@@ -1,0 +1,39 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Memory MCP Protocol (memory server)
+
+## When to Read Memory
+
+At the start of complex tasks:
+- Call `search_nodes` with task-related keywords before starting work
+- Call `read_graph` for full project context overview if needed
+
+## When to Write Memory
+
+Record after:
+1. **Non-trivial bug solved** → entity type `Solution_Pattern`
+2. **Architectural decision made** → entity type `Architecture_Decision`
+3. **User preference discovered** → entity type `User_Preference`
+4. **Failed approach** → entity type `Anti_Pattern` (prevents re-trying dead ends)
+
+## Entity Naming
+
+Use `PascalCase_with_underscores`: `MCP_Server_Startup_Fix`, `Paths_SSOT_Decision`
+
+## Observation Format
+
+Each observation: concise, self-contained fact.
+- Good: "paths.js must be imported as ESM — CJS require() breaks because type:module in package.json"
+- Bad: "Fixed the import issue"
+
+## Relations
+
+- `documents` (skill → solution)
+- `solved_by` (bug → fix)
+- `depends_on` (component → component)
+- `conflicts_with` (pattern → anti-pattern)
+- `replaces` (new approach → old approach)

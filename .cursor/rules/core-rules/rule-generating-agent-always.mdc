@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Rule Generation Agent (Meta-Rule)
+
+## Critical Rules
+
+- Rule files live ONLY in `.cursor/rules/{folder}/rule-name-{type}.mdc`
+- Naming suffix convention: `-always.mdc` | `-auto.mdc` | `-agent.mdc` | `-manual.mdc`
+- FrontMatter types:
+  - **always**: `alwaysApply: true`, description blank, globs blank — every chat
+  - **auto**: `alwaysApply: false`, globs filled, description blank — auto by file pattern
+  - **agent**: `alwaysApply: false`, globs blank, description detailed — agent decides when
+  - **manual**: `alwaysApply: false`, description blank, globs blank — only via `@mention`
+- Folder conventions:
+  - `core-rules/` — cursor agent behavior, rule generation
+  - `global-rules/` — always-on communication and style rules
+  - `tool-rules/` — MCP tools, git, specific tool usage protocols
+- Description for `agent` rules MUST be detailed enough for the agent to confidently decide when to apply
+- Keep rules concise — every token counts in context window
+- Never use quotes around glob patterns, never group extensions with `{}`
+- Always check existing rules before creating new ones
+
+## Examples
+
+<example>
+Creating a new always rule for communication style:
+File: `.cursor/rules/global-rules/communication-always.mdc`
+FrontMatter: alwaysApply: true, description: "", globs: ""
+</example>
+
+<example type="invalid">
+Creating a rule outside .cursor/rules/:
+File: `rules/my-rule.mdc` ← WRONG, must be under .cursor/rules/
+</example>

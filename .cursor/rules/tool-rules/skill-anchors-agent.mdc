@@ -1,0 +1,46 @@
+---
+description: Apply when editing JavaScript/TypeScript files that contain `// Skill anchor:` comments, or when introducing new retry logic, fallback chains, merge/dedup patterns, cache operations, or error classification. This rule governs how to read, respect, and create skill anchors — inline code markers that link risk branches to their governing skills. Use when the user asks to modify anchored code, add new risk logic, or when find_skills_for_file returns inlineAnchors results.
+globs: 
+alwaysApply: false
+---
+
+# Skill Anchor Protocol for Risk Branches
+
+## What Are Skill Anchors?
+
+`// Skill anchor: <reason>` followed by `// See skills/<category>/<skill-id>` marks code where past bugs were fixed with specific documented patterns. They prevent re-discovery of known solutions.
+
+## Before Modifying Anchored Code
+
+1. Read the skill referenced in `// See ...`
+2. Understand WHY the branch exists — the anchor text explains the invariant
+3. Do not remove or bypass the pattern without reading the skill first
+
+## Risk Branch Categories (always look for nearby anchors)
+
+- **Retry/Backoff**: `error.status === 429`, `Retry-After` parsing, `setTimeout` in retry loops
+- **Fallback/Degradation**: `try { live } catch { fallback }` chains, stale cache reads
+- **Merge/Dedup**: array assignments, `new Set()` deduplication, union computations
+- **Cache Operations**: `cache.delete()`, `cache.set()` with TTL
+- **Error Classification**: `error.status` extraction, HTTP status → retry decision
+- **Path Resolution**: `paths.js` imports, Docker vs host path detection
+
+## After Adding New Risk Logic
+
+1. Add `// Skill anchor: <reason explaining the invariant>`
+2. Add `// See skills/<category>/<skill-id>` on the next line
+3. One anchor per logical risk cluster — avoid spam
+
+## Examples
+
+<example>
+// Skill anchor: Docker detection must use /.dockerenv, not /workspace existence.
+// Windows host Git Bash maps /workspace to a real path causing false positives.
+// See skills/architecture/architecture-ssot
+const isDocker = process.platform !== "win32" && fsSync.existsSync("/.dockerenv");
+</example>
+
+<example type="invalid">
+// Skill anchor: fixed bug
+// (too vague — doesn't explain the invariant or link to a skill)
+</example>

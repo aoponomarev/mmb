@@ -21,10 +21,56 @@
 ## Статистика
 
 - Всего в MBB: ~195 скилов (41 all + 154 mbb)
+- Из них мета-скилов: 30 (выявлены ревизией 2026-02-20)
 - Перенесено: 0
 - Частично: 0
 - Пропущено (skip): 0
 - Ожидают: 195
+
+---
+
+## Мета-скилы → `skills/meta/` (приоритет: первыми)
+
+> Выявлены ревизией 2026-02-20. Мигрируют в `skills/meta/` — не в `process/`.
+> Папка `meta/` исключена из `audit_skill_coverage`.
+
+### Из `skills/all/` (16 мета-скилов)
+
+- [ ] `process-skill-template` → `skill-template` — **приоритет №1**: шаблон скила
+- [ ] `process-skills-lifecycle` → `skills-lifecycle` — жизненный цикл скилов
+- [ ] `process-skills-scope-routing` → `skills-scope-routing` — куда класть скилы (адаптировать: одна папка)
+- [ ] `process-skills-granularity` → `skills-granularity` — правила размера скила
+- [ ] `process-skills-language-policy` → `skills-language-policy` — языковая политика
+- [ ] `process-skill-code-loop-anchors` → `skill-code-anchors` — **приоритет**: anchors в коде
+- [ ] `process-code-header-skill-links` → `code-header-links` — header links в JS-файлах
+- [ ] `process-ssot-crosslinks` → `ssot-crosslinks` — SSOT и перекрёстные ссылки
+- [ ] `process-doc-levels` → `doc-levels` — уровни документации
+- [ ] `process-doc-style` → `doc-style` — стиль документации
+- [ ] `process-doc-updates` → `doc-updates` — обновление документации
+- [ ] `process-release-categorization` → `release-categorization` — Task vs Skill vs Task&Skill
+- [ ] `process-agent-commands` → `agent-commands` — словарь команд агента
+- [ ] `process-multi-agent-collaboration` → `multi-agent-collaboration` — мульти-агентное взаимодействие
+- [ ] `process-continue-ai-subagents` → `continue-subagents` — субагенты Continue AI
+- [ ] `process-session-handoff` → `session-handoff` — передача сессии и backup
+
+### Из `skills/mbb/` (14 мета-скилов)
+
+- [ ] `autonomous-skill-synthesis` → `autonomous-skill-synthesis` — автосинтез скилов из сигналов
+- [ ] `agentic-self-correction` → `agentic-self-correction` — самокоррекция агентов
+- [ ] `process-batch-skills-review` → `batch-skills-review` — пакетный аудит базы скилов
+- [ ] `process-skill-pipeline` → `skill-pipeline` — пайплайн: сигнал → кандидат → скил
+- [ ] `process-skill-quality-validation` → `skill-quality-validation` — критерии качества скила
+- [ ] `process-skill-watcher` → `skill-watcher` — обнаружение знаний из коммитов
+- [ ] `process-skills-bridge` → `skills-bridge` — мост агентов и UI управления скилами
+- [ ] `process-skills-curation-intelligence` → `skills-curation` — интеллектуальная курация базы
+- [ ] `process-future-skill-impact-analysis` → `skill-impact-analysis` — анализ влияния изменений
+- [ ] `process-commit-skill-extraction` → `commit-skill-extraction` — извлечение скилов из коммитов
+- [ ] `process-commit-analysis-heuristics` → `commit-analysis-heuristics` — эвристики анализа коммитов
+- [ ] `process-dynamic-context-management` → `dynamic-context-management` — динамическое управление контекстом
+- [ ] `process-orchestrator-evolution` → `orchestrator-evolution` — эволюция оркестратора (адаптировать: без .cursorrules)
+- [ ] `protocol-agent-core` → `agent-core-protocol` — фундаментальные правила агента
+- [ ] `skill-based-playbooks` → `skill-playbooks` — философия скилов как модульного интеллекта
+- [ ] `skills-architecture-ssot` → `skills-architecture-ssot` — SSOT архитектуры системы скилов
 
 ---
 

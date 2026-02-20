@@ -33,7 +33,9 @@ const logsDir      = paths.logs;
 const mbbSkillsAll = paths.mbbSkillsAll;
 const mbbSkillsMbb = paths.mbbSkillsMbb;
 
-const SKIP_DIRS = new Set(["drafts", "archive"]);
+// Skill anchor: meta/ excluded from audit_skill_coverage — meta-skills describe the
+// skills system itself, not project code, so JS coverage checks don't apply.
+const SKIP_DIRS = new Set(["drafts", "archive", "meta"]);
 
 // Директории кода для audit_skill_coverage (появятся по мере развития MMB)
 const CODE_DIRS = ["src", "core", "app"].map(d => path.join(mmbRoot, d));

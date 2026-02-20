@@ -1,0 +1,45 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Skills MCP Protocol (skills-mmb server)
+
+## Before Editing Any Code File
+
+1. Check the file's JSDoc header for `* Skill:` references — read each referenced skill
+2. Call `find_skills_for_file` with the file path to discover all skill links and inline anchors
+3. Read the returned skills before making changes — they contain architecture decisions and known failure patterns
+
+## When Encountering Errors
+
+Before debugging from scratch:
+1. Call `search_skills` with keywords from the error (e.g. "retry 429", "CORS", "path resolver")
+2. Call `find_skills_for_file` on the file where the error occurs
+3. If a skill documents the solution — follow it exactly
+
+## When Introducing New Patterns
+
+If adding retry logic, fallback branches, cache invalidation, merge/dedup, or error classification:
+1. Call `search_skills` to check if an existing skill covers this pattern
+2. If yes — follow the skill's protocol
+3. If no — after the fix works, note it for skill creation (propose to `skills/meta/skill-pipeline.md` workflow)
+
+## After Solving a Non-Trivial Bug
+
+1. Record the solution in Memory MCP: `create_entities` with type `Solution_Pattern`
+2. Add observations: what was broken, what fixed it, why it works
+3. Link to relevant skill via `create_relations`
+
+## Skill Categories Quick Reference
+
+| Category | What's there |
+|---|---|
+| `meta/` | Skills system itself — lifecycle, templates, anchors |
+| `process/` | Dev processes, protocols, session rules |
+| `architecture/` | MMB architecture decisions, SSOT |
+| `integrations/` | MCP, Continue, Docker, external APIs |
+| `troubleshooting/` | Known issues and solutions |
+| `security/` | Secrets, env boundaries |
+| `libs/` | Dependency management |

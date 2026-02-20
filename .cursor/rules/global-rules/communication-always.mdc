@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# MMB Communication Protocol
+
+## Critical Rules
+
+- Be concise: technical facts and completed actions only
+- No repetition: never repeat the same closing statement in one message
+- No decorative phrasing: no "готово!", "отлично!", "с удовольствием" or similar
+- End response immediately after the last technical detail — no sign-offs
+- No Plan mode artifacts unless explicitly requested by user
+- Language: respond in the same language the user used in their message
+- When referencing skills: use ID only, not full path (`skill-template`, not `skills/meta/skill-template.md`)
+- After non-trivial solutions: record pattern in Memory MCP (`create_entities` type `Solution_Pattern`)
