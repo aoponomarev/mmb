@@ -84,6 +84,15 @@ const CONTINUE_SSOT = path.resolve(GLOBAL_ROOT, "AO", ".continue");
 const VAULT_ROOT    = path.resolve(AI_ROOT, "_VAULT");
 
 // =============================================================================
+// ГРУППА F — СМЕЖНЫЕ РЕПОЗИТОРИИ (Repo "a")
+// =============================================================================
+
+const REPO_A_ROOT   = isDocker ? "/workspace/a" : path.resolve(PRO_ROOT, "a");
+const A_LIBS_ROOT   = path.resolve(REPO_A_ROOT, "libs");
+const A_COINS_ROOT  = path.resolve(REPO_A_ROOT, "coins");
+const A_DATA_ROOT   = path.resolve(REPO_A_ROOT, "data");
+
+// =============================================================================
 // ГРУППА D — DOCKER INTERNAL (фиксированные, не меняются)
 // =============================================================================
 
@@ -124,6 +133,12 @@ export const paths = {
   cursorSsot:   CURSOR_SSOT,
   continueSsot: CONTINUE_SSOT,
   vault:    VAULT_ROOT,
+
+  // Группа F (Смежные репозитории)
+  repoA:    REPO_A_ROOT,
+  aLibs:    A_LIBS_ROOT,
+  aCoins:   A_COINS_ROOT,
+  aData:    A_DATA_ROOT,
 
   // Группа D
   docker:   DOCKER,

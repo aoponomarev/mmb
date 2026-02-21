@@ -511,16 +511,17 @@ MCP-инструмент `find_skills_for_file` находит эти ссылк
 Детальный протокол anchors нужен только при реальном редактировании файлов с anchors.
 Подробное `description` позволяет агенту точно определить момент применения.
 
-### Что перенесено из `.cursorrules` MBB
+### Полный отказ от `.cursorrules` (Распил Оркестратора MBB)
 
-Из MBB `.cursorrules` было три смысловых блока:
+В старом MBB файл `.cursorrules` выполнял роль Оркестратора. Но в Cursor Agent mode этот файл игнорируется, поэтому мы полностью отказываемся от него в MMB. Старый Оркестратор "распилен" на надежные MDC-правила:
 
-| Блок MBB | Куда перенесено в MMB |
+| Блок старого MBB Orchestrator | Куда перенесено в MMB |
 |---|---|
-| Коммуникационный протокол (краткость, без эмодзи) | `global-rules/communication-always.mdc` |
-| Правила работы со скилами | `tool-rules/skills-mcp-always.mdc` |
-| Memory MCP протокол | `tool-rules/memory-protocol-always.mdc` |
-| Session handshake (проверка инфраструктуры) | Будет в мета-скиле `session-handoff` |
+| **Communication Protocol** (краткость, стиль) | `global-rules/communication-always.mdc` (always) |
+| **Skills Protocol** (проверка перед кодингом) | `tool-rules/skills-mcp-always.mdc` (always) |
+| **Memory MCP Protocol** | `tool-rules/memory-protocol-always.mdc` (always) |
+| **Active Session Awareness** (Handshake) | Будет в `.cursor/rules/core-rules/session-start-manual.mdc` (или мета-скиле `session-handoff`) |
+| **Session Termination** ("Закрываем рабочий день") | **Признано устаревшим.** Не переносится в новую архитектуру. |
 
 ---
 

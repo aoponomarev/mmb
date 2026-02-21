@@ -8,10 +8,15 @@ node_modules/
 logs/
 *.log
 
-# данные (memory MCP и др.)
-data/
+# данные
+data/memory-mcp/
+# если появятся другие базы или файлы, добавлять их сюда точечно, а саму папку data/ не игнорим
 
 # системные
 .DS_Store
 Thumbs.db
 
+СИМЛИНКИ.txt
+
+# continue settings
+.continue/

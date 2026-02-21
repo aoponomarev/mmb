@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "skills-mmb": {
+      "command": "node",
+      "args": ["D:/Clouds/AO/OneDrive/AI/PRO/mmb/mcp/skills-mcp/server.js"],
+      "env": {}
+    },
+    "memory": {
+      "command": "node",
+      "args": ["C:/Users/AO/AppData/Roaming/npm/node_modules/@modelcontextprotocol/server-memory/dist/index.js"],
+      "env": {
+        "MEMORY_FILE_PATH": "D:/Clouds/AO/OneDrive/AI/PRO/mmb/data/memory-mcp/memory.jsonl"
+      }
+    }
+  }
+}
