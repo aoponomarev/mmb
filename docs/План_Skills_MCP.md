@@ -533,7 +533,7 @@ MCP-инструмент `find_skills_for_file` находит эти ссылк
 - [x] ~~Мета-скил для описания процесса миграции MBB→MMB~~ — заменён реестром `MIGRATION.md`
       и разделом `meta/` в `MIGRATION.md`.
 - [x] ~~Конфигурация Cursor MCP~~ — выполнено: `skills-mmb` прописан в `~/.cursor/mcp.json`.
-- [ ] Continue AI конфигурация — аналогично MBB, через `~/.continue/config.yaml`.
+- [x] ~~Continue AI конфигурация~~ — выполнено: конфигурация переведена на `config.ts` для защиты ключей через `.env`.
 - [ ] `auto`-правила для glob-паттернов — пока не используем из-за ненадёжности
       в Cursor 2.0. Пересмотреть когда Cursor исправит баг с glob в conversations.
 

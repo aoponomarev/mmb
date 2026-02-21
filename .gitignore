@@ -3,6 +3,7 @@ node_modules/
 
 # секреты — никогда не коммитить
 .env
+secrets-backup.txt
 
 # логи
 logs/

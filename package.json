@@ -1,0 +1,9 @@
+{
+  "name": "mmb",
+  "version": "1.0.0",
+  "description": "MMB Project Root",
+  "type": "module",
+  "scripts": {
+    "env:check": "node scripts/validate-env-example.js"
+  }
+}
