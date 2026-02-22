@@ -1,5 +1,5 @@
 /**
- * Skill: architecture/architecture-ssot
+ * Skill: architecture/arch-ssot-governance
  *
  * SSOT всех путей проекта MMB.
  *

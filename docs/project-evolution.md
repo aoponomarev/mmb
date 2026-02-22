@@ -10,13 +10,16 @@
 ---
 
 ### 22/02/26
+Полная ревизия связности проекта перед переходом к следующему этапу миграции: устранены 10+ stale-ссылок (`architecture-ssot`→`arch-ssot-governance`; `scripts/git/`→`scripts/infrastructure/`), добавлены frontmatter `relations` в foundational-скилы (`process-env-sync-governance`, `protocol-git-secrets-and-env-boundary`, `skill-secrets-hygiene`), исправлен `scope: mmb`→`scope: process` в `process-project-evolution-logging`, добавлен orphan-fix (relations к `arch-master`/`process-agent-commands`), синхронизирована нумерация npm-команд в `scripts/README.md`, восстановлены кириллические имена файлов в `plans-sync-governance`, добавлен `План_Domain_Models.md` (future) в мастер-план. Skills health score: 100/100, все 7 гейтов зелёные.
+<!-- [Skill: skills-linking-governance] [SSOT: paths.js] [SSOT: project-evolution.md] -->
+
 Инфраструктурное усиление проекта: внедрение runtime Zod-валидации критических путей в `paths.js` для раннего обнаружения конфигурационных ошибок; добавление `DATASETS_ROOT` в `.env.example` как обязательной переменной среды. Запущен пакет validation-скриптов в `package.json`: `validate-skill-graph`, `validate-ssot`, `validate-symlinks`, `validate-env-example`. Развёрнут полный набор архитектурных скилов (`arch-master`, `arch-infrastructure`, `arch-security`, `arch-ssot-governance`, `arch-template-adr`) с ADR-протоколом для фиксации архитектурных решений. Добавлены правила агента: `migration-arch-agent.mdc`, `migration-docs-always.mdc`, `anti-calque-terminology-always.mdc`.
 <!-- [SSOT: paths.js] [SSOT: .env.example] [Rule: migration-arch-agent.mdc] -->
 
 ---
 
 ### 21/02/26
-Усиление безопасности и Git-дисциплины: введён скрипт `scripts/git/preflight-solo.ps1` для проверки окружения перед коммитом; добавлен `validate-env-example.js` для обнаружения расхождений между `.env` и `.env.example`. Создан скилл `process-env-sync-governance` (протокол синхронизации переменных среды) и `protocol-git-secrets-and-env-boundary` (граница секретов в Git). Добавлены скиллы `security/skill-secrets-hygiene`. Настроено исключение `secrets-backup.txt` из Git. Добавлены пути связанных репозиториев в `paths.js`; зафиксировано полное удаление `.cursorrules` в архитектуре MMB (переход на `.cursor/rules/*.mdc`); добавлен `mcp.json` и `settings.json` в `.cursor/`.
+Усиление безопасности и Git-дисциплины: введён скрипт `scripts/infrastructure/preflight-solo.ps1` для проверки окружения перед коммитом; добавлен `validate-env-example.js` для обнаружения расхождений между `.env` и `.env.example`. Создан скилл `process-env-sync-governance` (протокол синхронизации переменных среды) и `protocol-git-secrets-and-env-boundary` (граница секретов в Git). Добавлены скиллы `security/skill-secrets-hygiene`. Настроено исключение `secrets-backup.txt` из Git. Добавлены пути связанных репозиториев в `paths.js`; зафиксировано полное удаление `.cursorrules` в архитектуре MMB (переход на `.cursor/rules/*.mdc`); добавлен `mcp.json` и `settings.json` в `.cursor/`.
 <!-- [Skill: process-env-sync-governance] [SSOT: paths.js] -->
 
 ---

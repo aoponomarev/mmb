@@ -9,6 +9,9 @@ updated_at: 2026-02-21
 migrated_from: mbb:security/skill-secrets-hygiene
 migration_status: done
 migration_notes: "Moved to security category, updated for MMB paths"
+relations:
+  - protocol-git-secrets-and-env-boundary
+  - process-env-sync-governance
 ---
 
 # Security: Secrets Hygiene

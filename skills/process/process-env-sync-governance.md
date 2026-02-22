@@ -9,6 +9,9 @@ updated_at: 2026-02-21
 migrated_from: mbb:process/process-env-sync-governance
 migration_status: done
 migration_notes: "Adapted for MMB package.json"
+relations:
+  - protocol-git-secrets-and-env-boundary
+  - arch-ssot-governance
 ---
 
 # Process: Environment Sync Governance

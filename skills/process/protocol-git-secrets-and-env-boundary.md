@@ -9,6 +9,9 @@ updated_at: 2026-02-21
 migrated_from: mbb:process/protocol-git-secrets-and-env-boundary
 migration_status: done
 migration_notes: "Adapted for MMB structure"
+relations:
+  - process-env-sync-governance
+  - skill-secrets-hygiene
 ---
 
 # Protocol - Git Secrets and Env Boundary

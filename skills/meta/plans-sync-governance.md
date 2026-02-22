@@ -24,10 +24,10 @@ Keep all migration plans in factual sync so completed/replaced/changed work is r
 ## Mandatory sync contract
 Whenever a migration task changes state, update all affected plan artifacts in the same turn:
 
-1. `docs/Plan_MBB_to_MMB.md` (master status/checklists)
-2. `docs/Plan_Migration_Sync.md` (source->target mapping/status)
-3. Specific contour plans `docs/Plan_*.md` that were touched
-4. `docs/Plan_Skills_MCP.md` if skill/MCP decisions changed
+1. `docs/План_MBB_to_MMB.md` (master status/checklists)
+2. `docs/План_Migration_Sync.md` (source->target mapping/status)
+3. Specific contour plans `docs/План_*.md` that were touched
+4. `docs/План_Skills_MCP.md` if skill/MCP decisions changed
 
 ## Change types
 - **completed**: planned item is implemented and verified
@@ -37,7 +37,7 @@ Whenever a migration task changes state, update all affected plan artifacts in t
 ## Update protocol
 1. Mark status in contour plan checklist.
 2. Reflect the same status in master plan checkpoint.
-3. Update mapping row in `Plan_Migration_Sync.md`.
+3. Update mapping row in `docs/План_Migration_Sync.md`.
 4. If replaced, explicitly state replacement target and rationale.
 
 ## Anti-divergence rule

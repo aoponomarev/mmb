@@ -14,6 +14,7 @@ relations:
   - protocol-command-eip
   - protocol-command-kai
   - protocol-command-vzp
+  - protocol-command-ais
   - protocol-command-fin
   - protocol-command-fin-discovery
 ---

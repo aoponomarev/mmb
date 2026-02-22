@@ -1,11 +1,14 @@
 ---
 id: process-project-evolution-logging
-title: Process — Project Evolution Logging
-scope: mmb
+title: "Process: Project Evolution Logging"
+scope: process
 tags: [#process, #logging, #evolution, #git, #automation]
 priority: high
 created_at: 2026-02-22
 updated_at: 2026-02-22
+relations:
+  - arch-master
+  - process-agent-commands
 ---
 
 # Process — Project Evolution Logging

@@ -1,17 +1,17 @@
 # Scripts Layout
 
-Скрипты разделены по слоям:
+Scripts are organized by layer:
 
-- `scripts/infrastructure/` — проверки и генерация, связанные с путями, окружением, SSOT, симлинками.
-- `scripts/architecture/` — проверки и генерация, связанные с графом скилов и архитектурной структурой знаний.
-- `scripts/infrastructure/preflight-solo.ps1` — git-safety/preflight скрипт (операционный инфраструктурный контур).
+- `scripts/infrastructure/` — checks and generators related to paths, environment, SSOT, symlinks.
+- `scripts/architecture/` — checks and generators related to skills graph and architectural knowledge.
+- `scripts/infrastructure/preflight-solo.ps1` — git-safety/preflight script (operational infrastructure layer).
 
-Правило корня `scripts/`:
+Root `scripts/` rule:
 
-- В корне держим только `scripts/README.md` и ручные user-entry скрипты.
-- Любые внутренние валидаторы/генераторы — только в подкаталогах по контуру.
+- Only `scripts/README.md` and manual user-entry scripts are kept at root level.
+- All internal validators/generators belong in subfolders by contour.
 
-Текущие npm-команды:
+Current npm commands:
 
 - `npm run env:check` -> `scripts/infrastructure/validate-env-example.js`
 - `npm run ssot:check` -> `scripts/infrastructure/validate-ssot.js`
@@ -20,3 +20,5 @@
 - `npm run skills:graph:check` -> `scripts/architecture/validate-skill-graph.js`
 - `npm run skills:health:check` -> `scripts/architecture/validate-skills-health.js`
 - `npm run docs:index` -> `scripts/architecture/generate-skills-index.js`
+- `npm run evolution:update` -> `scripts/architecture/project-evolution-update.js`
+- `npm run evolution:rebuild` -> `scripts/architecture/project-evolution-update.js --rebuild`

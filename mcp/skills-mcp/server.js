@@ -1,6 +1,5 @@
 /**
- * Skill: architecture/architecture-ssot
- * Skill: integrations/integrations-continue-mcp-setup
+ * Skill: architecture/arch-ssot-governance
  *
  * MMB Skills MCP Server v0.1.0
  * Адаптирован из MBB mcp/skills-mcp/server.js v0.2.0

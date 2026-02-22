@@ -36,7 +36,7 @@ alwaysApply: false
 <example>
 // Skill anchor: Docker detection must use /.dockerenv, not /workspace existence.
 // Windows host Git Bash maps /workspace to a real path causing false positives.
-// See skills/architecture/architecture-ssot
+// See skills/architecture/arch-ssot-governance
 const isDocker = process.platform !== "win32" && fsSync.existsSync("/.dockerenv");
 </example>
 

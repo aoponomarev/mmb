@@ -24,6 +24,7 @@ _Excluded from audit_skill_coverage._
 - [process-agent-commands](./process/process-agent-commands.md) — Agent Commands (MMB)
 - [process-env-sync-governance](./process/process-env-sync-governance.md) — Process - Environment Sync Governance
 - [process-external-parity-sync-governance](./process/process-external-parity-sync-governance.md) — Process - External Parity Sync Governance
+- [process-project-evolution-logging](./process/process-project-evolution-logging.md) — Project Evolution Logging
 - [protocol-command-ais](./process/protocol-command-ais.md) — Command АИС (Architecture & Infrastructure Scan)
 - [protocol-command-eip](./process/protocol-command-eip.md) — Command ЕИП (SSOT Check)
 - [protocol-command-fin-discovery](./process/protocol-command-fin-discovery.md) — Command ФИНС (Finalization Discovery Blocks)
