@@ -1,0 +1,19 @@
+# <type>(<scope>): <subject — imperative, max 72 chars>
+#
+# Why:
+# What architectural/system benefit does this change deliver?
+#
+# Context tags (add relevant, remove unused lines):
+# Skill: <skill-id>
+# MCP: <server-name>
+# SSOT: <file-path>
+# Rule: <rule-name>
+#
+# Types: feat | fix | refactor | chore | docs | perf | test
+# Scopes: mcp | skills | infra | n8n | docker | docs | security
+#
+# Rules:
+# - Imperative mood: "Add", not "Added" / "Adds"
+# - No period at end of subject line
+# - Separate infra/config commits from feature/logic commits
+# - Do not include secrets, keys, or tokens

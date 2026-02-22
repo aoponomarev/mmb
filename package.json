@@ -4,13 +4,16 @@
   "description": "MMB Project Root",
   "type": "module",
   "scripts": {
-    "env:check": "node scripts/validate-env-example.js",
-    "skills:graph:check": "node scripts/validate-skill-graph.js",
-    "ssot:check": "node scripts/validate-ssot.js",
+    "env:check": "node scripts/infrastructure/validate-env-example.js",
+    "skills:graph:check": "node scripts/architecture/validate-skill-graph.js",
+    "skills:health:check": "node scripts/architecture/validate-skills-health.js",
+    "ssot:check": "node scripts/infrastructure/validate-ssot.js",
     "lint": "eslint .",
-    "docs:paths": "node scripts/generate-paths-docs.js",
-    "docs:index": "node scripts/generate-skills-index.js",
-    "symlinks:check": "node scripts/validate-symlinks.js"
+    "docs:paths": "node scripts/infrastructure/generate-paths-docs.js",
+    "docs:index": "node scripts/architecture/generate-skills-index.js",
+    "symlinks:check": "node scripts/infrastructure/validate-symlinks.js",
+    "evolution:update": "node scripts/architecture/project-evolution-update.js",
+    "evolution:rebuild": "node scripts/architecture/project-evolution-update.js --rebuild"
   },
   "dependencies": {
     "zod": "^4.3.6"

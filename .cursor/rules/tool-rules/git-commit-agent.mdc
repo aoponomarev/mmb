@@ -1,0 +1,61 @@
+---
+description: Apply when generating git commit messages or when the user asks to commit changes.
+globs: 
+alwaysApply: false
+---
+
+# Git Commit Generation Protocol
+
+When asked to generate a commit message or when the user types "commit" in the chat, follow this protocol to generate highly contextual messages linked to our architecture.
+
+## 1. Information Gathering (Mandatory)
+1. Run `git status` to see what is staged/unstaged.
+2. Run `git diff --cached` to see the exact code changes.
+3. If changes touch any files with `// Skill anchor:` or `.mdc` rules, explicitly read those skills/rules using MCP.
+
+## 2. Message Structure
+Follow Conventional Commits, but enrich the body with our project's specific context (MCP, SSOT, Skills).
+
+```
+<type>(<scope>): <summary, max 72 chars>
+
+<Detailed body explaining WHY the change was made, not just WHAT>
+
+[Context tags]
+```
+
+### Types:
+- `feat`: New feature or capability
+- `fix`: Bug fix
+- `refactor`: Code restructuring without behavior change
+- `chore`: Tooling, deps, config, CI
+- `docs`: Documentation, skills, or rules updates
+
+### Scopes:
+Use relevant architectural scopes: `mcp`, `skills`, `n8n`, `infra`, `docker`, `docs`.
+
+## 3. Enrichment (The "Magic")
+Your commit message body MUST include:
+1. **Architectural impact**: Does this affect SSOT? Does it change a protocol?
+2. **Skill / Rule references**: If you applied a pattern from a skill (e.g., `git-commit-message`, `arch-ssot-governance`), mention it.
+3. **Tags**: Append specific tags at the bottom of the body to help other agents find this commit later:
+   - `[Skill: <skill-name>]` (if a skill was applied or created)
+   - `[MCP: <server-name>]` (if an MCP server was modified)
+   - `[SSOT: <path>]` (if Single Source of Truth was affected)
+
+## Example Output
+
+```
+feat(mcp): add context enrichment to git commit messages
+
+Updated the commit generation workflow to automatically pull context 
+from MCP skills and SSOT paths. This ensures that future agents reading 
+the git history can instantly understand which architectural rules 
+dictated the change, rather than just seeing raw code diffs.
+
+[Skill: git-commit-message]
+[Rule: tool-rules/git-commit-agent.mdc]
+```
+
+## 4. Execution
+After presenting the commit message to the user, wait for their approval or use `git commit -m "..."` if explicitly authorized.
