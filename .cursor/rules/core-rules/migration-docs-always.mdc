@@ -1,0 +1,29 @@
+---
+description: ""
+globs: ""
+alwaysApply: true
+---
+# MMB Migration Documentation Protocol (Zero Divergence)
+
+## Critical Rule
+During the MBB -> MMB migration phase, you MUST immediately document any completed step, architectural decision, or migrated skill. **Never end your turn** without updating the relevant tracking documents if you performed a migration task. Fact must always match the plan.
+
+Apply in tandem with skill: `plans-sync-governance`.
+Status transitions must be synchronized as `completed` / `changed` / `replaced`.
+
+## Mandatory Target Files to Update:
+
+1. **`skills/MIGRATION.md`** 
+   - **Trigger:** Immediately after migrating any skill.
+   - **Action:** Change `[ ]` to `[x]` for the specific skill and update the total counts at the top of the file.
+
+2. **`docs/` (All files, specifically `План_MBB_to_MMB.md` and `План_Skills_MCP.md`)**
+   - **Trigger:** Immediately upon completing a high-level task, script migration, or architectural setup.
+   - **Action:** Mark checkboxes `[x]`, add new decisions, or cross out deprecated items (e.g., `~~old~~`).
+
+3. **`skills/README.md`**
+   - **Trigger:** If you introduce a new category folder (e.g., `security/`, `integrations/`) or change the structure of the skills folder.
+   - **Action:** Document the new category or structure.
+
+## Execution
+Do not wait for the user to remind you. If you moved code, changed configs, or migrated a skill, your final tool calls in that turn MUST be `StrReplace` or `Write` to update these documents.

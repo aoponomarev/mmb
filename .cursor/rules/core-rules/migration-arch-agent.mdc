@@ -1,0 +1,26 @@
+---
+description: "Apply when migrating architecture-heavy topics from MBB to MMB and old docs/A_*.md may contain constraints that must be converted into architecture skills."
+globs: ""
+alwaysApply: false
+---
+# Architectural Migration Protocol (Docs -> ADR Skills)
+
+## Critical rule
+When migrating a feature block (Security, Frontend, Cloudflare, Infra, DB, AI orchestration), migrate its architectural documentation first: `docs/A_*.md` -> `skills/architecture/arch-*.md`.
+
+## Mandatory workflow
+1. Find matching source in MBB: `docs/A_*.md`.
+2. Read it and convert before code migration.
+3. New skill MUST include:
+   - Frontmatter: `id`, `title`, `scope: architecture`, `tags`, `migrated_from`
+   - ADR identity: `decision_id` (e.g., `ADR-ARCH-001`)
+   - Evolution link: `supersedes` (ID of replaced decision, or `none`)
+   - Sections: `Overview`, `Implementation Status in MMB`, `Architectural Reasoning`, `Alternatives Considered`, `Migration Notes`
+4. Add `relations` to governing process skill + cross-domain dependency (security/integration).
+5. Update `skills/MIGRATION.md` immediately after skill creation/update.
+
+## Special case: A_MASTER
+`A_MASTER.md` must become `arch-master.md` as a navigation hub with concise summary + `relations` to other `arch-*` skills instead of duplicating large text.
+
+## Why this is mandatory
+ADR-style "why" context prevents local optimizations that violate historical constraints and reduces reintroduction of rejected designs.

@@ -15,17 +15,35 @@
 > 3. Обновить `relations:` — заменить пути на ID
 > 4. Убрать MBB-специфичные ссылки в тексте
 > 5. Удалить строку из этого файла (или пометить `[x]`)
+>
+> **Обязательный ADR-учет для архитектурных скилов (`arch-*`):**
+> - `Implemented` — уже реализовано в MMB
+> - `Pending` — запланировано, но не перенесено
+> - `Doubtful` — решение под вопросом / требует переоценки
+> - `Why this way` — почему выбрано именно это решение, а не альтернативы
+> - `decision_id` — уникальный ID решения
+> - `supersedes` — какое предыдущее решение заменено (`none`, если первое)
 
 ---
 
 ## Статистика
 
-- Всего в MBB: ~195 скилов (41 all + 154 mbb)
+- Всего в MBB: ~195 скилов (41 all + 154 mbb) + 18 архитектурных доков
 - Из них мета-скилов: 30 (выявлены ревизией 2026-02-20)
-- Перенесено: 0
+- Перенесено: 13
 - Частично: 0
 - Пропущено (skip): 0
-- Ожидают: 195
+- Ожидают: 203
+
+---
+
+## MMB-native (вне миграции из MBB)
+
+- [x] `skills-linking-governance` — мета-контракт связности скилов и правил эволюции графа
+- [x] `arch-ssot-governance` — единый SSOT-контракт (пути, конфиги, доки)
+- [x] `skills-symlinks-governance` — правила работы с симлинками и реестр (СИМЛИНКИ.txt)
+- [x] `plans-sync-governance` — контракт синхронизации статусов между всеми `План_*.md`
+- [x] Автогенерация индексов (`generate-skills-index.js`) и доков путей (`generate-paths-docs.js`)
 
 ---
 
@@ -74,13 +92,13 @@
 
 ---
 
-## Источник 1: `skills/all/` (~41 скил)
+## Source 1ALL: `skills/all/` (~41 скил)
 
 Универсальные скилы — кандидаты на перенос в первую очередь.
 
 ### process/
 
-- [ ] `process-agent-commands` — команды агентов
+- [x] `process-agent-commands` — команды агентов
 - [ ] `process-code-header-skill-links` — заголовки файлов со ссылками на скилы
 - [ ] `process-coin-set-merge-consistency` — MBB-специфика, смотреть по ситуации
 - [ ] `process-coingecko-file-protocol-topn` — MBB-специфика, смотреть по ситуации
@@ -105,8 +123,12 @@
 - [ ] `process-skills-scope-routing` — **приоритет**: адаптировать (одна папка вместо двух)
 - [ ] `process-ssot-crosslinks` — SSOT и перекрёстные ссылки
 - [ ] `process-windows-docker-paths` — пути Windows/Docker
-- [ ] `protocol-command-omk` — протокол краткости ОМК
-- [ ] `protocol-command-vzp` — протокол планового выполнения ВЗП
+- [x] `protocol-command-omk` — протокол краткости ОМК
+- [x] `protocol-command-vzp` — протокол планового выполнения ВЗП
+- [x] `protocol-command-eip` — проверка SSOT/путей (MMB-декомпозиция на базе `process-paths-management`)
+- [x] `protocol-command-kai` — полный анализ Код/Арх/Инфра (MMB-декомпозиция на базе `process-agent-commands`)
+- [x] `protocol-command-ais` — обзор Арх/Инфра (legacy-совместимость, MMB-адаптация)
+- [x] `protocol-command-fin` — протокол финализации (legacy-совместимость, MMB-адаптация)
 
 ### protocols/
 
@@ -120,7 +142,7 @@
 
 ### security/
 
-- [ ] `skill-secrets-hygiene` — **приоритет**: работа с секретами
+- [x] `skill-secrets-hygiene` — **приоритет**: работа с секретами
 
 ### troubleshooting/
 
@@ -135,7 +157,7 @@
 
 ---
 
-## Источник 2: `skills/mbb/` (~154 скила)
+## Source 2MBB: `skills/mbb/` (~154 скила)
 
 Проектные скилы MBB. Мигрируют по мере появления соответствующего кода в MMB.
 
@@ -294,7 +316,8 @@
 - [ ] `protocol-docker-image-hardening` — усиление Docker образов
 - [ ] `protocol-git-ai-collaboration` — AI-коллаборация в git
 - [ ] `protocol-git-commit-template-consistency` — консистентность шаблонов коммитов
-- [ ] `protocol-git-secrets-and-env-boundary` — граница секретов и env в git
+- [x] `protocol-git-secrets-and-env-boundary` — граница секретов и env в git
+- [x] `process-env-sync-governance` — синхронизация .env и .env.example
 - [ ] `protocol-n8n-mcp-interaction` — взаимодействие n8n и MCP
 - [ ] `protocol-node-async-safety` — безопасность async в Node
 - [ ] `protocol-node-mcp-development` — разработка MCP на Node
@@ -321,6 +344,31 @@
 ### index/ (не мигрируют — индексы генерируются заново)
 
 - [-] `index-mbb` — будет пересоздан как `index.md` для MMB
+
+---
+
+## Source 3DOC: Архитектурные документы `docs/A_*.md` (18 файлов)
+
+Устаревшие Markdown-документы из старого MBB превращаются в полноценные архитектурные скилы MMB. Мигрируют в `skills/architecture/` с префиксом `arch-`.
+
+- [x] `A_MASTER.md` → `arch-master.md` — главный навигационный узел (SSOT ссылок на другие скилы)
+- [x] `A_INFRASTRUCTURE.md` → `arch-infrastructure.md`
+- [ ] `A_CLOUDFLARE.md` → `arch-cloudflare.md`
+- [x] `A_SECURITY.md` → `arch-security.md`
+- [ ] `A_AI_ORCHESTRATION.md` → `arch-ai-orchestration.md`
+- [ ] `A_MATH_MODELS.md` → `arch-math-models.md`
+- [ ] `A_FIN_EVOLUTION.md` → `arch-fin-evolution.md`
+- [ ] `A_GITHUB_HYBRID_BEACON.md` → `arch-github-hybrid-beacon.md`
+- [ ] `A_OBSIDIAN_SMART_INDEXER.md` → `arch-obsidian-smart-indexer.md`
+- [ ] `A_GITHUB_WORKSPACE.md` → `arch-github-workspace.md`
+- [ ] `A_SKILLS.md` → `arch-skills.md`
+- [ ] `A_CORE_DATA_LOGIC.md` → `arch-core-data-logic.md`
+- [ ] `A_PORTFOLIO_SYSTEM.md` → `arch-portfolio-system.md`
+- [ ] `A_YANDEX_CLOUD.md` → `arch-yandex-cloud.md`
+- [ ] `A_FRONTEND_CORE.md` → `arch-frontend-core.md`
+- [ ] `A_AIS_SETTINGS.md` → `arch-ais-settings.md`
+- [ ] `A_LIBS.md` → `arch-libs.md`
+- [ ] `A_MONITORING.md` → `arch-monitoring.md`
 
 ---
 

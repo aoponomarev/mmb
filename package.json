@@ -4,6 +4,20 @@
   "description": "MMB Project Root",
   "type": "module",
   "scripts": {
-    "env:check": "node scripts/validate-env-example.js"
+    "env:check": "node scripts/validate-env-example.js",
+    "skills:graph:check": "node scripts/validate-skill-graph.js",
+    "ssot:check": "node scripts/validate-ssot.js",
+    "lint": "eslint .",
+    "docs:paths": "node scripts/generate-paths-docs.js",
+    "docs:index": "node scripts/generate-skills-index.js",
+    "symlinks:check": "node scripts/validate-symlinks.js"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.1",
+    "globals": "^17.3.0"
   }
 }

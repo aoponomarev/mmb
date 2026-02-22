@@ -18,6 +18,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import * as fsSync from "fs";
+import { z } from "zod";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,6 +62,23 @@ const AI_ROOT = isDocker
 const PRO_ROOT = isDocker
   ? "/workspace"
   : (env.PRO_ROOT || path.resolve(MMB_ROOT, ".."));
+
+// Runtime Zod Validation for Critical Roots (Fail Fast)
+if (!isDocker) {
+  const RootSchema = z.object({
+    MMB_ROOT: z.string().refine((val) => fsSync.existsSync(val), { message: "MMB_ROOT directory does not exist!" }),
+    AI_ROOT: z.string().refine((val) => fsSync.existsSync(val), { message: "AI_ROOT directory does not exist! Check .env" }),
+    PRO_ROOT: z.string().refine((val) => fsSync.existsSync(val), { message: "PRO_ROOT directory does not exist! Check .env" }),
+  });
+  
+  try {
+    RootSchema.parse({ MMB_ROOT, AI_ROOT, PRO_ROOT });
+  } catch (error) {
+    console.error("[SSOT Error] Failed to validate root paths during startup:");
+    error.errors.forEach((err) => console.error(` - ${err.message}`));
+    process.exit(1);
+  }
+}
 
 // =============================================================================
 // ГРУППА B — ПРОЕКТНЫЕ ПУТИ (вычисляются из MMB_ROOT)
@@ -112,6 +130,23 @@ const MBB_SKILLS_ALL = env.MBB_SKILLS_ALL || null;
 const MBB_SKILLS_MBB = env.MBB_SKILLS_MBB || null;
 
 // =============================================================================
+// ГРУППА G — СИМЛИНКИ (РЕЕСТР)
+// =============================================================================
+// Формат: Путь симлинка (в ОС) -> Целевой файл (SSOT внутри проекта/системы).
+// Симлинки проверяются командой `npm run symlinks:check`.
+
+const APPDATA = process.env.APPDATA || (process.platform === 'win32' ? path.join(process.env.USERPROFILE || '', 'AppData', 'Roaming') : '');
+const CURSOR_USER = path.join(APPDATA, 'Cursor', 'User');
+const GLOBAL_CURSOR_USER = path.resolve(GLOBAL_ROOT, "AO", "AppData", "Roaming", "Cursor", "User");
+
+const SYMLINKS_REGISTRY = {
+  [path.join(CURSOR_USER, "workspaceStorage")]: path.join(GLOBAL_CURSOR_USER, "workspaceStorage"),
+  [path.join(CURSOR_USER, "snippets")]: path.join(GLOBAL_CURSOR_USER, "snippets"),
+  [path.join(CURSOR_USER, "settings.json")]: path.join(GLOBAL_CURSOR_USER, "settings.json"),
+  [path.join(CURSOR_USER, "keybindings.json")]: path.join(GLOBAL_CURSOR_USER, "keybindings.json")
+};
+
+// =============================================================================
 // ЭКСПОРТ
 // =============================================================================
 
@@ -146,6 +181,9 @@ export const paths = {
   // Группа E (legacy, null если не заданы в .env)
   mbbSkillsAll: MBB_SKILLS_ALL,
   mbbSkillsMbb: MBB_SKILLS_MBB,
+
+  // Группа G (Симлинки)
+  symlinksRegistry: SYMLINKS_REGISTRY,
 
   // Хелперы
   /** Путь внутри MMB: paths.project('logs', 'server.log') */

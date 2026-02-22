@@ -1,0 +1,30 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# MMB Terminology & Anti-Calque Guardrail
+
+## Critical Naming Rules (Always Enforced)
+NEVER create English acronyms or variable names by transliterating or calquing Russian abbreviations. This causes massive context confusion (e.g. confusing a Russian concept with a standard IT industry acronym).
+
+1. **ЕИП (Единый Источник Правды)**
+   - MUST BE translated to: `SSOT` (Single Source of Truth)
+   - NEVER transliterate as: `EIP` (which means Enterprise Integration Patterns)
+2. **ВЗП (Выполнение Запланированных Процессов / Planned Execution)**
+   - MUST BE translated to: `Planned Execution` or `Task Plan`
+   - NEVER transliterate as: `VZP`
+3. **КАИ (Код, Архитектура, Инфраструктура)**
+   - MUST BE translated to: `CAI` or `Code-Arch-Infra`
+   - NEVER transliterate as: `KAI`
+4. **ОМК (Отказ от Мысли в Коде / Краткость)**
+   - MUST BE translated to: `Brevity` or `Concise`
+   - NEVER transliterate as: `OMK`
+5. **АИС / ФИН**
+   - MUST BE translated to: `Arch-Scan` / `Finalization`
+   - NEVER transliterate as: `AIS` / `FIN`
+
+**General Rule:**
+If a Russian concept needs an English name in code, filenames, or variables, TRANSLATE its meaning into standard English IT terminology. NEVER transliterate its Russian abbreviation into Latin characters.
+
+Reference Skill: `meta/skills-terminology-governance`

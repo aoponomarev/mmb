@@ -16,6 +16,10 @@
 Документ будет пополняться по мере развития проекта. Сейчас освещены только вопросы скилов.
 Архитектура MCP в целом (агенты, control-plane, n8n) — отдельные документы, когда дойдём.
 
+Граница этого документа: только skill/MCP/agent-подсистема.
+Остальные контуры вынесены в отдельные `docs/План_*.md` и связываются через
+`План_Migration_Sync.md` и мастер-план `План_MBB_to_MMB.md`.
+
 ---
 
 ## 1. Контекст: откуда берётся MMB и зачем нужна миграция
@@ -536,6 +540,95 @@ MCP-инструмент `find_skills_for_file` находит эти ссылк
 - [x] ~~Continue AI конфигурация~~ — выполнено: конфигурация переведена на `config.ts` для защиты ключей через `.env`.
 - [ ] `auto`-правила для glob-паттернов — пока не используем из-за ненадёжности
       в Cursor 2.0. Пересмотреть когда Cursor исправит баг с glob в conversations.
+
+---
+
+## 14. ADR-протокол для архитектурных скилов (внедрено)
+
+Для миграции старых `docs/A_*.md` в `skills/architecture/` принят обязательный ADR-формат:
+
+- `## Implementation Status in MMB`:
+  - `Implemented`
+  - `Pending`
+  - `Doubtful`
+- `## Architectural Reasoning (Why this way)` — почему выбран именно этот путь
+- `## Alternatives Considered` — какие варианты отклонены и почему
+
+Это снижает риск деградации контекста: агент видит не только "как сделано", но и "почему так сделано".
+
+Технически за это отвечают:
+- `skills/MIGRATION.md` (Source 3DOC: `A_*.md`)
+- `.cursor/rules/core-rules/migration-arch-agent.mdc` (agent-триггер)
+- `skills/architecture/arch-template-adr.md` (шаблон)
+
+## 15. Протокол anti-stale и связности (внедрено)
+
+В архитектурных скилах добавлены поля:
+
+- `status: active|draft|deprecated`
+- `confidence: high|medium|low`
+- `review_after: YYYY-MM-DD`
+- `decision_scope: architecture|process|integration`
+- `decision_id: ADR-...` (уникальный ID архитектурного решения)
+- `supersedes: ADR-...|none` (цепочка эволюции решений)
+
+Минимальные требования связности:
+- у каждого `arch-*` скила минимум 2 `relations`:
+  - к governing process-скилу;
+  - к security/integration скилу (если есть зависимость).
+- для `arch-*` включена автоматическая проверка:
+  - наличие `decision_id` и `supersedes`;
+  - `supersedes != decision_id`;
+  - все `relations` резолвятся в существующие `id`.
+
+Политика устаревания:
+- при утрате актуальности: `status: deprecated`;
+- в `relations` указывается заменяющий скил.
+
+## 16. Фактически реализовано на текущем этапе
+
+- Создан первый боевой ADR-хаб: `skills/architecture/arch-master.md` (Source 3DOC: `A_MASTER.md`).
+- Реализована практическая end-to-end связность через `relations`:
+  - `arch-master` -> `process-env-sync-governance`
+  - `arch-master` -> `protocol-git-secrets-and-env-boundary`
+  - `arch-master` -> `skill-secrets-hygiene`
+  - `arch-master` -> `process-agent-commands`
+- Мигрированы/декомпозированы командные протоколы:
+  - `process-agent-commands`
+  - `protocol-command-omk`
+  - `protocol-command-eip`
+  - `protocol-command-kai`
+  - `protocol-command-vzp`
+  - `protocol-command-ais` (legacy-совместимость)
+  - `protocol-command-fin` (legacy-совместимость)
+- Мигрированы архитектурные ADR-скилы:
+  - `arch-security` (Source 3DOC: `A_SECURITY.md`)
+  - `arch-infrastructure` (Source 3DOC: `A_INFRASTRUCTURE.md`)
+- Введён мета-скил связности:
+  - `skills-linking-governance` (контракт relation-полей и порядок эволюции графа)
+- Введён мета-скил синхронизации планов:
+  - `plans-sync-governance` (контракт `completed/changed/replaced` между всеми `План_*.md`)
+- Добавлен минимальный валидатор графа:
+  - `scripts/validate-skill-graph.js`
+  - npm-команда `skills:graph:check`
+- **SSOT-барьеры (Inverted SSOT, Runtime Zod, AST ESLint, Symlinks):**
+  - Создан `arch-ssot-governance` и `skills-symlinks-governance`
+  - Введено поле `ssot_target` в YAML-фронтматтер скилов для явных якорей
+  - Скрипт `validate-ssot.js` усилен проверкой `ssot_target` файлов
+  - Настроен реестр симлинков в `paths.js` (`SYMLINKS_REGISTRY`) с валидатором `validate-symlinks.js`
+  - Добавлена автогенерация индекса скилов `generate-skills-index.js`
+  - `paths.js` защищен Zod runtime-проверкой корней (`existsSync`)
+  - Добавлен AST-линтер на запрет `process.env` и `dotenv` вне SSOT (`eslint.config.js`)
+  - Автоматическая генерация документации `docs/paths-reference.md` из `paths.js` (`npm run docs:paths`)
+
+---
+
+## 17. Очередь на внедрение: SSOT-практики из MBB
+
+При анализе старой базы MBB выявлены мощные практики, которые отложены "в очередь" до прояснения архитектуры:
+
+1. **AST-ограничения для доменных границ**
+   По аналогии с запретом `process.env`, планируется внедрить eslint-правила, запрещающие перекрестные импорты между изолированными слоями бэкенда (когда он появится), делая архитектурные границы нерушимыми.
 
 ---
 
