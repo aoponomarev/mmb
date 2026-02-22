@@ -38,7 +38,7 @@ migration_notes: "Adapted for MMB structure"
 1. `git diff --cached --name-only`
 2. If `.env` is staged, unstage and re-check.
 3. Run:
-   - `powershell -ExecutionPolicy Bypass -File .\scripts\git\preflight-solo.ps1`
+   - `powershell -ExecutionPolicy Bypass -File .\scripts\infrastructure\preflight-solo.ps1`
 
 ## 4. Incident Response
 

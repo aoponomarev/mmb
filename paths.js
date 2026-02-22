@@ -109,6 +109,8 @@ const REPO_A_ROOT   = isDocker ? "/workspace/a" : path.resolve(PRO_ROOT, "a");
 const A_LIBS_ROOT   = path.resolve(REPO_A_ROOT, "libs");
 const A_COINS_ROOT  = path.resolve(REPO_A_ROOT, "coins");
 const A_DATA_ROOT   = path.resolve(REPO_A_ROOT, "data");
+const A_LEGACY_ASSETS_COINS_ROOT = path.resolve(REPO_A_ROOT, "libs", "assets", "coins");
+const A_LEGACY_ASSETS_DATA_ROOT = path.resolve(REPO_A_ROOT, "libs", "assets", "data");
 
 // =============================================================================
 // ГРУППА D — DOCKER INTERNAL (фиксированные, не меняются)
@@ -147,6 +149,38 @@ const SYMLINKS_REGISTRY = {
 };
 
 // =============================================================================
+// ГРУППА H — PATH MIGRATION & NAMING EXCEPTIONS
+// =============================================================================
+// Path migration registry: legacy -> target mapping for migration period.
+const PATH_MIGRATIONS = [
+  {
+    id: "repo-a-assets-coins-to-root-coins",
+    legacy: A_LEGACY_ASSETS_COINS_ROOT,
+    target: A_COINS_ROOT,
+    status: "active",
+    reason: "Coins are duplicated during migration; old assets folder will be removed later.",
+    removeAfter: "post-migration-assets-removal",
+  },
+  {
+    id: "repo-a-assets-data-to-root-data",
+    legacy: A_LEGACY_ASSETS_DATA_ROOT,
+    target: A_DATA_ROOT,
+    status: "active",
+    reason: "Data is duplicated during migration; old assets folder will be removed later.",
+    removeAfter: "post-migration-assets-removal",
+  },
+];
+
+// Naming exceptions that are explicitly tolerated (must be reviewed periodically).
+const PATH_NAMING_EXCEPTIONS = [
+  {
+    path: "docs/СИМЛИНКИ.txt",
+    reason: "Personal local file (gitignored), keeps user-specific symlink notes in Cyrillic name.",
+    reviewAfter: "2026-06-01",
+  },
+];
+
+// =============================================================================
 // ЭКСПОРТ
 // =============================================================================
 
@@ -174,6 +208,8 @@ export const paths = {
   aLibs:    A_LIBS_ROOT,
   aCoins:   A_COINS_ROOT,
   aData:    A_DATA_ROOT,
+  aLegacyAssetsCoins: A_LEGACY_ASSETS_COINS_ROOT,
+  aLegacyAssetsData: A_LEGACY_ASSETS_DATA_ROOT,
 
   // Группа D
   docker:   DOCKER,
@@ -184,6 +220,10 @@ export const paths = {
 
   // Группа G (Симлинки)
   symlinksRegistry: SYMLINKS_REGISTRY,
+
+  // Группа H (Migration/Naming registries)
+  pathMigrations: PATH_MIGRATIONS,
+  pathNamingExceptions: PATH_NAMING_EXCEPTIONS,
 
   // Хелперы
   /** Путь внутри MMB: paths.project('logs', 'server.log') */

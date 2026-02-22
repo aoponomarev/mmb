@@ -18,7 +18,7 @@ relations:
 # Protocol: Command `АИС` (Architecture & Infrastructure Scan)
 
 ## Command
-`АИС` = выполнить обзор архитектуры и инфраструктуры без глубокого code-level refactoring.
+`АИС` = review architecture and infrastructure without deep code-level refactoring.
 
 ## Scope
 - ADR consistency and relations.

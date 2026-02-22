@@ -16,7 +16,7 @@ relations:
 # Protocol: Command `ОМК` (Brevity)
 
 ## Command
-`ОМК` = отвечай максимально кратко без потери технической точности.
+`ОМК` = respond as briefly as possible without losing technical accuracy.
 
 ## Behavior
 1. Essence only: command, value, path, result.

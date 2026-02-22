@@ -2,7 +2,7 @@
 id: process-agent-commands
 title: "Process: Agent Commands (MMB)"
 scope: process
-tags: [#process, #agent, #commands, #омк, #еип, #каи, #взп]
+tags: [#process, #agent, #commands, #brevity, #ssot, #full-analysis, #planned-execution]
 version: 1.0.0
 priority: high
 updated_at: 2026-02-22
@@ -14,6 +14,8 @@ relations:
   - protocol-command-eip
   - protocol-command-kai
   - protocol-command-vzp
+  - protocol-command-fin
+  - protocol-command-fin-discovery
 ---
 
 # Process: Agent Commands (MMB)
@@ -27,9 +29,13 @@ Dictionary of short user commands that switch agent behavior predictably.
 - `КАИ` — full Code/Architecture/Infrastructure analysis.
 - `ВЗП` — planned execution protocol (step-by-step with verification).
 - `АИС` — legacy alias, routed to architecture/infrastructure analysis (`КАИ`/`arch-*`).
-- `ФИН` — legacy alias for explicit finalization request (not auto-mandated in MMB).
+- `ФИН` — finalization protocol (closure by default, can include discovery blocks).
+- `ФИНС` — discovery-only focus: explicit request for Ф/И/Н/С option listing.
 
 ## Rules
 1. If command is present, corresponding protocol skill has priority.
 2. Rules live in skills; chat text is not SSOT.
 3. Legacy aliases are supported for compatibility, but MMB-native protocols are canonical.
+4. `ФИН` and `ФИНС` are coordinated, not competing:
+   - `ФИН` => run finalization protocol, optionally with discovery-block depth.
+   - `ФИНС` => keep focus on discovery output (Features/Integrations/Settings/Skills) while preserving finalization context.

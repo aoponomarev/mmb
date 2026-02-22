@@ -19,8 +19,8 @@ migration_notes: "Adapted for MMB package.json"
 Every key defined in `.env` (excluding values) MUST have a corresponding entry in `.env.example` with a placeholder or description.
 
 ## 2. Verification Protocol
-1. **Automated Check**: `npm run env:check` (runs `scripts/validate-env-example.js`).
-2. **Preflight Guard**: `scripts/git/preflight-solo.ps1` triggers `env:check` if `.env.example` is staged.
+1. **Automated Check**: `npm run env:check` (runs `scripts/infrastructure/validate-env-example.js`).
+2. **Preflight Guard**: `scripts/infrastructure/preflight-solo.ps1` triggers `env:check` if `.env.example` is staged.
 
 ## 3. Sync Workflow
 When adding a new feature requiring an environment variable:

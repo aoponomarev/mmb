@@ -2,7 +2,7 @@
  * Skill: process/process-env-sync-governance
  */
 import fs from "fs";
-import { paths } from "../paths.js";
+import { paths } from "../../paths.js";
 
 function parseEnvKeys(content) {
   return content
@@ -16,6 +16,8 @@ function parseEnvKeys(content) {
 function unique(list) {
   return [...new Set(list)];
 }
+
+const OPTIONAL_ENV_KEYS = new Set(["DATASETS_ROOT", "MBB_SKILLS_ALL", "MBB_SKILLS_MBB"]);
 
 function main() {
   const envPath = paths.project(".env");
@@ -34,7 +36,7 @@ function main() {
   const exampleKeys = unique(parseEnvKeys(fs.readFileSync(envExamplePath, "utf8")));
 
   const missingInExample = envKeys.filter((key) => !exampleKeys.includes(key));
-  const extraInExample = exampleKeys.filter((key) => !envKeys.includes(key));
+  const extraInExample = exampleKeys.filter((key) => !envKeys.includes(key) && !OPTIONAL_ENV_KEYS.has(key));
 
   if (missingInExample.length || extraInExample.length) {
     console.error("[env-check] .env.example is out of sync with .env");

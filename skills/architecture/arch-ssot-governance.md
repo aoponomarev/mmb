@@ -38,7 +38,7 @@ Data duplication leads to configuration drift. In MBB, we relied on symlinks and
 - **Global `INFRASTRUCTURE_CONFIG.yaml`:** Rejected. YAML is static; we need dynamic path resolution for cross-platform (Windows/Docker) consistency.
 
 ## Enforcement
-- Script: `scripts/validate-ssot.js`
+- Script: `scripts/infrastructure/validate-ssot.js`
 - Command: `npm run ssot:check`
 
 This validator ensures:

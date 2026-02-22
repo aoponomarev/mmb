@@ -4,7 +4,7 @@
  */
 import fs from "fs";
 import path from "path";
-import { paths } from "../paths.js";
+import { paths } from "../../paths.js";
 
 let hasErrors = false;
 

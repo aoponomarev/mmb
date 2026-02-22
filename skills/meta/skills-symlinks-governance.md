@@ -19,7 +19,7 @@ relations:
 ## Purpose
 In MBB, NTFS symlinks were heavily used to sync global configurations (like `C:\Users\AO\.continue\config.yaml`) with the project repository. While MMB prefers dynamic runtime configs (e.g., `config.ts`), symlinks may still be necessary for certain external tools that only accept static files. 
 
-This skill defines the governance (ЕИП / SSOT) for managing symlinks in MMB.
+This skill defines SSOT governance for managing symlinks in MMB.
 
 ## Contract (mandatory)
 1. **No hidden symlinks:** Any symlink created for project infrastructure MUST be registered in `paths.js` (`SYMLINKS_REGISTRY`).
@@ -27,7 +27,7 @@ This skill defines the governance (ЕИП / SSOT) for managing symlinks in MMB.
 3. **Validation:** The `validate-symlinks.js` script must pass on CI/pre-commit to ensure no registered symlink is broken.
 
 ## Validation Script
-- Script: `scripts/validate-symlinks.js`
+- Script: `scripts/infrastructure/validate-symlinks.js`
 - Command: `npm run symlinks:check`
 
 This script reads `paths.symlinksRegistry` and verifies that:

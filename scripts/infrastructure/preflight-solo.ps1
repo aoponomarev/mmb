@@ -33,8 +33,7 @@ function Test-NodeFoundationIfNeeded([string[]]$files) {
     $_ -match '(^|/)package\.json$' -or
     $_ -match '(^|/)package-lock\.json$' -or
     $_ -like 'mcp/*' -or
-    $_ -like 'scripts/*.js' -or
-    $_ -like 'scripts/*.mjs'
+    $_ -match '(^|/)scripts/.+\.(js|mjs)$'
   }
   if (-not $needsNode) { return }
 

@@ -17,28 +17,28 @@ supersedes: none
 # Architecture ADR Template
 
 ## Overview
-- Коротко: что за архитектурное решение и где применяется.
+- Briefly describe the architectural decision and where it applies.
 
 ## Implementation Status in MMB
-- **Implemented:** что уже есть в коде MMB.
-- **Pending:** что еще не реализовано.
-- **Doubtful:** что под вопросом или требует переоценки.
+- **Implemented:** what is already implemented in MMB code.
+- **Pending:** what is still not implemented.
+- **Doubtful:** what remains uncertain or requires re-evaluation.
 
 ## Architectural Reasoning (Why this way)
-- Почему выбрали этот вариант.
-- Какие ограничения учитывали (runtime, infra, безопасность, DX).
+- Why this option was chosen.
+- What constraints were considered (runtime, infrastructure, security, DX).
 
 ## Alternatives Considered
-- Вариант A: плюсы/минусы и почему отклонен.
-- Вариант B: плюсы/минусы и почему отклонен.
+- Option A: pros/cons and why it was rejected.
+- Option B: pros/cons and why it was rejected.
 
 ## Migration Notes
-- Что убрано из MBB-специфики.
-- Что оставлено и почему.
+- What was removed from MBB-specific behavior.
+- What was retained and why.
 
 ## Supersedes
-- Если решение заменяет старое: укажи ID предыдущего ADR в `supersedes`.
-- Если это первое решение: `supersedes: none`.
+- If this decision replaces an old one, specify the previous ADR ID in `supersedes`.
+- If this is the first decision, set `supersedes: none`.
 
 ## Relations
 - process-skill-id (governing process)

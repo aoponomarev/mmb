@@ -36,7 +36,7 @@ Define minimal, enforceable contracts for skill linking so the skill graph stays
 - Improves agent routing quality in MCP queries.
 
 ## Enforcement
-- Script: `scripts/validate-skill-graph.js`
+- Script: `scripts/architecture/validate-skill-graph.js`
 - Command: `npm run skills:graph:check`
 
 ## Evolution rule

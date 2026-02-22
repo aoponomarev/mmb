@@ -609,8 +609,15 @@ MCP-инструмент `find_skills_for_file` находит эти ссылк
 - Введён мета-скил синхронизации планов:
   - `plans-sync-governance` (контракт `completed/changed/replaced` между всеми `План_*.md`)
 - Добавлен минимальный валидатор графа:
-  - `scripts/validate-skill-graph.js`
+  - `scripts/architecture/validate-skill-graph.js`
   - npm-команда `skills:graph:check`
+- Добавлен единый health-gate для базы скилов:
+  - `scripts/architecture/validate-skills-health.js`
+  - npm-команда `skills:health:check`
+  - Контракт: hard-fail по структурным ошибкам (`frontmatter/id/relations/scope`), warnings по stale/orphan/review-soon.
+- Добавлен process-скил двунаправленной синхронизации внешних инфраструктурных контуров:
+  - `process-external-parity-sync-governance`
+  - Контракт MBB↔MMB compatibility mode для Docker/Cloudflare/Yandex Cloud и активных внешних провайдеров.
 - **SSOT-барьеры (Inverted SSOT, Runtime Zod, AST ESLint, Symlinks):**
   - Создан `arch-ssot-governance` и `skills-symlinks-governance`
   - Введено поле `ssot_target` в YAML-фронтматтер скилов для явных якорей
@@ -629,6 +636,42 @@ MCP-инструмент `find_skills_for_file` находит эти ссылк
 
 1. **AST-ограничения для доменных границ**
    По аналогии с запретом `process.env`, планируется внедрить eslint-правила, запрещающие перекрестные импорты между изолированными слоями бэкенда (когда он появится), делая архитектурные границы нерушимыми.
+
+---
+
+## 18. Контур "здоровья скилов" v2 (must-have, автономный режим)
+
+Цель: поднять надежность до уровня "docs-as-code quality gate", где регрессии в базе знаний ловятся автоматически до коммита/релиза.
+
+### 18.1 Что взято из best practices и как приземлено в MMB
+
+1. **Schema-first metadata**
+   - Каждому скилу обязательны ключевые поля (`id/title/scope/tags/priority/updated_at`).
+   - Для `arch-*` обязательны ADR-поля (`decision_id/supersedes/status/confidence/review_after/decision_scope`).
+2. **Graph integrity**
+   - Проверка, что `relations` резолвятся в существующие `id`.
+   - Запрет "битых" связей как hard-fail.
+3. **Staleness governance**
+   - `review_after` контролируется как freshness-сигнал.
+   - Просрочки и близкие ревью — явные warnings в отчете.
+4. **Orphan detection**
+   - Скилы без входящих/исходящих связей помечаются как риск деградации навигации.
+5. **Health scorecard**
+   - Единый score (`0..100`) и агрегаты (`errors/warnings/stale/orphan`) для быстрых решений по качеству.
+
+### 18.2 Текущее внедрение (MMB)
+
+- `npm run skills:graph:check` — structural graph contract.
+- `npm run skills:health:check` — интегральный quality gate по структуре/свежести/связности.
+- Политика gate:
+  - `errors > 0` => build/check failed;
+  - warnings не блокируют, но считаются техническим долгом контура знаний.
+
+### 18.3 Следующие шаги (P1/P2)
+
+- **P1:** добавить owner-поля и review SLA для критичных скилов.
+- **P1:** ввести delta-check по измененным скилам (быстрый режим preflight).
+- **P2:** ввести trend-метрики (динамика score, stale-rate, orphan-rate) в `План_Monitoring.md`.
 
 ---
 

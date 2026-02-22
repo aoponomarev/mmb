@@ -18,7 +18,7 @@ relations:
 # Protocol: Command `КАИ` (Code/Architecture/Infrastructure)
 
 ## Command
-`КАИ` = выполнить полный анализ по трем слоям: Code, Architecture, Infrastructure.
+`КАИ` = perform a full analysis across three layers: Code, Architecture, Infrastructure.
 
 ## Required analysis order
 1. **Code:** defects, regressions, test gaps, anchor coverage.

@@ -18,7 +18,7 @@ relations:
 # Protocol: Command `ВЗП` (Planned Execution)
 
 ## Command
-`ВЗП` = выполнить задачу планово, с пошаговой верификацией.
+`ВЗП` = execute the task in a planned way, with step-by-step verification.
 
 ## Core principles
 1. Create a concrete step-by-step plan before edits.

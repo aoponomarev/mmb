@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..");
+const ROOT = path.resolve(__dirname, "..", "..");
 const SKILLS_ROOT = path.join(ROOT, "skills");
 
 const EXCLUDED = new Set(["drafts", ".obsidian"]);

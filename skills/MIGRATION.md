@@ -43,6 +43,8 @@
 - [x] `arch-ssot-governance` — единый SSOT-контракт (пути, конфиги, доки)
 - [x] `skills-symlinks-governance` — правила работы с симлинками и реестр (СИМЛИНКИ.txt)
 - [x] `plans-sync-governance` — контракт синхронизации статусов между всеми `План_*.md`
+- [x] `scripts-layout-governance` — контракт структуры `scripts/` (root для user-entry, внутренние скрипты по контурам)
+- [x] `process-external-parity-sync-governance` — двунаправленная синхронизация внешних контуров MBB↔MMB в migration compatibility mode
 - [x] Автогенерация индексов (`generate-skills-index.js`) и доков путей (`generate-paths-docs.js`)
 
 ---

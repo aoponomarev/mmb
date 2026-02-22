@@ -1,0 +1,20 @@
+---
+description: ""
+globs: ""
+alwaysApply: true
+---
+# MMB Scripts Layout Rule
+
+## Critical Rule
+When creating or moving scripts, preserve layout governance:
+
+1. `scripts/` root is reserved for:
+   - `README.md`
+   - manual user-entry scripts only.
+2. Internal automation scripts must be placed in:
+   - `scripts/infrastructure/`
+   - `scripts/architecture/`
+3. Preflight and git hygiene scripts belong to `scripts/infrastructure/`.
+4. If scripts layout changes, update:
+   - `scripts/README.md`
+   - skill `scripts-layout-governance`

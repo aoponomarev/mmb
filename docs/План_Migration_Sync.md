@@ -47,8 +47,9 @@
 
 | Блок MBB | Target в MMB | Статус | Решение |
 |---|---|---|---|
-| Skills/MCP/Meta | `План_Skills_MCP.md` | active | continue |
+| Skills/MCP/Meta | `План_Skills_MCP.md` | active | continue (graph+health gates enabled) |
 | Docker/Runtime | `План_Infrastructure_Docker.md` | pending | migrate |
+| External infra parity (MBB↔MMB) | `План_External_Infrastructure_Parity.md` | active | continue |
 | Control Plane | `План_Control_Plane.md` | pending | migrate |
 | Backend services | `План_Backend_Core.md` | pending | migrate |
 | n8n/workflows | `План_Integrations_n8n.md` | pending | migrate |
@@ -93,6 +94,7 @@
 | `План_Backend_Core.md` | P1 | старт |
 | `План_AI_Orchestration.md` | P1 | старт |
 | `План_Integrations_n8n.md` | P1 | старт |
+| `План_External_Infrastructure_Parity.md` | P1 | старт |
 | `План_Frontend_UI.md` | P2 | defer |
 | `План_Monitoring.md` | P2 | defer |
 | `План_Libs.md` | P2 | defer |
@@ -115,3 +117,16 @@
 4. При `replaced` указать заменяющий план и причину.
 
 Никакое изменение в миграции не считается завершенным, пока статусы не синхронизированы во всех трех уровнях.
+
+---
+
+## 8. Cross-plan sync: контур "здоровья скилов"
+
+Для контура Skills/MCP принято обязательное соответствие:
+
+- Источник контроля: `План_Skills_MCP.md`, раздел "Контур здоровья скилов v2".
+- Реализация: `scripts/architecture/validate-skill-graph.js` + `scripts/architecture/validate-skills-health.js`.
+- Операционный контракт:
+  1. При изменениях в `skills/**` запускать `skills:graph:check` и `skills:health:check`.
+  2. Ошибки health-gate считаются блокирующими для завершения этапа.
+  3. Warnings фиксируются как backlog на доработку freshness/sвязности.

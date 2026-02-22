@@ -18,7 +18,7 @@ relations:
 # Protocol: Command `ЕИП` (SSOT Check)
 
 ## Command
-`ЕИП` = проверить единый источник правды (SSOT) для путей/конфигурации.
+`ЕИП` = verify the single source of truth (SSOT) for paths/configuration.
 
 ## What to verify in MMB
 1. `.env` contains only root-level host variables and secrets placeholders policy is respected.
