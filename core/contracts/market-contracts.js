@@ -33,9 +33,9 @@ export const marketSnapshotSchema = z.object({
     ts: z.string().datetime(),
     topCoins: z.object({
         data: z.array(z.any())
-    }, { required_error: "INVALID_SNAPSHOT_PAYLOAD: topCoins must be object containing data array", invalid_type_error: "INVALID_SNAPSHOT_PAYLOAD: topCoins must be object containing data array" }),
+    }, { required_error: "INVALID_SNAPSHOT_PAYLOAD: topCoins must be object containing data array", invalid_type_error: "INVALID_SNAPSHOT_PAYLOAD: topCoins must be object containing data array" }).passthrough(),
     metrics: z.record(z.string(), z.any(), { required_error: "INVALID_SNAPSHOT_PAYLOAD: metrics must be object", invalid_type_error: "INVALID_SNAPSHOT_PAYLOAD: metrics must be object" })
-});
+}).passthrough();
 
 export function parseMarketQuery(input) {
     const result = marketQuerySchema.safeParse(input || {});

@@ -55,9 +55,9 @@
 - [x] Внедрение backend contract-first слоя (Zod): `core/api/market-contracts.js`.
 - [x] Подготовка transport-контура `core/api/market-snapshot-transport.js` и thin HTTP layer `core/api/market-snapshot-http.js`.
 - [x] E2E тестирование backend-слоя (`node:test`, `backend-market-runtime.test.js`, `market-snapshot-http.test.js`).
-- [ ] Завершение инфраструктурных проверок ядра (cache integrity gate).
+- [x] Завершение инфраструктурных проверок ядра (cache integrity gate).
 
-### Этап 4: Frontend и UI — *Активная фаза*
+### Этап 4: Frontend и UI — *Перенесено в бэклог*
 *(Связанные планы: `plan-frontend-ui.md`)*
 - [x] Подтверждение и обеспечение работоспособности на GitHub Pages (CORS proxy) и `file:///`.
 - [x] Внедрение **Reactive Reliability Gate (RRG)** (запрет прямых мутаций `window` и `innerHTML`).
@@ -67,7 +67,7 @@
 - [ ] Дальнейшая миграция UI компонентов (типобезопасные таблицы, карточки) согласно стандартам донора.
 - [ ] Завершение wrapper-first Vue migration (если потребуется для No-Build).
 
-### Этап 5: Интеграции и Оркестрация — *Отложено*
+### Этап 5: Интеграции и Оркестрация — *Перенесено в бэклог*
 *(Связанные планы: `plan-ai-orchestration.md`, `plan-integrations-n8n.md`, `plan-cloudflare.md`, `plan-yandex-cloud.md`)*
 - [ ] AI-Orchestration (управление моделями, fallback контракты).
 - [ ] Интеграции n8n.

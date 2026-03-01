@@ -134,6 +134,6 @@
 - [x] Добавлены query hardening-контракты для snapshot route: max query length (512), strict allowed keys (`topCount`,`sortBy`) и `x-api-version` header; покрытие через `backend:http:query-guard:e2e` и `backend:http:query-keys:e2e`.
 - [x] Усилен request-id контракт: sanitize входного `x-request-id` (charset + max length 64, invalid -> generated safe id) с отдельным gate `backend:http:request-id:sanitize:e2e`.
 - [x] Усилен node fallback parity для `500 INTERNAL_SERVER_ERROR`: выровнены runtime headers (`x-api-version`, `x-service-state=degraded`, CORS, `x-request-id`) с отдельным gate `backend:node:fallback:e2e`.
-- [ ] Добавлен API consumer-контур: `core/api/market-snapshot-client.js` + `backend:client:e2e` (request-id propagation, query normalization, ok/error transport shape).
-- [ ] Добавлен runtime cache-aware smoke: `backend:http:runtime-smoke:e2e` (cache-hit по `topCoins/metrics`, частичная деградация `openInterest`, degraded-готовность при недоступном провайдере).
+- [x] Добавлен API consumer-контур: `core/api/market-snapshot-client.js` + `backend:client:e2e` (request-id propagation, query normalization, ok/error transport shape).
+- [x] Добавлен runtime cache-aware smoke: `backend:http:runtime-smoke:e2e` (cache-hit по `topCoins/metrics`, частичная деградация `openInterest`, degraded-готовность при недоступном провайдере).
 - [ ] Синхронизация статусов в master/migration документах.
