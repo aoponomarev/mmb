@@ -65,6 +65,19 @@ function checkKnowledge() {
     } else {
         fail('knowledge', 'app skills directory', 'app/skills/ not found', false);
     }
+
+    // Integral health-gate for skills database
+    const validateSkillGraph = join(REPO_ROOT, 'is', 'scripts', 'skills', 'validate-skill-graph.js');
+    if (existsSync(validateSkillGraph)) {
+        try {
+            execSync(`node "${validateSkillGraph}"`, { stdio: 'ignore' });
+            pass('knowledge', 'skill graph validation', 'passed');
+        } catch {
+            fail('knowledge', 'skill graph validation', 'failed (run node is/scripts/skills/validate-skill-graph.js manually for details)', true);
+        }
+    } else {
+        fail('knowledge', 'skill graph validation', 'validate-skill-graph.js missing', false);
+    }
 }
 
 // --- Contract plane: .env & Paths ---

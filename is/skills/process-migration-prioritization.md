@@ -1,57 +1,57 @@
 ---
-title: "Процесс: Критерии приоритизации миграции"
+title: "Process: Migration Prioritization Criteria"
 tags: ["#process", "#migration", "#prioritization", "#heuristics"]
 ---
 
-# Приоритизация шагов миграции (Heuristic Weights)
+# Migration Prioritization Steps (Heuristic Weights)
 
-> **Контекст**: В условиях сложной миграции из Legacy App в Target App с десятками планов важно правильно выбирать следующий шаг, чтобы не создать хаос и не копить технический долг.
-> **Scope**: Глобальный (управление процессом миграции)
+> **Context**: In a complex migration from Legacy App to Target App with dozens of plans, it is crucial to choose the next step correctly to avoid creating chaos and accumulating technical debt.
+> **Scope**: Global (migration process management)
 
-## 1. Базовые критерии и их веса (Heuristics)
+## 1. Base Criteria and their Weights (Heuristics)
 
-При выборе следующего шага миграции (или следующего невыполненного чекбокса из планов) ИИ-агент должен оценивать кандидатов по трем критериям с соответствующими весами:
+When selecting the next migration step (or the next uncompleted checkbox from the plans), the AI agent must evaluate candidates against three criteria with the following weights:
 
-### A. Фундаментальность (Вес: 0.5)
-*Насколько этот шаг является блокирующим для других систем?*
-- Высокая (1.0): SSOT контракты, базовая безопасность, пути, ядро данных (всё, на что опираются другие слои).
-- Средняя (0.5): Утилиты разработчика, локальные удобства, изолированные фичи.
-- Низкая (0.1): Оконечные UI-компоненты, визуальные улучшения, декоративные элементы.
+### A. Fundamentality (Weight: 0.5)
+*How much is this step blocking for other systems?*
+- High (1.0): SSOT contracts, core security, paths, data core (everything that other layers rely on).
+- Medium (0.5): Developer utilities, local conveniences, isolated features.
+- Low (0.1): End-user UI components, visual improvements, decorative elements.
 
-### B. Отсутствие разрывов (Вес: 0.3)
-*Насколько этот шаг помогает завершить уже начатый логический кусок?*
-- Высокая (1.0): Шаг закрывает "дыру" в наполовину перенесенном модуле (например, написать тесты для только что перенесенного провайдера).
-- Средняя (0.5): Продолжение работы в том же слое, но над независимым модулем.
-- Низкая (0.1): Прыжок в совершенно новый контекст/план, когда старые еще пестрят открытыми задачами.
+### B. Absence of Gaps (Weight: 0.3)
+*How much does this step help to complete an already started logical piece?*
+- High (1.0): The step closes a "hole" in a half-transferred module (e.g., writing tests for a just-transferred provider).
+- Medium (0.5): Continuing work in the same layer, but on an independent module.
+- Low (0.1): Jumping into a completely new context/plan when old ones are still full of open tasks.
 
-### C. Снижение риска техдолга (Вес: 0.2)
-*Что будет, если мы отложим этот шаг? Начнет ли код "гнить"?*
-- Высокая (1.0): Откладывание приведет к ошибкам в проде, отсутствию тестов на критичном пути или утечке секретов (например, настройка CI/CD гейтов).
-- Средняя (0.5): Откладывание создаст временные неудобства (ручные запуски скриптов).
-- Низкая (0.1): Откладывание не влияет на качество уже перенесенного кода (например, откладывание новых фич оркестрации).
+### C. Technical Debt Risk Reduction (Weight: 0.2)
+*What happens if we delay this step? Will the code start to "rot"?*
+- High (1.0): Delaying will lead to bugs in production, lack of tests on a critical path, or secret leaks (e.g., setting up CI/CD gates).
+- Medium (0.5): Delaying will create temporary inconveniences (manual script executions).
+- Low (0.1): Delaying does not affect the quality of already transferred code (e.g., delaying new orchestration features).
 
 ---
 
-## 2. Формула принятия решения
+## 2. Decision Formula
 
 `Priority Score = (A * 0.5) + (B * 0.3) + (C * 0.2)`
 
-Агент обязан рассчитывать этот Score (явно в уме или в отчете) при предложении следующего шага пользователю, сравнивая 2-3 наиболее вероятных кандидатов из `docs/plans/`.
+The agent MUST calculate this Score (explicitly in its mind or in the report) when suggesting the next step to the user, comparing 2-3 most likely candidates from `docs/plans/`.
 
 ---
 
-## 3. Пример расчета
+## 3. Calculation Example
 
-Кандидат 1: Написать E2E тесты для перенесенных API-провайдеров.
-- Фундаментальность: 0.9 (данные - основа приложения).
-- Отсутствие разрывов: 1.0 (код провайдеров уже перенесен, тестов нет - это разрыв).
-- Снижение риска: 0.9 (без тестов код гниет).
+Candidate 1: Write E2E tests for transferred API providers.
+- Fundamentality: 0.9 (data is the foundation of the app).
+- Absence of Gaps: 1.0 (provider code already transferred, tests missing - this is a gap).
+- Risk Reduction: 0.9 (without tests, code rots).
 **Score: (0.9 * 0.5) + (1.0 * 0.3) + (0.9 * 0.2) = 0.45 + 0.3 + 0.18 = 0.93**
 
-Кандидат 2: Перенос UI-таблицы списка монет.
-- Фундаментальность: 0.2 (оконечный UI).
-- Отсутствие разрывов: 0.5 (продолжение работы над UI).
-- Снижение риска: 0.2 (старый UI работает в fallback режиме).
+Candidate 2: Transfer UI table for coin list.
+- Fundamentality: 0.2 (end-user UI).
+- Absence of Gaps: 0.5 (continuing work on UI).
+- Risk Reduction: 0.2 (old UI works in fallback mode).
 **Score: (0.2 * 0.5) + (0.5 * 0.3) + (0.2 * 0.2) = 0.1 + 0.15 + 0.04 = 0.29**
 
-Вывод: Сначала тесты провайдеров, UI подождет.
+Conclusion: Provider tests first, UI can wait.

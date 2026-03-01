@@ -1,75 +1,76 @@
 ---
-title: "Архитектурный фундамент (Naming, Paths, SSOT, MCP)"
+title: "Architectural Foundation (Naming, Paths, SSOT, MCP)"
 tags: ["#architecture", "#ssot", "#naming", "#mcp"]
 dependencies: []
 updated_at: "2026-03-01T00:00:00.000Z"
 ---
 
-# Архитектурный фундамент (Naming, Paths, SSOT)
+# Architectural Foundation (Naming, Paths, SSOT)
 
-> **Контекст**: Базовые правила построения приложения. Это первый и самый важный скил.
-> **Scope**: Глобальный (app, core, is)
+> **Context**: Basic rules for building the application. This is the first and most important skill.
+> **Scope**: Global (app, core, is)
 
-## 1. Отказ от старых аббревиатур (Anti-Calque)
-Запрещено использовать аббревиатуры `mbb` и `mmb` в коде, путях и именах файлов.
-Разрешено их использовать только в контексте интеграции с облачными сервисами (`cloudflare`, `yandex`), если это диктуется инфраструктурой, которая еще не переименована в облаке.
-Слои приложения:
-- `app/` — клиентский интерфейс, бизнес-логика пользователя (Vue).
-- `core/` — ядро приложения, независимое от фреймворков и платформы.
-- `is/` (Infrastructure / Information System) — скрипты, гейты, секреты, серверы MCP.
+## 1. Rejection of Old Abbreviations (Anti-Calque)
+It is forbidden to use the abbreviations `mbb` and `mmb` in code, paths, and file names.
+They are only allowed in the context of integration with cloud services (`cloudflare`, `yandex`), if dictated by infrastructure that has not yet been renamed in the cloud.
+Application layers:
+- `app/` — client interface, user business logic (Vue).
+- `core/` — application core, framework and platform independent.
+- `is/` (Infrastructure / Information System) — scripts, gates, secrets, MCP servers.
 
-## 2. Naming Contracts (Гейт Имен)
-Все имена файлов и папок обязаны быть в формате `kebab-case`.
-Проверка осуществляется через Zod-схемы в `is/contracts/naming/naming-rules.js`.
-(Системные файлы и папки, начинающиеся с точки, например `.github`, разрешены).
+## 2. Naming Contracts (Name Gate)
+All file and folder names MUST be in `kebab-case` format.
+Verification is done via Zod schemas in `is/contracts/naming/naming-rules.js`.
+(System files and folders starting with a dot, e.g., `.github`, are allowed).
 
-## 3. SSOT Путей
-Единственный источник правды о путях (Single Source of Truth) находится в `is/contracts/paths/paths.js`.
-Запрещено хардкодить абсолютные или относительные пути в инфраструктурных скриптах. Все пути должны браться из объекта `PATHS`. 
-Этот объект автоматически валидирует пути через Naming Contracts при старте.
+## 3. Paths SSOT
+The single source of truth for paths is located in `is/contracts/paths/paths.js`.
+It is forbidden to hardcode absolute or relative paths in infrastructure scripts. All paths must be taken from the `PATHS` object. 
+This object automatically validates paths via Naming Contracts upon startup.
 
-**Политика путей:**
-- **Для `import` / `require` (Код модулей):** СТРОГО относительные пути (`../`, `./`). Это сохраняет статический анализ IDE и не ломает бандлеры.
-- **Для файловых операций (fs.readFile, скрипты автоматизации, бэкапы):** СТРОГО абсолютные пути через `PATHS`. Файловая система не прощает относительных путей.
+**Path Policy:**
+- **For `import` / `require` (Module code):** STRICTLY relative paths (`../`, `./`). This preserves IDE static analysis and doesn't break bundlers.
+- **For file operations (fs.readFile, automation scripts, backups):** STRICTLY absolute paths via `PATHS`. The file system is unforgiving with relative paths.
 
-## 4. SSOT Окружения и Секретов (Secret Resilience)
-Контракт на переменные окружения описан в `is/contracts/env/env-rules.js`.
-Файл `.env` нельзя коммитить (в Git лежит только `.env.example`).
-Ключи и пароли шифруются AES-256 через `SYS_SECRET_ARCHIVE_KEY` (длиной от 32 символов) и складываются в `is/secrets/archives/` с помощью скриптов:
+## 4. Environment and Secrets SSOT (Secret Resilience)
+The contract for environment variables is described in `is/contracts/env/env-rules.js`.
+The `.env` file cannot be committed (only `.env.example` goes in Git).
+Keys and passwords are encrypted with AES-256 using `SYS_SECRET_ARCHIVE_KEY` (length >= 32 chars) and stored in `is/secrets/archives/` using scripts:
 - `npm run secret:backup`
 - `npm run secret:restore`
 - `npm run secret:check`
 
-## 5. Skills, MCP и Causality (База Знаний)
-Этот файл сам по себе является частью базы знаний, которая лежит в `is/skills/` и `core/skills/`.
-Доступ к базе знаний осуществляется локальным сервером `skills` (через MCP). Агенты Cursor/Continue обязаны использовать MCP инструменты (`search_skills`, `read_skill`) для соблюдения этих правил.
-Архитектурная память хранится через Memory MCP сервер (`is/memory/memory.jsonl`).
+## 5. Skills, MCP and Causality (Knowledge Base)
+This file itself is part of the knowledge base located in `is/skills/` and `core/skills/`.
+All skills MUST be authored in **English** as per `process-language-policy.md`.
+Access to the knowledge base is via a local `skills` server (via MCP). Cursor/Continue agents must use MCP tools (`search_skills`, `read_skill`) to comply with these rules.
+Architectural memory is maintained through the Memory MCP server (`is/memory/memory.jsonl`).
 
-**Отказ от жесткой Causality (Временно):**
-Мы не используем сложную грамматику идентификаторов Causality (вида `GC.c5d6`) до тех пор, пока количество скилов не превысит 50. Причинность архитектурных решений описывается обычным текстом в блоке "Контекст".
+**Rejection of Strict Causality (Temporary):**
+We do not use complex Causality identifier grammars (like `GC.c5d6`) until the number of skills exceeds 50. The causality of architectural decisions is described in plain text in the "Context" block.
 
-**Гибридное Якорение (Skill Anchoring):**
-- **File-level (Шапка файла):** Для декларации контракта всего модуля. Формат: `/** @skill is/skills/arch-foundation */`
-- **Inline-level (Фрагмент):** Только для нетривиальных, неочевидных решений внутри логики. Формат: `// @skill-anchor arch-foundation: intentionally avoiding paths.js for imports`
+**Hybrid Skill Anchoring:**
+- **File-level (File Header):** To declare the contract of the entire module. Format: `/** @skill is/skills/arch-foundation */`
+- **Inline-level (Fragment):** Only for non-trivial, non-obvious decisions inside logic. Format: `// @skill-anchor arch-foundation: intentionally avoiding paths.js for imports`
 
 ## 6. Hosting Constraints (File protocol & GitHub Pages)
-Приложение изначально спроектировано как **Local-First**, но обязано поддерживать несколько сред исполнения без изменения кода (Zero-Config Portability):
-1. **Local File Protocol (`file:///`)**: Приложение открывается двойным кликом по `index.html`. В этом режиме все API-запросы, подверженные CORS (например, CoinGecko), ОБЯЗАНЫ проксироваться через наш Cloudflare Worker (`cloudflareConfig.getApiProxyEndpoint`).
-2. **GitHub Pages (`https://aoponomarev.github.io/...`)**: Приложение может быть опубликовано как статический сайт. 
-   - **Ограничение**: Никакого локального Node.js сервера (Express/Fastify) в рантайме фронтенда быть не может, так как GitHub Pages раздает только статику (HTML/JS/CSS).
-   - Любые бэкенд-модули (`core/api/providers/`, Node.js сервисы) могут использоваться только:
-     а) Внутри CI/CD пайплайнов (например, крон-джобы, генераторы).
-     б) Как облачные воркеры (Cloudflare/Yandex).
-     в) Как локальные утилиты разработчика (preflight, backups).
-   - Запрещено завязывать работоспособность UI (`index.html`) на запущенный локально Node.js сервер. UI ходит либо напрямую во внешние API, либо через наши облачные Serverless-функции.
+The application is initially designed as **Local-First**, but MUST support multiple execution environments without code changes (Zero-Config Portability):
+1. **Local File Protocol (`file:///`)**: The application opens by double-clicking `index.html`. In this mode, all API requests subject to CORS (e.g., CoinGecko) MUST be proxied through our Cloudflare Worker (`cloudflareConfig.getApiProxyEndpoint`).
+2. **GitHub Pages (`https://aoponomarev.github.io/...`)**: The application can be published as a static site. 
+   - **Constraint**: There can be NO local Node.js server (Express/Fastify) in the frontend runtime, because GitHub Pages serves only static files (HTML/JS/CSS).
+   - Any backend modules (`core/api/providers/`, Node.js services) can be used only:
+     a) Inside CI/CD pipelines (e.g., cron jobs, generators).
+     b) As cloud workers (Cloudflare/Yandex).
+     c) As local developer utilities (preflight, backups).
+   - It is forbidden to tie the functionality of the UI (`index.html`) to a locally running Node.js server. The UI goes either directly to external APIs, or through our cloud Serverless functions.
 
 ## 7. Testing Strategy
-Мы используем встроенный `node:test` (появившийся в Node.js v18+) для всех тестов, чтобы не тащить тяжелые зависимости вроде Jest или Vitest.
-- Все тестовые файлы должны иметь суффикс `.test.js` (например: `core/api/market-snapshot-http.test.js`).
-- Запуск тестов осуществляется через `npm run test` (который под капотом вызывает `node --test`).
-- Для ассертов используется встроенный модуль `node:assert/strict`.
+We use the built-in `node:test` (introduced in Node.js v18+) for all tests, to avoid heavy dependencies like Jest or Vitest.
+- All test files must have the `.test.js` suffix (e.g.: `core/api/market-snapshot-http.test.js`).
+- Running tests is done via `npm run test` (which calls `node --test` under the hood).
+- For assertions, the built-in `node:assert/strict` module is used.
 
-## 8. Control Plane (Защита и проверки состояния)
-Control Plane — это набор инфраструктурных скриптов, гарантирующих безопасную и надежную работу приложения перед деплоем, тестированием или запуском.
-- **health-check:** Интегральная проверка всех контуров (Knowledge, Contracts, Runtime) через `npm run health-check`.
-- **single-writer guard:** Защита от race conditions (гонки данных) при работе с внешними облачными ресурсами. Запускается через `npm run validate:single-writer`. Переменная `DATA_PLANE_ACTIVE_APP` гарантирует, что только одно окружение (TARGET, LEGACY и т.д.) может писать данные в облако, остальные работают в режиме Read-Only.
+## 8. Control Plane (Protection and State Checks)
+The Control Plane is a set of infrastructure scripts that guarantee the safe and reliable operation of the application before deployment, testing, or launch.
+- **health-check:** Integral check of all contours (Knowledge, Contracts, Runtime) via `npm run health-check`.
+- **single-writer guard:** Protection against race conditions when working with external cloud resources. Started via `npm run validate:single-writer`. The `DATA_PLANE_ACTIVE_APP` variable ensures that only one environment (TARGET, LEGACY, etc.) can write data to the cloud, while others work in Read-Only mode.

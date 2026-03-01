@@ -3,33 +3,34 @@
  * @description Policy for AI behavior to ensure robust architectural evolution and migration safety.
  */
 
-# Протокол взаимодействия ИИ-агентов (AI Collaboration Protocol)
+# AI Collaboration Protocol
 
-> **Контекст**: В проекте с высокой ценой ошибки слепое следование за пользователем может привести к накоплению технического долга и провалу миграции.
+> **Context**: In a project with a high cost of errors, blindly following the user can lead to technical debt accumulation and migration failure.
 
-## 1. Скептицизм и Объективность (Primary Directive)
-- **НЕ старайся угодить:** Никогда не соглашайся с предложением пользователя (разработчика) только из вежливости.
-- **Подвергай критике:** Если предложенный путь нарушает текущие контракты (SSOT, Naming, Isolation), прямо заяви об этом и предложи альтернативу с аргументацией.
-- **Взвешивай старые планы:** То, что было написано в `AI/PRO/mmb/docs/План_*.md`, не является догмой. Обстоятельства миграции изменились (например, отказ от MMB/MBB терминов, отказ от жесткой Causality). Применяй планы, адаптируя их к новой реальности, а не слепо копируя.
-- **Никакой самодеятельности с Git:** КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО делать `git commit` без явного и прямого приказа пользователя. Запрещено надоедать пользователю фразами о том, что ты не сделал коммит, или предлагать ему сделать его. Вместо этого в конце ответа давай краткую сводку по общему прогрессу миграции (в процентах) и предлагай следующих кандидатов на выполнение.
+## 1. Skepticism and Objectivity (Primary Directive)
+- **DO NOT try to please:** Never agree with a user's (developer's) proposal just out of politeness.
+- **Criticize:** If a proposed path violates current contracts (SSOT, Naming, Isolation, Language Policy), state this directly and offer an alternative with reasoning.
+- **Weigh old plans:** What was written in `AI/PRO/mmb/docs/plan_*.md` is not dogma. Migration circumstances have changed (e.g., dropping MMB/MBB terms, dropping strict Causality, English language policy). Apply plans by adapting them to the new reality, not blindly copying them.
+- **No Git amateurism:** IT IS STRICTLY FORBIDDEN to perform a `git commit` without an explicit and direct command from the user. It is forbidden to nag the user with phrases about how you didn't commit, or to suggest they do it. Instead, at the end of your response, provide a brief summary of overall migration progress (in percentage) and suggest the next candidates for execution.
 
-## 2. Микрошаги (Fail-Fast Approach)
-- Выполняй крупные задачи через мелкие, проверяемые шаги.
-- После каждого значимого изменения запускай `npm run test` или профильные скрипты-гейты (например, `npm run secret:check`).
-- Если что-то сломалось, немедленно останавливайся и сообщай об ошибке, не пытайся "замести под ковер".
+## 2. Micro-steps (Fail-Fast Approach)
+- Execute large tasks through small, verifiable steps.
+- After every significant change, run `npm run test` or profile gate scripts (e.g., `npm run secret:check`).
+- If something breaks, stop immediately and report the error; do not try to "sweep it under the rug".
 
-## 3. Чтение документации перед действием
-- Прежде чем писать код в новом домене, используй инструмент `search_skills` или `read_skill` для получения контекста из `is/skills/` или `core/skills/`.
-- Если нужного правила нет — остановись и предложи разработчику его создать (зафиксировать в Markdown).
-- **Проактивный перенос скилов:** При переносе модулей кода из донора (`AI/PRO/mmb`), агент обязан параллельно сканировать донора на предмет относящихся к этому коду скилов и казуальностей. Если скил/казуальность из донора актуальны для новой архитектуры, их необходимо перенести в целевой проект и адаптировать, прежде чем писать или переносить сам код.
+## 3. Read Documentation Before Acting
+- Before writing code in a new domain, use the `search_skills` or `read_skill` tool to gain context from `is/skills/` or `core/skills/`.
+- If the required rule doesn't exist — stop and suggest to the developer that they create it (document it in Markdown).
+- **Proactive skill transfer:** When migrating code modules from the donor (`AI/PRO/mmb`), the agent MUST scan the donor in parallel for skills and causalities related to this code. If a skill/causality from the donor is relevant for the new architecture, it must be transferred to the target project and adapted before writing or transferring the code itself.
+- **Language Policy:** Ensure all transferred or newly created skills, comments, and variables are translated to **English** in accordance with `process-language-policy.md`.
 
-## 4. Контроль устаревшего кода (Obsolete Code Management)
-- **Zero-Tolerance к мусору:** В процессе миграции старые файлы и скрипты (например, старые генераторы индексов или проверки окружения), которые дублируются новым инфраструктурным слоем `is/`, должны немедленно удаляться.
-- **Чистота рабочей директории:** Если функция заменена на новую, старую функцию нельзя просто закомментировать "на всякий случай". Ее нужно удалить (Git все помнит).
-- **Бэклог для некритичного долга:** Если переименование файла ломает внешние интеграции (например, сторонние Python-скрипты), не удаляй его, а создай задачу в `docs/backlog/` с пояснением, почему файл пока оставлен.
+## 4. Obsolete Code Management
+- **Zero-Tolerance for garbage:** During migration, old files and scripts (e.g., old index generators or environment checks) that are duplicated by the new infrastructure layer `is/` must be deleted immediately.
+- **Clean working directory:** If a function is replaced by a new one, the old function cannot simply be commented out "just in case". It must be deleted (Git remembers everything).
+- **Backlog for non-critical debt:** If renaming a file breaks external integrations (e.g., third-party Python scripts), do not delete it, but create a task in `docs/backlog/` explaining why the file is left for now.
 
-## 5. Долгосрочная память (Chat-Agreement Memory)
-- **Фиксация договоренностей:** Любые архитектурные, инфраструктурные или процессные договоренности, достигнутые в диалоге (чате) с разработчиком, должны быть немедленно перенесены в базу знаний (в соответствующий файл `*.md` в `is/skills/` или `core/skills/`). 
-- Нельзя полагаться на то, что другой агент в новом чате "прочитает историю". Знания должны жить в файлах.
-- **Legacy Causality Workflow:** Запрещено писать в коде комментарии с "догадками" о старой бизнес-логике. Если причина непонятна, зафиксируй вопрос в `docs/drafts/causality-questions.md`. После ответа разработчика — оформи как Скил и добавь точный Якорь в код.
-- **Active Causality Recording (Запись решений):** Если в процессе написания нового кода агент исследует несколько путей и выбирает один по конкретным причинам (найденный баг, ограничение API, нюанс производительности), агент **ОБЯЗАН** зафиксировать эту "казуальность" (почему сделано именно так, а не иначе). Если это локальный нюанс — оставить комментарий в коде `// @causality: почему мы не используем X...`. Если это широкое решение — обновить/создать файл в `skills/` и повесить `@skill-anchor`. Цель: чтобы будущие агенты не "наступали на те же грабли", пытаясь переписать код обратно.
+## 5. Long-term Memory (Chat-Agreement Memory)
+- **Fixing agreements:** Any architectural, infrastructural, or process agreements reached in dialogue (chat) with the developer must be immediately transferred to the knowledge base (in the appropriate `*.md` file in `is/skills/` or `core/skills/`). 
+- You cannot rely on another agent in a new chat to "read the history". Knowledge must live in files.
+- **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/drafts/causality-questions.md`. After receiving an answer from the developer — format it as a Skill and add a precise Anchor to the code.
+- **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). If it's a local nuance — leave a comment in the code `// @causality: why we don't use X...`. If it's a broader decision — update/create a file in `skills/` and attach an `@skill-anchor`. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.

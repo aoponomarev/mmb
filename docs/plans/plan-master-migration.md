@@ -36,8 +36,8 @@
 - [x] Создание базовых архитектурных скилов (`arch-foundation.md`).
 - [x] Внедрение Causality: фиксация архитектурных решений (Active Causality Recording) прямо в скилах.
 - [x] Настройка базового скрипта `npm run preflight`.
-- [ ] Перенос полноценного MCP-сервера и Memory контура (если потребуется, сейчас заменяется активным ведением скилов).
-- [ ] Интегральный health-gate базы скилов.
+- [x] Перенос полноценного MCP-сервера и Memory контура (если потребуется, сейчас заменяется активным ведением скилов).
+- [x] Интегральный health-gate базы скилов.
 
 ### Этап 2: Базовая инфраструктура и Control Plane — *Активная фаза*
 *(Связанные планы: `plan-control-plane.md`, `plan-infrastructure-docker.md`, `plan-external-infrastructure-parity.md`)*
@@ -77,7 +77,7 @@
 *(Связанные планы: `plan-testing-strategy.md`, `plan-monitoring.md`, `plan-github-workspace.md`, `plan-rollback.md`)*
 - [x] Внедрение стратегии тестирования (`plan-testing-strategy.md`) с упором на `node:test`.
 - [x] Настройка CI/CD (GitHub Actions) для автоматического запуска preflight и тестов.
-- [ ] Внедрение мониторинга и диагностических контрактов.
+- [x] Внедрение мониторинга и диагностических контрактов.
 
 ---
 

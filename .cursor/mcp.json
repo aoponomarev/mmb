@@ -1,15 +1,15 @@
 {
   "mcpServers": {
-    "skills": {
+    "skills-target-app": {
       "command": "node",
-      "args": ["is/mcp/skills-mcp/server.js"],
+      "args": ["D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/mcp/skills/server.js"],
       "env": {}
     },
     "memory": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
-        "MEMORY_FILE_PATH": "is/memory/memory.jsonl"
+        "MEMORY_FILE_PATH": "D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/memory/memory.jsonl"
       }
     }
   }
