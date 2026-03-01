@@ -33,12 +33,17 @@ export const PATHS = {
     core: getAbsolutePath('core'),
     docs: getAbsolutePath('docs'),
     docsPlans: getAbsolutePath('docs/plans'),
+    drafts: getAbsolutePath('docs/drafts'),
+    data: getAbsolutePath('data'),
+    shared: getAbsolutePath('shared'),
+    styles: getAbsolutePath('styles'),
+    scripts: getAbsolutePath('scripts'),
+    mm: getAbsolutePath('mm'),
     skills: getAbsolutePath('is/skills'),
     coreSkills: getAbsolutePath('core/skills'),
     appSkills: getAbsolutePath('app/skills'),
     coreContracts: getAbsolutePath('core/contracts'),
     logs: getAbsolutePath('is/logs'),
-    drafts: getAbsolutePath('docs/drafts'),
     memory: getAbsolutePath('is/memory'),
     cloudflareApi: getAbsolutePath('is/cloudflare/edge-api')
 };
