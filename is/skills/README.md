@@ -23,13 +23,16 @@ This directory is the brain of the Target App's AI-assisted development. It cont
 - `arch-testing-ci` — node:test, GitHub Actions CI, contract-first preflight
 
 **Process skills** (`process-*.md`) — Governance processes and agent behavior rules:
-- `process-ai-collaboration` — Agent directives, skepticism, micro-steps, no unprompted commits
+- `process-ai-collaboration` — Agent directives, skepticism, micro-steps, no unprompted commits, 7 command dictionary (ВЗП/КАИ/АИС/ЕИП/ФИН/ФИНС/ОМК)
 - `process-code-anchors` — Linking code to skills via @skill / @skill-anchor
 - `process-env-sync` — .env / .env.example EIP sync contract
 - `process-evolution-logging` — Session work and milestone recording in project-evolution.md
 - `process-language-policy` — English-only for skills/code; Russian allowed in docs
 - `process-migration-prioritization` — Scoring formula for next migration step
 - `process-secrets-hygiene` — Zero-tolerance secrets policy, incident response
+- `process-windows-shell` — **HARD BAN: no bash in Cursor on Windows**. PowerShell patterns
+
+> **Domain skills** live in `core/skills/` and `app/skills/` — see their README files.
 
 ## Constraints
 - **English Only**: All files in this directory MUST be written strictly in English (per `process-language-policy.md`).

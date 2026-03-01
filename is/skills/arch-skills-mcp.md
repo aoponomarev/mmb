@@ -4,7 +4,7 @@
 
 ## Implementation Status in Target App
 
-- `Implemented`: Distributed skill storage across `is/skills/`, `core/skills/`, `app/skills/` (8 skills total).
+- `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
 - `Implemented`: `validate-skills.js` — structural validation with JSON output for automation.
 - `Implemented`: `generate-skills-index.js` — auto-generates skills index.
 - `Implemented`: `skills-health-trend.js` — trend tracking with JSONL append and degradation alerts.
@@ -36,6 +36,6 @@
 ## Alternatives Considered
 
 - Wholesale skill import from Legacy App (195 skills) — rejected (most describe Legacy App-specific code not present in Target App).
-- Central `skills/` vault with Obsidian — deferred (overkill for 8 skills; reconsider at 30+).
+- Central `skills/` vault with Obsidian — deferred (reconsider at 50+).
 - Git submodule for skill sharing — rejected (single-project scope, high sync overhead).
 - Full YAML frontmatter on all skills — deferred (justified only at scale).
