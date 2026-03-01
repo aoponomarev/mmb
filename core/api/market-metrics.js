@@ -145,8 +145,11 @@
                 }
             }
 
-            // Определяем, запущено ли из file://
-            const isFileProtocol = window.location.protocol === 'file:';
+            // Определяем, нужен ли прокси (file://, GitHub Pages, или localhost)
+            const isFileProtocol = window.location.protocol === 'file:' || 
+                                   window.location.hostname.includes('github.io') || 
+                                   window.location.hostname === 'localhost' || 
+                                   window.location.hostname === '127.0.0.1';
 
             const sources = [
                 // Yahoo Finance через Cloudflare Worker proxy (для file://)
@@ -300,7 +303,10 @@
             }
 
             try {
-                const isFile = window.location && window.location.protocol === 'file:';
+                const isFile = window.location && (window.location.protocol === 'file:' || 
+                               window.location.hostname.includes('github.io') || 
+                               window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1');
                 let url;
 
                 // Если file:// — используем Cloudflare Worker proxy

@@ -110,10 +110,11 @@
             // Добавляем URL клиентского приложения в state для правильного редиректа
             // Для file:// сохраняем полный путь с href, для http:// используем origin
             let clientUrl;
-            if (window.location.protocol === 'file:') {
-                // Для file:// сохраняем полный путь к файлу
-                clientUrl = window.location.href;
-                console.log('auth-client: обнаружен file:// протокол, сохраняем полный путь:', clientUrl);
+            if (window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // Для file:// и подкаталогов (GitHub Pages) сохраняем полный путь к файлу
+                // Убираем query и hash параметры, чтобы не дублировались при возврате
+                clientUrl = window.location.href.split('?')[0].split('#')[0];
+                console.log('auth-client: обнаружена локальная среда или GitHub Pages, сохраняем полный путь:', clientUrl);
             } else {
                 // Для http:// используем origin
                 clientUrl = window.location.origin;

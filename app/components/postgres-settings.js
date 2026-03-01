@@ -184,7 +184,7 @@ window.postgresSettings = {
                 }
             } catch (error) {
                 // Если ошибка содержит "Failed to fetch" и мы на протоколе file://, скорее всего это CORS
-                const isLocal = window.location.protocol === 'file:';
+                const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
                     this.healthStatus = 'Fail (CORS/Network)';
                 } else {

@@ -55,7 +55,12 @@
         }
 
         isFileProtocol() {
-            return Boolean(window.location && window.location.protocol === 'file:');
+            return Boolean(window.location && (
+                window.location.protocol === 'file:' || 
+                window.location.hostname.includes('github.io') || 
+                window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1'
+            ));
         }
 
         normalizeLimit(limit, fallback = 10) {

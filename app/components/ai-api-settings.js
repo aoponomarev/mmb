@@ -813,7 +813,7 @@ window.aiApiSettings = {
             } catch (error) {
                 // Skill anchor: health-check на file:// может давать ложные CORS ошибки, это не баг провайдера.
                 // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
-                const isLocal = window.location.protocol === 'file:';
+                const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
                     this.healthStatus = 'Fail (CORS/Network)';
                 } else {

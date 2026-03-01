@@ -83,12 +83,12 @@
          * На file:// используется Cloudflare Worker proxy для обхода CORS
          */
         buildUrl(pathWithQuery) {
-            // Skill anchor: на file:// ВСЕ запросы через proxy, прямой доступ заблокирован CORS.
+            // Skill anchor: на file:// и GitHub Pages ВСЕ запросы через proxy, прямой доступ может быть заблокирован CORS.
             // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
-            const isFile = window.location && window.location.protocol === 'file:';
+            const needsProxy = this.isFileProtocol();
 
-            // Если file:// — используем Cloudflare Worker proxy
-            if (isFile && window.cloudflareConfig) {
+            // Если нужен прокси — используем Cloudflare Worker
+            if (needsProxy && window.cloudflareConfig) {
                 // Разделяем путь и query параметры
                 const [path, query] = pathWithQuery.split('?');
                 const params = query ? Object.fromEntries(new URLSearchParams(query)) : {};
@@ -139,11 +139,16 @@
         }
 
         /**
-         * Проверка, запущено ли приложение по file://
+         * Проверка, требуется ли прокси (file://, GitHub Pages, или localhost)
          * @returns {boolean}
          */
         isFileProtocol() {
-            return Boolean(window.location && window.location.protocol === 'file:');
+            return Boolean(window.location && (
+                window.location.protocol === 'file:' || 
+                window.location.hostname.includes('github.io') || 
+                window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1'
+            ));
         }
 
         /**

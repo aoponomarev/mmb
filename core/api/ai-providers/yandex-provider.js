@@ -154,7 +154,7 @@
                 if (isAssistant) {
                     // Skill anchor: на file:// прямой вызов Assistant API заблокирован CORS, обязателен fallback через proxy.
                     // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
-                    if (window.location.protocol === 'file:') {
+                    if (window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                         modelUri = `gpt://${this.defaultFolderId}/yandexgpt/latest`;
                         requestBody.modelUri = modelUri;
                     } else {

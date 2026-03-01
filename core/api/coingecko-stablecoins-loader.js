@@ -48,7 +48,10 @@
      * На file:// используется Cloudflare Worker proxy для обхода CORS
      */
     function buildUrl(path) {
-        const isFile = window.location && window.location.protocol === 'file:';
+        const isFile = window.location && (window.location.protocol === 'file:' || 
+                       window.location.hostname.includes('github.io') || 
+                       window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1');
 
         // Если file:// — используем Cloudflare Worker proxy
         if (isFile && window.cloudflareConfig) {

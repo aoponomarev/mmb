@@ -37,7 +37,7 @@
     /**
      * Определить уровень логирования по окружению
      */
-    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:' || window.location.hostname.includes('github.io')) {
         currentLogLevel = LOG_LEVELS.DEBUG;
     }
 
