@@ -65,6 +65,15 @@ function runPreflight() {
         process.exit(1);
     }
 
+    // 4. Validate Cache Integrity
+    console.log('[preflight] Validating cache integrity...');
+    try {
+        execSync('node is/scripts/infrastructure/validate-cache-integrity-delta.js', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error(`[preflight] ERROR: Cache integrity check failed.`);
+        process.exit(1);
+    }
+
     console.log('[preflight] ALL SYSTEMS GO. Architecture contracts validated.\n');
 }
 

@@ -10,6 +10,8 @@
     "validate:single-writer": "node is/scripts/infrastructure/validate-single-writer.js",
     "skills:check": "node is/scripts/architecture/validate-skills.js",
     "skills:index": "node is/scripts/architecture/generate-skills-index.js",
+    "cache:integrity:check": "node is/scripts/infrastructure/validate-cache-integrity.js",
+    "cache:integrity:delta": "node is/scripts/infrastructure/validate-cache-integrity-delta.js",
     "index:gen": "node scripts/app-index-gen.js",
     "index:fix": "node scripts/app-index-gen.js --fix",
     "secret:backup": "node is/scripts/secrets/secret-resilience.js --backup",
