@@ -5,6 +5,7 @@
 
 ## Активные планы:
 - [plan-naming-and-paths.md](./plans/plan-naming-and-paths.md) - Регламенты нейминга и гейты для проверки путей к файлам.
+- [plan-testing-strategy.md](./plans/plan-testing-strategy.md) - Стратегия тестирования и Quality Gates.
 
 ## Принципы трансляции:
 1. **Нейтральные термины**: Вместо аббревиатур "MBB" или "MMB" используются "Target App", "Legacy Logic", "Donor Architecture".
