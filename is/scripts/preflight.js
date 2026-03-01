@@ -4,6 +4,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 import { PATHS } from '../contracts/paths/paths.js';
 import { validateEnv } from '../contracts/env/env-rules.js';
 
@@ -51,6 +52,16 @@ function runPreflight() {
     } catch (e) {
         console.error(`[preflight] ERROR: Environment validation failed.`);
         console.error(e.message);
+        process.exit(1);
+    }
+
+    // 3. Validate Skills (Format and Index Generation)
+    console.log('[preflight] Validating skills...');
+    try {
+        execSync('node is/scripts/architecture/validate-skills.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/generate-skills-index.js', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error(`[preflight] ERROR: Skills validation or index generation failed.`);
         process.exit(1);
     }
 
