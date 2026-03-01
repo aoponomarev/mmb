@@ -1,0 +1,25 @@
+---
+description: ""
+globs: ""
+alwaysApply: true
+---
+
+# Anti-Calque Terminology Guardrail
+
+## Critical Rule
+NEVER create English acronyms, variable names, or identifiers by transliterating or calquing Russian abbreviations. This causes context confusion and AI hallucination.
+
+## Banned Transliterations
+
+| Russian term | BANNED calque | REQUIRED translation |
+|---|---|---|
+| ЕИП (Единый Источник Правды) | `EIP` | `SSOT` |
+| ВЗП (Выполнение по Плану) | `VZP` | `Planned Execution` |
+| КАИ (Код/Архитектура/Инфраструктура) | `KAI` | `CAI`, `Arch-Scan` |
+| ОМК (Очень Мало Кода) | `OMK` | `Brevity` |
+| АИС (Архитектурное/Инфраструктурное Сканирование) | `AIS` | `Arch-Scan` |
+| ФИН (Финализация) | `FIN` | `Finalization` |
+| ФИНС (Ф/И/Н/С категории) | `FINS` | `Finalization Discovery Blocks` |
+
+## Enforcement
+When generating variable names, file paths, or identifiers from a Russian concept — always translate the **meaning** to standard IT terminology, never transliterate the letters.

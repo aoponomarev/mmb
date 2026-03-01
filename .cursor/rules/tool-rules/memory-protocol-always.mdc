@@ -1,0 +1,25 @@
+---
+description: ""
+globs: ""
+alwaysApply: true
+---
+
+# Memory MCP Protocol
+
+## When to Read Memory
+At the start of complex or multi-session tasks:
+- Call `search_nodes` with task-related keywords before starting.
+- Call `read_graph` for full project context if needed.
+
+## When to Write Memory
+After any architectural decision or agent agreement reached in chat:
+- Create or update an entity in memory immediately.
+- Do NOT rely on another agent in a new chat to "read the history". Knowledge must live in files AND memory.
+
+## Entity Types to Maintain
+- `ArchDecision` — architectural choice with rationale
+- `MigrationState` — current migration progress and stage
+- `AgentAgreement` — behavioral rule agreed in chat
+
+## Trigger
+Any time the user says "запомни", "зафиксируй", or reaches a conclusion about how the project should work — write to memory.

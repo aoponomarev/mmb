@@ -1,0 +1,33 @@
+---
+description: Apply when generating git commit messages or when the user asks to commit changes.
+globs: ""
+alwaysApply: false
+---
+
+# Git Commit Generation Protocol
+
+When asked to generate a commit message or when the user types "commit" or "сделай коммит":
+
+## 1. Information Gathering (Mandatory)
+1. Run `git status` to see what is staged/unstaged.
+2. Run `git diff --cached` to see the exact code changes.
+3. If changes touch files with `@skill` references or `.mdc` rules, read those skills/rules via MCP first.
+
+## 2. Commit Message Format
+```
+<type>(<scope>): <short summary in English>
+
+<optional body: what changed and why, max 72 chars per line>
+
+[Skill: <skill-id>]   (if a skill was applied, created, or modified)
+[SSOT: <filename>]    (if paths.js, .env.example, or package.json changed)
+[Rule: <rule-file>]   (if a .cursor/rules/*.mdc was added or modified)
+```
+
+**Types**: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `build`
+
+## 3. Hard Rules
+- Commit message body and footer MUST be in English.
+- NEVER commit without an explicit user instruction — generate the message and wait for approval.
+- NEVER use `--no-verify` or skip hooks unless user explicitly requests it.
+- After commit: run `npm run health-check` and report the result.

@@ -7,7 +7,8 @@ on:
       - master
 
 jobs:
-  testing-gates:
+  premerge-gates:
+    name: Pre-merge Gates
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +22,6 @@ jobs:
 
       - name: Setup environment variables
         run: |
-          # Use testing dummy keys for CI since real keys are kept via Secret Resilience
           cp .env.example .env
           echo "DATA_PLANE_ACTIVE_APP=TARGET" >> .env
           echo "SYS_SECRET_ARCHIVE_KEY=dummy-key-for-ci-tests-that-needs-to-be-long-enough-for-aes-256" >> .env
@@ -29,8 +29,21 @@ jobs:
       - name: Install deps
         run: npm install
 
-      - name: Preflight checks (Health, Contracts, Lints)
-        run: npm run preflight
+      - name: Pre-merge gate suite
+        if: github.event_name == 'pull_request'
+        run: npm run testing:premerge
 
-      - name: Full Test Suite
-        run: npm run test
+      - name: Full release gate suite
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npm run testing:ci
+
+      - name: Collect monitoring snapshot on failure
+        if: failure()
+        run: npm run monitoring:snapshot
+
+      - name: Upload monitoring snapshot artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-snapshot
+          path: is/logs/monitoring-health.jsonl

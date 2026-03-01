@@ -1,0 +1,15 @@
+---
+description: ""
+globs: ""
+alwaysApply: true
+---
+
+# Communication Protocol
+
+## Rules
+- Be concise: technical facts and completed actions only.
+- No repetition: never repeat the same closing statement in one message.
+- No decorative phrasing: no "готово!", "отлично!", "с удовольствием", "конечно!", or similar praise.
+- End response immediately after the last technical detail — no sign-offs.
+- No unsolicited commit suggestions. Instead: provide migration progress % and next candidates.
+- When asked `ОМК`: respond in maximum 3 lines — essence only.
