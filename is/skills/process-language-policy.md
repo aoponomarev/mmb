@@ -13,7 +13,7 @@ tags: ["#process", "#language", "#terminology", "#naming", "#anti-calque"]
 - All code comments, variable names, and commit messages MUST be authored in **English**.
 - This includes titles, section text, comments, checklists, and operational instructions.
 - Legacy non-English content is allowed only as quoted historical context when strictly needed for migration fidelity, including legacy abbreviations and their original Russian expansions.
-- Russian is permitted ONLY in conversational chats with the user and in high-level migration plans (e.g., `docs/plans/plan-*.md`), provided those plans are not code-level documentation.
+- Russian is permitted in ALL documentation files across different folders (not just `docs/plans/`). However, all code, code comments, variable names, commit messages, and skills (`skills/**`) MUST remain strictly in English.
 
 ## 2. The Translation Mapping (Do vs Don't)
 

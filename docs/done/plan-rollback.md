@@ -1,8 +1,8 @@
 # План_Rollback.md
 
 > Категория: План отката и восстановления
-> Статус: Черновик
-> Источники: disaster-recovery/process практики Legacy App
+> Статус: **Завершён**
+> Казуальность: `is/skills/arch-rollback.md`
 
 ---
 
@@ -49,9 +49,9 @@
 
 ## 8. Чек-лист
 
-- [ ] Определить rollback-триггеры (критерии).
-- [ ] Описать последовательность отката по слоям.
-- [ ] Ввести checkpoint-before-change правило.
-- [ ] Согласовать с мониторингом и master plan.
-- [ ] Зафиксировать rollback протокол в runbook:
-  - `docs/runbooks/rollback-mmb-protocol.md`.
+- [x] Определить rollback-триггеры (критерии). → `health-check` unhealthy, `cache:integrity:check` fail, `monitoring:baseline` Sev-2+.
+- [x] Описать последовательность отката по слоям. → External Integrations → Backend/Transport → Control-plane (by blast radius).
+- [x] Ввести checkpoint-before-change правило. → Обязательный `cache:integrity:check` + evidence note перед изменениями secrets/paths/writer.
+- [x] Согласовать с мониторингом и master plan. → Триггеры привязаны к командам мониторинга.
+- [x] Зафиксировать rollback протокол в runbook:
+  - `docs/runbooks/rollback-protocol.md`.

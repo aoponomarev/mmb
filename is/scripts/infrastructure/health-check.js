@@ -67,16 +67,16 @@ function checkKnowledge() {
     }
 
     // Integral health-gate for skills database
-    const validateSkillGraph = join(REPO_ROOT, 'is', 'scripts', 'skills', 'validate-skill-graph.js');
-    if (existsSync(validateSkillGraph)) {
+    const validateSkills = join(REPO_ROOT, 'is', 'scripts', 'architecture', 'validate-skills.js');
+    if (existsSync(validateSkills)) {
         try {
-            execSync(`node "${validateSkillGraph}"`, { stdio: 'ignore' });
-            pass('knowledge', 'skill graph validation', 'passed');
+            execSync(`node "${validateSkills}"`, { stdio: 'ignore' });
+            pass('knowledge', 'skills validation', 'passed');
         } catch {
-            fail('knowledge', 'skill graph validation', 'failed (run node is/scripts/skills/validate-skill-graph.js manually for details)', true);
+            fail('knowledge', 'skills validation', 'failed (run npm run skills:check for details)', true);
         }
     } else {
-        fail('knowledge', 'skill graph validation', 'validate-skill-graph.js missing', false);
+        fail('knowledge', 'skills validation', 'validate-skills.js missing', false);
     }
 }
 

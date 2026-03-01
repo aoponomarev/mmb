@@ -1,8 +1,8 @@
 # План_Monitoring.md
 
 > Категория: План мониторинга и наблюдаемости
-> Статус: Черновик
-> Источники: `A_MONITORING.md`, diagnostics/troubleshooting навыки Legacy App
+> Статус: **Завершён**
+> Казуальность: `is/skills/arch-monitoring.md`
 
 ---
 
@@ -39,8 +39,8 @@
 ## 6. Риски и снижение
 
 - шумные/неполезные алерты -> минимальный и приоритетный alert set.
-- утечки секретов в логах -> redaction policy.
-- trend-лог должен содержать только метрики контуров знаний, без PII/секретов.
+- утечки секретов в логах -> redaction policy: JSONL-логи содержат только структурированные safe-поля.
+- trend-лог содержит только метрики контуров знаний, без PII/секретов.
 
 ## 7. Definition of Done
 
@@ -50,15 +50,15 @@
 
 ## 8. Чек-лист
 
-- [ ] Определить мониторинговый минимум v1.
-- [ ] Реализовать минимум диагностических команд:
-  - `npm run cp:health` (контроль трех плоскостей),
-  - `npm run cp:health:json`,
-  - `npm run cp:monitoring:snapshot`,
-  - `npm run monitoring:baseline:check`.
-- [ ] Настроить redaction-политику логов.
-- [ ] Описать runbook инцидентного процесса и linkage с rollback.
-  - `docs/runbooks/rollback-mmb-protocol.md`
+- [x] Определить мониторинговый минимум v1. → Три плоскости: knowledge, contract, runtime.
+- [x] Реализовать минимум диагностических команд:
+  - `npm run health-check` (контроль трёх плоскостей),
+  - `npm run health-check:json`,
+  - `npm run monitoring:snapshot`,
+  - `npm run monitoring:baseline`.
+- [x] Настроить redaction-политику логов. → JSONL-логи содержат только структурированные метрики (score, stale_count, orphan_count), без raw env/secrets.
+- [x] Описать runbook инцидентного процесса и linkage с rollback.
+  - `docs/runbooks/rollback-protocol.md`
   - `docs/runbooks/monitoring-baseline.md`
-- [ ] Реализовать skill-health trend baseline: `skills:health:trend` + журнал `logs/skills-health-trend.jsonl` с метриками score/stale_rate/orphan_rate.
-- [ ] Добавить report-команду для trend: `npm run skills:health:trend:report` (compact summary по последним N записям для еженедельного обзора).
+- [x] Реализовать skill-health trend baseline: `npm run skills:health:trend` + журнал `logs/skills-health-trend.jsonl` с метриками score/stale/orphan.
+- [x] Добавить report-команду для trend: `npm run skills:health:trend:report` (compact summary по последним N записям).

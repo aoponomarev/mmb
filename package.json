@@ -13,6 +13,8 @@
     "validate:single-writer": "node is/scripts/infrastructure/validate-single-writer.js",
     "skills:check": "node is/scripts/architecture/validate-skills.js",
     "skills:index": "node is/scripts/architecture/generate-skills-index.js",
+    "skills:health:trend": "node is/scripts/architecture/skills-health-trend.js",
+    "skills:health:trend:report": "node is/scripts/architecture/skills-health-trend-report.js",
     "cache:integrity:check": "node is/scripts/infrastructure/validate-cache-integrity.js",
     "cache:integrity:delta": "node is/scripts/infrastructure/validate-cache-integrity-delta.js",
     "market:http:start": "node is/scripts/infrastructure/start-market-snapshot-server.js",

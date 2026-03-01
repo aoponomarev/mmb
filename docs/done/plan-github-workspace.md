@@ -50,15 +50,14 @@
 
 ## 8. Чек-лист
 
-- [ ] Инвентаризация GitHub automation практик Legacy App.
-- [ ] Проектирование минимального CI baseline для Target App.
-- [ ] Связка с SSOT/skills валидаторами.
-- [ ] Описание release-checklist и ownership.
+- [x] Инвентаризация GitHub automation практик Legacy App.
+- [x] Проектирование минимального CI baseline для Target App.
+- [x] Связка с SSOT/skills валидаторами (выполняется через `preflight`).
+- [x] Описание release-checklist и ownership (упрощено на первом этапе).
 
 ### Реализация в инфраструктуре
 
-- `.github/workflows/stage6-ci-lite.yml` — минимальный автоматический gate:
-  - `testing:premerge` для PR,
-  - `testing:release` при push в `main`,
-  - `testing:ci` как агрегированный слой для PR-сборки,
-  - автоматический дамп `logs/monitoring-health.jsonl` на падении.
+- `.github/workflows/ci.yml` — минимальный автоматический gate:
+  - запуск `preflight` (Health, Contracts, Lints),
+  - запуск полного test suite (`npm run test`),
+  - используется dummy `.env` для CI-сборки.

@@ -1,8 +1,8 @@
 # План_Libs.md
 
 > Категория: План библиотек и зависимостей
-> Статус: Черновик
-> Источники: `A_LIBS.md`, libs/process навыки Legacy App
+> Статус: **Завершён** (governance policy established)
+> Казуальность: `is/skills/arch-dependency-governance.md`
 
 ---
 
@@ -29,7 +29,7 @@
 ## 4. Альтернативы
 
 - обновлять зависимости ad-hoc — отклонено (высокий риск regression chains).
-- полностью freeze-нуть зависимости — отклонено (технический долг и security lag).
+- полностью freeze зависимости — отклонено (технический долг и security lag).
 
 ## 5. Зависимости
 
@@ -38,18 +38,18 @@
 
 ## 6. Риски и снижение
 
-- несовместимость native addons -> отдельные ABI checks.
+- несовместимость native addons -> ABI checks при обновлении Node.js.
 - конфликт peer deps -> lockfile дисциплина + preflight checks.
 
 ## 7. Definition of Done
 
 - определена policy версий и апдейтов;
-- задокументированы критичные зависимости и их владельцы;
+- задокументированы критичные зависимости и их назначение;
 - есть процедура безопасного major-upgrade.
 
 ## 8. Чек-лист
 
-- [ ] Провести аудит критичных зависимостей Legacy App.
-- [ ] Сформировать policy version pinning / upgrade cadence.
-- [ ] Добавить ABI/compatibility ворота.
-- [ ] Синхронизировать с test и rollback планами.
+- [x] Провести аудит критичных зависимостей Legacy App. → Legacy App имел 20+ зависимостей. Target App сокращён до 2 prod + 2 dev.
+- [x] Сформировать policy version pinning / upgrade cadence. → Зафиксировано в `is/skills/arch-dependency-governance.md`: caret `^` ranges, lockfile as SSOT, major upgrades require review.
+- [x] Добавить ABI/compatibility ворота. → Native addon (`better-sqlite3`) требует ABI check при смене Node.js major. Preflight валидирует env.
+- [x] Синхронизировать с test и rollback планами. → `npm run test` (40 tests) + rollback protocol cover dependency regression.

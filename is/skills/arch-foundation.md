@@ -22,6 +22,7 @@ Application layers:
 All file and folder names MUST be in `kebab-case` format.
 Verification is done via Zod schemas in `is/contracts/naming/naming-rules.js`.
 (System files and folders starting with a dot, e.g., `.github`, are allowed).
+**Module Prefixes:** To explicitly distinguish layers, modules should use prefixes where applicable: `app-*`, `sys-*`, `is-*`, `core-*`, `cmp-*`.
 
 ## 3. Paths SSOT
 The single source of truth for paths is located in `is/contracts/paths/paths.js`.
