@@ -93,13 +93,19 @@ export class DataProviderManager {
     return provider[methodName]({ ...payload, apiKey });
   }
 
-  async getTopCoins(count = 100, sortBy = "market_cap", options = {}) {
+    async getTopCoins(count = 100, sortBy = "market_cap", options = {}) {
+    // If the first argument is an object, assume it's a query object from the newer API
+    if (typeof count === 'object' && count !== null) {
+        const query = count;
+        return this.call("getTopCoins", query);
+    }
+    
     assertPositiveInt(count, "count");
     const normalizedSort = toNonEmptyString(sortBy) || "market_cap";
     if (!["market_cap", "volume"].includes(normalizedSort)) {
       throw new BackendCoreError(BACKEND_ERROR_CODES.InvalidInput, "INVALID_SORT_BY: allowed values are market_cap | volume", { field: "sortBy" });
     }
-    return this.call("getTopCoins", { count, sortBy: normalizedSort, options });
+    return this.call("getTopCoins", { topCount: count, sortBy: normalizedSort, options });
   }
 
   async searchCoins(query, options = {}) {

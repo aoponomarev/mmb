@@ -11,12 +11,26 @@ export class MarketDataService {
     this.marketTtlMs = Number.isFinite(params.marketTtlMs) ? Math.max(1, Math.floor(params.marketTtlMs)) : 60 * 60 * 1000;
   }
 
-  async getTopCoins(count = 100, sortBy = "market_cap", options = {}) {
-    const cacheKeyParams = { count, sortBy, provider: this.providerManager.getActiveProviderName() };
+  async getTopCoins(params, legacySortBy = "market_cap", legacyOptions = {}) {
+    let topCount = 100;
+    let sortBy = "market_cap";
+    let options = {};
+
+    if (typeof params === 'object' && params !== null) {
+      topCount = params.topCount ?? 100;
+      sortBy = params.sortBy ?? "market_cap";
+      options = legacySortBy !== "market_cap" && typeof legacySortBy === 'object' ? legacySortBy : {};
+    } else if (typeof params === 'number') {
+      topCount = params;
+      sortBy = legacySortBy;
+      options = legacyOptions;
+    }
+
+    const cacheKeyParams = { topCount, sortBy, provider: this.providerManager.getActiveProviderName() };
     const cached = this.cache.get("top-coins", cacheKeyParams, this.marketTtlMs);
     if (cached.hit) return { source: "cache", data: cached.value };
 
-    const data = await this.providerManager.getTopCoins({ topCount: count, sortBy }, options);
+    const data = await this.providerManager.getTopCoins({ topCount, sortBy }, options);
     this.cache.set("top-coins", cacheKeyParams, data);
     return { source: "live", data };
   }

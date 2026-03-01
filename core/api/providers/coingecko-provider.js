@@ -178,6 +178,21 @@ export class CoinGeckoProvider {
             price_change_percentage_24h: null,
         }));
     }
+
+    async getCoinData(coinIds) {
+        if (!Array.isArray(coinIds) || coinIds.length === 0) return [];
+
+        const params = new URLSearchParams({
+            vs_currency: "usd",
+            ids: coinIds.join(","),
+            price_change_percentage: "1h,24h,7d,14d,30d,200d",
+        });
+
+        const endpoint = `/coins/markets?${params.toString()}`;
+        const data = await this.guardedFetch(endpoint, { ids: coinIds }, "getCoinData");
+        
+        return Array.isArray(data) ? data.map(mapCoin) : [];
+    }
 }
 
 export function createCoinGeckoProvider(params = {}) {

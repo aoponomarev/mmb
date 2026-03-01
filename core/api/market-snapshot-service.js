@@ -5,7 +5,7 @@
  * @causality: We keep snapshot structure logic in a separate service to decouple it from individual fetch flows.
  */
 
-import { buildSnapshotPayload, parseSortBy, parseTopCount } from "../contracts/market-contracts.js";
+import { buildSnapshotPayload, parseMarketQuery } from "../contracts/market-contracts.js";
 
 export class MarketSnapshotService {
   constructor(params = {}) {
@@ -15,8 +15,9 @@ export class MarketSnapshotService {
 
   async getSnapshot(params = {}) {
     // @causality: Validate input near the edge before orchestrating heavy calls.
-    const topCount = parseTopCount(params.topCount, 25);
-    const sortBy = parseSortBy(params.sortBy, "market_cap");
+        const query = parseMarketQuery(params);
+        const topCount = query.topCount;
+        const sortBy = query.sortBy;
 
     const [topCoins, metrics] = await Promise.all([
       this.marketDataService.getTopCoins(topCount, sortBy),
