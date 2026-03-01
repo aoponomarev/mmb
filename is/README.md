@@ -1,51 +1,18 @@
-# /is - Infrastructure Source
+# Infrastructure Space (`is/`)
 
-This directory contains **deployed infrastructure code** for the app project.
-Application code lives in `/core` and `/app`; only deploy artifacts and cloud function sources belong here.
+## Scope
+The `is/` (Infrastructure Space) directory contains all configuration, tooling, orchestration, and knowledge assets that surround and manage the application, but are not the application itself.
 
-## Structure
+## Architecture & Constraints
+- **Separation of Concerns**: Infrastructure must never leak into `core/` or `app/`. The application should be able to run even if the infrastructure deployment method changes.
+- **SSOT (Single Source of Truth)**: Centralized definitions for paths, naming, and environments live here.
+- **Preflight Enforcement**: All contracts defined here are actively enforced by `preflight.js` before the application can start.
 
-```
-is/
-├── cloudflare/
-│   └── workers/          # Cloudflare Workers (app-api)
-│       ├── src/          # Worker source code (router, auth, proxy, APIs)
-│       ├── migrations/   # D1 database migrations
-│       ├── wrangler.toml # Wrangler deploy config
-│       └── *.md          # Deploy instructions
-│
-└── yandex/
-    └── functions/
-        ├── coingecko-fetcher/  # Cron function: fetches CoinGecko -> PostgreSQL
-        └── app-api/            # API function: serves data from PostgreSQL
-```
-
-## Deployment
-
-### Cloudflare Workers
-
-```bash
-cd is/cloudflare/workers
-npx wrangler deploy
-```
-
-Secrets (never committed):
-- `GOOGLE_CLIENT_SECRET` - Google OAuth client secret
-- `JWT_SECRET` - JWT signing key
-
-Set via: `wrangler secret put <NAME>`
-
-### Yandex Cloud Functions
-
-Each function has its own `package.json`. Deploy via Yandex CLI or the console.
-
-Required environment variables (set in Yandex Cloud console):
-- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
-- `COINGECKO_API_KEY` (optional, for higher rate limits)
-
-### What does NOT belong here
-
-- `node_modules/` (install locally per function)
-- `.wrangler/state/` (local dev state)
-- Secrets, API keys, passwords
-- Application UI code (belongs in `/core` or `/app`)
+## Subdirectories
+- `cloudflare/`: Edge computing scripts and CORS proxies.
+- `contracts/`: SSOT schemas for paths, naming rules, and environment variables.
+- `mcp/`: Model Context Protocol servers for AI agents.
+- `scripts/`: Automation, diagnostics, and deployment tools.
+- `secrets/`: Encrypted local secret archives and resilience scripts.
+- `skills/`: The MCP knowledge base and architectural ADRs.
+- `yandex/`: Cloud function definitions (currently in backlog).

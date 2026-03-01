@@ -78,6 +78,19 @@ function checkKnowledge() {
     } else {
         fail('knowledge', 'skills validation', 'validate-skills.js missing', false);
     }
+
+    // Directory Contracts (READMEs)
+    const validateReadmes = join(REPO_ROOT, 'is', 'scripts', 'architecture', 'validate-readmes.js');
+    if (existsSync(validateReadmes)) {
+        try {
+            execSync(`node "${validateReadmes}"`, { stdio: 'ignore' });
+            pass('knowledge', 'directory contracts (READMEs)', 'passed');
+        } catch {
+            fail('knowledge', 'directory contracts (READMEs)', 'failed (run npm run readmes:check for details)', true);
+        }
+    } else {
+        fail('knowledge', 'directory contracts (READMEs)', 'validate-readmes.js missing', false);
+    }
 }
 
 // --- Contract plane: .env & Paths ---
