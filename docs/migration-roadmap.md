@@ -4,6 +4,7 @@
 > Цель: Фиксация всех планов миграции архитектуры в новую целевую систему без использования старых аббревиатур (MBB/MMB).
 
 ## Активные планы:
+- [plan-master-migration.md](./plans/plan-master-migration.md) - Главный план миграции (этапы и ревизия чекбоксов).
 - [plan-naming-and-paths.md](./plans/plan-naming-and-paths.md) - Регламенты нейминга и гейты для проверки путей к файлам.
 - [plan-testing-strategy.md](./plans/plan-testing-strategy.md) - Стратегия тестирования и Quality Gates.
 
