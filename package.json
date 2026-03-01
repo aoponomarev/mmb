@@ -12,6 +12,7 @@
     "skills:index": "node is/scripts/architecture/generate-skills-index.js",
     "cache:integrity:check": "node is/scripts/infrastructure/validate-cache-integrity.js",
     "cache:integrity:delta": "node is/scripts/infrastructure/validate-cache-integrity-delta.js",
+    "market:http:start": "node is/scripts/infrastructure/start-market-snapshot-server.js",
     "index:gen": "node scripts/app-index-gen.js",
     "index:fix": "node scripts/app-index-gen.js --fix",
     "secret:backup": "node is/scripts/secrets/secret-resilience.js --backup",

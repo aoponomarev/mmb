@@ -3,6 +3,7 @@
  * @description Zod-based SSOT for market data inputs and outputs. Replaces manual validation.
  */
 import { z } from 'zod';
+import { BACKEND_ERROR_CODES, BackendCoreError } from '../api/providers/errors.js';
 
 export const ALLOWED_SORT = ["market_cap", "volume"];
 export const MAX_TOP_COUNT = 250;
@@ -39,10 +40,8 @@ export const marketSnapshotSchema = z.object({
 export function parseMarketQuery(input) {
     const result = marketQuerySchema.safeParse(input || {});
     if (!result.success) {
-        // We throw standard Error for now. 
-        // Can be swapped to BackendCoreError when errors.js is migrated.
         const msg = result.error.issues[0].message;
-        throw new Error(msg);
+        throw new BackendCoreError(BACKEND_ERROR_CODES.InvalidInput, msg);
     }
     return result.data;
 }
@@ -55,10 +54,9 @@ export function buildSnapshotPayload(data) {
     
     const result = marketSnapshotSchema.safeParse(payload);
     if (!result.success) {
-        // Find the first error message that starts with INVALID_SNAPSHOT_PAYLOAD
         const invalidMsg = result.error.issues.find(i => i.message.includes('INVALID_SNAPSHOT_PAYLOAD'))?.message 
                            || "INVALID_SNAPSHOT_PAYLOAD: malformed data";
-        throw new Error(invalidMsg);
+        throw new BackendCoreError(BACKEND_ERROR_CODES.InvalidInput, invalidMsg);
     }
     return result.data;
 }

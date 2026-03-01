@@ -76,7 +76,7 @@
 ### Этап 6: Надежность и операционная зрелость — *В процессе*
 *(Связанные планы: `plan-testing-strategy.md`, `plan-monitoring.md`, `plan-github-workspace.md`, `plan-rollback.md`)*
 - [x] Внедрение стратегии тестирования (`plan-testing-strategy.md`) с упором на `node:test`.
-- [ ] Настройка CI/CD (GitHub Actions) для автоматического запуска preflight и тестов.
+- [x] Настройка CI/CD (GitHub Actions) для автоматического запуска preflight и тестов.
 - [ ] Внедрение мониторинга и диагностических контрактов.
 
 ---

@@ -113,27 +113,27 @@
 - [x] Перенос core services + адаптация импорта путей (добавлены `core/api/data-provider-manager.js`, `core/api/providers/coingecko-provider.js`, `core/api/request-registry.js`, `core/api/market-data-service.js`, `core/cache/data-cache-manager.js`, `core/api/market-metrics-service.js` с FGI/VIX/BTC dominance/OI/FR/LSR).
 - [x] Перенос core services + адаптация импорта путей (выделен provider-слой `core/api/providers/binance-metrics-provider.js`; `market-metrics-service` оставлен orchestration-only с cache/error contracts).
 - [x] Контрактные тесты API и data-flow smoke checks (добавлены `npm run backend:provider:check`, `npm run backend:provider:e2e`, `npm run backend:cache:e2e`, `npm run backend:metrics:e2e`; покрыты retry/timeout, exhausted-retry, cache TTL, fail-fast валидация metric payload; backend suite подключён в `preflight-solo.ps1` для staged backend/core изменений).
-- [ ] Контрактные тесты API и data-flow smoke checks (расширен partial-failure сценарий: `getAllBestEffort` возвращает ошибки по упавшим метрикам без потери здоровых метрик; fail-fast сохраняется на уровне отдельных metric methods).
+- [x] Контрактные тесты API и data-flow smoke checks (расширен partial-failure сценарий: `getAllBestEffort` возвращает ошибки по упавшим метрикам без потери здоровых метрик; fail-fast сохраняется на уровне отдельных metric methods).
 - [x] Запущен следующий backend candidate после metrics: `core/api/market-snapshot-service.js` (orchestration слой `market-data-service + market-metrics-service`) с e2e контрактом `backend:snapshot:e2e`.
 - [x] Добавлен composition-root `core/api/backend-market-runtime.js` (единая сборка `DataProviderManager + providers + data/metrics/snapshot services`) с e2e контрактом `backend:runtime:e2e`.
 - [x] Добавлен контрактный слой `core/api/market-contracts.js` (валидация `topCount/sortBy` + shape-check snapshot payload) и подключён в `market-snapshot-service`.
-- [ ] Расширены e2e проверки контрактов backend: `backend:contracts:e2e` + негативный сценарий `market-snapshot` для invalid sort.
+- [x] Расширены e2e проверки контрактов backend: `backend:contracts:e2e` + негативный сценарий `market-snapshot` для invalid sort.
 - [x] Добавлен transport-адаптер `core/api/market-snapshot-transport.js` (query -> `{status, body}`), включая fail-fast mapping `BackendCoreError.code -> HTTP status` и e2e gate `backend:transport:e2e`.
 - [x] Добавлен thin HTTP binding `core/api/market-snapshot-http.js` (framework-agnostic handler) + e2e gate `backend:http:e2e` для route/method/query/status/body контракта.
 - [ ] Добавлена генерация документации контракта `docs/runbooks/market-snapshot-contract.md` через `npm run docs:market:contract`.
-- [ ] Добавлен lightweight Node server adapter `core/api/market-snapshot-node-server.js` + live loopback e2e gate `backend:http:live:e2e` и стартовый скрипт `market:http:start`.
-- [ ] Добавлен health-contract для HTTP слоя (`GET /api/health`) + отдельный gate `backend:http:health:e2e` и smoke-команда `market:http:smoke` для уже запущенного сервера.
-- [ ] Добавлен readiness-contract для HTTP слоя (`GET /api/ready`) с probe из runtime-композиции + отдельный gate `backend:http:ready:e2e`.
-- [ ] Усилен HTTP/server hardening: structured error envelope в handler, request logging contract и configurable graceful shutdown timeout в node-server, плюс отдельные gates `backend:http:ready:degraded:e2e` и `backend:node:hardening:e2e`.
-- [ ] Усилен traceability-контур: request-id correlation (`x-request-id`) в HTTP headers/payload + server logger fields (`requestId`, `durationMs`) с gates `backend:http:request-id:e2e` и `backend:node:trace:e2e`.
-- [ ] Усилен protocol-hardening: добавлен `Allow: GET` контракт для `405` ответов + bounded input guard (max `topCount`) с отдельным gate `backend:http:allow:e2e`.
-- [ ] Усилен response-header hardening: `x-content-type-options: nosniff`, `x-response-time-ms`, и обязательный `x-request-id` контракт с отдельным gate `backend:http:headers:e2e`.
-- [ ] Добавлен CORS contract для local runtime API (`OPTIONS` + access-control headers) с отдельным gate `backend:http:cors:e2e`.
-- [ ] Добавлен HEAD parity contract для HTTP routes (`GET`/`HEAD`), включая no-body semantics на live node adapter, с отдельным gate `backend:http:head:e2e`.
-- [ ] Добавлен service-state header contract (`x-service-state=ok|degraded`) для health/ready/snapshot маршрутов с отдельным gate `backend:http:service-state:e2e`.
-- [ ] Добавлены query hardening-контракты для snapshot route: max query length (512), strict allowed keys (`topCount`,`sortBy`) и `x-api-version` header; покрытие через `backend:http:query-guard:e2e` и `backend:http:query-keys:e2e`.
-- [ ] Усилен request-id контракт: sanitize входного `x-request-id` (charset + max length 64, invalid -> generated safe id) с отдельным gate `backend:http:request-id:sanitize:e2e`.
-- [ ] Усилен node fallback parity для `500 INTERNAL_SERVER_ERROR`: выровнены runtime headers (`x-api-version`, `x-service-state=degraded`, CORS, `x-request-id`) с отдельным gate `backend:node:fallback:e2e`.
+- [x] Добавлен lightweight Node server adapter `core/api/market-snapshot-node-server.js` + live loopback e2e gate `backend:http:live:e2e` и стартовый скрипт `market:http:start`.
+- [x] Добавлен health-contract для HTTP слоя (`GET /api/health`) + отдельный gate `backend:http:health:e2e` и smoke-команда `market:http:smoke` для уже запущенного сервера.
+- [x] Добавлен readiness-contract для HTTP слоя (`GET /api/ready`) с probe из runtime-композиции + отдельный gate `backend:http:ready:e2e`.
+- [x] Усилен HTTP/server hardening: structured error envelope в handler, request logging contract и configurable graceful shutdown timeout в node-server, плюс отдельные gates `backend:http:ready:degraded:e2e` и `backend:node:hardening:e2e`.
+- [x] Усилен traceability-контур: request-id correlation (`x-request-id`) в HTTP headers/payload + server logger fields (`requestId`, `durationMs`) с gates `backend:http:request-id:e2e` и `backend:node:trace:e2e`.
+- [x] Усилен protocol-hardening: добавлен `Allow: GET` контракт для `405` ответов + bounded input guard (max `topCount`) с отдельным gate `backend:http:allow:e2e`.
+- [x] Усилен response-header hardening: `x-content-type-options: nosniff`, `x-response-time-ms`, и обязательный `x-request-id` контракт с отдельным gate `backend:http:headers:e2e`.
+- [x] Добавлен CORS contract для local runtime API (`OPTIONS` + access-control headers) с отдельным gate `backend:http:cors:e2e`.
+- [x] Добавлен HEAD parity contract для HTTP routes (`GET`/`HEAD`), включая no-body semantics на live node adapter, с отдельным gate `backend:http:head:e2e`.
+- [x] Добавлен service-state header contract (`x-service-state=ok|degraded`) для health/ready/snapshot маршрутов с отдельным gate `backend:http:service-state:e2e`.
+- [x] Добавлены query hardening-контракты для snapshot route: max query length (512), strict allowed keys (`topCount`,`sortBy`) и `x-api-version` header; покрытие через `backend:http:query-guard:e2e` и `backend:http:query-keys:e2e`.
+- [x] Усилен request-id контракт: sanitize входного `x-request-id` (charset + max length 64, invalid -> generated safe id) с отдельным gate `backend:http:request-id:sanitize:e2e`.
+- [x] Усилен node fallback parity для `500 INTERNAL_SERVER_ERROR`: выровнены runtime headers (`x-api-version`, `x-service-state=degraded`, CORS, `x-request-id`) с отдельным gate `backend:node:fallback:e2e`.
 - [ ] Добавлен API consumer-контур: `core/api/market-snapshot-client.js` + `backend:client:e2e` (request-id propagation, query normalization, ok/error transport shape).
 - [ ] Добавлен runtime cache-aware smoke: `backend:http:runtime-smoke:e2e` (cache-hit по `topCoins/metrics`, частичная деградация `openInterest`, degraded-готовность при недоступном провайдере).
 - [ ] Синхронизация статусов в master/migration документах.
