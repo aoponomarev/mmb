@@ -3,14 +3,14 @@
  * AUTH BUTTON COMPONENT - Компонент кнопки авторизации и профиля пользователя
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-компонент для отображения кнопки входа через Google или профиля пользователя.
+ * PURPOSE: Vue-компонент for отображения кнопки входа через Google или профиля пользователя.
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Условное отображение: кнопка входа или dropdown с профилем
  * - Реактивное обновление при изменении состояния авторизации
  * - Обработка callback от Google OAuth при загрузке страницы
- * - Использование auth-client для проверки состояния авторизации
+ * - Использование auth-client for проверки состояния авторизации
  *
  * API КОМПОНЕНТА:
  *
@@ -18,9 +18,9 @@
  *
  * Events:
  * - login-success — эмитируется после успешного входа
- * - logout-success — эмитируется после успешного выхода
+ * - logout-success — эмитируется после успешного logoutа
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: app/templates/auth-button-template.js
  * - OAuth клиент: core/api/cloudflare/auth-client.js
  */
@@ -87,7 +87,7 @@ window.authButton = {
         async checkAuthStatus() {
             try {
                 if (!window.authClient) {
-                    console.warn('auth-button: authClient не загружен');
+                    console.warn('auth-button: authClient not loaded');
                     return;
                 }
 
@@ -193,7 +193,7 @@ window.authButton = {
         async handleLogin() {
             try {
                 if (!window.authClient) {
-                    console.error('auth-button: authClient не загружен');
+                    console.error('auth-button: authClient not loaded');
                     return;
                 }
 
@@ -216,12 +216,12 @@ window.authButton = {
         },
 
         /**
-         * Обработка выхода
+         * Обработка logoutа
          */
         async handleLogout() {
             try {
                 if (!window.authClient) {
-                    console.error('auth-button: authClient не загружен');
+                    console.error('auth-button: authClient not loaded');
                     return;
                 }
 

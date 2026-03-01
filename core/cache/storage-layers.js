@@ -3,32 +3,32 @@
  * STORAGE LAYERS - Разделение данных по слоям хранения
  * ================================================================================================
  *
- * ЦЕЛЬ: Распределение ключей кэша по хранилищам (localStorage/IndexedDB) в зависимости от объема и частоты доступа.
+ * PURPOSE: Распределение ключей кэша по хранилищам (localStorage/IndexedDB) в зависимости от объема и частоты доступа.
  * Skill: core/skills/cache-layer
  *
  * HOT (localStorage, ≤5MB) — синхронный доступ, быстрый:
  * - settings, theme, timezone, favorites, ui-state, active-tab — настройки и UI-состояние
  *   Причина: маленький объем (<10KB), частый доступ при каждом рендере/действии, синхронность важна
  * - icons-cache — объект {coinId: url}
- *   Причина: объем ~100-500KB, доступ при каждом отображении монеты, синхронность критична для рендеринга
+ *   Причина: объем ~100-500KB, доступ при каждом отображении монеты, синхронность критична for рендеринга
  *
  * WARM (IndexedDB, ≤50MB) — асинхронный доступ, средний объем:
  * - coins-list — список всех монет из CoinGecko API
- *   Причина: объем 1-5MB (JSON), частый доступ для поиска/фильтрации, структурированные данные
- * - market-metrics — метрики рынка
+ *   Причина: объем 1-5MB (JSON), частый доступ for поиска/фильтрации, структурированные данные
+ * - market-metrics — metrics рынка
  *   Причина: объем 100KB-2MB, частый доступ, обновляется регулярно
  * - api-cache — кэш API-ответов
  *   Причина: объем зависит от количества запросов, частый доступ, структурированные данные
  *
  * COLD (IndexedDB, ≤500MB) — асинхронный доступ, большие объемы:
- * - time-series — временные ряды цен
- *   Причина: объем 10-100MB+ (тысячи точек), редкий доступ (по требованию), нужны индексы для поиска
+ * - time-series — time series цен
+ *   Причина: объем 10-100MB+ (тысячи точек), редкий доступ (по требованию), нужны индексы for поиска
  * - history — история операций
  *   Причина: объем растет со временем, редкий доступ, нужны индексы
  * - portfolios, strategies — портфели и стратегии
- *   Причина: объем зависит от пользователя (может быть большим), редкий доступ, структурированные данные
+ *   Причина: объем зависит от пользователя (can be большим), редкий доступ, структурированные данные
  * - correlations — корреляции между активами
- *   Причина: объем может быть большим (матрицы), редкий доступ, вычисляемые данные
+ *   Причина: объем can be большим (матрицы), редкий доступ, вычисляемые данные
  *
  * ДОБАВЛЕНИЕ НОВОГО КЛЮЧА:
  * - localStorage: синхронный доступ, лимит ~5MB, простые структуры
@@ -41,7 +41,7 @@
  * 3. Оценить тип данных (простые объекты → localStorage, массивы/структуры → IndexedDB)
  * 4. Добавить ключ в массив LAYERS.{layer}.keys
  *
- * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
+ * ССЫЛКА: General principles кэширования: core/skills/cache-layer
  */
 
 (function() {
@@ -83,7 +83,7 @@
     };
 
     /**
-     * Получить конфигурацию слоя для ключа
+     * Get конфигурацию слоя for ключа
      * @param {string} key - ключ кэша
      * @returns {Object|null} - конфигурация слоя или null
      */
@@ -93,12 +93,12 @@
                 return { layer: layerName, ...config };
             }
         }
-        // По умолчанию hot для неизвестных ключей
+        // По умолчанию hot for неизвестных ключей
         return { layer: 'hot', ...LAYERS.hot };
     }
 
     /**
-     * Получить объект хранилища для слоя
+     * Get объект хранилища for слоя
      * @param {string} layer - 'hot', 'warm' или 'cold'
      * @returns {Object|null} - объект хранилища с методами get/set/has/delete/clear
      */
@@ -169,7 +169,7 @@
                     return true;
                 },
                 keys: async () => {
-                    // Получить все ключи из localStorage
+                    // Get все ключи из localStorage
                     const allKeys = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
@@ -185,7 +185,7 @@
             // Пока возвращаем заглушку
             return {
                 get: async (key) => {
-                    console.warn(`IndexedDB для ${layer} ещё не реализован, используем localStorage`);
+                    console.warn(`IndexedDB for ${layer} ещё не реализован, используем localStorage`);
                     try {
                         const item = localStorage.getItem(`idb_${layer}_${key}`);
                         return item ? JSON.parse(item) : null;
@@ -194,7 +194,7 @@
                     }
                 },
                 set: async (key, value) => {
-                    console.warn(`IndexedDB для ${layer} ещё не реализован, используем localStorage`);
+                    console.warn(`IndexedDB for ${layer} ещё не реализован, используем localStorage`);
                     try {
                         localStorage.setItem(`idb_${layer}_${key}`, JSON.stringify(value));
                         return true;
@@ -216,7 +216,7 @@
                     return true;
                 },
                 keys: async () => {
-                    // Получить все ключи для этого слоя из localStorage (fallback для IndexedDB)
+                    // Get все ключи for этого слоя из localStorage (fallback for IndexedDB)
                     const prefix = `idb_${layer}_`;
                     const allKeys = [];
                     for (let i = 0; i < localStorage.length; i++) {
@@ -234,13 +234,13 @@
         return null;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.storageLayers = {
         LAYERS,
         getLayerForKey,
         getStorage
     };
 
-    console.log('storage-layers.js: инициализирован');
+    console.log('storage-layers.js: initialized');
 })();
 

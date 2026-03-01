@@ -3,12 +3,12 @@
  * MATH VALIDATION - Валидация математических вычислений
  * ================================================================================================
  *
- * ЦЕЛЬ: Проверка корректности финансовых расчётов и математических операций.
+ * PURPOSE: Проверка корректности финансовых расчётов и математических операций.
  * Валидация диапазонов, проверка на NaN/Infinity, валидация портфелей.
  *
  * Skill: core/skills/domain-portfolio
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Строгая проверка перед использованием результатов расчётов
  * - Валидация портфелей (сумма весов = 1)
  * - Проверка корреляций (-1 до 1)
@@ -66,7 +66,7 @@
                         details: errorDetails,
                         type: messageData.type || 'warning',
                         priority: messageData.priority || 3,
-                        key: errorKey, // Сохраняем ключ для последующего перевода
+                        key: errorKey, // Сохраняем ключ for последующего перевода
                         scope: scope,
                         actions: []
                     });
@@ -139,8 +139,8 @@
 
     /**
      * Валидировать метрику (не должна быть NaN или Infinity)
-     * @param {number} metric - значение метрики
-     * @param {string} metricName - имя метрики (для сообщения об ошибке)
+     * @param {number} metric - значение metrics
+     * @param {string} metricName - имя metrics (for сообщения об ошибке)
      * @param {Object} options - опции { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, error: string }
      */
@@ -148,9 +148,9 @@
         if (!isValidNumber(metric)) {
             let errorMsg = `${metricName} должна быть числом`;
             if (isNaN(metric)) {
-                errorMsg = `${metricName} не может быть NaN`;
+                errorMsg = `${metricName} не can be NaN`;
             } else if (!isFinite(metric)) {
-                errorMsg = `${metricName} не может быть Infinity`;
+                errorMsg = `${metricName} не can be Infinity`;
             }
 
             const result = { valid: false, error: errorMsg };
@@ -238,7 +238,7 @@
         return { valid: true, error: null };
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.mathValidation = {
         isValidNumber,
         validatePortfolioWeights,
@@ -247,6 +247,6 @@
         validateTimeSeries
     };
 
-    console.log('math-validation.js: инициализирован');
+    console.log('math-validation.js: initialized');
 })();
 

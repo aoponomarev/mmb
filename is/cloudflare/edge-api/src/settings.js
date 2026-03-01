@@ -4,12 +4,12 @@
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Замена continue-wrapper снимков (JSON файлы на диске) на облачное хранилище.
+ * PURPOSE: Замена continue-wrapper снимков (JSON файлы на диске) на облачное хранилище.
  * Настройки хранятся в KV namespace SETTINGS, доступны с любого устройства.
  *
  * МАРШРУТЫ:
- * - GET  /api/settings        — получить все настройки (для импорта в UI)
- * - POST /api/settings        — сохранить все настройки (экспорт из UI)
+ * - GET  /api/settings        — получить all settings (for импорта в UI)
+ * - POST /api/settings        — сохранить all settings (экспорт из UI)
  * - GET  /api/settings/:key   — получить одно поле
  * - PUT  /api/settings/:key   — установить одно поле
  *
@@ -56,7 +56,7 @@ async function resolveAuthorizationContext(request, env) {
   }
 
   if (!expectedToken && !env.JWT_SECRET) {
-    return { authorized: false, mode: null, userId: null, reason: 'SETTINGS_TOKEN и JWT_SECRET не настроены' };
+    return { authorized: false, mode: null, userId: null, reason: 'SETTINGS_TOKEN и JWT_SECRET not configuredы' };
   }
   return { authorized: false, mode: null, userId: null, reason: 'Token mismatch or invalid JWT' };
 }
@@ -115,13 +115,13 @@ export async function handleSettings(request, env, path) {
 
   const method = request.method;
 
-  // GET /api/settings — все настройки
+  // GET /api/settings — all settings
   if (method === 'GET' && (path === '/api/settings' || path === '/api/settings/')) {
     const raw = await readSettings(env, authContext);
     return jsonResponse({ data: raw || {} });
   }
 
-  // POST /api/settings — сохранить все настройки (полная замена)
+  // POST /api/settings — сохранить all settings (полная замена)
   if (method === 'POST' && (path === '/api/settings' || path === '/api/settings/')) {
     let body;
     try {

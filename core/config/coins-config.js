@@ -4,17 +4,17 @@
  * ================================================================================================
  * Skill: app/skills/ux-principles
  *
- * ЦЕЛЬ: Единый источник правды для справочных списков, связанных с монетами
- * (стейблкоины и др.). Используется в UI для выборок и фильтров без дублирования
+ * PURPOSE: SSOT for справочных списков, связанных с монетами
+ * (стейблкоины и др.). Используется в UI for выборок и фильтров без дублирования
  * хардкода в компонентах.
  *
- * ПРИНЦИПЫ:
- * - Все справочные списки по монетам определяются здесь
- * - Возвращаемые структуры иммутабельны для вызывающего кода (копии массивов/Set)
+ * PRINCIPLES:
+ * - Все справочные списки по монетам are defined here
+ * - Возвращаемые структуры иммутабельны for вызывающего кода (копии массивов/Set)
  * - Расширяемость: при добавлении новых списков используем геттеры
  *
- * ССЫЛКИ:
- * - ЕИП: `app/skills/ux-principles` (раздел "Единый источник правды")
+ * REFERENCES:
+ * - ЕИП: `app/skills/ux-principles` (раздел "SSOT")
  */
 
 (function() {
@@ -76,8 +76,8 @@
     /**
      * Проверить, является ли монета оберткой (Wrapped) или LST
      * @param {string} id - ID монеты
-     * @param {string} symbol - Символ монеты (опционально)
-     * @param {string} name - Название монеты (опционально)
+     * @param {string} symbol - Символ монеты (optional)
+     * @param {string} name - Название монеты (optional)
      * @returns {boolean}
      */
     function isWrappedOrLst(id, symbol = '', name = '') {
@@ -104,10 +104,10 @@
     }
 
     /**
-     * Получить тип монеты (для UI-индикаторов)
+     * Get тип монеты (for UI-индикаторов)
      * @param {string} id - ID монеты
-     * @param {string} symbol - Символ монеты (опционально)
-     * @param {string} name - Название монеты (опционально)
+     * @param {string} symbol - Символ монеты (optional)
+     * @param {string} name - Название монеты (optional)
      * @returns {'stable'|'wrapped'|'lst'|null}
      */
     function getCoinType(id, symbol = '', name = '') {
@@ -135,7 +135,7 @@
     }
 
     /**
-     * Иконка типа монеты (ЕИП для UI)
+     * Иконка типа монеты (ЕИП for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
      * @returns {string|null}
      */
@@ -147,7 +147,7 @@
     }
 
     /**
-     * Подсказка для типа монеты (ЕИП для UI)
+     * Подсказка for типа монеты (ЕИП for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
      * @returns {string|null}
      */
@@ -158,7 +158,7 @@
         return null;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.coinsConfig = {
         setStablecoins,
         setWrappedCoins,
@@ -175,5 +175,5 @@
         getCoinTypeTitle
     };
 
-    console.log('coins-config.js: инициализирован');
+    console.log('coins-config.js: initialized');
 })();

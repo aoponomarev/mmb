@@ -1,27 +1,27 @@
 /**
  * ================================================================================================
- * DATASETS CLIENT - API клиент для работы с датасетами через Cloudflare Workers
+ * DATASETS CLIENT - API клиент for работы с датасетами через Cloudflare Workers
  * ================================================================================================
  *
- * ЦЕЛЬ: Браузерный клиент для работы с временными рядами и метриками через Cloudflare Workers API.
+ * PURPOSE: Браузерный клиент for работы с временными рядами и метриками через Cloudflare Workers API.
  *
  * Skill: core/skills/config-contracts
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды: Использовать `cloudflare-config.js` для всех endpoints
- * - Авторизация: Использовать `auth-client.js` для получения токена
+ * PRINCIPLES:
+ * - SSOT: Использовать `cloudflare-config.js` for всех endpoints
+ * - Авторизация: Использовать `auth-client.js` for получения токена
  * - Обработка ошибок: Использовать существующую систему обработки ошибок
  * - Модульность: Независимый модуль без зависимостей от UI компонентов
  *
  * ОСОБЕННОСТИ:
  * - Автоматическое добавление Authorization заголовка с JWT токеном
  * - Обработка ошибок сети и авторизации
- * - Поддержка batch операций для сохранения данных
+ * - Поддержка batch операций for сохранения данных
  *
  * ПРИМЕЧАНИЕ: R2 хранилище отложено, поэтому endpoints возвращают заглушки.
  * После активации R2 будет реализована полная функциональность.
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация Workers: core/config/cloudflare-config.js
  * - OAuth клиент: core/api/cloudflare/auth-client.js
  * - План интеграции: core/skills/config-contracts
@@ -35,17 +35,17 @@
     // - core/api/cloudflare/auth-client.js (window.authClient)
 
     if (typeof window.cloudflareConfig === 'undefined') {
-        console.error('datasets-client.js: cloudflareConfig не загружен');
+        console.error('datasets-client.js: cloudflareConfig not loaded');
         return;
     }
 
     if (typeof window.authClient === 'undefined') {
-        console.error('datasets-client.js: authClient не загружен');
+        console.error('datasets-client.js: authClient not loaded');
         return;
     }
 
     /**
-     * Получить заголовки для авторизованного запроса
+     * Get заголовки for авторизованного запроса
      * @returns {Promise<Object>} Объект с заголовками или null при ошибке авторизации
      */
     async function getAuthHeaders() {
@@ -92,7 +92,7 @@
     }
 
     /**
-     * Получить временные ряды для монеты и даты
+     * Get time series for монеты и даты
      * @param {string} coin - ID монеты
      * @param {string} date - Дата (формат: YYYY-MM-DD)
      * @returns {Promise<Array>} Массив точек временного ряда
@@ -106,7 +106,7 @@
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('timeSeries', { coin, date });
             if (!url) {
-                throw new Error('Не удалось получить URL для временных рядов');
+                throw new Error('Не удалось получить URL for временных рядов');
             }
 
             const response = await fetchWithAuth(url, {
@@ -140,7 +140,7 @@
     }
 
     /**
-     * Сохранить временные ряды (batch)
+     * Сохранить time series (batch)
      * @param {Array} timeSeriesData - Массив данных временных рядов
      * @returns {Promise<boolean>} Успех операции
      * @throws {Error} При ошибке сети или авторизации
@@ -153,7 +153,7 @@
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('timeSeries');
             if (!url) {
-                throw new Error('Не удалось получить URL для сохранения временных рядов');
+                throw new Error('Не удалось получить URL for сохранения временных рядов');
             }
 
             const response = await fetchWithAuth(url, {
@@ -188,7 +188,7 @@
     }
 
     /**
-     * Получить метрики для монеты и даты
+     * Get metrics for монеты и даты
      * @param {string} coin - ID монеты
      * @param {string} date - Дата (формат: YYYY-MM-DD)
      * @returns {Promise<Object>} Объект с метриками
@@ -202,7 +202,7 @@
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('metrics', { coin, date });
             if (!url) {
-                throw new Error('Не удалось получить URL для метрик');
+                throw new Error('Не удалось получить URL for метрик');
             }
 
             const response = await fetchWithAuth(url, {
@@ -236,7 +236,7 @@
     }
 
     /**
-     * Сохранить метрики (batch)
+     * Сохранить metrics (batch)
      * @param {Array} metricsData - Массив данных метрик
      * @returns {Promise<boolean>} Успех операции
      * @throws {Error} При ошибке сети или авторизации
@@ -249,7 +249,7 @@
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('metrics');
             if (!url) {
-                throw new Error('Не удалось получить URL для сохранения метрик');
+                throw new Error('Не удалось получить URL for сохранения метрик');
             }
 
             const response = await fetchWithAuth(url, {
@@ -283,7 +283,7 @@
         }
     }
 
-    // Экспорт функций через window для использования в других модулях
+    // Экспорт функций через window for использования в других модулях
     window.datasetsClient = {
         getTimeSeries,
         saveTimeSeries,
@@ -291,5 +291,5 @@
         saveMetrics,
     };
 
-    console.log('datasets-client.js: инициализирован');
+    console.log('datasets-client.js: initialized');
 })();

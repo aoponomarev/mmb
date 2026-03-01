@@ -3,24 +3,24 @@
  * CELL NUM - Компонент числовой ячейки таблицы
  * ================================================================================================
  *
- * ЦЕЛЬ: Форматирование и отображение числовых значений в таблице.
+ * PURPOSE: Форматирование и отображение числовых значений в таблице.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Минимальная кастомизация, дефолтный Bootstrap
  * - Разбиение числа на части (префикс, знак, целая часть, разделитель, дробная часть, единица)
- * - Цветизация на основе знака значения (для процентов)
+ * - Цветизация на основе знака значения (for процентов)
  * - Разделители разрядов (пробелы каждые 3 цифры)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price"></cell-num>
  * <cell-num :value="coin.price_change_percentage_24h" :precision="2" colorize unit="%"></cell-num>
  *
  * ТИПЫ ФОРМАТИРОВАНИЯ:
  * - 'default': стандартное форматирование с фиксированной точностью
- * - 'price': динамическая точность для отображения минимум 2 значащих цифр
+ * - 'price': динамическая точность for отображения минимум 2 значащих цифр
  *   (например: $0.000023 вместо $0.00)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Старая версия: do-overs/BOT/ui/components/cell-num.js
  * - Архитектура: is/skills/arch-foundation
  */
@@ -58,7 +58,7 @@
                 type: Boolean,
                 default: false
             },
-            // Отображение для пустых значений
+            // Отображение for пустых значений
             emptyValue: {
                 type: String,
                 default: '—'
@@ -75,7 +75,7 @@
                 default: ' ',
                 validator: (value) => [' ', '&nbsp;', ',', ''].includes(value)
             },
-            // Скрыть знак "+" для положительных значений (для Price)
+            // Скрыть знак "+" for положительных значений (for Price)
             hidePositiveSign: {
                 type: Boolean,
                 default: false
@@ -100,7 +100,7 @@
                 return !Number.isFinite(this.value);
             },
 
-            // Динамическая точность для типа 'price'
+            // Динамическая точность for типа 'price'
             // Для очень малых чисел (< 0.01) вычисляем точность так, чтобы показать минимум 2 значащие цифры
             effectivePrecision() {
                 if (this.type !== 'price' || this.isEmpty || this.isInfinite) {
@@ -126,9 +126,9 @@
                 
                 // Если число в экспоненциальной форме с отрицательным показателем
                 if (exponent < 0) {
-                    // Возвращаем количество знаков, необходимое для отображения 2 значащих цифр
+                    // Возвращаем количество знаков, необходимое for отображения 2 значащих цифр
                     // Например: 0.000023 -> нужно 6 знаков (000023)
-                    return Math.abs(exponent) + 1; // +1 для второй значащей цифры
+                    return Math.abs(exponent) + 1; // +1 for второй значащей цифры
                 }
 
                 return this.precision;
@@ -141,7 +141,7 @@
                 return Math.round(this.value * factor) / factor;
             },
 
-            // Отображение для пустых значений или бесконечности
+            // Отображение for пустых значений или бесконечности
             emptyOrInfiniteDisplay() {
                 if (this.isEmpty) {
                     return this.emptyValue;
@@ -160,7 +160,7 @@
                 return null;
             },
 
-            // Знак числа (всегда показываем "+" для положительных, если не отключено через prop)
+            // Знак числа (всегда показываем "+" for положительных, если не отключено через prop)
             numberSign() {
                 if (this.isEmpty || this.isInfinite) return '';
                 if (this.hidePositiveSign) return ''; // Для Price не показываем "+"
@@ -253,7 +253,7 @@
                 return this.unit || '';
             },
 
-            // CSS классы для частей числа (Bootstrap)
+            // CSS классы for частей числа (Bootstrap)
             // Цветизация применяется через CSS селекторы на основе data-value-sign
             prefixClass() {
                 return 'text-muted';
@@ -265,7 +265,7 @@
             },
 
             integerClass() {
-                // Целая часть: жирный шрифт для положительных чисел с целой частью >= 1
+                // Целая часть: жирный шрифт for положительных чисел с целой частью >= 1
                 if (this.colorize && !this.isEmpty && !this.isInfinite) {
                     const value = this.roundedValue;
                     const absValue = Math.abs(value);
@@ -291,7 +291,7 @@
                 return 'text-muted small';
             },
 
-            // Data-атрибут для определения знака значения (для CSS селекторов)
+            // Data-атрибут for определения знака значения (for CSS селекторов)
             colorizeDataAttr() {
                 if (!this.colorize) return null;
 

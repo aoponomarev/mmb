@@ -8,9 +8,9 @@
     'use strict';
 
     const TEMPLATE = `<div class="icon-manager-modal">
-        <!-- Блок токена (если не настроен) -->
+        <!-- Блок токена (если not configured) -->
         <div v-if="!githubToken" class="alert alert-warning mb-4">
-            <h6 class="alert-heading"><i class="fas fa-key me-2"></i>GitHub Token не настроен</h6>
+            <h6 class="alert-heading"><i class="fas fa-key me-2"></i>GitHub Token not configured</h6>
             <p class="small mb-2">Для загрузки иконок в репозиторий <code>libs</code> необходимо указать Personal Access Token.</p>
             <div class="input-group input-group-sm">
                 <input type="password" class="form-control" v-model="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
@@ -23,14 +23,14 @@
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="p-3 border rounded bg-body-tertiary">
-                        <label class="form-label small fw-bold">Внешний URL для подгрузки иконки</label>
+                        <label class="form-label small fw-bold">Внешний URL for подгрузки иконки</label>
                         <div class="input-group">
                             <input type="text" class="form-control" v-model="externalUrl" placeholder="https://example.com/icon.png" @input="loadFromUrl()">
                             <button class="btn btn-outline-primary" type="button" @click="loadFromUrl()">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
-                        <div class="form-text x-small">Изображение будет пропущено через прокси Cloudflare для обхода CORS.</div>
+                        <div class="form-text x-small">Изображение будет пропущено через прокси Cloudflare for CORS bypass.</div>
                     </div>
                 </div>
             </div>
@@ -106,5 +106,5 @@
         insertTemplate();
     }
 
-    console.log('icon-manager-modal-body-template.js: шаблон загружен');
+    console.log('icon-manager-modal-body-template.js: шаблон loaded');
 })();

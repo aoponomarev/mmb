@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * API PROXY - Универсальный прокси для внешних API с KV кэшированием
+ * API PROXY - Универсальный прокси for внешних API с KV кэшированием
  * ================================================================================================
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ЦЕЛЬ: Проксирование запросов к внешним API для обхода CORS при работе на file://
+ * PURPOSE: Проксирование запросов к внешним API for CORS bypass при работе на file://
  *
  * ПОДДЕРЖИВАЕМЫЕ API:
  * - CoinGecko (https://api.coingecko.com/api/v3)
@@ -17,17 +17,17 @@
  * - /api/stooq/* → Stooq API
  *
  * КЭШИРОВАНИЕ:
- * - Cloudflare KV для популярных запросов
- * - TTL зависит от типа данных (монеты: 5 мин, метрики: 1 час)
- * - Cache-Control headers для edge cache
+ * - Cloudflare KV for популярных запросов
+ * - TTL зависит от типа данных (монеты: 5 мин, metrics: 1 час)
+ * - Cache-Control headers for edge cache
  *
  * БЕЗОПАСНОСТЬ:
  * - Whitelist доменов (только разрешенные API)
- * - Rate limiting (опционально, через env.RATE_LIMIT)
+ * - Rate limiting (optional, через env.RATE_LIMIT)
  * - Валидация путей (только разрешенные endpoints)
  *
- * @param {Request} request - Входящий HTTP запрос
- * @param {Object} env - Переменные окружения (API_CACHE KV binding)
+ * @param {Request} request - Входящий HTTP request
+ * @param {Object} env - Environment variables (API_CACHE KV binding)
  * @param {string} apiType - Тип API ('coingecko', 'yahoo-finance', 'stooq')
  * @returns {Promise<Response>} HTTP ответ с CORS headers
  */
@@ -43,7 +43,7 @@ const API_CONFIGS = {
       '/coins/markets': 300,        // 5 минут (топ монет)
       '/coins/list': 86400,          // 24 часа (список всех монет)
       '/simple/price': 60,           // 1 минута (текущие цены)
-      '/global': 3600,               // 1 час (глобальные метрики)
+      '/global': 3600,               // 1 час (глобальные metrics)
     }
   },
   'yahoo-finance': {
@@ -63,9 +63,9 @@ const API_CONFIGS = {
 };
 
 /**
- * Получить TTL для кэширования на основе пути запроса
+ * Get TTL for кэширования на основе пути запроса
  * @param {string} apiType - Тип API
- * @param {string} path - Путь запроса
+ * @param {string} path - Path запроса
  * @returns {number} TTL в секундах
  */
 function getCacheTTL(apiType, path) {
@@ -77,7 +77,7 @@ function getCacheTTL(apiType, path) {
     return config.cacheTTL[path];
   }
 
-  // Проверяем частичное совпадение (для путей с параметрами)
+  // Проверяем частичное совпадение (for путей с параметрами)
   for (const [pattern, ttl] of Object.entries(config.cacheTTL)) {
     if (path.startsWith(pattern)) {
       return ttl;
@@ -88,11 +88,11 @@ function getCacheTTL(apiType, path) {
 }
 
 /**
- * Генерация ключа кэша для KV
+ * Генерация ключа кэша for KV
  * Cloudflare KV key limit = 512 bytes. For long URLs (e.g. 50-coin /coins/markets),
  * we hash the query string portion to stay within limits.
  * @param {string} apiType - Тип API
- * @param {string} path - Путь запроса
+ * @param {string} path - Path запроса
  * @param {string} queryString - Query параметры
  * @returns {Promise<string>} Ключ кэша
  */
@@ -115,7 +115,7 @@ async function generateCacheKey(apiType, path, queryString) {
 
 /**
  * Проверка валидности пути (защита от инъекций)
- * @param {string} path - Путь запроса
+ * @param {string} path - Path запроса
  * @returns {boolean} true если путь валиден
  */
 function isValidPath(path) {
@@ -131,10 +131,10 @@ function isValidPath(path) {
 }
 
 /**
- * Обработка прокси запроса для CoinGecko
+ * Обработка прокси запроса for CoinGecko
  * @param {Request} request - Входящий запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь после /api/coingecko
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path после /api/coingecko
  * @returns {Promise<Response>} Ответ от CoinGecko или из кэша
  */
 export async function handleCoinGeckoProxy(request, env, path) {
@@ -142,10 +142,10 @@ export async function handleCoinGeckoProxy(request, env, path) {
 }
 
 /**
- * Обработка прокси запроса для Yahoo Finance
+ * Обработка прокси запроса for Yahoo Finance
  * @param {Request} request - Входящий запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь после /api/yahoo-finance
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path после /api/yahoo-finance
  * @returns {Promise<Response>} Ответ от Yahoo Finance или из кэша
  */
 export async function handleYahooFinanceProxy(request, env, path) {
@@ -153,10 +153,10 @@ export async function handleYahooFinanceProxy(request, env, path) {
 }
 
 /**
- * Обработка прокси запроса для Stooq
+ * Обработка прокси запроса for Stooq
  * @param {Request} request - Входящий запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь после /api/stooq
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path после /api/stooq
  * @returns {Promise<Response>} Ответ от Stooq или из кэша
  */
 export async function handleStooqProxy(request, env, path) {
@@ -166,9 +166,9 @@ export async function handleStooqProxy(request, env, path) {
 /**
  * Универсальный обработчик прокси запросов
  * @param {Request} request - Входящий запрос
- * @param {Object} env - Переменные окружения
+ * @param {Object} env - Environment variables
  * @param {string} apiType - Тип API
- * @param {string} path - Путь запроса
+ * @param {string} path - Path запроса
  * @returns {Promise<Response>} Ответ от API или из кэша
  */
 async function handleApiProxy(request, env, apiType, path) {
@@ -212,7 +212,7 @@ async function handleApiProxy(request, env, apiType, path) {
       console.log(`[API Proxy] Cache MISS: ${cacheKey}`);
     }
 
-    // Формируем URL для внешнего API
+    // Формируем URL for внешнего API
     const targetUrl = queryString
       ? `${config.baseUrl}${path}?${queryString}`
       : `${config.baseUrl}${path}`;
@@ -280,12 +280,12 @@ async function handleApiProxy(request, env, apiType, path) {
 }
 
 /**
- * Универсальный прокси для любых URL (в основном для изображений)
+ * Универсальный прокси for любых URL (в основном for изображений)
  * @param {Request} request - Входящий запрос
- * @param {Object} env - Переменные окружения
+ * @param {Object} env - Environment variables
  * @returns {Promise<Response>} Ответ от целевого URL
  */
-// Whitelist доменов для generic proxy (иконки монет и публичные CDN).
+// Whitelist доменов for generic proxy (иконки монет и публичные CDN).
 // Только эти хосты могут быть проксированы — защита от open proxy abuse.
 const GENERIC_PROXY_ALLOWED_HOSTS = new Set([
   'assets.coingecko.com',

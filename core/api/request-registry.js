@@ -2,7 +2,7 @@
  * ================================================================================================
  * REQUEST REGISTRY - Журнал обращений к внешним API
  * ================================================================================================
- * ЦЕЛЬ: Отслеживание времени последних запросов к эндпоинтам для соблюдения rate limits.
+ * PURPOSE: Отслеживание времени последних запросов к эндпоинтам for соблюдения rate limits.
  * Хранит состояние в localStorage, выживает после перезагрузки страницы.
  *
  * Skill: core/skills/api-layer
@@ -43,7 +43,7 @@
     }
 
     /**
-     * Создать уникальный ключ для ресурса
+     * Создать уникальный ключ for ресурса
      */
     function getResourceKey(provider, endpoint, params = {}) {
         const paramsHash = btoa(JSON.stringify(params)).substring(0, 16);
@@ -112,7 +112,7 @@
     }
 
     /**
-     * Получить время до следующего разрешенного запроса
+     * Get время до следующего разрешенного запроса
      */
     function getTimeUntilNext(provider, endpoint, params, minInterval) {
         const key = getResourceKey(provider, endpoint, params);
@@ -139,7 +139,7 @@
     }
 
     /**
-     * Сбросить весь журнал запросов (используется при ручном сбросе кэша)
+     * Сбросить весь журнал запросов (using при ручном сбросе кэша)
      */
     function clear() {
         registry.calls = {};
@@ -161,5 +161,5 @@
         clear
     };
 
-    console.log('✅ Request Registry инициализирован');
+    console.log('✅ Request Registry initialized');
 })();

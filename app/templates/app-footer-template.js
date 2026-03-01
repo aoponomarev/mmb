@@ -3,9 +3,9 @@
  * APP FOOTER TEMPLATE - Шаблон компонента футера приложения
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента футера приложения (app-footer).
+ * PURPOSE: Шаблон for компонента футера приложения (app-footer).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="app-footer-template".
@@ -20,18 +20,18 @@
  * Структура HTML:
  * - Корневой элемент: ⟨footer⟩ с классами fixed-bottom, bg-body, py-2, px-2 px-md-5, font-monospace, text-muted, d-flex, align-items-center, justify-content-between, flex-wrap
  * - Время МСК: скрыто на мобильных (d-none d-md-inline), видно на десктопе
- * - Список метрик: метрики рынка (FGI, VIX, BTC, OI, FR, LSR) в виде спанов с адаптивными паддингами (px-1 px-md-2)
- * - Новость крипты: одна строка под метриками, скрыта на мобильных (d-none d-md-block), overflow-x-hidden, кликабельна для переключения, tooltip с полным текстом
+ * - Список метрик: metrics рынка (FGI, VIX, BTC, OI, FR, LSR) в виде спанов с адаптивными паддингами (px-1 px-md-2)
+ * - Новость крипты: одна строка под метриками, скрыта на мобильных (d-none d-md-block), overflow-x-hidden, кликабельна for переключения, tooltip с полным текстом
  * - Без промежуточных оберток: все классы на корневом элементе footer
  * Layout и CSS-классы:
  * - Фиксированное позиционирование: fixed-bottom
  * - Фон: bg-body (наследует тему от body, переключается вместе с темой)
  * - Многослойная тень направленная вверх с холодными стальными оттенками
  * - Минимум стилей: только базовые Bootstrap классы (text-muted, small, font-monospace на футере)
- * - Распределение элементов: d-flex, justify-content-between, flex-wrap для равномерного распределения спанов
+ * - Распределение элементов: d-flex, justify-content-between, flex-wrap for равномерного распределения спанов
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с шаблонами: app/skills/ui-architecture
  * - Компонент: app/components/app-footer.js
  * - Стили: styles/layout/footer.css
  */

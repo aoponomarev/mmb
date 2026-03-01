@@ -3,12 +3,12 @@
  * VALIDATOR - Валидация данных по схемам
  * ================================================================================================
  *
- * ЦЕЛЬ: Валидировать данные по схемам из validation-schemas.js.
+ * PURPOSE: Валидировать данные по схемам из validation-schemas.js.
  * Проверка типов, обязательных полей, диапазонов значений.
  *
  * Skill: core/skills/domain-portfolio
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Строгая валидация перед использованием данных
  * - Детальные сообщения об ошибках
  * - Поддержка вложенных объектов и массивов
@@ -20,7 +20,7 @@
     'use strict';
 
     if (typeof window.validationSchemas === 'undefined') {
-        console.error('validator.js: validationSchemas не загружен');
+        console.error('validator.js: validationSchemas not loaded');
         return;
     }
 
@@ -37,7 +37,7 @@
         }
 
         if (value === undefined || value === null) {
-            return { valid: true }; // Необязательное поле может быть null
+            return { valid: true }; // Необязательное поле can be null
         }
 
         // Проверка типа
@@ -48,7 +48,7 @@
             }
         }
 
-        // Проверка диапазона для чисел
+        // Проверка диапазона for чисел
         if (rule.type === 'number') {
             if (typeof value !== 'number' || isNaN(value)) {
                 return { valid: false, error: 'Значение должно быть числом' };
@@ -71,7 +71,7 @@
 
     /**
      * Валидировать данные по схеме
-     * @param {any} data - данные для валидации
+     * @param {any} data - данные for валидации
      * @param {string} schemaName - имя схемы
      * @param {Object} options - опции { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, errors: Array }
@@ -98,7 +98,7 @@
                 errors.push(`${fieldName}: ${result.error}`);
             }
 
-            // Валидация вложенных объектов (itemSchema для массивов)
+            // Валидация вложенных объектов (itemSchema for массивов)
             if (rule.itemSchema && Array.isArray(value)) {
                 for (let i = 0; i < value.length; i++) {
                     const itemResult = validate(value[i], rule.itemSchema, { showMessage: false });
@@ -126,7 +126,7 @@
                 details: errors.join('; '),
                 type: messageData.type || 'warning',
                 priority: messageData.priority || 3,
-                key: 'error.validation.error', // Сохраняем ключ для последующего перевода
+                key: 'error.validation.error', // Сохраняем ключ for последующего перевода
                 scope: scope,
                 actions: []
             });
@@ -171,7 +171,7 @@
                 details: errors.join('; '),
                 type: messageData.type || 'warning',
                 priority: messageData.priority || 3,
-                key: 'error.validation.error', // Сохраняем ключ для последующего перевода
+                key: 'error.validation.error', // Сохраняем ключ for последующего перевода
                 scope: scope,
                 actions: []
             });
@@ -180,13 +180,13 @@
         return result;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.validator = {
         validate,
         validateArray,
         validateRule
     };
 
-    console.log('validator.js: инициализирован');
+    console.log('validator.js: initialized');
 })();
 

@@ -3,7 +3,7 @@
  * SESSION LOG MODAL BODY COMPONENT - Компонент body модального окна Session Log
  * ================================================================================================
  *
- * ЦЕЛЬ: Отображение логов сессии в модальном окне для отладки.
+ * PURPOSE: Отображение логов сессии в модальном окне for отладки.
  * Skill: is/skills/arch-foundation
  *
  * ОСОБЕННОСТИ:
@@ -17,9 +17,9 @@
  * API КОМПОНЕНТА:
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Система управления кнопками: shared/components/modal.js
  * - Logger: core/logging/logger.js
  */
@@ -60,7 +60,7 @@ window.sessionLogModalBody = {
                 class="p-2 bg-dark text-light"
                 style="height: 400px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word;">
                 <div v-if="filteredLogs.length === 0" class="text-muted text-center py-4">
-                    Нет логов для отображения
+                    Нет логов for отображения
                 </div>
                 <div
                     v-for="(log, index) in filteredLogs"
@@ -105,7 +105,7 @@ window.sessionLogModalBody = {
             if (window.eventBus) {
                 this.logSubscription = window.eventBus.on('session-log', (logData) => {
                     this.sessionLogs.push(logData);
-                    // Ограничиваем количество логов в компоненте (для производительности)
+                    // Ограничиваем количество логов в компоненте (for производительности)
                     if (this.sessionLogs.length > 1000) {
                         this.sessionLogs.shift();
                     }
@@ -187,7 +187,7 @@ window.sessionLogModalBody = {
                     return `[${time}] [${log.level.toUpperCase()}] ${source}${log.message}`;
                 }).join('\n');
 
-                // Fallback для старых браузеров
+                // Fallback for старых браузеров
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(logText);
                 } else {

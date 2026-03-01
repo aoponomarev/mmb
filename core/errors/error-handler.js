@@ -3,17 +3,17 @@
  * ERROR HANDLER - Единая система обработки ошибок
  * ================================================================================================
  *
- * ЦЕЛЬ: Централизованная обработка всех ошибок приложения.
+ * PURPOSE: Централизованная обработка всех ошибок приложения.
  * Классификация, логирование, пользовательские сообщения, повторные попытки.
  *
  * Skill: is/skills/arch-foundation
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Все ошибки проходят через единый обработчик
  * - Автоматическая классификация ошибок
  * - Логирование через logger
  * - Пользовательские сообщения
- * - Автоматические повторные попытки для сетевых ошибок
+ * - Автоматические повторные попытки for сетевых ошибок
  *
  * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
@@ -26,7 +26,7 @@
     // - core/logging/logger.js (window.logger)
 
     if (typeof window.errorTypes === 'undefined') {
-        console.error('error-handler.js: errorTypes не загружен');
+        console.error('error-handler.js: errorTypes not loaded');
         return;
     }
 
@@ -35,7 +35,7 @@
      * @param {Error|Object} error - ошибка
      * @returns {string} - тип ошибки
      */
-    // Skill anchor: классификация HTTP ошибок (429 vs 500 vs network) критична для retry-политик.
+    // Skill anchor: классификация HTTP ошибок (429 vs 500 vs network) критична for retry-политик.
     // See core/skills/api-layer
     function classifyError(error) {
         // HTTP ошибки
@@ -80,9 +80,9 @@
     }
 
     /**
-     * Получить ключ сообщения из messagesConfig по типу ошибки
+     * Get ключ сообщения из messagesConfig по типу ошибки
      * @param {string} errorType - тип ошибки из errorTypes.ERROR_TYPES
-     * @returns {string} - ключ сообщения для messagesConfig
+     * @returns {string} - ключ сообщения for messagesConfig
      */
     function getMessageKey(errorType) {
         const keyMap = {
@@ -154,7 +154,7 @@
                 details: context.details || null,
                 type: messageData.type || 'danger',
                 priority: messageData.priority || 4,
-                key: messageKey, // Сохраняем ключ для последующего перевода
+                key: messageKey, // Сохраняем ключ for последующего перевода
                 scope: scope,
                 actions: context.actions || []
             });
@@ -202,13 +202,13 @@
         throw lastError;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.errorHandler = {
         handleError,
         withRetry,
         classifyError
     };
 
-    console.log('error-handler.js: инициализирован');
+    console.log('error-handler.js: initialized');
 })();
 

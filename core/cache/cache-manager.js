@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * CACHE MANAGER - Единый интерфейс для работы с кэшем
+ * CACHE MANAGER - Единый интерфейс for работы с кэшем
  * ================================================================================================
  * Skill: core/skills/cache-layer
  * Skill: core/skills/cache-layer
  *
- * ЦЕЛЬ: Единая точка доступа к кэшу для всех компонентов. Абстракция над localStorage и IndexedDB.
+ * PURPOSE: Единая точка доступа к кэшу for всех компонентов. Абстракция над localStorage и IndexedDB.
  *
  * НЕ версионируются:
- * Ключи версионируются префиксом v:{hash}:{key} для автоматической инвалидации при обновлении.
+ * Ключи версионируются префиксом v:{hash}:{key} for автоматической инвалидации при обновлении.
  *
  * Алгоритм getVersionedKey():
  * - Автоматически версионирует ключи из массива versionedKeys (данные из внешних API)
@@ -31,14 +31,14 @@
  * - has(key, options) — проверить наличие ключа в кэше
  * - delete(key, options) — удалить ключ из кэша
  * - clearOldVersions() — удалить ключи всех версий кроме текущей
- * - getVersionedKey(key, useVersioning) — получить версионированный ключ (для внутреннего использования)
+ * - getVersionedKey(key, useVersioning) — получить версионированный ключ (for внутреннего использования)
  *
  * ПРИМЕРЫ:
  * await cacheManager.get('coins-list')
  * await cacheManager.set('coins-list', data, { ttl: 86400000 })
  * await cacheManager.clearOldVersions()
  *
- * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
+ * ССЫЛКА: General principles кэширования: core/skills/cache-layer
  */
 
 (function() {
@@ -50,17 +50,17 @@
     // - core/cache/cache-migrations.js (window.cacheMigrations)
 
     if (typeof window.storageLayers === 'undefined') {
-        console.error('cache-manager.js: storageLayers не загружен');
+        console.error('cache-manager.js: storageLayers not loaded');
         return;
     }
 
     if (typeof window.cacheConfig === 'undefined') {
-        console.error('cache-manager.js: cacheConfig не загружен');
+        console.error('cache-manager.js: cacheConfig not loaded');
         return;
     }
 
     /**
-     * Получить хэш версии приложения для версионирования кэша
+     * Get хэш версии приложения for версионирования кэша
      * @returns {string} - хэш версии или 'default'
      */
     function getAppVersionHash() {
@@ -71,7 +71,7 @@
     }
 
     /**
-     * Определяет слой хранения для ключа
+     * Определяет слой хранения for ключа
      * @param {string} key - ключ кэша
      * @returns {string} - 'hot', 'warm' или 'cold'
      */
@@ -81,10 +81,10 @@
     }
 
     /**
-     * Получить версионированный ключ кэша
-     * Добавляет префикс версии для ключей, которые должны инвалидироваться при смене версии
+     * Get версионированный ключ кэша
+     * Добавляет префикс версии for ключей, которые должны инвалидироваться при смене версии
      * @param {string} key - исходный ключ
-     * @param {boolean} useVersioning - использовать ли версионирование (по умолчанию определяется автоматически)
+     * @param {boolean} useVersioning - использовать ли версионирование (по умолчанию auto-detected)
      * @returns {string} - версионированный ключ вида 'v:{hash}:{key}' или исходный ключ
      */
     function getVersionedKey(key, useVersioning = null) {
@@ -112,7 +112,7 @@
     }
 
     /**
-     * Получить значение из кэша
+     * Get значение из кэша
      * @param {string} key - ключ
      * @param {Object} options - опции (strategy, ttl, useVersioning)
      * @returns {Promise<any>} - значение или null
@@ -213,7 +213,7 @@
     }
 
     /**
-     * Удалить значение из кэша
+     * Delete значение из кэша
      * @param {string} key - ключ
      * @param {Object} options - опции (useVersioning)
      * @returns {Promise<boolean>}
@@ -238,7 +238,7 @@
 
     /**
      * Очистить весь кэш или слой
-     * @param {string} layer - слой ('hot', 'warm', 'cold') или null для всех
+     * @param {string} layer - слой ('hot', 'warm', 'cold') или null for всех
      * @returns {Promise<boolean>}
      */
     async function clear(layer = null) {
@@ -264,7 +264,7 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     /**
      * Очистить кэш старых версий приложения
      * Удаляет все ключи с префиксом версии, кроме текущей
@@ -312,6 +312,6 @@
         getAppVersionHash
     };
 
-    console.log('cache-manager.js: инициализирован');
+    console.log('cache-manager.js: initialized');
 })();
 

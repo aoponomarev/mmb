@@ -1,28 +1,43 @@
-# зависимости
+# Dependencies
 node_modules/
 
-# секреты — никогда не коммитить
+# Secrets — never commit
 .env
 secrets-backup.txt
 
-# локальные секретные архивы/кэш (из предыдущей версии)
+# Local data and caches (gitignored per data/README.md)
+data/cache/
 data/memory-mcp/
 data/secret-archives/
-data/cache/
+data/*.sqlite
+data/*.sqlite-*
+data/*.json
+data/*.jsonl
 
-# новые секретные архивы
+# Infrastructure runtime artifacts
 is/secrets/archives/
+is/logs/
+is/memory/*.jsonl
+is/memory/*.json
 
-# компрометированные/локальные служебные файлы
+# Compromised or local operational files
 docs/CRON.txt
 
-# логи
+# Logs
 logs/
 *.log
 
-# системные
+# Build artifacts (if any)
+dist/
+build/
+coverage/
+.next/
+out/
+
+# System
 .DS_Store
 Thumbs.db
 
-# continue settings
+# IDE / AI
 .continue/
+.cursor/debug-*.log

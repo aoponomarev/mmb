@@ -3,12 +3,12 @@
  * POSTGRES SETTINGS COMPONENT - Настройки PostgreSQL API слоя
  * ================================================================================================
  *
- * ЦЕЛЬ: Управление базовыми настройками будущего API слоя PostgreSQL.
+ * PURPOSE: Управление базовыми настройками будущего API слоя PostgreSQL.
  * Без выполнения запросов к БД и без создания таблиц.
  *
  * Skill: core/skills/api-layer
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация: core/config/postgres-config.js
  * - UI state: core/state/ui-state.js
  * - Шаблон: app/templates/postgres-settings-template.js
@@ -169,7 +169,7 @@ window.postgresSettings = {
                     await window.postgresClient.checkHealth();
                     this.healthStatus = 'OK';
                 } else {
-                    // Fallback если клиент еще не загружен
+                    // Fallback если клиент еще not loaded
                     const response = await fetch(this.healthEndpoint, {
                         method: 'GET',
                         mode: 'cors',

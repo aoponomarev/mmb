@@ -3,9 +3,9 @@
  * APP HEADER TEMPLATE - Шаблон компонента хедера приложения
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента хедера приложения (app-header) с кнопками меню и настроек.
+ * PURPOSE: Шаблон for компонента хедера приложения (app-header) с кнопками меню и настроек.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="app-header-template".
@@ -24,16 +24,16 @@
  * Layout и CSS-классы:
  * - Фиксированное позиционирование: fixed-top
  * - Темная тема: bg-dark bg-opacity-90, data-bs-theme="dark" (фиксированная, не переключается)
- * - Многослойная тень направленная вниз с белым inset для осветления фона
- * - Кнопки используют link variant с text-white text-decoration-none для белого цвета без подчеркивания
+ * - Многослойная тень направленная вниз с белым inset for осветления фона
+ * - Кнопки используют link variant с text-white text-decoration-none for белого цвета без подчеркивания
  * - Меню настроек выровнено по правому краю через text-end
  * Слоты:
  * - #menu-items — элементы меню (гамбургер) слева
  * - #portfolio-items — пункты меню портфелей (между созданием и списком)
  * - #settings-items — элементы меню настроек справа
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: app/components/app-header.js
  * - Стили: styles/layout/header.css
  */
@@ -176,7 +176,7 @@
                 @button-toggle="handleTabToggle"
             ></cmp-button-group>
 
-            <!-- Доступ к портфелям и создание портфеля -->
+            <!-- Доступ к портфелям и create portfolio -->
             <cmp-dropdown
                 :button-text="(portfolio.longCount || 0) + '/' + (portfolio.shortCount || 0)"
                 :button-text-short="(portfolio.longCount || 0) + '/' + (portfolio.shortCount || 0)"

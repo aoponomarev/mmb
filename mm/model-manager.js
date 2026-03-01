@@ -5,7 +5,7 @@
  * Skill: core/skills/domain-portfolio
  * Doc: docs/A_MATH_MODELS.md
  *
- * ЦЕЛЬ: Регистрация, переключение и управление активной математической моделью.
+ * PURPOSE: Регистрация, переключение и управление активной математической моделью.
  */
 
 (function() {
@@ -23,7 +23,7 @@
          */
         registerModel(model) {
             if (!model || !model.id) {
-                console.error('ModelManager: некорректная модель для регистрации', model);
+                console.error('ModelManager: некорректная модель for регистрации', model);
                 return;
             }
             this.models.set(model.id, model);
@@ -60,7 +60,7 @@
         }
 
         /**
-         * Получить активную модель
+         * Get активную модель
          * @returns {BaseModelCalculator}
          */
         getActiveModel() {
@@ -68,7 +68,7 @@
         }
 
         /**
-         * Получить ID активной модели
+         * Get ID активной модели
          * @returns {string|null}
          */
         getActiveModelId() {
@@ -76,7 +76,7 @@
         }
 
         /**
-         * Получить все зарегистрированные модели
+         * Get все зарегистрированные модели
          * @returns {Array}
          */
         getAllModels() {
@@ -89,7 +89,7 @@
         calculateMetrics(coins, params) {
             const model = this.getActiveModel();
             if (!model) {
-                console.error('ModelManager: активная модель не установлена');
+                console.error('ModelManager: активная модель not setа');
                 return { coins: [], marketData: {} };
             }
             return model.calculateMetrics(coins, params);
@@ -147,7 +147,7 @@
         }
 
         /**
-         * Получить рекомендуемый метод AGR для активной модели
+         * Get рекомендуемый метод AGR for активной модели
          * @param {Object} params
          * @returns {string|null}
          */
@@ -160,10 +160,10 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.modelManager = new ModelManager();
 
-    // Автоматическая регистрация существующих моделей (если они уже загружены)
+    // Автоматическая регистрация существующих моделей (если они уже loadedы)
     if (window.MedianAir260101Calculator) {
         window.modelManager.registerModel(window.MedianAir260101Calculator);
     }

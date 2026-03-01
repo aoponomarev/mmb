@@ -38,7 +38,7 @@
         },
 
         computed: {
-            // Формируем имя файла для сохранения
+            // Формируем имя файла for сохранения
             targetFilename() {
                 const alias = window.iconManager?.CONFIG?.aliasMap[this.coinData.id];
                 return (alias || this.coinData.id) + '.png';
@@ -156,7 +156,7 @@
             },
 
             /**
-             * Загрузить изображение по URL (через прокси для обхода CORS)
+             * Загрузить изображение по URL (через прокси for CORS bypass)
              * @param {string} url - Опциональный URL (если не указан, берется из externalUrl)
              * @param {boolean} skipInputUpdate - Не обновлять поле ввода
              */
@@ -241,7 +241,7 @@
                 // Очистка
                 ctx.clearRect(0, 0, 128, 128);
 
-                // Вычисляем пропорции для вписывания (contain)
+                // Вычисляем пропорции for вписывания (contain)
                 const scale = Math.min(128 / img.width, 128 / img.height);
                 const x = (128 - img.width * scale) / 2;
                 const y = (128 - img.height * scale) / 2;
@@ -263,7 +263,7 @@
                 this.isUploading = true;
 
                 try {
-                    // Конвертируем Blob в Base64 для GitHub API
+                    // Конвертируем Blob в Base64 for GitHub API
                     const reader = new FileReader();
                     const base64Promise = new Promise((resolve) => {
                         reader.onloadend = () => resolve(reader.result.split(',')[1]);
@@ -344,5 +344,5 @@
         }
     };
 
-    console.log('icon-manager-modal-body.js: загружен');
+    console.log('icon-manager-modal-body.js: loaded');
 })();

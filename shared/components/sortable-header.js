@@ -3,17 +3,17 @@
  * SORTABLE HEADER - Компонент сортируемого заголовка таблицы
  * ================================================================================================
  *
- * ЦЕЛЬ: Заголовок колонки с возможностью сортировки.
+ * PURPOSE: Заголовок колонки с возможностью сортировки.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Минимальная кастомизация, дефолтный Bootstrap
  * - Показывает иконку сортировки в зависимости от состояния (null, asc, desc)
- * - Эмитит событие при клике для обработки сортировки родительским компонентом
+ * - Эмитит событие при клике for обработки сортировки родительским компонентом
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header>
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Старая версия: do-overs/BOT/ui/components/sortable-header.js
  * - Архитектура: is/skills/arch-foundation
  */
@@ -25,7 +25,7 @@
         template: '#sortable-header-template',
 
         props: {
-            // Поле для сортировки (передается в handleSort)
+            // Поле for сортировки (передается в handleSort)
             field: {
                 type: String,
                 required: true
@@ -54,7 +54,7 @@
         },
 
         computed: {
-            // Определяет, активна ли сортировка для этого поля
+            // Определяет, активна ли сортировка for этого поля
             isActive() {
                 return this.sortBy === this.field && this.sortOrder !== null;
             },
@@ -69,7 +69,7 @@
         },
 
         methods: {
-            // Обработчик клика - эмитит событие для родительского компонента
+            // Обработчик клика - эмитит событие for родительского компонента
             handleClick() {
                 this.$emit('sort', this.field);
             }

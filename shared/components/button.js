@@ -3,33 +3,33 @@
  * BUTTON COMPONENT - Компонент кнопки
  * ================================================================================================
  *
- * ЦЕЛЬ: Переиспользуемый компонент кнопки с поддержкой иконки, текста, суффикса, вариантов Bootstrap,
+ * PURPOSE: Переиспользуемый компонент кнопки с поддержкой иконки, текста, суффикса, вариантов Bootstrap,
  * размеров, состояний, адаптивности и детерминированных хэшей экземпляров.
  *
  * Обработка событий:
  * Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/button-template.js`
  * Bootstrap-совместимость:
- * - Компонент использует классы btn, btn-{variant}, btn-{size} Bootstrap для базовой стилизации
+ * - Компонент использует классы btn, btn-{variant}, btn-{size} Bootstrap for базовой стилизации
  * - Состояния disabled и loading применяются через атрибут disabled и классы Bootstrap
  * - Поддержка тем Bootstrap через CSS-переменные (var(--bs-body-color), var(--bs-secondary-color) и т.п.)
  * - Полная обратная совместимость: компонент — обёртка над нативной Bootstrap кнопкой, все стандартные классы и атрибуты Bootstrap работают корректно
  * Использование в комплексных компонентах:
- * - Компонент cmp-button может использоваться в других компонентах (например, cmp-dropdown) для кнопок триггеров Bootstrap
- * - Для этого используется prop buttonAttributes с атрибутами Bootstrap (data-bs-toggle, aria-expanded, id, class)
+ * - Компонент cmp-button может использоваться в других компонентах (например, cmp-dropdown) for кнопок триггеров Bootstrap
+ * - Для этого using prop buttonAttributes с атрибутами Bootstrap (data-bs-toggle, aria-expanded, id, class)
  * - Атрибуты из buttonAttributes передаются на реальный DOM-элемент ⟨button⟩ через v-bind
  * - Bootstrap API работает напрямую с реальным DOM-элементом (не с Vue-компонентом)
- * - Доступ к реальному DOM-элементу через $refs.componentName.$el для инициализации Bootstrap
+ * - Доступ к реальному DOM-элементу через $refs.componentName.$el for инициализации Bootstrap
  * - Классы из buttonAttributes.class объединяются с классами из buttonClasses
  * Подсказки (tooltips):
  * - Нативные подсказки браузера через атрибут title (не Bootstrap Tooltip)
  * - Не требуют инициализации и уничтожения — работают автоматически через браузер
- * - Раздельные подсказки для иконки (tooltipIcon), текста (tooltipText) и каждого элемента суффикса (если suffix — массив, каждый элемент может иметь свой tooltip)
+ * - Раздельные подсказки for иконки (tooltipIcon), текста (tooltipText) и каждого элемента суффикса (если suffix — массив, каждый элемент может иметь свой tooltip)
  * Обработка событий:
  * - По умолчанию все зоны (иконка, текст, суффикс) эмитят общее событие 'click'
  * - Раздельные события (click-icon, click-text, click-suffix) эмитятся всегда при клике на соответствующую зону
- * - Обработчики событий используют .stop для предотвращения всплытия
+ * - Обработчики событий используют .stop for предотвращения всплытия
  * Множественные суффиксы:
- * - suffix может быть массивом элементов для поддержки нескольких badge/icon/indicator одновременно
+ * - suffix can be массивом элементов for поддержки нескольких badge/icon/indicator одновременно
  * - Каждый элемент массива может иметь свой tooltip
  * Анимация chevron:
  * - Анимация chevron через Font Awesome классы (fa-rotate-90) + inline transition (единственное исключение из запрета inline-стилей)
@@ -38,36 +38,36 @@
  *
  * Входные параметры (props):
  * - label (String) — текст кнопки (отображается на десктопе, если задана иконка или укороченный текст)
- * - labelShort (String) — укороченная версия текста для мобильных (используется, если icon не задан)
+ * - labelShort (String) — укороченная версия текста for мобильных (using, если icon не задан)
  * - icon (String) — CSS класс иконки слева (Font Awesome, Material Symbols)
  * - suffix (Object | Array) — суффикс справа. Может быть одиночным объектом или массивом элементов. Формат элемента:
  *   { type: 'badge'|'icon'|'indicator'|'chevron'|'info', value: String|Number, variant: String, expanded: Boolean, tooltip: String }
- * - tooltipIcon (String) — всплывающая подсказка для иконки слева
- * - tooltipText (String) — всплывающая подсказка для текстовой области
- * - tooltipSuffix (String) — всплывающая подсказка для суффикса (приоритет над suffix.tooltip, работает только для одиночного suffix)
+ * - tooltipIcon (String) — всплывающая подсказка for иконки слева
+ * - tooltipText (String) — всплывающая подсказка for текстовой области
+ * - tooltipSuffix (String) — всплывающая подсказка for суффикса (приоритет над suffix.tooltip, работает только for одиночного suffix)
  * - variant (String, default: 'primary') — вариант Bootstrap: 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'outline-*', 'link'
  * - size (String) — размер кнопки: 'sm', 'lg' или null (по умолчанию)
  * - disabled (Boolean) — отключённое состояние кнопки
  * - loading (Boolean) — состояние загрузки (показывает спиннер вместо иконки/текста)
  * - type (String, default: 'button') — тип кнопки: 'button', 'submit', 'reset'
  * - iconOpacity (Number, default: 1) — прозрачность иконки слева (0-1)
- * - buttonId (String) — идентификатор экземпляра для генерации детерминированного хэша (instanceHash)
- * - classesAdd (Object, default: {}) — классы для добавления на различные элементы компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
- * - classesRemove (Object, default: {}) — классы для удаления с различных элементов компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
- * - buttonAttributes (Object, default: {}) — произвольные атрибуты для передачи на корневой <button> элемент. Используется для интеграции с Bootstrap API (dropdown, modal и т.д.)
+ * - buttonId (String) — идентификатор экземпляра for генерации детерминированного хэша (instanceHash)
+ * - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
+ * - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
+ * - buttonAttributes (Object, default: {}) — произвольные атрибуты for передачи на корневой <button> элемент. Используется for интеграции with Bootstrap API (dropdown, modal и т.д.)
  *
- * Выходные события (emits):
+ * Logoutные события (emits):
  * - click — общее событие клика по кнопке (эмитится всегда при клике на любую зону)
  * - click-icon — клик по иконке слева (эмитится вместе с click)
  * - click-text — клик по текстовой области (эмитится вместе с click)
  * - click-suffix — клик по элементу суффикса (эмитится вместе с click, передаёт элемент суффикса как второй аргумент)
  *
- * Примечание: Все зоны (иконка, текст, суффикс) эмитят общее событие click по умолчанию. Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно в родительском компоненте.
+ * Note: Все зоны (иконка, текст, суффикс) эмитят общее событие click по умолчанию. Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно в родительском компоненте.
  *
- * ССЫЛКИ:
- * - Общие принципы работы с компонентами: app/skills/ux-principles
- * - Адаптивность: app/skills/ui-architecture
- * - Выравнивание высоты: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с компонентами: app/skills/ux-principles
+ * - Responsiveness: app/skills/ui-architecture
+ * - Height alignment: app/skills/ui-architecture
  * - Детерминированные хэши: is/skills/arch-foundation
  * - Шаблон: shared/templates/button-template.js
  */
@@ -83,7 +83,7 @@ window.cmpButton = {
         },
         labelShort: {
             type: String,
-            default: null // укороченная версия текста для мобильных (если нет иконки)
+            default: null // укороченная версия текста for мобильных (если нет иконки)
         },
 
         // === Опциональные ===
@@ -92,7 +92,7 @@ window.cmpButton = {
             default: null
         },
 
-        // === Суффикс (правый элемент) - может быть объектом или массивом ===
+        // === Суффикс (правый элемент) - can be объектом или массивом ===
         suffix: {
             type: [Object, Array],
             default: null,
@@ -113,7 +113,7 @@ window.cmpButton = {
             }
         },
 
-        // === Подсказки для тап-зон ===
+        // === Подсказки for тап-зон ===
         tooltipIcon: {
             type: String,
             default: null
@@ -162,13 +162,13 @@ window.cmpButton = {
             default: null
         }, // Для instanceHash (идентификация экземпляра)
 
-        // === Произвольные атрибуты для использования в комплексных компонентах ===
+        // === Произвольные атрибуты for использования в комплексных компонентах ===
         buttonAttributes: {
             type: Object,
             default: () => ({})
             // Пример: { 'data-bs-toggle': 'dropdown', 'aria-expanded': false, 'id': 'dropdown-button', 'class': 'dropdown-toggle' }
-            // Используется для передачи data-атрибутов, aria-атрибутов и дополнительных классов
-            // для интеграции с Bootstrap API (dropdown, modal и т.д.)
+            // Используется for передачи data-атрибутов, aria-атрибутов и дополнительных классов
+            // for интеграции with Bootstrap API (dropdown, modal и т.д.)
         },
 
         // === Стилизация ===
@@ -199,18 +199,18 @@ window.cmpButton = {
         suffixArray() {
             const baseSuffix = this.suffix ? (Array.isArray(this.suffix) ? this.suffix : [this.suffix]) : [];
 
-            // УДАЛЕНО: Автоматическое добавление chevron для dropdown-toggle
+            // УДАЛЕНО: Автоматическое добавление chevron for dropdown-toggle
             // Теперь используем стандартный Bootstrap треугольник через CSS псевдоэлемент ::after
             // (идентично combobox)
 
             return baseSuffix;
         },
 
-        // CSS классы для корневого элемента (root)
+        // CSS классы for корневого элемента (root)
         buttonClasses() {
             const baseClasses = ['btn', 'btn-responsive', this.instanceHash];
 
-            // Условные классы для адаптивности
+            // Условные классы for адаптивности
             if (this.icon) baseClasses.push('has-icon');
             if (this.labelShort) baseClasses.push('has-label-short');
 
@@ -218,7 +218,7 @@ window.cmpButton = {
             if (this.disabled && !this.loading && this.variant !== 'link') {
                 baseClasses.push('btn-secondary', 'text-secondary', 'bg-secondary', 'bg-opacity-10', 'border-secondary');
             } else {
-                // Обычный вариант из темы (или link для иконочных кнопок в header)
+                // Обычный вариант из темы (или link for иконочных кнопок в header)
                 baseClasses.push(`btn-${this.variant}`);
             }
 
@@ -247,9 +247,9 @@ window.cmpButton = {
             return result;
         },
 
-        // CSS классы для обертки иконки (icon)
+        // CSS классы for обертки иконки (icon)
         iconClasses() {
-            // Flexbox для центрирования иконки внутри квадратной обертки
+            // Flexbox for центрирования иконки внутри квадратной обертки
             const baseClasses = ['icon', 'd-flex', 'align-items-center', 'justify-content-center'];
             if (this.iconOpacity === 0.5) baseClasses.push('opacity-50');
 
@@ -267,7 +267,7 @@ window.cmpButton = {
             );
         },
 
-        // CSS классы для обертки текста (label)
+        // CSS классы for обертки текста (label)
         labelClasses() {
             const baseClasses = ['text-nowrap'];
 
@@ -284,7 +284,7 @@ window.cmpButton = {
             return result;
         },
 
-        // CSS классы для обертки суффиксов (suffix)
+        // CSS классы for обертки суффиксов (suffix)
         suffixClasses() {
             const baseClasses = ['d-flex', 'align-items-center', 'suffix-container'];
 
@@ -301,7 +301,7 @@ window.cmpButton = {
             return result;
         },
 
-        // Атрибуты для передачи на корневой элемент (исключая class, который обрабатывается отдельно)
+        // Атрибуты for передачи на корневой элемент (исключая class, который обрабатывается отдельно)
         buttonAttrs() {
             const attrs = { ...this.buttonAttributes };
             // Удаляем class из копии, так как он обрабатывается в buttonClasses
@@ -309,12 +309,12 @@ window.cmpButton = {
             return attrs;
         },
 
-        // CSS классы для внутреннего контейнера
+        // CSS классы for внутреннего контейнера
         // ВАЖНО: Вертикальный padding (py-*) управляется через CSS в зависимости от размера кнопки
-        // Горизонтальный padding (px-2) задан по умолчанию, может быть переопределен через classesAdd.container
-        // ВАЖНО: gap НЕ используется, так как flexbox gap применяется между ВСЕМИ дочерними элементами,
+        // Горизонтальный padding (px-2) задан по умолчанию, can be переопределен через classesAdd.container
+        // ВАЖНО: gap НЕ using, так как flexbox gap применяется между ВСЕМИ дочерними элементами,
         // даже если они скрыты через visibility:hidden или имеют width:0. Это вызывает смещение иконки.
-        // Отступы между элементами управляются через CSS для дочерних элементов.
+        // Отступы между элементами управляются через CSS for дочерних элементов.
         containerClasses() {
             const baseClasses = ['d-flex', 'align-items-center', 'justify-content-center', 'px-2'];
 
@@ -344,7 +344,7 @@ window.cmpButton = {
             // Идентификатор экземпляра из props
             const instanceId = this.buttonId || this.label || this.icon || 'button';
 
-            // Комбинация для уникальности
+            // Комбинация for уникальности
             const uniqueId = `${parentContext}:${instanceId}`;
             return window.hashGenerator.generateMarkupClass(uniqueId);
         }
@@ -361,12 +361,12 @@ window.cmpButton = {
         tooltipSuffix(newVal) {
             this.updateTouchTooltips('suffix', newVal);
         },
-        // Отслеживаем изменения suffix (может быть массивом)
+        // Отслеживаем изменения suffix (can be массивом)
         suffix: {
             handler(newVal) {
                 if (this._touchTooltips) {
                     this.$nextTick(() => {
-                        // Обновляем tooltips для элементов суффикса
+                        // Обновляем tooltips for элементов суффикса
                         this._touchTooltips.forEach(({ element, tooltip, elementType }) => {
                             if (elementType === 'suffix' && tooltip) {
                                 // Для суффикса нужно найти соответствующий элемент в массиве
@@ -395,7 +395,7 @@ window.cmpButton = {
     },
 
     methods: {
-        // Обновить Bootstrap tooltips для указанного типа элемента
+        // Update Bootstrap tooltips for указанного типа элемента
         updateTouchTooltips(elementType, newTitle) {
             if (!this._touchTooltips || !newTitle) return;
 
@@ -413,8 +413,8 @@ window.cmpButton = {
             });
         },
 
-        // Получить родительский контекст (класс avto-* или ID родителя)
-        // Вызывается из computed, поэтому $el может быть еще не доступен
+        // Get родительский контекст (класс avto-* или ID родителя)
+        // Вызывается из computed, поэтому $el can be еще не доступен
         getParentContext() {
             // Проверяем доступность DOM элемента
             if (!this.$el) {
@@ -484,16 +484,16 @@ window.cmpButton = {
         initTouchTooltips() {
             // Определение touch-устройства: проверяем несколько способов
             const hasTouchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            // Проверка через media query (для DevTools эмуляции)
+            // Проверка через media query (for DevTools эмуляции)
             const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-            // Комбинированная проверка: touch support ИЛИ маленький экран (для тестирования в DevTools)
+            // Комбинированная проверка: touch support ИЛИ маленький экран (for тестирования в DevTools)
             const isTouch = hasTouchSupport || isSmallScreen;
 
             if (!isTouch || !window.bootstrap || !window.bootstrap.Tooltip) {
                 return;
             }
 
-            const LONG_PRESS_DURATION = 500; // 500ms для long press
+            const LONG_PRESS_DURATION = 500; // 500ms for long press
             const tooltipElements = [];
 
             // Находим все элементы с title (иконка, текст, суффикс)
@@ -503,12 +503,12 @@ window.cmpButton = {
                 const title = element.getAttribute('title');
                 if (!title) return;
 
-                // Сохраняем title в data-атрибут для восстановления при необходимости
+                // Сохраняем title в data-атрибут for восстановления при необходимости
                 element.setAttribute('data-original-title', title);
                 // Убираем title, чтобы не показывался нативный tooltip
                 element.removeAttribute('title');
 
-                // Определяем тип элемента для связи с props
+                // Определяем тип элемента for связи с props
                 let elementType = null;
                 if (element.classList.contains('icon')) {
                     elementType = 'icon';
@@ -532,7 +532,7 @@ window.cmpButton = {
                     // Восстанавливаем title при ошибке
                     element.setAttribute('title', title);
                     element.removeAttribute('data-original-title');
-                    return; // Пропускаем этот элемент, если не удалось создать tooltip
+                    return; // Пропускаем этот элемент, если failed to создать tooltip
                 }
 
                 // Long press обработчики
@@ -587,7 +587,7 @@ window.cmpButton = {
                 element.addEventListener('touchcancel', handleTouchCancel, { passive: true });
                 element.addEventListener('click', handleClick);
 
-                // Сохраняем обработчики для очистки
+                // Сохраняем обработчики for очистки
                 element._touchTooltipHandlers = {
                     touchstart: handleTouchStart,
                     touchend: handleTouchEnd,
@@ -596,11 +596,11 @@ window.cmpButton = {
                 };
             });
 
-            // Сохраняем ссылки для очистки
+            // Сохраняем ссылки for очистки
             this._touchTooltips = tooltipElements;
 
 
-            // Обработчик клика на document для скрытия всех tooltips при клике вне элемента
+            // Обработчик клика на document for скрытия всех tooltips при клике вне элемента
             if (tooltipElements.length > 0 && !this._documentClickHandler) {
                 this._documentClickHandler = (e) => {
                     // Проверяем, был ли клик вне всех элементов с tooltips
@@ -618,7 +618,7 @@ window.cmpButton = {
                     }
                 };
 
-                // Используем capture phase для более раннего перехвата
+                // Используем capture phase for более раннего перехвата
                 document.addEventListener('click', this._documentClickHandler, true);
                 document.addEventListener('touchend', this._documentClickHandler, true);
             }

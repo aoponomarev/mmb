@@ -1,12 +1,12 @@
 /**
  * ================================================================================================
- * COIN BLOCK - Компонент для отображения монеты
+ * COIN BLOCK - Компонент for отображения монеты
  * ================================================================================================
  *
- * ЦЕЛЬ: Переиспользуемый компонент для отображения информации о монете.
+ * PURPOSE: Переиспользуемый компонент for отображения информации о монете.
  * Адаптирован из do-overs/BOT/ui/components/cell-coin.js с удалением привязки к CoinGecko.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Независимость от конкретного провайдера данных (CoinGecko, CoinMarketCap и т.д.)
  * - Принимает нормализованные данные через props
  * - Поддержка кликов и контекстного меню
@@ -17,9 +17,9 @@
  * - symbol: Тикер монеты (BTC, ETH и т.д.)
  * - name: Полное название монеты
  * - image: URL иконки монеты
- * - cssClasses: Объект с CSS-классами для кастомизации
+ * - cssClasses: Объект с CSS-классами for кастомизации
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * <coin-block
  *   :coin-id="coin.id"
  *   :symbol="coin.symbol"
@@ -28,7 +28,7 @@
  *   @context-menu="handleContextMenu">
  * </coin-block>
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Старая версия: do-overs/BOT/ui/components/cell-coin.js
  * - Data Provider Manager: core/api/data-provider-manager.js
  */
@@ -44,7 +44,7 @@
         },
 
         props: {
-            // ID монеты (обязательно для событий и хэширования)
+            // ID монеты (обязательно for событий и хэширования)
             coinId: {
                 type: String,
                 required: true
@@ -74,7 +74,7 @@
                 type: Boolean,
                 default: false
             },
-            // CSS-классы для частей компонента
+            // CSS-классы for частей компонента
             cssClasses: {
                 type: Object,
                 default: () => ({
@@ -83,7 +83,7 @@
                     symbol: ''
                 })
             },
-            // Применить стили для обрезания текста (overflow: hidden, text-overflow: ellipsis, white-space: nowrap)
+            // Применить стили for обрезания текста (overflow: hidden, text-overflow: ellipsis, white-space: nowrap)
             applyTextOverflow: {
                 type: Boolean,
                 default: false
@@ -124,14 +124,14 @@
             },
 
             /**
-             * Классы для обрезания текста (если applyTextOverflow === true)
+             * Классы for обрезания текста (если applyTextOverflow === true)
              */
             textOverflowClasses() {
                 return this.applyTextOverflow ? 'overflow-hidden text-truncate' : '';
             },
 
             /**
-             * Полный заголовок для tooltip
+             * Полный заголовок for tooltip
              */
             tooltipTitle() {
                 if (this.name && this.symbol) {
@@ -194,7 +194,7 @@
             },
 
             /**
-             * Тип монеты для UI-индикаторов (ЕИП)
+             * Тип монеты for UI-индикаторов (ЕИП)
              */
             coinType() {
                 if (!window.coinsConfig || !window.coinsConfig.getCoinType) return null;
@@ -214,7 +214,7 @@
 
         methods: {
             /**
-             * Обработка клика - эмитим событие для родительского компонента
+             * Обработка клика - эмитим событие for родительского компонента
              */
             handleClick(event) {
                 this.$emit('click', event, this.coinId);
@@ -256,7 +256,7 @@
             },
 
             /**
-             * Удалить монету из таблицы
+             * Delete монету из таблицы
              */
             handleDelete() {
                 this.$emit('delete-coin', this.coinId);
@@ -282,7 +282,7 @@
              */
             handleImageError() {
                 if (this.fallbackImage && this.currentImage !== this.fallbackImage) {
-                    // console.warn(`coin-block: не удалось загрузить основную иконку для ${this.coinId}, пробуем fallback...`);
+                    // console.warn(`coin-block: failed to загрузить основную иконку for ${this.coinId}, пробуем fallback...`);
                     this.currentImage = this.fallbackImage;
                 } else {
                     // Если fallback отсутствует/тоже битый — скрываем img, чтобы не показывать broken icon.

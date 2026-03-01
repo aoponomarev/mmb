@@ -3,13 +3,13 @@
  * APP HEADER COMPONENT - Компонент хедера приложения
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-компонент хедера приложения с кнопками меню и настроек.
+ * PURPOSE: Vue-компонент хедера приложения с кнопками меню и настроек.
  * Skill: app/skills/ux-principles
  *
  * Слоты:
  * - Фиксированная темная тема (data-bs-theme="dark"), не переключается
- * - Использует cmp-dropdown для кнопок меню и настроек
- * - Поддержка слотов для кастомизации элементов меню
+ * - Использует cmp-dropdown for кнопок меню и настроек
+ * - Поддержка слотов for кастомизации элементов меню
  *
  * API КОМПОНЕНТА:
  *
@@ -18,7 +18,7 @@
  * - #portfolio-items — пункты меню портфелей (между созданием и списком)
  * - #settings-items — элементы меню настроек справа
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: app/templates/app-header-template.js
  * - Стили: styles/layout/header.css
  */
@@ -65,7 +65,7 @@ window.appHeader = {
             type: [String, null],
             default: null
         },
-        // Данные для Info-box (вторая строка хедера)
+        // Данные for Info-box (вторая строка хедера)
         medians: {
             type: Object,
             default: () => ({})
@@ -104,7 +104,7 @@ window.appHeader = {
         handleViewPortfolio(portfolioId) {
             this.$emit('view-portfolio', portfolioId);
         },
-        // Метод для получения tooltip для кнопки видимости колонок по id
+        // Метод for получения tooltip for кнопки видимости колонок по id
         getTabTooltip(tabId) {
             const tooltipMap = {
                 'percent': this.tooltipTabPercent,
@@ -123,14 +123,14 @@ window.appHeader = {
         }
     },
     computed: {
-        // Централизованный язык для tooltips
+        // Централизованный язык for tooltips
         currentLanguage() {
             return this.uiState?.tooltips?.currentLanguage || 'ru';
         },
         settingsIcon() {
             return this.isAuthenticated ? 'fas fa-id-card' : 'fas fa-cog';
         },
-        // Реактивные tooltip для контролов хедера
+        // Реактивные tooltip for контролов хедера
         tooltipHorizonDays() {
             if (!window.tooltipInterpreter) return '';
             return window.tooltipInterpreter.getTooltip('horizonDays', {
@@ -138,7 +138,7 @@ window.appHeader = {
                 lang: this.currentLanguage
             });
         },
-        // Индивидуальные tooltips для кнопок hours (4h, 8h, 12h) с привязкой к текущему значению MDN
+        // Индивидуальные tooltips for кнопок hours (4h, 8h, 12h) с привязкой к текущему значению MDN
         tooltipMdnHours4h() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
             const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description');
@@ -169,13 +169,13 @@ window.appHeader = {
             }
             return staticText;
         },
-        // Tooltip для лейбла AGR
+        // Tooltip for лейбла AGR
         tooltipAgrLabel() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
             return window.tooltipsConfig.getTooltip('metric.agrMethod.description');
         },
-        // Индивидуальные tooltips для кнопок AGR (DCS, TSI, MP)
+        // Индивидуальные tooltips for кнопок AGR (DCS, TSI, MP)
         tooltipAgrDcs() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
@@ -204,7 +204,7 @@ window.appHeader = {
                 lang: this.currentLanguage
             });
         },
-        // Индивидуальные tooltips для кнопок видимости колонок
+        // Индивидуальные tooltips for кнопок видимости колонок
         tooltipTabPercent() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
@@ -239,7 +239,7 @@ window.appHeader = {
             }
             return baseText;
         },
-        // Улучшенные tooltips для Long/Short метрик
+        // Улучшенные tooltips for Long/Short метрик
         tooltipLongShort() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
@@ -265,13 +265,13 @@ window.appHeader = {
             const lang = this.currentLanguage;
             return window.tooltipsConfig.getTooltip('metric.agrRatio.description');
         },
-        // Индивидуальные tooltips для медиан с зависимостью от значений
+        // Индивидуальные tooltips for медиан с зависимостью от значений
         tooltipMedianCdh() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
             const staticText = window.tooltipsConfig.getTooltip('metric.medianCdh.description');
             const cdhValue = this.medians?.cdh;
             if (cdhValue !== undefined && cdhValue !== null) {
-                // Используем интерпретацию для mdn, так как CDH имеет похожую логику
+                // Используем интерпретацию for mdn, так как CDH имеет похожую логику
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(cdhValue), this.currentLanguage);
                 return interpretation ? `${staticText}\n${interpretation}` : staticText;
             }
@@ -282,7 +282,7 @@ window.appHeader = {
             const staticText = window.tooltipsConfig.getTooltip('metric.medianCgr.description');
             const cgrValue = this.medians?.cgr;
             if (cgrValue !== undefined && cgrValue !== null) {
-                // Используем интерпретацию для mdn, так как CGR имеет похожую логику
+                // Используем интерпретацию for mdn, так как CGR имеет похожую логику
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(cgrValue), this.currentLanguage);
                 return interpretation ? `${staticText}\n${interpretation}` : staticText;
             }
@@ -293,7 +293,7 @@ window.appHeader = {
             const staticText = window.tooltipsConfig.getTooltip('metric.medianAgr.description');
             const agrValue = this.medians?.agr;
             if (agrValue !== undefined && agrValue !== null) {
-                // Используем интерпретацию для agr
+                // Используем интерпретацию for agr
                 const interpretation = window.tooltipInterpreter.getInterpretation('agr', Number(agrValue), this.currentLanguage);
                 return interpretation ? `${staticText}\n${interpretation}` : staticText;
             }

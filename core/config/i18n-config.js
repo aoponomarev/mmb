@@ -4,21 +4,21 @@
  * ================================================================================================
  * Skill: app/skills/ux-principles
  *
- * ЦЕЛЬ: Единый источник правды для всех настроек интернационализации (i18n).
+ * PURPOSE: SSOT for всех настроек интернационализации (i18n).
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Централизованное определение поддерживаемых языков
- * - Единое место для базового языка приложения
+ * - Единое место for базового языка приложения
  * - Маппинг кодов языков на человеко-читаемые названия
- * - Константы для использования во всех модулях i18n (tooltips, messages)
+ * - Константы for использования во всех модулях i18n (tooltips, messages)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * window.i18nConfig.BASE_LANGUAGE         // 'ru'
  * window.i18nConfig.SUPPORTED_LANGUAGES   // ['ru', 'en', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ko']
  * window.i18nConfig.getLanguageLabel('en') // 'English'
  * window.i18nConfig.isLanguageSupported('fr') // true
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Принципы единого источника правды: app/skills/ux-principles
  * - Конфигурация tooltips: core/config/tooltips-config.js
  * - Конфигурация сообщений: core/config/messages-config.js
@@ -54,7 +54,7 @@
     };
 
     /**
-     * Получить человеко-читаемое название языка
+     * Get человеко-читаемое название языка
      * @param {string} languageCode - код языка ('ru', 'en', etc.)
      * @returns {string} - название языка ('Русский', 'English', etc.)
      */
@@ -93,7 +93,7 @@
         normalizeLanguage
     };
 
-    console.log('i18n-config: конфигурация загружена', {
+    console.log('i18n-config: конфигурация loadedа', {
         baseLanguage: BASE_LANGUAGE,
         supportedLanguages: SUPPORTED_LANGUAGES
     });

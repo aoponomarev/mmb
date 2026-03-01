@@ -1,16 +1,16 @@
 /**
  * ================================================================================================
- * API CONFIG - Конфигурация для rate limiter
+ * API CONFIG - Конфигурация for rate limiter
  * ================================================================================================
  *
- * ЦЕЛЬ: Конфигурация параметров rate limiting для разных API.
- * Используется rate-limiter.js для управления запросами.
+ * PURPOSE: Конфигурация параметров rate limiting for разных API.
+ * Используется rate-limiter.js for managing запросами.
  * Skill: core/skills/api-layer
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Параметры адаптивных таймаутов
  * - Приоритеты запросов
- * - Настройки для каждого API
+ * - Настройки for каждого API
  *
  * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
@@ -19,7 +19,7 @@
     'use strict';
 
     /**
-     * Конфигурация rate limiting для разных API
+     * Конфигурация rate limiting for разных API
      */
     const API_CONFIG = {
         coingecko: {
@@ -47,7 +47,7 @@
     };
 
     /**
-     * Получить конфигурацию для API
+     * Get конфигурацию for API
      * @param {string} apiName - имя API
      * @returns {Object} - конфигурация
      */
@@ -56,7 +56,7 @@
     }
 
     /**
-     * Получить приоритет запроса
+     * Get приоритет запроса
      * @param {string} requestType - тип запроса
      * @returns {number} - приоритет
      */
@@ -64,7 +64,7 @@
         return REQUEST_PRIORITIES[requestType] || REQUEST_PRIORITIES.NORMAL;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.apiConfig = {
         API_CONFIG,
         REQUEST_PRIORITIES,
@@ -72,6 +72,6 @@
         getPriority
     };
 
-    console.log('api-config.js: инициализирован');
+    console.log('api-config.js: initialized');
 })();
 

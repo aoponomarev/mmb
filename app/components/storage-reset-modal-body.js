@@ -3,12 +3,12 @@
  * STORAGE RESET MODAL BODY COMPONENT - Компонент body модального окна сброса кэша
  * ================================================================================================
  *
- * ЦЕЛЬ: Выборочное удаление данных из кэша по категориям.
+ * PURPOSE: Выборочное удаление данных из кэша по категориям.
  *
  * Skill: core/skills/cache-layer
  *
  * ОСОБЕННОСТИ:
- * - Чекбоксы для выбора категорий кэша
+ * - Чекбоксы for выбора категорий кэша
  * - Автоматический выбор всех категорий при выборе "Полностью"
  * - Регистрация кнопки "Сбросить выбранное" через modalApi
  * - Удаление данных через cacheManager.delete()
@@ -26,9 +26,9 @@
  * API КОМПОНЕНТА:
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Система управления кнопками: shared/components/modal.js
  * - Cache Manager: core/cache/cache-manager.js
  */
@@ -36,7 +36,7 @@
 window.storageResetModalBody = {
     template: `
         <div class="container-fluid">
-            <p class="text-muted mb-3">Выберите категории данных для удаления из кэша. <strong>API-ключи</strong> не включены в "Полностью" и требуют явного выбора.</p>
+            <p class="text-muted mb-3">Выберите категории данных for удаления из кэша. <strong>API-ключи</strong> не включены в "Полностью" и требуют явного выбора.</p>
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="form-check">

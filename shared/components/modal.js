@@ -3,10 +3,10 @@
  * MODAL COMPONENT - Компонент модального окна
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-обёртка над Bootstrap Modal с полной проницаемостью для Bootstrap API.
+ * PURPOSE: Vue-обёртка над Bootstrap Modal с полной проницаемостью for Bootstrap API.
  *
- * ПРИНЦИПЫ:
- * - Максимальная совместимость с Bootstrap JS API (обязательное требование)
+ * PRINCIPLES:
+ * - Максимальная совместимость with Bootstrap JS API (обязательное требование)
  * - Использование только Bootstrap классов (запрет кастомных стилей)
  * - Инициализация Bootstrap Modal через JavaScript API
  * - Подписка на события Bootstrap (show.bs.modal, hide.bs.modal)
@@ -15,14 +15,14 @@
  * API КОМПОНЕНТА:
  *
  * Входные параметры (props):
- * - modalId (String, required) — уникальный ID модального окна (используется для Bootstrap)
- * - size (String) — размер модального окна ('sm', 'lg', 'xl') или null для дефолтного
+ * - modalId (String, required) — уникальный ID модального окна (using for Bootstrap)
+ * - size (String) — размер модального окна ('sm', 'lg', 'xl') или null for дефолтного
  * - centered (Boolean, default: false) — центрирование модального окна по вертикали
- * - titleId (String) — ID заголовка для aria-labelledby (генерируется автоматически, если не указан)
- * - static (Boolean, default: false) — статическое отображение модального окна (без backdrop, всегда видимо, для примеров)
- * - title (String) — заголовок модального окна (опционально, если не указан, получается из modalsConfig по modalId)
+ * - titleId (String) — ID заголовка for aria-labelledby (генерируется автоматически, если не указан)
+ * - static (Boolean, default: false) — статическое отображение модального окна (без backdrop, всегда видимо, for примеров)
+ * - title (String) — заголовок модального окна (optional, если не указан, получается из modalsConfig по modalId)
  *
- * Выходные события (emits):
+ * Logoutные события (emits):
  * - show — событие открытия модального окна (синхронизировано с show.bs.modal)
  * - shown — событие после открытия (синхронизировано с shown.bs.modal)
  * - hide — событие закрытия модального окна (синхронизировано с hide.bs.modal)
@@ -37,10 +37,10 @@
  * - show() — программное открытие модального окна через Bootstrap API
  * - hide() — программное закрытие модального окна через Bootstrap API
  * - toggle() — программное переключение модального окна через Bootstrap API
- * - getBootstrapInstance() — получение экземпляра Bootstrap Modal для прямого доступа к API
+ * - getBootstrapInstance() — получение экземпляра Bootstrap Modal for прямого доступа к API
  *
  * ПРАВИЛА ИСПОЛЬЗОВАНИЯ:
- * - Кнопка "Закрыть" не используется: закрытие модального окна выполняется только через крестик в header (btn-close) или клик вне модального окна (backdrop)
+ * - Кнопка "Закрыть" не using: закрытие модального окна выполняется только через крестик в header (btn-close) или клик вне модального окна (backdrop)
  * - Кнопка "Отмена" обязательна в footer: отменяет введенные данные (восстанавливает исходные значения полей) или закрывает окно, если данные не изменены
  *   - На форме с измененными данными: первый клик по "Отмена" восстанавливает исходные значения полей, второй клик закрывает окно
  *   - На форме без изменений: клик по "Отмена" сразу закрывает окно
@@ -53,28 +53,28 @@
  *   - Кнопка "Сохранить" НЕ закрывает модальное окно напрямую: закрытие происходит только через крестик, клик вне модального окна или второй клик в состоянии "Сохранено, закрыть?"
  * - Заголовок модального окна: обязательное требование идентичности заголовка модального окна и текста пункта меню/кнопки/ссылки, которая его открывает
  *   - Заголовок определяется в `core/config/modals-config.js` (единый источник правды)
- *   - Компонент поддерживает prop `title` для явной передачи заголовка
+ *   - Компонент поддерживает prop `title` for явной передачи заголовка
  *   - Если prop `title` не передан, заголовок автоматически получается из `modalsConfig` по `modalId`
- *   - Все пункты меню, кнопки и ссылки должны использовать `modalsConfig.getModalTitle(modalId)` для получения заголовка
+ *   - Все пункты меню, кнопки и ссылки должны использовать `modalsConfig.getModalTitle(modalId)` for получения заголовка
  *
  * ПРАВИЛА ИСПОЛЬЗОВАНИЯ:
- * Компонент предоставляет через provide/inject API для управления кнопками в header и footer:
+ * Компонент предоставляет через provide/inject API for managing кнопками в header и footer:
  * - title (String|null) — заголовок модального окна (computed, доступен через modalApi.title)
  * - registerButton(buttonId, config) — регистрация кнопки с указанием мест отображения (header, footer или оба)
  * - updateButton(buttonId, updates) — обновление состояния кнопки (реактивно обновляется во всех местах)
  * - removeButton(buttonId) — удаление кнопки
  * - getButton(buttonId) — получение конфигурации кнопки
- * - getButtonsForLocation(location) — получение кнопок для конкретного места (header/footer)
+ * - getButtonsForLocation(location) — получение кнопок for конкретного места (header/footer)
  *
  * Одна кнопка может отображаться в header, footer или в обоих местах одновременно без дублирования функциональности.
- * Состояние кнопки (disabled, visible, onClick) единое для всех мест отображения.
+ * Состояние кнопки (disabled, visible, onClick) единое for всех мест отображения.
  *
  * ВАЖНО ДЛЯ ИСПОЛЬЗОВАНИЯ bodyComponent:
  * Компонент, указанный в modals-config.js как bodyComponent, ДОЛЖЕН быть зарегистрирован
- * в корневом экземпляре Vue (app/app-ui-root.js) и указан в deps для app-ui-root в modules-config.js.
+ * в корневом экземпляре Vue (app/app-ui-root.js) и указан в deps for app-ui-root в modules-config.js.
  * Без этого тело модального окна будет пустым.
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: shared/templates/modal-template.js
  * - Компонент кнопок: shared/components/modal-buttons.js
  * - Bootstrap Modal API: https://getbootstrap.com/docs/5.3/components/modal/
@@ -126,7 +126,7 @@ window.cmpModal = {
             // Единый реестр всех кнопок модального окна
             // Map<buttonId, buttonConfig> - кнопка регистрируется один раз, может отображаться в header, footer или в обоих
             buttons: new Map(),
-            // Счетчик для принудительной реактивности computed свойств
+            // Счетчик for принудительной реактивности computed свойств
             buttonsUpdateCounter: 0
         };
     },
@@ -171,11 +171,11 @@ window.cmpModal = {
         },
 
         /**
-         * Проверка наличия кнопок для header
-         * Используем buttonsUpdateCounter для реактивности
+         * Validate presence кнопок for header
+         * Используем buttonsUpdateCounter for реактивности
          */
         hasHeaderButtons() {
-            // Используем buttonsUpdateCounter для принудительной реактивности
+            // Используем buttonsUpdateCounter for принудительной реактивности
             const _ = this.buttonsUpdateCounter;
             let hasButtons = false;
             for (const button of this.buttons.values()) {
@@ -188,11 +188,11 @@ window.cmpModal = {
         },
 
         /**
-         * Проверка наличия кнопок для footer
-         * Используем buttonsUpdateCounter для реактивности
+         * Validate presence кнопок for footer
+         * Используем buttonsUpdateCounter for реактивности
          */
         hasFooterButtons() {
-            // Используем buttonsUpdateCounter для принудительной реактивности
+            // Используем buttonsUpdateCounter for принудительной реактивности
             const _ = this.buttonsUpdateCounter;
             let hasButtons = false;
             for (const button of this.buttons.values()) {
@@ -218,7 +218,7 @@ window.cmpModal = {
             if (document.activeElement && document.activeElement.blur) {
                 document.activeElement.blur();
             }
-            // Перемещаем фокус на body для гарантии
+            // Перемещаем фокус на body for гарантии
             if (document.body && document.body.focus) {
                 document.body.focus();
             } else {
@@ -250,11 +250,11 @@ window.cmpModal = {
          * @param {Function} config.onClick - обработчик клика
          * @param {boolean} config.disabled - состояние disabled (по умолчанию false)
          * @param {boolean} config.visible - видимость кнопки (по умолчанию true)
-         * @param {Object} config.classesAdd - дополнительные классы для cmp-button
-         * @param {Object} config.buttonAttributes - атрибуты для передачи на корневой элемент button
+         * @param {Object} config.classesAdd - дополнительные классы for cmp-button
+         * @param {Object} config.buttonAttributes - атрибуты for передачи на корневой элемент button
          * @param {string} config.icon - CSS класс иконки (Font Awesome, Material Symbols)
-         * @param {string} config.tooltipIcon - подсказка для иконки (используется в header для иконочных кнопок)
-         * @param {string} config.tooltipText - подсказка для текста (используется в footer)
+         * @param {string} config.tooltipIcon - подсказка for иконки (using в header for иконочных кнопок)
+         * @param {string} config.tooltipText - подсказка for текста (using в footer)
          */
         registerButton(buttonId, config) {
             // Нормализуем locations в массив
@@ -291,7 +291,7 @@ window.cmpModal = {
                 tooltipText: config.tooltipText || null
             });
 
-            // Увеличиваем счетчик для принудительной реактивности computed свойств
+            // Увеличиваем счетчик for принудительной реактивности computed свойств
             this.buttonsUpdateCounter++;
         },
 
@@ -314,7 +314,7 @@ window.cmpModal = {
                 }
             });
 
-            // Увеличиваем счетчик для принудительной реактивности computed свойств
+            // Увеличиваем счетчик for принудительной реактивности computed свойств
             this.buttonsUpdateCounter++;
         },
 
@@ -324,7 +324,7 @@ window.cmpModal = {
          */
         removeButton(buttonId) {
             if (this.buttons.delete(buttonId)) {
-                // Увеличиваем счетчик для принудительной реактивности computed свойств
+                // Увеличиваем счетчик for принудительной реактивности computed свойств
                 this.buttonsUpdateCounter++;
             }
         },
@@ -339,7 +339,7 @@ window.cmpModal = {
         },
 
         /**
-         * Получение кнопок для конкретного места (header или footer)
+         * Получение кнопок for конкретного места (header или footer)
          * @param {string} location - 'header' или 'footer'
          * @returns {Array<Object>} - массив конфигураций кнопок
          */
@@ -355,7 +355,7 @@ window.cmpModal = {
     },
 
     /**
-     * Предоставление API для управления кнопками через provide/inject
+     * Предоставление API for managing кнопками через provide/inject
      */
     provide() {
         return {
@@ -388,7 +388,7 @@ window.cmpModal = {
                     keyboard: !this.disableClose
                 });
 
-                // Подписка на события Bootstrap для синхронизации состояния
+                // Подписка на события Bootstrap for синхронизации состояния
                 this.$refs.modalElement.addEventListener('show.bs.modal', () => {
                     this.isOpen = true;
                     this.$emit('show');
@@ -404,7 +404,7 @@ window.cmpModal = {
                     if (document.activeElement && document.activeElement.blur) {
                         document.activeElement.blur();
                     }
-                    // Перемещаем фокус на body для гарантии
+                    // Перемещаем фокус на body for гарантии
                     if (document.body && document.body.focus) {
                         document.body.focus();
                     } else {
@@ -423,7 +423,7 @@ window.cmpModal = {
     },
 
     beforeUnmount() {
-        // Уничтожение Bootstrap Modal для предотвращения утечек памяти
+        // Уничтожение Bootstrap Modal for предотвращения утечек памяти
         if (this.modalInstance) {
             this.modalInstance.dispose();
             this.modalInstance = null;

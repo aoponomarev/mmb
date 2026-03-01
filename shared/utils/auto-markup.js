@@ -3,11 +3,11 @@
  * AUTO-MARKUP - Утилита автоматической маркировки элементов DOM
  * ================================================================================================
  *
- * ЦЕЛЬ: Автоматическая маркировка всех значимых контейнеров в DOM через CSS классы avto-{hash}
- * для навигации в коде через DevTools и указания агенту места в разметке.
+ * PURPOSE: Автоматическая маркировка всех значимых контейнеров в DOM через CSS классы avto-{hash}
+ * for навигации в коде через DevTools и указания агенту места в разметке.
  *
- * ПРОБЛЕМА: Ручная маркировка контейнеров для навигации в коде требует постоянного внимания
- * и может быть пропущена при добавлении новых элементов, особенно асинхронно загружаемых.
+ * ПРОБЛЕМА: Ручная маркировка контейнеров for навигации в коде требует постоянного внимания
+ * и can be пропущена при добавлении новых элементов, особенно асинхронно загружаемых.
  *
  * РЕШЕНИЕ: Автоматическая маркировка через MutationObserver с детерминированными хэшами
  * на основе пути элемента в DOM.
@@ -17,7 +17,7 @@
  * - Правила shouldMarkup() определяют, какие элементы нужно маркировать
  * - Генерация детерминированного Base58 хэша на основе пути элемента (tagName, позиция, классы)
  * - Автоматическая инициализация после монтирования Vue приложения
- * - Поддержка ручного вызова для асинхронно загружаемых элементов
+ * - Поддержка ручного вызова for асинхронно загружаемых элементов
  *
  * ПРАВИЛА ПРИМЕНЕНИЯ:
  * - Маркируются: основные секции (main, section, article, aside, header, footer, nav),
@@ -29,17 +29,17 @@
  *
  * ОСОБЕННОСТИ:
  * - Детерминированные хэши: один и тот же путь в DOM всегда дает один и тот же хэш
- * - Стабильность между сессиями для статичных элементов
- * - Исключение элементов внутри Vue компонентов для избежания конфликтов с instanceHash
+ * - Стабильность между сессиями for статичных элементов
+ * - Исключение элементов внутри Vue компонентов for избежания конфликтов с instanceHash
  * - Поддержка асинхронной загрузки через MutationObserver
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * - Автоматически маркирует элементы при загрузке и при добавлении новых элементов
  * - Ручной вызов: window.autoMarkup.markupContainer(element)
  * - Отключение: window.autoMarkup.stopObserver()
  *
- * ССЫЛКИ:
- * - Общие принципы маркировки: is/skills/arch-foundationarchitecture-dom-markup.md
+ * REFERENCES:
+ * - General principles маркировки: is/skills/arch-foundationarchitecture-dom-markup.md
  * - Детерминированные хэши компонентов: is/skills/arch-foundation
  */
 
@@ -47,7 +47,7 @@ window.autoMarkup = {
   observer: null,
   isInitialized: false,
 
-  // Правила для определения значимых контейнеров
+  // Правила for определения значимых контейнеров
   shouldMarkup(element) {
     // Исключения: не маркируем
     if (element.hasAttribute('data-no-markup')) return false;
@@ -95,7 +95,7 @@ window.autoMarkup = {
     return false;
   },
 
-  // Генерация уникального идентификатора для элемента на основе пути в DOM
+  // Генерация уникального идентификатора for элемента на основе пути в DOM
   generateElementId(element) {
     const path = [];
     let current = element;
@@ -107,7 +107,7 @@ window.autoMarkup = {
       const index = Array.from(current.parentElement?.children || []).indexOf(current);
       const classes = Array.from(current.classList)
         .filter(c => !c.startsWith('avto-'))
-        .slice(0, 3) // Ограничиваем количество классов для стабильности
+        .slice(0, 3) // Ограничиваем количество классов for стабильности
         .join('.');
       const id = current.id ? `#${current.id}` : '';
 
@@ -166,7 +166,7 @@ window.autoMarkup = {
     return elements.length;
   },
 
-  // Маркировка конкретного контейнера (для ручного вызова)
+  // Маркировка конкретного контейнера (for ручного вызова)
   markupContainer(container) {
     if (!container || !container.nodeType) {
       console.warn('autoMarkup.markupContainer: invalid container');
@@ -176,9 +176,9 @@ window.autoMarkup = {
     return this.markupTree(container);
   },
 
-  // Инициализация наблюдателя для автоматической маркировки новых элементов
+  // Инициализация наблюдателя for автоматической маркировки новых элементов
   initObserver() {
-    if (this.observer) return; // Уже инициализирован
+    if (this.observer) return; // Уже initialized
 
     this.observer = new MutationObserver((mutations) => {
       // Батчинг: собираем все новые элементы
@@ -192,7 +192,7 @@ window.autoMarkup = {
               newElements.add(node);
             }
 
-            // Проверяем дочерние элементы (только первый уровень для производительности)
+            // Проверяем дочерние элементы (только первый уровень for производительности)
             if (node.querySelectorAll) {
               node.querySelectorAll('*').forEach(child => {
                 if (this.shouldMarkup(child)) {
@@ -242,13 +242,13 @@ window.autoMarkup = {
     // Первичная маркировка существующих элементов
     this.markupTree(document.body);
 
-    // Запуск наблюдателя для будущих изменений
+    // Запуск наблюдателя for будущих изменений
     this.initObserver();
 
     this.isInitialized = true;
   },
 
-  // Деинициализация (для тестирования)
+  // Деинициализация (for тестирования)
   destroy() {
     this.stopObserver();
     this.isInitialized = false;

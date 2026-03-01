@@ -3,12 +3,12 @@
  * EVENT BUS - Глобальная шина событий
  * ================================================================================================
  *
- * ЦЕЛЬ: Обеспечить коммуникацию между компонентами без жёстких зависимостей.
+ * PURPOSE: Обеспечить коммуникацию между компонентами без жёстких зависимостей.
  * Подписка на события, эмит событий, автоматическая отписка.
  * Skill: is/skills/arch-foundation
  *
- * ПРИНЦИПЫ:
- * - Глобальная шина событий для всех компонентов
+ * PRINCIPLES:
+ * - Глобальная шина событий for всех компонентов
  * - Подписка/отписка через простой API
  * - Поддержка одноразовых подписок
  *
@@ -25,7 +25,7 @@
     const subscriptions = new Map();
 
     /**
-     * Счётчик для генерации ID подписок
+     * Счётчик for генерации ID подписок
      */
     let subscriptionIdCounter = 0;
 
@@ -34,7 +34,7 @@
      * @param {string} eventName - имя события
      * @param {Function} callback - функция-обработчик
      * @param {boolean} once - одноразовая подписка
-     * @returns {string} - ID подписки (для отписки)
+     * @returns {string} - ID подписки (for отписки)
      */
     function on(eventName, callback, once = false) {
         if (typeof callback !== 'function') {
@@ -122,7 +122,7 @@
     }
 
     /**
-     * Получить количество подписок на событие
+     * Get количество подписок на событие
      * @param {string} eventName - имя события
      * @returns {number}
      */
@@ -137,7 +137,7 @@
         subscriptions.clear();
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.eventBus = {
         on,
         once,
@@ -147,6 +147,6 @@
         clear
     };
 
-    console.log('event-bus.js: инициализирован');
+    console.log('event-bus.js: initialized');
 })();
 

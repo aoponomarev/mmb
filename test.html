@@ -10,7 +10,7 @@
     ПРИМЕРЫ МОДАЛЬНЫХ ОКОН:
     ================================================================================================
 
-    ЦЕЛЬ: test.html - страница для тестирования и демонстрации компонентов.
+    PURPOSE: test.html - страница for тестирования и демонстрации компонентов.
     Здесь размещаются примеры использования всех компонентов приложения.
 
     ------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@
     ПРАВИЛА ОФОРМЛЕНИЯ:
     - Карточки и поля должны поддерживать темную тему
     - Запрещено использовать bg-light, bg-white (не адаптируются к темной теме)
-    - Использовать bg-body, bg-body-secondary для темо-зависимых фонов
+    - Использовать bg-body, bg-body-secondary for темо-зависимых фонов
     - Для информационных блоков: bg-opacity-10 с border (например, bg-info bg-opacity-10)
 
     Примеры правильного оформления:
@@ -109,12 +109,12 @@
             </template>
         </app-header>
 
-        <!-- Основной контент с отступами для header и footer (Bootstrap spacing utilities) -->
+        <!-- Основной контент с отступами for header и footer (Bootstrap spacing utilities) -->
         <div class="container-fluid pt-5 pb-5 d-flex flex-column flex-grow-1">
             <main class="flex-grow-1 d-flex flex-column">
                 <!-- Контент приложения загружается через Vue компоненты -->
                 <div class="container flex-grow-1">
-                        <!-- Вкладки для шагов тестирования -->
+                        <!-- Вкладки for шагов тестирования -->
                     <div class="mb-4 p-3 border rounded" style="display: flex; flex-direction: column;">
                         <h2 class="mb-3">Интеграции</h2>
                         <p class="text-muted small mb-3">
@@ -122,7 +122,7 @@
                             Здесь будут тестироваться компоненты авторизации, работы с портфелями и датасетами.
                         </p>
 
-                        <!-- Вкладки для шагов тестирования -->
+                        <!-- Вкладки for шагов тестирования -->
                         <ul class="nav nav-tabs mb-3" role="tablist" ref="testStepsTabs">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1-pane" type="button" role="tab" aria-controls="step1-pane" aria-selected="true" title="Проверка загрузки модулей">1</button>
@@ -250,10 +250,10 @@
                         <!-- Шаг 5: Тестирование OAuth flow (инициация входа) -->
                             <div class="tab-pane fade" id="step5-pane" role="tabpanel" aria-labelledby="step5-tab">
                             <h5 class="mb-2">Шаг 5: Инициация входа через Google</h5>
-                            <p class="text-muted small mb-2">Нажимаем кнопку "Войти через Google" для начала OAuth flow.</p>
+                            <p class="text-muted small mb-2">Нажимаем кнопку "Войти через Google" for начала OAuth flow.</p>
                             <div class="alert alert-warning alert-sm mb-2">
                                 <small>
-                                    <strong>Внимание:</strong> После нажатия произойдет редирект на страницу Google OAuth.
+                                    <strong>Внимание:</strong> После нажатия произойдет redirect to страницу Google OAuth.
                                     Вы будете перенаправлены обратно после авторизации.
                                 </small>
                             </div>
@@ -352,13 +352,13 @@
                             <small class="text-muted ms-2">Создает 4 тестовых сообщения всех типов (danger, warning, info, success) в scope "test-messages"</small>
                         </div>
 
-                        <!-- Контейнер для отображения сообщений в карточке -->
+                        <!-- Контейнер for отображения сообщений в карточке -->
                         <div class="mb-3">
                             <h6 class="mb-2">Сообщения в карточке (scope: test-messages):</h6>
                             <cmp-system-messages scope="test-messages" :include-unscoped="true"></cmp-system-messages>
                         </div>
 
-                        <!-- Вкладки для шагов тестирования -->
+                        <!-- Вкладки for шагов тестирования -->
                         <ul class="nav nav-tabs mb-3" role="tablist" ref="messagesTestTabs">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="msg-step1-tab" data-bs-toggle="tab" data-bs-target="#msg-step1-pane" type="button" role="tab" aria-controls="msg-step1-pane" aria-selected="true" title="Проверка Worker endpoint">1</button>
@@ -381,7 +381,7 @@
                             <!-- Шаг 1: Проверка Worker endpoint -->
                             <div class="tab-pane fade show active" id="msg-step1-pane" role="tabpanel" aria-labelledby="msg-step1-tab">
                                 <h5 class="mb-2">Шаг 1: Проверка Worker endpoint</h5>
-                                <p class="text-muted small mb-2">Проверяем доступность Worker endpoint для сообщений.</p>
+                                <p class="text-muted small mb-2">Проверяем доступность Worker endpoint for сообщений.</p>
                                 <div class="d-flex gap-2 mb-2">
                                     <cmp-button
                                         label="Проверить версию"
@@ -565,12 +565,12 @@
                             </div>
                         </div>
 
-                        <!-- Компонент для отображения сообщений -->
+                        <!-- Компонент for отображения сообщений -->
                         <div class="mt-3">
                             <cmp-system-messages scope="test-messages"></cmp-system-messages>
                         </div>
 
-                        <!-- Кнопка для показа сообщений в потоке (сплэш снизу) -->
+                        <!-- Кнопка for показа сообщений в потоке (сплэш снизу) -->
                         <div class="mt-3">
                             <cmp-button
                                 label="Показать в потоке"
@@ -703,7 +703,7 @@
                     <div class="mb-4 p-3 border rounded">
                         <h2 class="mb-3">Тестирование системы перевода tooltips</h2>
                         <p class="text-muted small mb-3">
-                            Проверка работы tooltipsConfig.getTooltip() для разных типов tooltips.
+                            Проверка работы tooltipsConfig.getTooltip() for разных типов tooltips.
                             При смене языка перевода в настройках tooltips должны автоматически обновляться.
                         </p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
@@ -758,7 +758,7 @@
                         <div class="mt-3 p-2 border rounded">
                             <small class="text-muted">
                                 <strong>Текущий язык:</strong> {{ currentTranslationLanguage || 'ru' }} |
-                                <strong>tooltipsConfig:</strong> {{ tooltipsConfig ? 'загружен' : 'не загружен' }}
+                                <strong>tooltipsConfig:</strong> {{ tooltipsConfig ? 'загружен' : 'not loaded' }}
                             </small>
                         </div>
                     </div>
@@ -782,7 +782,7 @@
                                         name="yandex-test-query"
                                         class="form-control flex-grow-1 mb-3"
                                         v-model="yandexTestInputQuery"
-                                        placeholder="Введите ваш запрос или оставьте пустым для случайного запроса"
+                                        placeholder="Введите ваш запрос или оставьте пустым for случайного запроса"
                                         rows="8"
                                         :disabled="yandexTestLoading"
                                         style="resize: vertical; min-height: 150px;">
@@ -834,7 +834,7 @@
                         </div>
                     </div>
 
-                    <!-- Тестовая секция для визуального контроля высоты -->
+                    <!-- Тестовая секция for визуального контроля высоты -->
                     <div class="mb-4 p-3 border rounded">
                         <h2 class="mb-4">Визуальный контроль высоты элементов</h2>
                         <div class="d-flex align-items-center" style="gap: 0;">
@@ -860,7 +860,7 @@
                             </cmp-dropdown>
                         </div>
                         <style>
-                            /* Убираем border-radius и промежуточные границы для элементов встык */
+                            /* Убираем border-radius и промежуточные границы for элементов встык */
                             .d-flex.align-items-center > input + cmp-button button,
                             .d-flex.align-items-center > cmp-button + cmp-button-group .btn-group > .btn:first-child {
                                 border-radius: 0 !important;
@@ -880,7 +880,7 @@
                     <div class="mb-4 p-3 border rounded" style="display: flex; flex-direction: column;">
                         <h2 class="mb-3">Примеры компонента button-group</h2>
 
-                        <!-- Вкладки для примеров -->
+                        <!-- Вкладки for примеров -->
                         <ul class="nav nav-tabs mb-3" role="tablist" ref="buttonGroupTabs">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="btn-group-tab1" data-bs-toggle="tab" data-bs-target="#btn-group-pane1" type="button" role="tab" aria-controls="btn-group-pane1" aria-selected="true" title="Базовые примеры">1</button>
@@ -987,10 +987,10 @@
                                 collapse-breakpoint="lg"
                                 dropdown-label="Меню"
                                 :buttons="[
-                                    { type: 'button', label: 'Действие 1', variant: 'primary' },
-                                    { type: 'button', label: 'Действие 2', variant: 'secondary' },
-                                    { type: 'button', label: 'Действие 3', variant: 'success' },
-                                    { type: 'button', label: 'Действие 4', variant: 'info' }
+                                    { type: 'button', label: 'Action 1', variant: 'primary' },
+                                    { type: 'button', label: 'Action 2', variant: 'secondary' },
+                                    { type: 'button', label: 'Action 3', variant: 'success' },
+                                    { type: 'button', label: 'Action 4', variant: 'info' }
                                 ]"
                                 @button-click="handleButtonGroupClick">
                             </cmp-button-group>
@@ -1021,7 +1021,7 @@
                                 dropdown-label="Действия"
                                 variant="secondary"
                                 :buttons="[
-                                    { type: 'button', label: 'Действие', variant: 'primary' },
+                                    { type: 'button', label: 'Action', variant: 'primary' },
                                     { type: 'checkbox', label: 'Фильтр', variant: 'outline-secondary' },
                                     { type: 'radio', label: 'Опция 1', variant: 'outline-info' },
                                     { type: 'radio', label: 'Опция 2', variant: 'outline-info', active: true }
@@ -1061,9 +1061,9 @@
                             <h4 class="h6 mb-2">Без адаптивности (всегда группа кнопок)</h4>
                             <cmp-button-group
                                 :buttons="[
-                                    { type: 'button', label: 'Действие 1', variant: 'primary' },
-                                    { type: 'button', label: 'Действие 2', variant: 'secondary' },
-                                    { type: 'button', label: 'Действие 3', variant: 'success' }
+                                    { type: 'button', label: 'Action 1', variant: 'primary' },
+                                    { type: 'button', label: 'Action 2', variant: 'secondary' },
+                                    { type: 'button', label: 'Action 3', variant: 'success' }
                                 ]"
                                 @button-click="handleButtonGroupClick">
                             </cmp-button-group>
@@ -1085,9 +1085,9 @@
                             <p class="mt-2 text-muted small">Группа отображается вертикально на экранах &lt;576px и горизонтально на экранах ≥576px</p>
                         </div>
 
-                        <!-- Адаптивность с checkbox (sm) -->
+                        <!-- Responsiveness с checkbox (sm) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность с checkbox (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness с checkbox (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="sm"
                                 dropdown-label="Фильтры"
@@ -1103,9 +1103,9 @@
                             <p class="mt-2 text-muted small">Группа checkbox превращается в dropdown на экранах &lt;576px</p>
                         </div>
 
-                        <!-- Адаптивность с radio (md) -->
+                        <!-- Responsiveness с radio (md) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность с radio (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness с radio (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="md"
                                 dropdown-label="Выбор"
@@ -1121,9 +1121,9 @@
                             <p class="mt-2 text-muted small">Группа radio превращается в dropdown на экранах &lt;768px</p>
                         </div>
 
-                        <!-- Адаптивность с наследованием стилей (lg) -->
+                        <!-- Responsiveness с наследованием стилей (lg) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность с наследованием стилей (lg breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness с наследованием стилей (lg breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="lg"
                                 dropdown-label="Инструменты"
@@ -1139,9 +1139,9 @@
                             <p class="mt-2 text-muted small">Все кнопки наследуют info sm, кроме "Инструмент 3" (warning sm). Группа превращается в dropdown на экранах &lt;992px</p>
                         </div>
 
-                        <!-- Адаптивность с разными размерами dropdown (xl) -->
+                        <!-- Responsiveness с разными размерами dropdown (xl) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность с разными размерами dropdown (xl breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness с разными размерами dropdown (xl breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="xl"
                                 dropdown-label="Большое меню"
@@ -1158,9 +1158,9 @@
                             <p class="mt-2 text-muted small">Группа превращается в большой dropdown на экранах &lt;1200px</p>
                         </div>
 
-                        <!-- Адаптивность со смешанными типами (sm) -->
+                        <!-- Responsiveness со смешанными типами (sm) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность со смешанными типами (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness со смешанными типами (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="sm"
                                 dropdown-label="Действия"
@@ -1178,9 +1178,9 @@
                             <p class="mt-2 text-muted small">Смешанная группа с button, checkbox и radio. Группа превращается в dropdown на экранах &lt;576px</p>
                         </div>
 
-                        <!-- Адаптивность с кастомным dropdown (md) -->
+                        <!-- Responsiveness с кастомным dropdown (md) -->
                         <div class="mb-3">
-                            <h4 class="h6 mb-2">Адаптивность с кастомным dropdown (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <h4 class="h6 mb-2">Responsiveness с кастомным dropdown (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
                             <cmp-button-group
                                 collapse-breakpoint="md"
                                 dropdown-label="Опции"
@@ -1550,10 +1550,10 @@
                     </div>
 
 
-                    <!-- Адаптивность (мобильные состояния) -->
+                    <!-- Responsiveness (мобильные состояния) -->
                     <div class="mb-4">
-                        <h3 class="h5 mb-3">Адаптивность (мобильные состояния)</h3>
-                        <p class="text-muted small mb-2">На мобильных устройствах текст скрывается, если есть иконка (измените размер окна для проверки)</p>
+                        <h3 class="h5 mb-3">Responsiveness (мобильные состояния)</h3>
+                        <p class="text-muted small mb-2">На мобильных устройствах текст скрывается, если есть иконка (измените размер окна for проверки)</p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <cmp-button label="Сохранить" icon="fas fa-save" @click="handleClick"></cmp-button>
                             <cmp-button label="Удалить" icon="fas fa-trash" variant="danger" @click="handleClick"></cmp-button>
@@ -1574,7 +1574,7 @@
                                 @click="handleClick">
                             </cmp-button>
                         </div>
-                        <p class="text-muted small mb-2">Адаптивность управляется через CSS классы (измените размер окна для проверки):</p>
+                        <p class="text-muted small mb-2">Responsiveness управляется через CSS классы (измените размер окна for проверки):</p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <cmp-button
                                 label="Сохранить"
@@ -2060,7 +2060,7 @@
                         <!-- Длинный текст с переносом -->
                         <dropdown-menu-item
                             title="Очень длинный заголовок пункта меню который должен переноситься на несколько строк"
-                            subtitle="И очень длинный подзаголовок который тоже должен переноситься на несколько строк для проверки работы text-wrap"
+                            subtitle="И очень длинный подзаголовок который тоже должен переноситься на несколько строк for проверки работы text-wrap"
                             icon="fas fa-file-alt"
                             :suffix="{ type: 'badge', value: 'New', variant: 'primary', tooltip: 'Новая функция' }"
                             tooltip-icon="Иконка: Документ"
@@ -2070,7 +2070,7 @@
                     </ul>
                 </div>
 
-                <!-- DEBUG: Тестовые кнопки для Data Provider -->
+                <!-- DEBUG: Тестовые кнопки for Data Provider -->
                 <div class="container mb-4">
                     <div class="card">
                         <div class="card-header bg-warning">
@@ -2214,7 +2214,7 @@
         })();
     </script>
 
-    <!-- X-Templates для Vue компонентов -->
+    <!-- X-Templates for Vue компонентов -->
     <script type="text/x-template" id="coin-block-template">
         <div
             :class="['coin-block d-flex align-items-center', instanceHash, cssClasses.container]"

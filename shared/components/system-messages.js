@@ -3,10 +3,10 @@
  * SYSTEM MESSAGES - Контейнер системных сообщений
  * ================================================================================================
  *
- * ЦЕЛЬ: Контейнер для отображения списка системных сообщений.
+ * PURPOSE: Контейнер for отображения списка системных сообщений.
  * Делегирует рендеринг каждого сообщения компоненту cmp-system-message (SSOT шаблона).
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Фильтрация по scope
  * - Ограничение количества сообщений (limit)
  * - Реактивность через Vue.reactive
@@ -18,12 +18,12 @@
  * - limit (Number, default: 0) - ограничение количества (0 = без ограничения)
  * - horizontalScroll (Boolean, default: false) - горизонтальная прокрутка
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * <cmp-system-messages scope="global" />
  * <cmp-system-messages scope="test-messages" :limit="3" />
  * <cmp-system-messages scope="global" :horizontal-scroll="true" />
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Дочерний компонент: shared/components/system-message.js
  * - Хранилище: shared/utils/messages-store.js
  * - Конфигурация: core/config/messages-config.js
@@ -33,7 +33,7 @@
     'use strict';
 
     if (!window.Vue) {
-        console.error('system-messages.js: Vue.js не загружен');
+        console.error('system-messages.js: Vue.js not loaded');
         return;
     }
 
@@ -42,7 +42,7 @@
      */
     const cmpSystemMessages = {
         components: {
-            // Локальная регистрация дочернего компонента для Vue 3
+            // Локальная регистрация дочернего компонента for Vue 3
             'cmp-system-message': window.cmpSystemMessage
         },
         template: `
@@ -74,7 +74,7 @@
 
         props: {
             /**
-             * Горизонтальная прокрутка (для сплэша внизу)
+             * Горизонтальная прокрутка (for сплэша внизу)
              * @type {Boolean}
              */
             horizontalScroll: {
@@ -82,7 +82,7 @@
                 default: false
             },
             /**
-             * Scope сообщений для фильтрации
+             * Scope сообщений for фильтрации
              * @type {String}
              */
             scope: {
@@ -111,14 +111,14 @@
 
         data() {
             return {
-                // Fallback tick для принудительного ререндера
+                // Fallback tick for принудительного ререндера
                 _appMessagesTick: 0,
                 _onAppMessagesChanged: null
             };
         },
 
         mounted() {
-            // Подписываемся на изменения сообщений (fallback для не-Vue реактивности)
+            // Подписываемся на изменения сообщений (fallback for не-Vue реактивности)
             this._onAppMessagesChanged = () => {
                 this._appMessagesTick++;
             };
@@ -147,7 +147,7 @@
              * @returns {Array<Object>}
              */
             visibleMessages() {
-                // Принудительная зависимость от _appMessagesTick для fallback
+                // Принудительная зависимость от _appMessagesTick for fallback
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._appMessagesTick;
 
@@ -208,7 +208,7 @@
         }
     };
 
-    // Экспортируем компонент в window для регистрации в app-ui-root
+    // Экспортируем компонент в window for регистрации в app-ui-root
     window.cmpSystemMessages = cmpSystemMessages;
 
 })();

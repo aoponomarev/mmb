@@ -3,9 +3,9 @@
  * SORTABLE-HEADER TEMPLATE - Шаблон компонента сортируемого заголовка колонки
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента заголовка колонки таблицы с поддержкой сортировки.
+ * PURPOSE: Шаблон for компонента заголовка колонки таблицы с поддержкой сортировки.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="sortable-header-template".
@@ -22,12 +22,12 @@
  * - Текст заголовка: ⟨span class="fw-semibold"⟩
  * - Иконка сортировки: ⟨span class="material-symbols-sharp"⟩
  * Layout и CSS-классы:
- * - Использование только Bootstrap классов для стилизации
- * - Курсор pointer для индикации кликабельности
- * - Material Symbols для иконок сортировки
+ * - Использование только Bootstrap классов for стилизации
+ * - Курсор pointer for индикации кликабельности
+ * - Material Symbols for иконок сортировки
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с шаблонами: app/skills/ui-architecture
  * - Компонент: shared/components/sortable-header.js
  */
 
@@ -48,5 +48,5 @@
     // Добавляем в DOM
     document.body.appendChild(scriptElement);
 
-    console.log('sortable-header-template.js: шаблон загружен');
+    console.log('sortable-header-template.js: шаблон loaded');
 })();

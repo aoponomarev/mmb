@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * MESSAGES MIGRATIONS - Миграции для датасета сообщений
+ * MESSAGES MIGRATIONS - Миграции for датасета сообщений
  * ================================================================================================
  *
- * ЦЕЛЬ: Управление версиями и миграциями датасета сообщений при изменении структуры.
+ * PURPOSE: Управление версиями и миграциями датасета сообщений при изменении структуры.
  * Обеспечивает совместимость данных между версиями приложения.
  * Skill: core/skills/config-contracts
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Миграции применяются только при изменении структуры ключей или формата данных
  * - Изменение текстов сообщений не требует миграции
  * - Каждая миграция имеет уникальную версию (v1, v2, v3...)
@@ -24,13 +24,13 @@
  * - Добавление новых сообщений (обратная совместимость сохранена)
  * - Изменение приоритетов или типов сообщений
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const migratedData = await window.messagesMigrations.migrate(cacheData, fromVersion, toVersion);
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация сообщений: core/config/messages-config.js
  * - Кэш-менеджер: core/cache/cache-manager.js
- * - Аналог для кэша: core/cache/cache-migrations.js
+ * - Аналог for кэша: core/cache/cache-migrations.js
  */
 
 (function() {
@@ -59,7 +59,7 @@
     };
 
     /**
-     * Получить версию датасета из кэша
+     * Get версию датасета из кэша
      * @param {Object} cacheData - данные из кэша
      * @returns {number} - версия датасета (по умолчанию 1)
      */
@@ -71,7 +71,7 @@
     }
 
     /**
-     * Установить версию датасета
+     * Set версию датасета
      * @param {Object} data - данные
      * @param {number} version - версия
      * @returns {Object} - данные с версией
@@ -85,14 +85,14 @@
 
     /**
      * Выполнить миграцию данных из одной версии в другую
-     * @param {Object} data - данные для миграции
+     * @param {Object} data - данные for миграции
      * @param {number} fromVersion - исходная версия
      * @param {number} toVersion - целевая версия
      * @returns {Promise<Object>} - мигрированные данные
      */
     async function migrate(data, fromVersion, toVersion) {
         if (!data || typeof data !== 'object') {
-            console.warn('messages-migrations.migrate: некорректные данные для миграции');
+            console.warn('messages-migrations.migrate: некорректные данные for миграции');
             return data;
         }
 
@@ -166,7 +166,7 @@
         return cleanData;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.messagesMigrations = {
         CURRENT_VERSION,
         getVersion,
@@ -177,5 +177,5 @@
         stripMetadata
     };
 
-    console.log('messages-migrations.js: инициализирован');
+    console.log('messages-migrations.js: initialized');
 })();

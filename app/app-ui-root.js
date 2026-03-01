@@ -1,7 +1,7 @@
 /**
  * Корневой компонент приложения
  *
- * ЦЕЛЬ: Инициализация Vue приложения и настройка корневого компонента
+ * PURPOSE: Инициализация Vue приложения и настройка корневого компонента
  * Skill: is/skills/arch-foundation
  *
  * ПРОБЛЕМА: Логика инициализации Vue раздувала index.html
@@ -43,13 +43,13 @@
     function initVueApp() {
         // Проверяем наличие Vue и компонентов
         if (typeof Vue === 'undefined') {
-            console.error('app-ui-root: Vue.js не загружен');
+            console.error('app-ui-root: Vue.js not loaded');
             return;
         }
 
-        // Базовые компоненты (всегда должны быть загружены)
+        // Базовые компоненты (всегда должны быть loadedы)
         if (!window.cmpDropdownMenuItem || !window.cmpButton || !window.cmpDropdown || !window.cmpCombobox || !window.cmpButtonGroup || !window.appHeader || !window.appFooter || !window.cmpModal || !window.cmpModalButtons || !window.cmpTimezoneSelector || !window.modalExampleBody || !window.aiApiSettings || !window.timezoneModalBody || !window.cmpSystemMessage || !window.cmpSystemMessages) {
-            console.error('app-ui-root: не все базовые компоненты загружены');
+            console.error('app-ui-root: не все базовые компоненты loadedы');
             console.log('Загруженные компоненты:', {
                 cmpDropdownMenuItem: !!window.cmpDropdownMenuItem,
                 cmpButton: !!window.cmpButton,
@@ -70,14 +70,14 @@
             return;
         }
 
-        // Проверка feature flags для условной загрузки компонентов
+        // Проверка feature flags for условной загрузки компонентов
         const authEnabled = window.appConfig && window.appConfig.isFeatureEnabled('auth');
         const portfoliosEnabled = window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync');
 
-        // auth-button больше не используется в header, авторизация через модальное окно.
+        // auth-button больше не using в header, авторизация через модальное окно.
 
         if (portfoliosEnabled && !window.portfoliosManager) {
-            console.warn('app-ui-root: portfolios-manager не загружен, хотя feature flags portfolios и cloudSync включены');
+            console.warn('app-ui-root: portfolios-manager not loaded, хотя feature flags portfolios и cloudSync включены');
         }
 
         const { createApp } = Vue;
@@ -124,7 +124,7 @@
                 const authEnabled = window.appConfig && window.appConfig.isFeatureEnabled('auth');
                 const portfoliosEnabled = window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync');
 
-                // Синхронная инициализация темы (читаем напрямую из localStorage для избежания мерцания)
+                // Синхронная инициализация темы (читаем напрямую из localStorage for избежания мерцания)
                 let initialTheme = 'light';
                 try {
                     const savedTheme = localStorage.getItem('theme');
@@ -135,7 +135,7 @@
                     // Игнорируем ошибки
                 }
 
-                // Применяем тему сразу при инициализации
+                // Применяем тему сразу at initialization
                 if (initialTheme === 'dark') {
                     document.body.setAttribute('data-bs-theme', 'dark');
                 } else {
@@ -148,7 +148,7 @@
                 try {
                     // Пробуем сначала cacheManager (если доступен синхронно), потом localStorage
                     if (window.cacheManager && typeof window.cacheManager.get === 'function') {
-                        // cacheManager асинхронный, поэтому для синхронной инициализации используем localStorage
+                        // cacheManager асинхронный, поэтому for синхронной инициализации используем localStorage
                         const savedLanguage = localStorage.getItem('translation-language');
                         if (savedLanguage && typeof savedLanguage === 'string') {
                             initialLanguage = savedLanguage;
@@ -182,18 +182,18 @@
                 const defaultActiveCoinSetIds = Array.isArray(defaultWorkspace.activeCoinSetIds) ? defaultWorkspace.activeCoinSetIds : [];
 
                 return {
-                    // Feature flags для условного отображения компонентов
+                    // Feature flags for условного отображения компонентов
                     isAuthEnabled: authEnabled,
                     isPortfoliosEnabled: portfoliosEnabled,
                     // Централизованное состояние авторизации (единый источник правды)
                     authState: window.authState ? window.authState.getState() : null,
-                    // Конфигурация модальных окон (для доступа в шаблоне)
+                    // Конфигурация модальных окон (for доступа в шаблоне)
                     modalsConfig: window.modalsConfig || null,
                     // Состояние формирования портфеля
                     currentViewingPortfolio: null,
                     portfolioFormKey: 0,
                     userPortfolios: [],
-                    // Конфигурация tooltips (для доступа в шаблоне)
+                    // Конфигурация tooltips (for доступа в шаблоне)
                     tooltipsConfig: window.tooltipsConfig || null,
                     // Текущая тема приложения
                     currentTheme: initialTheme,
@@ -217,7 +217,7 @@
                         'button.help.text': '',
                         'button.help.suffix.info': ''
                     },
-                    // Данные для dropdown
+                    // Данные for dropdown
                     dropdownItems: [
                         { id: 1, name: 'Элемент 1', description: 'Описание элемента 1', icon: 'fas fa-home', labelShort: 'Эл. 1' },
                         { id: 2, name: 'Элемент 2', description: 'Описание элемента 2', icon: 'fas fa-user', labelShort: 'Эл. 2' },
@@ -225,7 +225,7 @@
                         { id: 4, name: 'Элемент 4', description: 'Описание элемента 4', icon: 'fas fa-file', labelShort: 'Эл. 4' },
                         { id: 5, name: 'Элемент 5', description: 'Описание элемента 5', icon: 'fas fa-folder', labelShort: 'Эл. 5' }
                     ],
-                    // Данные для режима select (отдельные переменные для каждого dropdown)
+                    // Данные for режима select (отдельные переменные for каждого dropdown)
                     selectedDropdownItem1: null, // Только иконка
                     selectedDropdownItem2: null, // Иконка + полный текст
                     selectedDropdownItem3: null, // Иконка + укороченный текст
@@ -238,7 +238,7 @@
                         description: `Описание элемента ${i + 1}`
                     })),
                     isMenuExpanded: false,
-                    // Данные для combobox
+                    // Данные for combobox
                     comboboxValue1: '',
                     comboboxValue2: '',
                     comboboxValue3: '',
@@ -271,7 +271,7 @@
                     yandexTestInputQuery: '',
                     yandexTestResponse: '',
                     yandexTestLoading: false,
-                    yandexTestError: '', // Используем пустую строку вместо null для лучшей реактивности Vue
+                    yandexTestError: '', // Используем пустую строку вместо null for лучшей реактивности Vue
                     // Тестирование Google-Cloudflare интеграции
                     testStep1Result: null,
                     testStep2Result: null,
@@ -298,17 +298,17 @@
                     headerActionHover: null, // Hover state for header action buttons (load/save, refresh, favorites)
                     coinsCacheCheckTimer: null, // Таймер проверки устаревания кэша топ-монет
                     selectedCoinIds: [], // Выбранные монеты (заглушка)
-                    favoriteCoinIds: [], // ID монет в избранном (для реактивности)
+                    favoriteCoinIds: [], // ID монет в избранном (for реактивности)
                     favoriteCoinsMeta: [], // Полные данные избранных монет из favoritesManager (id, symbol)
                     favoriteActionHoverId: null, // ID монеты, по которой наведена иконка действия в списке избранного
-                    coinsDataCache: new Map(), // Кэш данных монет (id -> coin data) для сохранения иконок после удаления из таблицы
-                    horizonDays: Number.isFinite(Number(defaultMetrics.horizonDays)) && Number(defaultMetrics.horizonDays) > 0 ? Number(defaultMetrics.horizonDays) : 2, // Горизонт прогноза (дни) для расчета метрик
+                    coinsDataCache: new Map(), // Кэш данных монет (id -> coin data) for сохранения иконок после удаления из таблицы
+                    horizonDays: Number.isFinite(Number(defaultMetrics.horizonDays)) && Number(defaultMetrics.horizonDays) > 0 ? Number(defaultMetrics.horizonDays) : 2, // Горизонт прогноза (дни) for расчета метрик
                     mdnHours: Number.isFinite(Number(defaultMetrics.mdnHours)) && Number(defaultMetrics.mdnHours) > 0 ? Number(defaultMetrics.mdnHours) : 4, // Горизонт MDN (часы)
-                    mdnValue: null, // Текущий MDN (Market Direction Now) для выбранного горизонта
+                    mdnValue: null, // Текущий MDN (Market Direction Now) for выбранного горизонта
                     agrMethod: defaultMetrics.agrMethod || 'mp', // Способ расчета AGR (dcs, tsi, mp)
                     // Индикатор состояния облачной БД (PostgreSQL)
                     dbStatus: { count: null, loading: false, error: false },
-                    // Данные для Info-box в хедере
+                    // Данные for Info-box в хедере
                     infoBoxMedians: { cdh: 0, cgr: 0, agr: 0 },
                     infoBoxBreadth: { bullishPercent: 0, adRatio: '—' },
                     infoBoxDirection: { trend: 'Neutral' },
@@ -322,8 +322,8 @@
                     ],
                     activeModelId: defaultWorkspace.activeModelId || defaultModelId, // Текущая математическая модель
                     recommendedAgrMethod: null,
-                    activeCoinSetIds: defaultActiveCoinSetIds, // ID монет из загруженного набора (пусто = дефолтный список, массив = активный набор)
-                      // Конфигурация видимости колонок (для mixin columnVisibilityMixin)
+                    activeCoinSetIds: defaultActiveCoinSetIds, // ID монет из loadedного набора (пусто = дефолтный список, массив = активный набор)
+                      // Конфигурация видимости колонок (for mixin columnVisibilityMixin)
                       columnVisibilityConfig: {
                         'percent': { hide: ['col-cd', 'col-cgr', 'col-max', 'col-min', 'col-balance', 'col-stability'] },
                         'complex-deltas': { hide: ['col-percent', 'col-cgr', 'col-max', 'col-min', 'col-balance', 'col-stability'] },
@@ -332,7 +332,7 @@
                       },
                       missingCoins: [], // Отсутствующие монеты при загрузке набора
                       currentIconEditingCoin: null, // Монета, иконка которой редактируется в данный момент
-                      pendingCoinSetContext: null, // Контекст загружаемых наборов для последующей синхронизации
+                      pendingCoinSetContext: null, // Контекст загружаемых sets for последующей синхронизации
                     searchQuery: '',
                     searchResults: [],
                     searchExactResults: [],
@@ -365,7 +365,7 @@
                     }
                 },
                 /**
-                 * Кэш топ-монет устарел (для двухрежимного refresh)
+                 * Кэш топ-монет устарел (for двухрежимного refresh)
                  */
                 isCoinsCacheStale() {
                     const timestamp = this.uiState?.cache?.coinsCacheMeta?.timestamp;
@@ -376,10 +376,10 @@
                     return Date.now() - timestamp >= threshold;
                 },
                 /**
-                 * Тултип для кнопки обновления
+                 * Тултип for кнопки обновления
                  */
                 getRefreshTitle() {
-                    const base = this.isCoinsCacheStale ? 'Обновить данные из API' : 'Данные актуальны';
+                    const base = this.isCoinsCacheStale ? 'Update данные из API' : 'Данные актуальны';
                     const timestamp = this.uiState?.cache?.coinsCacheMeta?.timestamp;
 
                     if (!timestamp) return base;
@@ -398,7 +398,7 @@
                     return `${base}\nДанные обновлены ${ageText}`;
                 },
                 /**
-                 * Проверка, выбраны ли все монеты (для чекбокса "выбрать все")
+                 * Проверка, выбраны ли все монеты (for чекбокса "выбрать все")
                  */
                 allCoinsSelected() {
                     const visibleCoins = this.sortedCoins;
@@ -408,13 +408,13 @@
                     return this.selectedCoinIds.length === visibleCoins.length && visibleCoins.length > 0;
                 },
                 /**
-                 * Количество выбранных монет (для счетчика)
+                 * Количество выбранных монет (for счетчика)
                  */
                 selectedCoinsCount() {
                     return this.selectedCoinIds.length;
                 },
                 /**
-                 * Общее количество монет (для счетчика)
+                 * Общее количество монет (for счетчика)
                  * Показывает количество видимых монет (из активного набора или дефолтного списка)
                  */
                 totalCoinsCount() {
@@ -422,7 +422,7 @@
                     return visibleCoins ? visibleCoins.length : 0;
                 },
                 /**
-                 * Процент выбранных монет (для круговой диаграммы)
+                 * Процент выбранных монет (for круговой диаграммы)
                  */
                 selectedCoinsPercentage() {
                     const visibleCoins = this.sortedCoins || [];
@@ -432,15 +432,15 @@
                     return this.selectedCoinIds.length / visibleCoins.length;
                 },
                 /**
-                 * Список избранных монет с полными данными (для дропдауна)
+                 * Список избранных монет с полными данными (for дропдауна)
                  */
                 favoriteCoinsList() {
                     if (!this.favoriteCoinsMeta || this.favoriteCoinsMeta.length === 0) {
                         return [];
                     }
 
-                    // Используем coinsDataCache для получения полных данных (включая иконки)
-                    // и sortedCoins для определения inTable (учитывает активные наборы)
+                    // Используем coinsDataCache for получения полных данных (включая иконки)
+                    // и sortedCoins for определения inTable (учитывает активные наборы)
                     const visibleCoinsMap = new Map((this.sortedCoins || []).map(coin => [coin.id, coin]));
 
                     return this.favoriteCoinsMeta.map(fav => {
@@ -502,7 +502,7 @@
                     // Если она установлена - используем её, игнорируя coinSortType
                     if (this.sortBy && this.sortOrder) {
                         const sorted = [...coinsToSort].sort((a, b) => {
-                            // Используем getCellValue для поддержки вложенных полей (например, metrics.cdWeighted.0)
+                            // Используем getCellValue for поддержки вложенных полей (например, metrics.cdWeighted.0)
                             const aVal = this.getCellValue(a, this.sortBy);
                             const bVal = this.getCellValue(b, this.sortBy);
 
@@ -529,16 +529,16 @@
                         return sorted;
                     }
 
-                    // Если стандартная сортировка не установлена - используем сортировку по типу монет
+                    // Если стандартная сортировка not setа - используем сортировку по типу монет
                     if (this.coinSortType) {
                         return this.sortCoinsByType(coinsToSort);
                     }
 
-                    // Если ничего не установлено - возвращаем исходный порядок
+                    // Если ничего not setо - возвращаем исходный порядок
                     return coinsToSort;
                 },
                 /**
-                 * Стиль для колонки Price в colgroup
+                 * Стиль for колонки Price в colgroup
                  */
                 priceColumnStyle() {
                     return this.showPriceColumn ? '' : 'display: none;';
@@ -550,7 +550,7 @@
                     if (!window.menusConfig) {
                         return [];
                     }
-                    // Создаем реактивную зависимость от списка монет для работы condition
+                    // Создаем реактивную зависимость от списка монет for работы condition
                     if (this.coins) { /* trigger */ }
                     return window.menusConfig.getCoinSortMenuItems().map(item => ({
                         ...item,
@@ -561,7 +561,7 @@
                     if (!window.menusConfig) {
                         return [];
                     }
-                    // Создаем реактивную зависимость от списка монет для работы condition
+                    // Создаем реактивную зависимость от списка монет for работы condition
                     if (this.coins) { /* trigger */ }
                     return window.menusConfig.getCoinActionMenuItems();
                 },
@@ -611,7 +611,7 @@
                     return window.menusConfig || null;
                 },
                 /**
-                 * Список модальных окон для автоматической регистрации
+                 * Список модальных окон for автоматической регистрации
                  * Получается из modalsConfig с применением условий
                  */
                 registeredModals() {
@@ -620,7 +620,7 @@
                     }
                     const modals = window.modalsConfig.getRegisteredModals();
 
-                    // Обеспечиваем стабильность массива для v-for, чтобы избежать лишних перерисовок
+                    // Обеспечиваем стабильность массива for v-for, чтобы избежать лишних перерисовок
                     const currentIds = modals.map(m => m.id).join(',');
                     if (this._lastModalIds === currentIds && this._lastModals) {
                         return this._lastModals;
@@ -631,7 +631,7 @@
                     return modals;
                 },
                 /**
-                 * Алиасы для удобного доступа к централизованному состоянию авторизации
+                 * Алиасы for удобного доступа к централизованному состоянию авторизации
                  */
                 isAuthenticated() {
                     return this.authState ? this.authState.isAuthenticated : false;
@@ -640,7 +640,7 @@
                     return this.authState ? this.authState.user : null;
                 },
                 /**
-                 * Проверка наличия глобальных системных сообщений для отображения сплэша
+                 * Validate presence глобальных системных сообщений for отображения сплэша
                  */
                 hasGlobalSystemMessages() {
                     if (!window.AppMessages || !window.AppMessages.state) {
@@ -655,7 +655,7 @@
                 currentTranslationLanguage: {
                     async handler(newLanguage, oldLanguage) {
                         if (newLanguage && newLanguage !== oldLanguage) {
-                            // Обновляем tooltips для нового языка
+                            // Обновляем tooltips for нового языка
                             if (window.tooltipsConfig && typeof window.tooltipsConfig.init === 'function') {
                                 try {
                                     // Если уже идет инициализация этого языка, не запускаем повторно
@@ -677,7 +677,7 @@
                     },
                     immediate: false
                 },
-                // Watcher для синхронизации активной модели (E.1)
+                // Watcher for синхронизации активной модели (E.1)
                 activeModelId: {
                     handler(newId) {
                         if (window.modelManager) {
@@ -706,14 +706,14 @@
                 yandexTestError: {
                     handler(newVal, oldVal) {
                     },
-                    immediate: false // Убираем immediate, чтобы избежать мелькания при инициализации
+                    immediate: false // Убираем immediate, чтобы избежать мелькания at initialization
                 },
-                // Watcher для отслеживания успешной авторизации через изменение testStep4Result
+                // Watcher for отслеживания успешной авторизации через изменение testStep4Result
                 'testStep4Result.isAuthenticated': {
                     handler(newVal, oldVal) {
                         // Если пользователь успешно авторизован, но testStep5Result еще не обновлен через handleAuthLogin
                         if (newVal === true && oldVal === false && this.testStep4Result && this.testStep4Result.userData) {
-                            // Обновляем testStep5Result для отображения успешной авторизации
+                            // Обновляем testStep5Result for отображения успешной авторизации
                             if (!this.testStep5Result || !this.testStep5Result.success) {
                                 const userEmail = this.testStep4Result.userData.email || 'неизвестен';
                                 const userName = this.testStep4Result.userData.name || userEmail;
@@ -727,25 +727,25 @@
                     immediate: false
                 },
                 /**
-                 * Отслеживание изменения активной вкладки для видимости колонок
+                 * Отслеживание изменения активной вкладки for видимости колонок
                  */
                 activeTabId() {
                     // Trigger re-render when activeTabId changes
                 },
                 /**
-                 * Пересчитывать метрики при изменении горизонта прогноза
+                 * Пересчитывать metrics при изменении горизонта прогноза
                  */
                 horizonDays() {
                     this.recalculateAllMetrics();
                 },
                 /**
-                 * Пересчитывать метрики при изменении MDN горизонта
+                 * Пересчитывать metrics при изменении MDN горизонта
                  */
                 mdnHours() {
                     this.recalculateAllMetrics();
                 },
                 /**
-                 * Пересчитывать метрики при изменении метода AGR
+                 * Пересчитывать metrics при изменении метода AGR
                  */
                 agrMethod() {
                     this.recalculateAllMetrics();
@@ -756,7 +756,7 @@
                 selectedCoinIds: {
                     handler() {
                         if (this.infoBoxPortfolio) {
-                            // Находим выбранные монеты для расчета L/S сегментов (D.2)
+                            // Находим выбранные монеты for расчета L/S сегментов (D.2)
                             const selected = this.coins.filter(c => this.selectedCoinIds.includes(c.id));
                             const longCount = selected.filter(c => (c.metrics?.agr || 0) >= 0).length;
                             const shortCount = selected.filter(c => (c.metrics?.agr || 0) < 0).length;
@@ -769,10 +769,10 @@
                     deep: true
                 },
                 /**
-                 * Пересчитывать метрики при изменении активной вкладки (некоторые метрики могут зависеть от контекста)
+                 * Пересчитывать metrics при изменении активной вкладки (некоторые metrics могут зависеть от контекста)
                  */
                 activeTabId() {
-                    // Можно добавить специфичную логику для вкладок, если нужно
+                    // Можно добавить специфичную логику for вкладок, если нужно
                     this.recalculateAllMetrics();
                 }
             },
@@ -784,7 +784,7 @@
                  */
                 handleMenuClick(item) {
                     if (!item || !item.handler) {
-                        // Fallback для пунктов без обработчика
+                        // Fallback for пунктов без обработчика
                         this.handleClick();
                         return;
                     }
@@ -798,7 +798,7 @@
                         this[item.handler]();
                         }
                     } else {
-                        console.warn(`app-ui-root: метод "${item.handler}" не найден для пункта меню "${item.id}"`);
+                        console.warn(`app-ui-root: метод "${item.handler}" не найден for пункта меню "${item.id}"`);
                         // Fallback
                         this.handleClick();
                     }
@@ -829,8 +829,8 @@
                     });
                 },
                 /**
-                 * Обновить реактивные tooltips из tooltipsConfig
-                 * Вызывается при инициализации и смене языка
+                 * Update реактивные tooltips из tooltipsConfig
+                 * Вызывается at initialization и смене языка
                  */
                 updateTooltips() {
                     if (!window.tooltipsConfig || typeof window.tooltipsConfig.getTooltip !== 'function') {
@@ -853,8 +853,8 @@
                     });
                 },
                 /**
-                 * Получить tooltip для метрики (для заголовков таблицы)
-                 * @param {string} metricKey - ключ метрики ('agr', 'din', 'cdh', и т.д.)
+                 * Get tooltip for metrics (for заголовков таблицы)
+                 * @param {string} metricKey - ключ metrics ('agr', 'din', 'cdh', и т.д.)
                  * @returns {string} - текст tooltip
                  */
                 getMetricTooltip(metricKey) {
@@ -870,7 +870,7 @@
                     if (window.cacheManager) {
                         await window.cacheManager.set('theme', this.currentTheme);
                     } else {
-                        // Fallback на прямое localStorage, если cacheManager ещё не загружен
+                        // Fallback на прямое localStorage, если cacheManager ещё not loaded
                         localStorage.setItem('theme', this.currentTheme);
                     }
 
@@ -979,7 +979,7 @@
                     if (active) {
                         this.activeTabId = button.id;
 
-                        // Обновляем состояние active в массиве displayTabs для реактивности (если нужно)
+                        // Обновляем состояние active в массиве displayTabs for реактивности (если нужно)
                         this.displayTabs.forEach(tab => {
                             tab.active = (tab.id === button.id);
                         });
@@ -1103,7 +1103,7 @@
                         });
                     }
 
-                    // 3. Устанавливаем текущий портфель для просмотра
+                    // 3. Устанавливаем текущий портфель for просмотра
                     this.currentViewingPortfolio = portfolio;
 
                     // 4. Показ сообщения
@@ -1131,7 +1131,7 @@
                  * Удаление портфеля
                  */
                 async handleDeletePortfolio(portfolioId) {
-                    console.log('app-ui-root: удаление портфеля', portfolioId);
+                    console.log('app-ui-root: delete portfolio', portfolioId);
                     const removed = this.userPortfolios.find(p => p.id === portfolioId) || null;
 
                     // 1. Удаляем из локального списка (D.5)
@@ -1143,7 +1143,7 @@
                         try {
                             await window.portfoliosClient.deletePortfolio(removed.cloudflareId);
                         } catch (error) {
-                            console.warn('app-ui-root: удаление Cloudflare-портфеля не удалось', error);
+                            console.warn('app-ui-root: удаление Cloudflare-портфеля failed to', error);
                         }
                     }
 
@@ -1173,7 +1173,7 @@
                     try {
                         authenticated = await window.authClient.isAuthenticated();
                     } catch (error) {
-                        console.warn('app-ui-root: не удалось проверить auth для Cloudflare sync', error);
+                        console.warn('app-ui-root: failed to проверить auth for Cloudflare sync', error);
                         return;
                     }
                     if (!authenticated) return;
@@ -1227,7 +1227,7 @@
                 handleAuthLogin(tokenData) {
                     console.log('app-ui-root: пользователь успешно авторизован', tokenData);
 
-                    // Обновляем testStep5Result для отображения успешной авторизации на тестовой карточке
+                    // Обновляем testStep5Result for отображения успешной авторизации на тестовой карточке
                     if (tokenData && tokenData.access_token) {
                         const userEmail = tokenData.user?.email || 'неизвестен';
                         const userName = tokenData.user?.name || userEmail;
@@ -1246,21 +1246,21 @@
                     // Например, загрузку портфелей пользователя
                 },
                 /**
-                 * Обработка выхода из системы
+                 * Обработка logoutа из системы
                  */
                 handleAuthLogout() {
                     console.log('app-ui-root: пользователь вышел из системы');
-                    // Можно добавить дополнительную логику при выходе
+                    // Можно добавить дополнительную логику при logoutе
                     // Например, очистку данных пользователя
                 },
                 /**
-                 * Выход из системы для тестовой кнопки Шаг 5
+                 * Logout из системы for тестовой кнопки Шаг 5
                  */
                 async testStep5_Logout() {
                     if (!window.authClient) {
                         this.testStep5Result = {
                             success: false,
-                            message: '✗ auth-client не загружен'
+                            message: '✗ auth-client not loaded'
                         };
                         return;
                     }
@@ -1268,14 +1268,14 @@
                         await window.authClient.logout();
                         this.testStep5Result = {
                             success: true,
-                            message: '✓ Выход выполнен успешно. Страница будет перезагружена.'
+                            message: '✓ Logout выполнен успешно. Страница будет переloadedа.'
                         };
                         // Обновляем статус авторизации
                         await this.testStep4_CheckAuthStatus();
                     } catch (error) {
                         this.testStep5Result = {
                             success: false,
-                            message: `✗ Ошибка выхода: ${error.message}`
+                            message: `✗ Ошибка logoutа: ${error.message}`
                         };
                     }
                 },
@@ -1299,14 +1299,14 @@
                  */
                 async testYandexAPI(useRandom = false) {
                     if (!window.aiProviderManager) {
-                        this.yandexTestError = 'AI Provider Manager не загружен';
+                        this.yandexTestError = 'AI Provider Manager not loaded';
                         return;
                     }
 
                     let query = '';
 
                     if (useRandom || !this.yandexTestInputQuery.trim()) {
-                        // Список случайных запросов для тестирования
+                        // Список случайных запросов for тестирования
                         const randomQueries = [
                             'Что такое искусственный интеллект?',
                             'Расскажи про криптовалюты',
@@ -1334,7 +1334,7 @@
                         const apiKey = await window.aiProviderManager.getApiKey(providerName);
 
                         if (!apiKey) {
-                            throw new Error(`API ключ для ${providerName} не настроен. Откройте настройки "API-ключи" для настройки.`);
+                            throw new Error(`API ключ for ${providerName} not configured. Откройте настройки "API-ключи" for настройки.`);
                         }
 
                         const model = await window.aiProviderManager.getModel(providerName);
@@ -1348,7 +1348,7 @@
                     } catch (error) {
                         console.error('testYandexAPI: ошибка запроса:', error);
                         const errorMessage = error.message || 'Неизвестная ошибка';
-                        // Используем Vue.nextTick для гарантии обновления DOM
+                        // Используем Vue.nextTick for гарантии обновления DOM
                         this.$nextTick(() => {
                             this.yandexTestError = errorMessage;
                         });
@@ -1467,7 +1467,7 @@
                             }
                         }
 
-                        // Обновляем tooltips для нового языка
+                        // Обновляем tooltips for нового языка
                         if (window.tooltipsConfig && typeof window.tooltipsConfig.init === 'function') {
                             try {
                                 await window.tooltipsConfig.init(languageToSave);
@@ -1568,7 +1568,7 @@
                     // Не требуется ручное обновление this.isAuthenticated и this.user
                 },
                 handleAuthLogoutSuccess() {
-                    console.log('app-ui-root: успешный выход');
+                    console.log('app-ui-root: успешный logout');
                     // Состояние обновляется автоматически через централизованное хранилище auth-state
                     // Не требуется ручное обновление this.isAuthenticated и this.user
                 },
@@ -1602,12 +1602,12 @@
                  */
                 testStep1_CheckModules() {
                     const checks = [];
-                    if (window.authClient) checks.push('✓ auth-client загружен');
-                    else checks.push('✗ auth-client НЕ загружен');
-                    if (window.portfoliosClient) checks.push('✓ portfolios-client загружен');
-                    else checks.push('✗ portfolios-client НЕ загружен');
-                    if (window.portfoliosManager) checks.push('✓ portfolios-manager загружен');
-                    else checks.push('✗ portfolios-manager НЕ загружен');
+                    if (window.authClient) checks.push('✓ auth-client loaded');
+                    else checks.push('✗ auth-client НЕ loaded');
+                    if (window.portfoliosClient) checks.push('✓ portfolios-client loaded');
+                    else checks.push('✗ portfolios-client НЕ loaded');
+                    if (window.portfoliosManager) checks.push('✓ portfolios-manager loaded');
+                    else checks.push('✗ portfolios-manager НЕ loaded');
 
                     const allLoaded = window.authClient && window.portfoliosClient && window.portfoliosManager;
                     this.testStep1Result = {
@@ -1623,7 +1623,7 @@
                     if (!window.appConfig) {
                         this.testStep2Result = {
                             success: false,
-                            message: '✗ appConfig не загружен'
+                            message: '✗ appConfig not loaded'
                         };
                         return;
                     }
@@ -1651,7 +1651,7 @@
                         this.testStep3Result = {
                             success: false,
                             hasAuthButton: false,
-                            message: '✗ auth-modal-body не загружен. Проверьте консоль на наличие ошибок загрузки модулей.'
+                            message: '✗ auth-modal-body not loaded. Проверьте консоль на наличие ошибок загрузки модулей.'
                         };
                         return;
                     }
@@ -1659,14 +1659,14 @@
                         this.testStep3Result = {
                             success: false,
                             hasAuthButton: true,
-                            message: '⚠ auth-modal-body загружен, но auth-client отсутствует'
+                            message: '⚠ auth-modal-body loaded, но auth-client отсутствует'
                         };
                         return;
                     }
                     this.testStep3Result = {
                         success: true,
                         hasAuthButton: true,
-                        message: '✓ auth-modal-body загружен и доступен. Авторизация доступна через модальное окно.'
+                        message: '✓ auth-modal-body loaded и доступен. Авторизация доступна через модальное окно.'
                     };
                 },
 
@@ -1677,7 +1677,7 @@
                     if (!window.authClient) {
                         this.testStep4Result = {
                             success: false,
-                            message: '✗ auth-client не загружен'
+                            message: '✗ auth-client not loaded'
                         };
                         return;
                     }
@@ -1704,13 +1704,13 @@
                 },
 
                 /**
-                 * Шаг 5: Инициация входа через Google
+                 * Шаг 5: Initiation входа через Google
                  */
                 testStep5_InitiateLogin() {
                     if (!window.authClient) {
                         this.testStep5Result = {
                             success: false,
-                            message: '✗ auth-client не загружен'
+                            message: '✗ auth-client not loaded'
                         };
                         return;
                     }
@@ -1735,27 +1735,27 @@
                     if (!window.portfoliosManager) {
                         this.testStep6Result = {
                             success: false,
-                            message: '✗ portfolios-manager не загружен. Проверьте консоль на наличие ошибок загрузки модулей.'
+                            message: '✗ portfolios-manager not loaded. Проверьте консоль на наличие ошибок загрузки модулей.'
                         };
                         return;
                     }
                     if (!window.portfoliosClient) {
                         this.testStep6Result = {
                             success: false,
-                            message: '⚠ portfolios-manager загружен, но portfolios-client отсутствует'
+                            message: '⚠ portfolios-manager loaded, но portfolios-client отсутствует'
                         };
                         return;
                     }
                     if (!this.isPortfoliosEnabled) {
                         this.testStep6Result = {
                             success: false,
-                            message: '⚠ portfolios-manager загружен, но feature flags не включены или пользователь не авторизован'
+                            message: '⚠ portfolios-manager loaded, но feature flags не включены или пользователь not authenticated'
                         };
                         return;
                     }
                     this.testStep6Result = {
                         success: true,
-                        message: '✓ portfolios-manager загружен и доступен. Компонент должен отображаться ниже.'
+                        message: '✓ portfolios-manager loaded и доступен. Компонент должен отображаться ниже.'
                     };
                 },
 
@@ -1764,7 +1764,7 @@
                  */
                 showMessagesInStream() {
                     if (!window.AppMessages || !window.messagesConfig) {
-                        console.error('app-ui-root: AppMessages или messagesConfig не загружен');
+                        console.error('app-ui-root: AppMessages или messagesConfig not loaded');
                         return;
                     }
 
@@ -1778,12 +1778,12 @@
                         details: dangerMsg.details,
                         type: dangerMsg.type || 'danger',
                         priority: dangerMsg.priority || 4,
-                        key: 'error.api.network', // Сохраняем ключ для последующего перевода
+                        key: 'error.api.network', // Сохраняем ключ for последующего перевода
                         scope: 'global'
                     });
 
                     // Warning сообщение (используем короткий ключ e.rate с параметрами)
-                    // Используем числа вместо текста для универсальности
+                    // Используем числа вместо текста for универсальности
                     const warningParams = { time: '3 min' };
                     const warningMsg = window.messagesConfig.get('e.rate', warningParams);
                     window.AppMessages.push({
@@ -1791,7 +1791,7 @@
                         details: warningMsg.details,
                         type: warningMsg.type,
                         key: warningMsg.key,
-                        params: warningParams, // Сохраняем параметры для последующего перевода
+                        params: warningParams, // Сохраняем параметры for последующего перевода
                         scope: 'global'
                     });
 
@@ -1803,7 +1803,7 @@
                         details: infoMsg.details,
                         type: infoMsg.type,
                         key: infoMsg.key,
-                        params: infoParams, // Сохраняем параметры для последующего перевода
+                        params: infoParams, // Сохраняем параметры for последующего перевода
                         scope: 'global'
                     });
 
@@ -1814,7 +1814,7 @@
                         details: successMsg.details,
                         type: successMsg.type || 'success',
                         priority: successMsg.priority || 1,
-                        key: 'health.proxy.restored', // Сохраняем ключ для последующего перевода
+                        key: 'health.proxy.restored', // Сохраняем ключ for последующего перевода
                         scope: 'global'
                     });
                 },
@@ -1828,7 +1828,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep1Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -1840,7 +1840,7 @@
                     } catch (error) {
                         this.testMessagesStep1Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1850,7 +1850,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep1Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -1862,7 +1862,7 @@
                     } catch (error) {
                         this.testMessagesStep1Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1876,7 +1876,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep2Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -1886,7 +1886,7 @@
                             const source = data.version ? 'KV' : 'fallback (хардкод)';
                             this.testMessagesStep2Result = {
                                 success: true,
-                                message: `✓ Модуль "${module}" загружен из ${source}. Сообщений: ${messageCount}`
+                                message: `✓ Модуль "${module}" loaded из ${source}. Сообщений: ${messageCount}`
                             };
                         } else {
                             this.testMessagesStep2Result = {
@@ -1897,7 +1897,7 @@
                     } catch (error) {
                         this.testMessagesStep2Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1907,7 +1907,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep2Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -1923,7 +1923,7 @@
                     } catch (error) {
                         this.testMessagesStep2Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1937,19 +1937,19 @@
                         if (!window.messagesConfig) {
                             this.testMessagesStep3Result = {
                                 success: false,
-                                message: '✗ messagesConfig не загружен'
+                                message: '✗ messagesConfig not loaded'
                             };
                             return;
                         }
                         const messageCount = window.messagesConfig.MESSAGES ? Object.keys(window.messagesConfig.MESSAGES).length : 0;
                         this.testMessagesStep3Result = {
                             success: true,
-                            message: `✓ messages-config инициализирован. Сообщений: ${messageCount}`
+                            message: `✓ messages-config initialized. Сообщений: ${messageCount}`
                         };
                     } catch (error) {
                         this.testMessagesStep3Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1959,7 +1959,7 @@
                         if (!window.messagesConfig) {
                             this.testMessagesStep3Result = {
                                 success: false,
-                                message: '✗ messagesConfig не загружен'
+                                message: '✗ messagesConfig not loaded'
                             };
                             return;
                         }
@@ -1978,7 +1978,7 @@
                     } catch (error) {
                         this.testMessagesStep3Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -1988,7 +1988,7 @@
                         if (!window.messagesConfig) {
                             this.testMessagesStep3Result = {
                                 success: false,
-                                message: '✗ messagesConfig не загружен'
+                                message: '✗ messagesConfig not loaded'
                             };
                             return;
                         }
@@ -1998,18 +1998,18 @@
                         if (openSettingsAction && openSettingsAction.handler && openAiSettingsAction && openAiSettingsAction.handler) {
                             this.testMessagesStep3Result = {
                                 success: true,
-                                message: '✓ Действия настроены. Нажмите кнопки ниже для проверки открытия модальных окон.'
+                                message: '✓ Действия настроены. Нажмите кнопки ниже for проверки открытия модальных окон.'
                             };
                         } else {
                             this.testMessagesStep3Result = {
                                 success: false,
-                                message: '✗ Действия не настроены или handlers отсутствуют'
+                                message: '✗ Действия not configuredы или handlers отсутствуют'
                             };
                         }
                     } catch (error) {
                         this.testMessagesStep3Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -2051,7 +2051,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep4Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -2064,7 +2064,7 @@
                     } catch (error) {
                         this.testMessagesStep4Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -2074,7 +2074,7 @@
                         if (!window.messagesMigrations) {
                             this.testMessagesStep4Result = {
                                 success: false,
-                                message: '✗ messagesMigrations не загружен'
+                                message: '✗ messagesMigrations not loaded'
                             };
                             return;
                         }
@@ -2095,7 +2095,7 @@
                     } catch (error) {
                         this.testMessagesStep4Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -2109,7 +2109,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep5Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -2122,7 +2122,7 @@
                     } catch (error) {
                         this.testMessagesStep5Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -2132,7 +2132,7 @@
                         if (!window.messagesApi) {
                             this.testMessagesStep5Result = {
                                 success: false,
-                                message: '✗ messagesApi не загружен'
+                                message: '✗ messagesApi not loaded'
                             };
                             return;
                         }
@@ -2142,18 +2142,18 @@
                             const messageKeys = data.messages ? Object.keys(data.messages) : [];
                             this.testMessagesStep5Result = {
                                 success: true,
-                                message: `✓ Модуль 'api' загружен. Ключи сообщений: ${messageKeys.slice(0, 5).join(', ')}${messageKeys.length > 5 ? '...' : ''} (всего: ${messageKeys.length})`
+                                message: `✓ Модуль 'api' loaded. Ключи сообщений: ${messageKeys.slice(0, 5).join(', ')}${messageKeys.length > 5 ? '...' : ''} (всего: ${messageKeys.length})`
                             };
                         } else {
                             this.testMessagesStep5Result = {
                                 success: false,
-                                message: '⚠ Модуль "api" не найден в KV, используется fallback'
+                                message: '⚠ Модуль "api" не найден в KV, using fallback'
                             };
                         }
                     } catch (error) {
                         this.testMessagesStep5Result = {
                             success: false,
-                            message: `✗ Ошибка: ${error.message}`
+                            message: `✗ Error: ${error.message}`
                         };
                     }
                 },
@@ -2164,7 +2164,7 @@
                  */
                 initTestMessages() {
                     if (!window.AppMessages) {
-                        console.warn('app-ui-root: AppMessages не загружен');
+                        console.warn('app-ui-root: AppMessages not loaded');
                         return;
                     }
 
@@ -2226,7 +2226,7 @@
 
                     try {
                         if (!window.dataProviderManager) {
-                            throw new Error('dataProviderManager не загружен');
+                            throw new Error('dataProviderManager not loaded');
                         }
 
                         // Проверяем кэш
@@ -2236,7 +2236,7 @@
                         if (window.cacheManager) {
                             coins = await window.cacheManager.get(cacheKey);
                             if (coins) {
-                                console.log('✅ Топ монет загружены из кэша');
+                                console.log('✅ Топ монет loadedы из кэша');
                             }
                         }
 
@@ -2270,7 +2270,7 @@
 
                     try {
                         if (!window.dataProviderManager) {
-                            throw new Error('dataProviderManager не загружен');
+                            throw new Error('dataProviderManager not loaded');
                         }
 
                         const results = await window.dataProviderManager.searchCoins('bitcoin');
@@ -2385,7 +2385,7 @@
                         if (this.selectedCoinIds.length === 0 && window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'warning',
-                                text: 'Список стейблкоинов пуст или не загружен',
+                                text: 'Список стейблкоинов пуст или not loaded',
                                 scope: 'global',
                                 duration: 3000
                             });
@@ -2475,18 +2475,18 @@
                 },
 
                 /**
-                 * Обновить метаданные монет (генерация coins.json на GitHub)
+                 * Update метаданные монет (генерация coins.json на GitHub)
                  */
                 async handleUpdateCoinsMetadata() {
                     if (window.coinsMetadataGenerator) {
                         await window.coinsMetadataGenerator.generateAndUpload();
                     } else {
-                        console.error('coinsMetadataGenerator не загружен');
+                        console.error('coinsMetadataGenerator not loaded');
                     }
                 },
 
                 /**
-                 * Удалить отмеченные монеты из таблицы
+                 * Delete отмеченные монеты из таблицы
                  */
                 async handleDeleteSelected() {
                     if (this.selectedCoinIds.length === 0) {
@@ -2497,7 +2497,7 @@
                     const selectedSet = new Set(this.selectedCoinIds);
                     this.coins = this.coins.filter(coin => !selectedSet.has(coin.id));
 
-                    // Если используется активный набор, удаляем монеты и оттуда
+                    // Если using активный набор, удаляем монеты и оттуда
                     if (this.activeCoinSetIds && Array.isArray(this.activeCoinSetIds)) {
                         const updatedActive = this.activeCoinSetIds.filter(id => !selectedSet.has(id));
                         await this.saveActiveCoinSetIds(updatedActive);
@@ -2589,7 +2589,7 @@
 
                     // Если монеты нет в таблице - пытаемся подгрузить и добавить
                     if (!window.dataProviderManager || typeof window.dataProviderManager.getCoinData !== 'function') {
-                        console.warn('app-ui-root: dataProviderManager недоступен для добавления монеты из избранного');
+                        console.warn('app-ui-root: dataProviderManager недоступен for добавления монеты из избранного');
                         return;
                     }
 
@@ -2598,7 +2598,7 @@
                         const coinData = Array.isArray(result) ? result[0] : null;
                         if (coinData) {
                             this.coins.push(coinData);
-                            // Обновляем кэш данных монеты для сохранения иконки
+                            // Обновляем кэш данных монеты for сохранения иконки
                             this.coinsDataCache.set(coinId, coinData);
                             this.scrollToCoinRow(coinId);
                         } else {
@@ -2618,7 +2618,7 @@
                 },
 
                 /**
-                 * Удалить монету из таблицы
+                 * Delete монету из таблицы
                  */
                 async handleDeleteCoin(coinId) {
                     if (!coinId) return;
@@ -2636,7 +2636,7 @@
                         await this.saveTableSettings();
                     }
 
-                    // Если используется активный набор, удаляем монету и оттуда
+                    // Если using активный набор, удаляем монету и оттуда
                     if (this.activeCoinSetIds && Array.isArray(this.activeCoinSetIds)) {
                         const activeIndex = this.activeCoinSetIds.indexOf(coinId);
                         if (activeIndex > -1) {
@@ -2678,7 +2678,7 @@
                 },
 
                 /**
-                 * Удалить монету из таблицы или из избранного (в зависимости от статуса inTable)
+                 * Delete монету из таблицы или из избранного (в зависимости от статуса inTable)
                  */
                 async handleFavoriteRemoveFromTableOrFavorites(coinId) {
                     this.favoriteActionHoverId = null;
@@ -2699,7 +2699,7 @@
                  * Иконка статуса монеты в списке избранного
                  */
                 getFavoriteIndicatorIcon(coin) {
-                    // При hover показываем крестик для любого состояния
+                    // При hover показываем крестик for любого состояния
                     if (this.favoriteActionHoverId === coin.id) {
                         return 'fas fa-times';
                     }
@@ -2712,8 +2712,8 @@
                 },
 
                 /**
-                 * Вспомогательный метод для получения URL иконки в поиске (index.html)
-                 * Нужен для безопасного доступа к window.iconManager из шаблона
+                 * Вспомогательный метод for получения URL иконки в поиске (index.html)
+                 * Нужен for безопасного доступа к window.iconManager из шаблона
                  */
                 getIconUrlForSearch(res) {
                     if (!res) return null;
@@ -2785,7 +2785,7 @@
                     this.sortBy = null;
                     this.sortOrder = null;
                     // Сохраняем состояние сортировки через tablesConfig (ЕИП)
-                    // Также сохраняем в localStorage для обратной совместимости (если используется где-то еще)
+                    // Также сохраняем в localStorage for обратной совместимости (если using где-то еще)
                     if (sortType) {
                         localStorage.setItem('cgCoinSortType', sortType);
                     } else {
@@ -2798,7 +2798,7 @@
                 },
 
                 /**
-                 * Сортировка монет по типу (только по убыванию для числовых, по возрастанию для алфавита)
+                 * Сортировка монет по типу (только по убыванию for числовых, по возрастанию for алфавита)
                  */
                 sortCoinsByType(coins) {
                     if (!this.coinSortType || !coins || coins.length === 0) {
@@ -2837,7 +2837,7 @@
 
                         case 'favorite':
                             // Сортировка избранных монет вверх (заглушка - пока нет избранного)
-                            // В будущем можно добавить логику для избранных монет
+                            // В будущем можно добавить логику for избранных монет
                             break;
 
                         case 'selected':
@@ -2860,7 +2860,7 @@
                 },
 
                 /**
-                 * Пересчитать все метрики для текущего списка монет
+                 * Пересчитать все metrics for текущего списка монет
                  */
                 recalculateAllMetrics() {
                     if (!this.coins || !this.coins.length) return;
@@ -2912,7 +2912,7 @@
                         cmd = metricsEngine.calculateCMD(marketMedians, prcWeights, this.horizonDays);
                     }
 
-                    // 2. MDN (Market Direction Now) для разных горизонтов
+                    // 2. MDN (Market Direction Now) for разных горизонтов
                     const mdnCalculator = metricsEngine.calculateMDN;
                     this.mdnValue = typeof mdnCalculator === 'function'
                         ? mdnCalculator.call(metricsEngine, this.mdnHours, finalCoinsFiltered, marketIndicators)
@@ -2921,7 +2921,7 @@
                     const mdn8h = typeof mdnCalculator === 'function' ? mdnCalculator.call(metricsEngine, 8, finalCoinsFiltered, marketIndicators) : 0;
                     const mdn12h = typeof mdnCalculator === 'function' ? mdnCalculator.call(metricsEngine, 12, finalCoinsFiltered, marketIndicators) : 0;
 
-                    // 3. Расчет данных для Info-box
+                    // 3. Расчет данных for Info-box
                     // 3.1 Медианы
                     const cgrValues = finalCoinsFiltered.map(c => c.metrics.cgr).filter(v => Number.isFinite(v));
                     const agrValues = finalCoinsFiltered.map(c => c.metrics.agr).filter(v => Number.isFinite(v));
@@ -2958,7 +2958,7 @@
                         mdn4h, mdn8h, mdn12h
                     };
 
-                    // 5.4 Портфель (D.2: расчет L/S сегментов для выбранных монет)
+                    // 5.4 Портфель (D.2: расчет L/S сегментов for выбранных монет)
                     const selected = finalCoinsFiltered.filter(c => this.selectedCoinIds.includes(c.id));
                     const longCount = selected.filter(c => (c.metrics?.agr || 0) >= 0).length;
                     const shortCount = selected.filter(c => (c.metrics?.agr || 0) < 0).length;
@@ -2989,7 +2989,7 @@
                  */
                 async saveTableSettings() {
                     if (!window.workspaceConfig) {
-                        console.warn('app-ui-root: workspaceConfig не загружен');
+                        console.warn('app-ui-root: workspaceConfig not loaded');
                         return;
                     }
 
@@ -3023,7 +3023,7 @@
                  */
                 async loadTableSettings() {
                     if (!window.workspaceConfig) {
-                        console.warn('app-ui-root: workspaceConfig не загружен');
+                        console.warn('app-ui-root: workspaceConfig not loaded');
                         return;
                     }
 
@@ -3094,7 +3094,7 @@
                     const normalizedIds = Array.isArray(ids) ? ids : [];
                     this.activeCoinSetIds = normalizedIds;
                     if (!window.workspaceConfig) {
-                        console.warn('app-ui-root: workspaceConfig не загружен, activeCoinSetIds не сохранены');
+                        console.warn('app-ui-root: workspaceConfig not loaded, activeCoinSetIds не сохранены');
                         return;
                     }
 
@@ -3290,7 +3290,7 @@
                         this.coins = this.applyBanFilterToCoins(coins);
                         coins.forEach(coin => this.coinsDataCache.set(coin.id, coin));
 
-                        // Классифицируем загруженные монеты для автонаборов
+                        // Классифицируем loadedные монеты for автоsets
                         if (window.autoCoinSets) {
                             window.autoCoinSets.classifyAndUpdateAutoSets(coins);
                         }
@@ -3323,7 +3323,7 @@
                 },
 
                 /**
-                 * Получить значение для ячейки таблицы (поддержка вложенности типа metrics.agr)
+                 * Get значение for ячейки таблицы (поддержка вложенности типа metrics.agr)
                  * @param {Object} coin
                  * @param {string} field
                  */
@@ -3340,7 +3340,7 @@
                 },
 
                 /**
-                 * Возвращает список всех CSS-классов колонок для columnVisibilityMixin
+                 * Возвращает список всех CSS-классов колонок for columnVisibilityMixin
                  */
                 getColumnClasses() {
                     return [
@@ -3635,7 +3635,7 @@
                 },
 
                 /**
-                 * Обработчик клика по документу (для закрытия дропдауна)
+                 * Обработчик клика по документу (for закрытия дропдауна)
                  */
                 handleDocumentClick(event) {
                     // Закрываем дропдаун, если клик был вне его
@@ -3651,7 +3651,7 @@
                 },
 
                 /**
-                 * Получить название типа сортировки для tooltip
+                 * Get название типа сортировки for tooltip
                  */
                 getCoinSortTypeTitle(sortType) {
                     const keyMap = {
@@ -3672,7 +3672,7 @@
                     return title;
                 },
                 /**
-                 * Tooltip для кнопки загрузки/сохранения набора монет
+                 * Tooltip for кнопки загрузки/сохранения набора монет
                  */
                 getCoinSetActionTitle() {
                     if (!window.tooltipsConfig) {
@@ -3683,7 +3683,7 @@
                         : window.tooltipsConfig.getTooltip('ui.coinSet.save');
                 },
                 /**
-                 * Tooltip для кнопки показа/скрытия Price
+                 * Tooltip for кнопки показа/скрытия Price
                  */
                 getPriceColumnTitle() {
                     if (!window.tooltipsConfig) {
@@ -3695,7 +3695,7 @@
                 },
 
                 /**
-                 * Получить иконку для типа сортировки Coin
+                 * Get иконку for типа сортировки Coin
                  */
                 getCoinSortTypeIcon(sortType) {
                     const iconMap = {
@@ -3734,11 +3734,11 @@
                  * Сохранить набор монет в локальный "Draft"
                  * Добавляет монеты к существующему Draft набору (не заменяет)
                  * Не требует авторизации, сохраняется только в localStorage
-                 * @param {Object} data - Данные для сохранения { coin_ids, coins } (опционально, если не указано - используется текущий набор)
+                 * @param {Object} data - Данные for сохранения { coin_ids, coins } (optional, if omitted - using текущий набор)
                  */
                 saveToDraft(data = null) {
                     if (!window.draftCoinSet) {
-                        console.error('draftCoinSet не загружен');
+                        console.error('draftCoinSet not loaded');
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'warning',
@@ -3776,7 +3776,7 @@
                             if (window.messagesStore) {
                                 window.messagesStore.addMessage({
                                     type: 'warning',
-                                    text: 'Нет монет для сохранения в Draft',
+                                    text: 'Нет монет for сохранения в Draft',
                                     scope: 'global',
                                     duration: 3000
                                 });
@@ -3821,7 +3821,7 @@
                             });
                         }
 
-                        // 3. Добавляем монеты из текущего набора this.coins (для заполнения пробелов)
+                        // 3. Добавляем монеты из текущего набора this.coins (for заполнения пробелов)
                         if (this.coins && Array.isArray(this.coins)) {
                             this.coins.forEach(coin => {
                                 if (allCoinIds.includes(coin.id) && !coinsDataMap.has(coin.id)) {
@@ -3870,7 +3870,7 @@
                  */
                 async handleSaveCoinSet(data) {
                     if (!window.coinSetsClient) {
-                        console.error('coin-sets-client не загружен');
+                        console.error('coin-sets-client not loaded');
                         return;
                     }
 
@@ -3916,8 +3916,8 @@
                                 });
                             }
 
-                            // Обновляем список наборов в модальном окне загрузки (если оно открыто)
-                            // Используем событие через eventBus для обновления списка
+                            // Обновляем список sets в модальном окне загрузки (если оно открыто)
+                            // Используем событие через eventBus for обновления списка
                             if (window.eventBus) {
                                 window.eventBus.emit('coin-set-saved', { coinSet: result });
                             }
@@ -3948,9 +3948,9 @@
                 },
 
                 /**
-                 * Обработчик загрузки наборов монет
-                 * Объединяет монеты из выбранных наборов и заменяет текущий список или добавляет к нему
-                 * @param {Array} coinSets - массив наборов монет для загрузки
+                 * Обработчик загрузки sets монет
+                 * Объединяет монеты из выбранных sets и заменяет текущий список или добавляет к нему
+                 * @param {Array} coinSets - массив sets монет for загрузки
                  * @param {Object} options - опции загрузки
                  * @param {boolean} options.merge - если true, монеты добавляются к текущим, если false - заменяют (по умолчанию false)
                  */
@@ -3958,11 +3958,11 @@
                     const { merge = false } = options;
 
                     if (!coinSets || !Array.isArray(coinSets) || coinSets.length === 0) {
-                        console.warn('coin-set-load-modal-body: нет наборов для загрузки');
+                        console.warn('coin-set-load-modal-body: нет sets for загрузки');
                         return;
                     }
 
-                    // Объединяем монеты из всех выбранных наборов
+                    // Объединяем монеты из всех выбранных sets
                     const allCoinIds = new Set();
                     const allCoinsData = new Map(); // Для хранения полных данных монет
                     const setNames = [];
@@ -3984,7 +3984,7 @@
                     const { bannedIds } = this.getBanContext();
                     const coinIdsArray = Array.from(allCoinIds).filter(id => !bannedIds.has(id));
 
-                    // Сначала используем уже переданные полные данные монет из выбранных наборов,
+                    // Сначала используем уже переданные полные данные монет из выбранных sets,
                     // затем догружаем только недостающие ID через loadCoinsByIds.
                     // Skill anchor: не пере-fetch'ить то, что уже пришло в coinSet.coins (типичная точка лишних API циклов).
                     // See core/skills/api-layer
@@ -4035,13 +4035,13 @@
                         this.coins = coins;
                     }
 
-                    // Классифицируем загруженные монеты для автонаборов
+                    // Классифицируем loadedные монеты for автоsets
                     if (window.autoCoinSets) {
                         window.autoCoinSets.classifyAndUpdateAutoSets(coins);
                     }
 
                     if (unresolved.length > 0) {
-                        // Собираем метаданные по отсутствующим монетам из исходных наборов
+                        // Собираем метаданные по отсутствующим монетам из исходных sets
                         const missingWithMeta = unresolved.map(id => {
                             let symbol = id;
                             let name = '';
@@ -4083,7 +4083,7 @@
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
-                                text: `Загружено ${this.coins.length} монет из наборов (${coinSets.length})`,
+                                text: `Загружено ${this.coins.length} монет из sets (${coinSets.length})`,
                                 scope: 'global',
                                 duration: 3000
                             });
@@ -4094,10 +4094,10 @@
                     if (window.messagesStore) {
                         const namesText = setNames.length === 1
                             ? `"${setNames[0]}"`
-                            : `${setNames.length} наборов`;
+                            : `${setNames.length} sets`;
                         const loadedCount = coins.length;
                         const requestedCount = coinIdsArray.length;
-                        const actionText = merge ? 'добавлены' : 'загружены';
+                        const actionText = merge ? 'добавлены' : 'loadedы';
                         const tableText = merge
                             ? 'Таблица обновлена.'
                             : 'Таблица показывает только монеты из набора.';
@@ -4146,7 +4146,7 @@
                             });
                     updatedIds = Array.from(new Set(updatedIds));
 
-                    // Загружаем данные монет для обновленного списка
+                    // Загружаем данные монет for обновленного списка
                     const { coins, unresolved } = await this.loadCoinsByIds(updatedIds);
                     this.coins = coins;
                     coins.forEach(c => this.coinsDataCache.set(c.id, c));
@@ -4164,7 +4164,7 @@
                     if (unresolved && unresolved.length > 0 && window.messagesStore) {
                                     window.messagesStore.addMessage({
                                         type: 'warning',
-                            text: `После замены не найдены данные для ${unresolved.length} монет: ${unresolved.slice(0, 3).join(', ')}`,
+                            text: `После замены не найдены данные for ${unresolved.length} монет: ${unresolved.slice(0, 3).join(', ')}`,
                                         scope: 'global',
                             duration: 6000
                                     });
@@ -4188,7 +4188,7 @@
                 },
 
                 /**
-                 * Синхронизация измененных наборов в облаке и локально
+                 * Синхронизация измененных sets в облаке и локально
                  * @param {Array<Object>|null} coinSets
                  * @param {Set<string>} excludeSet
                  * @param {Map<string,string>} replaceMap
@@ -4241,7 +4241,7 @@
                 },
 
                 /**
-                 * Обработчик удаления наборов монет
+                 * Обработчик удаления sets монет
                  */
                 async handleDeleteCoinSets(coinSetIds) {
                     if (!coinSetIds || !Array.isArray(coinSetIds) || coinSetIds.length === 0) {
@@ -4249,17 +4249,17 @@
                     }
 
                     if (!window.coinSetsClient) {
-                        console.error('coin-sets-client не загружен');
+                        console.error('coin-sets-client not loaded');
                         return;
                     }
 
                     // Проверяем авторизацию перед удалением
                     if (!this.isAuthenticated) {
-                        const error = new Error('Для удаления наборов монет необходимо авторизоваться');
+                        const error = new Error('Для удаления sets монет необходимо авторизоваться');
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'warning',
-                                text: 'Для удаления наборов монет необходимо авторизоваться. Откройте настройки и выполните авторизацию через Google.',
+                                text: 'Для удаления sets монет необходимо авторизоваться. Откройте настройки и выполните авторизацию через Google.',
                                 scope: 'global',
                                 duration: 5000
                             });
@@ -4278,17 +4278,17 @@
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
-                                text: `Удалено наборов монет: ${coinSetIds.length}`,
+                                text: `Удалено sets монет: ${coinSetIds.length}`,
                                 scope: 'global',
                                 duration: 3000
                             });
                         }
                     } catch (error) {
-                        console.error('Ошибка удаления наборов монет:', error);
+                        console.error('Ошибка удаления sets монет:', error);
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'danger',
-                                text: `Ошибка удаления наборов монет: ${error.message || 'Неизвестная ошибка'}`,
+                                text: `Ошибка удаления sets монет: ${error.message || 'Неизвестная ошибка'}`,
                                 scope: 'global',
                                 duration: 5000
                             });
@@ -4314,7 +4314,7 @@
                  */
                 initializeDraftSet() {
                     if (!window.draftCoinSet) {
-                        console.warn('app-ui-root: draftCoinSet не загружен, инициализация пропущена');
+                        console.warn('app-ui-root: draftCoinSet not loaded, инициализация пропущена');
                         return;
                     }
 
@@ -4324,7 +4324,7 @@
                         if (!existing || existing.coin_ids.length === 0) {
                             // Инициализируем пустым набором
                             window.draftCoinSet.initialize([]);
-                            console.log('✅ Draft набор инициализирован (пустой)');
+                            console.log('✅ Draft набор initialized (пустой)');
                         } else {
                             console.log(`✅ Draft набор уже существует (${existing.coin_ids.length} монет)`);
                         }
@@ -4335,11 +4335,11 @@
 
                 /**
                  * Предзагрузить максимальные наборы монет (250 по капитализации и по объему)
-                 * Вызывается при старте приложения для заполнения кэша
+                 * Вызывается при старте приложения for заполнения кэша
                  */
                 async preloadMaxCoinsData() {
                     if (!window.dataProviderManager || !window.cacheManager) {
-                        console.warn('app-ui-root: dataProviderManager или cacheManager не загружены, предзагрузка пропущена');
+                        console.warn('app-ui-root: dataProviderManager или cacheManager not loadedы, предзагрузка пропущена');
                         return;
                     }
 
@@ -4383,14 +4383,14 @@
                             }
                         } catch (error) {
                             const isRateLimit = /rate limit|429/i.test(String(error.message || ''));
-                            console.warn(`app-ui-root: не удалось предзагрузить ${label}:`, error.message);
+                            console.warn(`app-ui-root: failed to предзагрузить ${label}:`, error.message);
                             if (isRateLimit) return 'rate-limited';
                         }
                         return null;
                     };
 
-                    // Если мы только что загрузили основные данные для таблицы,
-                    // откладываем предзагрузку полных наборов на 5-10 минут.
+                    // Если мы только что загрузили основные данные for таблицы,
+                    // откладываем предзагрузку полных sets на 5-10 минут.
                     // На холодном старте (кэш пуст) даём 60 секунд, чтобы не давить на rate limiter
                     // сразу после первичной загрузки монет.
                     const delay = (this.coins && this.coins.length > 0) ? 5 * 60 * 1000 : 60 * 1000;
@@ -4409,13 +4409,13 @@
                 },
 
                 /**
-                 * Обновить кэш монет и метрик рынка (принудительная загрузка из API)
+                 * Update кэш монет и метрик рынка (принудительная загрузка из API)
                  * Вызывается по кнопке Refresh
-                 * На file:// использует Cloudflare Worker proxy для обхода CORS
+                 * На file:// использует Cloudflare Worker proxy for CORS bypass
                  */
                 async refreshCoinsCache() {
                     if (!window.dataProviderManager || !window.cacheManager) {
-                        console.error('app-ui-root: dataProviderManager или cacheManager не загружены');
+                        console.error('app-ui-root: dataProviderManager или cacheManager not loadedы');
                         return;
                     }
 
@@ -4464,7 +4464,7 @@
 
                         console.log('app-ui-root: кэш метрик очищен, загружаем свежие данные...');
 
-                        // 5. Загружаем свежие метрики рынка через футер
+                        // 5. Загружаем свежие metrics рынка через футер
                         if (this.$refs.appFooter && typeof this.$refs.appFooter.fetchMarketIndices === 'function') {
                             await this.$refs.appFooter.fetchMarketIndices({ forceRefresh: true });
                             console.log('✅ Метрики рынка обновлены');
@@ -4478,7 +4478,7 @@
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
-                                text: 'Данные успешно обновлены (монеты + метрики рынка + стейблкоины)',
+                                text: 'Данные успешно обновлены (монеты + metrics рынка + стейблкоины)',
                                 scope: 'global',
                                 duration: 4000
                             });
@@ -4501,7 +4501,7 @@
                 },
 
                 /**
-                 * Обновить метаданные кэша топ-монет (expiresAt/timestamp)
+                 * Update метаданные кэша топ-монет (expiresAt/timestamp)
                  */
                 /**
                  * Запрашивает количество монет в облачной PostgreSQL БД
@@ -4565,7 +4565,7 @@
                         }
 
                         if (coinMap.size === 0) {
-                            console.log('app-ui-root: syncCacheToDb — нет монет из CoinGecko для синхронизации');
+                            console.log('app-ui-root: syncCacheToDb — нет монет из CoinGecko for синхронизации');
                             return;
                         }
 
@@ -4631,7 +4631,7 @@
                  */
                 async softRefreshCoinsTable() {
                     if (!window.cacheManager) {
-                        console.warn('app-ui-root: cacheManager не загружен, мягкий рефреш пропущен');
+                        console.warn('app-ui-root: cacheManager not loaded, мягкий рефреш пропущен');
                         return;
                     }
 
@@ -4661,8 +4661,8 @@
                 },
 
                 /**
-                 * Загрузить топ монет для таблицы (index.html)
-                 * Берет данные из предзагруженного кэша максимальных наборов
+                 * Загрузить топ монет for таблицы (index.html)
+                 * Берет данные из предloadedного кэша максимальных sets
                  */
                 async loadTopCoins() {
                     this.coinsLoading = true;
@@ -4672,7 +4672,7 @@
                     let coinsFullSet = null;
                     try {
                         if (!window.dataProviderManager) {
-                            throw new Error('dataProviderManager не загружен');
+                            throw new Error('dataProviderManager not loaded');
                         }
 
                         // ВСЕГДА сначала пробуем кэш, чтобы мгновенно отрендерниться
@@ -4728,7 +4728,7 @@
                                             console.log('✅ Топ монет обновлен в кэше');
                                         }
                                     } catch (e) {
-                                        console.warn('app-ui-root: фоновое обновление не удалось, остаемся на кэше');
+                                        console.warn('app-ui-root: фоновое обновление failed to, остаемся на кэше');
                                     }
                                 }, 15000);
                             } else {
@@ -4782,7 +4782,7 @@
                  */
                 handleCoinContextMenu(event, coinId) {
                     console.log('Coin context menu:', coinId, event);
-                    // Заглушка для будущего функционала
+                    // Заглушка for будущего функционала
                 },
 
                 /**
@@ -4794,7 +4794,7 @@
 
                     try {
                         if (!window.coinSetsClient) {
-                            throw new Error('coinSetsClient не загружен');
+                            throw new Error('coinSetsClient not loaded');
                         }
 
                         const coinSet = await window.coinSetsClient.createCoinSet({
@@ -4816,7 +4816,7 @@
                 },
 
                 /**
-                 * DEBUG: Получение списка наборов монет
+                 * DEBUG: Получение списка sets монет
                  */
                 async testGetCoinSets() {
                     this.testLoading = true;
@@ -4824,14 +4824,14 @@
 
                     try {
                         if (!window.coinSetsClient) {
-                            throw new Error('coinSetsClient не загружен');
+                            throw new Error('coinSetsClient not loaded');
                         }
 
                         const coinSets = await window.coinSetsClient.getCoinSets();
                         this.testCoinSets = coinSets;
                         console.log('✅ Наборы получены:', coinSets);
                     } catch (error) {
-                        this.testError = error.message || 'Ошибка получения наборов';
+                        this.testError = error.message || 'Ошибка получения sets';
                         console.error('testGetCoinSets error:', error);
                     } finally {
                         this.testLoading = false;
@@ -4847,11 +4847,11 @@
 
                     try {
                         if (!window.coinSetsClient) {
-                            throw new Error('coinSetsClient не загружен');
+                            throw new Error('coinSetsClient not loaded');
                         }
 
                         if (this.testCoinSets.length === 0) {
-                            throw new Error('Нет наборов для удаления. Сначала получите список.');
+                            throw new Error('Нет sets for удаления. Сначала получите список.');
                         }
 
                         const lastSet = this.testCoinSets[0]; // Первый в списке (newest)
@@ -4881,7 +4881,7 @@
                     });
                 }
 
-                // Загружаем таймзону и язык перевода из кэша при инициализации
+                // Загружаем таймзону и язык перевода из кэша at initialization
                 // Это обеспечивает синхронизацию с футером и статическими примерами
                 try {
                     let savedLanguage = 'ru';
@@ -4915,7 +4915,7 @@
                         }
                     }
 
-                    // Инициализируем tooltips для загруженного языка
+                    // Инициализируем tooltips for loadedного языка
                     // Ждём завершения инициализации перед обновлением реактивных tooltips
                     if (window.tooltipsConfig && typeof window.tooltipsConfig.init === 'function') {
                         try {
@@ -5014,9 +5014,9 @@
                         // Подписываемся на обновления
                         if (window.eventBus) {
                             window.eventBus.on('favorites-updated', (favorites) => {
-                                // Используем $nextTick для гарантии реактивности Vue
+                                // Используем $nextTick for гарантии реактивности Vue
                                 this.$nextTick(() => {
-                                    this.favoriteCoinsMeta = [...favorites]; // Создаем новый массив для реактивности
+                                    this.favoriteCoinsMeta = [...favorites]; // Создаем новый массив for реактивности
                                 this.favoriteCoinIds = favorites.map(f => f.id);
                                 });
                             });
@@ -5088,7 +5088,7 @@
                     // Закрытие дропдауна сортировки монет при клике вне
                     document.addEventListener('click', this.handleDocumentClick);
 
-                    // Tooltips для вкладок инициализируются автоматически Bootstrap из атрибута title
+                    // Tooltips for вкладок инициализируются автоматически Bootstrap из атрибута title
                     // Не требуется ручная инициализация - Bootstrap Tab автоматически создает tooltip
                 } catch (error) {
                     console.error('Failed to load timezone/language in app-ui-root:', error);
@@ -5108,7 +5108,7 @@
 
         const appInstance = app.mount('#app');
 
-        // Экспортируем Vue instance в window.appRoot для доступа из других модулей
+        // Экспортируем Vue instance в window.appRoot for доступа из других модулей
         window.appRoot = appInstance;
 
         // Инициализация темы при загрузке (если не была применена в data())
@@ -5125,7 +5125,7 @@
         }
 
         // Инициализация CSS-класса версии приложения на body
-        // Используется для версионной стилизации и привязки кэша к версии
+        // Используется for версионной стилизации и привязки кэша к версии
         try {
             if (window.appConfig) {
                 const versionClass = window.appConfig.getVersionClass();
@@ -5165,7 +5165,7 @@
             window.appInit = initVueApp;
         });
     } else {
-        // Если DOM уже загружен, устанавливаем функцию инициализации
+        // Если DOM уже loaded, устанавливаем функцию инициализации
         window.appInit = initVueApp;
     }
 })();

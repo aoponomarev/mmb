@@ -3,9 +3,9 @@
  * POSTGRES SETTINGS TEMPLATE - Шаблон компонента настроек PostgreSQL API
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента postgres-settings.
+ * PURPOSE: Шаблон for компонента postgres-settings.
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Компонент: app/components/postgres-settings.js
  * - Принципы шаблонов: is/skills/arch-foundation
  */
@@ -38,7 +38,7 @@
             v-model="apiBaseUrl"
             placeholder="https://api.example.com">
         <small class="form-text text-muted mb-3 d-block">
-            Используется для health и будущих CRUD эндпоинтов.
+            Используется for health и будущих CRUD эндпоинтов.
         </small>
 
         <div class="d-flex align-items-center gap-2 mb-2">

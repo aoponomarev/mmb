@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * POSTGRES CLIENT - Клиент для взаимодействия с API слоем PostgreSQL
+ * POSTGRES CLIENT - Клиент for взаимодействия с API слоем PostgreSQL
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Базовый клиент для CRUD операций с данными в Yandex Cloud PostgreSQL.
- * Реализует паттерн "Data Provider" для горячих данных (портфели, настройки).
+ * PURPOSE: Базовый клиент for CRUD операций с данными в Yandex Cloud PostgreSQL.
+ * Реализует паттерн "Data Provider" for горячих данных (портфели, настройки).
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - users: id, email, created_at, settings (jsonb)
  * - portfolios: id, user_id, name, created_at, updated_at, settings (jsonb), model_mix (jsonb)
  * - snapshots: id, portfolio_id, type (market/assets/metrics), data (jsonb), created_at
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация: core/config/postgres-config.js
  * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 3.2)
  */
@@ -28,7 +28,7 @@
         if (window.postgresConfig?.getEndpointUrl) {
             url = window.postgresConfig.getEndpointUrl(endpoint);
         } else {
-            // Резервный механизм, если конфиг не загружен или не содержит функции
+            // Резервный механизм, если конфиг not loaded или не содержит функции
             const isAbsolute = typeof endpoint === 'string' && (endpoint.startsWith('http://') || endpoint.startsWith('https://'));
             url = isAbsolute ? endpoint : `${window.postgresConfig?.getApiBaseUrl() || ''}${endpoint}`;
         }
@@ -58,7 +58,7 @@
             }
             return await response.json();
         } catch (error) {
-            // Не логируем сетевые ошибки для health check в консоль как ошибки (Error),
+            // Не логируем сетевые ошибки for health check в консоль как ошибки (Error),
             // чтобы не пугать пользователя при тестировании CORS.
             if (endpoint !== '/health') {
                 console.error(`postgres-client: request failed (${endpoint})`, error);
@@ -92,7 +92,7 @@
     }
 
     /**
-     * Получить все портфели пользователя
+     * Get все портфели пользователя
      */
     async function getPortfolios(userId) {
         if (!userId) return [];
@@ -147,5 +147,5 @@
         saveSnapshotsBatch
     };
 
-    console.log('postgres-client.js: инициализирован');
+    console.log('postgres-client.js: initialized');
 })();

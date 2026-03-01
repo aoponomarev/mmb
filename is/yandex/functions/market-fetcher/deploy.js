@@ -1,6 +1,6 @@
 /**
  * Деплой coingecko-fetcher в Yandex Cloud Functions через REST API
- * Использует API key сервисного аккаунта для получения IAM токена
+ * Использует API key сервисного аккаунта for получения IAM токена
  */
 'use strict';
 
@@ -54,7 +54,7 @@ function apiRequest(options, body = null) {
     });
 }
 
-// ─── Получить IAM токен через API key ─────────────────────────────────────────
+// ─── Get IAM токен через API key ─────────────────────────────────────────
 async function getIamToken() {
     console.log('Получаем IAM токен...');
     // Для API key сервисного аккаунта используем endpoint /iam/v1/tokens с apiKey
@@ -64,7 +64,7 @@ async function getIamToken() {
             secret: API_KEY_SECRET
         }
     });
-    // Правильный endpoint для service account API key
+    // Правильный endpoint for service account API key
     const result = await apiRequest({
         hostname: 'iam.api.cloud.yandex.net',
         path: '/iam/v1/tokens',

@@ -1,27 +1,27 @@
 /**
  * ================================================================================================
- * AUTH CLIENT - Клиент для Google OAuth авторизации через Cloudflare Workers
+ * AUTH CLIENT - Клиент for Google OAuth авторизации через Cloudflare Workers
  * ================================================================================================
  *
- * ЦЕЛЬ: Реализация клиентской части OAuth flow: инициирование авторизации,
- * обработка callback, обмен code на токен, управление токенами.
+ * PURPOSE: Реализация клиентской части OAuth flow: инициирование авторизации,
+ * обработка callback, code-to-token exchange, управление токенами.
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды: Использовать `auth-config.js` для всех параметров OAuth
+ * PRINCIPLES:
+ * - SSOT: Использовать `auth-config.js` for всех параметров OAuth
  * - Модульность: Независимый модуль без зависимостей от UI компонентов
  * - Безопасность: Токены хранятся через `cacheManager` БЕЗ версионирования (пользовательские данные)
  * - Обработка ошибок: Использование существующей системы обработки ошибок
  *
  * ОСОБЕННОСТИ:
- * - Инициация Google OAuth с генерацией state для защиты от CSRF
+ * - Initiation Google OAuth с генерацией state for CSRF protection
  * - Обработка callback от Google (извлечение code и state из URL)
  * - Обмен authorization code на access token через Workers endpoint
  * - Хранение токена в кэше с проверкой срока действия
  * - Автоматическое обновление токена при необходимости
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация OAuth: core/config/auth-config.js
  * - Конфигурация Workers: core/config/cloudflare-config.js
  * - План интеграции: core/skills/config-contracts
@@ -36,27 +36,27 @@
     // - core/cache/cache-manager.js (window.cacheManager)
 
     if (typeof window.authConfig === 'undefined') {
-        console.error('auth-client.js: authConfig не загружен');
+        console.error('auth-client.js: authConfig not loaded');
         return;
     }
 
     if (typeof window.cloudflareConfig === 'undefined') {
-        console.error('auth-client.js: cloudflareConfig не загружен');
+        console.error('auth-client.js: cloudflareConfig not loaded');
         return;
     }
 
     if (typeof window.cacheManager === 'undefined') {
-        console.error('auth-client.js: cacheManager не загружен');
+        console.error('auth-client.js: cacheManager not loaded');
         return;
     }
 
-    // Ключ для хранения токена в кэше
+    // Ключ for хранения токена в кэше
     const TOKEN_CACHE_KEY = 'auth-token';
-    // Ключ для хранения state (CSRF protection)
+    // Ключ for хранения state (CSRF protection)
     const STATE_CACHE_KEY = 'auth-state';
 
     /**
-     * Генерация случайного state для защиты от CSRF
+     * Генерация случайного state for CSRF protection
      * @returns {string} Случайная строка state
      */
     function generateState() {
@@ -66,7 +66,7 @@
     }
 
     /**
-     * Сохранение state в sessionStorage для проверки при callback
+     * Сохранение state в sessionStorage for проверки при callback
      * @param {string} state - State строка
      */
     function saveState(state) {
@@ -97,18 +97,18 @@
     }
 
     /**
-     * Инициация Google OAuth авторизации
+     * Initiation Google OAuth авторизации
      * Редиректит пользователя на страницу авторизации Google
-     * @param {string} env - Окружение ('local' | 'production'), если не указано - определяется автоматически
+     * @param {string} env - Environment ('local' | 'production'), if omitted - auto-detected
      * @returns {void}
      */
     function initiateGoogleAuth(env = null) {
         try {
-            // Генерация state для защиты от CSRF
+            // Генерация state for CSRF protection
             const stateBase = generateState();
 
-            // Добавляем URL клиентского приложения в state для правильного редиректа
-            // Для file:// сохраняем полный путь с href, для http:// используем origin
+            // Добавляем URL клиентского приложения в state for правильного редиректа
+            // Для file:// сохраняем полный путь с href, for http:// используем origin
             let clientUrl;
             if (window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                 // Для file:// и подкаталогов (GitHub Pages) сохраняем полный путь к файлу
@@ -127,11 +127,11 @@
 
             saveState(stateBase);
 
-            // Получение URL для авторизации из конфигурации
+            // Получение URL for авторизации из конфигурации
             const authUrl = window.authConfig.getAuthUrl(state, env);
 
             if (!authUrl) {
-                throw new Error('Не удалось получить URL для авторизации');
+                throw new Error('Не удалось получить URL for авторизации');
             }
 
             // Открываем OAuth в новой вкладке вместо редиректа
@@ -146,7 +146,7 @@
                 // Если popup заблокирован браузером, показываем предупреждение и предлагаем fallback-редирект.
                 const userConfirmed = confirm(
                     'Для авторизации нужно открыть новую вкладку.\n\n' +
-                    'Разрешите всплывающие окна для этого сайта или нажмите OK для открытия в текущей вкладке.'
+                    'Разрешите всплывающие окна for этого сайта или нажмите OK for открытия в текущей вкладке.'
                 );
 
                 if (userConfirmed) {
@@ -157,8 +157,8 @@
 
             console.log('OAuth открыт в новой вкладке. Ожидание авторизации...');
 
-            // Примечание: проверка authWindow.closed удалена из-за COOP (Cross-Origin-Opener-Policy)
-            // Браузер блокирует доступ к window.closed для cross-origin окон и выводит ошибку в консоль
+            // Note: проверка authWindow.closed удалена из-за COOP (Cross-Origin-Opener-Policy)
+            // Браузер блокирует доступ к window.closed for cross-origin окон и выводит ошибку в консоль
             // Авторизация работает через postMessage
         } catch (error) {
             console.error('auth-client.initiateGoogleAuth:', error);
@@ -176,7 +176,7 @@
     /**
      * Обработка callback от Google OAuth
      * Извлекает code и state из URL, проверяет state, обменивает code на токен
-     * @param {string} url - URL страницы с параметрами callback (опционально, по умолчанию window.location.href)
+     * @param {string} url - URL страницы с параметрами callback (optional, по умолчанию window.location.href)
      * @returns {Promise<Object|null>} Данные пользователя или null при ошибке
      */
     async function handleAuthCallback(url = null) {
@@ -195,13 +195,13 @@
                 throw new Error(`Ошибка авторизации: ${errorDescription}`);
             }
 
-            // Проверка наличия code
+            // Validate presence code
             if (!code) {
                 // Если нет code и нет ошибки - возможно, это не callback страница
                 return null;
             }
 
-            // Парсинг state (может быть JSON объектом с client_url или просто строкой)
+            // Парсинг state (can be JSON объектом с client_url или просто строкой)
             let stateObj = null;
             let stateCsrf = state;
             try {
@@ -251,7 +251,7 @@
      * Обмен authorization code на access token через Workers endpoint
      * @param {string} code - Authorization code от Google
      * @returns {Promise<Object>} Данные токена (access_token, refresh_token, expires_in и т.д.)
-     * @throws {Error} При ошибке HTTP запроса или невалидном ответе
+     * @throws {Error} При ошибке HTTP requestа или невалидном ответе
      */
     async function exchangeCodeForToken(code) {
         if (!code) {
@@ -261,7 +261,7 @@
         try {
             const callbackUrl = window.cloudflareConfig.getAuthEndpoint('callback');
             if (!callbackUrl) {
-                throw new Error('Не удалось получить URL для обмена токена');
+                throw new Error('Не удалось получить URL for обмена токена');
             }
 
             const response = await fetch(callbackUrl, {
@@ -351,7 +351,7 @@
                         return refreshed;
                     }
                 }
-                // Если обновление не удалось - удаляем токен
+                // Если обновление failed to - удаляем токен
                 await window.cacheManager.delete(TOKEN_CACHE_KEY, { useVersioning: false });
                 return null;
             }
@@ -381,7 +381,7 @@
     }
 
     /**
-     * Проверка наличия валидного токена
+     * Validate presence валидного токена
      * @returns {Promise<boolean>} true если пользователь авторизован
      */
     async function isAuthenticated() {
@@ -390,7 +390,7 @@
     }
 
     /**
-     * Получение текущего пользователя
+     * Get current user
      * @returns {Promise<Object|null>} Данные пользователя или null
      */
     async function getCurrentUser() {
@@ -432,7 +432,7 @@
     }
 
     /**
-     * Выход из системы
+     * Logout из системы
      * Очищает токен и редиректит на главную страницу
      * @returns {Promise<void>}
      */
@@ -441,7 +441,7 @@
             // Удаляем токен из кэша
             await window.cacheManager.delete(TOKEN_CACHE_KEY, { useVersioning: false });
 
-            // Опционально: вызываем Workers endpoint для logout на сервере
+            // Опционально: вызываем Workers endpoint for logout на сервере
             // Пока пропускаем - будет реализовано на Этапе 4
 
             // Редирект на главную страницу
@@ -453,7 +453,7 @@
         }
     }
 
-    // Экспорт функций через window для использования в других модулях
+    // Экспорт функций через window for использования в других модулях
     window.authClient = {
         initiateGoogleAuth,
         handleAuthCallback,
@@ -465,5 +465,5 @@
         logout
     };
 
-    console.log('auth-client.js: инициализирован');
+    console.log('auth-client.js: initialized');
 })();

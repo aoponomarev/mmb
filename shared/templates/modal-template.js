@@ -3,9 +3,9 @@
  * MODAL TEMPLATE - Шаблон компонента модального окна
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для Vue-обёртки над Bootstrap Modal (cmp-modal).
+ * PURPOSE: Шаблон for Vue-обёртки над Bootstrap Modal (cmp-modal).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="modal-template".
@@ -22,7 +22,7 @@
  * - Контейнер диалога: ⟨div class="modal-dialog"⟩ с условными классами размера и центрирования
  * - Контент: ⟨div class="modal-content"⟩
  * Layout и CSS-классы:
- * - Использование только Bootstrap классов для стилизации
+ * - Использование только Bootstrap классов for стилизации
  * - Поддержка размеров через Bootstrap классы (modal-sm, modal-lg, modal-xl)
  * - Центрирование через класс modal-dialog-centered
  * Слоты:
@@ -35,8 +35,8 @@
  * - Кнопки отображаются автоматически, если зарегистрированы через modalApi
  * - Слоты и динамические кнопки могут использоваться одновременно
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/modal.js
  * - Компонент кнопок: shared/components/modal-buttons.js
  */

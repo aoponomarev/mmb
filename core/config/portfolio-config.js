@@ -4,16 +4,16 @@
  * ================================================================================================
  * Skill: core/skills/domain-portfolio
  *
- * ЦЕЛЬ: Единый источник правды для структуры данных портфеля и его параметров.
+ * PURPOSE: SSOT for структуры данных портфеля и его параметров.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Поддержка смешанных портфелей (монеты от разных моделей).
- * - Сохранение контекста формирования (метрики рынка, состояние моделей).
+ * - Сохранение контекста формирования (metrics рынка, состояние моделей).
  * - Совместимость с планом миграции (Блок D.1).
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md
- * - Документация метрик: `core/skills/domain-portfolio`
+ * - Documentation метрик: `core/skills/domain-portfolio`
  * - Архитектура портфелей: `is/skills/arch-foundation` (раздел "Портфельная система")
  * - Hardening: `a/skills/all/recipe-portfolio-engine-mvp-hardening.md`
  *
@@ -25,7 +25,7 @@
     'use strict';
 
     /**
-     * Создает пустую структуру монеты для портфеля
+     * Создает пустую структуру монеты for портфеля
      * @param {Object} coin - Исходные данные монеты с метриками
      * @param {string} modelId - ID модели, делегировавшей монету
      * @param {number} weight - Доля в портфеле (0-100)
@@ -325,7 +325,7 @@
         generateSnapshotId,
 
         /**
-         * Получает список портфелей из локального хранилища (D.5)
+         * Получает list portfolios из локального хранилища (D.5)
          */
         getLocalPortfolios() {
             try {
@@ -340,7 +340,7 @@
         },
 
         /**
-         * Сохраняет список портфелей в локальное хранилище (D.5)
+         * Сохраняет list portfolios в локальное хранилище (D.5)
          */
         saveLocalPortfolios(portfolios) {
             try {
@@ -373,7 +373,7 @@
                 exportData.portfolios = portfolios.map(p => {
                     const cloned = { ...p };
                     if (cloned.snapshots) {
-                        // Оставляем только ID снимков для ссылок, но удаляем сами массивы данных
+                        // Оставляем только ID снимков for ссылок, но удаляем сами массивы данных
                         cloned.snapshots = {
                             snapshotId: cloned.snapshots.snapshotId,
                             market: { snapshotId: cloned.snapshots.market?.snapshotId },

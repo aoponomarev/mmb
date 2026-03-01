@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * MAIN ROUTER - Главный роутер для Cloudflare Workers API
+ * MAIN ROUTER - Главный роутер for Cloudflare Workers API
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Обработка всех входящих запросов и маршрутизация к соответствующим handlers.
+ * PURPOSE: Обработка всех входящих запросов и маршрутизация к соответствующим handlers.
  *
  * МАРШРУТЫ:
  * - /auth/* → OAuth endpoints (auth.js)
@@ -17,8 +17,8 @@
  * - /api/settings/* → App Settings (settings.js, KV-backed)
  * - /health → Health check endpoint
  *
- * @param {Request} request - Входящий HTTP запрос
- * @param {Object} env - Переменные окружения и bindings (DB, API_CACHE, secrets)
+ * @param {Request} request - Входящий HTTP request
+ * @param {Object} env - Environment variables и bindings (DB, API_CACHE, secrets)
  * @returns {Promise<Response>} HTTP ответ
  */
 

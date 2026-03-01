@@ -1,40 +1,40 @@
 /**
  * ================================================================================================
- * DATA PROVIDER MANAGER - Менеджер для переключения между провайдерами данных
+ * DATA PROVIDER MANAGER - Менеджер for переключения между провайдерами данных
  * ================================================================================================
  * Skill: core/skills/api-layer
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Единая точка доступа для работы с разными провайдерами данных о монетах
+ * PURPOSE: Единая точка доступа for работы с разными провайдерами данных о монетах
  * (CoinGecko, CoinMarketCap, Binance и т.д.). Управляет переключением между провайдерами
  * и предоставляет единый интерфейс.
  *
- * ПРИНЦИПЫ:
- * - Единый интерфейс для всех провайдеров
- * - Автоматическое получение настроек (API ключ) для текущего провайдера
+ * PRINCIPLES:
+ * - Единый интерфейс for всех провайдеров
+ * - Автоматическое получение настроек (API ключ) for текущего провайдера
  * - Бесшовное переключение между источниками данных
- * - Кэширование данных отдельно для каждого провайдера
+ * - Кэширование данных отдельно for каждого провайдера
  *
  * ОСОБЕННОСТИ:
  * - Дефолтный провайдер: CoinGecko
  * - Хранение текущего провайдера в cacheManager ('data-provider')
- * - Хранение API ключей отдельно для каждого провайдера в localStorage
+ * - Хранение API ключей отдельно for каждого провайдера в localStorage
  * - API ключи хранятся в JSON объекте: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
  *
- * ИСПОЛЬЗОВАНИЕ:
- * // Получить топ 10 монет через текущий провайдер
+ * USAGE:
+ * // Get топ 10 монет через текущий провайдер
  * const coins = await window.dataProviderManager.getTopCoins(10);
  *
  * // Переключить провайдера
  * await window.dataProviderManager.setProvider('coingecko');
  *
- * // Получить текущий провайдер
+ * // Get текущий провайдер
  * const provider = await window.dataProviderManager.getCurrentProvider();
  *
- * // Установить API ключ для провайдера
+ * // Set API ключ for провайдера
  * await window.dataProviderManager.setApiKey('coingecko', 'my-api-key');
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - AI Provider Manager (аналогия): core/api/ai-provider-manager.js
  * - Провайдеры: core/api/data-providers/
  * - Конфигурация: core/config/data-providers-config.js
@@ -51,7 +51,7 @@
         constructor() {
             this.providers = {};
             this.defaultProvider = 'coingecko'; // CoinGecko по умолчанию
-            this.apiKeysStorageKey = 'data-provider-keys'; // Ключ для localStorage
+            this.apiKeysStorageKey = 'data-provider-keys'; // Ключ for localStorage
         }
 
         isFileProtocol() {
@@ -106,7 +106,7 @@
         }
 
         /**
-         * Получить текущий активный провайдер
+         * Get текущий активный провайдер
          * @returns {Promise<BaseDataProvider>}
          */
         async getCurrentProvider() {
@@ -115,7 +115,7 @@
         }
 
         /**
-         * Получить имя текущего провайдера
+         * Get имя текущего провайдера
          * @returns {Promise<string>}
          */
         async getCurrentProviderName() {
@@ -126,13 +126,13 @@
                 const providerName = await window.cacheManager.get('data-provider');
                 return providerName || this.defaultProvider;
             } catch (error) {
-                console.warn('data-provider-manager: ошибка получения провайдера, используется дефолтный', error);
+                console.warn('data-provider-manager: ошибка получения провайдера, using дефолтный', error);
                 return this.defaultProvider;
             }
         }
 
         /**
-         * Установить активный провайдер
+         * Set активный провайдер
          * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
          * @returns {Promise<void>}
          */
@@ -146,7 +146,7 @@
         }
 
         /**
-         * Получить топ N монет через текущий провайдер
+         * Get топ N монет через текущий провайдер
          * @param {number} count - Количество монет (1-250)
          * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
          * @param {Object} options - Дополнительные опции
@@ -223,7 +223,7 @@
             }
 
             if (!provider) {
-                throw new Error('Нет доступного провайдера данных для getTopCoins');
+                throw new Error('Нет доступного провайдера данных for getTopCoins');
             }
 
             // ПРОВЕРКА ЖУРНАЛА (Request Registry)
@@ -253,7 +253,7 @@
             // Получаем API ключ если требуется
             const apiKey = await this.getApiKey(providerName);
             if (provider.requiresApiKey() && !apiKey) {
-                const error = `API ключ для ${provider.getDisplayName()} не настроен`;
+                const error = `API ключ for ${provider.getDisplayName()} not configured`;
                 provider.logError(error);
                 throw new Error(error);
             }
@@ -354,7 +354,7 @@
         }
 
         /**
-         * Получить данные монет по ID через текущий провайдер
+         * Get данные монет по ID через текущий провайдер
          * @param {Array<string>} coinIds - Массив ID монет
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<Array>} Массив нормализованных данных монет
@@ -379,7 +379,7 @@
 
             const apiKey = await this.getApiKey(providerName);
             if (provider.requiresApiKey() && !apiKey) {
-                const error = `API ключ для ${provider.getDisplayName()} не настроен`;
+                const error = `API ключ for ${provider.getDisplayName()} not configured`;
                 provider.logError(error);
                 throw new Error(error);
             }
@@ -533,7 +533,7 @@
         }
 
         /**
-         * Получить ID монеты по тикеру через текущий провайдер
+         * Get ID монеты по тикеру через текущий провайдер
          * @param {string} symbol - Тикер монеты
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<string|null>} ID монеты или null
@@ -566,7 +566,7 @@
         }
 
         /**
-         * Получить API ключ для провайдера из localStorage
+         * Get API ключ for провайдера из localStorage
          * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
          * @returns {Promise<string|null>}
          */
@@ -578,13 +578,13 @@
                 const keys = JSON.parse(keysJson);
                 return keys[providerName] || null;
             } catch (error) {
-                console.warn(`data-provider-manager: ошибка получения API ключа для ${providerName}`, error);
+                console.warn(`data-provider-manager: ошибка получения API ключа for ${providerName}`, error);
                 return null;
             }
         }
 
         /**
-         * Установить API ключ для провайдера в localStorage
+         * Set API ключ for провайдера в localStorage
          * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
          * @param {string} apiKey - API ключ
          * @returns {Promise<void>}
@@ -603,13 +603,13 @@
 
                 localStorage.setItem(this.apiKeysStorageKey, JSON.stringify(keys));
             } catch (error) {
-                console.error(`data-provider-manager: ошибка сохранения API ключа для ${providerName}`, error);
+                console.error(`data-provider-manager: ошибка сохранения API ключа for ${providerName}`, error);
                 throw error;
             }
         }
 
         /**
-         * Получить список всех доступных провайдеров
+         * Get list всех доступных провайдеров
          * @returns {Array<Object>} [{ value: string, label: string, provider: BaseDataProvider }]
          */
         getAvailableProviders() {
@@ -621,7 +621,7 @@
         }
 
         /**
-         * Получить провайдер по имени
+         * Get провайдер по имени
          * @param {string} providerName
          * @returns {BaseDataProvider|null}
          */
@@ -630,7 +630,7 @@
         }
 
         /**
-         * Проверить, требуется ли API ключ для текущего провайдера
+         * Проверить, требуется ли API ключ for текущего провайдера
          * @returns {Promise<boolean>}
          */
         async currentProviderRequiresApiKey() {
@@ -639,7 +639,7 @@
         }
 
         /**
-         * Получить URL для получения API ключа для текущего провайдера
+         * Get URL for получения API ключа for текущего провайдера
          * @returns {Promise<string|null>}
          */
         async getApiKeyUrl() {
@@ -656,7 +656,7 @@
         window.dataProviderManager.init();
         console.log('✅ dataProviderManager initialized with providers:', Object.keys(window.dataProviderManager.providers));
     } else {
-        // Если провайдеры еще не загружены, ждем их
+        // Если провайдеры еще not loadedы, ждем их
         const checkProviders = setInterval(() => {
             if (window.CoinGeckoProvider) {
                 window.dataProviderManager.init();

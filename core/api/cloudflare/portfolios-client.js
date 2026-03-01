@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * PORTFOLIOS CLIENT - API клиент для работы с портфелями через Cloudflare Workers
+ * PORTFOLIOS CLIENT - API клиент for работы с портфелями через Cloudflare Workers
  * ================================================================================================
  *
- * ЦЕЛЬ: Браузерный клиент для CRUD операций с портфелями через Cloudflare Workers API.
+ * PURPOSE: Браузерный клиент for CRUD операций с портфелями через Cloudflare Workers API.
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды: Использовать `cloudflare-config.js` для всех endpoints
- * - Авторизация: Использовать `auth-client.js` для получения токена
+ * PRINCIPLES:
+ * - SSOT: Использовать `cloudflare-config.js` for всех endpoints
+ * - Авторизация: Использовать `auth-client.js` for получения токена
  * - Обработка ошибок: Использовать существующую систему обработки ошибок
  * - Модульность: Независимый модуль без зависимостей от UI компонентов
  *
@@ -16,7 +16,7 @@
  * - Обработка ошибок сети и авторизации
  * - Возврат структурированных данных портфелей
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md, docs/A_CLOUDFLARE.md
  * - Конфигурация Workers: core/config/cloudflare-config.js
  * - OAuth клиент: core/api/cloudflare/auth-client.js
@@ -32,17 +32,17 @@
     // - core/api/cloudflare/auth-client.js (window.authClient)
 
     if (typeof window.cloudflareConfig === 'undefined') {
-        console.error('portfolios-client.js: cloudflareConfig не загружен');
+        console.error('portfolios-client.js: cloudflareConfig not loaded');
         return;
     }
 
     if (typeof window.authClient === 'undefined') {
-        console.error('portfolios-client.js: authClient не загружен');
+        console.error('portfolios-client.js: authClient not loaded');
         return;
     }
 
     /**
-     * Получить заголовки для авторизованного запроса
+     * Get заголовки for авторизованного запроса
      * @returns {Promise<Object>} Объект с заголовками или null при ошибке авторизации
      */
     async function getAuthHeaders() {
@@ -89,7 +89,7 @@
     }
 
     /**
-     * Получить список портфелей пользователя
+     * Get list portfolios пользователя
      * @returns {Promise<Array>} Массив портфелей
      * @throws {Error} При ошибке сети или авторизации
      */
@@ -97,7 +97,7 @@
         try {
             const url = window.cloudflareConfig.getPortfoliosEndpoint('list');
             if (!url) {
-                throw new Error('Не удалось получить URL для списка портфелей');
+                throw new Error('Не удалось получить URL for списка портфелей');
             }
 
             const response = await fetchWithAuth(url, {
@@ -124,7 +124,7 @@
     }
 
     /**
-     * Получить портфель по ID
+     * Get портфель по ID
      * @param {string|number} portfolioId - ID портфеля
      * @returns {Promise<Object>} Портфель
      * @throws {Error} При ошибке сети, авторизации или если портфель не найден
@@ -137,7 +137,7 @@
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('get', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL для портфеля');
+                throw new Error('Не удалось получить URL for портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -167,7 +167,7 @@
     }
 
     /**
-     * Создать новый портфель
+     * Create new портфель
      * @param {Object} portfolioData - Данные портфеля { name, description, assets }
      * @returns {Promise<Object>} Созданный портфель
      * @throws {Error} При ошибке сети, авторизации или валидации
@@ -180,7 +180,7 @@
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('create');
             if (!url) {
-                throw new Error('Не удалось получить URL для создания портфеля');
+                throw new Error('Не удалось получить URL for создания портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -212,7 +212,7 @@
     }
 
     /**
-     * Обновить портфель
+     * Update портфель
      * @param {string|number} portfolioId - ID портфеля
      * @param {Object} updates - Обновляемые поля { name, description, assets }
      * @returns {Promise<Object>} Обновлённый портфель
@@ -225,12 +225,12 @@
             }
 
             if (!updates || Object.keys(updates).length === 0) {
-                throw new Error('Необходимо указать хотя бы одно поле для обновления');
+                throw new Error('Необходимо указать хотя бы одно поле for обновления');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('update', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL для обновления портфеля');
+                throw new Error('Не удалось получить URL for обновления портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -261,7 +261,7 @@
     }
 
     /**
-     * Удалить портфель
+     * Delete портфель
      * @param {string|number} portfolioId - ID портфеля
      * @returns {Promise<boolean>} Успех операции
      * @throws {Error} При ошибке сети, авторизации или если портфель не найден
@@ -274,7 +274,7 @@
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('delete', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL для удаления портфеля');
+                throw new Error('Не удалось получить URL for удаления портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -303,7 +303,7 @@
         }
     }
 
-    // Экспорт функций через window для использования в других модулях
+    // Экспорт функций через window for использования в других модулях
     window.portfoliosClient = {
         getPortfolios,
         getPortfolio,
@@ -312,5 +312,5 @@
         deletePortfolio,
     };
 
-    console.log('portfolios-client.js: инициализирован');
+    console.log('portfolios-client.js: initialized');
 })();

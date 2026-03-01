@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * CORS UTILITIES - Утилиты для обработки CORS заголовков
+ * CORS UTILITIES - Утилиты for обработки CORS заголовков
  * ================================================================================================
  *
- * ЦЕЛЬ: Централизованная обработка CORS заголовков для всех ответов Workers.
+ * PURPOSE: Централизованная обработка CORS заголовков for всех ответов Workers.
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Все ответы должны включать CORS заголовки
  * - Поддержка preflight OPTIONS запросов
- * - Настраиваемые allowed origins (для продакшена можно ограничить)
+ * - Настраиваемые allowed origins (for продакшена можно ограничить)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { addCorsHeaders, handleOptions } from './utils/cors.js';
  *
  * // Добавление заголовков к ответу
@@ -24,24 +24,24 @@
  */
 
 /**
- * CORS заголовки для всех ответов
+ * CORS заголовки for всех ответов
  */
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // Разрешить любой источник для разработки
+  'Access-Control-Allow-Origin': '*', // Разрешить любой источник for разработки
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Max-Age': '86400', // Кэширование preflight запросов на 24 часа
 };
 
 /**
- * Получить CORS заголовки
- * @param {Object} options - Опции (origin для кастомизации)
+ * Get CORS заголовки
+ * @param {Object} options - Опции (origin for кастомизации)
  * @returns {Object} Объект с CORS заголовками
  */
 export function getCorsHeaders(options = {}) {
   const headers = { ...corsHeaders };
 
-  // Если указан origin - используем его (для продакшена можно ограничить)
+  // Если указан origin - используем его (for продакшена можно ограничить)
   if (options.origin) {
     headers['Access-Control-Allow-Origin'] = options.origin;
   }
@@ -51,8 +51,8 @@ export function getCorsHeaders(options = {}) {
 
 /**
  * Добавить CORS заголовки к существующим заголовкам
- * @param {Headers} existingHeaders - Существующие заголовки (опционально)
- * @param {Object} options - Опции для getCorsHeaders
+ * @param {Headers} existingHeaders - Существующие заголовки (optional)
+ * @param {Object} options - Опции for getCorsHeaders
  * @returns {Headers} Новые заголовки с CORS
  */
 export function addCorsHeaders(existingHeaders = null, options = {}) {
@@ -79,10 +79,10 @@ export function handleOptions(request) {
 }
 
 /**
- * Создать JSON ответ с CORS заголовками
- * @param {any} data - Данные для JSON ответа
+ * Создать JSON response с CORS заголовками
+ * @param {any} data - Данные for JSON responseа
  * @param {Object} options - Опции (status, headers, corsOptions)
- * @returns {Response} JSON ответ с CORS заголовками
+ * @returns {Response} JSON response с CORS заголовками
  */
 export function jsonResponse(data, options = {}) {
   const {

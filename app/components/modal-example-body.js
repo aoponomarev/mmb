@@ -1,16 +1,16 @@
 /**
  * ================================================================================================
- * MODAL EXAMPLE BODY COMPONENT - Компонент-пример для демонстрации системы управления кнопками
+ * MODAL EXAMPLE BODY COMPONENT - Компонент-пример for демонстрации системы управления кнопками
  * ================================================================================================
  *
- * ЦЕЛЬ: Демонстрация использования системы управления кнопками модального окна.
+ * PURPOSE: Демонстрация использования системы управления кнопками модального окна.
  *
  * ОСОБЕННОСТИ:
  * - Регистрация кнопок через inject modalApi
  * - Реактивное обновление состояния кнопок при изменении данных формы
  * - Демонстрация кнопок в header и footer одновременно
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Система управления кнопками: shared/components/modal.js
  * - Принципы: app/skills/ux-principles
  */
@@ -18,7 +18,7 @@
 window.modalExampleBody = {
     template: `
         <div>
-            <p>Содержимое модального окна. Здесь может быть любой контент: текст, формы, изображения и т.д.</p>
+            <p>Содержимое модального окна. Здесь can be любой контент: текст, формы, изображения и т.д.</p>
             <div class="mb-3">
                 <label :for="formIdPrefix + '-exampleInput'" class="form-label">Пример поля ввода</label>
                 <input
@@ -59,7 +59,7 @@ window.modalExampleBody = {
     },
 
     computed: {
-        // Уникальный префикс для ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
         formIdPrefix() {
             return `modal-example-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -121,8 +121,8 @@ window.modalExampleBody = {
                 locations: ['header', 'footer'],
                 label: 'Сохранить',
                 variant: 'primary',
-                icon: 'fas fa-save', // Иконка для header версии
-                tooltipIcon: 'Сохранить', // Подсказка для иконочной кнопки в header
+                icon: 'fas fa-save', // Иконка for header версии
+                tooltipIcon: 'Сохранить', // Подсказка for иконочной кнопки в header
                 disabled: !this.hasChanges || !this.isValid,
                 onClick: () => this.handleSave()
             });
@@ -142,7 +142,7 @@ window.modalExampleBody = {
                 label: 'Экспорт',
                 variant: 'outline-primary',
                 icon: 'fas fa-download',
-                tooltipIcon: 'Экспорт данных', // Подсказка для иконочной кнопки
+                tooltipIcon: 'Экспорт данных', // Подсказка for иконочной кнопки
                 onClick: () => this.handleExport()
             });
         }

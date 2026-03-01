@@ -4,15 +4,15 @@
  * ================================================================================================
  * Skill: core/skills/cache-layer
  *
- * ЦЕЛЬ: Централизованное управление TTL, версиями схем и стратегиями кэширования.
- * Единый источник правды — запрещено дублировать значения TTL в компонентах.
+ * PURPOSE: Централизованное управление TTL, версиями схем и стратегиями кэширования.
+ * SSOT — запрещено дублировать значения TTL в компонентах.
  *
  * TTL (Time To Live) — объяснение значений:
  * - icons-cache: 1 час — иконки меняются редко, но могут обновиться (новые монеты, обновление дизайна)
  * - coins-list: 1 день — список монет стабилен, обновляется раз в день через API
- * - market-metrics: 1 час — метрики обновляются часто (цены меняются постоянно)
- * - api-cache: 5 минут — кэш API-ответов, быстрое устаревание для актуальности
- * - time-series: 1 час — временные ряды обновляются регулярно, час — баланс актуальности/производительности
+ * - market-metrics: 1 час — metrics обновляются часто (цены меняются постоянно)
+ * - api-cache: 5 минут — кэш API-ответов, быстрое устаревание for актуальности
+ * - time-series: 1 час — time series обновляются регулярно, час — баланс актуальности/производительности
  * - history: 1 день — история изменяется реже, день достаточен
  * - crypto-news-cache-max-age: 24 часа — максимальный возраст состояния новостей (не самих новостей)
  * - market-update-fallback: 3 часа — fallback при ошибке расчета времени обновления
@@ -23,23 +23,23 @@
  * - Настройки (settings, theme, timezone) — пользователь не должен терять настройки
  * - API ключи и провайдеры — чувствительные данные, хранятся без срока
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * - cache-first: icons-cache, coins-list — данные стабильны, важна скорость доступа
  * - network-first: market-metrics, api-cache — актуальность критична, сначала запрос к сети
  * - stale-while-revalidate: time-series, history — показываем кэш, обновляем в фоне
  * - cache-only: portfolios, strategies, settings, API ключи — только локальные данные, нет источника обновления
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * Версионирование структуры данных пользовательских ключей (portfolios, strategies и т.д.).
  * При изменении структуры создается миграция в cache-migrations.js.
  * Версионирование схем отличается от версионирования приложения (префикс v:{hash}:).
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * cacheConfig.getTTL('coins-list') // 86400000 (1 день)
  * cacheConfig.getStrategy('icons-cache') // 'cache-first'
  * cacheConfig.getVersion('portfolios') // '1.0.0'
  *
- * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
+ * ССЫЛКА: General principles кэширования: core/skills/cache-layer
  */
 
 (function() {
@@ -58,7 +58,7 @@
         ? topCoinsContract.ttlMs
         : 2 * DURATIONS.HOUR;
 
-    // Контракты/правила для ключевых потоков данных.
+    // Контракты/правила for ключевых потоков данных.
     const DATA_FLOW_CONTRACTS = {
         topCoins: {
             ttlMs: TOP_COINS_REFRESH_WINDOW_MS,
@@ -72,7 +72,7 @@
     const TTL = {
         'icons-cache': 60 * 60 * 1000,           // 1 час
         'coins-list': 24 * DURATIONS.HOUR,       // 1 день
-        'top-coins': 60 * 60 * 1000,             // 1 час (кэш максимальных наборов монет)
+        'top-coins': 60 * 60 * 1000,             // 1 час (кэш максимальных sets монет)
         'top-coins-by-market-cap': TOP_COINS_REFRESH_WINDOW_MS,  // 2 часа (топ 250 по капитализации)
         'top-coins-by-volume': TOP_COINS_REFRESH_WINDOW_MS,      // 2 часа (топ 250 по объему)
         'active-coin-set-data': TOP_COINS_REFRESH_WINDOW_MS,     // 2 часа (полные данные монет активного набора)
@@ -93,7 +93,7 @@
         'yandex-api-key': null,                   // Без TTL (чувствительные данные)
         'yandex-folder-id': null,                 // Без TTL
         'yandex-model': null,                     // Без TTL
-        'yandex-proxy-type': null,                // Без TTL (тип прокси для YandexGPT: 'yandex' и т.д.)
+        'yandex-proxy-type': null,                // Без TTL (тип прокси for YandexGPT: 'yandex' и т.д.)
         'translation-language': null,              // Без TTL
         'crypto-news-cache-max-age': 24 * 60 * 60 * 1000,  // 24 часа - максимальный возраст кэша новостей
         'market-update-fallback': 3 * 60 * 60 * 1000,        // 3 часа - fallback при ошибке расчета времени обновления
@@ -125,7 +125,7 @@
     };
 
     /**
-     * Получить TTL для ключа
+     * Get TTL for ключа
      * @param {string} key - ключ кэша
      * @returns {number|null} - TTL в миллисекундах или null
      */
@@ -134,7 +134,7 @@
     }
 
     /**
-     * Получить версию схемы для ключа
+     * Get версию схемы for ключа
      * @param {string} key - ключ кэша
      * @returns {string} - версия
      */
@@ -143,7 +143,7 @@
     }
 
     /**
-     * Получить стратегию кэширования для ключа
+     * Get стратегию кэширования for ключа
      * @param {string} key - ключ кэша
      * @returns {string} - стратегия
      */
@@ -172,7 +172,7 @@
         return DATA_FLOW_CONTRACTS.topCoins.requestRegistryMinIntervalMs;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.cacheConfig = {
         TTL,
         VERSIONS,
@@ -189,6 +189,6 @@
         getStrategy
     };
 
-    console.log('cache-config.js: инициализирован');
+    console.log('cache-config.js: initialized');
 })();
 

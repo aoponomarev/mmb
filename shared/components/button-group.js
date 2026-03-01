@@ -3,11 +3,11 @@
  * BUTTON GROUP COMPONENT - Компонент группы кнопок
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-обёртка над Bootstrap .btn-group с поддержкой:
+ * PURPOSE: Vue-обёртка над Bootstrap .btn-group с поддержкой:
  * - Трёх типов кнопок: button (через cmp-button), checkbox, radio (нативный HTML)
  * - Наследования стилей (variant, size) от группы к кнопкам
  * - Адаптивного схлопывания в dropdown при брейкпоинте
- * - 100% совместимости с Bootstrap JS API
+ * - 100% совместимости with Bootstrap JS API
  *
  * Конфигурация кнопок:
  * - Двойной рендер: группа кнопок (>= breakpoint) и dropdown (< breakpoint)
@@ -21,15 +21,15 @@
  * Входные параметры (props):
  * Базовые свойства группы:
  * - size (String) — размер группы: 'sm', 'lg' или '' (по умолчанию). Применяется ко всем кнопкам, если не переопределено в конфигурации кнопки
- * - variant (String, default: 'secondary') — базовый вариант Bootstrap для всех кнопок. Если кнопка не имеет собственного variant, наследует от группы
+ * - variant (String, default: 'secondary') — базовый вариант Bootstrap for всех кнопок. Если кнопка не имеет собственного variant, наследует от группы
  * - vertical (Boolean, default: false) — вертикальная ориентация группы (добавляет класс btn-group-vertical)
  * - verticalBreakpoint (String) — адаптивная вертикальная ориентация: 'sm' (576px). На мобильных (< 576px) группа отображается вертикально, на десктопе (>= 576px) — горизонтально
  * - role (String, default: 'group') — ARIA-роль группы
- * - ariaLabel (String) — ARIA-метка для группы
- * - classesAdd (Object, default: {}) — классы для добавления на различные элементы компонента. Структура: { root: 'классы', dropdown: 'классы', dropdownButton: 'классы', dropdownMenu: 'классы' }
- * - classesRemove (Object, default: {}) — классы для удаления с различных элементов компонента. Структура: { root: 'классы', dropdown: 'классы', dropdownButton: 'классы', dropdownMenu: 'классы' }
- * Адаптивность (схлопывание в dropdown):
- * - collapseBreakpoint (String) — брейкпоинт для схлопывания группы в dropdown: 'sm', 'md', 'lg', 'xl', 'xxl'. Если не указан, группа всегда отображается как группа кнопок
+ * - ariaLabel (String) — ARIA-метка for группы
+ * - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', dropdown: 'классы', dropdownButton: 'классы', dropdownMenu: 'классы' }
+ * - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', dropdown: 'классы', dropdownButton: 'классы', dropdownMenu: 'классы' }
+ * Responsiveness (схлопывание в dropdown):
+ * - collapseBreakpoint (String) — брейкпоинт for схлопывания группы в dropdown: 'sm', 'md', 'lg', 'xl', 'xxl'. Если не указан, группа всегда отображается как группа кнопок
  * - dropdownLabel (String, default: 'Действия') — текст кнопки dropdown при схлопывании
  * - dropdownIcon (String) — иконка кнопки dropdown (Font Awesome класс)
  * - dropdownVariant (String) — вариант кнопки dropdown. Если не указан, наследует от variant группы
@@ -37,23 +37,23 @@
  * - buttons (Array, required) — массив конфигураций кнопок. Каждый элемент — объект ButtonConfig:
  *   ButtonConfig:
  *   - type (String, required) — тип кнопки: 'button', 'checkbox' или 'radio'
- *   - label (String) — текст кнопки (для всех типов)
- *   - labelShort (String) — укороченная версия текста для мобильных (только для type="button")
+ *   - label (String) — текст кнопки (for всех типов)
+ *   - labelShort (String) — укороченная версия текста for мобильных (только for type="button")
  *   - icon (String) — CSS класс иконки (Font Awesome, Material Symbols)
  *   - variant (String) — вариант Bootstrap (переопределяет групповой)
  *   - size (String) — размер кнопки (переопределяет групповой)
  *   - disabled (Boolean) — отключённое состояние
- *   - loading (Boolean) — состояние загрузки (только для type="button")
- *   - active (Boolean) — активное состояние (для checkbox/radio)
- *   - suffix (Object | Array) — суффикс справа (только для type="button"). Формат аналогичен cmp-button
+ *   - loading (Boolean) — состояние загрузки (только for type="button")
+ *   - active (Boolean) — активное состояние (for checkbox/radio)
+ *   - suffix (Object | Array) — суффикс справа (только for type="button"). Формат аналогичен cmp-button
  *   - tooltip (String) — общая подсказка
- *   - tooltipIcon (String) — подсказка для иконки (только для type="button")
- *   - tooltipText (String) — подсказка для текста (только для type="button")
- *   - tooltipSuffix (String) — подсказка для суффикса (только для type="button")
- *   - [key: data-bs-${string}] (any) — произвольные Bootstrap data-атрибуты для прозрачности JS API
+ *   - tooltipIcon (String) — подсказка for иконки (только for type="button")
+ *   - tooltipText (String) — подсказка for текста (только for type="button")
+ *   - tooltipSuffix (String) — подсказка for суффикса (только for type="button")
+ *   - [key: data-bs-${string}] (any) — произвольные Bootstrap data-атрибуты for прозрачности JS API
  *   - [key: string] (any) — любые другие атрибуты
  *
- * Выходные события (emits):
+ * Logoutные события (emits):
  * - button-click — клик по кнопке (type="button"). Параметры: (event, { button, index, type })
  * - button-click-icon — клик по иконке кнопки (type="button"). Параметры: (event, { button, index, type })
  * - button-click-text — клик по тексту кнопки (type="button"). Параметры: (event, { button, index, type })
@@ -62,14 +62,14 @@
  * - button-toggle — переключение состояния checkbox/radio. Параметры: ({ button, index, active, type })
  *
  * Слоты:
- * - default — содержимое кнопок (fallback для кастомных кнопок)
+ * - default — содержимое кнопок (fallback for кастомных кнопок)
  * - button-{index} — переопределение конкретной кнопки по индексу. Параметры слота: { button, index }
  *
  * Базовые свойства группы:
  * Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/button-group-template.js`
- * Использование компонента cmp-button для type="button":
+ * Использование компонента cmp-button for type="button":
  * - Все пропсы cmp-button поддерживаются через ButtonConfig
- * - Адаптивность через CSS классы .btn-responsive работает автоматически
+ * - Responsiveness через CSS классы .btn-responsive работает автоматически
  * - Suffix и tooltips поддерживаются полностью
  * Наследование стилей:
  * - Компонент поддерживает наследование variant и size от группы к кнопкам
@@ -79,17 +79,17 @@
  * Маппинг данных при схлопывании:
  * - Маппинг ButtonConfig → DropdownMenuItem: label → title, icon → icon, suffix → suffix, type="checkbox/radio" + active → active: true, disabled → disabled, tooltip → tooltipText
  * Синхронизация состояния:
- * - Компонент использует внутреннее состояние buttonStates для синхронизации
+ * - Компонент использует внутреннее состояние buttonStates for синхронизации
  * - При создании компонента состояние инициализируется из props
  * - При изменении checkbox/radio состояние обновляется в buttonStates
  * - Для radio автоматически сбрасываются все остальные radio в группе при выборе
  * - Состояние синхронизируется с dropdown при схлопывании
  * - События синхронизируются между кнопками и пунктами меню
  *
- * ССЫЛКИ:
- * - Общие принципы работы с компонентами: app/skills/ux-principles
- * - Стратегия совместимости с Bootstrap: app/skills/ux-principles
- * - Адаптивность: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с компонентами: app/skills/ux-principles
+ * - Стратегия совместимости with Bootstrap: app/skills/ux-principles
+ * - Responsiveness: app/skills/ui-architecture
  * - Шаблон: shared/templates/button-group-template.js
  */
 
@@ -110,7 +110,7 @@ window.cmpButtonGroup = {
         },
         variant: {
             type: String,
-            default: 'secondary' // базовый variant для всех кнопок
+            default: 'secondary' // базовый variant for всех кнопок
         },
         vertical: {
             type: Boolean,
@@ -141,7 +141,7 @@ window.cmpButtonGroup = {
             // Пример: { root: 'some-class', dropdown: 'another-class' }
         },
 
-        // === Адаптивность (схлопывание в dropdown) ===
+        // === Responsiveness (схлопывание в dropdown) ===
         collapseBreakpoint: {
             type: String,
             default: null,
@@ -198,12 +198,12 @@ window.cmpButtonGroup = {
 
     data() {
         return {
-            buttonStates: [] // состояние кнопок (для checkbox/radio)
+            buttonStates: [] // состояние кнопок (for checkbox/radio)
         };
     },
 
     created() {
-        // Генерируем уникальный ID для группы при создании компонента
+        // Генерируем уникальный ID for группы при создании компонента
         this._groupId = `btn-group-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
         // Инициализируем внутреннее состояние кнопок из props
@@ -227,12 +227,12 @@ window.cmpButtonGroup = {
     },
 
     computed: {
-        // CSS классы для группы кнопок
+        // CSS классы for группы кнопок
         groupClasses() {
             const baseClasses = ['btn-group'];
             if (this.size) baseClasses.push(`btn-group-${this.size}`);
 
-            // Проверяем, есть ли адаптивный класс для вертикальной ориентации в classesAdd.root
+            // Проверяем, есть ли адаптивный класс for вертикальной ориентации в classesAdd.root
             const classesAddRoot = this.classesAdd?.root;
             const hasAdaptiveVertical = classesAddRoot && (
                 (typeof classesAddRoot === 'string' && classesAddRoot.includes('btn-group-responsive-vertical')) ||
@@ -251,7 +251,7 @@ window.cmpButtonGroup = {
 
             if (this.instanceHash) baseClasses.push(this.instanceHash);
 
-            // Классы видимости для адаптивного схлопывания
+            // Классы видимости for адаптивного схлопывания
             if (this.collapseBreakpoint) {
                 baseClasses.push(`d-none`, `d-${this.collapseBreakpoint}-inline-flex`);
             }
@@ -270,7 +270,7 @@ window.cmpButtonGroup = {
             return result;
         },
 
-        // Атрибуты для группы
+        // Атрибуты for группы
         groupAttrs() {
             return {
                 role: this.role,
@@ -278,10 +278,10 @@ window.cmpButtonGroup = {
             };
         },
 
-        // Классы для dropdown (для передачи в cmp-dropdown)
+        // Классы for dropdown (for передачи в cmp-dropdown)
         dropdownClassesForGroup() {
             // ВАЖНО: Возвращаем объект с undefined вместо пропуска свойств
-            // Это обеспечивает стабильную структуру объекта для Vue реактивности
+            // Это обеспечивает стабильную структуру объекта for Vue реактивности
             return {
                 root: this.classesAdd?.dropdown || undefined,
                 button: this.classesAdd?.dropdownButton || undefined,
@@ -296,7 +296,7 @@ window.cmpButtonGroup = {
             };
         },
 
-        // Классы для dropdown контейнера
+        // Классы for dropdown контейнера
         dropdownClasses() {
             if (!this.collapseBreakpoint) return '';
             return `d-${this.collapseBreakpoint}-none`;
@@ -314,7 +314,7 @@ window.cmpButtonGroup = {
             return window.hashGenerator.generateMarkupClass(`${parentContext}:${instanceId}`);
         },
 
-        // Маппинг buttons в menuItems для dropdown
+        // Маппинг buttons в menuItems for dropdown
         menuItems() {
             if (!this.collapseBreakpoint) return [];
 
@@ -327,7 +327,7 @@ window.cmpButtonGroup = {
                 tooltipText: btn.tooltip || btn.tooltipText || null,
                 tooltipIcon: btn.tooltipIcon || null,
                 tooltipSuffix: btn.tooltipSuffix || (btn.suffix?.tooltip) || null,
-                // Сохраняем оригинальные данные для событий
+                // Сохраняем оригинальные данные for событий
                 _originalButton: btn,
                 _originalIndex: index
             }));
@@ -335,17 +335,17 @@ window.cmpButtonGroup = {
             return items;
         },
 
-        // Variant для dropdown кнопки
+        // Variant for dropdown кнопки
         computedDropdownVariant() {
             return this.dropdownVariant || this.variant;
         },
 
-        // Size для dropdown кнопки
+        // Size for dropdown кнопки
         computedDropdownSize() {
             return this.dropdownSize || this.size;
         },
 
-        // Текст для dropdown кнопки
+        // Текст for dropdown кнопки
         computedDropdownLabel() {
             if (this.dropdownDynamicLabel) {
                 const activeBtn = this.buttonStates.find(btn => btn.active && (btn.type === 'radio' || btn.type === 'checkbox'));
@@ -356,7 +356,7 @@ window.cmpButtonGroup = {
             return this.dropdownLabel;
         },
 
-        // Укороченный текст для dropdown кнопки
+        // Укороченный текст for dropdown кнопки
         computedDropdownLabelShort() {
             if (this.dropdownDynamicLabelShort) {
                 const activeBtn = this.buttonStates.find(btn => btn.active && (btn.type === 'radio' || btn.type === 'checkbox'));
@@ -369,7 +369,7 @@ window.cmpButtonGroup = {
     },
 
     methods: {
-        // Получить родительский контекст (класс avto-* или ID родителя)
+        // Get родительский контекст (класс avto-* или ID родителя)
         getParentContext() {
             if (!this.$el?.parentElement) return 'root';
 
@@ -388,19 +388,19 @@ window.cmpButtonGroup = {
             return 'root';
         },
 
-        // Утилита для исключения свойств из объекта
+        // Утилита for исключения свойств из объекта
         omit(obj, keys) {
             const result = { ...obj };
             keys.forEach(key => delete result[key]);
             return result;
         },
 
-        // Генерация уникального ID для checkbox/radio
+        // Генерация уникального ID for checkbox/radio
         getButtonId(index) {
             return `${this._groupId}-${index}`;
         },
 
-        // Имя для radio группы
+        // Имя for radio группы
         getRadioName() {
             return `${this._groupId}-radio`;
         },
@@ -497,7 +497,7 @@ window.cmpButtonGroup = {
     },
 
     mounted() {
-        // Инициализация Bootstrap Button для action-кнопок (если нужно)
+        // Инициализация Bootstrap Button for action-кнопок (если нужно)
         this.$nextTick(() => {
             if (window.bootstrap?.Button && this.$refs.groupContainer) {
                 const buttons = this.$refs.groupContainer.querySelectorAll('.btn[data-bs-toggle="button"]');

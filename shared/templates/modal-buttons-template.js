@@ -3,9 +3,9 @@
  * MODAL BUTTONS TEMPLATE - Шаблон компонента кнопок модального окна
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента рендеринга кнопок модального окна (cmp-modal-buttons).
+ * PURPOSE: Шаблон for компонента рендеринга кнопок модального окна (cmp-modal-buttons).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="modal-buttons-template".
@@ -22,8 +22,8 @@
  * - Каждая кнопка использует cmp-button с конфигурацией из button config
  * - Передача всех свойств кнопки (label, variant, disabled, icon, classesAdd, buttonAttributes)
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с шаблонами: app/skills/ui-architecture
  * - Компонент: shared/components/modal-buttons.js
  */
 

@@ -3,10 +3,10 @@
  * DROPDOWN-MENU-ITEM TEMPLATE - Шаблон компонента пункта выпадающего меню
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для универсального компонента пункта выпадающего меню (cmp-dropdown-menu-item)
+ * PURPOSE: Шаблон for универсального компонента пункта выпадающего меню (cmp-dropdown-menu-item)
  * с поддержкой иконки, текста, подзаголовка и суффикса.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="dropdown-menu-item-template".
@@ -20,22 +20,22 @@
  * ОСОБЕННОСТИ ШАБЛОНА:
  * Структура HTML:
  * - Корневой элемент: ⟨li class="dropdown-item p-0"⟩ с условными классами 'active' и 'disabled'
- * - Внутренний контейнер: ⟨div class="d-flex align-items-start px-2 py-2"⟩ для layout
+ * - Внутренний контейнер: ⟨div class="d-flex align-items-start px-2 py-2"⟩ for layout
  * - Элементы: иконка (⟨span class="icon"⟩), текстовая область (⟨div class="flex-grow-1 text-break text-wrap"⟩), суффикс (⟨span⟩)
  * Layout и CSS-классы:
  * - Все стили реализованы через Bootstrap утилиты: d-flex, align-items-start, text-break, text-wrap, lh-sm, mt-1, opacity-50 и т.п.
  * - Выравнивание элементов: иконка и суффикс выровнены по первой строке текста через align-items-start и pt-1
  * - Текстовая область растягивается через flex-grow-1
- * - Перенос текста: текстовая область использует text-break и text-wrap для переноса длинного текста
- * - min-width: 0 на flex-элементе для корректного обрезания текста
- * - Подзаголовок отображается через ⟨small⟩ с классом mt-1 для отступа
+ * - Перенос текста: текстовая область использует text-break и text-wrap for переноса длинного текста
+ * - min-width: 0 на flex-элементе for корректного обрезания текста
+ * - Подзаголовок отображается через ⟨small⟩ с классом mt-1 for отступа
  * Условный рендеринг:
  * - Иконка: условный рендеринг через v-if="icon"
  * - Подзаголовок: условный рендеринг через v-if="subtitle"
  * - Суффикс: условный рендеринг через v-if="suffix"
  * - Состояния: классы 'active' и 'disabled' применяются условно через :class
- * Адаптивность:
- * - Адаптивность через классы .icon, .subtitle (управляется CSS)
+ * Responsiveness:
+ * - Responsiveness через классы .icon, .subtitle (управляется CSS)
  * События:
  * - Раздельные события кликов по зонам (иконка, текст, суффикс) через @mouseup.stop
  * - Закрытие dropdown при отпускании кнопки мыши (@mouseup вместо @click)
@@ -44,8 +44,8 @@
  * Анимация chevron:
  * - Анимация chevron через Font Awesome класс fa-rotate-90 и inline transition (единственное исключение из запрета inline-стилей)
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/dropdown-menu-item.js
  */
 

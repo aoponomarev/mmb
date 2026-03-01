@@ -3,12 +3,12 @@
  * LOADING STATE - Единая система состояний загрузки
  * ================================================================================================
  *
- * ЦЕЛЬ: Управление состояниями загрузки (loading, error, success) для всех компонентов.
+ * PURPOSE: Управление состояниями загрузки (loading, error, success) for всех компонентов.
  * Синхронизация состояний, индикаторы прогресса, отмена запросов.
  * Skill: is/skills/arch-foundation
  *
- * ПРИНЦИПЫ:
- * - Единый интерфейс для всех состояний загрузки
+ * PRINCIPLES:
+ * - Единый интерфейс for всех состояний загрузки
  * - Отслеживание множественных загрузок
  * - Автоматическое управление состоянием
  *
@@ -24,7 +24,7 @@
     const activeLoadings = new Map();
 
     /**
-     * Установить состояние загрузки
+     * Set состояние загрузки
      * @param {string} key - ключ загрузки
      * @param {Object} state - состояние { loading: boolean, error: Error|null, data: any }
      */
@@ -43,7 +43,7 @@
     }
 
     /**
-     * Получить состояние загрузки
+     * Get состояние загрузки
      * @param {string} key - ключ загрузки
      * @returns {Object|null} - состояние или null
      */
@@ -75,7 +75,7 @@
     }
 
     /**
-     * Получить все активные загрузки
+     * Get все активные загрузки
      * @returns {Array} - массив ключей активных загрузок
      */
     function getActiveLoadings() {
@@ -109,7 +109,7 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.loadingState = {
         setLoadingState,
         getLoadingState,
@@ -120,6 +120,6 @@
         clearAllLoadingStates
     };
 
-    console.log('loading-state.js: инициализирован');
+    console.log('loading-state.js: initialized');
 })();
 

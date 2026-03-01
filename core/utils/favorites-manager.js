@@ -3,19 +3,19 @@
  * FAVORITES MANAGER - Менеджер избранных монет
  * ================================================================================================
  *
- * ЦЕЛЬ: Централизованное управление избранными монетами пользователя.
+ * PURPOSE: Централизованное управление избранными монетами пользователя.
  * Skill: app/skills/ux-principles
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - ЕИП: Cloudflare D1 (таблица user_coin_sets с type='favorite') - основной источник правды.
- * - Кэширование: localStorage - быстрый локальный кэш для отзывчивости интерфейса.
- * - Хранение: Сохраняем только { id, symbol } для каждой монеты. Остальные данные подтягиваются из кэша CoinGecko.
+ * - Кэширование: localStorage - быстрый локальный кэш for отзывчивости интерфейса.
+ * - Хранение: Сохраняем только { id, symbol } for каждой монеты. Остальные данные подтягиваются из кэша CoinGecko.
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * window.favoritesManager.getFavorites();
  * window.favoritesManager.toggleFavorite(coin);
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - API клиент: core/api/cloudflare/coin-sets-client.js
  */
 
@@ -72,7 +72,7 @@
         }
 
         isInitialized = true;
-        console.log(`✅ FavoritesManager: инициализирован (${favorites.length} монет)`);
+        console.log(`✅ FavoritesManager: initialized (${favorites.length} монет)`);
     }
 
     /**
@@ -108,7 +108,7 @@
     }
 
     /**
-     * Получить список избранных монет
+     * Get list избранных монет
      */
     function getFavorites() {
         return [...favorites];
@@ -137,7 +137,7 @@
 
         saveToCache();
 
-        // Оповещаем UI немедленно для отзывчивости
+        // Оповещаем UI немедленно for отзывчивости
         if (window.eventBus) {
             window.eventBus.emit('favorites-updated', favorites);
         }
@@ -147,7 +147,7 @@
     }
 
     /**
-     * Удалить монету из избранного
+     * Delete монету из избранного
      */
     async function removeFavorite(coinId) {
         const index = favorites.findIndex(f => f.id === coinId);
@@ -156,7 +156,7 @@
             favorites.splice(index, 1);
             saveToCache();
 
-            // Оповещаем UI немедленно для отзывчивости
+            // Оповещаем UI немедленно for отзывчивости
             if (window.eventBus) {
                 window.eventBus.emit('favorites-updated', favorites);
             }
@@ -167,7 +167,7 @@
     }
 
     /**
-     * Обновить данные в D1
+     * Update данные в D1
      */
     async function updateD1() {
         if (!window.coinSetsClient || !window.authState || !window.authState.isAuthenticated) {
@@ -201,7 +201,7 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.favoritesManager = {
         init,
         sync,
@@ -211,7 +211,7 @@
         removeFavorite
     };
 
-    // Слушаем изменение состояния авторизации для синхронизации
+    // Слушаем изменение состояния авторизации for синхронизации
     if (window.eventBus) {
         window.eventBus.on('auth-state-changed', (state) => {
             if (state.isAuthenticated) {

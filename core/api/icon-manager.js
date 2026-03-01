@@ -4,13 +4,13 @@
  * ================================================================================================
  * Skill: app/skills/ui-architecture
  *
- * ЦЕЛЬ: Единый источник правды для получения URL иконок монет.
+ * PURPOSE: SSOT for получения URL иконок монет.
  * Приоритизирует наш GitHub CDN над внешними источниками (CoinGecko).
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * 1. GitHub CDN (наш "золотой фонд") - приоритет #1.
  * 2. Fallback на CoinGecko - если иконки нет у нас.
- * 3. Поддержка Alias Map для разрешения конфликтов именования.
+ * 3. Поддержка Alias Map for разрешения конфликтов именования.
  * 4. Cache Busting через "соль" (версия приложения).
  */
 
@@ -34,7 +34,7 @@
     };
 
     /**
-     * Получить URL иконки для монеты
+     * Get URL иконки for монеты
      * @param {string} coinId - ID монеты (обычно из CoinGecko)
      * @param {string} fallbackUrl - URL иконки от провайдера (если на CDN не найдено)
      * @returns {string} - URL иконки
@@ -46,7 +46,7 @@
         const filename = CONFIG.aliasMap[coinId] || coinId;
 
         // 2. Формируем URL нашего CDN
-        // Добавляем соль (версию приложения) для обхода кэша GitHub Pages
+        // Добавляем соль (версию приложения) for обхода кэша GitHub Pages
         const salt = window.appConfig ? window.appConfig.getVersionHash() : Date.now();
         const cdnUrl = `${CONFIG.cdnBaseUrl}${filename}.png?v=${salt}`;
 
@@ -63,12 +63,12 @@
         return !!localStorage.getItem('app_github_token');
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.iconManager = {
         getIconUrl,
         canEditIcons,
         CONFIG
     };
 
-    console.log('icon-manager.js: инициализирован');
+    console.log('icon-manager.js: initialized');
 })();

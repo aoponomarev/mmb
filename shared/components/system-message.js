@@ -1,25 +1,25 @@
 /**
  * ================================================================================================
- * SYSTEM MESSAGE - Единичное системное сообщение (SSOT для шаблона)
+ * SYSTEM MESSAGE - Единичное системное сообщение (SSOT for шаблона)
  * ================================================================================================
  *
- * ЦЕЛЬ: Единый источник правды для отображения одного системного сообщения.
- * Используется компонентом cmp-system-messages для рендеринга каждого сообщения.
+ * PURPOSE: SSOT for отображения одного системного сообщения.
+ * Используется компонентом cmp-system-messages for рендеринга каждого сообщения.
  *
- * ПРИНЦИПЫ:
- * - Единый шаблон для всех типов сообщений (danger, warning, info, success)
+ * PRINCIPLES:
+ * - Единый шаблон for всех типов сообщений (danger, warning, info, success)
  * - Mapping типов в Bootstrap классы
  * - Поддержка actions (кнопки действий)
  * - Эмиты событий вместо прямых вызовов
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * <cmp-system-message
  *     :message="messageObject"
  *     @dismiss="handleDismiss"
  *     @action="handleAction"
  * />
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Родительский компонент: shared/components/system-messages.js
  * - Хранилище: shared/utils/messages-store.js
  * - Конфигурация: core/config/messages-config.js
@@ -29,7 +29,7 @@
     'use strict';
 
     if (!window.Vue) {
-        console.error('system-message.js: Vue.js не загружен');
+        console.error('system-message.js: Vue.js not loaded');
         return;
     }
 
@@ -87,14 +87,14 @@
 
         data() {
             return {
-                // Tick для принудительного пересчета computed при смене языка
+                // Tick for принудительного пересчета computed при смене языка
                 _translationTick: 0,
                 _onLanguageChanged: null
             };
         },
 
         mounted() {
-            // Подписываемся на изменения языка для принудительного пересчета computed
+            // Подписываемся на изменения языка for принудительного пересчета computed
             this._onLanguageChanged = () => {
                 this._translationTick++;
             };
@@ -109,7 +109,7 @@
 
         computed: {
             /**
-             * CSS классы для сообщения
+             * CSS классы for сообщения
              * @returns {Array<string>}
              */
             messageClasses() {
@@ -131,11 +131,11 @@
 
             /**
              * Переведенный текст сообщения с подставленными параметрами
-             * Единый источник правды: использует messagesTranslator для перевода
+             * SSOT: использует messagesTranslator for перевода
              * @returns {string}
              */
             translatedText() {
-                // Принудительная зависимость от _translationTick для пересчета при смене языка
+                // Принудительная зависимость от _translationTick for пересчета при смене языка
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._translationTick;
 
@@ -153,11 +153,11 @@
 
             /**
              * Переведенные детали сообщения с подставленными параметрами
-             * Единый источник правды: использует messagesTranslator для перевода
+             * SSOT: использует messagesTranslator for перевода
              * @returns {string|null}
              */
             translatedDetails() {
-                // Принудительная зависимость от _translationTick для пересчета при смене языка
+                // Принудительная зависимость от _translationTick for пересчета при смене языка
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._translationTick;
 
@@ -176,7 +176,7 @@
 
         methods: {
             /**
-             * Получить Bootstrap класс для типа сообщения
+             * Get Bootstrap класс for типа сообщения
              * @param {string} type - тип сообщения (danger|warning|info|success)
              * @returns {string} - Bootstrap класс alert-*
              */
@@ -191,7 +191,7 @@
             },
 
             /**
-             * Получить класс кнопки для действия
+             * Get класс кнопки for действия
              * @param {Object} action - объект действия
              * @returns {string} - классы Bootstrap кнопки
              */
@@ -217,7 +217,7 @@
         }
     };
 
-    // Экспортируем компонент в window для регистрации в app-ui-root
+    // Экспортируем компонент в window for регистрации в app-ui-root
     window.cmpSystemMessage = cmpSystemMessage;
 
 })();

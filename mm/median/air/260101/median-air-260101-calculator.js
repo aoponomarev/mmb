@@ -5,7 +5,7 @@
  * Skill: core/skills/domain-portfolio
  * Doc: docs/A_MATH_MODELS.md
  *
- * ЦЕЛЬ: Зафиксировать текущую рабочую модель как версию Median/AIR/260101.
+ * PURPOSE: Зафиксировать текущую рабочую модель как версию Median/AIR/260101.
  * AGR clamped to [-agrLimit, agrLimit]. Empty PV arrays guarded.
  * CGR slope division-by-zero guarded (dt === 0).
  */
@@ -58,11 +58,11 @@
             const cmd = this.calculateCMD(marketMedians, prcWeights, hDays);
             const marketFactor = this.calculateMarketFactor(indicators);
 
-            // 2. Поиск BTC для корреляции
+            // 2. Поиск BTC for корреляции
             const btcCoin = coins.find(c => c.ticker?.toLowerCase() === 'btc');
             const btcPvs = btcCoin ? (btcCoin.pvs || [btcCoin.PV1h, btcCoin.PV24h, btcCoin.PV7d, btcCoin.PV14d, btcCoin.PV30d, btcCoin.PV200d]) : null;
 
-            // 3. Первый проход: Базовые метрики
+            // 3. Первый проход: Базовые metrics
             const enrichedCoins = coins.map(coin => {
                 const metrics = coin.metrics || {};
                 const pvs = coin.pvs || [coin.PV1h, coin.PV24h, coin.PV7d, coin.PV14d, coin.PV30d, coin.PV200d];

@@ -3,14 +3,14 @@
  * PORTFOLIOS MANAGER COMPONENT - Компонент управления портфелями
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-компонент для управления портфелями пользователя через Cloudflare API.
+ * PURPOSE: Vue-компонент for managing портфелями пользователя через Cloudflare API.
  *
  * Skill: core/skills/domain-portfolio
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Список портфелей пользователя (загрузка через portfolios-client)
  * - Создание/редактирование/удаление портфелей
- * - Модальное окно для создания/редактирования
+ * - Модальное окно for создания/редактирования
  * - Проверка авторизации перед загрузкой данных
  *
  * API КОМПОНЕНТА:
@@ -22,7 +22,7 @@
  * - portfolio-updated — эмитируется после обновления портфеля
  * - portfolio-deleted — эмитируется после удаления портфеля
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: app/templates/portfolios-manager-template.js
  * - API клиент: core/api/cloudflare/portfolios-client.js
  * - Конфигурация модальных окон: core/config/modals-config.js
@@ -90,7 +90,7 @@ window.portfoliosManager = {
         async loadPortfolios() {
             try {
                 if (!window.portfoliosClient) {
-                    console.error('portfolios-manager: portfoliosClient не загружен');
+                    console.error('portfolios-manager: portfoliosClient not loaded');
                     return;
                 }
 
@@ -108,7 +108,7 @@ window.portfoliosManager = {
         },
 
         /**
-         * Открытие модального окна для создания портфеля
+         * Открытие модального окна for создания портфеля
          */
         openCreateModal() {
             this.isEditing = false;
@@ -132,13 +132,13 @@ window.portfoliosManager = {
         },
 
         /**
-         * Открытие модального окна для редактирования портфеля
-         * @param {Object} portfolio - Портфель для редактирования
+         * Открытие модального окна for редактирования портфеля
+         * @param {Object} portfolio - Портфель for редактирования
          */
         openEditModal(portfolio) {
             this.isEditing = true;
             this.editingPortfolioId = portfolio.id;
-            // Глубокое копирование assets для предотвращения мутаций оригинальных данных
+            // Глубокое копирование assets for предотвращения мутаций оригинальных данных
             const assetsCopy = portfolio.assets && Array.isArray(portfolio.assets)
                 ? portfolio.assets.map(asset => ({ ...asset }))
                 : [];
@@ -147,7 +147,7 @@ window.portfoliosManager = {
                 description: portfolio.description || '',
                 assets: assetsCopy,
             };
-            // Сохраняем исходные данные для восстановления при отмене
+            // Сохраняем исходные данные for восстановления при отмене
             this.initialFormData = {
                 name: portfolio.name || '',
                 description: portfolio.description || '',
@@ -172,7 +172,7 @@ window.portfoliosManager = {
 
         /**
          * Подтверждение удаления портфеля
-         * @param {Object} portfolio - Портфель для удаления
+         * @param {Object} portfolio - Портфель for удаления
          */
         confirmDelete(portfolio) {
             this.deletePortfolio(portfolio.id);
@@ -185,7 +185,7 @@ window.portfoliosManager = {
         async deletePortfolio(portfolioId) {
             try {
                 if (!window.portfoliosClient) {
-                    throw new Error('portfoliosClient не загружен');
+                    throw new Error('portfoliosClient not loaded');
                 }
 
                 this.isLoading = true;
@@ -195,7 +195,7 @@ window.portfoliosManager = {
                 this.successMessage = 'Портфель успешно удалён';
                 this.$emit('portfolio-deleted', portfolioId);
 
-                // Перезагружаем список портфелей
+                // Перезагружаем list portfolios
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.deletePortfolio error:', error);
@@ -215,7 +215,7 @@ window.portfoliosManager = {
         async handleSave(name, description, assets) {
             try {
                 if (!window.portfoliosClient) {
-                    throw new Error('portfoliosClient не загружен');
+                    throw new Error('portfoliosClient not loaded');
                 }
 
                 this.isLoading = true;
@@ -253,7 +253,7 @@ window.portfoliosManager = {
                     assets: (savedPortfolio.assets || []).map(asset => ({ ...asset })),
                 };
 
-                // Перезагружаем список портфелей
+                // Перезагружаем list portfolios
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.handleSave error:', error);
@@ -281,7 +281,7 @@ window.portfoliosManager = {
         },
 
         /**
-         * Форматирование даты для отображения
+         * Форматирование даты for отображения
          * @param {string} dateString - Дата в формате ISO
          * @returns {string}
          */

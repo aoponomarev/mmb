@@ -3,11 +3,11 @@
  * NORMALIZER - Нормализация данных к единому формату
  * ================================================================================================
  *
- * ЦЕЛЬ: Приводить данные из разных источников к единому формату.
+ * PURPOSE: Приводить данные из разных источников к единому формату.
  * Нормализация API-ответов, временных рядов, портфелей.
  * Skill: core/skills/domain-portfolio
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Единый формат независимо от источника
  * - Сохранение всех данных при нормализации
  * - Обратная совместимость
@@ -65,7 +65,7 @@
 
     /**
      * Нормализовать метрику рынка
-     * @param {Object} metric - данные метрики
+     * @param {Object} metric - данные metrics
      * @returns {Object} - нормализованная метрика
      */
     function normalizeMarketMetric(metric) {
@@ -76,7 +76,7 @@
         };
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.normalizer = {
         normalizeCoinGeckoCoin,
         normalizeCoinGeckoCoins,
@@ -84,6 +84,6 @@
         normalizeMarketMetric
     };
 
-    console.log('normalizer.js: инициализирован');
+    console.log('normalizer.js: initialized');
 })();
 

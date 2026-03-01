@@ -3,11 +3,11 @@
  * MESSAGES CONFIG - Конфигурация системных сообщений (v2 - упрощённая схема)
  * ================================================================================================
  *
- * ЦЕЛЬ: Единый источник правды для всех системных сообщений в приложении.
+ * PURPOSE: SSOT for всех системных сообщений в приложении.
  * Исходные тексты на русском языке (базовый язык).
  * Skill: core/skills/config-contracts
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Короткие ключи: e.net, e.rate, w.proxy, i.switch, s.ok
  * - Короткие типы: d (danger), w (warning), i (info), s (success)
  * - Минимальная структура: { t: text, d: details, type, p: priority }
@@ -21,11 +21,11 @@
  * - v.* - валидация (validation)
  * - a.* - авторизация (auth)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * window.messagesConfig.get('e.net')
  * window.messagesConfig.get('e.rate', { time: '5 минут' })
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Принципы единого источника правды: app/skills/ux-principles
  * - Модуль перевода: core/api/messages-translator.js
  */
@@ -100,7 +100,7 @@
             type: 'd'
         },
         'e.quota': {
-            t: 'Недостаточно места для сохранения данных',
+            t: 'Недостаточно места for сохранения данных',
             type: 'w'
         },
         'e.unknown': {
@@ -150,7 +150,7 @@
             type: 's'
         },
         'h.mod': {
-            t: 'Модуль {name} не загружен',
+            t: 'Модуль {name} not loaded',
             type: 'd'
         },
 
@@ -181,7 +181,7 @@
             type: 'd'
         },
         'a.logout': {
-            t: 'Ошибка при выходе из системы',
+            t: 'Ошибка при logoutе из системы',
             type: 'd'
         },
 
@@ -201,7 +201,7 @@
 
         // === AI API (ai.*) ===
         'ai.key': {
-            t: 'API ключ для {provider} не настроен',
+            t: 'API ключ for {provider} not configured',
             d: 'Откройте настройки "AI API"',
             type: 'w'
         },
@@ -219,7 +219,7 @@
     };
 
     /**
-     * Маппинг старых ключей на новые (для обратной совместимости)
+     * Маппинг старых ключей на новые (for обратной совместимости)
      */
     const LEGACY_KEY_MAP = {
         'error.api.network': 'e.net',
@@ -258,7 +258,7 @@
     };
 
     /**
-     * Реестр действий для кнопок в сообщениях
+     * Реестр действий for кнопок в сообщениях
      */
     const ACTIONS = {
         'retry': {
@@ -310,7 +310,7 @@
     /**
      * Заменить плейсхолдеры в тексте
      * @param {string} text - текст с плейсхолдерами {name}
-     * @param {Object} params - параметры для замены
+     * @param {Object} params - параметры for замены
      * @returns {string} - текст с заменёнными плейсхолдерами
      */
     function replacePlaceholders(text, params = {}) {
@@ -323,7 +323,7 @@
     }
 
     /**
-     * Получить полный тип из короткого
+     * Get полный тип из короткого
      * @param {string} shortType - короткий тип (d, w, i, s)
      * @returns {string} - полный тип (danger, warning, info, success)
      */
@@ -332,7 +332,7 @@
     }
 
     /**
-     * Получить приоритет из короткого типа
+     * Get приоритет из короткого типа
      * @param {string} shortType - короткий тип (d, w, i, s)
      * @returns {number} - приоритет (1-4)
      */
@@ -341,9 +341,9 @@
     }
 
     /**
-     * Получить сообщение по ключу
+     * Get сообщение по ключу
      * @param {string} key - ключ сообщения (новый или legacy)
-     * @param {Object} params - параметры для замены плейсхолдеров
+     * @param {Object} params - параметры for замены плейсхолдеров
      * @returns {Object} - { text, details?, type, priority, key }
      */
     function get(key, params = {}) {
@@ -374,7 +374,7 @@
     }
 
     /**
-     * Получить сообщение по ключу (alias для обратной совместимости)
+     * Get сообщение по ключу (alias for обратной совместимости)
      * @deprecated Используйте get() вместо getMessage()
      */
     function getMessage(key, params = {}) {
@@ -382,7 +382,7 @@
     }
 
     /**
-     * Получить действие по ключу
+     * Get действие по ключу
      * @param {string} key - ключ действия
      * @returns {Object|null} - { label, kind, handler } или null
      */
@@ -408,7 +408,7 @@
     }
 
     /**
-     * Получить все ключи сообщений
+     * Get все ключи сообщений
      * @returns {string[]} - массив ключей
      */
     function getAllKeys() {
@@ -416,7 +416,7 @@
     }
 
     /**
-     * Получить все сообщения для перевода
+     * Get все сообщения for перевода
      * @returns {Object} - { key: { t, d } }
      */
     function getAllForTranslation() {
@@ -431,7 +431,7 @@
     }
 
     /**
-     * Инициализировать сообщения (заглушка для обратной совместимости)
+     * Инициализировать сообщения (заглушка for обратной совместимости)
      * @param {string} language - язык (игнорируется)
      * @returns {Promise<void>}
      */
@@ -439,7 +439,7 @@
         return Promise.resolve();
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.messagesConfig = {
         // Новый API
         get,

@@ -1,24 +1,24 @@
 /**
  * ================================================================================================
- * DRAFT COIN SET - Утилита для работы с локальным набором "Draft"
+ * DRAFT COIN SET - Утилита for работы с локальным набором "Draft"
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Управление локальным набором монет "Draft", который хранится только в localStorage
+ * PURPOSE: Управление локальным набором монет "Draft", который хранится только в localStorage
  * и позволяет перебрасывать наборы между аккаунтами пользователей на одном устройстве.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Хранится только в localStorage (не синхронизируется с D1)
  * - Доступен всем пользователям на устройстве
  * - Автоматически загружается при старте приложения
  * - Может быть обновлен из любого аккаунта
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const draftSet = window.draftCoinSet.get();
  * window.draftCoinSet.save(coinIds, coinsData);
  * window.draftCoinSet.clear();
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Coin Sets: app/components/coin-set-load-modal-body.js
  */
 
@@ -54,7 +54,7 @@
     }
 
     /**
-     * Получить набор "Draft" из localStorage
+     * Get набор "Draft" из localStorage
      * @returns {Object|null} Набор монет или null
      */
     function getDraftSet() {
@@ -105,7 +105,7 @@
     /**
      * Сохранить набор "Draft" в localStorage
      * @param {Array<string>} coinIds - Массив ID монет
-     * @param {Array<Object>|null} coinsData - Полные данные монет (опционально)
+     * @param {Array<Object>|null} coinsData - Полные данные монет (optional)
      */
     function saveDraftSet(coinIds, coinsData = null) {
         try {
@@ -127,13 +127,13 @@
 
     /**
      * Инициализировать набор "Draft" (если еще не существует)
-     * @param {Array<string>} defaultCoinIds - Массив ID монет по умолчанию (опционально, по умолчанию пустой массив)
+     * @param {Array<string>} defaultCoinIds - Массив ID монет по умолчанию (optional, по умолчанию пустой массив)
      */
     function initializeDraftSet(defaultCoinIds = []) {
         const existing = getDraftSet();
         if (!existing || existing.coin_ids.length === 0) {
             saveDraftSet(defaultCoinIds || []);
-            console.log('✅ Draft набор инициализирован:', defaultCoinIds.length || 0, 'монет');
+            console.log('✅ Draft набор initialized:', defaultCoinIds.length || 0, 'монет');
         }
     }
 
@@ -149,7 +149,7 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.draftCoinSet = {
         get: getDraftSet,
         save: saveDraftSet,

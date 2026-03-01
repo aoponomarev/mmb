@@ -1,50 +1,35 @@
 /**
  * ================================================================================================
- * AUTH CONFIG - Конфигурация авторизации Google OAuth
+ * AUTH CONFIG - Google OAuth authorization configuration
  * ================================================================================================
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ЦЕЛЬ: Единый источник правды для всех параметров Google OAuth авторизации.
- * Client ID, redirect URIs, scopes, endpoints.
+ * PURPOSE: SSOT for all Google OAuth parameters. Client ID, redirect URIs, scopes, endpoints.
  *
- * ПРИНЦИПЫ:
- * - Все параметры OAuth определяются здесь и используются везде
- * - Запрещено дублировать значения в компонентах или API клиентах
- * - Использовать функции-геттеры вместо прямого доступа к CONFIG
- * - Проверка наличия конфигурации при инициализации
+ * PRINCIPLES:
+ * - All OAuth parameters are defined here and used everywhere
+ * - Duplicating values in components or API clients is forbidden
+ * - Use getter functions instead of direct CONFIG access
+ * - Validate configuration presence at initialization
  *
- * ПРИНЦИПЫ:
- * {
- *   google: {
- *     clientId: '...',
- *     redirectUris: {
- *       local: '...',
- *       production: '...'
- *     },
- *     scopes: [...],
- *     authUrl: '...',
- *     tokenUrl: '...'
- *   }
- * }
- *
- * ССЫЛКИ:
- * - Принципы единого источника правды: app/skills/ux-principles
- * - План интеграции: core/skills/config-contracts
- * - Cloudflare инфраструктура: core/skills/config-contracts
+ * REFERENCES:
+ * - SSOT principles: app/skills/ux-principles
+ * - Integration plan: core/skills/config-contracts
+ * - Cloudflare infrastructure: core/skills/config-contracts
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация авторизации
+     * Authorization configuration
      */
     const CONFIG = {
         google: {
             // Google OAuth Client ID
             clientId: '926359695878-hr94rhkq1s30c3nqgkcbfcpr0537kt7i.apps.googleusercontent.com',
 
-            // Redirect URIs для разных окружений
+            // Redirect URIs per environment
             redirectUris: {
                 local: 'http://localhost:8787/auth/callback',
                 // @exception anti-calque: live Google OAuth redirect URI registered in Google Console.
@@ -52,7 +37,7 @@
                 production: 'https://mbb-api.ponomarev-ux.workers.dev/auth/callback'
             },
 
-            // OAuth scopes (права доступа)
+            // OAuth scopes (access rights)
             scopes: [
                 'openid',
                 'https://www.googleapis.com/auth/userinfo.email',
@@ -63,14 +48,13 @@
             authUrl: 'https://accounts.google.com/o/oauth2/auth',
             tokenUrl: 'https://oauth2.googleapis.com/token',
 
-            // Определение текущего окружения (local или production)
-            // Можно переопределить через setEnvironment()
+            // Current environment (local or production). Override via setEnvironment()
             environment: window.location.hostname === 'localhost' ? 'local' : 'production'
         }
     };
 
     /**
-     * Получить Google OAuth Client ID
+     * Get Google OAuth Client ID
      * @returns {string} Client ID
      */
     function getGoogleClientId() {
@@ -78,8 +62,8 @@
     }
 
     /**
-     * Получить redirect URI для текущего окружения
-     * @param {string} env - Окружение ('local' | 'production'), если не указано - определяется автоматически
+     * Get redirect URI for current environment
+     * @param {string} env - Environment ('local' | 'production'), auto-detected if omitted
      * @returns {string} Redirect URI
      */
     function getRedirectUri(env = null) {
@@ -88,26 +72,26 @@
     }
 
     /**
-     * Получить массив OAuth scopes
-     * @returns {Array<string>} Массив scopes
+     * Get OAuth scopes array
+     * @returns {Array<string>} Scopes array
      */
     function getScopes() {
         return [...CONFIG.google.scopes];
     }
 
     /**
-     * Получить строку scopes для URL (через пробел)
-     * @returns {string} Scopes строка
+     * Get scopes string for URL (space-separated)
+     * @returns {string} Scopes string
      */
     function getScopesString() {
         return CONFIG.google.scopes.join(' ');
     }
 
     /**
-     * Получить URL для инициации OAuth авторизации
-     * @param {string} state - State параметр для защиты от CSRF
-     * @param {string} env - Окружение ('local' | 'production')
-     * @returns {string} Полный URL для редиректа на Google OAuth
+     * Get URL to initiate OAuth authorization
+     * @param {string} state - State parameter for CSRF protection
+     * @param {string} env - Environment ('local' | 'production')
+     * @returns {string} Full URL for redirect to Google OAuth
      */
     function getAuthUrl(state, env = null) {
         const redirectUri = getRedirectUri(env);
@@ -126,7 +110,7 @@
     }
 
     /**
-     * Получить URL для обмена code на токен
+     * Get URL for code-to-token exchange
      * @returns {string} Token URL
      */
     function getTokenUrl() {
@@ -134,19 +118,19 @@
     }
 
     /**
-     * Установить окружение вручную
+     * Set environment manually
      * @param {string} env - 'local' | 'production'
      */
     function setEnvironment(env) {
         if (env === 'local' || env === 'production') {
             CONFIG.google.environment = env;
         } else {
-            console.warn('auth-config.setEnvironment: неверное окружение, используйте "local" или "production"');
+            console.warn('auth-config.setEnvironment: invalid environment, use "local" or "production"');
         }
     }
 
     /**
-     * Получить текущее окружение
+     * Get current environment
      * @returns {string} 'local' | 'production'
      */
     function getEnvironment() {
@@ -154,8 +138,8 @@
     }
 
     /**
-     * Проверить, что конфигурация инициализирована корректно
-     * @returns {boolean} true если конфигурация валидна
+     * Check that configuration is initialized correctly
+     * @returns {boolean} true if configuration is valid
      */
     function isValid() {
         return !!(
@@ -166,12 +150,12 @@
         );
     }
 
-    // Проверка при инициализации
+    // Validation at initialization
     if (!isValid()) {
-        console.error('auth-config.js: Конфигурация невалидна! Проверьте параметры.');
+        console.error('auth-config.js: Invalid configuration! Check parameters.');
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.authConfig = {
         CONFIG,
         getGoogleClientId,
@@ -185,5 +169,5 @@
         isValid
     };
 
-    console.log('auth-config.js: инициализирован');
+    console.log('auth-config.js: initialized');
 })();

@@ -4,11 +4,11 @@
  * ================================================================================================
  * Skill: core/skills/domain-portfolio
  *
- * ЦЕЛЬ: Определить структуру и типы данных для всех источников данных приложения.
+ * PURPOSE: Определить структуру и типы данных for всех источников данных приложения.
  * Валидация API-ответов, временных рядов, портфелей и стратегий.
  * Skill: core/skills/domain-portfolio
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Строгая валидация финансовых данных
  * - Нормализация к единому формату
  * - Проверка типов и диапазонов значений
@@ -20,7 +20,7 @@
     'use strict';
 
     /**
-     * Схемы валидации для разных типов данных
+     * Схемы валидации for разных типов данных
      */
     const SCHEMAS = {
         // CoinGecko API ответы
@@ -92,7 +92,7 @@
     };
 
     /**
-     * Получить схему по имени
+     * Get схему по имени
      * @param {string} schemaName - имя схемы
      * @returns {Object|null} - схема или null
      */
@@ -100,12 +100,12 @@
         return SCHEMAS[schemaName] || null;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.validationSchemas = {
         SCHEMAS,
         getSchema
     };
 
-    console.log('validation-schemas.js: инициализирован');
+    console.log('validation-schemas.js: initialized');
 })();
 

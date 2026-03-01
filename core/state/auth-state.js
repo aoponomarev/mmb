@@ -3,22 +3,22 @@
  * AUTH STATE - Единая система состояния авторизации
  * ================================================================================================
  *
- * ЦЕЛЬ: Централизованное управление состоянием авторизации для синхронизации между всеми компонентами.
+ * PURPOSE: Централизованное управление состоянием авторизации for синхронизации между всеми компонентами.
  * Все экземпляры компонентов авторизации используют единый источник правды.
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды для состояния авторизации
+ * PRINCIPLES:
+ * - SSOT for состояния авторизации
  * - Реактивность через Vue reactive API
- * - Синхронизация через eventBus для оповещения всех подписчиков
+ * - Синхронизация через eventBus for оповещения всех подписчиков
  * - Автоматическое обновление всех компонентов при изменении состояния
  *
- * ИСПОЛЬЗОВАНИЕ:
- * const authState = window.authState.getState(); // Получить reactive объект
- * window.authState.setAuthState(true, userData); // Установить состояние авторизации
+ * USAGE:
+ * const authState = window.authState.getState(); // Get reactive объект
+ * window.authState.setAuthState(true, userData); // Set состояние авторизации
  * window.authState.clearAuthState(); // Очистить состояние авторизации
- * window.authState.setLoading(true); // Установить состояние загрузки
+ * window.authState.setLoading(true); // Set состояние загрузки
  *
  * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
@@ -28,7 +28,7 @@
 
     // Проверяем доступность Vue
     if (!window.Vue) {
-        console.error('auth-state.js: Vue не загружен');
+        console.error('auth-state.js: Vue not loaded');
         return;
     }
 
@@ -44,7 +44,7 @@
     });
 
     /**
-     * Установить состояние авторизации
+     * Set состояние авторизации
      * @param {boolean} isAuthenticated - статус авторизации
      * @param {Object|null} user - данные пользователя (name, email, picture и т.д.)
      */
@@ -53,7 +53,7 @@
         authState.user = user;
         authState.lastUpdated = Date.now();
 
-        // Эмит события через eventBus (если доступен) для компонентов, которые не используют реактивное состояние напрямую
+        // Эмит события через eventBus (если доступен) for компонентов, которые не используют реактивное состояние напрямую
         if (window.eventBus) {
             window.eventBus.emit('auth-state-changed', {
                 isAuthenticated: authState.isAuthenticated,
@@ -69,7 +69,7 @@
     }
 
     /**
-     * Установить состояние загрузки
+     * Set состояние загрузки
      * @param {boolean} isLoading - идет ли загрузка
      */
     function setLoading(isLoading) {
@@ -99,7 +99,7 @@
     }
 
     /**
-     * Получить реактивный объект состояния авторизации
+     * Get реактивный объект состояния авторизации
      * @returns {Object} - реактивный объект { isAuthenticated, isLoading, user, lastUpdated }
      */
     function getState() {
@@ -112,7 +112,7 @@
      */
     async function checkAuthStatus() {
         if (!window.authClient) {
-            console.warn('auth-state.checkAuthStatus: authClient не загружен');
+            console.warn('auth-state.checkAuthStatus: authClient not loaded');
             return false;
         }
 
@@ -138,7 +138,7 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.authState = {
         getState,
         setAuthState,
@@ -147,5 +147,5 @@
         checkAuthStatus
     };
 
-    console.log('auth-state.js: инициализирован');
+    console.log('auth-state.js: initialized');
 })();

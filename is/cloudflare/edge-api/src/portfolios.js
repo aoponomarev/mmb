@@ -1,19 +1,19 @@
 /**
  * ================================================================================================
- * PORTFOLIOS ENDPOINTS - API для работы с портфелями
+ * PORTFOLIOS ENDPOINTS - API for работы с портфелями
  * ================================================================================================
  *
- * ЦЕЛЬ: CRUD операции для портфелей пользователя.
+ * PURPOSE: CRUD операции for портфелей пользователя.
  * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
- * - GET /api/portfolios — список портфелей пользователя (из D1)
- * - GET /api/portfolios/:id — получение портфеля по ID (из D1)
- * - POST /api/portfolios — создание портфеля (сохранение в D1)
- * - PUT /api/portfolios/:id — обновление портфеля
- * - DELETE /api/portfolios/:id — удаление портфеля
+ * - GET /api/portfolios — list portfolios пользователя (из D1)
+ * - GET /api/portfolios/:id — get portfolio по ID (из D1)
+ * - POST /api/portfolios — create portfolio (сохранение в D1)
+ * - PUT /api/portfolios/:id — update portfolio
+ * - DELETE /api/portfolios/:id — delete portfolio
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { handlePortfolios } from './portfolios.js';
  *
  * if (path.startsWith('/api/portfolios')) {
@@ -33,9 +33,9 @@ import {
 
 /**
  * Получение списка портфелей пользователя
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON ответ со списком портфелей
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
+ * @returns {Promise<Response>} JSON response со списком портфелей
  */
 async function handleList(request, env) {
   if (request.method !== 'GET') {
@@ -59,10 +59,10 @@ async function handleList(request, env) {
 
 /**
  * Получение портфеля по ID
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
  * @param {string} portfolioId - ID портфеля
- * @returns {Promise<Response>} JSON ответ с портфелем
+ * @returns {Promise<Response>} JSON response с портфелем
  */
 async function handleGet(request, env, portfolioId) {
   if (request.method !== 'GET') {
@@ -102,9 +102,9 @@ async function handleGet(request, env, portfolioId) {
 
 /**
  * Создание портфеля
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON ответ с созданным портфелем
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
+ * @returns {Promise<Response>} JSON response с созданным портфелем
  */
 async function handleCreate(request, env) {
   if (request.method !== 'POST') {
@@ -158,10 +158,10 @@ async function handleCreate(request, env) {
 
 /**
  * Обновление портфеля
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
  * @param {string} portfolioId - ID портфеля
- * @returns {Promise<Response>} JSON ответ с обновлённым портфелем
+ * @returns {Promise<Response>} JSON response с обновлённым портфелем
  */
 async function handleUpdate(request, env, portfolioId) {
   if (request.method !== 'PUT') {
@@ -208,10 +208,10 @@ async function handleUpdate(request, env, portfolioId) {
 
 /**
  * Удаление портфеля
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
  * @param {string} portfolioId - ID портфеля
- * @returns {Promise<Response>} JSON ответ
+ * @returns {Promise<Response>} JSON response
  */
 async function handleDelete(request, env, portfolioId) {
   if (request.method !== 'DELETE') {
@@ -243,9 +243,9 @@ async function handleDelete(request, env, portfolioId) {
 
 /**
  * Главный обработчик portfolios endpoints
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь запроса
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path запроса
  * @returns {Promise<Response>} HTTP ответ
  */
 export async function handlePortfolios(request, env, path) {

@@ -4,13 +4,13 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Предотвратить блокировку API из-за превышения лимитов запросов.
+ * PURPOSE: Предотвратить блокировку API из-за превышения лимитов запросов.
  * Адаптивные таймауты, очередь запросов, приоритизация.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Адаптивные таймауты (увеличение при 429, уменьшение при успехе)
  * - Очередь запросов с приоритизацией
- * - Обработка rate limiting для всех внешних API
+ * - Обработка rate limiting for всех внешних API
  *
  * ССЫЛКА: Критически важные структуры описаны в `is/skills/arch-foundation`
  */
@@ -22,7 +22,7 @@
     // - core/config/api-config.js (window.apiConfig)
 
     /**
-     * Адаптивный таймаут для запросов
+     * Адаптивный таймаут for запросов
      */
     const adaptiveTimeout = {
         base: 300,        // 300ms базовое значение
@@ -69,7 +69,7 @@
     }
 
     /**
-     * Получить текущий таймаут
+     * Get текущий таймаут
      * @returns {number} - таймаут в миллисекундах
      */
     function getTimeout() {
@@ -147,7 +147,7 @@
         requestQueue.processing = false;
     }
 
-    // Экспорт в глобальную область (старый API для обратной совместимости)
+    // Export to global scope (старый API for обратной совместимости)
     window.rateLimiter = {
         increaseTimeout,
         decreaseTimeout,
@@ -158,22 +158,22 @@
     };
 
     /**
-     * Класс RateLimiter для использования в новой архитектуре провайдеров
+     * Класс RateLimiter for использования в новой архитектуре провайдеров
      * Обертка над существующим функциональным API
      */
     class RateLimiter {
-        // Хранилище общих экземпляров для разных сервисов (ЕИП)
+        // Хранилище общих экземпляров for разных сервисов (ЕИП)
         static instances = new Map();
 
         /**
-         * Получить или создать именованный экземпляр RateLimiter (ЕИП)
+         * Get или создать именованный экземпляр RateLimiter (ЕИП)
          * @param {string} key - уникальный ключ (напр. 'coingecko')
          * @param {number} requestsPerMinute
          * @param {number} requestsPerSecond
          */
         static getOrCreate(key, requestsPerMinute = 50, requestsPerSecond = 10) {
             if (!RateLimiter.instances.has(key)) {
-                console.log(`rate-limiter: создан новый именованный экземпляр для "${key}"`);
+                console.log(`rate-limiter: создан новый именованный экземпляр for "${key}"`);
                 RateLimiter.instances.set(key, new RateLimiter(requestsPerMinute, requestsPerSecond));
             }
             return RateLimiter.instances.get(key);
@@ -187,7 +187,7 @@
         }
 
         /**
-         * Ожидание доступности токена для запроса
+         * Ожидание доступности токена for запроса
          * @returns {Promise<void>}
          */
         async waitForToken() {
@@ -214,7 +214,7 @@
         }
 
         /**
-         * Прокси-метод для функционального API (совместимость)
+         * Прокси-метод for функционального API (совместимость)
          */
         async waitBeforeRequest() {
             await this.waitForToken();
@@ -235,8 +235,8 @@
         }
     }
 
-    // Экспорт класса для новой архитектуры
+    // Экспорт класса for новой архитектуры
     window.RateLimiter = RateLimiter;
 
-    console.log('✅ rate-limiter.js: инициализирован (функциональный API + класс RateLimiter + ЕИП менеджер)');
+    console.log('✅ rate-limiter.js: initialized (функциональный API + класс RateLimiter + ЕИП менеджер)');
 })();

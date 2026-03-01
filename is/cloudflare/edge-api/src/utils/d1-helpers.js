@@ -1,19 +1,19 @@
 /**
  * ================================================================================================
- * D1 HELPERS - Утилиты для работы с D1 базой данных
+ * D1 HELPERS - Утилиты for работы с D1 базой данных
  * ================================================================================================
  *
- * ЦЕЛЬ: Хелперы для работы с D1 (users, portfolios, rebalances).
- * Абстракция над SQL запросами для упрощения работы с базой данных.
+ * PURPOSE: Хелперы for работы с D1 (users, portfolios, rebalances).
+ * Абстракция над SQL запросами for упрощения работы с базой данных.
  * Skill: core/skills/config-contracts
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Все функции возвращают Promise
  * - Обработка ошибок SQL запросов
- * - Транзакции для атомарных операций
+ * - Транзакции for атомарных операций
  * - Валидация данных перед сохранением
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { createUser, getUser, createPortfolio, getPortfolio } from './utils/d1-helpers.js';
  *
  * const user = await createUser(env.DB, { google_id: '...', email: '...' });
@@ -31,7 +31,7 @@ export async function createUser(db, userData) {
     const { google_id, email, name = null, picture = null } = userData;
 
     if (!google_id || !email) {
-      throw new Error('google_id и email обязательны для создания пользователя');
+      throw new Error('google_id и email обязательны for создания пользователя');
     }
 
     const result = await db
@@ -229,7 +229,7 @@ export async function getUserPortfolios(db, userId) {
       return [];
     }
 
-    // Парсинг JSON полей для каждого портфеля
+    // Парсинг JSON полей for каждого портфеля
     return result.results.map(portfolio => {
       if (portfolio.assets) {
         portfolio.assets = JSON.parse(portfolio.assets);
@@ -246,7 +246,7 @@ export async function getUserPortfolios(db, userId) {
  * Обновление портфеля
  * @param {D1Database} db - D1 база данных
  * @param {number} portfolioId - ID портфеля
- * @param {number} userId - ID пользователя (для проверки прав доступа)
+ * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @param {Object} updates - Обновляемые поля { name, description, assets }
  * @returns {Promise<Object|null>} Обновлённый портфель или null
  */
@@ -302,7 +302,7 @@ export async function updatePortfolio(db, portfolioId, userId, updates) {
  * Удаление портфеля
  * @param {D1Database} db - D1 база данных
  * @param {number} portfolioId - ID портфеля
- * @param {number} userId - ID пользователя (для проверки прав доступа)
+ * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @returns {Promise<boolean>} Успех операции
  */
 export async function deletePortfolio(db, portfolioId, userId) {
@@ -326,7 +326,7 @@ export async function deletePortfolio(db, portfolioId, userId) {
 }
 
 // ================================================================================================
-// USER COIN SETS - Хелперы для работы с пользовательскими наборами монет
+// USER COIN SETS - Хелперы for работы с пользовательскими coin sets
 // ================================================================================================
 
 /**
@@ -412,11 +412,11 @@ export async function getCoinSet(db, coinSetId) {
 }
 
 /**
- * Получение списка наборов монет пользователя
+ * Получение списка sets монет пользователя
  * @param {D1Database} db - D1 база данных
  * @param {number} userId - ID пользователя
- * @param {boolean} activeOnly - Получить только активные наборы (по умолчанию все)
- * @returns {Promise<Array>} Массив наборов монет
+ * @param {boolean} activeOnly - Get только активные наборы (по умолчанию все)
+ * @returns {Promise<Array>} Sets array монет
  */
 export async function getUserCoinSets(db, userId, activeOnly = false) {
   try {
@@ -438,7 +438,7 @@ export async function getUserCoinSets(db, userId, activeOnly = false) {
       return [];
     }
 
-    // Парсинг JSON полей для каждого набора
+    // Парсинг JSON полей for каждого набора
     return result.results.map(coinSet => {
       if (coinSet.coin_ids) {
         coinSet.coin_ids = JSON.parse(coinSet.coin_ids);
@@ -455,7 +455,7 @@ export async function getUserCoinSets(db, userId, activeOnly = false) {
  * Обновление набора монет
  * @param {D1Database} db - D1 база данных
  * @param {number} coinSetId - ID набора монет
- * @param {number} userId - ID пользователя (для проверки прав доступа)
+ * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @param {Object} updates - Обновляемые поля { name, description, coin_ids, is_active, provider }
  * @returns {Promise<Object|null>} Обновлённый набор или null
  */
@@ -522,7 +522,7 @@ export async function updateCoinSet(db, coinSetId, userId, updates) {
  * Удаление набора монет
  * @param {D1Database} db - D1 база данных
  * @param {number} coinSetId - ID набора монет
- * @param {number} userId - ID пользователя (для проверки прав доступа)
+ * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @returns {Promise<boolean>} Успех операции
  */
 export async function deleteCoinSet(db, coinSetId, userId) {
@@ -549,8 +549,8 @@ export async function deleteCoinSet(db, coinSetId, userId) {
  * Архивирование/разархивирование набора монет
  * @param {D1Database} db - D1 база данных
  * @param {number} coinSetId - ID набора монет
- * @param {number} userId - ID пользователя (для проверки прав доступа)
- * @param {boolean} isActive - true = разархивировать, false = архивировать
+ * @param {number} userId - ID пользователя (for проверки прав доступа)
+ * @param {boolean} isActive - true = unarchive, false = archive
  * @returns {Promise<Object|null>} Обновлённый набор или null
  */
 export async function toggleCoinSetActive(db, coinSetId, userId, isActive) {

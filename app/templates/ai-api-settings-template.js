@@ -3,10 +3,10 @@
  * AI API SETTINGS TEMPLATE - Шаблон компонента настроек AI API провайдеров
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента настроек AI API провайдеров (ai-api-settings).
+ * PURPOSE: Шаблон for компонента настроек AI API провайдеров (ai-api-settings).
  * Провайдеры: GitHub, YandexGPT, PostgreSQL.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="ai-api-settings-template".
@@ -19,14 +19,14 @@
  *
  * ОСОБЕННОСТИ ШАБЛОНА:
  * Структура HTML:
- * - Radio buttons для выбора провайдера (GitHub, YandexGPT, PostgreSQL)
+ * - Radio buttons for выбора провайдера (GitHub, YandexGPT, PostgreSQL)
  * - Условное отображение полей настроек в зависимости от выбранного провайдера
  * - Поля ввода API ключей (password/text с переключателем видимости)
  * - Выбор моделей через select
  * - Компактный и аскетичный интерфейс
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: app/components/ai-api-settings.js
  */
 
@@ -185,7 +185,7 @@
                 v-model="apiBaseUrl"
                 placeholder="https://api.example.com">
             <small class="form-text text-muted mb-3 d-block">
-                Используется для health и будущих CRUD эндпоинтов.
+                Используется for health и будущих CRUD эндпоинтов.
             </small>
 
             <div class="d-flex align-items-center gap-2 mb-2">

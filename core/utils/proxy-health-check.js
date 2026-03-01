@@ -3,14 +3,14 @@
  * PROXY HEALTH CHECK - Проверка доступности прокси
  * ================================================================================================
  *
- * ЦЕЛЬ: Проверка доступности прокси перед переключением или использованием.
+ * PURPOSE: Проверка доступности прокси перед переключением или использованием.
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const isAvailable = await window.proxyHealthCheck.check(url);
  * const result = await window.proxyHealthCheck.checkWithDetails(url);
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация прокси: core/config/app-config.js
  */
 
@@ -54,11 +54,11 @@
             const startTime = Date.now();
 
             try {
-                // Используем AbortController для таймаута
+                // Используем AbortController for таймаута
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-                // Отправляем OPTIONS запрос (preflight) для проверки CORS
+                // Отправляем OPTIONS запрос (preflight) for проверки CORS
                 const response = await fetch(proxyUrl, {
                     method: 'OPTIONS',
                     signal: controller.signal,
@@ -70,7 +70,7 @@
                 clearTimeout(timeoutId);
                 const duration = Date.now() - startTime;
 
-                // Проверяем статус ответа (200 или 204 для OPTIONS)
+                // Проверяем статус ответа (200 или 204 for OPTIONS)
                 const isOk = response.status === 200 || response.status === 204;
 
                 // Проверяем наличие CORS заголовков
@@ -118,13 +118,13 @@
         }
 
         /**
-         * Проверить доступность всех прокси для провайдера
+         * Проверить доступность всех прокси for провайдера
          * @param {string} providerName - имя провайдера ('yandex')
          * @returns {Promise<Array<Object>>} Массив результатов проверки [{type, url, available, ...}]
          */
         async checkAllProxies(providerName) {
             if (!window.appConfig) {
-                console.error('proxy-health-check: appConfig не загружен');
+                console.error('proxy-health-check: appConfig not loaded');
                 return [];
             }
 
@@ -149,8 +149,8 @@
         }
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.proxyHealthCheck = new ProxyHealthCheck();
 
-    console.log('proxy-health-check.js: инициализирован');
+    console.log('proxy-health-check.js: initialized');
 })();

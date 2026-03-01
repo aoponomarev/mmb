@@ -1,39 +1,39 @@
 /**
  * ================================================================================================
- * COIN SETS CLIENT - Клиент для работы с API пользовательских наборов монет
+ * COIN SETS CLIENT - Client for user coin sets API
  * ================================================================================================
  *
- * ЦЕЛЬ: Взаимодействие с Cloudflare Workers API для управления наборами монет.
+ * PURPOSE: Interact with Cloudflare Workers API for managing coin sets.
  *
  * Skill: core/skills/config-contracts
  *
- * МЕТОДЫ:
- * - getCoinSets(activeOnly) - Получить список наборов пользователя
- * - getCoinSet(id) - Получить набор по ID
- * - createCoinSet(data) - Создать новый набор
- * - updateCoinSet(id, data) - Обновить набор
- * - deleteCoinSet(id) - Удалить набор
- * - toggleCoinSet(id, isActive) - Архивировать/разархивировать набор
+ * METHODS:
+ * - getCoinSets(activeOnly) - Get user coin sets list
+ * - getCoinSet(id) - Get set by ID
+ * - createCoinSet(data) - Create new set
+ * - updateCoinSet(id, data) - Update set
+ * - deleteCoinSet(id) - Delete set
+ * - toggleCoinSet(id, isActive) - Archive/unarchive set
  *
- * ЗАВИСИМОСТИ:
- * - authClient (для получения токена)
- * - cloudflareConfig (для получения API URL)
+ * DEPENDENCIES:
+ * - authClient (for token)
+ * - cloudflareConfig (for API URL)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const sets = await window.coinSetsClient.getCoinSets();
  * const newSet = await window.coinSetsClient.createCoinSet({ name: 'My Set', coin_ids: ['bitcoin'] });
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Workers API: cloud/cloudflare/workers/src/coin-sets.js
  * - D1 Helpers: cloud/cloudflare/workers/src/utils/d1-helpers.js
- * - Portfolios Client (аналогия): core/api/cloudflare/portfolios-client.js
+ * - Portfolios Client (analogy): core/api/cloudflare/portfolios-client.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Клиент для работы с API наборов монет
+     * Client for coin sets API
      */
     class CoinSetsClient {
         constructor() {
@@ -42,15 +42,15 @@
         }
 
         /**
-         * Инициализация базового URL
+         * Initialize base URL
          */
         init() {
             if (window.cloudflareConfig && window.cloudflareConfig.getWorkersBaseUrl) {
-                // Coin sets — защищенный API, должен использовать тот же origin, что и OAuth callback.
+                // Coin sets — protected API, must use same origin as OAuth callback.
                 this.baseUrl = window.cloudflareConfig.getAuthBaseUrl
                     ? window.cloudflareConfig.getAuthBaseUrl()
                     : window.cloudflareConfig.getWorkersBaseUrl();
-                console.log('coin-sets-client: cloudflareConfig загружен, используется защищенный URL:', this.baseUrl);
+                console.log('coin-sets-client: cloudflareConfig loaded, using protected URL:', this.baseUrl);
             } else {
                 // @exception anti-calque: legacy worker URL used as fallback until OAuth redirect migrated to app-api
                 console.warn('coin-sets-client: cloudflareConfig not loaded, using fallback URL');
@@ -70,33 +70,33 @@
                     }
                 }
             } catch (error) {
-                console.warn('coin-sets-client: не удалось определить auth origin, используется init baseUrl', error);
+                console.warn('coin-sets-client: failed to determine auth origin, using init baseUrl', error);
             }
             return this.baseUrl;
         }
 
         /**
-         * Получить токен авторизации
+         * Get auth token
          * @returns {Promise<string|null>}
          */
         async getAuthToken() {
             if (!window.authClient) {
-                throw new Error('authClient не загружен');
+                throw new Error('authClient not loaded');
             }
 
             const tokenData = await window.authClient.getAccessToken();
 
             if (!tokenData || !tokenData.access_token) {
-                throw new Error('Пользователь не авторизован');
+                throw new Error('User not authenticated');
             }
 
             return tokenData.access_token;
         }
 
         /**
-         * Получить список наборов монет пользователя
-         * @param {Object} options - Параметры фильтрации { activeOnly, type }
-         * @returns {Promise<Array>} Массив наборов монет
+         * Get user coin sets list
+         * @param {Object} options - Filter params { activeOnly, type }
+         * @returns {Promise<Array>} Coin sets array
          */
         async getCoinSets(options = {}) {
             const { activeOnly = false, type = null } = options;
@@ -133,7 +133,7 @@
         }
 
         /**
-         * Получить набор монет по ID
+         * Get набор монет по ID
          * @param {number} id - ID набора
          * @returns {Promise<Object>} Набор монет
          */
@@ -164,7 +164,7 @@
         }
 
         /**
-         * Создать новый набор монет
+         * Create new набор монет
          * @param {Object} coinSetData - Данные набора { name, description, coin_ids, is_active, provider, type }
          * @returns {Promise<Object>} Созданный набор
          */
@@ -196,7 +196,7 @@
         }
 
         /**
-         * Обновить набор монет
+         * Update набор монет
          * @param {number} id - ID набора
          * @param {Object} updates - Обновляемые поля
          * @returns {Promise<Object>} Обновлённый набор
@@ -229,7 +229,7 @@
         }
 
         /**
-         * Удалить набор монет
+         * Delete набор монет
          * @param {number} id - ID набора
          * @returns {Promise<boolean>} Успех операции
          */
@@ -259,9 +259,9 @@
         }
 
         /**
-         * Архивировать/разархивировать набор монет
+         * Archive/unarchive набор монет
          * @param {number} id - ID набора
-         * @param {boolean} isActive - true = разархивировать, false = архивировать
+         * @param {boolean} isActive - true = unarchive, false = archive
          * @returns {Promise<Object>} Обновлённый набор
          */
         async toggleCoinSet(id, isActive) {

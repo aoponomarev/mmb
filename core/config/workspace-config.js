@@ -7,7 +7,7 @@
      * ================================================================================================
      * Skill: core/skills/config-contracts
      *
-     * ЦЕЛЬ: Единый источник правды (ЕИП) для настроек рабочей зоны, включая основную таблицу.
+     * PURPOSE: SSOT (ЕИП) for настроек рабочей зоны, включая основную таблицу.
      * Хранит одну структуру workspace и сохраняет её в cacheManager (EI) с fallback на localStorage.
      *
      * WORKSPACE CONFIG - Централизованное хранилище настроек рабочей зоны
@@ -23,8 +23,8 @@
      *   }
      * }
      *
-     * ПРИНЦИПЫ:
-     * - ЕИП: все настройки workspace читаются/записываются только через workspaceConfig.
+     * PRINCIPLES:
+     * - ЕИП: all settings workspace читаются/записываются только через workspaceConfig.
      * - EI: cacheManager с fallback на localStorage. Без версионирования (пользовательские данные).
      * - Мерж: частичные обновления не затирают остальные поля.
      */
@@ -159,7 +159,7 @@
                     });
                 }
             } catch (storageError) {
-                console.error('workspace-config: fallback сохранение в localStorage не удалось', storageError);
+                console.error('workspace-config: fallback сохранение в localStorage failed to', storageError);
                 if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
                     window.fallbackMonitor.notify({
                         source: 'workspaceConfig.save',

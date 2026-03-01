@@ -3,9 +3,9 @@
  * CELL-NUM TEMPLATE - Шаблон компонента числовой ячейки
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента отображения форматированных числовых значений в таблице.
+ * PURPOSE: Шаблон for компонента отображения форматированных числовых значений в таблице.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="cell-num-template".
@@ -18,15 +18,15 @@
  *
  * ОСОБЕННОСТИ ШАБЛОНА:
  * Структура HTML:
- * - Корневой элемент: ⟨span⟩ с data-value-sign для цветизации через CSS
+ * - Корневой элемент: ⟨span⟩ с data-value-sign for цветизации через CSS
  * - Условное отображение пустых/бесконечных значений
  * - Раздельное отображение префикса, знака, целой части, разделителя, дробной части, единиц
  * Layout и CSS-классы:
  * - Цветизация через data-value-sign атрибут (Bootstrap классы через CSS селекторы)
  * - Поддержка tooltip через title атрибут
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: app/skills/ui-architecture
+ * REFERENCES:
+ * - General principles работы с шаблонами: app/skills/ui-architecture
  * - Компонент: shared/components/cell-num.js
  */
 
@@ -34,7 +34,7 @@
     'use strict';
 
     const TEMPLATE = `<span :data-value-sign="colorizeDataAttr" :title="tooltipText">
-        <!-- Отображение для пустых значений или бесконечности -->
+        <!-- Отображение for пустых значений или бесконечности -->
         <template v-if="emptyOrInfiniteDisplay !== null">
             <span>{{ emptyOrInfiniteDisplay }}</span>
         </template>
@@ -70,5 +70,5 @@
     // Добавляем в DOM
     document.body.appendChild(scriptElement);
 
-    console.log('cell-num-template.js: шаблон загружен');
+    console.log('cell-num-template.js: шаблон loaded');
 })();

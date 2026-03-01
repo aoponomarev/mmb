@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * DATASETS ENDPOINTS - API для работы с датасетами (time-series, metrics)
+ * DATASETS ENDPOINTS - API for работы с датасетами (time-series, metrics)
  * ================================================================================================
  *
- * ЦЕЛЬ: CRUD операции для временных рядов и метрик.
+ * PURPOSE: CRUD операции for временных рядов и метрик.
  * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
@@ -15,7 +15,7 @@
  * ПРИМЕЧАНИЕ: R2 хранилище отложено, поэтому временно возвращаем заглушки.
  * После добавления R2 будет реализована полная функциональность.
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { handleDatasets } from './datasets.js';
  *
  * if (path.startsWith('/api/datasets')) {
@@ -28,11 +28,11 @@ import { requireAuth } from './utils/auth.js';
 
 /**
  * Получение временных рядов
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
  * @param {string} coin - ID монеты
  * @param {string} date - Дата
- * @returns {Promise<Response>} JSON ответ с временными рядами
+ * @returns {Promise<Response>} JSON response с временными рядами
  */
 async function handleGetTimeSeries(request, env, coin, date) {
   if (request.method !== 'GET') {
@@ -58,9 +58,9 @@ async function handleGetTimeSeries(request, env, coin, date) {
 
 /**
  * Сохранение временных рядов
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
- * @returns {Promise<Response>} JSON ответ
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
+ * @returns {Promise<Response>} JSON response
  */
 async function handleSaveTimeSeries(request, env) {
   if (request.method !== 'POST') {
@@ -84,11 +84,11 @@ async function handleSaveTimeSeries(request, env) {
 
 /**
  * Получение метрик
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
  * @param {string} coin - ID монеты
  * @param {string} date - Дата
- * @returns {Promise<Response>} JSON ответ с метриками
+ * @returns {Promise<Response>} JSON response с метриками
  */
 async function handleGetMetrics(request, env, coin, date) {
   if (request.method !== 'GET') {
@@ -109,9 +109,9 @@ async function handleGetMetrics(request, env, coin, date) {
 
 /**
  * Сохранение метрик
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
- * @returns {Promise<Response>} JSON ответ
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
+ * @returns {Promise<Response>} JSON response
  */
 async function handleSaveMetrics(request, env) {
   if (request.method !== 'POST') {
@@ -130,9 +130,9 @@ async function handleSaveMetrics(request, env) {
 
 /**
  * Главный обработчик datasets endpoints
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь запроса
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path запроса
  * @returns {Promise<Response>} HTTP ответ
  */
 export async function handleDatasets(request, env, path) {

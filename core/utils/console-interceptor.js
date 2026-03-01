@@ -3,20 +3,20 @@
  * CONSOLE INTERCEPTOR - Перехватчик console.* методов
  * ================================================================================================
  *
- * ЦЕЛЬ: Перехватывать все вызовы console.log/warn/error/info/debug и записывать их в sessionLogStore.
+ * PURPOSE: Перехватывать все вызовы console.log/warn/error/info/debug и записывать их в sessionLogStore.
  * Skill: is/skills/arch-foundation
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Сохраняет оригинальные методы console.*
  * - Перехватывает вызовы и записывает в sessionLogStore
- * - Вызывает оригинальные методы для сохранения стандартного поведения
+ * - Вызывает оригинальные методы for сохранения стандартного поведения
  * - Извлекает источник из stack trace (если возможно)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * Автоматически активируется при загрузке модуля.
  * Для деактивации: window.consoleInterceptor.disable()
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Session Log Store: core/utils/session-log-store.js
  * - Logger: core/logging/logger.js
  */
@@ -38,7 +38,7 @@
 
     /**
      * Извлечь источник из stack trace
-     * @param {Error} error - Объект Error для получения stack trace
+     * @param {Error} error - Объект Error for получения stack trace
      * @returns {string|null} Имя файла или null
      */
     function extractSource(error) {
@@ -71,7 +71,7 @@
     }
 
     /**
-     * Создать перехватчик для console метода
+     * Создать перехватчик for console метода
      * @param {string} level - Уровень лога
      * @param {Function} originalMethod - Оригинальный метод console
      * @returns {Function} Перехватывающая функция
@@ -180,15 +180,15 @@
     enable();
 
     /**
-     * Установить режим подавления вывода в браузерную консоль
-     * @param {boolean} suppress - true для отключения вывода в консоль браузера
+     * Set режим подавления вывода в браузерную консоль
+     * @param {boolean} suppress - true for отключения вывода в консоль браузера
      */
     function setSuppressBrowserConsole(suppress) {
         suppressBrowserConsole = suppress === true;
         localStorage.setItem('suppressBrowserConsole', suppressBrowserConsole);
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.consoleInterceptor = {
         enable,
         disable,
@@ -197,6 +197,6 @@
         getSuppressBrowserConsole: () => suppressBrowserConsole
     };
 
-    // Используем оригинальный console.log для инициализации, чтобы не попасть в перехватчик
-    originalConsole.log('console-interceptor.js: инициализирован');
+    // Используем оригинальный console.log for инициализации, чтобы не попасть в перехватчик
+    originalConsole.log('console-interceptor.js: initialized');
 })();

@@ -3,28 +3,28 @@
  * AUTH MODAL BODY COMPONENT - Компонент body модального окна авторизации
  * ================================================================================================
  *
- * ЦЕЛЬ: Компонент для отображения состояния авторизации и управления авторизацией через Google OAuth.
+ * PURPOSE: Компонент for отображения состояния авторизации и управления авторизацией через Google OAuth.
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
- * - Отображение текущего состояния авторизации (авторизован/не авторизован)
+ * - Отображение текущего состояния авторизации (авторизован/not authenticated)
  * - Отображение информации о пользователе (имя, email)
  * - Регистрирует кнопки "Авторизоваться" и "Выйти" через modalApi
- * - Использует auth-client для авторизации и выхода
- * - Использует централизованное состояние из auth-state для синхронизации между всеми экземплярами
+ * - Использует auth-client for авторизации и logoutа
+ * - Использует централизованное состояние из auth-state for синхронизации между всеми экземплярами
  * - Реактивно обновляет состояние при изменении авторизации (все экземпляры синхронизируются автоматически)
  *
  * API КОМПОНЕНТА:
  *
  * Props:
  * - onLoginSuccess (Function, optional) — функция, вызываемая после успешного входа
- * - onLogoutSuccess (Function, optional) — функция, вызываемая после успешного выхода
+ * - onLogoutSuccess (Function, optional) — функция, вызываемая после успешного logoutа
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - OAuth клиент: core/api/cloudflare/auth-client.js
  * - Централизованное состояние: core/state/auth-state.js
  * - Система управления кнопками: shared/components/modal.js
@@ -67,7 +67,7 @@ window.authModalBody = {
         },
 
         /**
-         * Локальные алиасы для удобства (прямой доступ к свойствам authState)
+         * Локальные алиасы for удобства (прямой доступ к свойствам authState)
          */
         isAuthenticated() {
             return this.authState ? this.authState.isAuthenticated : false;
@@ -85,7 +85,7 @@ window.authModalBody = {
         'authState.isAuthenticated'(newVal, oldVal) {
             this.updateButtons();
         },
-        // Отслеживаем изменения isLoading для обновления disabled состояния кнопок
+        // Отслеживаем изменения isLoading for обновления disabled состояния кнопок
         'uiState.auth.isLoading'(newVal, oldVal) {
             this.updateButtons();
         }
@@ -94,15 +94,15 @@ window.authModalBody = {
     methods: {
         /**
          * Проверка состояния авторизации через централизованное хранилище
-         * Обновляет состояние для всех экземпляров компонента автоматически
+         * Обновляет состояние for всех экземпляров компонента автоматически
          */
         async checkAuthStatus() {
             if (!window.authState) {
-                console.warn('auth-modal-body: authState не загружен');
+                console.warn('auth-modal-body: authState not loaded');
                 return;
             }
 
-            // Централизованная проверка через auth-state (обновит состояние для всех экземпляров)
+            // Централизованная проверка через auth-state (обновит состояние for всех экземпляров)
             await window.authState.checkAuthStatus();
         },
 
@@ -116,7 +116,7 @@ window.authModalBody = {
             const hasLoginButton = this.modalApi.getButton('login') !== undefined;
             const hasLogoutButton = this.modalApi.getButton('logout') !== undefined;
 
-            // Если кнопки не зарегистрированы (модальное окно не смонтировано), выходим
+            // Если кнопки не зарегистрированы (модальное окно не смонтировано), logoutим
             if (!hasLoginButton || !hasLogoutButton) {
                 return;
             }
@@ -148,7 +148,7 @@ window.authModalBody = {
         async handleLogin() {
             try {
                 if (!window.authClient || !window.authState) {
-                    console.error('auth-modal-body: authClient или authState не загружен');
+                    console.error('auth-modal-body: authClient или authState not loaded');
                     return;
                 }
 
@@ -196,7 +196,7 @@ window.authModalBody = {
                 this._oauthMessageHandler = handleOAuthMessage;
                 window.addEventListener('message', handleOAuthMessage);
 
-                // Таймаут для удаления обработчика (на случай если окно закрыто без авторизации)
+                // Таймаут for удаления обработчика (на случай если окно закрыто без авторизации)
                 setTimeout(() => {
                     window.removeEventListener('message', handleOAuthMessage);
                     this._authInProgress = false;
@@ -218,12 +218,12 @@ window.authModalBody = {
         },
 
         /**
-         * Обработка выхода
+         * Обработка logoutа
          */
         async handleLogout() {
             try {
                 if (!window.authClient || !window.authState) {
-                    console.error('auth-modal-body: authClient или authState не загружен');
+                    console.error('auth-modal-body: authClient или authState not loaded');
                     return;
                 }
 

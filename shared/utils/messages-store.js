@@ -3,22 +3,22 @@
  * MESSAGES STORE - Глобальное хранилище системных сообщений
  * ================================================================================================
  *
- * ЦЕЛЬ: Единое реактивное хранилище для всех системных сообщений приложения.
+ * PURPOSE: Единое реактивное хранилище for всех системных сообщений приложения.
  * Работает как с Vue (реактивность), так и без него (через события).
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Реактивное хранилище через Vue.reactive (если доступен)
- * - Fallback на события CustomEvent для не-Vue страниц
+ * - Fallback на события CustomEvent for не-Vue страниц
  * - Приоритезация сообщений (danger > warning > info > success)
- * - Интеграция с eventBus для глобальных событий
- * - Поддержка scope для фильтрации сообщений
+ * - Интеграция с eventBus for глобальных событий
+ * - Поддержка scope for фильтрации сообщений
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * window.AppMessages.push({ text: 'Текст', type: 'info', scope: 'global' })
  * window.AppMessages.dismiss(id)
  * window.AppMessages.clear('global')
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация сообщений: core/config/messages-config.js
  * - Событийная система: core/events/event-bus.js
  */
@@ -30,7 +30,7 @@
 
     /**
      * Реактивное состояние хранилища
-     * Если Vue доступен - используем Vue.reactive для автоматического обновления UI
+     * Если Vue доступен - используем Vue.reactive for автоматического обновления UI
      * Если нет - используем обычный объект + события
      */
     const state = hasVueReactive
@@ -61,7 +61,7 @@
     }
 
     /**
-     * Получить приоритет по типу сообщения
+     * Get приоритет по типу сообщения
      * @param {string} type - тип сообщения
      * @returns {number} - приоритет (danger=4, warning=3, info=2, success=1)
      */
@@ -76,7 +76,7 @@
     }
 
     /**
-     * Сгенерировать уникальный ID для сообщения
+     * Сгенерировать уникальный ID for сообщения
      * @returns {string} - уникальный ID
      */
     function makeId() {
@@ -85,13 +85,13 @@
 
     /**
      * Эмитнуть событие изменения сообщений
-     * Используется для не-Vue страниц
+     * Используется for не-Vue страниц
      */
     function emitChanged() {
         try {
             document.dispatchEvent(new CustomEvent('app-messages:changed'));
         } catch {
-            // Fallback для окружений без CustomEvent
+            // Fallback for окружений без CustomEvent
             try {
                 document.dispatchEvent(new Event('app-messages:changed'));
             } catch {
@@ -148,9 +148,9 @@
             actions: Array.isArray(msg.actions) ? msg.actions : [],
             createdAt: msg.createdAt || new Date().toISOString(),
             sticky: Boolean(msg.sticky),
-            // key: ключ сообщения из messagesConfig (для последующего перевода)
+            // key: ключ сообщения из messagesConfig (for последующего перевода)
             key: msg.key || null,
-            // params: параметры для плейсхолдеров (для последующего перевода)
+            // params: параметры for плейсхолдеров (for последующего перевода)
             params: msg.params || null
         };
 
@@ -174,7 +174,7 @@
     }
 
     /**
-     * Удалить сообщение по ID
+     * Delete сообщение по ID
      * @param {string} id - ID сообщения
      * @returns {boolean} - true если сообщение было удалено
      */
@@ -192,7 +192,7 @@
 
     /**
      * Очистить все сообщения или сообщения в определённом scope
-     * @param {string} scope - scope для очистки (если не указан - очищаются все)
+     * @param {string} scope - scope for очистки (если не указан - очищаются все)
      */
     function clear(scope) {
         const s = scope ? normalizeScope(scope) : null;
@@ -211,8 +211,8 @@
     }
 
     /**
-     * Получить сообщения по scope
-     * @param {string} scope - scope для фильтрации
+     * Get сообщения по scope
+     * @param {string} scope - scope for фильтрации
      * @param {boolean} includeUnscoped - включить сообщения без scope
      * @returns {Array} - массив сообщений
      */
@@ -225,7 +225,7 @@
         });
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.AppMessages = {
         state,
         // push/replace используют один и тот же upsert; различие семантическое
@@ -240,7 +240,7 @@
         getMessages
     };
 
-    // Алиас для обратной совместимости с кодом, использующим messagesStore
+    // Алиас for обратной совместимости с кодом, использующим messagesStore
     window.messagesStore = {
         addMessage(msg) {
             return upsert(msg);
@@ -250,5 +250,5 @@
         getMessages
     };
 
-    console.log('messages-store.js: инициализирован');
+    console.log('messages-store.js: initialized');
 })();

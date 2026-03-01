@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * YANDEX AI PROVIDER - Провайдер для YandexGPT API
+ * YANDEX AI PROVIDER - Провайдер for YandexGPT API
  * ================================================================================================
  *
- * ЦЕЛЬ: Реализация провайдера для работы с YandexGPT через Yandex Cloud API.
+ * PURPOSE: Реализация провайдера for работы с YandexGPT через Yandex Cloud API.
  *
  * Skill: core/skills/api-layer
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Использует Yandex Cloud Foundation Models API
  * - Поддерживает yandexgpt и yandexgpt-lite
  * - Аутентификация через Api-Key
- * - Прокси через Yandex Cloud Functions для обхода CORS (обязателен для работы из браузера)
+ * - Прокси через Yandex Cloud Functions for CORS bypass (обязателен for работы из браузера)
  *
  * ОСОБЕННОСТИ:
  * - Endpoint: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
@@ -31,27 +31,27 @@
  * - Прокси обрабатывает OPTIONS preflight запросы (возвращает статус 204)
  * - Прокси добавляет CORS заголовки: Access-Control-Allow-Origin: *, Access-Control-Allow-Methods: POST, OPTIONS
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const provider = new YandexProvider();
  * const response = await provider.sendRequest(apiKey, model, messages);
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Базовый класс: core/api/ai-providers/base-provider.js
  * - Конфигурация прокси: core/config/app-config.js
  * - Yandex Cloud API: https://yandex.cloud/ru/docs/foundation-models/
- * - Документация прокси: docs/archive/yandex/ya-cloud-function-code.md
+ * - Documentation прокси: docs/archive/yandex/ya-cloud-function-code.md
  */
 
 (function() {
     'use strict';
 
     if (!window.BaseAIProvider) {
-        console.error('yandex-provider: BaseAIProvider не загружен');
+        console.error('yandex-provider: BaseAIProvider not loaded');
         return;
     }
 
     /**
-     * Провайдер для YandexGPT API
+     * Провайдер for YandexGPT API
      */
     class YandexProvider extends window.BaseAIProvider {
         constructor() {
@@ -100,11 +100,11 @@
          */
         async sendRequest(apiKey, model, messages, options = {}) {
             if (!this.validateApiKey(apiKey)) {
-                throw new Error('Необходимы apiKey для запроса к YandexGPT');
+                throw new Error('Необходимы apiKey for запроса к YandexGPT');
             }
 
             if (!messages || messages.length === 0) {
-                throw new Error('Необходимы messages для запроса к YandexGPT');
+                throw new Error('Необходимы messages for запроса к YandexGPT');
             }
 
             // Преобразуем messages в формат YandexGPT
@@ -121,7 +121,7 @@
             let modelUri = selectedModel;
 
             // Формируем тело запроса согласно документации Yandex API
-            // Используем completionOptions для temperature и maxTokens
+            // Используем completionOptions for temperature и maxTokens
             const requestBody = {
                 modelUri: modelUri,
                 messages: yandexMessages
@@ -201,10 +201,10 @@
                     }
                 }
 
-                // Если указан прокси, используем его (для обхода CORS)
+                // Если указан прокси, используем его (for CORS bypass)
                 if (this.proxyUrl) {
                     // Через прокси: передаем API ключ и тело запроса в теле запроса к прокси
-                    // Формируем тело запроса в том же формате, что и для прямого запроса
+                    // Формируем тело запроса в том же формате, что и for прямого запроса
                     const proxyRequestBody = {
                         apiKey: apiKey,
                         modelUri: modelUri,
@@ -256,7 +256,7 @@
                                 errorData = JSON.parse(errorText);
                             }
                         } catch (parseError) {
-                            // Если не удалось распарсить, используем дефолтное сообщение
+                            // Если failed to распарсить, используем дефолтное сообщение
                         }
                         throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
                     }
@@ -338,7 +338,7 @@
         }
 
         /**
-         * Получить модель по умолчанию
+         * Get модель по умолчанию
          * @returns {string} Model URI
          */
         getDefaultModel() {
@@ -346,7 +346,7 @@
         }
 
         /**
-         * Получить список доступных моделей
+         * Get list доступных моделей
          * @returns {Array<Object>} [{ value: string, label: string }]
          */
         getAvailableModels() {
@@ -367,7 +367,7 @@
         }
 
         /**
-         * Получить имя провайдера
+         * Get имя провайдера
          * @returns {string}
          */
         getName() {
@@ -375,7 +375,7 @@
         }
 
         /**
-         * Получить отображаемое имя провайдера
+         * Get отображаемое имя провайдера
          * @returns {string}
          */
         getDisplayName() {
@@ -386,6 +386,6 @@
     // Экспорт класса
     window.YandexProvider = YandexProvider;
 
-    console.log('yandex-provider.js: инициализирован');
+    console.log('yandex-provider.js: initialized');
 })();
 

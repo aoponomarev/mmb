@@ -3,9 +3,9 @@
  * DROPDOWN TEMPLATE - Шаблон компонента выпадающего меню
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для Vue-обёртки над Bootstrap dropdown (cmp-dropdown) с поддержкой поиска и прокрутки.
+ * PURPOSE: Шаблон for Vue-обёртки над Bootstrap dropdown (cmp-dropdown) с поддержкой поиска и прокрутки.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="dropdown-template".
@@ -22,25 +22,25 @@
  * - Кнопка триггера: компонент ⟨cmp-button⟩ или кастомная кнопка через слот #button
  * - Выпадающее меню: ⟨ul class="dropdown-menu"⟩ с условным классом 'show' при открытии
  * Layout и CSS-классы:
- * - Использование компонента cmp-button для кнопки триггера (через ⟨cmp-button⟩) для единообразия
+ * - Использование компонента cmp-button for кнопки триггера (через ⟨cmp-button⟩) for единообразия
  * - Прокручиваемая область: ⟨div class="dropdown-menu-scrollable"⟩ с overflow-y: auto и настраиваемой max-height
- * - Использование только Bootstrap классов для стилизации
+ * - Использование только Bootstrap классов for стилизации
  * Условный рендеринг:
- * - Кастомная кнопка через слот #button (v-if="!$slots.button" для стандартной кнопки)
+ * - Кастомная кнопка через слот #button (v-if="!$slots.button" for стандартной кнопки)
  * - Поисковое поле с условным рендерингом (v-if="searchable")
- * - Прокручиваемая область для длинных списков (v-if="scrollable")
+ * - Прокручиваемая область for длинных списков (v-if="scrollable")
  * - Пустое состояние при поиске с проверкой filteredItems && filteredItems.length
  * Слоты:
  * - #button — кастомная кнопка триггера (с ограниченной областью видимости: isOpen, toggle)
  * - #items — элементы списка (с ограниченной областью видимости: filteredItems, searchQuery, handleItemSelect)
- * Адаптивность:
- * - Адаптивность кнопки триггера реализована через CSS классы компонента .dropdown-responsive и .btn-responsive с вложенными селекторами
+ * Responsiveness:
+ * - Responsiveness кнопки триггера реализована через CSS классы компонента .dropdown-responsive и .btn-responsive с вложенными селекторами
  * - С иконкой на мобильных: если задан buttonIcon, на мобильных отображается только иконка, на десктопе — только текст buttonText
  * - С укороченным текстом на мобильных: если buttonIcon не задан, но задан buttonTextShort, на мобильных отображается укороченный текст, на десктопе — полный buttonText
  * - Без адаптивности: если не заданы ни buttonIcon, ни buttonTextShort, всегда отображается полный buttonText
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/dropdown.js
  */
 
@@ -88,7 +88,7 @@
                 ref="searchInput">
         </li>
 
-        <!-- Прокручиваемая область для длинных списков -->
+        <!-- Прокручиваемая область for длинных списков -->
         <template v-if="scrollable">
             <div
                 class="dropdown-menu-scrollable"

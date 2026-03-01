@@ -8,15 +8,19 @@ updated_at: "2026-03-01T00:00:00.000Z"
 # Architectural Foundation (Naming, Paths, SSOT)
 
 > **Context**: Basic rules for building the application. This is the first and most important skill.
-> **Scope**: Global (app, core, is)
+> **Scope**: Global (app, core, is, shared, styles, scripts, mm)
 
 ## 1. Rejection of Old Abbreviations (Anti-Calque)
 It is forbidden to use the abbreviations `mbb` and `mmb` in code, paths, and file names.
 They are only allowed in the context of integration with cloud services (`cloudflare`, `yandex`), if dictated by infrastructure that has not yet been renamed in the cloud.
 Application layers:
-- `app/` — client interface, user business logic (Vue).
-- `core/` — application core, framework and platform independent.
+- `app/` — client interface, user business logic (Vue). Root component, domain-specific components.
+- `core/` — application core, framework and platform independent. API, config, domain logic.
 - `is/` (Infrastructure / Information System) — scripts, gates, secrets, MCP servers.
+- `shared/` — reusable components, styles, utils shared across app (hash-generator, pluralize, class-manager, etc.).
+- `styles/` — CSS files (wrappers, layout, custom). Load order matters; see `index.html`.
+- `scripts/` — project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation).
+- `mm/` — math models (domain-specific calculators). Legacy structure.
 
 ## 2. Naming Contracts (Name Gate)
 All file and folder names MUST be in `kebab-case` format.

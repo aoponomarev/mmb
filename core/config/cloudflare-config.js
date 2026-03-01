@@ -1,19 +1,19 @@
 /**
  * ================================================================================================
- * CLOUDFLARE CONFIG - Конфигурация Cloudflare Workers API
+ * CLOUDFLARE CONFIG - Cloudflare Workers API configuration
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Единый источник правды для всех параметров Cloudflare Workers API.
- * Base URL, endpoints для portfolios, datasets, auth.
+ * PURPOSE: SSOT for all Cloudflare Workers API parameters.
+ * Base URL, endpoints for portfolios, datasets, auth.
  *
- * ПРИНЦИПЫ:
- * - Все endpoints определяются здесь и используются везде
- * - Запрещено дублировать значения в компонентах или API клиентах
- * - Использовать функции-геттеры вместо прямого доступа к CONFIG
- * - Проверка наличия конфигурации при инициализации
+ * PRINCIPLES:
+ * - All endpoints are defined here and used everywhere
+ * - Duplicating values in components or API clients is forbidden
+ * - Use getter functions instead of direct CONFIG access
+ * - Validate configuration presence at initialization
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * {
  *   workers: {
  *     baseUrl: '...',
@@ -25,50 +25,50 @@
  *   }
  * }
  *
- * ССЫЛКИ:
- * - Принципы единого источника правды: `app/skills/ux-principles`
- * - План интеграции: `core/skills/config-contracts`
- * - Cloudflare инфраструктура: `core/skills/config-contracts`
+ * REFERENCES:
+ * - SSOT principles: `app/skills/ux-principles`
+ * - Integration plan: `core/skills/config-contracts`
+ * - Cloudflare infrastructure: `core/skills/config-contracts`
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация Cloudflare Workers
+     * Cloudflare Workers configuration
      */
     const CONFIG = {
         workers: {
             // Base URL Cloudflare Worker
             baseUrl: 'https://app-api.ponomarev-ux.workers.dev',
 
-            // Endpoints для различных API
+            // Endpoints for various APIs
             endpoints: {
                 // Auth endpoints
                 auth: {
-                    google: '/auth/google',              // Инициация Google OAuth
+                    google: '/auth/google',              // Google OAuth initiation
                     callback: '/auth/callback',           // OAuth callback
-                    logout: '/auth/logout',              // Выход
-                    me: '/auth/me'                       // Получение текущего пользователя
+                    logout: '/auth/logout',              // Logout
+                    me: '/auth/me'                       // Get current user
                 },
 
                 // Portfolios API endpoints
                 portfolios: {
-                    list: '/api/portfolios',             // GET - список портфелей
-                    get: '/api/portfolios',               // GET /api/portfolios/:id - получение портфеля
-                    create: '/api/portfolios',           // POST - создание портфеля
-                    update: '/api/portfolios',           // PUT /api/portfolios/:id - обновление портфеля
-                    delete: '/api/portfolios'            // DELETE /api/portfolios/:id - удаление портфеля
+                    list: '/api/portfolios',             // GET - list portfolios
+                    get: '/api/portfolios',               // GET /api/portfolios/:id - get portfolio
+                    create: '/api/portfolios',           // POST - create portfolio
+                    update: '/api/portfolios',           // PUT /api/portfolios/:id - update portfolio
+                    delete: '/api/portfolios'            // DELETE /api/portfolios/:id - delete portfolio
                 },
 
                 // Datasets API endpoints
                 datasets: {
-                    timeSeries: '/api/datasets/time-series',      // GET/POST - временные ряды
-                    metrics: '/api/datasets/metrics',             // GET/POST - метрики
-                    snapshots: '/api/datasets/snapshots'          // GET/POST - снимки данных
+                    timeSeries: '/api/datasets/time-series',      // GET/POST - time series
+                    metrics: '/api/datasets/metrics',             // GET/POST - metrics
+                    snapshots: '/api/datasets/snapshots'          // GET/POST - data snapshots
                 },
 
-                // API Proxy endpoints (для обхода CORS на file://)
+                // API Proxy endpoints (for CORS bypass on file://)
                 proxy: {
                     coingecko: '/api/coingecko',         // CoinGecko API proxy
                     yahooFinance: '/api/yahoo-finance',  // Yahoo Finance API proxy
@@ -76,24 +76,24 @@
                     generic: '/api/proxy'                // Generic URL proxy (images, etc)
                 },
 
-                // Messages API endpoints (DEPRECATED - сообщения теперь в хардкоде)
+                // Messages API endpoints (DEPRECATED - messages now hardcoded)
                 // messages: {
-                //     module: '/api/messages',                      // GET ?module={module}&version={version} - получение модуля
-                //     list: '/api/messages/list',                   // GET - список доступных модулей
-                //     version: '/api/messages/version'              // GET - текущая версия датасета
+                //     module: '/api/messages',                      // GET ?module={module}&version={version} - get module
+                //     list: '/api/messages/list',                   // GET - list available modules
+                //     version: '/api/messages/version'              // GET - current dataset version
                 // },
 
                 // App Settings API (KV-backed, replaces continue-wrapper snapshots)
-                settings: '/api/settings',               // GET/POST - все настройки
+                settings: '/api/settings',               // GET/POST - all settings
 
                 // Health check
-                health: '/health'                         // GET - проверка работоспособности Worker
+                health: '/health'                         // GET - Worker health check
             }
         }
     };
 
     /**
-     * Получить base URL Cloudflare Worker
+     * Get base URL Cloudflare Worker
      * @returns {string} Base URL
      */
     function getWorkersBaseUrl() {
@@ -101,9 +101,9 @@
     }
 
     /**
-     * Получить base URL для auth flow.
-     * Источник истины - origin из authConfig.getRedirectUri(), чтобы callback и проверка токена
-     * всегда шли через один и тот же Worker.
+     * Get base URL for auth flow.
+     * SSOT: origin from authConfig.getRedirectUri() so callback and token check
+     * always go through the same Worker.
      * @returns {string} Base URL
      */
     function getAuthBaseUrl() {
@@ -118,33 +118,33 @@
                 }
             }
         } catch (error) {
-            console.warn('cloudflare-config.getAuthBaseUrl: не удалось определить auth origin из redirect_uri', error);
+            console.warn('cloudflare-config.getAuthBaseUrl: failed to determine auth origin from redirect_uri', error);
         }
         return getWorkersBaseUrl();
     }
 
     /**
-     * Получить полный URL для endpoint
-     * @param {string} endpoint - Путь endpoint (например, '/auth/google')
-     * @returns {string} Полный URL
+     * Get full URL for endpoint
+     * @param {string} endpoint - Endpoint path (e.g. '/auth/google')
+     * @returns {string} Full URL
      */
     function getEndpointUrl(endpoint) {
         const baseUrl = getWorkersBaseUrl();
-        // Убираем ведущий слэш, если есть
+        // Remove leading slash if present
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
         const fullUrl = `${baseUrl}/${cleanEndpoint}`;
         return fullUrl;
     }
 
     /**
-     * Получить URL для auth endpoints
-     * @param {string} action - Действие ('google', 'callback', 'logout', 'me')
-     * @returns {string} Полный URL для endpoint
+     * Get URL for auth endpoints
+     * @param {string} action - Action ('google', 'callback', 'logout', 'me')
+     * @returns {string} Full URL for endpoint
      */
     function getAuthEndpoint(action) {
         const endpoint = CONFIG.workers.endpoints.auth[action];
         if (!endpoint) {
-            console.warn(`cloudflare-config.getAuthEndpoint: неизвестное действие "${action}"`);
+            console.warn(`cloudflare-config.getAuthEndpoint: unknown action "${action}"`);
             return null;
         }
         const baseUrl = getAuthBaseUrl();
@@ -153,20 +153,20 @@
     }
 
     /**
-     * Получить URL для portfolios endpoints
-     * @param {string} action - Действие ('list', 'get', 'create', 'update', 'delete')
-     * @param {string|number} id - ID портфеля (опционально, для get, update, delete)
-     * @returns {string} Полный URL для endpoint
+     * Get URL for portfolios endpoints
+     * @param {string} action - Action ('list', 'get', 'create', 'update', 'delete')
+     * @param {string|number} id - Portfolio ID (optional, for get, update, delete)
+     * @returns {string} Full URL for endpoint
      */
     function getPortfoliosEndpoint(action, id = null) {
         const endpoint = CONFIG.workers.endpoints.portfolios[action];
         if (!endpoint) {
-            console.warn(`cloudflare-config.getPortfoliosEndpoint: неизвестное действие "${action}"`);
+            console.warn(`cloudflare-config.getPortfoliosEndpoint: unknown action "${action}"`);
             return null;
         }
 
         let url = getEndpointUrl(endpoint);
-        // Для get, update, delete добавляем ID в путь
+        // For get, update, delete add ID to path
         if (id && (action === 'get' || action === 'update' || action === 'delete')) {
             url = `${url}/${id}`;
         }
@@ -175,28 +175,28 @@
     }
 
     /**
-     * Получить URL для datasets endpoints
-     * @param {string} type - Тип данных ('timeSeries', 'metrics', 'snapshots')
-     * @param {Object} params - Параметры запроса (coin, date и т.д.)
-     * @returns {string} Полный URL для endpoint
+     * Get URL for datasets endpoints
+     * @param {string} type - Data type ('timeSeries', 'metrics', 'snapshots')
+     * @param {Object} params - Request params (coin, date, etc.)
+     * @returns {string} Full URL for endpoint
      */
     function getDatasetsEndpoint(type, params = {}) {
         const endpoint = CONFIG.workers.endpoints.datasets[type];
         if (!endpoint) {
-            console.warn(`cloudflare-config.getDatasetsEndpoint: неизвестный тип "${type}"`);
+            console.warn(`cloudflare-config.getDatasetsEndpoint: unknown type "${type}"`);
             return null;
         }
 
         let url = getEndpointUrl(endpoint);
 
-        // Добавляем параметры в путь, если указаны
+        // Add params to path if specified
         if (params.coin && params.date) {
             url = `${url}/${params.coin}/${params.date}`;
         } else if (params.coin) {
             url = `${url}/${params.coin}`;
         }
 
-        // Добавляем query параметры, если есть
+        // Add query params if any
         const queryParams = new URLSearchParams();
         Object.keys(params).forEach(key => {
             if (key !== 'coin' && key !== 'date' && params[key] !== undefined) {
@@ -212,28 +212,28 @@
     }
 
     /**
-     * Получить URL для messages endpoints
-     * ⚠️ DEPRECATED: Сообщения теперь в хардкоде, эндпоинты больше не используются.
-     * Функция оставлена для обратной совместимости с messages-api.js (используется только для тестов).
-     * @param {string} action - Действие ('module', 'list', 'version')
-     * @param {Object} params - Параметры запроса (module, version для 'module')
-     * @returns {string|null} Полный URL для endpoint или null
+     * Get URL for messages endpoints
+     * ⚠️ DEPRECATED: Messages now hardcoded, endpoints no longer used.
+     * Kept for backward compatibility with messages-api.js (tests only).
+     * @param {string} action - Action ('module', 'list', 'version')
+     * @param {Object} params - Request params (module, version for 'module')
+     * @returns {string|null} Full URL for endpoint or null
      */
     function getMessagesEndpoint(action, params = {}) {
-        // Messages endpoints отключены - сообщения теперь в хардкоде
+        // Messages endpoints disabled - messages now hardcoded
         if (!CONFIG.workers.endpoints.messages) {
-            console.warn('cloudflare-config.getMessagesEndpoint: messages endpoints отключены (сообщения в хардкоде)');
+            console.warn('cloudflare-config.getMessagesEndpoint: messages endpoints disabled (messages hardcoded)');
             return null;
         }
         const endpoint = CONFIG.workers.endpoints.messages[action];
         if (!endpoint) {
-            console.warn(`cloudflare-config.getMessagesEndpoint: неизвестное действие "${action}"`);
+            console.warn(`cloudflare-config.getMessagesEndpoint: unknown action "${action}"`);
             return null;
         }
 
         let url = getEndpointUrl(endpoint);
 
-        // Для 'module' добавляем query параметры
+        // For 'module' add query params
         if (action === 'module' && params.module) {
             const queryParams = new URLSearchParams();
             queryParams.append('module', params.module);
@@ -247,31 +247,31 @@
     }
 
     /**
-     * Получить URL для health check endpoint
-     * @returns {string} Полный URL для health check
+     * Get URL for health check endpoint
+     * @returns {string} Full URL for health check
      */
     function getHealthEndpoint() {
         return getEndpointUrl(CONFIG.workers.endpoints.health);
     }
 
     /**
-     * Получить URL для API proxy endpoint
-     * @param {string} apiType - Тип API ('coingecko', 'yahooFinance', 'stooq', 'generic')
-     * @param {string} path - Путь API (например, '/coins/markets') или пустая строка для generic
-     * @param {Object} params - Query параметры (опционально)
-     * @returns {string} Полный URL для proxy endpoint
+     * Get URL for API proxy endpoint
+     * @param {string} apiType - API type ('coingecko', 'yahooFinance', 'stooq', 'generic')
+     * @param {string} path - API path (e.g. '/coins/markets') or empty string for generic
+     * @param {Object} params - Query params (optional)
+     * @returns {string} Full URL for proxy endpoint
      */
     function getApiProxyEndpoint(apiType, path, params = {}) {
         const endpoint = CONFIG.workers.endpoints.proxy[apiType];
         if (!endpoint) {
-            console.warn(`cloudflare-config.getApiProxyEndpoint: неизвестный тип API "${apiType}"`);
+            console.warn(`cloudflare-config.getApiProxyEndpoint: unknown type API "${apiType}"`);
             return null;
         }
 
-        // Формируем URL: baseUrl + proxyEndpoint + apiPath
+        // Build URL: baseUrl + proxyEndpoint + apiPath
         let url = `${getWorkersBaseUrl()}${endpoint}${path}`;
 
-        // Добавляем query параметры, если есть
+        // Add query params if any
         const queryParams = new URLSearchParams(params);
         if (queryParams.toString()) {
             url = `${url}?${queryParams.toString()}`;
@@ -281,17 +281,17 @@
     }
 
     /**
-     * Получить URL для проксирования произвольного URL (для обхода CORS)
-     * @param {string} targetUrl - Целевой URL
-     * @returns {string} Прокси-URL
+     * Get URL for proxying arbitrary URL (for CORS bypass)
+     * @param {string} targetUrl - Target URL
+     * @returns {string} Proxy URL
      */
     function getGenericProxyUrl(targetUrl) {
         return getApiProxyEndpoint('generic', '', { url: targetUrl });
     }
 
     /**
-     * Проверить, что конфигурация инициализирована корректно
-     * @returns {boolean} true если конфигурация валидна
+     * Check that configuration is initialized correctly
+     * @returns {boolean} true if configuration is valid
      */
     function isValid() {
         return !!(
@@ -300,16 +300,16 @@
             CONFIG.workers.endpoints.portfolios &&
             CONFIG.workers.endpoints.datasets &&
             CONFIG.workers.endpoints.proxy
-            // messages endpoints отключены (сообщения в хардкоде)
+            // messages endpoints disabled (messages hardcoded)
         );
     }
 
-    // Проверка при инициализации
+    // Validation at initialization
     if (!isValid()) {
-        console.error('cloudflare-config.js: Конфигурация невалидна! Проверьте параметры.');
+        console.error('cloudflare-config.js: Invalid configuration! Check parameters.');
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.cloudflareConfig = {
         CONFIG,
         getWorkersBaseUrl,
@@ -325,5 +325,5 @@
         isValid
     };
 
-    console.log('cloudflare-config.js: инициализирован');
+    console.log('cloudflare-config.js: initialized');
 })();

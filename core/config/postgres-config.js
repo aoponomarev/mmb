@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * POSTGRES CONFIG - Конфигурация API слоя для Yandex Cloud PostgreSQL
+ * POSTGRES CONFIG - Конфигурация API слоя for Yandex Cloud PostgreSQL
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Единый источник правды для параметров API слоя PostgreSQL.
- * Base URL и endpoints для health/portfolios/snapshots и др.
+ * PURPOSE: SSOT for параметров API слоя PostgreSQL.
+ * Base URL и endpoints for health/portfolios/snapshots и др.
  *
- * ПРИНЦИПЫ:
- * - Все endpoints определяются здесь и используются везде
- * - Запрещено дублировать значения в компонентах или API клиентах
- * - Использовать функции-геттеры вместо прямого доступа к CONFIG
+ * PRINCIPLES:
+ * - Все endpoints are defined here и используются везде
+ * - Duplicating is forbidden значения в компонентах или API клиентах
+ * - Use getter functions вместо прямого доступа к CONFIG
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 3)
  * - Архитектурный план: is/skills/arch-foundation
  */

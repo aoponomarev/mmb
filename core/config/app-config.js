@@ -4,34 +4,34 @@
  * ================================================================================================
  * Skill: is/skills/arch-foundation
  *
- * ЦЕЛЬ: Централизованная конфигурация приложения.
+ * PURPOSE: Централизованная конфигурация приложения.
  * API endpoints, лимиты, таймауты, настройки по умолчанию, версия, feature flags.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Все настройки в одном месте
  * - Версионирование конфигурации
- * - Feature flags для включения/выключения функций
- * - Единый источник правды для всех дефолтных значений (запрещено дублировать в компонентах)
+ * - Feature flags for включения/выключения функций
+ * - SSOT for всех дефолтных значений (запрещено дублировать в компонентах)
  *
  * ИСТОРИЯ ИЗМЕНЕНИЙ:
  * - Добавлены дефолтные значения (вынесены из app-footer.js):
  *   - defaults.timezone: 'Europe/Moscow'
  *   - defaults.translationLanguage: 'ru'
  *   - defaults.marketUpdates.times: [9, 12, 18] — времена обновления метрик (МСК)
- *   - defaults.marketUpdates.timezone: 'Europe/Moscow' — таймзона для расчета времени обновления
+ *   - defaults.marketUpdates.timezone: 'Europe/Moscow' — таймзона for расчета времени обновления
  *   - defaults.timezoneAbbreviations: объект с маппингом таймзон на аббревиатуры (MCK, LON, NYC и т.д.)
- *   - getTimezoneAbbr(timezone): функция для получения аббревиатуры таймзоны из конфигурации
+ *   - getTimezoneAbbr(timezone): функция for получения аббревиатуры таймзоны из конфигурации
  *
  * КОНФИГУРАЦИЯ YANDEXGPT:
- * - defaults.yandex.folderId: 'b1gv03a122le5a934cqj' — Folder ID для Yandex Cloud
+ * - defaults.yandex.folderId: 'b1gv03a122le5a934cqj' — Folder ID for Yandex Cloud
  * - defaults.yandex.proxyType: 'yandex' — тип прокси по умолчанию
  * - defaults.yandex.proxies: объект с доступными прокси (единый источник правды)
  * - Формат modelUri: gpt://{folderId}/{model}/latest
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Критически важные структуры описаны в is/skills/arch-foundation
- * - Конфигурация авторизации: core/config/auth-config.js
- * - Конфигурация Cloudflare Workers: core/config/cloudflare-config.js
+ * - Authorization configuration: core/config/auth-config.js
+ * - Cloudflare Workers configuration: core/config/cloudflare-config.js
  * - YandexGPT провайдер: core/api/ai-providers/yandex-provider.js
  * - План интеграции Cloudflare: core/skills/config-contracts
  */
@@ -84,8 +84,8 @@
             // AI провайдер по умолчанию
             aiProvider: 'yandex',
             yandex: {
-                // Folder ID для Yandex Cloud (b1gv03a122le5a934cqj)
-                // Используется для формирования modelUri: gpt://{folderId}/{model}/latest
+                // Folder ID for Yandex Cloud (b1gv03a122le5a934cqj)
+                // Используется for формирования modelUri: gpt://{folderId}/{model}/latest
                 folderId: 'b1gv03a122le5a934cqj',
                 // Модель YandexGPT по умолчанию
                 model: 'gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest',
@@ -94,12 +94,12 @@
                     { value: 'gpt://b1gv03a122le5a934cqj/yandexgpt/latest', label: 'YandexGPT' },
                     { value: 'assistant:fvtj79pcagqihmvsaivl', label: 'Assistant' }
                 ],
-                // Прокси для YandexGPT (Yandex Cloud Functions)
-                // ОБЯЗАТЕЛЕН для работы из браузера (обход CORS)
+                // Прокси for YandexGPT (Yandex Cloud Functions)
+                // ОБЯЗАТЕЛЕН for работы из браузера (обход CORS)
                 // Функция: yandexgpt-proxy (ID: d4erd8d1pttbufsl26s1)
                 // Должна быть публичной и обрабатывать OPTIONS preflight
                 proxyType: 'yandex', // Тип прокси по умолчанию
-                // Доступные прокси для YandexGPT (единый источник правды)
+                // Доступные прокси for YandexGPT (единый источник правды)
                 proxies: {
                     yandex: {
                         url: 'https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1',
@@ -111,7 +111,7 @@
             },
             marketUpdates: {
                 times: [9, 12, 18], // Часы обновления метрик (МСК)
-                timezone: 'Europe/Moscow' // Таймзона для расчета времени обновления
+                timezone: 'Europe/Moscow' // Таймзона for расчета времени обновления
             },
             timezoneAbbreviations: {
                 'Europe/Moscow': 'MCK',
@@ -140,7 +140,7 @@
     };
 
     /**
-     * Получить значение конфигурации по пути
+     * Get значение конфигурации по пути
      * @param {string} path - путь через точку (например, 'api.coingecko.baseUrl')
      * @param {any} defaultValue - значение по умолчанию
      * @returns {any}
@@ -161,7 +161,7 @@
     }
 
     /**
-     * Получить аббревиатуру таймзоны
+     * Get аббревиатуру таймзоны
      * @param {string} timezone - таймзона (например, 'Europe/Moscow')
      * @returns {string} - аббревиатура (например, 'MCK') или автоматически сгенерированная
      */
@@ -175,16 +175,16 @@
     }
 
     /**
-     * Получить хэш версии приложения
-     * Используется для:
+     * Get хэш версии приложения
+     * Используется for:
      * - CSS-класса на body (app-version-{hash})
-     * - Версионирования ключей кэша (для инвалидации при смене версии)
+     * - Версионирования ключей кэша (for инвалидации при смене версии)
      * - Отладки (видно версию приложения в DOM)
      * @returns {string} - Base58 хэш версии (8 символов) или 'unknown'
      */
     function getVersionHash() {
         if (!window.hashGenerator) {
-            console.warn('app-config.getVersionHash: hashGenerator не загружен, используется fallback');
+            console.warn('app-config.getVersionHash: hashGenerator not loaded, using fallback');
             return 'unknown';
         }
         // Генерируем детерминированный хэш из версии приложения
@@ -193,7 +193,7 @@
     }
 
     /**
-     * Получить полное имя CSS-класса версии для body
+     * Get полное имя CSS-класса версии for body
      * @returns {string} - класс вида 'app-version-{hash}'
      */
     function getVersionClass() {
@@ -201,7 +201,7 @@
     }
 
     /**
-     * Установить значение конфигурации (только для runtime изменений)
+     * Set значение конфигурации (только for runtime изменений)
      * @param {string} path - путь через точку
      * @param {any} value - значение
      */
@@ -230,8 +230,8 @@
     }
 
     /**
-     * Получить URL прокси для AI провайдера
-     * Единый источник правды для прокси URL
+     * Get URL прокси for AI провайдера
+     * SSOT for прокси URL
      * @param {string} providerName - имя провайдера ('yandex')
      * @param {string} proxyType - тип прокси ('cloudflare' | 'yandex' и т.д.)
      * @returns {string|null} URL прокси или null, если не найден
@@ -254,7 +254,7 @@
     }
 
     /**
-     * Получить список доступных прокси для AI провайдера
+     * Get list доступных прокси for AI провайдера
      * @param {string} providerName - имя провайдера ('yandex')
      * @returns {Array<Object>} Массив объектов прокси с полями {type, url, label, description}
      */
@@ -272,7 +272,7 @@
         }));
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.appConfig = {
         CONFIG,
         get,
@@ -285,6 +285,6 @@
         getAvailableProxies
     };
 
-    console.log('app-config.js: инициализирован');
+    console.log('app-config.js: initialized');
 })();
 

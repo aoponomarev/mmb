@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * MARKET METRICS API - Утилита для получения метрик рынка
+ * MARKET METRICS API - Утилита for получения метрик рынка
  * ================================================================================================
  *
- * ЦЕЛЬ: Независимый модуль для получения метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR).
+ * PURPOSE: Независимый модуль for получения метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR).
  * Экспортирует функции через window.marketMetrics.
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Чистая логика без UI
- * - Fallback стратегия для VIX (3 источника + Cloudflare proxy)
+ * - Fallback стратегия for VIX (3 источника + Cloudflare proxy)
  * - Кэширование VIX на 24 часа (TTL в cache-config.js)
- * - Глобальные переменные для совместимости с математическими моделями
+ * - Глобальные переменные for совместимости с математическими моделями
  *
  * ПРОКСИРОВАНИЕ (КРИТИЧЕСКИ ВАЖНО):
  * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
@@ -20,7 +20,7 @@
  * - Yahoo Finance, Stooq: через cloudflareConfig.getApiProxyEndpoint() на file://
  * - BTC Dominance (CoinGecko): через cloudflareConfig.getApiProxyEndpoint() на file://
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: app/skills/file-protocol-cors-guard
+ * - Details: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
  * - VIX: кэширование 24ч + fallback (Yahoo Finance, Stooq, Alpha Vantage)
@@ -28,7 +28,7 @@
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация API: core/config/app-config.js
  * - Конфигурация кэша: core/cache/cache-config.js (vix-index: 24h)
  * - Cloudflare Config: core/config/cloudflare-config.js
@@ -37,18 +37,18 @@
 (function() {
     'use strict';
 
-    // Глобальные переменные для хранения числовых значений метрик (совместимость с математическими моделями)
+    // Глобальные переменные for хранения числовых значений метрик (совместимость с математическими моделями)
     let fgiVal = 0, vixVal = null, btcDomVal = 0, oiVal = 0, frVal = 0, lsrVal = 0;
     let vixAvailable = false;
 
     window.marketMetrics = {
-        // Утилита для ограничения значения в диапазоне
+        // Утилита for ограничения значения в диапазоне
         clamp(value, min, max) {
             if (value === null || value === undefined || isNaN(value)) return min;
             return Math.max(min, Math.min(max, parseFloat(value)));
         },
 
-        // Утилита для безопасного преобразования в число
+        // Утилита for безопасного преобразования в число
         safeNumber(value, defaultValue = 0) {
             if (value === null || value === undefined || value === '') return defaultValue;
             const num = parseFloat(value);
@@ -77,7 +77,7 @@
                     fgiVal = cached.value;
                     this.updateWindowMetrics();
                     const originalSource = cached.source || 'Alternative.me';
-                    console.log('FGI загружен из кэша:', fgiVal, 'исходный источник:', originalSource);
+                    console.log('FGI loaded из кэша:', fgiVal, 'исходный источник:', originalSource);
                     return { success: true, value: fgiVal.toString(), numericValue: fgiVal, source: originalSource };
                 }
             }
@@ -122,7 +122,7 @@
                         vixAvailable = true;
                         this.updateWindowMetrics();
                         const originalSource = cached.source;
-                        console.log('VIX загружен из кэша:', vixVal.toFixed(2), 'исходный источник:', originalSource);
+                        console.log('VIX loaded из кэша:', vixVal.toFixed(2), 'исходный источник:', originalSource);
 
                         // Показываем сообщение об источнике (исходный источник, не "cache")
                         if (window.messagesStore) {
@@ -152,7 +152,7 @@
                                    window.location.hostname === '127.0.0.1';
 
             const sources = [
-                // Yahoo Finance через Cloudflare Worker proxy (для file://)
+                // Yahoo Finance через Cloudflare Worker proxy (for file://)
                 async () => {
                     if (isFileProtocol && window.cloudflareConfig) {
                         try {
@@ -173,9 +173,9 @@
                     }
                     return null;
                 },
-                // Yahoo Finance (прямой запрос для HTTP/HTTPS)
+                // Yahoo Finance (прямой запрос for HTTP/HTTPS)
                 async () => {
-                    if (isFileProtocol) return null; // только для HTTP/HTTPS
+                    if (isFileProtocol) return null; // только for HTTP/HTTPS
                     try {
                         const url = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d';
                         const resp = await fetch(url);
@@ -189,7 +189,7 @@
                     }
                     return null;
                 },
-                // Stooq через Cloudflare Worker proxy (для file://)
+                // Stooq через Cloudflare Worker proxy (for file://)
                 async () => {
                     if (isFileProtocol && window.cloudflareConfig) {
                         try {
@@ -212,7 +212,7 @@
                     }
                     return null;
                 },
-                // Stooq (прямой запрос для HTTP/HTTPS)
+                // Stooq (прямой запрос for HTTP/HTTPS)
                 async () => {
                     if (isFileProtocol) return null;
                     try {
@@ -229,7 +229,7 @@
                     }
                     return null;
                 },
-                // Alpha Vantage (прямой запрос для HTTP/HTTPS, требует API ключ)
+                // Alpha Vantage (прямой запрос for HTTP/HTTPS, требует API ключ)
                 async () => {
                     if (isFileProtocol) return null;
                     try {
@@ -313,7 +313,7 @@
                 if (isFile && window.cloudflareConfig) {
                     url = window.cloudflareConfig.getApiProxyEndpoint('coingecko', '/global');
                 } else {
-                    // Прямой запрос к CoinGecko для HTTP/HTTPS
+                    // Прямой запрос к CoinGecko for HTTP/HTTPS
                     url = 'https://api.coingecko.com/api/v3/global';
                 }
 
@@ -478,7 +478,7 @@
         async fetchAll(options = {}) {
             const force = options.forceRefresh || false;
 
-            // Если принудительно, очищаем журнал для этих метрик
+            // Если принудительно, очищаем журнал for этих метрик
             if (force && window.requestRegistry) {
                 // Мы не можем просто удалить из журнала, но можем сделать так,
                 // чтобы fetch функции игнорировали проверку.
@@ -499,9 +499,9 @@
 
             return {
                 fgi: fgi.success ? fgi.value : '—',
-                fgiSource: fgi.source || null, // Источник данных FGI (для tooltip в футере)
+                fgiSource: fgi.source || null, // Источник данных FGI (for tooltip в футере)
                 vix: vix.success ? vix.value : '—',
-                vixSource: vix.source || null, // Источник данных VIX (для tooltip в футере)
+                vixSource: vix.source || null, // Источник данных VIX (for tooltip в футере)
                 btcDom: btcDom.success ? btcDom.value : '—',
                 oi: oi.success ? oi.value : '—',
                 fr: fr.success ? fr.value : '—',
@@ -513,6 +513,6 @@
     // Инициализируем window при загрузке модуля
     window.marketMetrics.updateWindowMetrics();
 
-    console.log('market-metrics.js: инициализирован');
+    console.log('market-metrics.js: initialized');
 })();
 

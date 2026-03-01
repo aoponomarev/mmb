@@ -4,31 +4,31 @@
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Перевод системных сообщений через AI провайдеры с кэшированием.
+ * PURPOSE: Перевод системных сообщений через AI провайдеры с кэшированием.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Упрощённый формат промпта: KEY|TEXT|DETAILS
  * - Компактное хранение в localStorage: { key: [text, details] }
  * - Lazy translation — перевод только при смене языка
  * - Fallback на русский при ошибках
- * - Версионирование кэша — привязка к версии приложения для автоматической инвалидации
+ * - Версионирование кэша — привязка к версии приложения for автоматической инвалидации
  *
  * ФОРМАТ КЭША (localStorage):
  * Ключ: 'tr-{lang}-{versionHash}' (например: 'tr-en-aBc12XyZ')
  * Значение: { "e.net": ["Network error", "Check connection"], ... }
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * - При обновлении приложения создается новый ключ кэша с новым versionHash
  * - Старый кэш автоматически становится неактуальным
  * - Гарантирует соответствие переводов структуре сообщений в новой версии
  * - Исключает ошибки при изменении ключей сообщений между версиями
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * await messagesTranslator.init('en');
  * await messagesTranslator.updateLanguage('es');
  * const translated = messagesTranslator.translate('e.net');
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация: core/config/messages-config.js
  * - AI провайдеры: core/api/ai-provider-manager.js
  * - i18n конфиг: core/config/i18n-config.js
@@ -48,12 +48,12 @@
     let isInitialized = false;
 
     /**
-     * Получить ключ кэша для языка с версионированием
+     * Get ключ кэша for языка с версионированием
      * @param {string} lang - код языка
      * @returns {string} - ключ localStorage с версией приложения
      */
     function getCacheKey(lang) {
-        // Версионирование кэша переводов для привязки к версии приложения
+        // Версионирование кэша переводов for привязки к версии приложения
         // При обновлении приложения (изменении ключей сообщений) создается новый кэш
         const versionHash = window.appConfig?.getVersionHash() || 'v1';
         return `tr-${lang}-${versionHash}`;
@@ -96,13 +96,13 @@
     }
 
     /**
-     * Сформировать промпт для AI
+     * Сформировать промпт for AI
      * @param {string} targetLang - целевой язык
      * @returns {string} - промпт
      */
     function buildPrompt(targetLang) {
         if (!window.messagesConfig) {
-            console.error('messages-translator: messagesConfig не загружен');
+            console.error('messages-translator: messagesConfig not loaded');
             return '';
         }
 
@@ -167,7 +167,7 @@
         if (lang === 'ru') return null;
 
         if (!window.aiProviderManager) {
-            console.warn('messages-translator: aiProviderManager не загружен');
+            console.warn('messages-translator: aiProviderManager not loaded');
             return null;
         }
 
@@ -188,7 +188,7 @@
             const translatedCount = Object.keys(cache).length;
 
             if (translatedCount === 0) {
-                console.warn('messages-translator: не удалось распарсить переводы из ответа AI');
+                console.warn('messages-translator: failed to распарсить переводы из ответа AI');
                 return null;
             }
 
@@ -207,7 +207,7 @@
     /**
      * Перевести одно сообщение
      * @param {string} key - ключ сообщения
-     * @param {Object} params - параметры для плейсхолдеров
+     * @param {Object} params - параметры for плейсхолдеров
      * @returns {Object} - { text, details }
      */
     function translate(key, params = {}) {
@@ -260,7 +260,7 @@
         if (currentLanguage === 'ru') {
             translationsCache = null;
             isInitialized = true;
-            // Эмитим событие для инициализации компонентов
+            // Эмитим событие for инициализации компонентов
             document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
                 detail: { language: currentLanguage }
             }));
@@ -272,7 +272,7 @@
 
         isInitialized = true;
 
-        // Эмитим событие для инициализации компонентов
+        // Эмитим событие for инициализации компонентов
         document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
             detail: { language: currentLanguage }
         }));
@@ -307,14 +307,14 @@
         // Обновляем отображаемые сообщения
         await updateDisplayedMessages();
 
-        // Эмитим событие для принудительного пересчета computed в компонентах
+        // Эмитим событие for принудительного пересчета computed в компонентах
         document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
             detail: { language: lang }
         }));
     }
 
     /**
-     * Обновить все отображаемые сообщения
+     * Update все отображаемые сообщения
      * @returns {Promise<void>}
      */
     async function updateDisplayedMessages() {
@@ -372,7 +372,7 @@
     }
 
     /**
-     * Получить текущий язык
+     * Get текущий язык
      * @returns {string}
      */
     function getCurrentLanguage() {
@@ -380,7 +380,7 @@
     }
 
     /**
-     * Проверить, инициализирован ли переводчик
+     * Проверить, initialized ли переводчик
      * @returns {boolean}
      */
     function isReady() {
@@ -388,7 +388,7 @@
     }
 
     /**
-     * Очистить кэш для языка
+     * Очистить кэш for языка
      * @param {string} lang - язык (если не указан — текущий)
      */
     function clearCache(lang) {
@@ -401,7 +401,7 @@
         } catch (e) {}
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.messagesTranslator = {
         init,
         translate,

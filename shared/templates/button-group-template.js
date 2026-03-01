@@ -3,9 +3,9 @@
  * BUTTON GROUP TEMPLATE - Шаблон компонента группы кнопок
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для Vue-обёртки над Bootstrap .btn-group (cmp-button-group).
+ * PURPOSE: Шаблон for Vue-обёртки над Bootstrap .btn-group (cmp-button-group).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="button-group-template".
@@ -19,25 +19,25 @@
  * ОСОБЕННОСТИ ШАБЛОНА:
  * Структура HTML:
  * - Двойной рендер: группа кнопок (>= breakpoint) и dropdown (< breakpoint)
- * - Группа кнопок: ⟨div class="btn-group"⟩ с условными классами для видимости (d-none d-{breakpoint}-inline-flex)
- * - Dropdown: ⟨cmp-dropdown⟩ с условными классами для видимости (d-{breakpoint}-none)
+ * - Группа кнопок: ⟨div class="btn-group"⟩ с условными классами for видимости (d-none d-{breakpoint}-inline-flex)
+ * - Dropdown: ⟨cmp-dropdown⟩ с условными классами for видимости (d-{breakpoint}-none)
  * Layout и CSS-классы:
- * - Адаптивное схлопывание в dropdown: CSS-переключение через Bootstrap utilities (d-none, d-{breakpoint}-inline-flex для группы, d-{breakpoint}-none для dropdown)
+ * - Адаптивное схлопывание в dropdown: CSS-переключение через Bootstrap utilities (d-none, d-{breakpoint}-inline-flex for группы, d-{breakpoint}-none for dropdown)
  * - Мгновенное переключение через CSS (без JS resize listener), использование стандартных Bootstrap utilities
- * - Оба режима независимы и совместимы с Bootstrap JS API
+ * - Оба режима независимы и совместимы with Bootstrap JS API
  * Условный рендеринг:
  * - Группа кнопок: условная видимость через классы d-none d-{breakpoint}-inline-flex (видна >= breakpoint)
  * - Dropdown: условная видимость через классы d-{breakpoint}-none (виден < breakpoint)
  * - Типы кнопок: type="button" через ⟨cmp-button⟩, type="checkbox" и type="radio" через нативный HTML
- * Нативный HTML для checkbox/radio:
+ * Нативный HTML for checkbox/radio:
  * - Используется стандартная Bootstrap структура: ⟨input class="btn-check"⟩ + ⟨label class="btn"⟩
- * - Классы выравнивания: d-flex, align-items-center для label
+ * - Классы выравнивания: d-flex, align-items-center for label
  * Слоты:
- * - default — содержимое кнопок (fallback для кастомных кнопок)
+ * - default — содержимое кнопок (fallback for кастомных кнопок)
  * - button-{index} — переопределение конкретной кнопки по индексу (параметры слота: { button, index })
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/button-group.js
  */
 
@@ -48,7 +48,7 @@
     <!-- Режим 1: Группа кнопок (видна >= breakpoint) -->
     <div :class="groupClasses" v-bind="groupAttrs" ref="groupContainer">
         <template v-for="(button, index) in buttonStates" :key="index">
-            <!-- Слот для переопределения кнопки -->
+            <!-- Слот for переопределения кнопки -->
             <slot v-if="$slots[\`button-\${index}\`]" :name="\`button-\${index}\`" :button="button" :index="index"></slot>
 
             <!-- Action кнопка через cmp-button -->
@@ -131,7 +131,7 @@
             </template>
         </template>
 
-        <!-- Слот для дополнительного контента -->
+        <!-- Слот for дополнительного контента -->
         <slot name="default"></slot>
     </div>
 

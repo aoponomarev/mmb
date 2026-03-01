@@ -3,7 +3,7 @@
  * AI API SETTINGS COMPONENT - Компонент настроек AI API провайдеров
  * ================================================================================================
  *
- * ЦЕЛЬ: Компонент настроек AI API провайдеров (YandexGPT) для модального окна.
+ * PURPOSE: Компонент настроек AI API провайдеров (YandexGPT) for модального окна.
  * Позволяет переключаться между провайдерами и настраивать их параметры.
  *
  * Skill: core/skills/api-layer
@@ -15,12 +15,12 @@
  * - Использует систему управления кнопками модального окна
  * - Сохранение через cache-manager
  * - Валидация API ключей
- * - Поддержка состояния "Сохранено, закрыть?" для кнопки "Сохранить"
+ * - Поддержка состояния "Сохранено, закрыть?" for кнопки "Сохранить"
  * - Переключатель видимости API ключа (глазик)
  *
  * YANDEXGPT НАСТРОЙКИ:
  * - yandexApiKey: API ключ Yandex Cloud (получается из IAM, показывается только один раз при создании)
- * - yandexFolderId: Folder ID для Yandex Cloud (b1gv03a122le5a934cqj)
+ * - yandexFolderId: Folder ID for Yandex Cloud (b1gv03a122le5a934cqj)
  * - yandexModel: Model URI (gpt://{folderId}/{model}/latest)
  * - Модели: YandexGPT Lite, YandexGPT
  *
@@ -42,7 +42,7 @@
  * - isValid (Boolean) — валидность формы (API ключ текущего провайдера не пустой)
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
  * Методы:
  * - loadSettings() — загрузка настроек из кэша
@@ -53,7 +53,7 @@
  * - toggleYandexApiKeyVisibility() — переключение видимости API ключа Yandex
  * - toggleGithubTokenVisibility() — переключение видимости GitHub token
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: app/templates/ai-api-settings-template.js
  * - AI Provider Manager: core/api/ai-provider-manager.js
  * - Система управления кнопками: shared/components/modal.js
@@ -105,7 +105,7 @@ window.aiApiSettings = {
     },
 
     computed: {
-        // Уникальный префикс для ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
         formIdPrefix() {
             return `ai-api-settings-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -188,7 +188,7 @@ window.aiApiSettings = {
     },
 
         async mounted() {
-            // Регистрируем кнопки при монтировании через $nextTick для гарантии доступности modalApi
+            // Регистрируем кнопки при монтировании через $nextTick for гарантии доступности modalApi
             this.$nextTick(() => {
                 if (this.modalApi) {
                     // Кнопка "Сохранить" только в footer
@@ -297,7 +297,7 @@ window.aiApiSettings = {
                 }
 
                 // Локальный резервный план: восстанавливаем ПО КАЖДОМУ отсутствующему полю отдельно.
-                // Важно: наличие apiBaseUrl не должно блокировать восстановление yandex/github токенов.
+                // Important: наличие apiBaseUrl не должно блокировать восстановление yandex/github токенов.
                 const backup = this.loadPersistentSettingsBackup();
                 if (backup) {
                     if ((!this.provider || !this.provider.trim()) && typeof backup.provider === 'string' && backup.provider) this.provider = backup.provider;
@@ -386,7 +386,7 @@ window.aiApiSettings = {
                     this.initialSyncEnabled = d.syncEnabled;
                 }
 
-                // Сохраняем восстановленные ключи в локальный cacheManager для следующего старта
+                // Сохраняем восстановленные ключи в локальный cacheManager for следующего старта
                 const saves = [];
                 if (d.provider)        saves.push(window.cacheManager.set('ai-provider', d.provider));
                 if (d.yandexApiKey)    saves.push(window.cacheManager.set('yandex-api-key', d.yandexApiKey));
@@ -484,7 +484,7 @@ window.aiApiSettings = {
         },
 
         /**
-         * Получить заголовок авторизации для Cloudflare /api/settings.
+         * Get заголовок авторизации for Cloudflare /api/settings.
          * Приоритет:
          * 1) service token (githubToken / app_github_token)
          * 2) OAuth JWT текущего пользователя
@@ -537,13 +537,13 @@ window.aiApiSettings = {
             this.settingsTokenWarningShown = true;
             const suffix = context ? ` (${context})` : '';
             console.warn(
-                `ai-api-settings: нет токена для Cloudflare KV${suffix}. ` +
+                `ai-api-settings: нет токена for Cloudflare KV${suffix}. ` +
                 'Нужен либо service token (githubToken), либо OAuth JWT после авторизации.'
             );
         },
 
         /**
-         * Получить URL Cloudflare Worker для /api/settings.
+         * Get URL Cloudflare Worker for /api/settings.
          */
         getSettingsUrl() {
             const base = window.cloudflareConfig
@@ -553,12 +553,12 @@ window.aiApiSettings = {
         },
 
         /**
-         * Обновить список снимков: Cloudflare KV.
+         * Update список снимков: Cloudflare KV.
          * В KV хранится один актуальный снимок — показываем его как "облако".
          */
         async refreshSnapshots() {
             this.isSnapshotsLoading = true;
-            // Skill anchor: isSnapshotsLoading сбрасывается в общем finally — обязательно для всех путей выхода.
+            // Skill anchor: isSnapshotsLoading сбрасывается в общем finally — обязательно for всех путей logoutа.
             try {
                 const snapshotFiles = [];
                 try {

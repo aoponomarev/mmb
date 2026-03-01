@@ -117,7 +117,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Удалить из портфеля
+                                                                Delete из портфеля
                                                             </button>
                                                         </li>
                                                         <li>
@@ -212,7 +212,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Удалить из портфеля
+                                                                Delete из портфеля
                                                             </button>
                                                         </li>
                                                         <li>
@@ -254,9 +254,9 @@
                     </div>
                 </div>
 
-                <!-- Итоговая статистика (скрыта по требованию, оставлена для валидации) -->
+                <!-- Итоговая статистика (скрыта по требованию, оставлена for валидации) -->
                 <div v-if="Math.abs(totalPercent - 100) > 0.01" class="p-1 small text-center">
-                    <span class="text-warning fw-bold">Внимание: распределено {{ totalPercent }}% (требуется 100%)</span>
+                    <span class="text-warning fw-bold">Warning: распределено {{ totalPercent }}% (требуется 100%)</span>
                 </div>
             </div>
         `,
@@ -285,7 +285,7 @@
                 type: Function,
                 required: true
             },
-            // Начальные данные для редактирования (D.4)
+            // Начальные данные for редактирования (D.4)
             initialData: {
                 type: Object,
                 required: false,
@@ -327,7 +327,7 @@
                     this.updateDefaultName();
                     // ВАЖНО: В режиме custom НЕ обновляем customLongPercent/customShortPercent здесь.
                     // Общий вес сегмента в Custom режиме является жестким ограничением, 
-                    // которое меняется только вручную через поле ввода сегмента.
+                    // которое меняется только manually через поле ввода сегмента.
                     if (this.balanceMode !== 'custom') {
                         this.customLongPercent = this.segmentTotalPercent(true);
                         this.customShortPercent = this.segmentTotalPercent(false);
@@ -336,7 +336,7 @@
             },
             portfolioName(newVal, oldVal) {
                 // Если новое значение не совпадает с тем, что мы бы сгенерировали автоматически,
-                // значит пользователь его отредактировал вручную
+                // значит пользователь его отредактировал manually
                 const autoName = this.generateDefaultName();
                 if (newVal !== autoName && oldVal === autoName) {
                     this.isNameManuallyEdited = true;
@@ -348,7 +348,7 @@
             this.registerButtons();
             this.normalizeSelectedCoinsForDomain();
 
-            // Если режим редактирования (D.4) — монеты уже загружены из initialData
+            // Если режим редактирования (D.4) — монеты уже loadedы из initialData
             // Если есть предвыбранные монеты из таблицы — используем их
             // Иначе — авто-отбор топ 5+5
             if (!this.initialData) {
@@ -557,7 +557,7 @@
                     || 'Median/AIR/260101';
                 const topCoins = window.portfolioConfig.autoSelectCoins(this.allCoins);
 
-                // Подготавливаем монеты для портфеля (структура PortfolioCoin)
+                // Подготавливаем монеты for портфеля (структура PortfolioCoin)
                 this.selectedCoins = topCoins.map(coin =>
                     window.portfolioConfig.createPortfolioCoin(coin, activeModelId)
                 );
@@ -588,7 +588,7 @@
             },
 
             /**
-             * Обновляет название портфеля, если оно не было отредактировано вручную
+             * Обновляет название портфеля, если оно не было отредактировано manually
              */
             updateDefaultName() {
                 if (!this.isNameManuallyEdited) {
@@ -606,7 +606,7 @@
                         const allocateSegment = (assets, targetTotal) => {
                             if (assets.length === 0) return [];
                             
-                            // Создаем временный драфт для сегмента
+                            // Создаем временный драфт for сегмента
                             const draft = {
                                 assets: assets.map(a => ({ 
                                     ...a, 
@@ -621,7 +621,7 @@
                                 mode: this.weightMode
                             };
 
-                            // Используем движок для распределения targetTotal внутри сегмента
+                            // Используем движок for распределения targetTotal внутри сегмента
                             // Он учтет заблокированные (isLocked) веса и распределит остаток
                             const allocated = window.portfolioEngine.allocateWeights(draft, draft.mode);
                             return allocated.assets;

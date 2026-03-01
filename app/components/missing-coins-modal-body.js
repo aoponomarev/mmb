@@ -14,7 +14,7 @@
         template: `
             <div>
                 <div class="alert alert-warning mb-3">
-                    Не найдены данные для {{ rows.length }} монет. Выберите, что сделать с каждой: исключить или заменить по тикеру.
+                    Не найдены данные for {{ rows.length }} монет. Выберите, что сделать с каждой: исключить или заменить по тикеру.
                 </div>
                 <div class="list-group">
                     <div
@@ -43,7 +43,7 @@
                                         <input
                                             type="text"
                                             class="form-control form-control-sm"
-                                            :placeholder="'Тикер для замены (' + row.id + ')'"
+                                            :placeholder="'Тикер for замены (' + row.id + ')'"
                                             v-model="row.altTicker"
                                             :disabled="row.exclude"
                                             @input="handleAltTickerInput(row)"

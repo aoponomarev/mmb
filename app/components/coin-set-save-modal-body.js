@@ -3,15 +3,15 @@
  * COIN SET SAVE MODAL BODY COMPONENT - Компонент body модального окна сохранения набора монет
  * ================================================================================================
  *
- * ЦЕЛЬ: Форма для сохранения выбранных монет в набор с названием.
+ * PURPOSE: Форма for сохранения выбранных монет в набор с названием.
  * Skill: app/skills/ux-principles
  *
  * ОСОБЕННОСТИ:
- * - Форма для ввода названия набора монет
+ * - Форма for ввода названия набора монет
  * - Регистрирует кнопки "Отмена" и "Сохранить" через modalApi
  * - Реактивно обновляет состояние кнопок при изменении данных формы
  * - Управляет логикой отмены (восстановление исходных значений)
- * - Поддерживает состояние "Сохранено, закрыть?" для кнопки "Сохранить"
+ * - Поддерживает состояние "Сохранено, закрыть?" for кнопки "Сохранить"
  *
  * API КОМПОНЕНТА:
  *
@@ -21,9 +21,9 @@
  * - onCancel (Function, required) — функция отмены
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Система управления кнопками: shared/components/modal.js
  * - Компонент кнопки: shared/components/button.js
  * - Coin Sets Client: core/api/cloudflare/coin-sets-client.js
@@ -117,7 +117,7 @@ window.coinSetSaveModalBody = {
 
     watch: {
         /**
-         * Отслеживание изменения авторизации для обновления состояния кнопок
+         * Отслеживание изменения авторизации for обновления состояния кнопок
          */
         isAuthenticated() {
             this.$nextTick(() => {
@@ -138,7 +138,7 @@ window.coinSetSaveModalBody = {
         this.updateSaveButton();
         this.updateDraftButton();
 
-        // Отслеживаем изменения выбранных монет для обновления кнопки Draft
+        // Отслеживаем изменения выбранных монет for обновления кнопки Draft
         this.$watch('selectedCoinIds', () => {
             this.updateDraftButton();
         }, { deep: true });
@@ -194,7 +194,7 @@ window.coinSetSaveModalBody = {
                 onClick: () => this.handleSave()
             });
 
-            // Кнопка "Авторизоваться" (показывается когда пользователь не авторизован)
+            // Кнопка "Авторизоваться" (показывается когда пользователь not authenticated)
             this.modalApi.registerButton('auth', {
                 label: 'Авторизоваться',
                 variant: 'primary',
@@ -239,7 +239,7 @@ window.coinSetSaveModalBody = {
             const existingCoinIds = draftSet && draftSet.coin_ids ? new Set(draftSet.coin_ids) : new Set();
 
             // Проверяем, какие выбранные монеты уже есть в Draft
-            // Используем this.coins (из props) для получения полных данных монет (ЕИП)
+            // Используем this.coins (из props) for получения полных данных монет (ЕИП)
             const newCoinIds = this.selectedCoinIds.filter(id => !existingCoinIds.has(id));
             const allExist = newCoinIds.length === 0;
 
@@ -252,7 +252,7 @@ window.coinSetSaveModalBody = {
                     visible: true
                 });
             } else {
-                // Есть новые монеты для добавления
+                // Есть новые монеты for добавления
                 this.modalApi.updateButton('saveToDraft', {
                     label: `+ ${newCoinIds.length} to Draft`,
                     variant: 'info',
@@ -317,7 +317,7 @@ window.coinSetSaveModalBody = {
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'warning',
-                        text: 'Нет монет для сохранения в Draft',
+                        text: 'Нет монет for сохранения в Draft',
                         scope: 'global',
                         duration: 3000
                     });
@@ -434,7 +434,7 @@ window.coinSetSaveModalBody = {
 
             try {
                 // Получаем полные данные монет из родительского компонента
-                // Это нужно для того, чтобы при загрузке набора сразу были доступны полные данные
+                // Это нужно for того, чтобы при загрузке набора сразу были доступны полные данные
                 const fullCoinsData = this.$parent.coins ?
                     this.$parent.coins.filter(coin => this.selectedCoinIds.includes(coin.id)) :
                     [];
@@ -462,7 +462,7 @@ window.coinSetSaveModalBody = {
         async handleOpenAuth() {
             try {
                 if (!window.authClient || !window.authState) {
-                    console.error('coin-set-save-modal-body: authClient или authState не загружен');
+                    console.error('coin-set-save-modal-body: authClient или authState not loaded');
                     return;
                 }
 
@@ -505,7 +505,7 @@ window.coinSetSaveModalBody = {
 
                 window.addEventListener('message', handleOAuthMessage);
 
-                // Таймаут для удаления обработчика (на случай если окно закрыто без авторизации)
+                // Таймаут for удаления обработчика (на случай если окно закрыто без авторизации)
                 setTimeout(() => {
                     window.removeEventListener('message', handleOAuthMessage);
                     window.authState.setLoading(false);

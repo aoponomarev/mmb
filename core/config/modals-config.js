@@ -4,27 +4,27 @@
  * ================================================================================================
  * Skill: app/skills/ux-principles
  *
- * ЦЕЛЬ: Единый источник правды для заголовков, иконок и метаданных модальных окон.
+ * PURPOSE: SSOT for заголовков, иконок и метаданных модальных окон.
  *
- * ПРИНЦИПЫ:
- * - Заголовок модального окна определяется здесь и используется везде
+ * PRINCIPLES:
+ * - Заголовок модального окна определяется здесь и using везде
  * - Пункты меню, кнопки и ссылки получают заголовок из этой конфигурации
  * - Изменение заголовка в одном месте автоматически синхронизируется везде
  * - Обязательное требование: заголовок модального окна должен совпадать с текстом пункта меню/кнопки
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * {
  *   modalId: {
  *     title: 'Заголовок модального окна',
  *     icon: 'fas fa-icon-class', // Опционально
  *     description: 'Описание', // Опционально
- *     bodyComponent: 'component-name', // Имя Vue-компонента для body (опционально)
- *     centered: true, // Центрирование по вертикали (опционально, default: false)
- *     condition: () => true // Функция для условного отображения (опционально)
+ *     bodyComponent: 'component-name', // Имя Vue-компонента for body (optional)
+ *     centered: true, // Центрирование по вертикали (optional, default: false)
+ *     condition: () => true // Функция for условного отображения (optional)
  *   }
  * }
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Принципы единого источника правды: `app/skills/ux-principles`
  * - Компонент модального окна: shared/components/modal.js
  */
@@ -108,7 +108,7 @@
         'coinSetLoadModal': {
             title: 'Загрузить набор монет',
             icon: 'fas fa-folder-open',
-            description: 'Выбор сохраненного набора монет для загрузки',
+            description: 'Выбор сохраненного набора монет for загрузки',
             bodyComponent: 'coin-set-load-modal-body',
             centered: true,
             autoRegister: false // Требует props (onLoad, onCancel)
@@ -124,7 +124,7 @@
         'sessionLogModal': {
             title: 'Session Log',
             icon: 'fas fa-terminal',
-            description: 'Логи сессии для отладки',
+            description: 'Логи сессии for отладки',
             bodyComponent: 'session-log-modal-body',
             centered: true,
             autoRegister: true // Не требует props
@@ -140,7 +140,7 @@
     };
 
     /**
-     * Получить конфигурацию модального окна
+     * Get конфигурацию модального окна
      * @param {string} modalId - ID модального окна
      * @returns {Object|null} - Конфигурация или null
      */
@@ -149,7 +149,7 @@
     }
 
     /**
-     * Получить заголовок модального окна
+     * Get заголовок модального окна
      * @param {string} modalId - ID модального окна
      * @returns {string|null} - Заголовок или null
      */
@@ -159,7 +159,7 @@
     }
 
     /**
-     * Получить иконку модального окна
+     * Get иконку модального окна
      * @param {string} modalId - ID модального окна
      * @returns {string|null} - Иконка или null
      */
@@ -169,7 +169,7 @@
     }
 
     /**
-     * Получить список модальных окон для автоматической регистрации (с применением условий)
+     * Get list модальных окон for автоматической регистрации (с применением условий)
      * Возвращает только модальные окна с autoRegister: true
      * @returns {Array} - Массив конфигураций модальных окон
      */
@@ -188,7 +188,7 @@
                         continue; // Пропускаем модальное окно, если условие не выполнено
                     }
                 } catch (error) {
-                    console.error(`modals-config: ошибка в condition для модального окна "${modalId}":`, error);
+                    console.error(`modals-config: ошибка в condition for модального окна "${modalId}":`, error);
                     continue;
                 }
             }
@@ -201,7 +201,7 @@
         return modals;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.modalsConfig = {
         MODALS_CONFIG,
         getModalConfig,
@@ -210,6 +210,6 @@
         getRegisteredModals
     };
 
-    console.log('modals-config.js: инициализирован');
+    console.log('modals-config.js: initialized');
 })();
 

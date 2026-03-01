@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * AUTH UTILITIES - Утилиты для проверки JWT токенов и авторизации
+ * AUTH UTILITIES - Утилиты for проверки JWT токенов и авторизации
  * ================================================================================================
  *
- * ЦЕЛЬ: Проверка JWT токенов на защищённых endpoints, извлечение данных пользователя.
+ * PURPOSE: Проверка JWT токенов на защищённых endpoints, извлечение данных пользователя.
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Проверка подписи JWT токена через JWT_SECRET
  * - Извлечение user_id из токена
- * - Middleware для защищённых endpoints
+ * - Middleware for защищённых endpoints
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { verifyToken, getUserIdFromToken, requireAuth } from './utils/auth.js';
  *
  * // Проверка токена
@@ -24,7 +24,7 @@
 /**
  * Проверка JWT токена и извлечение user_id
  * @param {string} token - JWT токен
- * @param {string} jwtSecret - Секрет для проверки подписи
+ * @param {string} jwtSecret - Секрет for проверки подписи
  * @returns {Object|null} Данные из токена (user_id, email и т.д.) или null при ошибке
  */
 export async function verifyToken(token, jwtSecret) {
@@ -40,7 +40,7 @@ export async function verifyToken(token, jwtSecret) {
     }
 
     // Декодирование payload (без проверки подписи пока)
-    // В продакшене нужно использовать библиотеку для проверки подписи
+    // В продакшене нужно использовать библиотеку for проверки подписи
     const payload = JSON.parse(atob(parts[1]));
 
     // Проверка срока действия токена
@@ -66,7 +66,7 @@ export async function verifyToken(token, jwtSecret) {
 /**
  * Извлечение user_id из токена
  * @param {string} token - JWT токен
- * @param {string} jwtSecret - Секрет для проверки подписи
+ * @param {string} jwtSecret - Секрет for проверки подписи
  * @returns {Promise<string|null>} user_id или null
  */
 export async function getUserIdFromToken(token, jwtSecret) {
@@ -76,7 +76,7 @@ export async function getUserIdFromToken(token, jwtSecret) {
 
 /**
  * Извлечение токена из заголовка Authorization
- * @param {Request} request - HTTP запрос
+ * @param {Request} request - HTTP request
  * @returns {string|null} Токен или null
  */
 export function extractToken(request) {
@@ -88,9 +88,9 @@ export function extractToken(request) {
 }
 
 /**
- * Middleware для проверки авторизации на защищённых endpoints
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (должен содержать JWT_SECRET)
+ * Middleware for проверки авторизации на защищённых endpoints
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (должен содержать JWT_SECRET)
  * @returns {Promise<string|null>} user_id или null при ошибке авторизации
  */
 export async function requireAuth(request, env) {
@@ -101,7 +101,7 @@ export async function requireAuth(request, env) {
 
   const jwtSecret = env.JWT_SECRET;
   if (!jwtSecret) {
-    console.error('JWT_SECRET не настроен в Workers secrets');
+    console.error('JWT_SECRET not configured в Workers secrets');
     return null;
   }
 
@@ -110,9 +110,9 @@ export async function requireAuth(request, env) {
 }
 
 /**
- * Создание JWT токена (для использования при обмене code на токен)
- * @param {Object} payload - Данные для токена (user_id, email и т.д.)
- * @param {string} jwtSecret - Секрет для подписи
+ * Создание JWT токена (for использования при обмене code на токен)
+ * @param {Object} payload - Данные for токена (user_id, email и т.д.)
+ * @param {string} jwtSecret - Секрет for подписи
  * @param {number} expiresIn - Время жизни токена в секундах (по умолчанию 1 час)
  * @returns {Promise<string>} JWT токен
  */
@@ -135,7 +135,7 @@ export async function createToken(payload, jwtSecret, expiresIn = 3600) {
 
   // TODO: Создание подписи через HMAC-SHA256
   // Для MVP используем простую заглушку
-  // В продакшене нужно использовать crypto.subtle для создания подписи
+  // В продакшене нужно использовать crypto.subtle for создания подписи
   const signature = await createSignature(`${encodedHeader}.${encodedPayload}`, jwtSecret);
   const encodedSignature = signature.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 
@@ -143,14 +143,14 @@ export async function createToken(payload, jwtSecret, expiresIn = 3600) {
 }
 
 /**
- * Создание подписи для JWT токена
- * @param {string} data - Данные для подписи
+ * Создание подписи for JWT токена
+ * @param {string} data - Данные for подписи
  * @param {string} secret - Секрет
  * @returns {Promise<string>} Подпись в base64
  */
 async function createSignature(data, secret) {
   try {
-    // Использование Web Crypto API для создания подписи
+    // Использование Web Crypto API for создания подписи
     const encoder = new TextEncoder();
     const keyData = encoder.encode(secret);
     const messageData = encoder.encode(data);
@@ -167,7 +167,7 @@ async function createSignature(data, secret) {
     return btoa(String.fromCharCode(...new Uint8Array(signature)));
   } catch (error) {
     console.error('createSignature error:', error);
-    // Fallback: простая заглушка для разработки
+    // Fallback: простая заглушка for разработки
     return btoa(data + secret);
   }
 }

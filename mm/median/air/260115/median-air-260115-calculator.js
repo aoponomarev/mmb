@@ -5,7 +5,7 @@
  * Skill: core/skills/domain-portfolio
  * Doc: docs/A_MATH_MODELS.md
  *
- * ЦЕЛЬ: Новая версия модели Median/AIR с Robust-нормализацией (median+MAD)
+ * PURPOSE: Новая версия модели Median/AIR с Robust-нормализацией (median+MAD)
  *        и λ-смешиванием краткосрочного/долгосрочного AGR.
  * AGR_final = (1-λ)*AGR_long + λ*AGR_short
  * AGR_raw   = R*(w_I*I + w_A*A + w_IA*I*A)

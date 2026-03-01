@@ -4,23 +4,23 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Централизованная конфигурация для всех провайдеров финансовых данных.
- * Аналогично AI провайдерам, но для источников данных о криптовалютах.
+ * PURPOSE: Централизованная конфигурация for всех провайдеров финансовых данных.
+ * Аналогично AI провайдерам, но for источников данных о криптовалютах.
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды для всех настроек провайдеров
+ * PRINCIPLES:
+ * - SSOT for всех настроек провайдеров
  * - Поддержка множественных провайдеров (CoinGecko, CoinMarketCap, Binance и т.д.)
  * - Бесшовное переключение между провайдерами
- * - API ключи хранятся в localStorage (как для AI провайдеров)
+ * - API ключи хранятся в localStorage (как for AI провайдеров)
  * - Провайдер по умолчанию и список доступных провайдеров
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * {
  *   name: 'coingecko',                    // Внутреннее имя
  *   displayName: 'CoinGecko',             // Отображаемое имя
  *   baseUrl: 'https://api.coingecko.com', // Базовый URL API
  *   requiresApiKey: false,                // Требуется ли API ключ
- *   apiKeyUrl: 'https://...',             // URL для получения ключа
+ *   apiKeyUrl: 'https://...',             // URL for получения ключа
  *   rateLimit: {...},                     // Лимиты запросов
  *   timeout: 30000,                       // Таймаут запросов
  *   endpoints: {...},                     // Специфические эндпоинты
@@ -32,12 +32,12 @@
  * - Формат: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
  * - Управление через DataProviderManager
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Данные от внешних провайдеров версионируются в cache-manager
  * - Ключ: `coins-list-v${version}` (версия меняется при смене структуры данных)
  * - При смене провайдера структура может измениться → нужна новая версия
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - AI Providers Config (аналогия): `core/skills/api-layer`
  * - Data Provider Manager: core/api/data-provider-manager.js
  * - Base Data Provider: core/api/data-providers/base-provider.js
@@ -54,7 +54,7 @@
         // Провайдер по умолчанию
         defaultProvider: 'coingecko',
 
-        // Версия структуры данных (для кэширования)
+        // Версия структуры данных (for кэширования)
         // Увеличивать при изменении нормализованного формата данных
         dataVersion: 1,
 
@@ -88,7 +88,7 @@
                     'market-data',      // Рыночные данные
                     'icons'             // Иконки монет
                 ],
-                // Параметры для запросов
+                // Параметры for запросов
                 defaultParams: {
                     vs_currency: 'usd',
                     order: 'market_cap_desc',
@@ -129,7 +129,7 @@
     };
 
     /**
-     * Получить конфигурацию провайдера по имени
+     * Get конфигурацию провайдера по имени
      * @param {string} providerName - имя провайдера
      * @returns {Object|null} конфигурация провайдера или null
      */
@@ -138,7 +138,7 @@
     }
 
     /**
-     * Получить дефолтного провайдера
+     * Get дефолтного провайдера
      * @returns {string} имя провайдера по умолчанию
      */
     function getDefaultProvider() {
@@ -146,7 +146,7 @@
     }
 
     /**
-     * Получить список всех доступных провайдеров
+     * Get list всех доступных провайдеров
      * @returns {Array<Object>} массив конфигураций провайдеров
      */
     function getAvailableProviders() {
@@ -154,7 +154,7 @@
     }
 
     /**
-     * Проверить, требуется ли API ключ для провайдера
+     * Проверить, требуется ли API ключ for провайдера
      * @param {string} providerName - имя провайдера
      * @returns {boolean}
      */
@@ -164,7 +164,7 @@
     }
 
     /**
-     * Получить URL для получения API ключа
+     * Get URL for получения API ключа
      * @param {string} providerName - имя провайдера
      * @returns {string|null}
      */
@@ -174,7 +174,7 @@
     }
 
     /**
-     * Получить базовый URL провайдера
+     * Get базовый URL провайдера
      * @param {string} providerName - имя провайдера
      * @returns {string|null}
      */
@@ -184,7 +184,7 @@
     }
 
     /**
-     * Получить таймаут для запросов провайдера
+     * Get таймаут for запросов провайдера
      * @param {string} providerName - имя провайдера
      * @returns {number} таймаут в миллисекундах
      */
@@ -194,7 +194,7 @@
     }
 
     /**
-     * Получить лимиты запросов провайдера
+     * Get лимиты запросов провайдера
      * @param {string} providerName - имя провайдера
      * @returns {Object|null} объект с лимитами
      */
@@ -204,7 +204,7 @@
     }
 
     /**
-     * Получить эндпоинты провайдера
+     * Get эндпоинты провайдера
      * @param {string} providerName - имя провайдера
      * @returns {Object|null} объект с эндпоинтами
      */
@@ -214,7 +214,7 @@
     }
 
     /**
-     * Получить параметры по умолчанию для запросов
+     * Get параметры по умолчанию for запросов
      * @param {string} providerName - имя провайдера
      * @returns {Object|null} объект с параметрами
      */
@@ -224,7 +224,7 @@
     }
 
     /**
-     * Получить версию данных (для кэширования)
+     * Get версию данных (for кэширования)
      * @returns {number}
      */
     function getDataVersion() {
@@ -242,7 +242,7 @@
         return config ? config.features.includes(feature) : false;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.dataProvidersConfig = {
         CONFIG,
         getProviderConfig,

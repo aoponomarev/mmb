@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * AUTO COIN SETS - Автоматическая классификация и управление наборами монет
+ * AUTO COIN SETS - Автоматическая классификация и управление coin sets
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * ЦЕЛЬ: Автоматическое формирование и пополнение наборов монет по типам
- * (стейблкоины, обертки, LST) на основе загруженных монет.
+ * PURPOSE: Автоматическое формирование и пополнение sets монет по типам
+ * (стейблкоины, обертки, LST) на основе loadedных монет.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Автонаборы формируются при каждой загрузке монет (из рейтингов или прямого поиска)
  * - Монеты добавляются в автонаборы без дубликатов
  * - Автонаборы хранятся в localStorage и никогда не очищаются автоматически
@@ -20,12 +20,12 @@
  *
  * ОБОСНОВАНИЕ:
  * - Автоматический сборщик избавляет пользователя от ручной работы по составлению
- *   наборов однотипных монет
+ *   sets однотипных монет
  * - Наборы пополняются органически по мере работы с приложением
  * - Использование localStorage обеспечивает персистентность между сессиями
  * - Разделение на три типа соответствует актуальной классификации рынка
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - ЕИП: app/skills/ux-principles
  * - Классификатор: core/config/coins-config.js
  */
@@ -33,7 +33,7 @@
 (function() {
     'use strict';
 
-    // Ключи для хранения автонаборов в localStorage
+    // Ключи for хранения автоsets в localStorage
     const AUTO_SET_KEYS = {
         stablecoins: 'auto-set-stablecoins',
         wrapped: 'auto-set-wrapped',
@@ -41,14 +41,14 @@
     };
 
     /**
-     * Получить автонабор из localStorage
+     * Get автонабор из localStorage
      * @param {string} type - Тип автонабора ('stablecoins' | 'wrapped' | 'lst')
      * @returns {Array} Массив объектов монет { id, symbol, name }
      */
     function getAutoSet(type) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: неизвестный тип автонабора "${type}"`);
+            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
             return [];
         }
 
@@ -64,12 +64,12 @@
     /**
      * Добавить монеты в автонабор (без дубликатов)
      * @param {string} type - Тип автонабора ('stablecoins' | 'wrapped' | 'lst')
-     * @param {Array} newCoins - Массив монет для добавления
+     * @param {Array} newCoins - Массив монет for добавления
      */
     function addToAutoSet(type, newCoins) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: неизвестный тип автонабора "${type}"`);
+            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
             return;
         }
 
@@ -87,7 +87,7 @@
             });
 
             if (uniqueNewCoins.length === 0) {
-                return; // Нет новых монет для добавления
+                return; // Нет новых монет for добавления
             }
 
             // Сохраняем только необходимые поля
@@ -108,7 +108,7 @@
 
     /**
      * Классифицировать монеты и обновить автонаборы
-     * @param {Array} coins - Массив монет для классификации
+     * @param {Array} coins - Массив монет for классификации
      */
     function classifyAndUpdateAutoSets(coins) {
         if (!coins || !Array.isArray(coins) || coins.length === 0) {
@@ -116,7 +116,7 @@
         }
 
         if (!window.coinsConfig) {
-            console.warn('auto-coin-sets: coinsConfig не загружен, классификация невозможна');
+            console.warn('auto-coin-sets: coinsConfig not loaded, классификация невозможна');
             return;
         }
 
@@ -124,7 +124,7 @@
         const wrapped = [];
         const lst = [];
 
-        // Получаем списки для проверки принадлежности
+        // Получаем списки for проверки принадлежности
         const wrappedIds = new Set(window.coinsConfig.getWrappedCoins());
         const lstIds = new Set(window.coinsConfig.getLstCoins());
 
@@ -137,7 +137,7 @@
             // 1. Стейблкоины
             if (window.coinsConfig.isStablecoinId(coin.id)) {
                 stablecoins.push(coin);
-                return; // Стейблкоин не может быть одновременно wrapped/lst
+                return; // Стейблкоин не can be одновременно wrapped/lst
             }
 
             // 2. Wrapped или LST
@@ -174,7 +174,7 @@
     }
 
     /**
-     * Получить все автонаборы
+     * Get все автонаборы
      * @returns {Object} Объект с тремя массивами: { stablecoins, wrapped, lst }
      */
     function getAllAutoSets() {
@@ -187,13 +187,13 @@
     }
 
     /**
-     * Очистить автонабор (только для отладки/ручного управления)
-     * @param {string} type - Тип автонабора для очистки
+     * Очистить автонабор (только for отладки/ручного управления)
+     * @param {string} type - Тип автонабора for очистки
      */
     function clearAutoSet(type) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: неизвестный тип автонабора "${type}"`);
+            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
             return;
         }
 
@@ -206,7 +206,7 @@
     }
 
     /**
-     * Получить количество монет в автонаборе
+     * Get количество монет в автонаборе
      * @param {string} type - Тип автонабора
      * @returns {number}
      */
@@ -214,7 +214,7 @@
         return getAutoSet(type).length;
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.autoCoinSets = {
         classifyAndUpdateAutoSets,
         getAutoSet,
@@ -224,5 +224,5 @@
         AUTO_SET_KEYS // Для использования в других модулях
     };
 
-    console.log('auto-coin-sets.js: инициализирован');
+    console.log('auto-coin-sets.js: initialized');
 })();

@@ -5,15 +5,15 @@
  * Skill: core/skills/domain-portfolio
  * Doc: docs/A_MATH_MODELS.md
  *
- * ЦЕЛЬ: Единый источник правды для метаданных математических моделей и базовых параметров расчета.
+ * PURPOSE: SSOT for метаданных математических моделей и базовых параметров расчета.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Централизация списка моделей и их атрибутов (id, название, описание, калькулятор, признак дефолта)
  * - Централизация дефолтных параметров расчета (horizonDays, mdnHours, agrMethod)
  * - Избежание хардкода параметров в компонентах и сторонах хранения
  *
- * ССЫЛКИ:
- * - Документация метрик: core/skills/domain-portfolio
+ * REFERENCES:
+ * - Documentation метрик: core/skills/domain-portfolio
  * - Архитектура моделей: is/skills/arch-foundation (раздел "Математические модели и портфели")
  */
 
@@ -81,7 +81,7 @@
         'Median/AIR/260115': Object.freeze({
             id: 'Median/AIR/260115',
             name: 'Медиана (A.I.R.) 26.01.15',
-            description: 'Новая версия: каркас для AGR 260115 (в разработке)',
+            description: 'Новая версия: каркас for AGR 260115 (в разработке)',
             calculator: 'MedianAir260115Calculator',
             meta: Object.freeze({
                 id: 'Median/AIR/260115',

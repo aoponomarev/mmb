@@ -2,20 +2,20 @@
 // КОМПОНЕНТ COMBOBOX
 // Vue-обёртка над Bootstrap input-group + dropdown с поддержкой автодополнения
 // =========================
-// ЦЕЛЬ: Переиспользуемый компонент комбобокса с поддержкой:
+// PURPOSE: Переиспользуемый компонент комбобокса с поддержкой:
 // - Автодополнения и фильтрации
 // - Клавиатурной навигации
 // - Выбора значения из списка
 // - Произвольного ввода
 // - Группировки элементов
 // - Валидации
-// - Полной совместимости с Bootstrap JS API
+// - Полной совместимости with Bootstrap JS API
 // - Переключения в режим простого текстового поля
-// - Структура для: подсветки найденного текста, виртуального скроллинга, множественного выбора
+// - Структура for: подсветки найденного текста, виртуального скроллинга, множественного выбора
 //
-// ПРИНЦИПЫ:
-// - Максимальная совместимость с Bootstrap JS API (обязательное требование)
-// - Использование только Bootstrap классов (запрет кастомных стилей, кроме CSS для крестика)
+// PRINCIPLES:
+// - Максимальная совместимость with Bootstrap JS API (обязательное требование)
+// - Использование только Bootstrap классов (запрет кастомных стилей, кроме CSS for крестика)
 // - Инициализация Bootstrap Dropdown через JavaScript API
 // - Подписка на события Bootstrap (show.bs.dropdown, hide.bs.dropdown)
 // - Программный доступ к Bootstrap API через ref
@@ -26,46 +26,46 @@
 // Входные параметры (props):
 // Базовые:
 // - modelValue (String | Array) — значение компонента (v-model). Для множественного выбора — массив значений
-// - items (Array) — массив элементов для выбора. Может быть массивом строк или объектов с полями label, value, id
-// - placeholder (String, default: 'Выберите или введите...') — плейсхолдер для поля ввода
+// - items (Array) — массив элементов for выбора. Может быть массивом строк или объектов с полями label, value, id
+// - placeholder (String, default: 'Выберите или введите...') — плейсхолдер for поля ввода
 // Режимы:
 // - mode (String, default: 'combobox') — режим работы: 'combobox' (комбобокс) или 'input' (простое текстовое поле)
-// - multiple (Boolean, default: false) — режим множественного выбора (структура заложена для будущей реализации)
+// - multiple (Boolean, default: false) — режим множественного выбора (структура заложена for будущей реализации)
 // Поведение:
 // - allowCustom (Boolean, default: true) — разрешить произвольный ввод (не только из списка)
 // - strict (Boolean, default: false) — только значения из списка (запрет произвольного ввода)
 // - autocomplete (Boolean, default: true) — включить автодополнение и фильтрацию
-// - clearable (Boolean, default: true) — показывать крестик для очистки (реализовано через CSS псевдоэлемент ::before)
+// - clearable (Boolean, default: true) — показывать крестик for очистки (реализовано через CSS псевдоэлемент ::before)
 // Фильтрация и поиск:
 // - filterFunction (Function, default: null) — кастомная функция фильтрации (items, query) => filteredItems
-// - debounce (Number, default: 300) — задержка для debounce поиска (мс)
-// - highlightMatches (Boolean, default: false) — подсветка найденного текста (структура заложена для будущей реализации)
-// - itemLabel (String | Function, default: null) — поле для label или функция получения label
-// - itemValue (String | Function, default: null) — поле для value или функция получения value
+// - debounce (Number, default: 300) — задержка for debounce поиска (мс)
+// - highlightMatches (Boolean, default: false) — подсветка найденного текста (структура заложена for будущей реализации)
+// - itemLabel (String | Function, default: null) — поле for label или функция получения label
+// - itemValue (String | Function, default: null) — поле for value или функция получения value
 // Прокрутка:
-// - scrollable (Boolean, default: false) — включить прокрутку для длинных списков
+// - scrollable (Boolean, default: false) — включить прокрутку for длинных списков
 // - maxHeight (String, default: '300px') — максимальная высота прокручиваемой области
-// - virtualScrolling (Boolean, default: false) — виртуальный скроллинг (структура заложена для будущей реализации)
-// - virtualItemHeight (Number, default: 38) — высота элемента для виртуального скроллинга (px)
+// - virtualScrolling (Boolean, default: false) — виртуальный скроллинг (структура заложена for будущей реализации)
+// - virtualItemHeight (Number, default: 38) — высота элемента for виртуального скроллинга (px)
 // Группировка:
-// - groupBy (String | Function, default: null) — поле для группировки или функция (структура заложена для будущей реализации)
+// - groupBy (String | Function, default: null) — поле for группировки или функция (структура заложена for будущей реализации)
 // Валидация:
 // - required (Boolean, default: false) — обязательное поле
-// - pattern (String, default: null) — паттерн для валидации (HTML5)
+// - pattern (String, default: null) — паттерн for валидации (HTML5)
 // - disabled (Boolean, default: false) — отключить компонент
 // UI:
 // - size (String, default: null) — размер: 'sm' или 'lg'
 // - variant (String, default: 'outline-secondary') — вариант кнопки dropdown (Bootstrap button variants)
 // - icon (String, default: null) — иконка слева (Font Awesome класс)
 // Дополнительные:
-// - classesAdd (Object, default: {}) — классы для добавления на различные элементы компонента. Структура: { root: 'классы', menu: 'классы' }
-// - classesRemove (Object, default: {}) — классы для удаления с различных элементов компонента. Структура: { root: 'классы', menu: 'классы' }
-// - menuClasses (String, default: '') — дополнительные классы для dropdown-menu (для обратной совместимости, рекомендуется использовать classesAdd.menu)
-// - menuStyle (Object, default: {}) — дополнительные стили для dropdown-menu
-// - dropdownId (String, default: null) — ID для кнопки dropdown (для Bootstrap)
+// - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', menu: 'классы' }
+// - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', menu: 'классы' }
+// - menuClasses (String, default: '') — дополнительные классы for dropdown-menu (for обратной совместимости, рекомендуется использовать classesAdd.menu)
+// - menuStyle (Object, default: {}) — дополнительные стили for dropdown-menu
+// - dropdownId (String, default: null) — ID for кнопки dropdown (for Bootstrap)
 // - emptySearchText (String, default: 'Ничего не найдено') — текст при пустом результате поиска
 //
-// Выходные события (emits):
+// Logoutные события (emits):
 // - update:modelValue — обновление значения (v-model)
 // - select — выбор элемента: { value, label, item }
 // - input — ввод текста: value
@@ -79,7 +79,7 @@
 // - show() — программное открытие dropdown
 // - hide() — программное закрытие dropdown
 // - toggle() — программное переключение dropdown
-// - getBootstrapInstance() — получение экземпляра Bootstrap Dropdown для прямого доступа к API
+// - getBootstrapInstance() — получение экземпляра Bootstrap Dropdown for прямого доступа к API
 //
 // Клавиатурная навигация:
 // Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/combobox-template.js`
@@ -88,7 +88,7 @@
 // - Enter — выбор элемента или принятие произвольного значения
 // - Escape — закрытие dropdown
 // - Tab — закрытие dropdown при переходе
-// Структура для будущих расширений:
+// Структура for будущих расширений:
 // - Подсветка найденного текста: метод highlightItemText(), computed highlightText, слот item с highlightedText
 // - Виртуальный скроллинг: computed visibleItems, virtualVisibleItems, обработчик handleScroll(), props virtualScrolling, virtualItemHeight
 // - Множественный выбор: prop multiple, логика в handleItemSelect(), computed isMultiple
@@ -97,7 +97,7 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/combobox-template.js (ID: combobox-template)
 // - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - См. также: app/skills/ux-principles
+// - See also: app/skills/ux-principles
 
 window.cmpCombobox = {
     template: '#combobox-template',
@@ -143,7 +143,7 @@ window.cmpCombobox = {
         },
         clearable: {
             type: Boolean,
-            default: true // показывать крестик для очистки
+            default: true // показывать крестик for очистки
         },
 
         // === Фильтрация и поиск ===
@@ -153,7 +153,7 @@ window.cmpCombobox = {
         },
         debounce: {
             type: Number,
-            default: 300 // задержка для debounce (мс)
+            default: 300 // задержка for debounce (мс)
         },
         highlightMatches: {
             type: Boolean,
@@ -161,11 +161,11 @@ window.cmpCombobox = {
         },
         itemLabel: {
             type: [String, Function],
-            default: null // поле для label или функция получения label
+            default: null // поле for label или функция получения label
         },
         itemValue: {
             type: [String, Function],
-            default: null // поле для value или функция получения value
+            default: null // поле for value или функция получения value
         },
 
         // === Прокрутка ===
@@ -183,13 +183,13 @@ window.cmpCombobox = {
         },
         virtualItemHeight: {
             type: Number,
-            default: 38 // высота элемента для виртуального скроллинга (px)
+            default: 38 // высота элемента for виртуального скроллинга (px)
         },
 
         // === Группировка ===
         groupBy: {
             type: [String, Function],
-            default: null // поле для группировки или функция (структура заложена)
+            default: null // поле for группировки или функция (структура заложена)
         },
 
         // === Валидация ===
@@ -226,22 +226,22 @@ window.cmpCombobox = {
             type: String,
             default: 'text'
         },
-        // Стили для инпута (например, maxWidth для компактного режима)
+        // Стили for инпута (например, maxWidth for компактного режима)
         inputStyle: {
             type: Object,
             default: () => ({})
         },
-        // Минимальное значение для number input
+        // Минимальное значение for number input
         inputMin: {
             type: [Number, String],
             default: null
         },
-        // Максимальное значение для number input
+        // Максимальное значение for number input
         inputMax: {
             type: [Number, String],
             default: null
         },
-        // Шаг для number input
+        // Шаг for number input
         inputStep: {
             type: [Number, String],
             default: null
@@ -286,12 +286,12 @@ window.cmpCombobox = {
         return {
             isOpen: false,
             searchQuery: '',
-            selectedIndex: -1, // индекс выбранного элемента для клавиатурной навигации
+            selectedIndex: -1, // индекс выбранного элемента for клавиатурной навигации
             dropdownInstance: null,
             debounceTimer: null,
-            scrollTop: 0, // для виртуального скроллинга
-            virtualStartIndex: 0, // для виртуального скроллинга
-            virtualEndIndex: 0 // для виртуального скроллинга
+            scrollTop: 0, // for виртуального скроллинга
+            virtualStartIndex: 0, // for виртуального скроллинга
+            virtualEndIndex: 0 // for виртуального скроллинга
         };
     },
 
@@ -319,7 +319,7 @@ window.cmpCombobox = {
             return this.searchQuery || '';
         },
 
-        // CSS классы для input-group
+        // CSS классы for input-group
         inputGroupClasses() {
             const baseClasses = [];
             if (this.size) baseClasses.push(`input-group-${this.size}`);
@@ -337,7 +337,7 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы для режима input
+        // CSS классы for режима input
         inputModeClasses() {
             const baseClasses = ['position-relative'];
 
@@ -354,11 +354,11 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы для выпадающего меню
+        // CSS классы for выпадающего меню
         menuClassesComputed() {
             const baseClasses = ['dropdown-menu', 'dropdown-menu-end'];
 
-            // Добавляем классы из prop menuClasses (для обратной совместимости)
+            // Добавляем классы из prop menuClasses (for обратной совместимости)
             if (this.menuClasses) {
                 const extraClasses = this.menuClasses.split(' ').filter(c => c);
                 baseClasses.push(...extraClasses);
@@ -376,7 +376,7 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы для input
+        // CSS классы for input
         inputClasses() {
             const classes = ['form-control'];
             if (this.size) classes.push(`form-control-${this.size}`);
@@ -392,7 +392,7 @@ window.cmpCombobox = {
             );
         },
 
-        // Стили для прокручиваемой области
+        // Стили for прокручиваемой области
         scrollableStyle() {
             return {
                 maxHeight: this.maxHeight,
@@ -420,34 +420,34 @@ window.cmpCombobox = {
             });
         },
 
-        // Видимые элементы (для виртуального скроллинга или обычного)
+        // Видимые элементы (for виртуального скроллинга или обычного)
         visibleItems() {
             if (!this.virtualScrolling) {
                 return this.filteredItems;
             }
 
-            // Логика виртуального скроллинга (структура заложена для пункта 8)
+            // Логика виртуального скроллинга (структура заложена for пункта 8)
             // Вычисляем startIndex и endIndex на основе scrollTop
             const containerHeight = this.maxHeight ? parseInt(this.maxHeight) : 300;
             const visibleCount = Math.ceil(containerHeight / this.virtualItemHeight);
 
             const startIndex = Math.floor(this.scrollTop / this.virtualItemHeight);
             const endIndex = Math.min(
-                startIndex + visibleCount + 2, // +2 для буфера
+                startIndex + visibleCount + 2, // +2 for буфера
                 this.filteredItems.length
             );
 
             return this.filteredItems.slice(startIndex, endIndex);
         },
 
-        // Виртуальные видимые элементы (для рендеринга)
+        // Виртуальные видимые элементы (for рендеринга)
         virtualVisibleItems() {
             if (!this.virtualScrolling) return this.filteredItems;
             // Для виртуального скроллинга используем visibleItems
             return this.visibleItems;
         },
 
-        // Текст для подсветки
+        // Текст for подсветки
         highlightText() {
             return this.highlightMatches && this.searchQuery ? this.searchQuery : null;
         },
@@ -464,7 +464,7 @@ window.cmpCombobox = {
 
     mounted() {
         // Инициализация Bootstrap Dropdown через JavaScript API
-        // Уничтожение Bootstrap Dropdown для предотвращения утечек памяти
+        // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
         if (this.mode === 'combobox') {
             this.$nextTick(() => {
                 if (window.bootstrap && window.bootstrap.Dropdown) {
@@ -474,7 +474,7 @@ window.cmpCombobox = {
                             // Опции Bootstrap Dropdown можно передать через props при необходимости
                         });
 
-                        // Подписка на события Bootstrap для синхронизации состояния
+                        // Подписка на события Bootstrap for синхронизации состояния
                         this.$refs.comboboxContainer.addEventListener('show.bs.dropdown', () => {
                             this.isOpen = true;
                             this.$emit('show');
@@ -493,7 +493,7 @@ window.cmpCombobox = {
                         });
 
                         this.$refs.comboboxContainer.addEventListener('hidden.bs.dropdown', () => {
-                            // Очистка поиска при закрытии (опционально)
+                            // Очистка поиска при закрытии (optional)
                             if (this.autocomplete) {
                                 // Можно очистить searchQuery, если значение выбрано
                             }
@@ -505,7 +505,7 @@ window.cmpCombobox = {
     },
 
     beforeUnmount() {
-        // Уничтожение Bootstrap Dropdown для предотвращения утечек памяти
+        // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
         if (this.dropdownInstance) {
             this.dropdownInstance.dispose();
             this.dropdownInstance = null;
@@ -544,7 +544,7 @@ window.cmpCombobox = {
             return item.value !== undefined ? item.value : (item.id !== undefined ? item.id : this.getItemLabel(item));
         },
 
-        // Получение ключа для v-for
+        // Получение ключа for v-for
         getItemKey(item, index) {
             const value = this.getItemValue(item);
             return value !== undefined ? value : index;
@@ -559,7 +559,7 @@ window.cmpCombobox = {
             return this.modelValue === value;
         },
 
-        // Подсветка текста в элементе (структура для пункта 6)
+        // Подсветка текста в элементе (структура for пункта 6)
         highlightItemText(item) {
             if (!this.highlightText) return this.getItemLabel(item);
 
@@ -581,7 +581,7 @@ window.cmpCombobox = {
                 return;
             }
 
-            // Debounce для производительности
+            // Debounce for производительности
             if (this.debounceTimer) {
                 clearTimeout(this.debounceTimer);
             }
@@ -657,7 +657,7 @@ window.cmpCombobox = {
             });
         },
 
-        // Обработчик прокрутки (для виртуального скроллинга)
+        // Обработчик прокрутки (for виртуального скроллинга)
         handleScroll(event) {
             if (this.virtualScrolling) {
                 this.scrollTop = event.target.scrollTop;
@@ -670,7 +670,7 @@ window.cmpCombobox = {
             const label = this.getItemLabel(item);
 
             if (this.isMultiple) {
-                // Логика множественного выбора (структура для пункта 10)
+                // Логика множественного выбора (структура for пункта 10)
                 const currentValues = Array.isArray(this.modelValue) ? [...this.modelValue] : [];
                 const index = currentValues.indexOf(value);
 
@@ -770,7 +770,7 @@ window.cmpCombobox = {
             }
         },
 
-        // Получение экземпляра Bootstrap Dropdown (для прямого доступа к API)
+        // Получение экземпляра Bootstrap Dropdown (for прямого доступа к API)
         getBootstrapInstance() {
             return this.dropdownInstance;
         }

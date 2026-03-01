@@ -3,13 +3,13 @@
  * COIN SET LOAD MODAL BODY COMPONENT - Компонент body модального окна загрузки набора монет
  * ================================================================================================
  *
- * ЦЕЛЬ: Список сохраненных наборов монет для загрузки с возможностью множественного выбора.
+ * PURPOSE: Список сохраненных sets монет for загрузки с возможностью множественного выбора.
  *
  * ОСОБЕННОСТИ:
- * - Отображает список сохраненных наборов монет пользователя
+ * - Отображает список сохраненных sets монет пользователя
  * - Загружает наборы из Cloudflare D1 через coin-sets-client
- * - Позволяет выбрать несколько наборов для загрузки (чекбоксы)
- * - Объединяет монеты из выбранных наборов при загрузке
+ * - Позволяет выбрать несколько sets for загрузки (чекбоксы)
+ * - Объединяет монеты из выбранных sets при загрузке
  * - Позволяет удалить выбранные наборы
  * - Регистрирует кнопки "Загрузить" и "Удалить" через modalApi
  * - Поддерживает локальный набор "Draft" из localStorage (доступен без авторизации)
@@ -17,14 +17,14 @@
  * API КОМПОНЕНТА:
  *
  * Props:
- * - onLoad (Function, required) — функция загрузки наборов (массив coinSets)
- * - onDelete (Function, required) — функция удаления наборов (массив IDs)
+ * - onLoad (Function, required) — функция загрузки sets (массив coinSets)
+ * - onDelete (Function, required) — функция удаления sets (массив IDs)
  * - onCancel (Function, required) — функция отмены
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Система управления кнопками: shared/components/modal.js
  * - Coin Sets Client: core/api/cloudflare/coin-sets-client.js
  * - Skill: core/skills/api-layer
@@ -35,7 +35,7 @@ window.coinSetLoadModalBody = {
         <div>
             <div v-if="loading" class="text-center py-4">
                 <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                Загрузка наборов монет...
+                Загрузка sets монет...
             </div>
             <div v-else-if="error" class="alert alert-danger">
                 {{ error }}
@@ -144,7 +144,7 @@ window.coinSetLoadModalBody = {
                                     class="form-check-input"
                                     type="checkbox"
                                     disabled
-                                    title="Служебный список: для управления тикерами, не для загрузки"
+                                    title="Служебный список: for managing тикерами, не for загрузки"
                                     id="coin-set-ban-disabled">
                             </div>
                             <div class="flex-grow-1">
@@ -263,13 +263,13 @@ window.coinSetLoadModalBody = {
                         </div>
                         <span class="badge bg-primary rounded-pill ms-2 opacity-75">{{ coinSet.coin_ids?.length || 0 }}</span>
                     </div>
-                    <!-- Сообщение для неавторизованных пользователей -->
+                    <!-- Сообщение for неавторизованных пользователей -->
                     <div v-if="!isAuthenticated && coinSets.length === 0 && !loading && !error" class="list-group-item text-center text-muted py-4">
-                        Для доступа к списку наборов монет — авторизуйтесь
+                        Для доступа к списку sets монет — авторизуйтесь
                     </div>
-                    <!-- Сообщение для авторизованных пользователей без наборов -->
+                    <!-- Сообщение for авторизованных пользователей без sets -->
                     <div v-else-if="isAuthenticated && coinSets.length === 0 && !loading && !error" class="list-group-item text-center text-muted py-4">
-                        Нет сохраненных наборов монет
+                        Нет сохраненных sets монет
                     </div>
                 </div>
 
@@ -388,8 +388,8 @@ window.coinSetLoadModalBody = {
                 currentSource: ''
             },
             isCancelling: false, // Флаг: пользователь нажал «Остановить»
-            loadAbortController: null, // AbortController для отмены текущей загрузки
-            validationTimeout: null, // Таймер для debounce валидации
+            loadAbortController: null, // AbortController for отмены текущей загрузки
+            validationTimeout: null, // Таймер for debounce валидации
             autoSets: [], // Автонаборы (стейблкоины, обертки, LST)
             draftSet: {
                 id: 'draft',
@@ -401,7 +401,7 @@ window.coinSetLoadModalBody = {
                 is_draft: true,
                 is_local: true
             }, // Локальный набор "Draft" из localStorage (инициализируется пустым)
-            draftTickersInput: '', // Редактируемое поле для ввода тикеров Draft набора
+            draftTickersInput: '', // Редактируемое поле for ввода тикеров Draft набора
             draftLoading: false, // Состояние загрузки Draft набора
             banSet: {
                 id: 'ban',
@@ -413,7 +413,7 @@ window.coinSetLoadModalBody = {
                 is_ban: true,
                 is_local: true
             }, // Локальный служебный набор "Ban"
-            banTickersInput: '', // Редактируемое поле для ввода тикеров Ban набора
+            banTickersInput: '', // Редактируемое поле for ввода тикеров Ban набора
             banLoading: false, // Состояние загрузки Ban набора
             // Используем централизованное состояние из auth-state (единый источник правды)
             authState: window.authState ? window.authState.getState() : null
@@ -572,7 +572,7 @@ window.coinSetLoadModalBody = {
 
     watch: {
         /**
-         * Отслеживание изменения авторизации для обновления состояния кнопок
+         * Отслеживание изменения авторизации for обновления состояния кнопок
          */
         isAuthenticated() {
             this.$nextTick(() => {
@@ -580,7 +580,7 @@ window.coinSetLoadModalBody = {
             });
         },
         /**
-         * Отслеживание изменения поля ввода тикеров Draft для обновления состояния кнопок
+         * Отслеживание изменения поля ввода тикеров Draft for обновления состояния кнопок
          */
         draftTickersInput() {
             this.$nextTick(() => {
@@ -621,15 +621,15 @@ window.coinSetLoadModalBody = {
                 // Обновляем состояние кнопок при изменении авторизации
                 this.updateButtonsState();
                 if (eventData && eventData.isAuthenticated === true) {
-                    // Используем forceAuth=true для обхода race condition (событие приходит до обновления window.authState)
+                    // Используем forceAuth=true for обхода race condition (событие приходит до обновления window.authState)
                     this.loadCoinSets(true);
                 }
             });
 
-            // Подписываемся на событие сохранения набора для обновления списка
+            // Подписываемся на событие сохранения набора for обновления списка
             this.coinSetSavedUnsubscribe = window.eventBus.on('coin-set-saved', (eventData) => {
-                console.log('coin-set-load-modal-body: получено событие coin-set-saved, обновляем список наборов');
-                // Обновляем список наборов после сохранения
+                console.log('coin-set-load-modal-body: получено событие coin-set-saved, обновляем список sets');
+                // Обновляем список sets после сохранения
                 this.loadCoinSets(true);
             });
 
@@ -712,7 +712,7 @@ window.coinSetLoadModalBody = {
                 onClick: () => this.handleReplace()
             });
 
-            // Кнопка "Авторизоваться" (справа в footer, показывается когда дефолтный набор не выбран и пользователь не авторизован)
+            // Кнопка "Авторизоваться" (справа в footer, показывается когда дефолтный набор не выбран и пользователь not authenticated)
             this.modalApi.registerButton('auth', {
                 label: 'Авторизоваться',
                 variant: 'primary',
@@ -724,7 +724,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обновить состояние кнопок в зависимости от выбранных наборов и авторизации
+         * Update состояние кнопок в зависимости от выбранных sets и авторизации
          */
         updateButtonsState() {
             if (!this.modalApi) return;
@@ -795,7 +795,7 @@ window.coinSetLoadModalBody = {
         async handleOpenAuth() {
             try {
                 if (!window.authClient || !window.authState) {
-                    console.error('coin-set-load-modal-body: authClient или authState не загружен');
+                    console.error('coin-set-load-modal-body: authClient или authState not loaded');
                     return;
                 }
 
@@ -823,7 +823,7 @@ window.coinSetLoadModalBody = {
                                     await window.authState.checkAuthStatus();
                                 }
 
-                                // Перезагружаем список наборов монет после успешной авторизации
+                                // Перезагружаем список sets монет после успешной авторизации
                                 await this.loadCoinSets(true);
 
                                 // Удаляем обработчик после успешной авторизации
@@ -841,7 +841,7 @@ window.coinSetLoadModalBody = {
 
                 window.addEventListener('message', handleOAuthMessage);
 
-                // Таймаут для удаления обработчика (на случай если окно закрыто без авторизации)
+                // Таймаут for удаления обработчика (на случай если окно закрыто без авторизации)
                 setTimeout(() => {
                     window.removeEventListener('message', handleOAuthMessage);
                     window.authState.setLoading(false);
@@ -865,15 +865,15 @@ window.coinSetLoadModalBody = {
 
         /**
          * Загрузить локальный набор "Draft" из localStorage
-         * Всегда берет актуальные данные из localStorage для корректного отображения количества монет
-         * Если Draft набор не существует, создает пустой объект для отображения
+         * Всегда берет актуальные данные из localStorage for корректного отображения количества монет
+         * Если Draft набор не существует, создает пустой объект for отображения
          */
         loadDraftSet() {
             if (window.draftCoinSet) {
                 // Всегда получаем свежие данные из localStorage
                 const loadedDraftSet = window.draftCoinSet.get();
 
-                // Если Draft набор не существует, создаем пустой объект для отображения
+                // Если Draft набор не существует, создаем пустой объект for отображения
                 if (!loadedDraftSet) {
                     this.draftSet = {
                         id: 'draft',
@@ -893,11 +893,11 @@ window.coinSetLoadModalBody = {
                     // ВСЕГДА обновляем поле ввода, чтобы оно соответствовало данным в localStorage
                     const newTickers = loadedDraftSet.tickers || '';
 
-                    // ВСЕГДА обновляем поле ввода значением из localStorage для синхронизации
+                    // ВСЕГДА обновляем поле ввода значением из localStorage for синхронизации
                     this.draftTickersInput = newTickers;
                 }
             } else {
-                // Если draftCoinSet не загружен, создаем пустой объект для отображения
+                // Если draftCoinSet not loaded, создаем пустой объект for отображения
                 this.draftSet = {
                     id: 'draft',
                     name: 'Draft (черновик)',
@@ -954,7 +954,7 @@ window.coinSetLoadModalBody = {
          */
         loadAutoSets() {
             if (!window.autoCoinSets) {
-                console.warn('coin-set-load-modal-body: autoCoinSets не загружен');
+                console.warn('coin-set-load-modal-body: autoCoinSets not loaded');
                 return;
             }
 
@@ -964,7 +964,7 @@ window.coinSetLoadModalBody = {
                 {
                     id: 'auto-stablecoins',
                     name: 'Стейблкоины',
-                    description: 'Автоматический сбор стейблкоинов из загруженных монет',
+                    description: 'Автоматический сбор стейблкоинов из loadedных монет',
                     // icon: 'account_balance',
                     coins: autoSetsData.stablecoins,
                     coin_ids: autoSetsData.stablecoins.map(c => c.id)
@@ -972,7 +972,7 @@ window.coinSetLoadModalBody = {
                 {
                     id: 'auto-wrapped',
                     name: 'Обертки (Wrapped)',
-                    description: 'Автоматический сбор wrapped-токенов из загруженных монет',
+                    description: 'Автоматический сбор wrapped-токенов из loadedных монет',
                     // icon: 'repeat',
                     coins: autoSetsData.wrapped,
                     coin_ids: autoSetsData.wrapped.map(c => c.id)
@@ -980,14 +980,14 @@ window.coinSetLoadModalBody = {
                 {
                     id: 'auto-lst',
                     name: 'LST (Liquid Staking)',
-                    description: 'Автоматический сбор LST-токенов из загруженных монет',
+                    description: 'Автоматический сбор LST-токенов из loadedных монет',
                     // icon: 'local_fire_department',
                     coins: autoSetsData.lst,
                     coin_ids: autoSetsData.lst.map(c => c.id)
                 }
             ];
 
-            console.log(`coin-set-load-modal-body: загружено ${this.autoSets.length} автонаборов`);
+            console.log(`coin-set-load-modal-body: loadedо ${this.autoSets.length} автоsets`);
         },
 
         /**
@@ -1018,11 +1018,11 @@ window.coinSetLoadModalBody = {
             }
 
             if (!window.dataProviderManager) {
-                console.error('coin-set-load-modal-body: dataProviderManager не загружен');
+                console.error('coin-set-load-modal-body: dataProviderManager not loaded');
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
-                        text: 'Ошибка: модули данных не загружены',
+                        text: 'Error: модули данных not loadedы',
                         scope: 'global',
                         duration: 5000
                     });
@@ -1053,7 +1053,7 @@ window.coinSetLoadModalBody = {
                     return;
                 }
 
-                // Загружаем максимальные наборы из кэша для поиска монет по тикерам
+                // Загружаем максимальные наборы из кэша for поиска монет по тикерам
                 const cacheKeyMarketCap = 'top-coins-by-market-cap';
                 const cacheKeyVolume = 'top-coins-by-volume';
 
@@ -1071,7 +1071,7 @@ window.coinSetLoadModalBody = {
                     await window.cacheManager.set(cacheKeyVolume, coinsVolume);
                 }
 
-                // Объединяем оба набора в один Map для поиска по тикеру
+                // Объединяем оба набора в один Map for поиска по тикеру
                 const coinsMap = new Map();
                 if (coinsMarketCap) {
                     coinsMarketCap.forEach(coin => {
@@ -1129,7 +1129,7 @@ window.coinSetLoadModalBody = {
                 // Обновляем поле ввода тикеров напрямую (реактивно) - это гарантирует немедленное отображение
                 this.draftTickersInput = tickersString;
 
-                // Обновляем локальное состояние (перезагружаем из localStorage для корректного отображения количества)
+                // Обновляем локальное состояние (перезагружаем из localStorage for корректного отображения количества)
                 // Тикеры будут автоматически отсортированы по алфавиту в loadDraftSet()
                 this.loadDraftSet();
 
@@ -1239,24 +1239,24 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Загрузить список наборов монет
-         * @param {boolean} forceAuth - Принудительно считать пользователя авторизованным (для обхода race condition)
+         * Загрузить список sets монет
+         * @param {boolean} forceAuth - Принудительно считать пользователя авторизованным (for обхода race condition)
          */
         async loadCoinSets(forceAuth = false) {
             if (!window.coinSetsClient) {
-                // coin-sets-client не загружен - не критично, дефолтный набор всё равно будет доступен
-                console.warn('coin-set-load-modal-body: coin-sets-client не загружен');
+                // coin-sets-client not loaded - не критично, дефолтный набор всё равно будет доступен
+                console.warn('coin-set-load-modal-body: coin-sets-client not loaded');
                 this.coinSets = [];
                 this.loading = false;
                 return;
             }
 
-            // Проверяем авторизацию (используем forceAuth для обхода race condition)
+            // Проверяем авторизацию (используем forceAuth for обхода race condition)
             const isAuth = forceAuth || (this.authState && this.authState.isAuthenticated === true);
 
             if (!isAuth) {
-                // Пользователь не авторизован - показываем только дефолтный набор
-                console.info('coin-set-load-modal-body: пользователь не авторизован, показываем только дефолтный набор');
+                // Пользователь not authenticated - показываем только дефолтный набор
+                console.info('coin-set-load-modal-body: пользователь not authenticated, показываем только дефолтный набор');
                 this.coinSets = [];
                 this.loading = false;
                 this.error = null; // Не показываем ошибку, это нормальная ситуация
@@ -1269,15 +1269,15 @@ window.coinSetLoadModalBody = {
             try {
                 const sets = await window.coinSetsClient.getCoinSets({ activeOnly: true }); // Только активные
                 this.coinSets = sets || [];
-                // Обновляем состояние кнопок после загрузки наборов
+                // Обновляем состояние кнопок после загрузки sets
                 this.$nextTick(() => {
                     this.updateButtonsState();
                 });
             } catch (error) {
-                console.error('coin-set-load-modal-body: ошибка загрузки наборов:', error);
+                console.error('coin-set-load-modal-body: ошибка загрузки sets:', error);
                 // Не показываем ошибку авторизации, она уже обработана выше
                 if (!error.message || !error.message.includes('авторизован')) {
-                    this.error = error.message || 'Ошибка загрузки наборов монет';
+                    this.error = error.message || 'Ошибка загрузки sets монет';
                 }
                 this.coinSets = [];
             } finally {
@@ -1288,7 +1288,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обработка ввода в поле количества монет (с debounce для предотвращения спама)
+         * Обработка ввода в поле количества монет (с debounce for предотвращения спама)
          */
         handleCountInput(event) {
             // Очищаем предыдущий таймер
@@ -1303,7 +1303,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обновить дефолтный набор (при изменении настроек)
+         * Update дефолтный набор (при изменении настроек)
          */
         updateDefaultSet() {
             // Дефолтный набор обновляется динамически при загрузке, здесь только валидация
@@ -1349,7 +1349,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обновить визуальный прогресс загрузки
+         * Update визуальный прогресс загрузки
          * @param {Object} progress
          */
         cancelLoad() {
@@ -1417,7 +1417,7 @@ window.coinSetLoadModalBody = {
                     if (!overallTotal && pgTotal) {
                         overallTotal = pgTotal;
                     }
-                    text = `PostgreSQL: ${pgLoaded} монет загружено`;
+                    text = `PostgreSQL: ${pgLoaded} монет loadedо`;
                 } else if (phase === 'error') {
                     text = `PostgreSQL: ошибка (${progress.error || 'unknown'}), переход к CoinGecko`;
                 }
@@ -1477,7 +1477,7 @@ window.coinSetLoadModalBody = {
                     text = `Пауза ${delaySeconds}с перед следующей частью...`;
                 } else if (phase === 'done') {
                     active = false; done = true;
-                    text = `Готово: ${loaded}/${total || loaded} монет загружено.`;
+                    text = `Готово: ${loaded}/${total || loaded} монет loadedо.`;
                 } else if (phase === 'failed') {
                     active = false; done = false;
                     text = progress.message || 'Ошибка загрузки данных.';
@@ -1594,7 +1594,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обработка добавления выбранных наборов монет к текущему списку
+         * Обработка добавления выбранных sets монет к текущему списку
          */
         async handleAdd() {
             await this.loadSelectedSets({ merge: true });
@@ -1608,7 +1608,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Загрузка выбранных наборов монет с опцией мерджа
+         * Загрузка выбранных sets монет с опцией мерджа
          * @param {Object} options - опции загрузки
          * @param {boolean} options.merge - если true, монеты добавляются к текущим, если false - заменяют
          */
@@ -1624,7 +1624,7 @@ window.coinSetLoadModalBody = {
             try {
                 await this._performLoad(merge);
             } catch (error) {
-                console.error('coin-set-load-modal-body: ошибка загрузки наборов:', error);
+                console.error('coin-set-load-modal-body: ошибка загрузки sets:', error);
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
@@ -1640,7 +1640,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Внутренний метод для выполнения загрузки
+         * Внутренний метод for выполнения загрузки
          * @param {boolean} merge - если true, монеты добавляются к текущим
          */
         async _performLoad(merge) {
@@ -1652,7 +1652,7 @@ window.coinSetLoadModalBody = {
             // Проверяем, выбран ли Draft набор чекбоксом
             const hasDraft = this.selectedSetIds.includes('draft');
 
-            // Если нет выбранных наборов, ничего не делаем
+            // Если нет выбранных sets, ничего не делаем
             if (this.selectedSetIds.length === 0) {
                 this.resetDefaultSetProgress();
                 return;
@@ -1665,11 +1665,11 @@ window.coinSetLoadModalBody = {
 
             // Обработка дефолтного набора
             if (hasDefault) {
-                // Загружаем данные для дефолтного набора из кэша максимальных наборов
-                // ВАЖНО: Перед открытием набора ВСЕГДА обновляем кэш для актуальности
+                // Загружаем данные for дефолтного набора из кэша максимальных sets
+                // ВАЖНО: Перед открытием набора ВСЕГДА обновляем кэш for актуальности
                 try {
                     if (!window.cacheManager || !window.dataProviderManager) {
-                        throw new Error('cacheManager или dataProviderManager не загружены');
+                        throw new Error('cacheManager или dataProviderManager not loadedы');
                     }
 
                     // Определяем ключ кэша в зависимости от критерия сортировки
@@ -1680,7 +1680,7 @@ window.coinSetLoadModalBody = {
                     const cachedBeforeRefresh = await window.cacheManager.get(cacheKey);
                     let coinsFullSet = null;
 
-                    // Skill anchor: визуальный прогресс обязателен для chunked загрузки Top-N на file://.
+                    // Skill anchor: визуальный прогресс обязателен for chunked загрузки Top-N на file://.
                     // See core/skills/api-layer
                     this.isCancelling = false;
                     this.loadAbortController = new AbortController();
@@ -1768,7 +1768,7 @@ window.coinSetLoadModalBody = {
                     // Берем нужное количество монет из полного набора
                     const coins = coinsFullSet.slice(0, this.defaultCount);
 
-                    console.log(`coin-set-load-modal-body: загружено ${coins.length} монет из кэша ${cacheKey} (всего в кэше: ${coinsFullSet.length})`);
+                    console.log(`coin-set-load-modal-body: loadedо ${coins.length} монет из кэша ${cacheKey} (всего в кэше: ${coinsFullSet.length})`);
 
                     // Создаем виртуальный набор из актуальных данных
                     // ВАЖНО: передаем не только coin_ids, но и полные данные монет
@@ -1777,7 +1777,7 @@ window.coinSetLoadModalBody = {
                         name: `Актуальные рейтинги рынка (${coins.length} монет, ${this.defaultSortBy === 'market_cap' ? 'по капитализации' : 'по объему'})`,
                         description: 'Актуальные данные с рынка',
                         coin_ids: coins.map(coin => coin.id),
-                        coins: coins, // Полные данные монет для загрузки в this.coins
+                        coins: coins, // Полные данные монет for загрузки в this.coins
                         is_default: true
                     });
                 } catch (error) {
@@ -1794,7 +1794,7 @@ window.coinSetLoadModalBody = {
                             duration: 5000
                         });
                     }
-                    // НЕ прерываем выполнение - продолжаем обработку других наборов (если они выбраны)
+                    // НЕ прерываем выполнение - продолжаем обработку других sets (если они выбраны)
                 }
             }
 
@@ -1802,7 +1802,7 @@ window.coinSetLoadModalBody = {
             if (hasDraft) {
                 try {
                     if (!window.cacheManager || !window.dataProviderManager) {
-                        throw new Error('cacheManager или dataProviderManager не загружены');
+                        throw new Error('cacheManager или dataProviderManager not loadedы');
                     }
 
                     // ВАЖНО: Перед загрузкой Draft набора всегда обновляем его из localStorage
@@ -1834,10 +1834,10 @@ window.coinSetLoadModalBody = {
                                     is_local: true
                                 });
                             }
-                            // НЕ выходим - продолжаем обработку других наборов
+                            // НЕ logoutим - продолжаем обработку других sets
                         } else {
-                            console.warn('coin-set-load-modal-body: Draft набор пуст и нет тикеров для загрузки');
-                            // НЕ выходим - продолжаем обработку других наборов
+                            console.warn('coin-set-load-modal-body: Draft набор пуст и нет тикеров for загрузки');
+                            // НЕ logoutим - продолжаем обработку других sets
                         }
                     } else if (draftCoinIds.length > 0 || (draftCoinsData && draftCoinsData.length > 0)) {
                         // Если набор содержит полные данные монет - используем их
@@ -1871,7 +1871,7 @@ window.coinSetLoadModalBody = {
                                 await window.cacheManager.set(cacheKeyVolume, coinsVolume);
                             }
 
-                            // Объединяем оба набора в один Map для поиска по ID
+                            // Объединяем оба набора в один Map for поиска по ID
                             const coinsMap = new Map();
                             if (coinsMarketCap) {
                                 coinsMarketCap.forEach(coin => coinsMap.set(coin.id, coin));
@@ -1911,10 +1911,10 @@ window.coinSetLoadModalBody = {
                                 });
 
                                 if (missingIds.length > 0) {
-                                    console.warn(`coin-set-load-modal-body: не найдены данные для ${missingIds.length} монет из Draft набора:`, missingIds);
+                                    console.warn(`coin-set-load-modal-body: не найдены данные for ${missingIds.length} монет из Draft набора:`, missingIds);
                                 }
                             } else {
-                                throw new Error('Не удалось загрузить данные монет для Draft набора');
+                                throw new Error('Не удалось загрузить данные монет for Draft набора');
                             }
                         }
                     }
@@ -1931,12 +1931,12 @@ window.coinSetLoadModalBody = {
                 }
             }
 
-            // Обработка автонаборов (стейблкоины, обертки, LST)
+            // Обработка автоsets (стейблкоины, обертки, LST)
             const autoSetIds = this.selectedSetIds.filter(id => typeof id === 'string' && id.startsWith('auto-'));
             if (autoSetIds.length > 0) {
                 const autoSetsToLoad = this.autoSets.filter(set => autoSetIds.includes(set.id));
                 selectedSets.push(...autoSetsToLoad);
-                console.log(`coin-set-load-modal-body: добавлено ${autoSetsToLoad.length} автонаборов для объединения`);
+                console.log(`coin-set-load-modal-body: добавлено ${autoSetsToLoad.length} автоsets for объединения`);
             }
 
             // Добавляем сохраненные наборы (исключаем 'default', 'draft' и автонаборы из selectedSetIds)
@@ -1944,15 +1944,15 @@ window.coinSetLoadModalBody = {
             if (savedSetIds.length > 0) {
                 const savedSets = this.coinSets.filter(set => savedSetIds.includes(set.id));
                 selectedSets.push(...savedSets);
-                console.log(`coin-set-load-modal-body: добавлено ${savedSets.length} сохраненных наборов для объединения`);
+                console.log(`coin-set-load-modal-body: добавлено ${savedSets.length} сохраненных sets for объединения`);
             }
 
             if (selectedSets.length === 0) {
-                console.warn('coin-set-load-modal-body: нет наборов для загрузки после обработки');
+                console.warn('coin-set-load-modal-body: нет sets for загрузки после обработки');
                 return;
             }
 
-            console.log(`coin-set-load-modal-body: ${merge ? 'добавляем' : 'загружаем'} ${selectedSets.length} наборов (${selectedSets.map(s => s.name).join(', ')})`);
+            console.log(`coin-set-load-modal-body: ${merge ? 'добавляем' : 'загружаем'} ${selectedSets.length} sets (${selectedSets.map(s => s.name).join(', ')})`);
 
             if (this.onLoad) {
                 this.onLoad(selectedSets, { 
@@ -1963,7 +1963,7 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обработка удаления выбранных наборов
+         * Обработка удаления выбранных sets
          */
         async handleDelete() {
             if (this.selectedSetIds.length === 0) {

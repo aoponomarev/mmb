@@ -1,6 +1,6 @@
 /**
  * Локальный тест: загружает 1 страницу (50 монет) по market_cap и сохраняет в БД
- * Использует DB_PASSWORD из env или хардкод для теста
+ * Использует DB_PASSWORD из env или хардкод for теста
  */
 process.env.DB_PASSWORD = process.env.DB_PASSWORD || '********';
 

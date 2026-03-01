@@ -3,11 +3,11 @@
  * LAYOUT SYNC - Утилита синхронизации высоты header и footer с padding body
  * ================================================================================================
  *
- * ЦЕЛЬ: Автоматическая синхронизация padding-top и padding-bottom body с высотой
- * фиксированных header и footer для предотвращения перекрытия контента.
+ * PURPOSE: Автоматическая синхронизация padding-top и padding-bottom body с высотой
+ * фиксированных header и footer for предотвращения перекрытия контента.
  *
  * ПРОБЛЕМА: Фиксированные header (fixed-top) и footer (fixed-bottom) перекрывают контент,
- * если не зарезервировать для них место через padding body.
+ * если не зарезервировать for них место через padding body.
  *
  * РЕШЕНИЕ: Автоматическое отслеживание высоты header и footer через ResizeObserver
  * и MutationObserver с установкой соответствующих padding на body.
@@ -15,24 +15,24 @@
  * КАК ДОСТИГАЕТСЯ:
  * - ResizeObserver отслеживает изменения размеров header и footer
  * - MutationObserver отслеживает изменения атрибутов (class, style)
- * - CSS переменные (--header-height, --footer-height) для нативного подхода
+ * - CSS переменные (--header-height, --footer-height) for нативного подхода
  * - Автоматическая инициализация при загрузке DOM
  * - Поддержка ручного обновления и остановки наблюдения
  *
  * ОСОБЕННОСТИ:
  * - Работает с фиксированными элементами (fixed-top, fixed-bottom)
  * - Автоматически обновляется при изменении размеров
- * - Использует CSS переменные для совместимости с CSS
+ * - Использует CSS переменные for совместимости с CSS
  * - Поддержка множественных header/footer (берет первый найденный)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * - Автоматически инициализируется при загрузке DOM
  * - Ручное обновление: window.layoutSync.update()
  * - Остановка наблюдения: window.layoutSync.stop()
  * - Перезапуск: window.layoutSync.start()
  *
- * ССЫЛКИ:
- * - Общие принципы утилит: is/skills/arch-foundation
+ * REFERENCES:
+ * - General principles утилит: is/skills/arch-foundation
  */
 
 (function() {
@@ -103,7 +103,7 @@
 
         // Наблюдение за header
         if (header) {
-            // ResizeObserver для отслеживания изменений размеров
+            // ResizeObserver for отслеживания изменений размеров
             if (window.ResizeObserver) {
                 headerResizeObserver = new ResizeObserver(() => {
                     updateBodyPadding();
@@ -111,7 +111,7 @@
                 headerResizeObserver.observe(header);
             }
 
-            // MutationObserver для отслеживания изменений атрибутов
+            // MutationObserver for отслеживания изменений атрибутов
             headerObserver = new MutationObserver(() => {
                 updateBodyPadding();
             });
@@ -125,7 +125,7 @@
 
         // Наблюдение за footer
         if (footer) {
-            // ResizeObserver для отслеживания изменений размеров
+            // ResizeObserver for отслеживания изменений размеров
             if (window.ResizeObserver) {
                 footerResizeObserver = new ResizeObserver(() => {
                     updateBodyPadding();
@@ -133,7 +133,7 @@
                 footerResizeObserver.observe(footer);
             }
 
-            // MutationObserver для отслеживания изменений атрибутов
+            // MutationObserver for отслеживания изменений атрибутов
             footerObserver = new MutationObserver(() => {
                 updateBodyPadding();
             });
@@ -231,7 +231,7 @@
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', tryStart);
     } else {
-        // DOM уже загружен
+        // DOM уже loaded
         tryStart();
     }
 

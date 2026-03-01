@@ -12,7 +12,7 @@
  *
  * ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ:
  * - DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
- * - COINGECKO_API_KEY (опционально, Demo/Pro ключ для снятия rate limit)
+ * - COINGECKO_API_KEY (optional, Demo/Pro ключ for снятия rate limit)
  */
 
 'use strict';

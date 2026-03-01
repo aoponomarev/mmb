@@ -3,14 +3,14 @@
  * UI STATE - Централизованное состояние UI-флагов
  * ================================================================================================
  *
- * ЦЕЛЬ: Единый источник правды для UI-индикаторов и доступности контролов.
- * Данные расчетов (портфели/метрики) сюда не помещаются.
+ * PURPOSE: SSOT for UI-индикаторов и доступности контролов.
+ * Данные расчетов (портфели/metrics) сюда не помещаются.
  * Skill: is/skills/arch-foundation
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Только UI-флаги и метаданные (например, устаревание кэша)
  * - Реактивность через Vue reactive API
- * - Простой API set/get для обновления состояния
+ * - Простой API set/get for обновления состояния
  *
  * ССЫЛКА: is/skills/arch-foundation
  */
@@ -19,7 +19,7 @@
     'use strict';
 
     if (!window.Vue) {
-        console.error('ui-state.js: Vue не загружен');
+        console.error('ui-state.js: Vue not loaded');
         return;
     }
 
@@ -75,5 +75,5 @@
         setPostgresSyncEnabled
     };
 
-    console.log('ui-state.js: инициализирован');
+    console.log('ui-state.js: initialized');
 })();

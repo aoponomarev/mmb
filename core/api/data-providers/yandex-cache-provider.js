@@ -3,7 +3,7 @@
  * YANDEX CACHE PROVIDER - Провайдер данных из PostgreSQL (Yandex Cloud)
  * ================================================================================================
  *
- * ЦЕЛЬ: Читает данные монет из coin_market_cache (PostgreSQL Yandex Cloud),
+ * PURPOSE: Читает данные монет из coin_market_cache (PostgreSQL Yandex Cloud),
  *       которая обновляется кроном каждые 15 минут через coingecko-fetcher.
  *
  * ПРЕИМУЩЕСТВА перед прямым CoinGecko:
@@ -18,7 +18,7 @@
  * ФОРМАТ ОТВЕТА:
  * { coins: [...], count: 250, fetched_at: "2026-02-27T..." }
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - CoinGecko Provider (аналог): core/api/data-providers/coingecko-provider.js
  * - Base Provider: core/api/data-providers/base-provider.js
  * - Fetcher function: app/cloud/yandex/functions/coingecko-fetcher/
@@ -39,7 +39,7 @@
         getDisplayName() { return 'Yandex Cloud Cache (PostgreSQL)'; }
 
         /**
-         * Получить топ N монет из кэша БД
+         * Get топ N монет из кэша БД
          * @param {number} count - Количество монет (1-500)
          * @param {string} sortBy - 'market_cap' | 'volume'
          * @param {Object} options - { onProgress, signal }
@@ -57,7 +57,7 @@
         }
 
         /**
-         * Получить данные монет по ID из кэша БД
+         * Get данные монет по ID из кэша БД
          * @param {string[]} coinIds - Массив ID монет
          * @param {Object} options - { onProgress, signal }
          * @returns {Promise<Array>} Нормализованные монеты
@@ -103,7 +103,7 @@
         }
 
         /**
-         * Получить ID монеты по тикеру
+         * Get ID монеты по тикеру
          */
         async getCoinIdBySymbol(symbol) {
             const data = await this._fetchFromCache(`${MARKET_CACHE_ENDPOINT}?limit=500`);
@@ -167,7 +167,7 @@
                 price_change_percentage_14d:  pv14d,
                 price_change_percentage_30d:  pv30d,
                 price_change_percentage_200d: pv200d,
-                // Поля для математической модели (калькуляторы используют pvs / PV*)
+                // Поля for математической модели (калькуляторы используют pvs / PV*)
                 pvs,
                 PV1h:   pv1h,
                 PV24h:  pv24h,

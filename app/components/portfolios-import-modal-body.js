@@ -3,7 +3,7 @@
  * PORTFOLIOS IMPORT MODAL BODY - Компонент выборочного импорта портфелей
  * ================================================================================================
  *
- * ЦЕЛЬ: Выборочный импорт портфелей из JSON с фильтрацией по дате и базовой валидацией.
+ * PURPOSE: Выборочный импорт портфелей из JSON с фильтрацией по дате и базовой валидацией.
  * Skill: core/skills/domain-portfolio
  *
  * ОСОБЕННОСТИ:
@@ -16,9 +16,9 @@
  * API КОМПОНЕНТА:
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация портфелей: core/config/portfolio-config.js
  * - Конфигурация модалок: core/config/modals-config.js
  * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 4)
@@ -91,7 +91,7 @@ window.portfoliosImportModalBody = {
                     </label>
                 </div>
 
-                <div v-else class="small text-muted">Нет портфелей для выбранного фильтра.</div>
+                <div v-else class="small text-muted">Нет портфелей for выбранного фильтра.</div>
             </div>
         </div>
     `,
@@ -242,7 +242,7 @@ window.portfoliosImportModalBody = {
             const selectedSet = new Set(this.selectedIds);
             const filtered = this.portfolios.filter(p => selectedSet.has(p.id));
             if (!filtered.length) {
-                this.errors = ['Не выбраны портфели для импорта.'];
+                this.errors = ['Не выбраны портфели for импорта.'];
                 this.updateImportButton();
                 return;
             }

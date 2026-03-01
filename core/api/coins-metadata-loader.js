@@ -4,7 +4,7 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Загружать централизованные метаданные монет (стейблкоины, обертки, LST)
+ * PURPOSE: Загружать централизованные метаданные монет (стейблкоины, обертки, LST)
  * из внешнего JSON-файла на GitHub CDN.
  *
  * ФАЙЛ: libs/assets/data/coins.json
@@ -26,7 +26,7 @@
     };
 
     /**
-     * Построить URL для загрузки (с учетом кэш-бастинга через версию приложения)
+     * Построить URL for загрузки (с учетом кэш-бастинга через версию приложения)
      */
     function buildUrl() {
         const salt = window.appConfig ? window.appConfig.getVersionHash() : Date.now();
@@ -38,7 +38,7 @@
      */
     async function load({ forceRefresh = false, ttl = CONFIG.defaultTtl } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
-            console.warn('coinsMetadataLoader: cacheManager или coinsConfig не загружены');
+            console.warn('coinsMetadataLoader: cacheManager или coinsConfig not loadedы');
             return null;
         }
 
@@ -47,7 +47,7 @@
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data && cached.expiresAt && cached.expiresAt > Date.now()) {
                 applyMetadata(cached.data);
-                console.log('coinsMetadataLoader: метаданные загружены из кэша');
+                console.log('coinsMetadataLoader: метаданные loadedы из кэша');
                 return cached.data;
             }
         }
@@ -78,7 +78,7 @@
 
             // Применяем данные
             applyMetadata(data);
-            console.log('coinsMetadataLoader: метаданные успешно загружены из сети');
+            console.log('coinsMetadataLoader: метаданные успешно loadedы из сети');
 
             return data;
         } catch (error) {
@@ -104,7 +104,7 @@
 
         // data structure: { stable: [...], wrapped: [...], lst: [...] }
         if (data.stable) {
-            // Форматируем для setStablecoins (он ожидает объекты с id)
+            // Форматируем for setStablecoins (он ожидает объекты с id)
             const stableList = data.stable.map(id => ({ id: id, symbol: '', name: '' }));
             window.coinsConfig.setStablecoins(stableList);
         }
@@ -122,5 +122,5 @@
         load
     };
 
-    console.log('coins-metadata-loader.js: инициализирован');
+    console.log('coins-metadata-loader.js: initialized');
 })();

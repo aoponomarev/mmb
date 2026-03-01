@@ -4,7 +4,7 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Автоматическая генерация и обновление файла coins.json на GitHub.
+ * PURPOSE: Автоматическая генерация и обновление файла coins.json на GitHub.
  *
  * ФУНКЦИИ:
  * 1. Сбор списка стейблкоинов через coingecko-stablecoins-loader
@@ -46,7 +46,7 @@
                 stableList = await window.coingeckoStablecoinsLoader.load({ forceRefresh: true });
             }
 
-            // 2. Собираем топ-250 монет для поиска wrapped/lst (эвристика)
+            // 2. Собираем топ-250 монет for поиска wrapped/lst (эвристика)
             console.log('📡 Поиск Wrapped и LST монет...');
             const topCoins = await fetchTopCoins();
             const wrappedIds = [];
@@ -60,11 +60,11 @@
                 // Исключаем стейблкоины из поиска оберток
                 if (stableList.some(s => s.id === id)) return;
 
-                // Эвристика для Wrapped
+                // Эвристика for Wrapped
                 if (id.includes('wrapped-') || name.includes('wrapped ') || (symbol.startsWith('w') && symbol.length > 2 && id !== 'waves')) {
                     wrappedIds.push(id);
                 }
-                // Эвристика для LST (Liquid Staking Tokens)
+                // Эвристика for LST (Liquid Staking Tokens)
                 else if (id.includes('staked-') || name.includes('staked ') || name.includes('liquid staking') || id.endsWith('-steth')) {
                     lstIds.push(id);
                 }
@@ -92,7 +92,7 @@
     }
 
     /**
-     * Загрузка списка топ-250 монет для анализа
+     * Загрузка списка топ-250 монет for анализа
      */
     async function fetchTopCoins() {
         const url = window.cloudflareConfig?.getApiProxyEndpoint('coingecko', '/coins/markets', {
@@ -164,5 +164,5 @@
         generateAndUpload
     };
 
-    console.log('coins-metadata-generator.js: инициализирован. Вызовите coinsMetadataGenerator.generateAndUpload() для обновления.');
+    console.log('coins-metadata-generator.js: initialized. Вызовите coinsMetadataGenerator.generateAndUpload() for обновления.');
 })();

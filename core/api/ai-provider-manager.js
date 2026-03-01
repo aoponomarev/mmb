@@ -1,34 +1,34 @@
 /**
  * ================================================================================================
- * AI PROVIDER MANAGER - Менеджер для переключения между AI провайдерами
+ * AI PROVIDER MANAGER - Менеджер for переключения между AI провайдерами
  * ================================================================================================
  *
- * ЦЕЛЬ: Единая точка доступа для работы с AI провайдером (YandexGPT).
+ * PURPOSE: Единая точка доступа for работы с AI провайдером (YandexGPT).
  * Управляет переключением между провайдерами и предоставляет единый интерфейс.
  *
  * Skill: core/skills/api-layer
  *
- * ПРИНЦИПЫ:
- * - Единый интерфейс для всех провайдеров
- * - Автоматическое получение настроек (API ключ, модель) для текущего провайдера
- * - Кэширование переводов/новостей отдельно для каждого провайдера
+ * PRINCIPLES:
+ * - Единый интерфейс for всех провайдеров
+ * - Автоматическое получение настроек (API ключ, модель) for текущего провайдера
+ * - Кэширование переводов/новостей отдельно for каждого провайдера
  *
  * ОСОБЕННОСТИ:
  * - Дефолтный провайдер: YandexGPT
  * - Хранение текущего провайдера в cacheManager ('ai-provider')
- * - Хранение API ключей отдельно для каждого провайдера
+ * - Хранение API ключей отдельно for каждого провайдера
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * // Отправить запрос через текущий провайдер
  * const response = await window.aiProviderManager.sendRequest(messages);
  *
  * // Переключить провайдера
  * await window.aiProviderManager.setProvider('yandex');
  *
- * // Получить текущий провайдер
+ * // Get текущий провайдер
  * const provider = await window.aiProviderManager.getCurrentProvider();
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Провайдеры: core/api/ai-providers/
  * - Кэш-менеджер: core/cache/cache-manager.js
  */
@@ -102,12 +102,12 @@
                     await window.cacheManager.set('ai-provider', this.defaultProvider);
                 }
             } catch (e) {
-                // Игнорируем ошибки при инициализации
+                // Игнорируем ошибки at initialization
             }
         }
 
         /**
-         * Получить текущий активный провайдер
+         * Get текущий активный провайдер
          * @returns {Promise<BaseAIProvider>}
          */
         async getCurrentProvider() {
@@ -116,7 +116,7 @@
         }
 
         /**
-         * Получить имя текущего провайдера
+         * Get имя текущего провайдера
          * @returns {Promise<string>}
          */
         async getCurrentProviderName() {
@@ -124,13 +124,13 @@
                 const providerName = await window.cacheManager.get('ai-provider');
                 return providerName || this.defaultProvider;
             } catch (error) {
-                console.warn('ai-provider-manager: ошибка получения провайдера, используется дефолтный', error);
+                console.warn('ai-provider-manager: ошибка получения провайдера, using дефолтный', error);
                 return this.defaultProvider;
             }
         }
 
         /**
-         * Установить активный провайдер
+         * Set активный провайдер
          * @param {string} providerName - 'yandex'
          * @returns {Promise<void>}
          */
@@ -152,12 +152,12 @@
             const provider = await this.getCurrentProvider();
             const providerName = await this.getCurrentProviderName();
 
-            // Получаем API ключ и модель для текущего провайдера
+            // Получаем API ключ и модель for текущего провайдера
             const apiKey = await this.getApiKey(providerName);
             const model = await this.getModel(providerName);
 
             if (!apiKey) {
-                throw new Error(`API ключ для ${providerName} не настроен`);
+                throw new Error(`API ключ for ${providerName} not configured`);
             }
 
             const result = await provider.sendRequest(apiKey, model, messages, options);
@@ -166,7 +166,7 @@
         }
 
         /**
-         * Получить API ключ для провайдера
+         * Get API ключ for провайдера
          * @param {string} providerName - 'yandex'
          * @returns {Promise<string|null>}
          */
@@ -259,7 +259,7 @@
         }
 
         /**
-         * Получить модель для провайдера
+         * Get модель for провайдера
          * @param {string} providerName - 'yandex'
          * @returns {Promise<string>}
          */
@@ -274,13 +274,13 @@
                 const savedModel = await window.cacheManager.get(modelKey);
                 return savedModel || provider.getDefaultModel();
             } catch (error) {
-                console.warn(`ai-provider-manager: ошибка получения модели для ${providerName}`, error);
+                console.warn(`ai-provider-manager: ошибка получения модели for ${providerName}`, error);
                 return provider.getDefaultModel();
             }
         }
 
         /**
-         * Получить список доступных моделей для провайдера
+         * Get list доступных моделей for провайдера
          * @param {string} providerName - 'yandex'
          * @returns {Array<Object>} [{ value: string, label: string }]
          */
@@ -290,7 +290,7 @@
         }
 
         /**
-         * Получить список всех доступных провайдеров
+         * Get list всех доступных провайдеров
          * @returns {Array<Object>} [{ value: string, label: string, provider: BaseAIProvider }]
          */
         getAvailableProviders() {
@@ -302,7 +302,7 @@
         }
 
         /**
-         * Получить провайдер по имени
+         * Get провайдер по имени
          * @param {string} providerName
          * @returns {BaseAIProvider|null}
          */
@@ -315,7 +315,7 @@
     window.aiProviderManager = new AIProviderManager();
 
     // Инициализируем после загрузки всех провайдеров
-    // Вызываем init() сразу, так как провайдеры уже должны быть загружены
+    // Вызываем init() сразу, так как провайдеры уже должны быть loadedы
     // (они загружаются раньше через модульную систему)
     if (window.YandexProvider) {
         window.aiProviderManager.init();
@@ -331,6 +331,6 @@
         }, 5000);
     }
 
-    console.log('ai-provider-manager.js: инициализирован');
+    console.log('ai-provider-manager.js: initialized');
 })();
 

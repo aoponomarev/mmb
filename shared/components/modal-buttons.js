@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * MODAL BUTTONS COMPONENT - Компонент для рендеринга кнопок модального окна
+ * MODAL BUTTONS COMPONENT - Компонент for рендеринга кнопок модального окна
  * ================================================================================================
  *
- * ЦЕЛЬ: Рендеринг кнопок модального окна в header или footer на основе единой системы управления.
+ * PURPOSE: Рендеринг кнопок модального окна в header или footer на основе единой системы управления.
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Компонент получает кнопки через inject от cmp-modal
- * - Отображает кнопки только для указанного места (header или footer)
- * - Использует cmp-button для рендеринга каждой кнопки
+ * - Отображает кнопки только for указанного места (header или footer)
+ * - Использует cmp-button for рендеринга каждой кнопки
  * - Реагирует на изменения состояния кнопок (disabled, visible)
  *
  * API КОМПОНЕНТА:
@@ -17,9 +17,9 @@
  * - location (String, required) — место отображения: 'header' или 'footer'
  *
  * Inject:
- * - modalApi — API для управления кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: shared/templates/modal-buttons-template.js
  * - Компонент модального окна: shared/components/modal.js
  * - Компонент кнопки: shared/components/button.js
@@ -93,7 +93,7 @@ window.cmpModalButtons = {
                 return button;
             });
 
-            // Фильтрация по левой/правой стороне для footer
+            // Фильтрация по левой/правой стороне for footer
             if (this.location === 'footer') {
                 if (this.leftOnly) {
                     processed = processed.filter(b => b.classesAdd?.root?.includes('me-auto'));
@@ -106,7 +106,7 @@ window.cmpModalButtons = {
                 const aHasMeAuto = a.classesAdd?.root?.includes('me-auto') || false;
                 const bHasMeAuto = b.classesAdd?.root?.includes('me-auto') || false;
                 // ВАЖНО: Теперь все кнопки в левом блоке (с me-auto) выравниваются влево.
-                // Сортировка остается для корректного распределения по блокам.
+                // Сортировка остается for корректного распределения по блокам.
                 if (aHasMeAuto && !bHasMeAuto) return -1;
                 if (!aHasMeAuto && bHasMeAuto) return 1;
                 return 0;
@@ -118,7 +118,7 @@ window.cmpModalButtons = {
 
     methods: {
         /**
-         * Обновление списка кнопок для текущего места
+         * Обновление списка кнопок for текущего места
          */
         updateButtons() {
             if (this.modalApi && this.modalApi.getButtonsForLocation) {
@@ -142,7 +142,7 @@ window.cmpModalButtons = {
         this.updateButtons();
 
         // Подписка на изменения кнопок через watch
-        // Используем $watch для отслеживания изменений в modalApi
+        // Используем $watch for отслеживания изменений в modalApi
         this.$watch(
             () => {
                 // Принудительно получаем актуальный список кнопок

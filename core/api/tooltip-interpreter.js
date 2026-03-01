@@ -1,21 +1,21 @@
 /**
  * ================================================================================================
- * TOOLTIP INTERPRETER - Интерпретация значений метрик для динамических подсказок
+ * TOOLTIP INTERPRETER - Интерпретация значений метрик for динамических подсказок
  * ================================================================================================
  *
- * ЦЕЛЬ: Генерация динамической части tooltip на основе текущих значений метрик.
+ * PURPOSE: Генерация динамической части tooltip на основе текущих значений метрик.
  * Статическая часть берется из tooltipsConfig, динамическая — строится здесь.
  * Skill: app/skills/ux-principles
  *
- * ПРИНЦИПЫ:
- * - Единый источник правды (ЕИП): пороги и интерпретации хранятся централизованно
+ * PRINCIPLES:
+ * - SSOT (ЕИП): пороги и интерпретации хранятся централизованно
  * - Поддержка мультиязычности через tooltipsConfig
  * - Минималистичный вывод (нативный title без HTML)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * const tooltip = window.tooltipInterpreter.getTooltip('agr', { value: 12.5, lang: 'ru' });
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Конфигурация tooltips: core/config/tooltips-config.js
  * - Математические модели: mm/base-model-calculator.js, mm/model-manager.js
  */
@@ -24,7 +24,7 @@
     'use strict';
 
     /**
-     * Пороговые значения для интерпретации метрик
+     * Пороговые значения for интерпретации метрик
      * Структура: { метрика: { уровни: [значения], интерпретации: { ru: [...], en: [...] } } }
      */
     const THRESHOLDS = {
@@ -192,9 +192,9 @@
     };
 
     /**
-     * Получить интерпретацию значения метрики
-     * @param {string} key - ключ метрики ('agr', 'mdn', 'fgi', etc.)
-     * @param {number} value - текущее значение метрики
+     * Get интерпретацию значения metrics
+     * @param {string} key - ключ metrics ('agr', 'mdn', 'fgi', etc.)
+     * @param {number} value - текущее значение metrics
      * @param {string} lang - язык ('ru', 'en')
      * @returns {string} - интерпретация
      */
@@ -217,8 +217,8 @@
     }
 
     /**
-     * Получить полную подсказку (статическая + динамическая части)
-     * @param {string} key - ключ метрики ('agr', 'mdn', 'fgi', etc.)
+     * Get полную подсказку (статическая + динамическая части)
+     * @param {string} key - ключ metrics ('agr', 'mdn', 'fgi', etc.)
      * @param {Object} options - опции { value, lang, skipStatic }
      * @returns {string} - финальная подсказка
      */
@@ -248,14 +248,14 @@
     }
 
     /**
-     * Получить список всех доступных метрик с порогами
+     * Get list всех доступных метрик с порогами
      * @returns {Array<string>} - массив ключей метрик
      */
     function getAvailableMetrics() {
         return Object.keys(THRESHOLDS);
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.tooltipInterpreter = {
         getTooltip,
         getInterpretation,
@@ -263,5 +263,5 @@
         THRESHOLDS
     };
 
-    console.log('tooltip-interpreter.js: инициализирован');
+    console.log('tooltip-interpreter.js: initialized');
 })();

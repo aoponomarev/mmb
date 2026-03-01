@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * AUTH ENDPOINTS - OAuth endpoints для авторизации через Google
+ * AUTH ENDPOINTS - OAuth endpoints for auth via Google
  * ================================================================================================
  *
- * ЦЕЛЬ: Обработка OAuth flow на сервере: обмен code на токен, сохранение пользователя, выдача JWT.
+ * PURPOSE: OAuth flow handling on server: code-to-token exchange, user persistence, JWT issuance.
  * Skill: app/skills/file-protocol-cors-guard
  *
  * ENDPOINTS:
- * - GET /auth/google — редирект на Google OAuth (не используется, делается на клиенте)
- * - POST /auth/callback — обмен authorization code на JWT токен, сохранение пользователя в D1
- * - GET /auth/me — получение текущего пользователя по JWT токену
- * - POST /auth/logout — выход (опционально, можно делать на клиенте)
+ * - GET /auth/google — redirect to Google OAuth (не using, done on client)
+ * - POST /auth/callback — обмен authorization code на JWT токен, user persistence в D1
+ * - GET /auth/me — get current user by JWT token
+ * - POST /auth/logout — logout (optional, can be done on client)
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { handleAuth } from './auth.js';
  *
  * if (path.startsWith('/auth/')) {
@@ -25,46 +25,46 @@ import { requireAuth, createToken } from './utils/auth.js';
 import { createUser, getUserByGoogleId, getUser } from './utils/d1-helpers.js';
 
 /**
- * Обработка OAuth callback от Google
- * Поддерживает GET (редирект от Google) и POST (вызов от клиента)
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, GOOGLE_CLIENT_SECRET, JWT_SECRET)
- * @returns {Promise<Response>} JSON ответ с токеном или HTML с редиректом
+ * Handle OAuth callback from Google
+ * Supports GET (redirect from Google) и POST (call from client)
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, GOOGLE_CLIENT_SECRET, JWT_SECRET)
+ * @returns {Promise<Response>} JSON response с токеном или HTML with redirect
  */
 async function handleCallback(request, env) {
   try {
-    // Проверка наличия secrets
+    // Validate presence secrets
     if (!env.GOOGLE_CLIENT_SECRET) {
-      console.error('auth.handleCallback: GOOGLE_CLIENT_SECRET не установлен');
-      throw new Error('Google Client Secret не настроен. Используйте: wrangler secret put GOOGLE_CLIENT_SECRET');
+      console.error('auth.handleCallback: GOOGLE_CLIENT_SECRET not set');
+      throw new Error('Google Client Secret not configured. Use: wrangler secret put GOOGLE_CLIENT_SECRET');
     }
 
     if (!env.JWT_SECRET) {
-      console.error('auth.handleCallback: JWT_SECRET не установлен');
-      throw new Error('JWT Secret не настроен. Используйте: wrangler secret put JWT_SECRET');
+      console.error('auth.handleCallback: JWT_SECRET not set');
+      throw new Error('JWT Secret not configured. Use: wrangler secret put JWT_SECRET');
     }
 
     let code, redirect_uri;
-    let clientUrl = 'http://localhost:8787'; // По умолчанию для локальной разработки
+    let clientUrl = 'http://localhost:8787'; // Default for local development
 
-    // Поддержка GET (редирект от Google) и POST (вызов от клиента)
+    // Support GET (redirect from Google) и POST (call from client)
     if (request.method === 'GET') {
       const url = new URL(request.url);
       code = url.searchParams.get('code');
       const stateParam = url.searchParams.get('state');
 
-      // Извлекаем client_url из state, если он передан
+      // Extract client_url from state, if provided
       if (stateParam) {
         try {
           const stateObj = JSON.parse(stateParam);
           if (stateObj && stateObj.client_url) {
-            // Используем переданный URL напрямую (может быть file:// или http://)
+            // Use provided URL directly (can be file:// или http://)
             clientUrl = stateObj.client_url;
-            console.log('auth.handleCallback: извлечен client_url из state:', clientUrl);
+            console.log('auth.handleCallback: extracted client_url from state:', clientUrl);
           }
         } catch (e) {
-          // state не JSON, используем дефолтный URL
-          console.log('auth.handleCallback: ошибка парсинга state, используется дефолтный URL');
+          // state не JSON, используем default URL
+          console.log('auth.handleCallback: state parse error, using default URL');
         }
       }
 
@@ -72,7 +72,7 @@ async function handleCallback(request, env) {
       // Origin comes from current request — works for both legacy-api and app-api workers.
       redirect_uri = `${new URL(request.url).origin}/auth/callback`;
 
-      // Для GET возвращаем HTML страницу, которая обработает токен
+      // For GET return HTML page, that will handle token
       if (!code) {
         return new Response(
           '<!DOCTYPE html><html><head><title>OAuth Error</title></head><body><h1>Authorization code not found</h1></body></html>',
@@ -126,7 +126,7 @@ async function handleCallback(request, env) {
       keys: userInfo ? Object.keys(userInfo) : []
     });
 
-    // Google API использует 'sub' вместо 'id' для идентификатора пользователя
+    // Google API использует 'sub' вместо 'id' for идентификатора пользователя
     const googleUserId = userInfo?.sub || userInfo?.id;
 
     if (!userInfo || !googleUserId) {
@@ -204,7 +204,7 @@ async function handleCallback(request, env) {
       },
     };
 
-    // Для GET запроса (редирект от Google) возвращаем HTML страницу с JavaScript
+    // Для GET запроса (redirect from Google) возвращаем HTML page с JavaScript
     // которая сохранит токен и редиректит на клиентское приложение
     if (request.method === 'GET') {
       // clientUrl уже извлечен из state параметра выше
@@ -250,7 +250,7 @@ async function handleCallback(request, env) {
                         type: 'oauth-callback',
                         success: true,
                         token: tokenData
-                    }, '*'); // Используем '*' для поддержки file://
+                    }, '*'); // Используем '*' for поддержки file://
 
                     console.log('postMessage отправлен в исходное окно');
 
@@ -280,7 +280,7 @@ async function handleCallback(request, env) {
 
                                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
                                     <p style="font-size: 12px; color: #999; margin: 5px 0;">
-                                        Если приложение не обновилось автоматически, обновите страницу вручную (F5)
+                                        Если приложение не обновилось автоматически, обновите страницу manually (F5)
                                     </p>
                                 </div>
                             </div>
@@ -296,7 +296,7 @@ async function handleCallback(request, env) {
             // Если нет opener (обычный редирект), используем старую логику
             if (!hasOpener) {
                 // Для file:// протокола браузер блокирует редирект с https:// на file://
-                // Поэтому показываем инструкцию для ручного возврата
+                // Поэтому показываем инструкцию for ручного возврата
                 if (isFileProtocol) {
                     document.body.innerHTML = \`
                         <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 50px auto; padding: 30px; text-align: center; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -318,16 +318,16 @@ async function handleCallback(request, env) {
 
                             <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; padding: 15px; margin: 20px 0;">
                                 <p style="font-size: 13px; color: #856404; margin: 0;">
-                                    <strong>⚠️ Примечание:</strong> Браузер не позволяет автоматически вернуться к локальному файлу с веб-страницы по соображениям безопасности.
+                                    <strong>⚠️ Note:</strong> Браузер не позволяет автоматически вернуться к локальному файлу с веб-страницы по соображениям безопасности.
                                 </p>
                             </div>
 
                             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
                                 <p style="font-size: 13px; color: #666; margin: 5px 0;">
-                                    <strong>💡 Совет для разработки:</strong>
+                                    <strong>💡 Совет for разработки:</strong>
                                 </p>
                                 <p style="font-size: 12px; color: #999; margin: 5px 0;">
-                                    Используйте локальный сервер для полноценной работы OAuth:
+                                    Используйте локальный сервер for полноценной работы OAuth:
                                 </p>
                                 <code style="background: #f5f5f5; padding: 8px 12px; border-radius: 4px; display: inline-block; margin: 10px 0; font-size: 12px; color: #333;">
                                     python -m http.server 8787
@@ -377,7 +377,7 @@ async function handleCallback(request, env) {
       hasDB: !!env.DB
     });
 
-    // Для GET возвращаем HTML с ошибкой
+    // For GET return HTML с ошибкой
     if (request.method === 'GET') {
       const errorMessage = error.message || 'Неизвестная ошибка';
       const html = `<!DOCTYPE html>
@@ -491,10 +491,10 @@ async function getUserInfoFromGoogle(accessToken) {
 }
 
 /**
- * Получение текущего пользователя по JWT токену
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON ответ с данными пользователя
+ * Get current user by JWT token
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables (DB, JWT_SECRET)
+ * @returns {Promise<Response>} JSON response с данными пользователя
  */
 async function handleMe(request, env) {
   if (request.method !== 'GET') {
@@ -531,9 +531,9 @@ async function handleMe(request, env) {
 
 /**
  * Главный обработчик auth endpoints
- * @param {Request} request - HTTP запрос
- * @param {Object} env - Переменные окружения
- * @param {string} path - Путь запроса
+ * @param {Request} request - HTTP request
+ * @param {Object} env - Environment variables
+ * @param {string} path - Path запроса
  * @returns {Promise<Response>} HTTP ответ
  */
 export async function handleAuth(request, env, path) {

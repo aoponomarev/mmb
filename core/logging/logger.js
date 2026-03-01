@@ -3,11 +3,11 @@
  * LOGGER - Структурированное логирование
  * ================================================================================================
  *
- * ЦЕЛЬ: Единообразное логирование с уровнями и контекстом.
+ * PURPOSE: Единообразное логирование с уровнями и контекстом.
  * Упрощение отладки и мониторинга приложения.
  * Skill: core/skills/api-layer
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Уровни логирования (debug, info, warn, error)
  * - Контекст (компонент, действие)
  * - Единый формат логов
@@ -71,7 +71,7 @@
 
         const formatted = formatLog(level, message, context);
 
-        // Записываем в sessionLogStore (если доступен) для отображения в Session Log модальном окне
+        // Записываем в sessionLogStore (если доступен) for отображения в Session Log модальном окне
         if (window.sessionLogStore && typeof window.sessionLogStore.addLog === 'function') {
             try {
                 // Извлекаем источник из context, если есть
@@ -102,7 +102,7 @@
             window.eventBus.emit('log', { level, message, context, timestamp: Date.now() });
         }
 
-        // Автоматический показ сообщения пользователю для warn/error
+        // Автоматический показ сообщения пользователю for warn/error
         // Опция showMessage: false отключает автоматический показ
         const showMessage = context.showMessage !== false;
         if (showMessage && levelNum >= LOG_LEVELS.WARN && window.AppMessages) {
@@ -110,7 +110,7 @@
             const priority = levelNum === LOG_LEVELS.ERROR ? 4 : 3;
             const scope = context.scope || 'global';
 
-            // Если в context есть messageKey - используем messagesConfig для получения переводимого сообщения
+            // Если в context есть messageKey - используем messagesConfig for получения переводимого сообщения
             let messageText = message;
             let messageDetails = context.details || null;
             let messageKey = context.messageKey || null;
@@ -132,14 +132,14 @@
                 priority: priority,
                 scope: scope,
                 actions: context.actions || [],
-                key: messageKey, // Сохраняем ключ для последующего перевода
-                params: context.messageParams || null // Сохраняем параметры для последующего перевода
+                key: messageKey, // Сохраняем ключ for последующего перевода
+                params: context.messageParams || null // Сохраняем параметры for последующего перевода
             });
         }
     }
 
     /**
-     * Установить уровень логирования
+     * Set уровень логирования
      * @param {string} level - уровень (debug, info, warn, error)
      */
     function setLogLevel(level) {
@@ -149,7 +149,7 @@
         }
     }
 
-    // Методы для каждого уровня
+    // Методы for каждого уровня
     const logger = {
         debug: (message, context) => log('debug', message, context),
         info: (message, context) => log('info', message, context),
@@ -158,9 +158,9 @@
         setLogLevel
     };
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.logger = logger;
 
-    console.log('logger.js: инициализирован');
+    console.log('logger.js: initialized');
 })();
 

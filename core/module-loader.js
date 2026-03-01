@@ -3,13 +3,13 @@
  * MODULE LOADER - Загрузчик модулей с автоматическим разрешением зависимостей
  * ================================================================================================
  *
- * ЦЕЛЬ: Автоматическая загрузка модулей приложения в правильном порядке с учётом зависимостей.
+ * PURPOSE: Автоматическая загрузка модулей приложения в правильном порядке с учётом зависимостей.
  * Поддержка работы с file:// и http:// протоколами через асинхронную загрузку ⟨script⟩ тегов.
  * Skill: core/skills/state-events
  *
  * ПРОБЛЕМА:
  * - Ручное управление порядком загрузки через вложенные onload колбэки сложно поддерживать
- * - При добавлении нового модуля нужно вручную обновлять цепочку загрузки
+ * - При добавлении нового модуля нужно manually обновлять цепочку загрузки
  * - Легко допустить ошибку в порядке загрузки
  * - file:// протокол не поддерживает fetch() и XMLHttpRequest из-за CORS
  *
@@ -18,23 +18,23 @@
  * - Автоматическое разрешение зависимостей через топологическую сортировку (алгоритм Kahn)
  * - Обнаружение циклических зависимостей
  * - Асинхронная загрузка через динамическое создание ⟨script⟩ тегов (работает с file:// и http://)
- * - Кэширование загруженных модулей для избежания повторной загрузки
+ * - Кэширование loadedных модулей for избежания повторной загрузки
  *
  * КАК ДОСТИГАЕТСЯ:
  * - Чтение конфигурации из window.modulesConfig
  * - Построение графа зависимостей
- * - Топологическая сортировка для определения правильного порядка
+ * - Топологическая сортировка for определения правильного порядка
  * - Последовательная загрузка модулей через Promise с учётом зависимостей
- * - Проверка наличия глобальных переменных после загрузки
+ * - Validate presence глобальных переменных после загрузки
  * - Обработка ошибок: критичные модули прерывают загрузку, некритичные пропускаются с предупреждением
  *
  * ОСОБЕННОСТИ:
- * - Поддержка условной загрузки модулей через feature flags (опциональное поле condition)
- * - Кэширование загруженных модулей по src пути
+ * - Поддержка условной загрузки модулей через feature flags (optionalе поле condition)
+ * - Кэширование loadedных модулей по src пути
  * - Детальные сообщения об ошибках с указанием проблемных модулей
  *
- * ССЫЛКИ:
- * - Общие принципы модульной системы: core/skills/state-events
+ * REFERENCES:
+ * - General principles модульной системы: core/skills/state-events
  * - Конфигурация модулей: core/modules-config.js
  */
 
@@ -42,7 +42,7 @@
     'use strict';
 
     /**
-     * Кэш загруженных модулей (по src пути)
+     * Кэш loadedных модулей (по src пути)
      */
     const loadedModulesCache = new Set();
 
@@ -59,7 +59,7 @@
                 return;
             }
 
-            // Проверка, не загружен ли уже скрипт в DOM
+            // Проверка, not loaded ли уже скрипт в DOM
             const existingScript = document.querySelector(`script[src="${src}"]`);
             if (existingScript) {
                 loadedModulesCache.add(src);
@@ -69,7 +69,7 @@
 
             const script = document.createElement('script');
             script.src = src;
-            script.async = false; // Важно: последовательная загрузка для зависимостей
+            script.async = false; // Important: последовательная загрузка for зависимостей
 
             script.onload = () => {
                 // Добавляем в кэш после успешной загрузки
@@ -92,7 +92,7 @@
      * @returns {Promise<boolean>} - успех загрузки
      */
     function loadModule(module) {
-        // Используем асинхронную загрузку через <script> теги для всех протоколов
+        // Используем асинхронную загрузку через <script> теги for всех протоколов
         // Это работает и с file://, и с http://
         return loadScriptAsync(module.src);
     }
@@ -151,7 +151,7 @@
             if (module.deps && module.deps.length > 0) {
                 for (const depId of module.deps) {
                     if (!moduleMap[depId]) {
-                        throw new Error(`module-loader: зависимость "${depId}" не найдена для модуля "${module.id}"`);
+                        throw new Error(`module-loader: зависимость "${depId}" не найдена for модуля "${module.id}"`);
                     }
                     graph[module.id].push(depId);
                 }
@@ -214,10 +214,10 @@
      * @returns {Array} - отсортированный массив модулей
      *
      * ЛОГИКА:
-     * - Если модуль A зависит от модуля B, то B должен быть загружен до A
+     * - Если модуль A зависит от модуля B, то B должен быть loaded до A
      * - inDegree[A] = количество модулей, от которых зависит A (т.е. длина graph[A])
      * - Модули с inDegree === 0 загружаются первыми (у них нет зависимостей)
-     * - После загрузки модуля, уменьшаем inDegree для всех модулей, которые от него зависят
+     * - После загрузки модуля, уменьшаем inDegree for всех модулей, которые от него зависят
      */
     function topologicalSort(graph, moduleMap) {
         const inDegree = {};
@@ -242,7 +242,7 @@
             const node = queue.shift();
             result.push(moduleMap[node]);
 
-            // Уменьшаем inDegree для всех модулей, которые зависят от node
+            // Уменьшаем inDegree for всех модулей, которые зависят от node
             // Ищем все модули, у которых node в списке зависимостей
             for (const otherNode of Object.keys(graph)) {
                 if (graph[otherNode].includes(node)) {
@@ -273,11 +273,11 @@
             throw new Error('module-loader: конфигурация модулей не найдена (window.modulesConfig)');
         }
 
-        // Сначала собираем все модули БЕЗ проверки условий (для построения графа зависимостей)
+        // Сначала собираем все модули БЕЗ проверки условий (for построения графа зависимостей)
         const allModules = collectModules(config, false);
 
         if (allModules.length === 0) {
-            throw new Error('module-loader: не найдено модулей для загрузки');
+            throw new Error('module-loader: не найдено модулей for загрузки');
         }
 
         // Строим граф зависимостей
@@ -297,7 +297,7 @@
         for (let i = 0; i < sortedModules.length; i++) {
             const module = sortedModules[i];
 
-            // Проверяем условие загрузки ПОСЛЕ того, как зависимости уже загружены
+            // Проверяем условие загрузки ПОСЛЕ того, как зависимости уже loadedы
             if (module.condition && typeof module.condition === 'function') {
                 try {
                     const conditionResult = module.condition();
@@ -318,7 +318,7 @@
                 // Для критичных модулей (app, vue, шаблоны) прерываем загрузку
                 const criticalModules = ['vue', 'button-template', 'dropdown-menu-item-template', 'dropdown-template', 'combobox-template'];
                 if (module.category === 'app' || criticalModules.includes(module.id)) {
-                    throw new Error(`Критичный модуль ${module.id} не загружен. Приложение не может продолжить работу.`);
+                    throw new Error(`Критичный модуль ${module.id} not loaded. Приложение не может продолжить работу.`);
                 }
 
                 // Для некритичных модулей продолжаем загрузку
@@ -326,7 +326,7 @@
         }
 
         // Вызываем инициализацию приложения, если она определена
-        // Ждём готовности DOM, если он ещё не загружен
+        // Ждём готовности DOM, если он ещё not loaded
         function callAppInit() {
             if (typeof window.appInit === 'function') {
                 window.appInit();
@@ -336,7 +336,7 @@
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', callAppInit);
         } else {
-            // DOM уже загружен, вызываем сразу
+            // DOM уже loaded, вызываем сразу
             callAppInit();
         }
     }
@@ -362,14 +362,14 @@
         },
 
         /**
-         * Очищает кэш загруженных модулей
+         * Очищает кэш loadedных модулей
          */
         clearCache: function() {
             loadedModulesCache.clear();
         },
 
         /**
-         * Проверяет, загружен ли модуль
+         * Проверяет, loaded ли модуль
          * @param {string} src - путь к модулю
          * @returns {boolean}
          */

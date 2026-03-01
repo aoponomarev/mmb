@@ -157,5 +157,5 @@
     window.ssot = ssot;
     ssot.validateContracts();
 
-    console.log('ssot-policies.js: инициализирован');
+    console.log('ssot-policies.js: initialized');
 })();

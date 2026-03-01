@@ -3,9 +3,9 @@
  * COIN-BLOCK TEMPLATE - Шаблон компонента блока монеты
  * ================================================================================================
  *
- * ЦЕЛЬ: Шаблон для компонента отображения информации о монете (иконка + символ).
+ * PURPOSE: Шаблон for компонента отображения информации о монете (иконка + символ).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js для работы компонента.
+ * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
  *
  * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
  * при загрузке файла как <script type="text/x-template"> элемент с id="coin-block-template".
@@ -22,12 +22,12 @@
  * - Иконка монеты: ⟨img⟩ с условным отображением
  * - Символ монеты: ⟨span class="text-uppercase fw-bold"⟩
  * Layout и CSS-классы:
- * - Использование Bootstrap классов для layout (d-flex, align-items-center)
+ * - Использование Bootstrap классов for layout (d-flex, align-items-center)
  * - Поддержка tooltip через title атрибут
- * - Курсор pointer для индикации кликабельности
+ * - Курсор pointer for индикации кликабельности
  *
- * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * REFERENCES:
+ * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/coin-block.js
  */
 
@@ -124,5 +124,5 @@
     // Добавляем в DOM
     document.body.appendChild(scriptElement);
 
-    console.log('coin-block-template.js: шаблон загружен');
+    console.log('coin-block-template.js: шаблон loaded');
 })();

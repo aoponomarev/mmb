@@ -4,25 +4,25 @@
  * ================================================================================================
  * Skill: app/skills/ux-principles
  *
- * ЦЕЛЬ: Единый источник правды для всех пунктов выпадающих меню в приложении.
- * Используется в index.html, test.html и других местах для единообразия.
+ * PURPOSE: SSOT for всех пунктов выпадающих меню в приложении.
+ * Используется в index.html, test.html и других местах for единообразия.
  *
- * ПРИНЦИПЫ:
- * - Все пункты меню определяются здесь
+ * PRINCIPLES:
+ * - Все пункты меню are defined here
  * - Порядок пунктов определяется порядком в массивах
- * - Условное отображение через condition (опционально)
- * - Заголовки получаются из modalsConfig для модальных окон
+ * - Условное отображение через condition (optional)
+ * - Заголовки получаются из modalsConfig for модальных окон
  * - Изменение меню в одном месте автоматически синхронизируется везде
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * {
  *   id: 'unique-id',              // Уникальный ID пункта
  *   title: 'Заголовок' | { modalId: 'modalId' }, // Заголовок напрямую или через modalId
  *   handler: 'methodName',         // Название метода в app-ui-root
- *   condition: () => true          // Опциональная функция для условного отображения
+ *   condition: () => true          // Опциональная функция for условного отображения
  * }
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Принципы единого источника правды: `app/skills/ux-principles`
  * - Конфигурация модальных окон: core/config/modals-config.js
  */
@@ -84,7 +84,7 @@
 
     /**
      * Пункты основного меню (Menu)
-     * Используется для демонстрационных целей в test.html
+     * Используется for демонстрационных целей в test.html
      */
     const MAIN_MENU_ITEMS = [
         {
@@ -133,7 +133,7 @@
 
     /**
      * Пункты меню сортировки монет (Coin column dropdown)
-     * Единый источник правды для выпадающего меню заголовка колонки "Coin"
+     * SSOT for выпадающего меню заголовка колонки "Coin"
      */
     const COIN_SORT_MENU_ITEMS = [
         {
@@ -165,7 +165,7 @@
 
     /**
      * Пункты меню действий над списком монет (dropdown в header таблицы)
-     * Единый источник правды для выпадающего меню с действиями над выбранными/видимыми монетами.
+     * SSOT for выпадающего меню с действиями над выбранными/видимыми монетами.
      */
     const COIN_ACTION_MENU_ITEMS = [
         {
@@ -206,20 +206,20 @@
         },
         {
             id: 'delete-selected',
-            title: 'Удалить отмеченные',
+            title: 'Delete отмеченные',
             handler: 'handleDeleteSelected',
             icon: 'fas fa-trash'
         },
         {
             id: 'update-coins-metadata',
-            title: 'Обновить метаданные',
+            title: 'Update метаданные',
             handler: 'handleUpdateCoinsMetadata',
             icon: 'fas fa-sync-alt'
         }
     ];
 
     /**
-     * Получить заголовок пункта меню
+     * Get заголовок пункта меню
      * @param {string|Object} titleConfig - Заголовок напрямую или объект с modalId
      * @returns {string} - Заголовок пункта меню
      */
@@ -234,7 +234,7 @@
     }
 
     /**
-     * Получить отфильтрованные пункты меню настроек
+     * Get отфильтрованные пункты меню настроек
      * @returns {Array} - Массив пунктов меню с примененными условиями
      */
     function getSettingsMenuItems() {
@@ -243,7 +243,7 @@
                 try {
                     return item.condition();
                 } catch (error) {
-                    console.error(`menus-config: ошибка в condition для пункта "${item.id}":`, error);
+                    console.error(`menus-config: ошибка в condition for пункта "${item.id}":`, error);
                     return false;
                 }
             }
@@ -252,7 +252,7 @@
     }
 
     /**
-     * Получить отфильтрованные пункты основного меню
+     * Get отфильтрованные пункты основного меню
      * @returns {Array} - Массив пунктов меню с примененными условиями
      */
     function getMainMenuItems() {
@@ -261,7 +261,7 @@
                 try {
                     return item.condition();
                 } catch (error) {
-                    console.error(`menus-config: ошибка в condition для пункта "${item.id}":`, error);
+                    console.error(`menus-config: ошибка в condition for пункта "${item.id}":`, error);
                     return false;
                 }
             }
@@ -270,7 +270,7 @@
     }
 
     /**
-     * Получить пункты меню сортировки монет
+     * Get пункты меню сортировки монет
      * @returns {Array} - Массив пунктов меню сортировки монет
      */
     function getCoinSortMenuItems() {
@@ -279,7 +279,7 @@
                 try {
                     return item.condition();
                 } catch (error) {
-                    console.error(`menus-config: ошибка в condition для пункта "${item.id}":`, error);
+                    console.error(`menus-config: ошибка в condition for пункта "${item.id}":`, error);
                     return false;
                 }
             }
@@ -288,7 +288,7 @@
     }
 
     /**
-     * Получить пункты меню действий над монетами (для dropdown в таблице)
+     * Get пункты меню действий над монетами (for dropdown в таблице)
      * @returns {Array}
      */
     function getCoinActionMenuItems() {
@@ -297,7 +297,7 @@
                 try {
                     return item.condition();
                 } catch (error) {
-                    console.error(`menus-config: ошибка в condition для пункта "${item.id}":`, error);
+                    console.error(`menus-config: ошибка в condition for пункта "${item.id}":`, error);
                     return false;
                 }
             }
@@ -306,7 +306,7 @@
     }
 
     /**
-     * Получить пункты меню математических моделей
+     * Get пункты меню математических моделей
      * @returns {Array}
      */
     function getMathModelsMenuItems() {
@@ -315,7 +315,7 @@
                 try {
                     return item.condition();
                 } catch (error) {
-                    console.error(`menus-config: ошибка в condition для пункта "${item.id}":`, error);
+                    console.error(`menus-config: ошибка в condition for пункта "${item.id}":`, error);
                     return false;
                 }
             }
@@ -323,7 +323,7 @@
         });
     }
 
-    // Экспорт в глобальную область
+    // Export to global scope
     window.menusConfig = {
         SETTINGS_MENU_ITEMS,
         MAIN_MENU_ITEMS,
@@ -338,5 +338,5 @@
         getCoinActionMenuItems
     };
 
-    console.log('menus-config.js: инициализирован');
+    console.log('menus-config.js: initialized');
 })();

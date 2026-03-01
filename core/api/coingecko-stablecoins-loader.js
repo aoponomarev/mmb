@@ -4,14 +4,14 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Получать список стейблкоинов из CoinGecko (официальный источник),
+ * PURPOSE: Получать список стейблкоинов из CoinGecko (официальный источник),
  * сохранять в кэш (версионированный ключ stablecoins-list) и пробрасывать
  * в coinsConfig (единый источник правды). Поддерживает не-USD стейблы путем
- * определения базовой валюты по близости к 1 для нескольких валют.
+ * определения базовой валюты по близости к 1 for нескольких валют.
  *
  * ИСПОЛЬЗУЕТ:
- * - window.cacheManager (для кэша, TTL задается в вызове)
- * - window.coinsConfig (для установки актуального списка)
+ * - window.cacheManager (for кэша, TTL задается в вызове)
+ * - window.coinsConfig (for установки актуального списка)
  *
  * API:
  *   await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
@@ -25,7 +25,7 @@
  * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
  * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: `app/skills/file-protocol-cors-guard`
+ * - Details: `app/skills/file-protocol-cors-guard`
  *
  * Ограничения:
  * - CoinGecko лимиты (30-50 req/min). Используется общий RateLimiter (ЕИП).
@@ -40,12 +40,12 @@
     // Берем только USD (CoinGecko категория stablecoins включает мультивалютные стейблы),
     // одна страница до 250 записей.
     const BASE_CURRENCIES = ['usd'];
-    const PEG_TOLERANCE = 0.08; // 8% допуск для определения базовой валюты
+    const PEG_TOLERANCE = 0.08; // 8% допуск for определения базовой валюты
     const CACHE_KEY = 'stablecoins-list';
 
     /**
-     * Построить URL с учетом прокси (для file://)
-     * На file:// используется Cloudflare Worker proxy для обхода CORS
+     * Построить URL с учетом прокси (for file://)
+     * На file:// using Cloudflare Worker proxy for CORS bypass
      */
     function buildUrl(path) {
         const isFile = window.location && (window.location.protocol === 'file:' || 
@@ -68,7 +68,7 @@
     }
 
     /**
-     * Получить общий rate limiter для CoinGecko
+     * Get общий rate limiter for CoinGecko
      */
     function getRateLimiter() {
         if (window.RateLimiter) {
@@ -175,7 +175,7 @@
 
     async function load({ forceRefresh = false, ttl = 24 * 60 * 60 * 1000 } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
-            console.warn('coingeckoStablecoinsLoader: cacheManager или coinsConfig не загружены');
+            console.warn('coingeckoStablecoinsLoader: cacheManager или coinsConfig not loadedы');
             return [];
         }
         // Жесткий лимит 24 часа: блокируем запросы, если недавно уже был успешный
@@ -233,7 +233,7 @@
                 window.requestRegistry.recordCall('coingecko', 'stablecoins', { vs: BASE_CURRENCIES }, 200, true);
             }
             window.coinsConfig.setStablecoins(normalized);
-            console.log(`coingeckoStablecoinsLoader: загружено ${normalized.length} стейблкоинов`);
+            console.log(`coingeckoStablecoinsLoader: loadedо ${normalized.length} стейблкоинов`);
 
             return normalized;
         } catch (error) {

@@ -4,7 +4,7 @@
  * ================================================================================================
  * Skill: is/skills/arch-external-parity
  *
- * ЦЕЛЬ: API-слой для PostgreSQL (health + будущие CRUD эндпоинты).
+ * PURPOSE: API-слой for PostgreSQL (health + будущие CRUD эндпоинты).
  * ПРИМЕЧАНИЕ ПО БЕЗОПАСНОСТИ:
  * - Секреты не хранятся в репозитории.
  * - Фактические значения переменных окружения хранить в `do-overs/Secrets/`.
@@ -16,7 +16,7 @@
  * - DB_USER
  * - DB_PASSWORD
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - API Gateway: cloud/yandex/api-gateway/app-api-gw/openapi.yaml
  * - Интеграция: `app/skills/file-protocol-cors-guard`
  */
@@ -254,7 +254,7 @@ module.exports.handler = async function (event, context) {
 
                 // 4. Portfolio Assets (Links)
                 if (Array.isArray(assets) && Array.isArray(metrics)) {
-                    // Очищаем старые связи для этого портфеля перед обновлением
+                    // Очищаем старые связи for этого портфеля перед обновлением
                     await client.query('DELETE FROM portfolio_assets WHERE portfolio_id = $1', [portfolio_id]);
 
                     for (let i = 0; i < assets.length; i++) {
@@ -295,7 +295,7 @@ module.exports.handler = async function (event, context) {
             const includePrev = qp.include_prev === 'true';
             const countOnly = qp.count_only === 'true';
 
-            // Лёгкий запрос только для получения числа монет в БД (без данных)
+            // Лёгкий запрос только for получения числа монет в БД (без данных)
             if (countOnly) {
                 const cntRes = await client.query(
                     `SELECT COUNT(DISTINCT coin_id) AS total_count,

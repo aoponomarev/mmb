@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * COIN SETS API - Endpoints для работы с пользовательскими наборами монет
+ * COIN SETS API - Endpoints for работы с пользовательскими coin sets
  * ================================================================================================
  *
- * ЦЕЛЬ: API для создания, чтения, обновления и удаления наборов монет пользователей.
+ * PURPOSE: API for создания, чтения, обновления и удаления sets монет пользователей.
  * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
  * - POST   /api/coin-sets          - Создание набора монет
- * - GET    /api/coin-sets          - Получение списка наборов пользователя
+ * - GET    /api/coin-sets          - Получение списка sets пользователя
  * - GET    /api/coin-sets/:id      - Получение набора по ID
  * - PUT    /api/coin-sets/:id      - Обновление набора
  * - DELETE /api/coin-sets/:id      - Удаление набора
@@ -19,7 +19,7 @@
  * - Пользователь может управлять только своими наборами
  * - coin_ids валидируется как массив строк
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * import { handleCoinSets } from './coin-sets.js';
  * const response = await handleCoinSets(request, env);
  */
@@ -38,7 +38,7 @@ import {
 /**
  * Обработка запросов к /api/coin-sets
  * @param {Request} request - Запрос
- * @param {Object} env - Переменные окружения
+ * @param {Object} env - Environment variables
  * @returns {Promise<Response>}
  */
 export async function handleCoinSets(request, env) {
@@ -60,7 +60,7 @@ export async function handleCoinSets(request, env) {
     // Роутинг
     const pathParts = url.pathname.split('/').filter(Boolean);
 
-    // GET /api/coin-sets - список наборов пользователя
+    // GET /api/coin-sets - список sets пользователя
     if (method === 'GET' && pathParts.length === 2) {
       const activeOnly = url.searchParams.get('active_only') === 'true';
       const coinSets = await getUserCoinSets(env.DB, userId, activeOnly);

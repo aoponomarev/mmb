@@ -231,7 +231,7 @@
                 if (!this.modalApi) return;
 
                 this.modalApi.registerButton('delete', {
-                    label: 'Удалить портфель',
+                    label: 'Delete портфель',
                     variant: 'outline-danger',
                     icon: 'fas fa-trash-alt',
                     locations: ['footer'],

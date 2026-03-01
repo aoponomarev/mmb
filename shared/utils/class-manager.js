@@ -1,29 +1,29 @@
 /**
  * ================================================================================================
- * CLASS MANAGER - Утилита для управления CSS классами в компонентах
+ * CLASS MANAGER - Утилита for managing CSS классами в компонентах
  * ================================================================================================
  *
- * ЦЕЛЬ: Универсальная функция для обработки классов с поддержкой добавления и удаления.
+ * PURPOSE: Универсальная функция for обработки классов с поддержкой добавления и удаления.
  *
- * ПРИНЦИПЫ:
- * - Обрабатывает строки (классы через пробел) и массивы строк
+ * PRINCIPLES:
+ * - Обрабатывает строки (классы space-separated) и массивы строк
  * - Фильтрует пустые значения
  * - Удаляет дубликаты
  * - Поддерживает добавление и удаление классов
  *
- * ИСПОЛЬЗОВАНИЕ:
- * - В computed свойствах компонентов для обработки classesAdd и classesRemove
+ * USAGE:
+ * - В computed свойствах компонентов for обработки classesAdd и classesRemove
  * - Применяется к разным элементам внутри компонента (root, button, menu, suffix и т.д.)
  *
- * ССЫЛКИ:
- * - Документация компонентов: app/skills/ui-architecture
+ * REFERENCES:
+ * - Documentation компонентов: app/skills/ui-architecture
  */
 
 /**
  * Обрабатывает классы: добавляет classesAdd и удаляет classesRemove
  * @param {Array} baseClasses - базовые классы компонента
- * @param {String|Array} classesAdd - классы для добавления (опционально)
- * @param {String|Array} classesRemove - классы для удаления (опционально)
+ * @param {String|Array} classesAdd - классы for добавления (optional)
+ * @param {String|Array} classesRemove - классы for удаления (optional)
  * @returns {Array} - итоговый массив классов без дубликатов
  */
 function processClasses(baseClasses, classesAdd, classesRemove) {
@@ -51,17 +51,17 @@ function processClasses(baseClasses, classesAdd, classesRemove) {
 }
 
 /**
- * Преобразует результат processClasses в строку для использования в :class
+ * Преобразует результат processClasses в строку for использования в :class
  * @param {Array} baseClasses - базовые классы компонента
- * @param {String|Array} classesAdd - классы для добавления (опционально)
- * @param {String|Array} classesRemove - классы для удаления (опционально)
- * @returns {String} - итоговая строка классов через пробел
+ * @param {String|Array} classesAdd - классы for добавления (optional)
+ * @param {String|Array} classesRemove - классы for удаления (optional)
+ * @returns {String} - итоговая строка классов space-separated
  */
 function processClassesToString(baseClasses, classesAdd, classesRemove) {
     return processClasses(baseClasses, classesAdd, classesRemove).join(' ');
 }
 
-// Экспорт через window для использования в компонентах
+// Экспорт через window for использования в компонентах
 window.classManager = {
     processClasses,
     processClassesToString

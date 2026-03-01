@@ -3,16 +3,16 @@
  * APP FOOTER COMPONENT - Компонент футера приложения
  * ================================================================================================
  *
- * ЦЕЛЬ: Vue-компонент футера приложения с метриками рынка.
+ * PURPOSE: Vue-компонент футера приложения с метриками рынка.
  * Skill: app/skills/ux-principles
  *
  * ДАННЫЕ:
  * - Наследует тему от body (bg-body), переключается вместе с темой приложения
  * - Фиксированное позиционирование внизу страницы
  * - Отображение метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR)
- * - Отображение времени в выбранной таймзоне (кликабельно для выбора таймзоны)
+ * - Отображение времени в выбранной таймзоне (кликабельно for выбора таймзоны)
  * - Обновление метрик 3 раза в день (09:00, 12:00, 18:00 МСК)
- * - Отображение главной новости крипты через AI провайдер (YandexGPT, кликабельно для переключения)
+ * - Отображение главной новости крипты через AI провайдер (YandexGPT, кликабельно for переключения)
  *
  * ДАННЫЕ:
  * - Метрики рынка: fgi, vix, btcDom, oi, fr, lsr (строковые значения)
@@ -31,8 +31,8 @@
  * - openTimezoneModal() — открытие модального окна выбора таймзоны (эмитит событие)
  * - getNextUpdateTime() — расчет следующего времени обновления (09:00, 12:00, 18:00 МСК)
  * - scheduleNextUpdate() — планирование следующего обновления
- * - formatOIMobile() — форматирование OI для мобильной версии (компактный формат с буквенным обозначением миллиарда, например "8.4B")
- * - formatValueMobile() — форматирование значения для мобильной версии (округление до десятых долей, кроме FR)
+ * - formatOIMobile() — форматирование OI for мобильной версии (компактный формат с буквенным обозначением миллиарда, например "8.4B")
+ * - formatValueMobile() — форматирование значения for мобильной версии (округление до десятых долей, кроме FR)
  * - fetchSingleCryptoNews(index) — запрос одной новости крипты через AI провайдер (с переводом, по индексу 0-4)
  * - parseSingleNews(response) — парсинг одной новости с переводом по явным маркерам (---NEWS---, ---TRANSLATION---, ---END---)
  * - cleanMarkdown(text) — очистка текста от markdown-разметки и артефактов (цифры-сноски после точек)
@@ -44,9 +44,9 @@
  * - updateTranslationLanguage(language) — обновление языка перевода и перезагрузка новости с новым переводом
  *
  * СОБЫТИЯ:
- * - open-timezone-modal — эмитируется при клике на время в футере для открытия модального окна выбора таймзоны
+ * - open-timezone-modal — эмитируется при клике на время в футере for открытия модального окна выбора таймзоны
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Шаблон: app/templates/app-footer-template.js
  * - Стили: styles/layout/footer.css
  * - API метрик: core/api/market-metrics.js
@@ -66,7 +66,7 @@ window.appFooter = {
             fr: '—',
             lsr: '—',
 
-            // Числовые значения для расчетов
+            // Числовые значения for расчетов
             fgiValue: null,
             vixValue: null,
             btcDomValue: null,
@@ -74,7 +74,7 @@ window.appFooter = {
             frValue: null,
             lsrValue: null,
 
-            // Источники данных для tooltip
+            // Источники данных for tooltip
             fgiSource: null,
             vixSource: null,
 
@@ -89,7 +89,7 @@ window.appFooter = {
             // Новости крипты
             currentNewsIndex: 0, // Индекс текущей новости (0-4)
             currentNews: '', // Текущая отображаемая новость
-            currentNewsTranslated: '', // Перевод текущей новости для tooltip
+            currentNewsTranslated: '', // Перевод текущей новости for tooltip
             translationLanguage: window.appConfig?.get('defaults.translationLanguage', 'ru'),
             fallbackCount: 0,
             fallbackLast: null,
@@ -117,7 +117,7 @@ window.appFooter = {
                 this.fr = metrics.fr;
                 this.lsr = metrics.lsr;
 
-                // Сохраняем источники для tooltip
+                // Сохраняем источники for tooltip
                 this.fgiSource = metrics.fgiSource || null;
                 this.vixSource = metrics.vixSource || null;
 
@@ -310,7 +310,7 @@ window.appFooter = {
             }, delay);
         },
 
-        // Форматирование OI для мобильной версии (компактный формат с буквенным обозначением миллиарда)
+        // Форматирование OI for мобильной версии (компактный формат с буквенным обозначением миллиарда)
         formatOIMobile() {
             if (this.oiValue === null || this.oi === '—') {
                 return '—';
@@ -320,7 +320,7 @@ window.appFooter = {
             return '$' + billions.toFixed(1) + 'B';
         },
 
-        // Форматирование значения для мобильной версии (округление до десятых, кроме FR)
+        // Форматирование значения for мобильной версии (округление до десятых, кроме FR)
         formatValueMobile(value, originalValue) {
             if (value === null || originalValue === '—') {
                 return '—';
@@ -345,7 +345,7 @@ window.appFooter = {
                     if (!apiKey) {
                         if (!this.aiKeyMissingNotified) {
                             console.warn(
-                                `app-footer: API ключ для ${providerName} не найден. ` +
+                                `app-footer: API ключ for ${providerName} не найден. ` +
                                 'Проверьте AI API настройки или доступ к /api/settings.'
                             );
                         }
@@ -362,7 +362,7 @@ window.appFooter = {
             try {
                 const priority = ['most important', 'second most important', 'third most important', 'fourth most important', 'fifth most important'];
 
-                // Получаем название языка для промпта
+                // Получаем название языка for промпта
                 const languageNames = {
                     'ru': 'Russian',
                     'en': 'English',
@@ -579,7 +579,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                 this.currentNewsTranslated = newsItem.translation;
                 await this.saveCurrentNewsState();
             } else {
-                // Если не удалось загрузить, показываем сообщение
+                // Если failed to загрузить, показываем сообщение
                 console.warn('Failed to load next news item');
             }
         },
@@ -632,7 +632,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             }
         };
 
-        // Единственная точка входа для получения ключа и загрузки новостей.
+        // Единственная точка входа for получения ключа и загрузки новостей.
         // Алгоритм: getApiKey ждёт KV если нужно → получаем ключ → грузим.
         // Никаких таймеров, никаких гонок: getApiKey сам является await-точкой.
         const waitForApiKeyThenLoadNews = async () => {
@@ -685,12 +685,12 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
         }
     },
     computed: {
-        // Централизованный язык для tooltip
+        // Централизованный язык for tooltip
         currentLanguage() {
             return this.uiState?.tooltips?.currentLanguage || 'ru';
         },
 
-        // Реактивные tooltip для метрик футера
+        // Реактивные tooltip for метрик футера
         tooltipFgi() {
             if (!window.tooltipInterpreter) return '';
             const base = window.tooltipInterpreter.getTooltip('fgi', {

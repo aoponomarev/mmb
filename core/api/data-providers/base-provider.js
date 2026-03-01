@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * BASE DATA PROVIDER - Базовый класс для провайдеров данных о монетах
+ * BASE DATA PROVIDER - Базовый класс for провайдеров данных о монетах
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Единый интерфейс для работы с различными источниками данных о криптовалютах
+ * PURPOSE: Единый интерфейс for работы с различными источниками данных о криптовалютах
  * (CoinGecko, CoinMarketCap, Binance и т.д.).
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Абстракция различий между API провайдеров
  * - Нормализация данных к единому формату
  * - Обработка rate limiting и ошибок
@@ -40,15 +40,15 @@
  *   price_change_percentage_200d: number
  * }
  *
- * ИСПОЛЬЗОВАНИЕ:
+ * USAGE:
  * class MyProvider extends BaseDataProvider {
  *   async getTopCoins(count, sortBy) { ... }
  *   // ... остальные методы
  * }
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Data Provider Manager: core/api/data-provider-manager.js
- * - AI Provider для аналогии: core/api/ai-providers/base-provider.js
+ * - AI Provider for аналогии: core/api/ai-providers/base-provider.js
  * - Нормализация: core/validation/normalizer.js
  */
 
@@ -56,7 +56,7 @@
     'use strict';
 
     /**
-     * Базовый класс для провайдеров данных о монетах
+     * Базовый класс for провайдеров данных о монетах
      */
     class BaseDataProvider {
         constructor() {
@@ -66,7 +66,7 @@
         }
 
         /**
-         * Получить топ N монет по капитализации или объему
+         * Get топ N монет по капитализации или объему
          * @param {number} count - Количество монет (1-250)
          * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
          * @param {Object} options - Дополнительные опции (apiKey, timeout и т.д.)
@@ -87,7 +87,7 @@
         }
 
         /**
-         * Получить данные монет по их ID
+         * Get данные монет по их ID
          * @param {Array<string>} coinIds - Массив ID монет
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<Array>} Массив нормализованных данных монет
@@ -97,7 +97,7 @@
         }
 
         /**
-         * Получить ID монеты по тикеру
+         * Get ID монеты по тикеру
          * @param {string} symbol - Тикер монеты (BTC, ETH и т.д.)
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<string|null>} ID монеты или null
@@ -107,7 +107,7 @@
         }
 
         /**
-         * Получить внутреннее имя провайдера
+         * Get внутреннее имя провайдера
          * @returns {string} Имя провайдера ('coingecko', 'coinmarketcap' и т.д.)
          */
         getName() {
@@ -115,7 +115,7 @@
         }
 
         /**
-         * Получить отображаемое имя провайдера
+         * Get отображаемое имя провайдера
          * @returns {string} Отображаемое имя ('CoinGecko', 'CoinMarketCap' и т.д.)
          */
         getDisplayName() {
@@ -123,18 +123,18 @@
         }
 
         /**
-         * Валидация API ключа (если требуется для провайдера)
+         * Валидация API ключа (если требуется for провайдера)
          * @param {string} apiKey - API ключ
          * @returns {boolean} true если ключ валиден
          */
         validateApiKey(apiKey) {
             // Базовая реализация: проверка на пустоту
-            // Дочерние классы могут переопределить для более строгой валидации
+            // Дочерние классы могут переопределить for более строгой валидации
             return typeof apiKey === 'string' && apiKey.length > 0;
         }
 
         /**
-         * Проверка, требуется ли API ключ для провайдера
+         * Проверка, требуется ли API ключ for провайдера
          * @returns {boolean} true если API ключ обязателен
          */
         requiresApiKey() {
@@ -146,7 +146,7 @@
         /**
          * Нормализация данных монеты к единому формату
          * Базовая реализация - возвращает данные как есть
-         * Дочерние классы должны переопределить для приведения к единому формату
+         * Дочерние классы должны переопределить for приведения к единому формату
          * @param {Object} coinData - Данные монеты от провайдера
          * @returns {Object} Нормализованные данные
          */
@@ -155,9 +155,9 @@
         }
 
         /**
-         * Обработка ошибок HTTP запросов
+         * Обработка ошибок HTTP requestов
          * @param {Response} response - HTTP response
-         * @param {string} context - Контекст для сообщения об ошибке
+         * @param {string} context - Контекст for сообщения об ошибке
          * @throws {Error}
          */
         handleHttpError(response, context = 'HTTP request') {
@@ -217,7 +217,7 @@
         }
     }
 
-    // Экспорт через window для использования в других модулях
+    // Экспорт через window for использования в других модулях
     window.BaseDataProvider = BaseDataProvider;
 
     console.log('✅ BaseDataProvider loaded');

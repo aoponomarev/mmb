@@ -5,26 +5,26 @@
  * Skill: core/skills/api-layer
  * Skill: core/skills/api-layer
  *
- * ЦЕЛЬ: Реализация провайдера данных для CoinGecko API.
+ * PURPOSE: Реализация провайдера данных for CoinGecko API.
  * Наследует BaseDataProvider и реализует все обязательные методы.
  *
  * ИСТОЧНИК: Адаптирован из do-overs/BOT/core/api/coingecko.js
  * - Сохранена вся логика работы с API
  * - Добавлена нормализация данных к единому формату
- * - Интегрирована система сообщений для ошибок
+ * - Интегрирована система сообщений for ошибок
  * - Использованы конфигурация и rate limiting из новой архитектуры
  *
- * ПРИНЦИПЫ:
+ * PRINCIPLES:
  * - Нормализация данных CoinGecko к единому формату приложения
  * - Обработка rate limiting (429) через адаптивный таймаут
- * - Трансформация данных для совместимости с математической моделью (pvs, PV1h, PV24h и т.д.)
+ * - Трансформация данных for совместимости с математической моделью (pvs, PV1h, PV24h и т.д.)
  * - Логирование ошибок через систему сообщений
  *
  * НОРМАЛИЗАЦИЯ ДАННЫХ:
  * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
  * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: `app/skills/file-protocol-cors-guard`
+ * - Details: `app/skills/file-protocol-cors-guard`
  *
  * RATE LIMITING:
  * - Бесплатный tier: 10-50 запросов/минуту
@@ -50,10 +50,10 @@
  *   price_change_percentage_30d: 12.5,
  *   price_change_percentage_200d: 150.0,
  *   pvs: [0.5, 2.1, 5.3, 8.2, 12.5, 150.0], // Для математической модели
- *   PV1h, PV24h, PV7d, PV14d, PV30d, PV200d  // Отдельные поля для удобства
+ *   PV1h, PV24h, PV7d, PV14d, PV30d, PV200d  // Отдельные поля for удобства
  * }
  *
- * ССЫЛКИ:
+ * REFERENCES:
  * - Base Provider: core/api/data-providers/base-provider.js
  * - Config: core/config/data-providers-config.js
  * - Rate Limiter: core/api/rate-limiter.js
@@ -64,7 +64,7 @@
     'use strict';
 
     /**
-     * CoinGecko Provider - реализация провайдера для CoinGecko API
+     * CoinGecko Provider - реализация провайдера for CoinGecko API
      */
     class CoinGeckoProvider extends window.BaseDataProvider {
         constructor() {
@@ -73,17 +73,17 @@
             // Получаем конфигурацию из data-providers-config
             this.config = window.dataProvidersConfig.getProviderConfig('coingecko');
 
-            // Rate limiter для управления частотой запросов
+            // Rate limiter for managing частотой запросов
             this.rateLimiter = null;
             this.initRateLimiter();
         }
 
         /**
-         * Построить URL с учетом прокси (для file://)
-         * На file:// используется Cloudflare Worker proxy для обхода CORS
+         * Построить URL с учетом прокси (for file://)
+         * На file:// using Cloudflare Worker proxy for CORS bypass
          */
         buildUrl(pathWithQuery) {
-            // Skill anchor: на file:// и GitHub Pages ВСЕ запросы через proxy, прямой доступ может быть заблокирован CORS.
+            // Skill anchor: на file:// и GitHub Pages ВСЕ запросы через proxy, прямой доступ can be заблокирован CORS.
             // See app/skills/file-protocol-cors-guard
             const needsProxy = this.isFileProtocol();
 
@@ -106,7 +106,7 @@
         initRateLimiter() {
             if (window.RateLimiter) {
                 const rateLimit = this.config.rateLimit;
-                // Используем общий именованный экземпляр для CoinGecko (ЕИП)
+                // Используем общий именованный экземпляр for CoinGecko (ЕИП)
                 this.rateLimiter = window.RateLimiter.getOrCreate(
                     'coingecko',
                     rateLimit.requestsPerMinute,
@@ -118,14 +118,14 @@
         }
 
         /**
-         * Получить внутреннее имя провайдера
+         * Get внутреннее имя провайдера
          */
         getName() {
             return 'coingecko';
         }
 
         /**
-         * Получить отображаемое имя провайдера
+         * Get отображаемое имя провайдера
          */
         getDisplayName() {
             return 'CoinGecko';
@@ -176,7 +176,7 @@
         }
 
         /**
-         * Размер чанка для загрузки топа монет
+         * Размер чанка for загрузки топа монет
          * @param {number} count
          * @param {Object} options
          * @returns {number}
@@ -217,7 +217,7 @@
         }
 
         /**
-         * Построить query параметры для /coins/markets
+         * Построить query параметры for /coins/markets
          * @param {number} perPage
          * @param {number} page
          * @param {string} order
@@ -248,7 +248,7 @@
         }
 
         /**
-         * Получить задержку ретрая из Retry-After или fallback
+         * Get задержку ретрая из Retry-After или fallback
          * @param {Response} response
          * @param {number} fallbackMs
          * @returns {number}
@@ -492,7 +492,7 @@
         }
 
         /**
-         * Получить топ N монет
+         * Get топ N монет
          * @param {number} count - Количество монет (1-250)
          * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
          * @param {Object} options - Дополнительные опции (apiKey, timeout)
@@ -555,7 +555,7 @@
                 return [];
             }
 
-            // Используем buildUrl для поддержки proxy на file://
+            // Используем buildUrl for поддержки proxy на file://
             const url = this.buildUrl(`/search?query=${encodeURIComponent(query)}`);
 
             try {
@@ -616,7 +616,7 @@
 
                 const results = coins.slice(0, 10);
 
-                // Нормализуем данные поиска: маппируем thumb/large на image для единообразия
+                // Нормализуем данные поиска: маппируем thumb/large на image for единообразия
                 const normalizedResults = results.map(coin => ({
                     ...coin,
                     image: coin.thumb || coin.large || '', // Используем thumb (маленькая иконка) или large если thumb нет
@@ -633,7 +633,7 @@
         }
 
         /**
-         * Получить данные монет по их ID (с поддержкой чанков и прогресса)
+         * Get данные монет по их ID (с поддержкой чанков и прогресса)
          * @param {Array<string>} coinIds - Массив ID монет
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<Array>} Массив нормализованных данных монет
@@ -643,7 +643,7 @@
                 return [];
             }
 
-            // Skill anchor: принудительный чанкинг для больших наборов ID на file://.
+            // Skill anchor: принудительный чанкинг for больших sets ID на file://.
             // See core/skills/api-layer
             const totalCount = coinIds.length;
             const isFile = this.isFileProtocol();
@@ -686,7 +686,7 @@
                         page: chunkNumber
                     });
 
-                    // Используем внутренний метод для запроса одной страницы ID
+                    // Используем внутренний метод for запроса одной страницы ID
                     const rawChunk = await this.fetchCoinDataPage(currentChunkIds, options, chunkNumber, chunksTotal, totalCount);
                     
                     const normalizedChunk = this.normalizeTopCoinsList(rawChunk);
@@ -741,7 +741,7 @@
         }
 
         /**
-         * Внутренний метод для загрузки страницы ID с ретраями
+         * Внутренний метод for загрузки страницы ID с ретраями
          * @private
          */
         async fetchCoinDataPage(coinIds, options, chunkIndex, chunksTotal, total) {
@@ -839,7 +839,7 @@
         }
 
         /**
-         * Получить ID монеты по тикеру
+         * Get ID монеты по тикеру
          * @param {string} symbol - Тикер монеты (BTC, ETH и т.д.)
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<string|null>} ID монеты или null
@@ -848,7 +848,7 @@
             if (!symbol) return null;
 
             try {
-                // Используем поиск для получения ID
+                // Используем поиск for получения ID
                 const results = await this.searchCoins(symbol, options);
 
                 if (results.length === 0) {
@@ -876,7 +876,7 @@
 
         /**
          * Нормализация данных монеты к единому формату
-         * Добавляет поля pvs и отдельные PV* для совместимости с математической моделью
+         * Добавляет поля pvs и отдельные PV* for совместимости с математической моделью
          * @param {Object} coinData - Данные монеты от CoinGecko API
          * @returns {Object} Нормализованные данные
          */
@@ -887,7 +887,7 @@
                 return Number.isFinite(num) ? num : 0;
             };
 
-            // Создаем массив pvs (Price Variations) - для математической модели
+            // Создаем массив pvs (Price Variations) - for математической модели
             // Источник: старое приложение, old_app_not_write/parsing.js
             const pvs = [
                 safeValue(coinData.price_change_percentage_1h_in_currency ?? coinData.price_change_percentage_1h),   // pvs[0] - PV1h
@@ -898,7 +898,7 @@
                 safeValue(coinData.price_change_percentage_200d_in_currency ?? coinData.price_change_percentage_200d)  // pvs[5] - PV200d
             ];
 
-            // Нормализованный формат (единый для всех провайдеров)
+            // Нормализованный формат (единый for всех провайдеров)
             return {
                 // Базовые поля
                 id: coinData.id,

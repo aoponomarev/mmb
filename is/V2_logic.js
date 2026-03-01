@@ -64,7 +64,7 @@ const FALLBACK_DATA = {
       score: 80,
       news_source: 'n8n Releases',
       master_llm: 'qwen/qwen3-vl-235b-a22b-thinking',
-      description: 'Добавлена настраиваемость endpoint состояния для стабильной интеграции в разные среды.',
+      description: 'Добавлена настраиваемость endpoint состояния for стабильной интеграции в разные среды.',
       category: 'Infrastructure & DevOps',
     },
     {
@@ -78,7 +78,7 @@ const FALLBACK_DATA = {
     },
     {
       id: 'task-git-2-53',
-      title: 'Обновление Git для Windows до версии 2.53.0 с исправлениями',
+      title: 'Обновление Git for Windows до версии 2.53.0 с исправлениями',
       score: 60,
       news_source: 'Software: Git',
       master_llm: 'qwen/qwen3-vl-235b-a22b-thinking',
@@ -91,7 +91,7 @@ const FALLBACK_DATA = {
       score: 60,
       news_source: 'Library: better-sqlite3',
       master_llm: 'qwen/qwen3-vl-235b-a22b-thinking',
-      description: 'Обновлен node-abi для совместимости с современными версиями Node.js.',
+      description: 'Обновлен node-abi for совместимости с современными версиями Node.js.',
       category: 'components',
     },
     {
@@ -100,7 +100,7 @@ const FALLBACK_DATA = {
       score: 50,
       news_source: 'Library: MCP SDK',
       master_llm: 'qwen/qwen3-vl-235b-a22b-thinking',
-      description: 'Добавлены конформные тесты и новые методы для OAuth и стриминговых сценариев.',
+      description: 'Добавлены конформные тесты и новые методы for OAuth и стриминговых сценариев.',
       category: 'integrations',
     },
     {
@@ -1788,7 +1788,7 @@ function applyConfirmButtonState(btn, confirmed) {
   if (confirmed) {
     btn.classList.add('btn-success', 'text-white');
     btn.textContent = '✓';
-    btn.title = 'Подтверждено (нажмите снова для отмены отметки)';
+    btn.title = 'Подтверждено (нажмите снова for отмены отметки)';
     return;
   }
   btn.classList.add('btn-outline-secondary', 'opacity-75');
@@ -2082,7 +2082,7 @@ async function runMaintenance() {
     // Reload log after maintenance
     setTimeout(loadAgentLog, 2000);
   } catch (e) {
-    setStatus('log-status', 'Ошибка: ' + e.message);
+    setStatus('log-status', 'Error: ' + e.message);
   }
   hideSpinner('log-spinner');
 }
