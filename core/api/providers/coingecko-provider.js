@@ -179,7 +179,7 @@ export class CoinGeckoProvider {
         }));
     }
 
-    async getCoinData(coinIds) {
+    async getCoinData({ coinIds }) {
         if (!Array.isArray(coinIds) || coinIds.length === 0) return [];
 
         const params = new URLSearchParams({
