@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Проверка JWT токенов на защищённых endpoints, извлечение данных пользователя.
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Проверка подписи JWT токена через JWT_SECRET

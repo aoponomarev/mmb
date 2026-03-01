@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Централизованная обработка CORS заголовков для всех ответов Workers.
- * Skill: a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Все ответы должны включать CORS заголовки

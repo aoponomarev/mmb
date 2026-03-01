@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Обеспечить совместимость при изменении структуры пользовательских данных в кэше.
  * Автоматические миграции применяются при чтении данных старой версии.
- * Skill: a/skills/app/skills/cache/cache-versioning.md
+ * Skill: core/skills/cache-layer
  *
  * ПРИНЦИПЫ:
  * - Каждая запись в кэше содержит поле version (версия схемы данных)
@@ -28,7 +28,7 @@
  * 1. Обновить VERSIONS.portfolios = '1.1.0'
  * 2. Добавить миграцию: MIGRATIONS.portfolios['1.1.0'] = (data) => { return data; }
  *
- * ССЫЛКА: Общие принципы кэширования: a/skills/app/skills/cache/cache-strategy.md
+ * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
  */
 
 (function() {

@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Определить типы ошибок для единообразной обработки.
  * Классификация ошибок по категориям и уровням критичности.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Чёткая классификация ошибок
  * - Уровни критичности
  * - Пользовательские сообщения для каждого типа
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

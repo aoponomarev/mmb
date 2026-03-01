@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Vue-компонент для отображения кнопки входа через Google или профиля пользователя.
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ССЫЛКИ:
  * - Условное отображение: кнопка входа или dropdown с профилем

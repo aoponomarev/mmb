@@ -97,7 +97,7 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/combobox-template.js (ID: combobox-template)
 // - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - См. также: a/skills/app/skills/components/components-ssot.md
+// - См. также: app/skills/ux-principles
 
 window.cmpCombobox = {
     template: '#combobox-template',

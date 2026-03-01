@@ -18,6 +18,7 @@ const __dirname = path.dirname(__filename);
 
 const isSkillsRoot = PATHS.skills;
 const coreSkillsRoot = PATHS.coreSkills;
+const appSkillsRoot = PATHS.appSkills;
 const targetAppRoot = PATHS.root;
 const logsDir = PATHS.logs;
 
@@ -110,7 +111,8 @@ async function listSkills({ query, tags, limit, offset }) {
 
   const roots = [
     { dir: isSkillsRoot, repo: "is/skills" },
-    { dir: coreSkillsRoot, repo: "core/skills" }
+    { dir: coreSkillsRoot, repo: "core/skills" },
+    { dir: appSkillsRoot, repo: "app/skills" }
   ];
 
   const allFiles = await Promise.all(
@@ -143,7 +145,7 @@ async function listSkills({ query, tags, limit, offset }) {
 async function readSkill({ id, format }) {
   logDebug("read_skill:start", { id, format });
 
-  const roots = [isSkillsRoot, coreSkillsRoot];
+  const roots = [isSkillsRoot, coreSkillsRoot, appSkillsRoot];
 
   for (const root of roots) {
     const files = await walkMarkdownFiles(root);
@@ -166,7 +168,7 @@ async function searchSkillsFullText({ query, limit }) {
   const maxResults = limit ?? 10;
   const queryParts = query.toLowerCase().split(/\s+/).filter(Boolean);
 
-  const roots = [isSkillsRoot, coreSkillsRoot];
+  const roots = [isSkillsRoot, coreSkillsRoot, appSkillsRoot];
 
   const allFiles = (await Promise.all(roots.map(walkMarkdownFiles))).flat();
 

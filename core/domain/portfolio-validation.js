@@ -2,7 +2,7 @@
  * ================================================================================================
  * PORTFOLIO VALIDATION - Contract validator for portfolio drafts
  * ================================================================================================
- * Skill: a/skills/app/skills/metrics/metrics-validation.md
+ * Skill: core/skills/domain-portfolio
  * Skill: a/skills/all/recipe-portfolio-engine-mvp-hardening.md
  * Doc: docs/A_PORTFOLIO_SYSTEM.md
  *

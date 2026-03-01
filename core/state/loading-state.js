@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Управление состояниями загрузки (loading, error, success) для всех компонентов.
  * Синхронизация состояний, индикаторы прогресса, отмена запросов.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Единый интерфейс для всех состояний загрузки
  * - Отслеживание множественных загрузок
  * - Автоматическое управление состоянием
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

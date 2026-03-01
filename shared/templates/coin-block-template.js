@@ -27,7 +27,7 @@
  * - Курсор pointer для индикации кликабельности
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `a/skills/app/skills/architecture/architecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/coin-block.js
  */
 

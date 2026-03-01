@@ -25,7 +25,7 @@
  * - Минималистичный дизайн без дополнительных оберток
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: a/skills/app/skills/components/components-template-split.md
+ * - Общие принципы работы с шаблонами: app/skills/ui-architecture
  * - Компонент: shared/components/timezone-selector.js
  */
 

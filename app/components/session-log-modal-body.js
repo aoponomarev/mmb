@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Отображение логов сессии в модальном окне для отладки.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ОСОБЕННОСТИ:
  * - Автоматический сбор всех console.log/warn/error/info

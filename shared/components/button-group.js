@@ -87,9 +87,9 @@
  * - События синхронизируются между кнопками и пунктами меню
  *
  * ССЫЛКИ:
- * - Общие принципы работы с компонентами: a/skills/app/skills/components/components-ssot.md
- * - Стратегия совместимости с Bootstrap: a/skills/app/skills/components/components-ssot.md
- * - Адаптивность: a/skills/app/skills/components/components-responsive-visibility.md
+ * - Общие принципы работы с компонентами: app/skills/ux-principles
+ * - Стратегия совместимости с Bootstrap: app/skills/ux-principles
+ * - Адаптивность: app/skills/ui-architecture
  * - Шаблон: shared/templates/button-group-template.js
  */
 

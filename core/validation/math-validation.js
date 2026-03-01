@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Проверка корректности финансовых расчётов и математических операций.
  * Валидация диапазонов, проверка на NaN/Infinity, валидация портфелей.
  *
- * Skill: a/skills/app/skills/metrics/metrics-validation.md
+ * Skill: core/skills/domain-portfolio
  *
  * ПРИНЦИПЫ:
  * - Строгая проверка перед использованием результатов расчётов
@@ -14,7 +14,7 @@
  * - Проверка корреляций (-1 до 1)
  * - Проверка метрик на NaN/Infinity
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

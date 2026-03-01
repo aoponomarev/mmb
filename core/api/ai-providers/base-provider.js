@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Базовый класс для всех AI провайдеров (YandexGPT и т.д.)
  * Обеспечивает единый интерфейс для работы с разными провайдерами.
  *
- * Skill: a/skills/app/skills/integrations/integrations-ai-core.md
+ * Skill: core/skills/api-layer
  *
  * ПРИНЦИПЫ:
  * - Единый интерфейс для всех провайдеров

@@ -28,7 +28,7 @@
  *
  * ССЫЛКИ:
  * - Шаблон: shared/templates/timezone-selector-template.js
- * - Принцип единого источника правды: a/skills/app/skills/components/components-ssot.md
+ * - Принцип единого источника правды: app/skills/ux-principles
  */
 
 window.cmpTimezoneSelector = {

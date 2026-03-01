@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: CRUD операции для портфелей пользователя.
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
  * - GET /api/portfolios — список портфелей пользователя (из D1)

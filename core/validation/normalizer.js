@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Приводить данные из разных источников к единому формату.
  * Нормализация API-ответов, временных рядов, портфелей.
- * Skill: a/skills/app/skills/metrics/metrics-validation.md
+ * Skill: core/skills/domain-portfolio
  *
  * ПРИНЦИПЫ:
  * - Единый формат независимо от источника
  * - Сохранение всех данных при нормализации
  * - Обратная совместимость
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

@@ -32,7 +32,7 @@
  * - Перезапуск: window.layoutSync.start()
  *
  * ССЫЛКИ:
- * - Общие принципы утилит: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Общие принципы утилит: is/skills/arch-foundation
  */
 
 (function() {

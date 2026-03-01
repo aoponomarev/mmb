@@ -3,7 +3,7 @@
  * ICON MANAGER MODAL BODY - Компонент управления иконками в модальном окне
  * ================================================================================================
  *
- * Skill: a/skills/app/skills/components/components-icon-manager.md
+ * Skill: app/skills/ui-architecture
  */
 
 (function() {

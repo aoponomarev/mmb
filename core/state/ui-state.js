@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Единый источник правды для UI-индикаторов и доступности контролов.
  * Данные расчетов (портфели/метрики) сюда не помещаются.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Только UI-флаги и метаданные (например, устаревание кэша)
  * - Реактивность через Vue reactive API
  * - Простой API set/get для обновления состояния
  *
- * ССЫЛКА: a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: is/skills/arch-foundation
  */
 
 (function() {

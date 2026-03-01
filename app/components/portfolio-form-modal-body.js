@@ -3,7 +3,7 @@
  * PORTFOLIO FORM MODAL BODY - Компонент формирования портфеля (D.2)
  * ================================================================================================
  *
- * Skill: a/skills/app/skills/metrics/metrics-portfolio-structure.md
+ * Skill: core/skills/domain-portfolio
  */
 
 (function() {

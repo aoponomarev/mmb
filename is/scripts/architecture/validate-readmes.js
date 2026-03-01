@@ -8,7 +8,9 @@ const ROOT = path.resolve(__dirname, '..', '..', '..');
 
 const REQUIRED_READMES = [
     'app/README.md',
+    'app/skills/README.md',
     'core/README.md',
+    'core/skills/README.md',
     'is/README.md',
     'docs/README.md',
     'is/scripts/README.md',

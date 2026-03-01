@@ -5,7 +5,7 @@
  * ЦЕЛЬ: Отслеживание времени последних запросов к эндпоинтам для соблюдения rate limits.
  * Хранит состояние в localStorage, выживает после перезагрузки страницы.
  *
- * Skill: a/skills/app/skills/integrations/integrations-rate-limiting.md
+ * Skill: core/skills/api-layer
  */
 
 (function() {

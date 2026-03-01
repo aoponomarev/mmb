@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Централизованная обработка всех ошибок приложения.
  * Классификация, логирование, пользовательские сообщения, повторные попытки.
  *
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Все ошибки проходят через единый обработчик
@@ -15,7 +15,7 @@
  * - Пользовательские сообщения
  * - Автоматические повторные попытки для сетевых ошибок
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {
@@ -36,7 +36,7 @@
      * @returns {string} - тип ошибки
      */
     // Skill anchor: классификация HTTP ошибок (429 vs 500 vs network) критична для retry-политик.
-    // See a/skills/app/skills/integrations/integrations-rate-limiting.md
+    // See core/skills/api-layer
     function classifyError(error) {
         // HTTP ошибки
         if (error.status === 429) {

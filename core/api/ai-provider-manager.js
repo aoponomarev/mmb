@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Единая точка доступа для работы с AI провайдером (YandexGPT).
  * Управляет переключением между провайдерами и предоставляет единый интерфейс.
  *
- * Skill: a/skills/app/skills/integrations/integrations-ai-core.md
+ * Skill: core/skills/api-layer
  *
  * ПРИНЦИПЫ:
  * - Единый интерфейс для всех провайдеров

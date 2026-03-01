@@ -2,7 +2,7 @@
  * ================================================================================================
  * PORTFOLIO CONFIG - Конфигурация и структура данных портфеля
  * ================================================================================================
- * Skill: a/skills/app/skills/metrics/metrics-portfolio-structure.md
+ * Skill: core/skills/domain-portfolio
  *
  * ЦЕЛЬ: Единый источник правды для структуры данных портфеля и его параметров.
  *
@@ -13,8 +13,8 @@
  *
  * ССЫЛКИ:
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md
- * - Документация метрик: `a/skills/app/skills/metrics/metrics-models.md`
- * - Архитектура портфелей: `a/skills/app/skills/architecture/architecture-core-stack.md` (раздел "Портфельная система")
+ * - Документация метрик: `core/skills/domain-portfolio`
+ * - Архитектура портфелей: `is/skills/arch-foundation` (раздел "Портфельная система")
  * - Hardening: `a/skills/all/recipe-portfolio-engine-mvp-hardening.md`
  *
  * NOTE: This module acts as compatibility facade over `core/domain/portfolio-engine.js`.
@@ -476,7 +476,7 @@
             if (!Array.isArray(allCoins) || allCoins.length === 0) return [];
 
             // Skill anchor: exclude stablecoins and wrappers from default auto-selection
-            // See a/skills/app/skills/metrics/metrics-portfolio-structure.md
+            // See core/skills/domain-portfolio
             const candidates = allCoins.filter(coin => {
                 if (!window.coinsConfig) return true;
                 // Исключаем стейблкоины, обертки и LST из дефолтного набора

@@ -10,8 +10,20 @@ This directory contains the framework-agnostic business logic, data models, and 
 
 ## Subdirectories
 - `api/`: Backend services, HTTP handlers, and external data providers (CoinGecko, Binance).
-- `cache/`: Data caching logic.
+- `cache/`: Data caching logic (TTL-based, deterministic key hashing).
+- `config/`: Application-level configuration SSOT (auth, cloudflare, portfolio, modals, UI texts).
 - `contracts/`: Zod schemas for internal and external data structures.
-- `domain/`: Pure business logic models.
-- `skills/`: Backend-specific architectural knowledge.
+- `domain/`: Pure business logic models (portfolio engine, allocation, rebalancing).
+- `errors/`: Structured error types and error code registry.
+- `events/`: Event bus for cross-component communication.
+- `logging/`: Structured logging utilities.
+- `observability/`: Frontend observability hooks.
+- `skills/`: Backend-specific architectural knowledge (see `core/skills/README.md`).
+- `ssot/`: Legacy SSOT definitions being migrated into `is/contracts/`.
+- `state/`: Vue reactive state management (UI flags, auth, loading).
 - `utils/`: Reusable utility functions.
+- `validation/`: Domain-level validation utilities.
+
+## Root Files
+- `module-loader.js`: Dynamic module loading mechanism for no-build architecture.
+- `modules-config.js`: Module registry defining load order and dependencies.

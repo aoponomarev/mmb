@@ -2,8 +2,8 @@
  * ================================================================================================
  * PORTFOLIO ADAPTERS - Provider payload adapters for canonical draft
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
- * Skill: a/skills/app/skills/integrations/integrations-postgres.md
+ * Skill: core/skills/config-contracts
+ * Skill: core/skills/api-layer
  * Doc: docs/A_PORTFOLIO_SYSTEM.md
  *
  * Functions: toCloudflarePayload, toPostgresPayload.

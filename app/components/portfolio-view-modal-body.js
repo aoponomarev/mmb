@@ -3,7 +3,7 @@
  * PORTFOLIO VIEW MODAL BODY - Компонент просмотра портфеля (D.3)
  * ================================================================================================
  *
- * Skill: a/skills/app/skills/metrics/metrics-portfolio-structure.md
+ * Skill: core/skills/domain-portfolio
  */
 
 (function() {

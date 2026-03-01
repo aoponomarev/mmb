@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Генерация динамической части tooltip на основе текущих значений метрик.
  * Статическая часть берется из tooltipsConfig, динамическая — строится здесь.
- * Skill: a/skills/app/skills/components/components-tooltips.md
+ * Skill: app/skills/ux-principles
  *
  * ПРИНЦИПЫ:
  * - Единый источник правды (ЕИП): пороги и интерпретации хранятся централизованно

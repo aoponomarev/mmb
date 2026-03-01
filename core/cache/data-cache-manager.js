@@ -1,6 +1,6 @@
 /**
  * @skill core/skills/api-layer
- * @description MMB-native file cache for backend data flow.
+ * @description Native file cache for backend data flow.
  * - TTL-based freshness
  * - no secret storage
  * - deterministic key hashing

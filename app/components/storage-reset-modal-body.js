@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Выборочное удаление данных из кэша по категориям.
  *
- * Skill: a/skills/app/skills/cache/cache-strategy.md
+ * Skill: core/skills/cache-layer
  *
  * ОСОБЕННОСТИ:
  * - Чекбоксы для выбора категорий кэша

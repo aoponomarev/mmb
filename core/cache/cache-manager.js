@@ -2,8 +2,8 @@
  * ================================================================================================
  * CACHE MANAGER - Единый интерфейс для работы с кэшем
  * ================================================================================================
- * Skill: a/skills/app/skills/cache/cache-strategy.md
- * Skill: a/skills/app/skills/cache/cache-versioning.md
+ * Skill: core/skills/cache-layer
+ * Skill: core/skills/cache-layer
  *
  * ЦЕЛЬ: Единая точка доступа к кэшу для всех компонентов. Абстракция над localStorage и IndexedDB.
  *
@@ -38,7 +38,7 @@
  * await cacheManager.set('coins-list', data, { ttl: 86400000 })
  * await cacheManager.clearOldVersions()
  *
- * ССЫЛКА: Общие принципы кэширования: a/skills/app/skills/cache/cache-strategy.md
+ * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
  */
 
 (function() {

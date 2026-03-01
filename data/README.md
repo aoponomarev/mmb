@@ -9,4 +9,5 @@ This directory acts as the local storage volume for the application. It contains
 
 ## Typical Contents (Ignored)
 - `cache/`: SQLite database files for market data.
-- `memory-mcp/`: JSONL files tracking AI agent memory and chat history.
+
+> **Note**: MCP memory is stored at `is/memory/memory.jsonl`, not in `data/`.

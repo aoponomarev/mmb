@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Взаимодействие с Cloudflare Workers API для управления наборами монет.
  *
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * МЕТОДЫ:
  * - getCoinSets(activeOnly) - Получить список наборов пользователя
@@ -52,7 +52,8 @@
                     : window.cloudflareConfig.getWorkersBaseUrl();
                 console.log('coin-sets-client: cloudflareConfig загружен, используется защищенный URL:', this.baseUrl);
             } else {
-                console.warn('coin-sets-client: cloudflareConfig не загружен, используется fallback URL');
+                // @exception anti-calque: legacy worker URL used as fallback until OAuth redirect migrated to app-api
+                console.warn('coin-sets-client: cloudflareConfig not loaded, using fallback URL');
                 this.baseUrl = 'https://mbb-api.ponomarev-ux.workers.dev';
             }
         }

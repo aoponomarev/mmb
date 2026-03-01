@@ -7,6 +7,7 @@ Contains all executable Node.js and PowerShell scripts used to validate, build, 
 1. The root of `is/scripts/` must contain ONLY:
    - This `README.md`.
    - Top-level entrypoints intended for manual/direct execution (e.g., `preflight.js`).
+   - One-off migration utilities (e.g., `migrate-plans.js`).
 2. All internal automation MUST be placed in categorized subfolders.
 3. Every subfolder must be documented in this README.
 

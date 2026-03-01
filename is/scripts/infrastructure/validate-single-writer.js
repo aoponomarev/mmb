@@ -1,5 +1,5 @@
 /**
- * @skill process-external-parity-sync-governance
+ * @skill arch-external-parity
  * @skill arch-foundation
  * @description Blocking contract for shared external datasets.
  * Ensures only one active writer is allowed at a time via DATA_PLANE_ACTIVE_APP.
@@ -53,7 +53,7 @@ function main() {
     
     const activeWriter = getEnvValue(envText, "DATA_PLANE_ACTIVE_APP");
     
-    const validWriters = ['TARGET', 'LEGACY', 'MMB', 'MBB'];
+    const validWriters = ['TARGET', 'LEGACY'];
     if (!validWriters.includes(activeWriter)) {
         throw new Error(`DATA_PLANE_ACTIVE_APP must be one of [${validWriters.join(', ')}], got "${activeWriter || "<empty>"}"`);
     }

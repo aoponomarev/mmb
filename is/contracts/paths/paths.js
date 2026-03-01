@@ -35,15 +35,10 @@ export const PATHS = {
     docsPlans: getAbsolutePath('docs/plans'),
     skills: getAbsolutePath('is/skills'),
     coreSkills: getAbsolutePath('core/skills'),
+    appSkills: getAbsolutePath('app/skills'),
     coreContracts: getAbsolutePath('core/contracts'),
     logs: getAbsolutePath('is/logs'),
     drafts: getAbsolutePath('docs/drafts'),
     memory: getAbsolutePath('is/memory'),
-    skills: getAbsolutePath('is/skills'),
-    coreSkills: getAbsolutePath('core/skills'),
-    logs: getAbsolutePath('is/logs'),
-    drafts: getAbsolutePath('docs/drafts'),
-    memory: getAbsolutePath('is/memory'),
-    // Exception example (cloud paths are allowed to have legacy terms if needed by infrastructure)
     cloudflareApi: getAbsolutePath('is/cloudflare/edge-api')
 };

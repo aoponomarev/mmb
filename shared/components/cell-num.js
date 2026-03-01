@@ -22,7 +22,7 @@
  *
  * ССЫЛКИ:
  * - Старая версия: do-overs/BOT/ui/components/cell-num.js
- * - Архитектура: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Архитектура: is/skills/arch-foundation
  */
 
 (function() {

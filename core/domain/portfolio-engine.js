@@ -2,7 +2,7 @@
  * ================================================================================================
  * PORTFOLIO ENGINE - Pure domain logic for portfolio draft/rebalance
  * ================================================================================================
- * Skill: a/skills/app/skills/metrics/metrics-portfolio-structure.md
+ * Skill: core/skills/domain-portfolio
  * Skill: a/skills/all/recipe-portfolio-engine-mvp-hardening.md
  * Skill: a/skills/app/recipe-portfolio-engine-mvp-hardening.md
  * Doc: docs/A_PORTFOLIO_SYSTEM.md

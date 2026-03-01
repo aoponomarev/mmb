@@ -2,7 +2,7 @@
  * ================================================================================================
  * RATE LIMITER - Централизованное управление запросами к API
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-rate-limiting.md
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Предотвратить блокировку API из-за превышения лимитов запросов.
  * Адаптивные таймауты, очередь запросов, приоритизация.
@@ -12,7 +12,7 @@
  * - Очередь запросов с приоритизацией
  * - Обработка rate limiting для всех внешних API
  *
- * ССЫЛКА: Критически важные структуры описаны в `a/skills/app/skills/architecture/architecture-core-stack.md`
+ * ССЫЛКА: Критически важные структуры описаны в `is/skills/arch-foundation`
  */
 
 (function() {
@@ -134,7 +134,7 @@
                 decreaseTimeout();
             } catch (error) {
                 // Skill anchor: адаптивный 429 recovery (increase/decrease timeout цикл).
-                // See a/skills/app/skills/integrations/integrations-rate-limiting.md
+                // See core/skills/api-layer
                 // Увеличение таймаута при 429 ошибке
                 if (error.status === 429 || error.type === 'api_rate_limit') {
                     increaseTimeout();

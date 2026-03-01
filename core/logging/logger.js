@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Единообразное логирование с уровнями и контекстом.
  * Упрощение отладки и мониторинга приложения.
- * Skill: a/skills/app/skills/process/process-logging-strategy.md
+ * Skill: core/skills/api-layer
  *
  * ПРИНЦИПЫ:
  * - Уровни логирования (debug, info, warn, error)
@@ -13,7 +13,7 @@
  * - Единый формат логов
  * - Возможность отправки на сервер (если понадобится)
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

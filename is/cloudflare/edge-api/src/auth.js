@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Обработка OAuth flow на сервере: обмен code на токен, сохранение пользователя, выдача JWT.
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ENDPOINTS:
  * - GET /auth/google — редирект на Google OAuth (не используется, делается на клиенте)
@@ -68,8 +68,8 @@ async function handleCallback(request, env) {
         }
       }
 
-      // redirect_uri должен точно совпадать с тем, что использовался при инициации OAuth.
-      // Берём origin из текущего запроса — это работает и для mbb-api, и для app-api.
+      // redirect_uri must match exactly what was used to initiate OAuth.
+      // Origin comes from current request — works for both legacy-api and app-api workers.
       redirect_uri = `${new URL(request.url).origin}/auth/callback`;
 
       // Для GET возвращаем HTML страницу, которая обработает токен

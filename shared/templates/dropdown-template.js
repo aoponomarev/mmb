@@ -40,7 +40,7 @@
  * - Без адаптивности: если не заданы ни buttonIcon, ни buttonTextShort, всегда отображается полный buttonText
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `a/skills/app/skills/architecture/architecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/dropdown.js
  */
 

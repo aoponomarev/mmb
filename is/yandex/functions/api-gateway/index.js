@@ -2,7 +2,7 @@
  * ================================================================================================
  * app API FUNCTION - Yandex Cloud Functions
  * ================================================================================================
- * Skill: a/skills/app/skills/cloud/yandex-cloud-function-code.md
+ * Skill: is/skills/arch-external-parity
  *
  * ЦЕЛЬ: API-слой для PostgreSQL (health + будущие CRUD эндпоинты).
  * ПРИМЕЧАНИЕ ПО БЕЗОПАСНОСТИ:
@@ -18,7 +18,7 @@
  *
  * ССЫЛКИ:
  * - API Gateway: cloud/yandex/api-gateway/app-api-gw/openapi.yaml
- * - Интеграция: `a/skills/app/skills/integrations/integrations-api-proxy.md`
+ * - Интеграция: `app/skills/file-protocol-cors-guard`
  */
 const { Client } = require('pg');
 

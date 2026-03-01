@@ -4,7 +4,7 @@
     /**
      * MISSING COINS MODAL BODY
      * Показывает отсутствующие монеты, позволяет исключить или заменить на найденные по тикеру.
-     * Skill: a/skills/app/skills/components/components-modal-buttons.md
+     * Skill: app/skills/ux-principles
      *
      * Props:
      * - missingCoins: Array<{ id, symbol?, name? }>

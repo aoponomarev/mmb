@@ -5,8 +5,8 @@
  *
  * ЦЕЛЬ: Реализация провайдера для работы с YandexGPT через Yandex Cloud API.
  *
- * Skill: a/skills/app/skills/integrations/integrations-ai-core.md
- * Skill: a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
+ * Skill: core/skills/api-layer
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Использует Yandex Cloud Foundation Models API
@@ -153,7 +153,7 @@
                 // we gracefully fall back to Foundation model to avoid empty UI blocks.
                 if (isAssistant) {
                     // Skill anchor: на file:// прямой вызов Assistant API заблокирован CORS, обязателен fallback через proxy.
-                    // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
+                    // See app/skills/file-protocol-cors-guard
                     if (window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                         modelUri = `gpt://${this.defaultFolderId}/yandexgpt/latest`;
                         requestBody.modelUri = modelUri;

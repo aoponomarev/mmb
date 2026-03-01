@@ -45,7 +45,7 @@
  * - Анимация chevron через Font Awesome класс fa-rotate-90 и inline transition (единственное исключение из запрета inline-стилей)
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `a/skills/app/skills/architecture/architecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: shared/components/dropdown-menu-item.js
  */
 

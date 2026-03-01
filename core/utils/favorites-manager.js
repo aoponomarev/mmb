@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Централизованное управление избранными монетами пользователя.
- * Skill: a/skills/app/skills/components/components-ssot.md
+ * Skill: app/skills/ux-principles
  *
  * ПРИНЦИПЫ:
  * - ЕИП: Cloudflare D1 (таблица user_coin_sets с type='favorite') - основной источник правды.

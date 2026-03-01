@@ -42,7 +42,7 @@
  * - Группировка элементов: структура заложена для будущей реализации через v-if="groupBy"
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: a/skills/app/skills/components/components-template-split.md
+ * - Общие принципы работы с шаблонами: app/skills/ui-architecture
  * - Компонент: shared/components/combobox.js
  */
 

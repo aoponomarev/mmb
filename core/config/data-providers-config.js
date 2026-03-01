@@ -2,7 +2,7 @@
  * ================================================================================================
  * DATA PROVIDERS CONFIG - Конфигурация провайдеров данных о монетах
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-data-providers.md
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Централизованная конфигурация для всех провайдеров финансовых данных.
  * Аналогично AI провайдерам, но для источников данных о криптовалютах.
@@ -38,7 +38,7 @@
  * - При смене провайдера структура может измениться → нужна новая версия
  *
  * ССЫЛКИ:
- * - AI Providers Config (аналогия): `a/skills/app/skills/integrations/integrations-ai-core.md`
+ * - AI Providers Config (аналогия): `core/skills/api-layer`
  * - Data Provider Manager: core/api/data-provider-manager.js
  * - Base Data Provider: core/api/data-providers/base-provider.js
  * - Cache Manager: core/cache/cache-manager.js

@@ -43,7 +43,7 @@ export const envSchema = z.object({
     // 5. Infrastructure & Security
     // ---------------------------------------------------------
     // Shared datasets safety contract: only one app is active writer at a time
-    DATA_PLANE_ACTIVE_APP: z.enum(['TARGET', 'LEGACY', 'MMB', 'MBB']).default('TARGET'),
+    DATA_PLANE_ACTIVE_APP: z.enum(['TARGET', 'LEGACY']).default('TARGET'),
     
     // Local encrypted archive key for Secret Resilience (renamed from MMB_SECRET_ARCHIVE_KEY)
     SYS_SECRET_ARCHIVE_KEY: z.string({ required_error: 'SYS_SECRET_ARCHIVE_KEY is required' }).min(32, 'Secret archive key must be at least 32 characters long')

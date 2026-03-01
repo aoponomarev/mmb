@@ -2,7 +2,7 @@
  * Корневой компонент приложения
  *
  * ЦЕЛЬ: Инициализация Vue приложения и настройка корневого компонента
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРОБЛЕМА: Логика инициализации Vue раздувала index.html
  *
@@ -3987,7 +3987,7 @@
                     // Сначала используем уже переданные полные данные монет из выбранных наборов,
                     // затем догружаем только недостающие ID через loadCoinsByIds.
                     // Skill anchor: не пере-fetch'ить то, что уже пришло в coinSet.coins (типичная точка лишних API циклов).
-                    // See a/skills/app/skills/integrations/integrations-data-providers.md
+                    // See core/skills/api-layer
                     const resolvedCoinsMap = new Map();
                     coinIdsArray.forEach(coinId => {
                         const coinData = allCoinsData.get(coinId);
@@ -4067,7 +4067,7 @@
                         return;
                     } else {
                         // Skill anchor: после merge activeCoinSetIds должны быть union от this.coins, иначе счетчик таблицы "залипает".
-                        // See a/skills/app/skills/integrations/integrations-data-providers.md
+                        // See core/skills/api-layer
                         const nextActiveCoinSetIds = merge
                             ? Array.from(new Set(this.coins.map(coin => coin.id)))
                             : coinIdsArray;
@@ -4431,7 +4431,7 @@
 
                     try {
                         // Skill anchor: при force refresh допустимо удалять кэш; при обычной загрузке — нет (stale-while-revalidate).
-                        // See a/skills/app/skills/cache/cache-strategy.md
+                        // See core/skills/cache-layer
                         // 1. Удаляем старые данные монет из кэша
                         await window.cacheManager.delete('top-coins-by-market-cap');
                         await window.cacheManager.delete('top-coins-by-market-cap-meta');

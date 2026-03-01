@@ -33,7 +33,7 @@
  * - #settings-items — элементы меню настроек справа
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: `a/skills/app/skills/architecture/architecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - Общие принципы работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
  * - Компонент: app/components/app-header.js
  * - Стили: styles/layout/header.css
  */

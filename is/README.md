@@ -9,10 +9,18 @@ The `is/` (Infrastructure Space) directory contains all configuration, tooling, 
 - **Preflight Enforcement**: All contracts defined here are actively enforced by `preflight.js` before the application can start.
 
 ## Subdirectories
-- `cloudflare/`: Edge computing scripts and CORS proxies.
+- `cloudflare/`: Edge computing scripts and CORS proxies (Cloudflare Workers).
 - `contracts/`: SSOT schemas for paths, naming rules, and environment variables.
+- `docker/`: Docker configuration (currently in backlog).
+- `google/`: Google Cloud service configurations.
+- `logs/`: Runtime logs directory (gitignored contents).
 - `mcp/`: Model Context Protocol servers for AI agents.
-- `scripts/`: Automation, diagnostics, and deployment tools.
+- `memory/`: MCP memory JSONL files for long-term agent context.
+- `n8n/`: n8n orchestration workflows (currently in backlog).
+- `scripts/`: Automation, diagnostics, and deployment tools (see `is/scripts/README.md`).
 - `secrets/`: Encrypted local secret archives and resilience scripts.
-- `skills/`: The MCP knowledge base and architectural ADRs.
-- `yandex/`: Cloud function definitions (currently in backlog).
+- `skills/`: The MCP knowledge base and architectural ADRs (see `is/skills/README.md`).
+- `yandex/`: Yandex Cloud function definitions and deployment scripts.
+
+## Legacy Root Files
+- `IS.html`, `V2_logic.js`, `V2_standard.css`: Pre-migration artifacts retained for reference. Not part of the active architecture.

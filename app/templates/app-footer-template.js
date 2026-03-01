@@ -31,7 +31,7 @@
  * - Распределение элементов: d-flex, justify-content-between, flex-wrap для равномерного распределения спанов
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: a/skills/app/skills/components/components-template-split.md
+ * - Общие принципы работы с шаблонами: app/skills/ui-architecture
  * - Компонент: app/components/app-footer.js
  * - Стили: styles/layout/footer.css
  */

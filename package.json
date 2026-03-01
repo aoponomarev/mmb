@@ -24,8 +24,6 @@
     "cache:integrity:check": "node is/scripts/infrastructure/validate-cache-integrity.js",
     "cache:integrity:delta": "node is/scripts/infrastructure/validate-cache-integrity-delta.js",
     "market:http:start": "node is/scripts/infrastructure/start-market-snapshot-server.js",
-    "index:gen": "node scripts/app-index-gen.js",
-    "index:fix": "node scripts/app-index-gen.js --fix",
     "secret:backup": "node is/scripts/secrets/secret-resilience.js --backup",
     "secret:restore": "node is/scripts/secrets/secret-resilience.js --restore-latest",
     "secret:check": "node is/scripts/secrets/secret-resilience.js",

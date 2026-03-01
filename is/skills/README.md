@@ -30,6 +30,7 @@ This directory is the brain of the Target App's AI-assisted development. It cont
 - `process-language-policy` — English-only for skills/code; Russian allowed in docs
 - `process-migration-prioritization` — Scoring formula for next migration step
 - `process-secrets-hygiene` — Zero-tolerance secrets policy, incident response
+- `process-skill-placement` — Decision table and contract for correct skill profiling across is/core/app
 - `process-windows-shell` — **HARD BAN: no bash in Cursor on Windows**. PowerShell patterns
 
 > **Domain skills** live in `core/skills/` and `app/skills/` — see their README files.

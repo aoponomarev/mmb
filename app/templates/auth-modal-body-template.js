@@ -23,7 +23,7 @@
  * - Блок с сообщением о неавторизованном состоянии
  *
  * ССЫЛКИ:
- * - Общие принципы работы с шаблонами: a/skills/app/skills/components/components-template-split.md
+ * - Общие принципы работы с шаблонами: app/skills/ui-architecture
  * - Компонент: app/components/auth-modal-body.js
  */
 

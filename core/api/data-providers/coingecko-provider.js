@@ -2,8 +2,8 @@
  * ================================================================================================
  * COINGECKO PROVIDER - Провайдер данных CoinGecko API
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-data-providers.md
- * Skill: a/skills/app/skills/integrations/integrations-rate-limiting.md
+ * Skill: core/skills/api-layer
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Реализация провайдера данных для CoinGecko API.
  * Наследует BaseDataProvider и реализует все обязательные методы.
@@ -24,7 +24,7 @@
  * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
  * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: `a/skills/app/skills/integrations/integrations-api-proxy.md`
+ * - Подробности: `app/skills/file-protocol-cors-guard`
  *
  * RATE LIMITING:
  * - Бесплатный tier: 10-50 запросов/минуту
@@ -84,7 +84,7 @@
          */
         buildUrl(pathWithQuery) {
             // Skill anchor: на file:// и GitHub Pages ВСЕ запросы через proxy, прямой доступ может быть заблокирован CORS.
-            // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
+            // See app/skills/file-protocol-cors-guard
             const needsProxy = this.isFileProtocol();
 
             // Если нужен прокси — используем Cloudflare Worker
@@ -188,7 +188,7 @@
             }
 
             // Skill anchor: стабилизирует file:// Top-N runbook (чанки, чтобы не ловить 429 на тяжелых запросах).
-            // See a/skills/app/skills/integrations/integrations-data-providers.md
+            // See core/skills/api-layer
             // На file:// используем более "легкий" режим по 25 монет на запрос
             if (this.isFileProtocol()) {
                 return Math.min(25, count);
@@ -328,7 +328,7 @@
 
                         if (canRetry) {
                             // Skill anchor: предотвращает регрессии в 429 recovery (Retry-After приоритетнее fallback delay).
-                            // See a/skills/app/skills/integrations/integrations-rate-limiting.md
+                            // See core/skills/api-layer
                             const fallbackDelay = retryBaseDelayMs * attempt;
                             const retryDelayMs = response.status === 429
                                 ? this.getRetryDelayMs(response, fallbackDelay)
@@ -644,7 +644,7 @@
             }
 
             // Skill anchor: принудительный чанкинг для больших наборов ID на file://.
-            // See a/skills/app/skills/integrations/integrations-data-providers.md
+            // See core/skills/api-layer
             const totalCount = coinIds.length;
             const isFile = this.isFileProtocol();
             const maxChunkSize = isFile ? 25 : 50;

@@ -2,7 +2,7 @@
  * ================================================================================================
  * CLOUDFLARE CONFIG - Конфигурация Cloudflare Workers API
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ЦЕЛЬ: Единый источник правды для всех параметров Cloudflare Workers API.
  * Base URL, endpoints для portfolios, datasets, auth.
@@ -26,9 +26,9 @@
  * }
  *
  * ССЫЛКИ:
- * - Принципы единого источника правды: `a/skills/app/skills/components/components-ssot.md`
- * - План интеграции: `a/skills/app/skills/integrations/integrations-cloudflare-plan.md`
- * - Cloudflare инфраструктура: `a/skills/app/skills/integrations/integrations-cloudflare-core.md`
+ * - Принципы единого источника правды: `app/skills/ux-principles`
+ * - План интеграции: `core/skills/config-contracts`
+ * - Cloudflare инфраструктура: `core/skills/config-contracts`
  */
 
 (function() {

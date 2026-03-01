@@ -2,7 +2,7 @@
  * ================================================================================================
  * COINGECKO STABLECOINS LOADER
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-data-providers.md
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Получать список стейблкоинов из CoinGecko (официальный источник),
  * сохранять в кэш (версионированный ключ stablecoins-list) и пробрасывать
@@ -25,7 +25,7 @@
  * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
  * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: `a/skills/app/skills/integrations/integrations-api-proxy.md`
+ * - Подробности: `app/skills/file-protocol-cors-guard`
  *
  * Ограничения:
  * - CoinGecko лимиты (30-50 req/min). Используется общий RateLimiter (ЕИП).

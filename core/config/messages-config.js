@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Единый источник правды для всех системных сообщений в приложении.
  * Исходные тексты на русском языке (базовый язык).
- * Skill: a/skills/app/skills/core-systems/messages-keys-and-config.md
+ * Skill: core/skills/config-contracts
  *
  * ПРИНЦИПЫ:
  * - Короткие ключи: e.net, e.rate, w.proxy, i.switch, s.ok
@@ -26,7 +26,7 @@
  * window.messagesConfig.get('e.rate', { time: '5 минут' })
  *
  * ССЫЛКИ:
- * - Принципы единого источника правды: a/skills/app/skills/components/components-ssot.md
+ * - Принципы единого источника правды: app/skills/ux-principles
  * - Модуль перевода: core/api/messages-translator.js
  */
 

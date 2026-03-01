@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Компонент для отображения состояния авторизации и управления авторизацией через Google OAuth.
  *
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
  * - Отображение текущего состояния авторизации (авторизован/не авторизован)

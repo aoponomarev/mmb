@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Vue-компонент для управления портфелями пользователя через Cloudflare API.
  *
- * Skill: a/skills/app/skills/metrics/metrics-portfolio-structure.md
+ * Skill: core/skills/domain-portfolio
  *
  * ССЫЛКИ:
  * - Список портфелей пользователя (загрузка через portfolios-client)

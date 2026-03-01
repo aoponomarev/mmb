@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Независимый модуль для получения метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR).
  * Экспортирует функции через window.marketMetrics.
  *
- * Skill: a/skills/app/skills/integrations/integrations-api-proxy.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Чистая логика без UI
@@ -20,7 +20,7 @@
  * - Yahoo Finance, Stooq: через cloudflareConfig.getApiProxyEndpoint() на file://
  * - BTC Dominance (CoinGecko): через cloudflareConfig.getApiProxyEndpoint() на file://
  * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Подробности: a/skills/app/skills/integrations/integrations-api-proxy.md
+ * - Подробности: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
  * - VIX: кэширование 24ч + fallback (Yahoo Finance, Stooq, Alpha Vantage)

@@ -27,7 +27,7 @@
  * ССЫЛКИ:
  * - Система управления кнопками: shared/components/modal.js
  * - Coin Sets Client: core/api/cloudflare/coin-sets-client.js
- * - Skill: a/skills/app/skills/integrations/integrations-data-providers.md
+ * - Skill: core/skills/api-layer
  */
 
 window.coinSetLoadModalBody = {
@@ -1681,7 +1681,7 @@ window.coinSetLoadModalBody = {
                     let coinsFullSet = null;
 
                     // Skill anchor: визуальный прогресс обязателен для chunked загрузки Top-N на file://.
-                    // See a/skills/app/skills/integrations/integrations-data-providers.md
+                    // See core/skills/api-layer
                     this.isCancelling = false;
                     this.loadAbortController = new AbortController();
                     this.updateDefaultSetProgress({
@@ -1694,7 +1694,7 @@ window.coinSetLoadModalBody = {
                     try {
                         console.log(`coin-set-load-modal-body: обновляем кэш ${cacheKey} через chunked загрузку...`);
                         // Skill anchor: принудительный chunking + progress callback защищает UX и снижает риск 429 циклов.
-                        // See a/skills/app/skills/integrations/integrations-data-providers.md
+                        // See core/skills/api-layer
                         coinsFullSet = await window.dataProviderManager.getTopCoins(250, this.defaultSortBy, {
                             preferYandexFirst: true,
                             allowCoinGeckoFallback: true,

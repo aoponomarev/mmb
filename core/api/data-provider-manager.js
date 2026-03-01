@@ -2,8 +2,8 @@
  * ================================================================================================
  * DATA PROVIDER MANAGER - Менеджер для переключения между провайдерами данных
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-data-providers.md
- * Skill: a/skills/app/skills/integrations/integrations-rate-limiting.md
+ * Skill: core/skills/api-layer
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Единая точка доступа для работы с разными провайдерами данных о монетах
  * (CoinGecko, CoinMarketCap, Binance и т.д.). Управляет переключением между провайдерами
@@ -279,7 +279,7 @@
             } catch (error) {
                 if (window.requestRegistry) {
                     // Skill anchor: в журнал должен попадать реальный HTTP статус, иначе 429 цикл маскируется как "generic error".
-                    // See a/skills/app/skills/integrations/integrations-rate-limiting.md
+                    // See core/skills/api-layer
                     const status = Number.isFinite(error.status)
                         ? error.status
                         : (String(error.message || '').toLowerCase().includes('rate limit') ? 429 : 500);

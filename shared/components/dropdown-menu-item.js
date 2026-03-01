@@ -77,7 +77,7 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/dropdown-menu-item-template.js (ID: dropdown-menu-item-template)
 // - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - См. также: `a/skills/app/skills/architecture/architecture-dom-markup.md` (принципы модульности, запрет кастомных стилей)
+// - См. также: `is/skills/arch-foundationarchitecture-dom-markup.md` (принципы модульности, запрет кастомных стилей)
 
 window.cmpDropdownMenuItem = {
     template: '#dropdown-menu-item-template',

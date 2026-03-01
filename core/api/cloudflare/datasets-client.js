@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Браузерный клиент для работы с временными рядами и метриками через Cloudflare Workers API.
  *
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ПРИНЦИПЫ:
  * - Единый источник правды: Использовать `cloudflare-config.js` для всех endpoints
@@ -24,7 +24,7 @@
  * ССЫЛКИ:
  * - Конфигурация Workers: core/config/cloudflare-config.js
  * - OAuth клиент: core/api/cloudflare/auth-client.js
- * - План интеграции: a/skills/app/skills/integrations/integrations-cloudflare-plan.md
+ * - План интеграции: core/skills/config-contracts
  */
 
 (function() {

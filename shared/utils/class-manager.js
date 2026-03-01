@@ -16,7 +16,7 @@
  * - Применяется к разным элементам внутри компонента (root, button, menu, suffix и т.д.)
  *
  * ССЫЛКИ:
- * - Документация компонентов: a/skills/app/skills/components/components-class-manager.md
+ * - Документация компонентов: app/skills/ui-architecture
  */
 
 /**

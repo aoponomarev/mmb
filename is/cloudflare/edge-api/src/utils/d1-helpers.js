@@ -5,7 +5,7 @@
  *
  * ЦЕЛЬ: Хелперы для работы с D1 (users, portfolios, rebalances).
  * Абстракция над SQL запросами для упрощения работы с базой данных.
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ПРИНЦИПЫ:
  * - Все функции возвращают Promise

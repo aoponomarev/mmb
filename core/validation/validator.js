@@ -6,14 +6,14 @@
  * ЦЕЛЬ: Валидировать данные по схемам из validation-schemas.js.
  * Проверка типов, обязательных полей, диапазонов значений.
  *
- * Skill: a/skills/app/skills/metrics/metrics-validation.md
+ * Skill: core/skills/domain-portfolio
  *
  * ПРИНЦИПЫ:
  * - Строгая валидация перед использованием данных
  * - Детальные сообщения об ошибках
  * - Поддержка вложенных объектов и массивов
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

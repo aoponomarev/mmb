@@ -1,6 +1,6 @@
 /**
  * @skill core/skills/api-layer
- * @description MMB backend-core DataProviderManager.
+ * @description Backend-core DataProviderManager.
  *
  * Principles:
  * - fail-fast only (no hidden fallback chains during migration)

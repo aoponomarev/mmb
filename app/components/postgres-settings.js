@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Управление базовыми настройками будущего API слоя PostgreSQL.
  * Без выполнения запросов к БД и без создания таблиц.
  *
- * Skill: a/skills/app/skills/integrations/integrations-postgres.md
+ * Skill: core/skills/api-layer
  *
  * ССЫЛКИ:
  * - Конфигурация: core/config/postgres-config.js

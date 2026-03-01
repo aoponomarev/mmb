@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Централизованное управление состоянием авторизации для синхронизации между всеми компонентами.
  * Все экземпляры компонентов авторизации используют единый источник правды.
  *
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Единый источник правды для состояния авторизации
@@ -20,7 +20,7 @@
  * window.authState.clearAuthState(); // Очистить состояние авторизации
  * window.authState.setLoading(true); // Установить состояние загрузки
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

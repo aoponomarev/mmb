@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Централизованное хранение логов сессии для отображения в модальном окне Session Log.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Хранит логи в памяти (не в localStorage)

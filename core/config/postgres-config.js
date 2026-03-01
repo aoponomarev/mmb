@@ -2,7 +2,7 @@
  * ================================================================================================
  * POSTGRES CONFIG - Конфигурация API слоя для Yandex Cloud PostgreSQL
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-postgres.md
+ * Skill: core/skills/api-layer
  *
  * ЦЕЛЬ: Единый источник правды для параметров API слоя PostgreSQL.
  * Base URL и endpoints для health/portfolios/snapshots и др.
@@ -14,7 +14,7 @@
  *
  * ССЫЛКИ:
  * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 3)
- * - Архитектурный план: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Архитектурный план: is/skills/arch-foundation
  */
 
 (function() {

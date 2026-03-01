@@ -2,7 +2,7 @@
  * ================================================================================================
  * APP CONFIG - Конфигурация приложения
  * ================================================================================================
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ЦЕЛЬ: Централизованная конфигурация приложения.
  * API endpoints, лимиты, таймауты, настройки по умолчанию, версия, feature flags.
@@ -29,11 +29,11 @@
  * - Формат modelUri: gpt://{folderId}/{model}/latest
  *
  * ССЫЛКИ:
- * - Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Критически важные структуры описаны в is/skills/arch-foundation
  * - Конфигурация авторизации: core/config/auth-config.js
  * - Конфигурация Cloudflare Workers: core/config/cloudflare-config.js
  * - YandexGPT провайдер: core/api/ai-providers/yandex-provider.js
- * - План интеграции Cloudflare: a/skills/app/skills/integrations/integrations-cloudflare-plan.md
+ * - План интеграции Cloudflare: core/skills/config-contracts
  */
 
 (function() {

@@ -2,7 +2,7 @@
  * WorkFlow UI V2 Logic
  * Stateless, template-driven single-page dashboard.
  *
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * Architecture:
  *   - API layer: all HTTP calls go through api.call() / api.n8nCall()

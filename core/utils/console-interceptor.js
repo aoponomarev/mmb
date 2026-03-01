@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Перехватывать все вызовы console.log/warn/error/info/debug и записывать их в sessionLogStore.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Сохраняет оригинальные методы console.*

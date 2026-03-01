@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Реализация клиентской части OAuth flow: инициирование авторизации,
  * обработка callback, обмен code на токен, управление токенами.
  *
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ПРИНЦИПЫ:
  * - Единый источник правды: Использовать `auth-config.js` для всех параметров OAuth
@@ -24,7 +24,7 @@
  * ССЫЛКИ:
  * - Конфигурация OAuth: core/config/auth-config.js
  * - Конфигурация Workers: core/config/cloudflare-config.js
- * - План интеграции: a/skills/app/skills/integrations/integrations-cloudflare-plan.md
+ * - План интеграции: core/skills/config-contracts
  */
 
 (function() {

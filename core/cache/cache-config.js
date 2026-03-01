@@ -2,7 +2,7 @@
  * ================================================================================================
  * CACHE CONFIG - Конфигурация кэширования
  * ================================================================================================
- * Skill: a/skills/app/skills/cache/cache-strategy.md
+ * Skill: core/skills/cache-layer
  *
  * ЦЕЛЬ: Централизованное управление TTL, версиями схем и стратегиями кэширования.
  * Единый источник правды — запрещено дублировать значения TTL в компонентах.
@@ -39,7 +39,7 @@
  * cacheConfig.getStrategy('icons-cache') // 'cache-first'
  * cacheConfig.getVersion('portfolios') // '1.0.0'
  *
- * ССЫЛКА: Общие принципы кэширования: a/skills/app/skills/cache/cache-strategy.md
+ * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
  */
 
 (function() {

@@ -112,7 +112,7 @@ function checkContracts() {
         const match = envContent.match(/^DATA_PLANE_ACTIVE_APP\s*=\s*(.+)$/m);
         if (match) {
             const val = match[1].trim();
-            if (['TARGET', 'LEGACY', 'MMB', 'MBB'].includes(val)) {
+            if (['TARGET', 'LEGACY'].includes(val)) {
                 pass('contracts', 'DATA_PLANE_ACTIVE_APP anti-race', `value: ${val}`);
             } else {
                 fail('contracts', 'DATA_PLANE_ACTIVE_APP anti-race', `unexpected value: ${val}`, false);

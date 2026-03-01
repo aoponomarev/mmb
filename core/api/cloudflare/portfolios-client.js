@@ -20,8 +20,8 @@
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md, docs/A_CLOUDFLARE.md
  * - Конфигурация Workers: core/config/cloudflare-config.js
  * - OAuth клиент: core/api/cloudflare/auth-client.js
- * - Skill: a/skills/app/skills/integrations/integrations-cloudflare-plan.md
- * - Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * - Skill: core/skills/config-contracts
+ * - Skill: core/skills/config-contracts
  */
 
 (function() {

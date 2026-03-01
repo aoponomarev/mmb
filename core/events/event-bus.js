@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Обеспечить коммуникацию между компонентами без жёстких зависимостей.
  * Подписка на события, эмит событий, автоматическая отписка.
- * Skill: a/skills/app/skills/architecture/architecture-core-stack.md
+ * Skill: is/skills/arch-foundation
  *
  * ПРИНЦИПЫ:
  * - Глобальная шина событий для всех компонентов
  * - Подписка/отписка через простой API
  * - Поддержка одноразовых подписок
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

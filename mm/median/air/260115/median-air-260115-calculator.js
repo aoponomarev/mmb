@@ -2,7 +2,7 @@
  * ================================================================================================
  * MEDIAN AIR 260115 CALCULATOR - Версия модели "Медиана" (A.I.R.) от 26.01.15
  * ================================================================================================
- * Skill: a/skills/app/skills/metrics/metrics-models.md
+ * Skill: core/skills/domain-portfolio
  * Doc: docs/A_MATH_MODELS.md
  *
  * ЦЕЛЬ: Новая версия модели Median/AIR с Robust-нормализацией (median+MAD)

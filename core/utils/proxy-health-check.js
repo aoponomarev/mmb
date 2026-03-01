@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Проверка доступности прокси перед переключением или использованием.
- * Skill: a/skills/app/skills/integrations/integrations-api-proxy.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ИСПОЛЬЗОВАНИЕ:
  * const isAvailable = await window.proxyHealthCheck.check(url);

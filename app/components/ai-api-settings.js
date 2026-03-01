@@ -6,7 +6,7 @@
  * ЦЕЛЬ: Компонент настроек AI API провайдеров (YandexGPT) для модального окна.
  * Позволяет переключаться между провайдерами и настраивать их параметры.
  *
- * Skill: a/skills/app/skills/integrations/integrations-ai-core.md
+ * Skill: core/skills/api-layer
  *
  * ОСОБЕННОСТИ:
  * - Переключатель провайдеров через radio buttons (YandexGPT, GitHub, PostgreSQL)
@@ -812,7 +812,7 @@ window.aiApiSettings = {
                 }
             } catch (error) {
                 // Skill anchor: health-check на file:// может давать ложные CORS ошибки, это не баг провайдера.
-                // See a/skills/app/skills/troubleshooting/file-protocol-cors-guard.md
+                // See app/skills/file-protocol-cors-guard
                 const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
                     this.healthStatus = 'Fail (CORS/Network)';

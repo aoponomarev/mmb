@@ -65,10 +65,10 @@
  * Примечание: Все зоны (иконка, текст, суффикс) эмитят общее событие click по умолчанию. Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно в родительском компоненте.
  *
  * ССЫЛКИ:
- * - Общие принципы работы с компонентами: a/skills/app/skills/components/components-ssot.md
- * - Адаптивность: a/skills/app/skills/components/components-responsive-visibility.md
- * - Выравнивание высоты: a/skills/app/skills/components/components-layout-alignment.md
- * - Детерминированные хэши: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Общие принципы работы с компонентами: app/skills/ux-principles
+ * - Адаптивность: app/skills/ui-architecture
+ * - Выравнивание высоты: app/skills/ui-architecture
+ * - Детерминированные хэши: is/skills/arch-foundation
  * - Шаблон: shared/templates/button-template.js
  */
 

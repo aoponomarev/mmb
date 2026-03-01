@@ -2,7 +2,7 @@
  * ================================================================================================
  * AUTH CONFIG - Конфигурация авторизации Google OAuth
  * ================================================================================================
- * Skill: a/skills/app/skills/integrations/integrations-oauth-file-protocol.md
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * ЦЕЛЬ: Единый источник правды для всех параметров Google OAuth авторизации.
  * Client ID, redirect URIs, scopes, endpoints.
@@ -28,9 +28,9 @@
  * }
  *
  * ССЫЛКИ:
- * - Принципы единого источника правды: a/skills/app/skills/components/components-ssot.md
- * - План интеграции: a/skills/app/skills/integrations/integrations-cloudflare-plan.md
- * - Cloudflare инфраструктура: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * - Принципы единого источника правды: app/skills/ux-principles
+ * - План интеграции: core/skills/config-contracts
+ * - Cloudflare инфраструктура: core/skills/config-contracts
  */
 
 (function() {
@@ -47,8 +47,8 @@
             // Redirect URIs для разных окружений
             redirectUris: {
                 local: 'http://localhost:8787/auth/callback',
-                // В Google OAuth Console пока разрешен legacy callback.
-                // После добавления app-api в список Authorized redirect URIs можно вернуть app-api.
+                // @exception anti-calque: live Google OAuth redirect URI registered in Google Console.
+                // After adding app-api to Authorized redirect URIs list, replace with app-api origin.
                 production: 'https://mbb-api.ponomarev-ux.workers.dev/auth/callback'
             },
 

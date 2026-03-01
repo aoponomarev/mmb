@@ -12,7 +12,7 @@
  *
  * ССЫЛКИ:
  * - Система управления кнопками: shared/components/modal.js
- * - Принципы: a/skills/app/skills/components/components-ssot.md
+ * - Принципы: app/skills/ux-principles
  */
 
 window.modalExampleBody = {

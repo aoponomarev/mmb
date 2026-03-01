@@ -9,7 +9,7 @@
 - `Implemented`: Cache integrity gate (`npm run cache:integrity:check`, `npm run cache:integrity:delta`).
 - `Implemented`: Secret resilience (encrypted backup/restore via `npm run secret:backup/restore`).
 - `Implemented`: Health-check validates contract plane (env, paths, single-writer).
-- `Backlog`: Docker split compose (`base + mmb + mbb`) — deferred to backlog.
+- `Backlog`: Docker split compose (`base + target + legacy`) — deferred to backlog.
 - `Backlog`: Cloudflare runtime parity checks — deferred to backlog.
 - `Backlog`: Yandex Cloud functional migration — deferred (no confirmed use case).
 

@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Распределение ключей кэша по хранилищам (localStorage/IndexedDB) в зависимости от объема и частоты доступа.
- * Skill: a/skills/app/skills/cache/cache-strategy.md
+ * Skill: core/skills/cache-layer
  *
  * HOT (localStorage, ≤5MB) — синхронный доступ, быстрый:
  * - settings, theme, timezone, favorites, ui-state, active-tab — настройки и UI-состояние
@@ -41,7 +41,7 @@
  * 3. Оценить тип данных (простые объекты → localStorage, массивы/структуры → IndexedDB)
  * 4. Добавить ключ в массив LAYERS.{layer}.keys
  *
- * ССЫЛКА: Общие принципы кэширования: a/skills/app/skills/cache/cache-strategy.md
+ * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
  */
 
 (function() {

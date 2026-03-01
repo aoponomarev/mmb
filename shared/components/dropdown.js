@@ -106,8 +106,8 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/dropdown-template.js (ID: dropdown-template)
 // - Зависимости: Bootstrap 5, Vue.js
-// - См. также: `a/skills/app/skills/components/components-bootstrap.md` (раздел "Стратегия максимальной совместимости с Bootstrap")
-// - См. также: `a/skills/app/skills/architecture/` (принципы модульности, запрет кастомных стилей)
+// - См. также: `app/skills/ui-architecture` (раздел "Стратегия максимальной совместимости с Bootstrap")
+// - См. также: `is/skills/arch-foundation` (принципы модульности, запрет кастомных стилей)
 
 window.cmpDropdown = {
     template: '#dropdown-template',

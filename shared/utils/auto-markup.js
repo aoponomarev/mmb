@@ -39,8 +39,8 @@
  * - Отключение: window.autoMarkup.stopObserver()
  *
  * ССЫЛКИ:
- * - Общие принципы маркировки: a/skills/app/skills/architecture/architecture-dom-markup.md
- * - Детерминированные хэши компонентов: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Общие принципы маркировки: is/skills/arch-foundationarchitecture-dom-markup.md
+ * - Детерминированные хэши компонентов: is/skills/arch-foundation
  */
 
 window.autoMarkup = {

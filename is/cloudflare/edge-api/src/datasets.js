@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: CRUD операции для временных рядов и метрик.
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
  * - GET /api/datasets/time-series/:coin/:date — получение временных рядов

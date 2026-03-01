@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Определить индексы IndexedDB для быстрого поиска данных.
- * Skill: a/skills/app/skills/cache/cache-strategy.md
+ * Skill: core/skills/cache-layer
  *
  * КОНФИГУРАЦИЯ ИНДЕКСОВ:
  * - time-series: coinId, timestamp, coinId_timestamp (составной)
@@ -23,7 +23,7 @@
  *
  * ПРИМЕЧАНИЕ: Реализация индексов будет добавлена при реализации IndexedDB. Пока файл содержит только конфигурацию.
  *
- * ССЫЛКА: Общие принципы кэширования: a/skills/app/skills/cache/cache-strategy.md
+ * ССЫЛКА: Общие принципы кэширования: core/skills/cache-layer
  */
 
 (function() {

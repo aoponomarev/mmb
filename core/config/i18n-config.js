@@ -2,7 +2,7 @@
  * ================================================================================================
  * I18N CONFIG - Конфигурация интернационализации
  * ================================================================================================
- * Skill: a/skills/app/skills/components/components-localization.md
+ * Skill: app/skills/ux-principles
  *
  * ЦЕЛЬ: Единый источник правды для всех настроек интернационализации (i18n).
  *
@@ -19,7 +19,7 @@
  * window.i18nConfig.isLanguageSupported('fr') // true
  *
  * ССЫЛКИ:
- * - Принципы единого источника правды: a/skills/app/skills/components/components-ssot.md
+ * - Принципы единого источника правды: app/skills/ux-principles
  * - Конфигурация tooltips: core/config/tooltips-config.js
  * - Конфигурация сообщений: core/config/messages-config.js
  */

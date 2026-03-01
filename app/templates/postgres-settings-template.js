@@ -7,7 +7,7 @@
  *
  * ССЫЛКИ:
  * - Компонент: app/components/postgres-settings.js
- * - Принципы шаблонов: a/skills/app/skills/architecture/architecture-core-stack.md
+ * - Принципы шаблонов: is/skills/arch-foundation
  */
 
 (function() {

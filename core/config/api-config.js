@@ -5,14 +5,14 @@
  *
  * ЦЕЛЬ: Конфигурация параметров rate limiting для разных API.
  * Используется rate-limiter.js для управления запросами.
- * Skill: a/skills/app/skills/integrations/integrations-rate-limiting.md
+ * Skill: core/skills/api-layer
  *
  * ПРИНЦИПЫ:
  * - Параметры адаптивных таймаутов
  * - Приоритеты запросов
  * - Настройки для каждого API
  *
- * ССЫЛКА: Критически важные структуры описаны в a/skills/app/skills/architecture/architecture-core-stack.md
+ * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
  */
 
 (function() {

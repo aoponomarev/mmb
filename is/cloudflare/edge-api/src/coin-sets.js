@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: API для создания, чтения, обновления и удаления наборов монет пользователей.
- * Skill: a/skills/app/skills/integrations/integrations-cloudflare-core.md
+ * Skill: core/skills/config-contracts
  *
  * ENDPOINTS:
  * - POST   /api/coin-sets          - Создание набора монет

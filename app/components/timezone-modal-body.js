@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * ЦЕЛЬ: Интеграция timezone-selector и выбора языка перевода с системой управления кнопками модального окна.
- * Skill: a/skills/app/skills/components/components-modal-buttons.md
+ * Skill: app/skills/ux-principles
  *
  * ОСОБЕННОСТИ:
  * - Использует cmp-timezone-selector для выбора таймзоны
