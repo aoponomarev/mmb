@@ -1,0 +1,121 @@
+/**
+ * Стили для компонента DROPDOWN
+ *
+ * НАЗНАЧЕНИЕ: Предоставить адаптивность компонента cmp-dropdown через CSS классы
+ * и вложенные селекторы для управления видимостью элементов кнопки триггера
+ * (иконка, текст, укороченный текст).
+ *
+ * ПРИНЦИП РАБОТЫ:
+ * - Mobile-first подход: базовые стили для мобильных, переопределение через @media для desktop (>= 576px)
+ * - Использование класса .dropdown-responsive на корневом элементе dropdown
+ * - Классы-модификаторы: .has-icon, .has-text-short, .hide-suffix
+ * - Управление видимостью через visibility, font-size, max-width вместо display: none
+ *   (это позволяет элементам оставаться в DOM для корректной работы flexbox gaps)
+ * - Кнопка триггера реализована через cmp-button, поэтому использует стили .btn-responsive
+ *
+ * БРЕЙКПОИНТ: 576px (SM Bootstrap) - стандартный брейкпоинт Bootstrap для перехода mobile → desktop
+ *
+ * ЗАВИСИМОСТИ:
+ * - Bootstrap 5 (классы .dropdown, .dropdown-toggle, .dropdown-menu)
+ * - button.css (кнопка триггера использует .btn-responsive)
+ * - dropdown-menu-item.css (пункты меню используют .dropdown-menu-item-responsive)
+ * - Используется в: cmp-dropdown, cmp-button-group (при схлопывании в dropdown)
+ *
+ * ПОРЯДОК ЗАГРУЗКИ:
+ * Загружается третьим среди компонентных стилей (после button.css и dropdown-menu-item.css),
+ * так как использует кнопку (через cmp-button) и содержит пункты меню (через cmp-dropdown-menu-item).
+ *
+ * Подробнее: a/skills/app/skills/components/components-styling-principles.md
+ */
+
+/* ============================================================================
+   КОМПОНЕНТ DROPDOWN
+   ============================================================================ */
+
+/* Скрытие суффиксов (chevron) в кнопке dropdown при использовании класса hide-suffix */
+.dropdown-responsive.hide-suffix .suffix-container {
+  display: none !important;
+}
+
+/* Базовые стили (mobile-first) */
+.dropdown-responsive .icon {
+  display: inline;
+}
+
+/* Базовое скрытие текста на мобильных */
+.dropdown-responsive .button-text,
+.dropdown-responsive .button-text-short {
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  display: inline;
+}
+
+/* Если есть иконка - скрыть текст на мобильных */
+.dropdown-responsive.has-icon .button-text,
+.dropdown-responsive.has-icon .button-text-short {
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  display: inline;
+}
+
+/* Если нет иконки, но есть короткий текст - показать его на мобильных */
+.dropdown-responsive.has-text-short:not(.has-icon) .button-text-short {
+  visibility: visible;
+  font-size: inherit;
+  line-height: inherit;
+  max-width: none;
+  overflow: visible;
+  display: inline;
+}
+
+.dropdown-responsive.has-text-short:not(.has-icon) .button-text {
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  display: inline;
+}
+
+/* Десктоп 576px */
+@media (min-width: 576px) {
+  .dropdown-responsive .icon {
+    display: none;
+  }
+
+  /* Показываем текст на desktop */
+  .dropdown-responsive .button-text,
+  .dropdown-responsive.has-icon .button-text {
+    visibility: visible;
+    font-size: inherit;
+    line-height: inherit;
+    max-width: none;
+    overflow: visible;
+    display: inline;
+  }
+
+  .dropdown-responsive.has-text-short:not(.has-icon) .button-text-short {
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    max-width: 0;
+    overflow: hidden;
+    display: inline;
+  }
+
+  .dropdown-responsive.has-text-short:not(.has-icon) .button-text {
+    visibility: visible;
+    font-size: inherit;
+    line-height: inherit;
+    max-width: none;
+    overflow: visible;
+    display: inline;
+  }
+}
+

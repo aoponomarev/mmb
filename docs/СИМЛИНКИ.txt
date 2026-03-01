@@ -1,0 +1,67 @@
+Cursor IDE
+mklink /J "C:\Users\AO\AppData\Roaming\Cursor\User\workspaceStorage" "D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\workspaceStorage"
+mklink /J "C:\Users\AO\AppData\Roaming\Cursor\User\snippets" "D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\snippets"
+mklink "C:\Users\AO\AppData\Roaming\Cursor\User\settings.json" "D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\settings.json"
+mklink "C:\Users\AO\AppData\Roaming\Cursor\User\keybindings.json" "D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\keybindings.json"
+
+================================================
+
+Шаг 1: Подготовьте папку на первом (основном) ПК
+Закройте Cursor (чтобы он не перезаписал базу данных в процессе переноса).
+Откройте Проводник Windows и перейдите в папку хранения данных Cursor:
+%APPDATA%\Cursor\User (обычно это C:\Users\AO\AppData\Roaming\Cursor\User).
+Найдите там папку workspaceStorage. Именно в ней лежат базы данных по каждому проекту.
+Переместите (Вырежьте и Вставьте) папку workspaceStorage в ваш синхронизируемый OneDrive.
+Например, создайте для неё место: D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage.
+(Убедитесь, что в %APPDATA%\Cursor\User этой папки больше нет!)
+
+Шаг 2: Создайте символическую ссылку на первом ПК
+Откройте Командную строку (cmd) (нажмите Win+R, введите cmd и нажмите Enter) и выполните эту команду.
+(Я использую ключ /J для Directory Junction, так как для него не нужны права администратора).
+mklink /J "%APPDATA%\Cursor\User\workspaceStorage" "D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage"
+Если команда выполнится успешно, вы увидите сообщение: Junction created for...
+
+Шаг 3: Настройте второй ПК
+Убедитесь, что OneDrive полностью синхронизировал новую папку CursorSync\workspaceStorage на второй компьютер (она должна лежать ровно по пути D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage).
+Закройте Cursor на втором компьютере.
+Перейдите в %APPDATA%\Cursor\User на втором ПК.
+Если там уже есть папка workspaceStorage, удалите её или переименуйте в workspaceStorage_backup (чтобы освободить место для ссылки).
+Откройте Командную строку (cmd) на втором компьютере и выполните ту же самую команду создания ссылки:
+mklink /J "%APPDATA%\Cursor\User\workspaceStorage" "D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage"
+
+⚠️ Важные нюансы использования этого метода:
+Не запускайте проект одновременно на двух ПК. База данных SQLite (в которой лежат чаты) блокируется при чтении/записи. Если Cursor будет открыт на обоих компьютерах одновременно, база данных state.vscdb может повредиться (corrupted) при попытке синхронизации OneDrive-ом конфликтующих версий файла.
+Давайте время на синхронизацию. Перед тем как открыть Cursor на втором ПК, убедитесь, что иконка OneDrive показывает, что все файлы синхронизированы и загружены на диск.
+Поскольку абсолютный путь к вашему проекту (D:\Clouds\AO\OneDrive\AI\PRO\app) одинаковый, хэш ID рабочей области в базе данных совпадет, и Cursor мгновенно подтянет всю историю чатов Composer'а и контекст агента с первого ПК.
+
+Даже если вы всегда работаете с правами администратора, ключ /J (Directory Junction, или Соединение каталогов) в вашем сценарии с OneDrive является оптимальным и самым надежным.
+Вот почему именно /J, а не /D (Symbolic Link):
+
+1. Как OneDrive и Windows понимают эти ссылки
+/J (Junction) работает на более низком уровне файловой системы (NTFS). Когда программа (в нашем случае Cursor) обращается к Junction-папке в AppData, она "думает", что это настоящая физическая папка. ОС перехватывает запрос прозрачно.
+/D (Symlink) — это более современный тип ссылки, который может указывать на сетевые диски и относительные пути. Но некоторые старые программы или специфичные процессы (особенно встроенные базы данных SQLite, которые использует Cursor) могут спотыкаться о симлинки, понимая, что это лишь "ярлык", и выдавать ошибки доступа или блокировки файла.
+
+2. Отношение OneDrive к ссылкам
+OneDrive категорически не умеет нормально синхронизировать папки, если вы кладете саму ссылку (Symlink/Junction) внутрь папки OneDrive, а оригинальные файлы лежат где-то на диске C:. Облако просто загрузит ссылку как пустой файл или перестанет отслеживать изменения.
+Но мы делаем всё наоборот (и это единственно верный путь):
+Оригинальная физическая папка с тяжелыми базами данных workspaceStorage будет лежать реально внутри OneDrive (D:\Clouds\AO\OneDrive\AI\PRO\app\CursorSync\workspaceStorage или где вы решите её разместить).
+А вот "обманка" (Junction) будет лежать в %APPDATA%\Cursor\User\.
+OneDrive будет видеть обычную физическую папку и прекрасно её синхронизировать (ведь в облаке лежат реальные файлы), а Cursor, обращаясь в свой %APPDATA%, будет перенаправляться по Junction-ссылке прямо в OneDrive.
+
+Резюме команд (именно с /J):
+Правильная архитектура:
+Реальные файлы лежат в: D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage
+Ссылка лежит в: %APPDATA%\Cursor\User\workspaceStorage
+Команда:
+mklink /J "%APPDATA%\Cursor\User\workspaceStorage" "D:\Clouds\AO\OneDrive\CursorSync\workspaceStorage"
+(Папка workspaceStorage в %APPDATA%\... перед выполнением команды должна быть удалена, иначе возникнет ошибка "Файл уже существует").
+Используйте /J. Это самый "железобетонный" вариант для обмана программ в Windows, когда нужно вынести их служебные папки на другой диск или в облако.
+
+### --- АВТОМАТИЧЕСКИЙ РЕЕСТР СИМЛИНКОВ ИЗ paths.js --- ###
+# Не редактируйте этот блок вручную, он обновляется командой npm run docs:paths
+# Формат: Путь симлинка | Целевой файл
+
+C:\Users\AO\AppData\Roaming\Cursor\User\workspaceStorage | D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\workspaceStorage
+C:\Users\AO\AppData\Roaming\Cursor\User\snippets | D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\snippets
+C:\Users\AO\AppData\Roaming\Cursor\User\settings.json | D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\settings.json
+C:\Users\AO\AppData\Roaming\Cursor\User\keybindings.json | D:\Clouds\AO\OneDrive\AI\Global\AO\AppData\Roaming\Cursor\User\keybindings.json

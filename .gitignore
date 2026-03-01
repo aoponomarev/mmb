@@ -1,0 +1,28 @@
+# зависимости
+node_modules/
+
+# секреты — никогда не коммитить
+.env
+secrets-backup.txt
+
+# локальные секретные архивы/кэш (из предыдущей версии)
+data/memory-mcp/
+data/secret-archives/
+data/cache/
+
+# новые секретные архивы
+is/secrets/archives/
+
+# компрометированные/локальные служебные файлы
+docs/CRON.txt
+
+# логи
+logs/
+*.log
+
+# системные
+.DS_Store
+Thumbs.db
+
+# continue settings
+.continue/

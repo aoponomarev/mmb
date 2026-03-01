@@ -1,0 +1,47 @@
+/**
+ * ================================================================================================
+ * COMBOBOX CUSTOM STYLES
+ * ================================================================================================
+ *
+ * ЦЕЛЬ: Кастомные стили для компонента combobox (крестик очистки через CSS псевдоэлемент).
+ *
+ * ИСПОЛЬЗОВАНИЕ:
+ * - Подключается в index.html и test.html через <link rel="stylesheet">
+ * - Используется компонентом cmp-combobox
+ */
+
+/* Крестик для очистки через CSS псевдоэлемент (для combobox) */
+.combobox-clear {
+    cursor: pointer;
+    position: relative;
+    padding: 0.375rem 0.5rem;
+}
+
+.combobox-clear::before {
+    content: '\f00d'; /* Font Awesome times icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.875rem;
+    color: var(--bs-secondary);
+    transition: color 0.15s ease-in-out;
+}
+
+.combobox-clear:hover::before {
+    color: var(--bs-danger);
+}
+
+.combobox-clear:active::before {
+    color: var(--bs-danger);
+    opacity: 0.75;
+}
+
+/* Скрытие стрелок (spin buttons) для числовых полей ввода */
+.hide-spinners::-webkit-outer-spin-button,
+.hide-spinners::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.hide-spinners[type=number] {
+    -moz-appearance: textfield;
+}

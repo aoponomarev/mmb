@@ -1,0 +1,34 @@
+/**
+ * ================================================================================================
+ * MODAL THEMED STYLES - Стили для тематических модальных окон
+ * ================================================================================================
+ */
+
+/* Тематический хедер и футер (как основной хедер приложения) */
+.modal-header-themed,
+.modal-footer-themed {
+    background-color: var(--bs-dark) !important;
+    /* Освежаем фон белым инсетом как в app-header */
+    box-shadow: 
+        0 0 0 1000px rgba(255, 255, 255, 0.1) inset !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.modal-header-themed .modal-title {
+    color: #fff !important;
+}
+
+/* Цвет фона для строк с суммами/заголовков сегментов - как у выделенных строк основной таблицы */
+.bg-segment-highlight {
+    background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
+    transition: background-color 150ms ease;
+}
+
+[data-bs-theme="dark"] .bg-segment-highlight {
+    background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+}
+
+/* Для таблиц внутри модалок - заголовки тоже должны быть тематическими */
+.modal-table-header-themed {
+    background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+}

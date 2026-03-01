@@ -1,0 +1,188 @@
+/**
+ * ================================================================================================
+ * SCROLLBARS STYLES - Глобальные стили для полос прокрутки
+ * ================================================================================================
+ *
+ * ЦЕЛЬ: Единый подход для всех блоков с прокруткой - без скроллбаров.
+ * Вертикальная прокрутка мышкой, горизонтальная - с Shift.
+ *
+ * ПРИНЦИПЫ:
+ * - Вертикальная полоса прокрутки страницы (html/body): всегда видна
+ * - Вертикальная полоса прокрутки в контейнерах: скрыта визуально, но прокрутка работает
+ * - Горизонтальная полоса прокрутки: скрыта визуально, прокрутка через Shift + колесико мыши
+ * - Применяется глобально ко всем элементам (кроме html/body для вертикального скроллбара)
+ *
+ * ССЫЛКИ:
+ * - Аналог из BOT: do-overs/BOT/ui/styles/layout.css
+ */
+
+/* Глобально: скрываем горизонтальную полосу прокрутки на уровне страницы */
+html {
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Компенсация для Bootstrap модальных окон: отключаем добавление padding-right,
+   так как место под скроллбар зарезервировано через scrollbar-gutter: stable */
+body.modal-open,
+body.modal-open .fixed-top,
+body.modal-open .fixed-bottom,
+body.modal-open .sticky-top {
+    padding-right: 0 !important;
+}
+
+/* ИСКЛЮЧЕНИЕ: вертикальный скроллбар страницы (html/body) - всегда виден */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 12px;
+    height: 0 !important; /* Скрываем горизонтальную полосу */
+}
+
+html::-webkit-scrollbar:vertical,
+body::-webkit-scrollbar:vertical {
+    width: 12px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+[data-bs-theme="dark"] html::-webkit-scrollbar-track,
+[data-bs-theme="dark"] body::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+[data-bs-theme="dark"] html::-webkit-scrollbar-thumb,
+[data-bs-theme="dark"] body::-webkit-scrollbar-thumb {
+    background: #666;
+}
+
+[data-bs-theme="dark"] html::-webkit-scrollbar-thumb:hover,
+[data-bs-theme="dark"] body::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* Для Firefox: вертикальный скроллбар страницы виден */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+[data-bs-theme="dark"] html {
+    scrollbar-color: #666 #2d2d2d;
+}
+
+/* Глобально: скрываем горизонтальную полосу прокрутки во всех контейнерах (кроме html/body) */
+*:not(html):not(body) {
+    /* Для Firefox: скрываем горизонтальную полосу, но оставляем вертикальную */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+/* Для Webkit браузеров (Chrome, Safari, Edge): настраиваем полосы прокрутки (кроме html/body) */
+*:not(html):not(body)::-webkit-scrollbar {
+    width: 12px;
+    height: 0 !important; /* Скрываем горизонтальную полосу прокрутки глобально */
+}
+
+/* Глобально скрываем все горизонтальные скроллбары */
+*:not(html):not(body)::-webkit-scrollbar:horizontal,
+*:not(html):not(body)::-webkit-scrollbar[orientation="horizontal"] {
+    height: 0 !important;
+    display: none !important;
+    width: 0 !important;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+/* Восстанавливаем вертикальную полосу прокрутки (но делаем её прозрачной) для всех элементов кроме html/body */
+*:not(html):not(body)::-webkit-scrollbar:vertical {
+    width: 12px;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-thumb:vertical {
+    background: transparent;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-thumb:vertical:hover {
+    background: transparent;
+}
+
+[data-bs-theme="dark"] *:not(html):not(body)::-webkit-scrollbar-thumb:vertical {
+    background: transparent;
+}
+
+[data-bs-theme="dark"] *:not(html):not(body)::-webkit-scrollbar-thumb:vertical:hover {
+    background: transparent;
+}
+
+/* Для контейнеров с горизонтальной прокруткой - скрываем полосу, но разрешаем прокрутку */
+.table-responsive,
+[style*="overflow-x"],
+[style*="overflow"],
+[class*="overflow"],
+.d-flex[style*="overflow"] {
+    /* Скрываем горизонтальную полосу прокрутки */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    scrollbar-color: transparent transparent !important;
+}
+
+.table-responsive::-webkit-scrollbar,
+[style*="overflow-x"]::-webkit-scrollbar,
+[style*="overflow"]::-webkit-scrollbar,
+[class*="overflow"]::-webkit-scrollbar,
+.d-flex[style*="overflow"]::-webkit-scrollbar {
+    height: 0 !important;
+    display: none !important;
+}
+
+/* Дополнительное правило для элементов с inline стилями overflow */
+*[style*="overflow-x: auto"]::-webkit-scrollbar,
+*[style*="overflow-x:auto"]::-webkit-scrollbar,
+*[style*="overflow: auto"]::-webkit-scrollbar,
+*[style*="overflow:auto"]::-webkit-scrollbar,
+*[style*="overflow: auto hidden"]::-webkit-scrollbar,
+*[style*="overflow:auto hidden"]::-webkit-scrollbar,
+*[style*="overflow: hidden auto"]::-webkit-scrollbar,
+*[style*="overflow:hidden auto"]::-webkit-scrollbar {
+    height: 0 !important;
+    display: none !important;
+}
+
+/* Универсальное правило: для всех элементов с overflow - скрываем горизонтальный скроллбар */
+*[style*="overflow"] {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+*[style*="overflow"]::-webkit-scrollbar:horizontal {
+    height: 0 !important;
+    display: none !important;
+}
+
+*[style*="overflow"]::-webkit-scrollbar {
+    height: 0 !important;
+}

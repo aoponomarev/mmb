@@ -1,0 +1,125 @@
+/*
+   app V2 ORCHESTRATOR SHARED STANDARDS
+   Centralized rules for the V2 Workflow UI system.
+*/
+
+/* --- TABLE-V2 STANDARD --- */
+.table-v2 {
+    width: 100%;
+    border-collapse: collapse;
+    --v2-gutter: 1.5rem;
+    --v2-border: rgba(var(--bs-secondary-rgb), 0.1);
+}
+
+/* Neutral Buttons Standard */
+.btn-outline-secondary {
+    border-color: rgba(var(--bs-secondary-rgb), 0.3) !important;
+    color: var(--bs-secondary-color) !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+    border-color: rgba(var(--bs-secondary-rgb), 0.5) !important;
+    color: var(--bs-light) !important;
+}
+
+/* Score chip alignment */
+.task-score,
+.skill-score,
+.rejected-score {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    min-height: 20px;
+}
+
+/* Header Styling */
+.table-v2 thead th {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--bs-secondary-color);
+    opacity: 0.5;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--v2-border);
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.table-v2 thead th:first-child {
+    text-align: right !important;
+    padding-right: var(--v2-gutter) !important;
+}
+
+.table-v2 thead th:last-child {
+    text-align: left !important;
+    padding-left: var(--v2-gutter) !important;
+}
+
+/* Body Row Styling */
+.table-v2 tbody tr {
+    border-bottom: 1px solid var(--v2-border);
+    vertical-align: top;
+}
+
+.table-v2 tbody td {
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.item-details-cell {
+    cursor: pointer;
+}
+
+.item-details-cell:hover {
+    opacity: 0.9;
+}
+
+/* FIRST COLUMN (Left Anchor) */
+.table-v2 th:first-child,
+.table-v2 td:first-child {
+    padding-right: var(--v2-gutter) !important;
+}
+
+/* LAST COLUMN (Right Anchor) */
+.table-v2 th:last-child,
+.table-v2 td:last-child {
+    padding-left: var(--v2-gutter) !important;
+}
+
+/* SORTING STATES */
+.table-v2 thead th {
+    cursor: pointer;
+    transition: opacity 0.2s, color 0.2s;
+}
+.table-v2 thead th:hover {
+    opacity: 0.8;
+}
+.table-v2 thead th.active-sort {
+    opacity: 1;
+    font-weight: 400;
+    color: var(--bs-light);
+}
+
+/* --- AGENT ROLE DROPDOWN --- */
+.agent-id-clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(var(--bs-secondary-rgb), 0.4);
+    transition: text-decoration-color 0.2s;
+}
+.agent-id-clickable:hover {
+    text-decoration-color: var(--bs-light);
+}
+
+.agent-role-select {
+    height: auto !important;
+    border-radius: 4px;
+}
+
+/* --- LAYOUT & NAVIGATION --- */
+.nav-v2 {
+    margin-bottom: 3rem;
+}

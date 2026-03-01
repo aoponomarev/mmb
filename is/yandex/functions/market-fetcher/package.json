@@ -1,0 +1,8 @@
+{
+  "name": "coingecko-fetcher",
+  "version": "1.0.0",
+  "description": "Cron fetcher: CoinGecko top-250 → PostgreSQL coin_market_cache",
+  "dependencies": {
+    "pg": "^8.11.0"
+  }
+}

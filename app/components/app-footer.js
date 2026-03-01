@@ -1,0 +1,763 @@
+/**
+ * ================================================================================================
+ * APP FOOTER COMPONENT - Компонент футера приложения
+ * ================================================================================================
+ *
+ * ЦЕЛЬ: Vue-компонент футера приложения с метриками рынка.
+ * Skill: a/skills/app/skills/components/components-ssot.md
+ *
+ * ДАННЫЕ:
+ * - Наследует тему от body (bg-body), переключается вместе с темой приложения
+ * - Фиксированное позиционирование внизу страницы
+ * - Отображение метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR)
+ * - Отображение времени в выбранной таймзоне (кликабельно для выбора таймзоны)
+ * - Обновление метрик 3 раза в день (09:00, 12:00, 18:00 МСК)
+ * - Отображение главной новости крипты через AI провайдер (YandexGPT, кликабельно для переключения)
+ *
+ * ДАННЫЕ:
+ * - Метрики рынка: fgi, vix, btcDom, oi, fr, lsr (строковые значения)
+ * - Числовые значения: fgiValue, vixValue, btcDomValue, oiValue, frValue, lsrValue
+ * - Таймзона: timezone (по умолчанию 'Europe/Moscow')
+ * - Время: timeDisplay (формат "ABBR:hh.mm", где ABBR — аббревиатура таймзоны)
+ * - Новости крипты: currentNewsIndex (0-4), currentNews (текст), currentNewsTranslated (перевод)
+ *
+ * МЕТОДЫ:
+ * - fetchMarketIndices() — загрузка всех метрик через window.marketMetrics
+ * - getTime() — получение текущего времени в выбранной таймзоне
+ * - getTimezoneAbbr() — получение аббревиатуры таймзоны
+ * - updateTime() — обновление отображаемого времени
+ * - loadTimezone() — загрузка таймзоны из кэша
+ * - saveTimezone(timezone) — сохранение таймзоны в кэш
+ * - openTimezoneModal() — открытие модального окна выбора таймзоны (эмитит событие)
+ * - getNextUpdateTime() — расчет следующего времени обновления (09:00, 12:00, 18:00 МСК)
+ * - scheduleNextUpdate() — планирование следующего обновления
+ * - formatOIMobile() — форматирование OI для мобильной версии (компактный формат с буквенным обозначением миллиарда, например "8.4B")
+ * - formatValueMobile() — форматирование значения для мобильной версии (округление до десятых долей, кроме FR)
+ * - fetchSingleCryptoNews(index) — запрос одной новости крипты через AI провайдер (с переводом, по индексу 0-4)
+ * - parseSingleNews(response) — парсинг одной новости с переводом по явным маркерам (---NEWS---, ---TRANSLATION---, ---END---)
+ * - cleanMarkdown(text) — очистка текста от markdown-разметки и артефактов (цифры-сноски после точек)
+ * - cleanTranslation(text) — очистка перевода от артефактов (примеры из промпта, префиксы)
+ * - saveCurrentNewsState() — сохранение индекса текущей новости в кэш
+ * - loadNewsState() — загрузка индекса последней новости из кэша
+ * - switchToNextNews() — переключение на следующую (менее значимую) новость (асинхронно, загружает по требованию)
+ * - loadTranslationLanguage() — загрузка языка перевода из кэша
+ * - updateTranslationLanguage(language) — обновление языка перевода и перезагрузка новости с новым переводом
+ *
+ * СОБЫТИЯ:
+ * - open-timezone-modal — эмитируется при клике на время в футере для открытия модального окна выбора таймзоны
+ *
+ * ССЫЛКИ:
+ * - Шаблон: app/templates/app-footer-template.js
+ * - Стили: styles/layout/footer.css
+ * - API метрик: core/api/market-metrics.js
+ */
+
+window.appFooter = {
+    template: '#app-footer-template',
+
+    data() {
+        return {
+            uiState: window.uiState ? window.uiState.getState() : null,
+            // Строковые значения метрик
+            fgi: '—',
+            vix: '—',
+            btcDom: '—',
+            oi: '—',
+            fr: '—',
+            lsr: '—',
+
+            // Числовые значения для расчетов
+            fgiValue: null,
+            vixValue: null,
+            btcDomValue: null,
+            oiValue: null,
+            frValue: null,
+            lsrValue: null,
+
+            // Источники данных для tooltip
+            fgiSource: null,
+            vixSource: null,
+
+            // Время
+            timezone: window.appConfig?.get('defaults.timezone', 'Europe/Moscow'),
+            timeDisplay: 'MCK:--.--',
+
+            // Таймеры
+            updateTimer: null,
+            timeUpdateTimer: null,
+
+            // Новости крипты
+            currentNewsIndex: 0, // Индекс текущей новости (0-4)
+            currentNews: '', // Текущая отображаемая новость
+            currentNewsTranslated: '', // Перевод текущей новости для tooltip
+            translationLanguage: window.appConfig?.get('defaults.translationLanguage', 'ru'),
+            fallbackCount: 0,
+            fallbackLast: null,
+            fallbackSubId: null,
+            aiKeyMissingNotified: false
+        };
+    },
+
+    methods: {
+        // Загрузка метрик рынка
+        async fetchMarketIndices(options = {}) {
+            if (!window.marketMetrics) {
+                console.error('marketMetrics module not loaded');
+                return;
+            }
+
+            try {
+                const metrics = await window.marketMetrics.fetchAll(options);
+
+                // Сохраняем строковые значения
+                this.fgi = metrics.fgi;
+                this.vix = metrics.vix;
+                this.btcDom = metrics.btcDom;
+                this.oi = metrics.oi;
+                this.fr = metrics.fr;
+                this.lsr = metrics.lsr;
+
+                // Сохраняем источники для tooltip
+                this.fgiSource = metrics.fgiSource || null;
+                this.vixSource = metrics.vixSource || null;
+
+                // Парсим числовые значения
+                this.fgiValue = metrics.fgi !== '—' ? parseFloat(metrics.fgi) : null;
+                this.vixValue = metrics.vix !== '—' ? parseFloat(metrics.vix) : null;
+                if (metrics.btcDom !== '—') {
+                    this.btcDomValue = parseFloat(metrics.btcDom.replace('%', ''));
+                } else {
+                    this.btcDomValue = null;
+                }
+                if (metrics.oi !== '—') {
+                    this.oiValue = parseFloat(metrics.oi.replace('$', ''));
+                } else {
+                    this.oiValue = null;
+                }
+                if (metrics.fr !== '—') {
+                    this.frValue = parseFloat(metrics.fr.replace('%', ''));
+                } else {
+                    this.frValue = null;
+                }
+                this.lsrValue = metrics.lsr !== '—' ? parseFloat(metrics.lsr) : null;
+            } catch (error) {
+                console.error('Market indices fetch error:', error);
+            }
+        },
+
+        // Получение текущего времени в выбранной таймзоне
+        getTime() {
+            try {
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    timeZone: this.timezone,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                const parts = formatter.formatToParts(now);
+                const hours = parts.find(p => p.type === 'hour').value;
+                const minutes = parts.find(p => p.type === 'minute').value;
+
+                // Получаем аббревиатуру таймзоны
+                const tzAbbr = this.getTimezoneAbbr();
+                return `${tzAbbr}:${hours}.${minutes}`;
+            } catch (error) {
+                // Fallback на системное время
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                return `SYS:${hours}.${minutes}`;
+            }
+        },
+
+        // Получение аббревиатуры таймзоны
+        getTimezoneAbbr() {
+            const baseAbbr = window.appConfig?.getTimezoneAbbr
+                ? window.appConfig.getTimezoneAbbr(this.timezone)
+                : this.timezone.split('/').pop().substring(0, 3).toUpperCase();
+
+            if (baseAbbr === 'MSK' || baseAbbr === 'МСК' || baseAbbr === 'MCK') {
+                return this.currentLanguage === 'ru' ? 'МСК' : 'MSK';
+            }
+
+            return baseAbbr;
+        },
+
+        // Обновление времени
+        updateTime() {
+            this.timeDisplay = this.getTime();
+        },
+
+        // Загрузка таймзоны из кэша
+        async loadTimezone() {
+            try {
+                const savedTimezone = await window.cacheManager.get('timezone');
+                if (savedTimezone && typeof savedTimezone === 'string') {
+                    this.timezone = savedTimezone;
+                }
+            } catch (error) {
+                console.error('Failed to load timezone:', error);
+            }
+        },
+
+        // Обновление таймзоны (вызывается извне после сохранения в кэш)
+        async saveTimezone(timezone) {
+            this.timezone = timezone;
+            this.updateTime();
+        },
+
+        // Обновление языка перевода (вызывается извне после сохранения в кэш)
+        updateTranslationLanguage(language) {
+            this.translationLanguage = language;
+            // Если есть текущая новость, перезагружаем её с новым языком
+            if (this.currentNews) {
+                this.fetchSingleCryptoNews(this.currentNewsIndex).then(newsItem => {
+                    if (newsItem) {
+                        this.currentNews = newsItem.news;
+                        this.currentNewsTranslated = newsItem.translation;
+                    }
+                });
+            }
+        },
+
+        // Загрузка языка перевода из кэша
+        async loadTranslationLanguage() {
+            try {
+                const savedLanguage = await window.cacheManager.get('translation-language');
+                if (savedLanguage && typeof savedLanguage === 'string') {
+                    this.translationLanguage = savedLanguage;
+                }
+            } catch (error) {
+                console.error('Failed to load translation language:', error);
+            }
+        },
+
+        // Открытие модального окна выбора таймзоны
+        openTimezoneModal() {
+            this.$emit('open-timezone-modal');
+        },
+
+        // Расчет следующего времени обновления (09:00, 12:00, 18:00 МСК)
+        getNextUpdateTime() {
+            const updateHours = window.appConfig?.get('defaults.marketUpdates.times', [9, 12, 18]);
+            const now = new Date();
+
+            try {
+                // Получаем текущее время в МСК через Intl.DateTimeFormat
+                const defaultTimezone = window.appConfig?.get('defaults.timezone', 'Europe/Moscow');
+                const mskFormatter = new Intl.DateTimeFormat('en-US', {
+                    timeZone: defaultTimezone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                const mskParts = mskFormatter.formatToParts(now);
+                const mskYear = parseInt(mskParts.find(p => p.type === 'year').value);
+                const mskMonth = parseInt(mskParts.find(p => p.type === 'month').value) - 1;
+                const mskDay = parseInt(mskParts.find(p => p.type === 'day').value);
+                const mskHour = parseInt(mskParts.find(p => p.type === 'hour').value);
+                const mskMinute = parseInt(mskParts.find(p => p.type === 'minute').value);
+
+                // Находим следующее время обновления в МСК
+                let nextHour = updateHours.find(h => h > mskHour);
+                let nextDay = mskDay;
+                if (!nextHour) {
+                    // Если уже прошло 18:00, следующий обновление завтра в 09:00
+                    nextHour = 9;
+                    nextDay = mskDay + 1;
+                }
+
+                // Вычисляем разницу в миллисекундах между текущим временем МСК и следующим обновлением
+                const currentMSKTime = mskHour * 60 + mskMinute; // Текущее время в минутах от начала дня
+                const nextMSKTime = nextHour * 60; // Следующее время обновления в минутах
+                const minutesDiff = (nextDay - mskDay) * 24 * 60 + (nextMSKTime - currentMSKTime);
+                const delay = minutesDiff * 60 * 1000; // Конвертируем в миллисекунды
+
+                const maxDelay = window.ssot && typeof window.ssot.getFooterMarketUpdateDelayMaxMs === 'function'
+                    ? window.ssot.getFooterMarketUpdateDelayMaxMs()
+                    : (window.cacheConfig?.getTTL('market-update-delay-max') || 24 * 60 * 60 * 1000);
+                return delay > 0 ? delay : delay + maxDelay; // Если отрицательно, добавляем сутки
+            } catch (error) {
+                // Fallback: обновление через 3 часа
+                const fallbackTTL = window.ssot && typeof window.ssot.getFooterMarketUpdateFallbackMs === 'function'
+                    ? window.ssot.getFooterMarketUpdateFallbackMs()
+                    : (window.cacheConfig?.getTTL('market-update-fallback') || 3 * 60 * 60 * 1000);
+                if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
+                    window.fallbackMonitor.notify({
+                        source: 'appFooter.getNextUpdateTime',
+                        phase: 'schedule-fallback',
+                        details: `ttlMs=${fallbackTTL}`
+                    });
+                }
+                return fallbackTTL;
+            }
+        },
+
+        // Планирование следующего обновления
+        scheduleNextUpdate() {
+            if (this.updateTimer) {
+                clearTimeout(this.updateTimer);
+            }
+
+            const delay = this.getNextUpdateTime();
+            this.updateTimer = setTimeout(() => {
+                this.fetchMarketIndices();
+                this.scheduleNextUpdate(); // Планируем следующее
+            }, delay);
+        },
+
+        // Форматирование OI для мобильной версии (компактный формат с буквенным обозначением миллиарда)
+        formatOIMobile() {
+            if (this.oiValue === null || this.oi === '—') {
+                return '—';
+            }
+            // Конвертируем в миллиарды
+            const billions = this.oiValue / 1000000000;
+            return '$' + billions.toFixed(1) + 'B';
+        },
+
+        // Форматирование значения для мобильной версии (округление до десятых, кроме FR)
+        formatValueMobile(value, originalValue) {
+            if (value === null || originalValue === '—') {
+                return '—';
+            }
+            return value.toFixed(1);
+        },
+
+
+        // Запрос одной новости крипты через AI провайдер (с переводом)
+        async fetchSingleCryptoNews(index, preResolvedApiKey = null) {
+            if (!window.aiProviderManager) {
+                return null;
+            }
+
+            // Если ключ уже разрешён вызывающим кодом — не проверяем повторно.
+            // Иначе проверяем сами (вызов из ротатора новостей, не из startNewsLoad).
+            if (!preResolvedApiKey) {
+                try {
+                    const provider = await window.aiProviderManager.getCurrentProvider();
+                    const providerName = provider.getName();
+                    const apiKey = await window.aiProviderManager.getApiKey(providerName);
+                    if (!apiKey) {
+                        if (!this.aiKeyMissingNotified) {
+                            console.warn(
+                                `app-footer: API ключ для ${providerName} не найден. ` +
+                                'Проверьте AI API настройки или доступ к /api/settings.'
+                            );
+                        }
+                        this.aiKeyMissingNotified = true;
+                        return null;
+                    }
+                    this.aiKeyMissingNotified = false;
+                } catch (error) {
+                    console.error('app-footer: ошибка проверки API ключа:', error);
+                    return null;
+                }
+            }
+
+            try {
+                const priority = ['most important', 'second most important', 'third most important', 'fourth most important', 'fifth most important'];
+
+                // Получаем название языка для промпта
+                const languageNames = {
+                    'ru': 'Russian',
+                    'en': 'English',
+                    'es': 'Spanish',
+                    'fr': 'French',
+                    'de': 'German',
+                    'it': 'Italian',
+                    'pt': 'Portuguese',
+                    'zh': 'Chinese',
+                    'ja': 'Japanese',
+                    'ko': 'Korean'
+                };
+                const targetLanguage = languageNames[this.translationLanguage] || 'Russian';
+
+                const prompt = `What is the ${priority[index]} cryptocurrency news today? Provide exactly one news item with the following structure:
+- One headline sentence (concise summary)
+- Two sentences that explain the details and context
+
+CRITICAL: Format the response EXACTLY as follows (do not modify the markers):
+---NEWS---
+[Headline sentence. Detail sentence 1. Detail sentence 2.]
+---TRANSLATION---
+[${targetLanguage} translation]
+---END---
+
+IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END--- in your response.`;
+
+                // Отправляем запрос через текущий провайдер
+                const response = await window.aiProviderManager.sendRequest(
+                    [{ role: 'user', content: prompt }]
+                );
+
+                // Проверяем на ошибки/ограничения
+                if (response && (response.toLowerCase().includes('cannot provide') || response.toLowerCase().includes('limited') || response.toLowerCase().includes('error'))) {
+                    const providerName = await window.aiProviderManager.getCurrentProviderName();
+                    console.warn(`${providerName} API returned error/limitation message for index`, index);
+                    return null;
+                }
+
+                // Парсим ответ
+                const newsItem = this.parseSingleNews(response);
+                return newsItem;
+            } catch (error) {
+                console.error('Failed to fetch crypto news for index', index, error);
+                return null;
+            }
+        },
+
+        // Парсинг одной новости с переводом по явным маркерам
+        parseSingleNews(response) {
+            if (!response) return null;
+
+            // Ищем маркеры
+            const newsIndex = response.indexOf('---NEWS---');
+            const translationIndex = response.indexOf('---TRANSLATION---');
+            const endIndex = response.indexOf('---END---');
+
+            let newsText = null;
+            let translationText = null;
+
+            // Попытка парсинга с маркерами
+            if (newsIndex !== -1 && translationIndex !== -1) {
+                // Извлекаем английскую новость
+                newsText = response
+                    .substring(newsIndex + '---NEWS---'.length, translationIndex)
+                    .trim();
+
+                // Извлекаем перевод
+                translationText = endIndex !== -1
+                    ? response.substring(translationIndex + '---TRANSLATION---'.length, endIndex).trim()
+                    : response.substring(translationIndex + '---TRANSLATION---'.length).trim();
+            } else {
+                // Fallback: пытаемся распарсить без маркеров
+                // Ищем разделители: "Translation:", "Перевод:", или пустую строку
+                const lines = response.split('\n').map(l => l.trim()).filter(l => l);
+
+                // Пытаемся найти разделение между английским текстом и переводом
+                let splitIndex = -1;
+                for (let i = 0; i < lines.length; i++) {
+                    const lowerLine = lines[i].toLowerCase();
+                    if (lowerLine.includes('translation:') ||
+                        lowerLine.includes('перевод:') ||
+                        lowerLine.includes('русский:')) {
+                        splitIndex = i;
+                        break;
+                    }
+                }
+
+                if (splitIndex > 0) {
+                    // Разделяем на новость и перевод
+                    newsText = lines.slice(0, splitIndex).join(' ').trim();
+                    translationText = lines.slice(splitIndex + 1).join(' ').trim();
+                    // Убираем префикс "Translation:" если он есть
+                    translationText = translationText.replace(/^(translation|перевод|русский):\s*/i, '').trim();
+                } else {
+                    // Если разделения нет, пытаемся взять первые 2-3 предложения как новость
+                    // и остальное как перевод
+                    const sentences = response.split(/[.!?]+/).filter(s => s.trim());
+                    if (sentences.length >= 4) {
+                        // Первые 2-3 предложения - новость
+                        newsText = sentences.slice(0, 3).join('. ').trim() + '.';
+                        // Остальное - перевод
+                        translationText = sentences.slice(3).join('. ').trim() + '.';
+                    } else {
+                        // Последняя попытка: разделяем пополам
+                        const midPoint = Math.floor(response.length / 2);
+                        const spaceIndex = response.indexOf(' ', midPoint);
+                        if (spaceIndex > 0) {
+                            newsText = response.substring(0, spaceIndex).trim();
+                            translationText = response.substring(spaceIndex).trim();
+                        }
+                    }
+                }
+            }
+
+            // Убираем артефакты из перевода
+            if (translationText) {
+                translationText = this.cleanTranslation(translationText);
+            }
+
+            if (!newsText || !translationText) {
+                console.warn('News markers not found and fallback parsing failed', {
+                    hasMarkers: newsIndex !== -1 && translationIndex !== -1,
+                    responseLength: response?.length,
+                    responsePreview: response?.substring(0, 200)
+                });
+                return null;
+            }
+
+            return {
+                news: this.cleanMarkdown(newsText),
+                translation: this.cleanMarkdown(translationText)
+            };
+        },
+
+        // Очистка артефактов из перевода
+        cleanTranslation(text) {
+            if (!text) return '';
+            return text
+                // Убираем пример из промпта
+                .replace(/^Заголовочное предложение\.\s*Первое предложение с деталями\.\s*Второе предложение с деталями\.\s*/i, '')
+                // Убираем префикс "Российский перевод: " или "Russian translation: "
+                .replace(/^(Российский перевод|Russian translation):\s*/i, '')
+                // Убираем перевод строки в начале
+                .replace(/^\s*[\r\n]+/, '')
+                .trim();
+        },
+
+        // Очистка микроразметки из новости
+        cleanMarkdown(text) {
+            if (!text) return '';
+            return text
+                .replace(/\*\*/g, '') // Убираем двойные звездочки (жирный текст)
+                .replace(/\*/g, '') // Убираем одинарные звездочки
+                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Убираем markdown ссылки [текст](url) -> текст
+                .replace(/\[([^\]]+)\]/g, '$1') // Убираем квадратные скобки [текст] -> текст
+                .replace(/\([^\)]+\)/g, '') // Убираем скобки с содержимым (текст)
+                .replace(/#{1,6}\s+/g, '') // Убираем заголовки markdown
+                .replace(/`([^`]+)`/g, '$1') // Убираем код в обратных кавычках
+                .replace(/~~([^~]+)~~/g, '$1') // Убираем зачеркнутый текст
+                .replace(/\.(\d+)/g, '.') // Убираем цифры-сноски после точек (например, ".1" -> ".")
+                .replace(/\.\s*[\d\[\]]+(?=\s|$)/g, '.') // Убираем сноски после точек с пробелом (например, ". 1" или ". [1]" -> ".")
+                .trim();
+        },
+
+        // Сохранение состояния текущей новости в кэш (только индекс и timestamp)
+        async saveCurrentNewsState() {
+            try {
+                const dataToSave = {
+                    index: this.currentNewsIndex,
+                    timestamp: Date.now()
+                };
+                await window.cacheManager.set('crypto-news-state', dataToSave);
+            } catch (error) {
+                console.error('Failed to save crypto news state:', error);
+            }
+        },
+
+        // Загрузка состояния новостей из кэша
+        async loadNewsState() {
+            try {
+                let savedData = null;
+
+                savedData = await window.cacheManager.get('crypto-news-state');
+
+                // Проверяем, что состояние не старше 24 часов
+                if (savedData && typeof savedData.index === 'number') {
+                    const age = Date.now() - (savedData.timestamp || 0);
+                    const maxAge = window.ssot && typeof window.ssot.getFooterCryptoNewsCacheMaxAgeMs === 'function'
+                        ? window.ssot.getFooterCryptoNewsCacheMaxAgeMs()
+                        : (window.cacheConfig?.getTTL('crypto-news-cache-max-age') || 24 * 60 * 60 * 1000);
+
+                    if (age < maxAge) {
+                        return savedData.index;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load crypto news state:', error);
+            }
+            return null;
+        },
+
+        // Переключение на следующую (менее значимую) новость
+        async switchToNextNews() {
+            // Переключаемся на следующую новость циклично (0-4)
+            const nextIndex = (this.currentNewsIndex + 1) % 5;
+
+            // Загружаем новую новость
+            const newsItem = await this.fetchSingleCryptoNews(nextIndex);
+
+            if (newsItem) {
+                this.currentNewsIndex = nextIndex;
+                this.currentNews = newsItem.news;
+                this.currentNewsTranslated = newsItem.translation;
+                await this.saveCurrentNewsState();
+            } else {
+                // Если не удалось загрузить, показываем сообщение
+                console.warn('Failed to load next news item');
+            }
+        },
+
+        syncFallbackState() {
+            if (!window.fallbackMonitor) {
+                this.fallbackCount = 0;
+                this.fallbackLast = null;
+                return;
+            }
+            this.fallbackCount = window.fallbackMonitor.getCount();
+            const recent = window.fallbackMonitor.getRecent(1);
+            this.fallbackLast = recent.length > 0 ? recent[0] : null;
+        }
+    },
+
+    async mounted() {
+        this.syncFallbackState();
+        if (window.eventBus && typeof window.eventBus.on === 'function') {
+            this.fallbackSubId = window.eventBus.on('fallback:used', () => this.syncFallbackState());
+        }
+
+        // Загрузка таймзоны из кэша
+        await this.loadTimezone();
+
+        // Загрузка языка перевода из кэша
+        await this.loadTranslationLanguage();
+
+        // Инициализация времени
+        this.updateTime();
+        // Обновляем время каждую минуту
+        this.timeUpdateTimer = setInterval(() => {
+            this.updateTime();
+        }, 60 * 1000);
+
+        // Загрузка метрик при разблокировке приложения
+        // Если window.appUnlocked не определен, считаем приложение разблокированным
+        const isUnlocked = window.appUnlocked !== undefined ? window.appUnlocked : true;
+
+        // Загрузить новость с уже известным ключом (без повторных KV-запросов).
+        const startNewsLoad = async (apiKey) => {
+            const savedIndex = await this.loadNewsState();
+            const startIndex = savedIndex !== null ? savedIndex : 0;
+            const newsItem = await this.fetchSingleCryptoNews(startIndex, apiKey);
+            if (newsItem) {
+                this.currentNewsIndex = startIndex;
+                this.currentNews = newsItem.news;
+                this.currentNewsTranslated = newsItem.translation;
+                await this.saveCurrentNewsState();
+            }
+        };
+
+        // Единственная точка входа для получения ключа и загрузки новостей.
+        // Алгоритм: getApiKey ждёт KV если нужно → получаем ключ → грузим.
+        // Никаких таймеров, никаких гонок: getApiKey сам является await-точкой.
+        const waitForApiKeyThenLoadNews = async () => {
+            try {
+                if (!window.aiProviderManager) return;
+                const provider = await window.aiProviderManager.getCurrentProvider();
+                const providerName = provider?.getName?.();
+                if (!providerName) return;
+
+                // getApiKey: сначала кэш, затем KV (один раз за сессию, await до конца)
+                const apiKey = await window.aiProviderManager.getApiKey(providerName);
+
+                if (apiKey) {
+                    this.aiKeyMissingNotified = false;
+                    await startNewsLoad(apiKey);
+                } else {
+                    if (!this.aiKeyMissingNotified) {
+                        console.warn('app-footer: AI API ключ не найден, загрузка новостей пропущена.');
+                        this.aiKeyMissingNotified = true;
+                    }
+                }
+            } catch (err) {
+                console.error('app-footer: ошибка при ожидании API ключа:', err);
+            }
+        };
+
+        if (isUnlocked) {
+            this.fetchMarketIndices();
+            this.scheduleNextUpdate();
+            waitForApiKeyThenLoadNews();
+        } else {
+            const checkUnlocked = async () => {
+                if (window.appUnlocked) {
+                    this.fetchMarketIndices();
+                    this.scheduleNextUpdate();
+                    waitForApiKeyThenLoadNews();
+                } else {
+                    setTimeout(checkUnlocked, 100);
+                }
+            };
+            checkUnlocked();
+        }
+    },
+
+    watch: {
+        currentLanguage(newLanguage, oldLanguage) {
+            if (newLanguage !== oldLanguage) {
+                this.updateTime();
+            }
+        }
+    },
+    computed: {
+        // Централизованный язык для tooltip
+        currentLanguage() {
+            return this.uiState?.tooltips?.currentLanguage || 'ru';
+        },
+
+        // Реактивные tooltip для метрик футера
+        tooltipFgi() {
+            if (!window.tooltipInterpreter) return '';
+            const base = window.tooltipInterpreter.getTooltip('fgi', {
+                value: this.fgiValue,
+                lang: this.currentLanguage
+            });
+            return this.fgiSource ? `${base}\n© ${this.fgiSource}` : base;
+        },
+        tooltipVix() {
+            if (!window.tooltipsConfig) return '';
+            const lang = this.currentLanguage;
+            const description = window.tooltipsConfig.getTooltip('metric.vix.description');
+            const prefix = window.tooltipsConfig.getTooltip('ui.vix.sourcePrefix');
+            if (this.vixSource) {
+                return `${description}\n\n${prefix} ${this.vixSource}`;
+            }
+            return description;
+        },
+        tooltipBtcDom() {
+            if (!window.tooltipInterpreter) return '';
+            return window.tooltipInterpreter.getTooltip('btcDom', {
+                value: this.btcDomValue,
+                lang: this.currentLanguage
+            });
+        },
+        tooltipOi() {
+            if (!window.tooltipInterpreter) return '';
+            return window.tooltipInterpreter.getTooltip('oi', {
+                value: this.oiValue,
+                lang: this.currentLanguage
+            });
+        },
+        tooltipFr() {
+            if (!window.tooltipInterpreter) return '';
+            return window.tooltipInterpreter.getTooltip('fr', {
+                value: this.frValue,
+                lang: this.currentLanguage
+            });
+        },
+        tooltipLsr() {
+            if (!window.tooltipInterpreter) return '';
+            return window.tooltipInterpreter.getTooltip('lsr', {
+                value: this.lsrValue,
+                lang: this.currentLanguage
+            });
+        },
+        fallbackIndicatorTitle() {
+            if (!this.fallbackLast) {
+                return 'Fallback monitor: no events';
+            }
+            const time = new Date(this.fallbackLast.timestamp).toLocaleTimeString();
+            const details = this.fallbackLast.details ? ` ${this.fallbackLast.details}` : '';
+            return `Fallbacks: ${this.fallbackCount}. Last: ${this.fallbackLast.source}/${this.fallbackLast.phase} at ${time}.${details}`;
+        }
+    },
+
+    beforeUnmount() {
+        if (window.eventBus && typeof window.eventBus.off === 'function' && this.fallbackSubId) {
+            window.eventBus.off('fallback:used', this.fallbackSubId);
+            this.fallbackSubId = null;
+        }
+        if (this.updateTimer) {
+            clearTimeout(this.updateTimer);
+        }
+        if (this.timeUpdateTimer) {
+            clearInterval(this.timeUpdateTimer);
+        }
+    }
+};
+

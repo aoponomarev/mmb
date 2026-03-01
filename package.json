@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test is/**/*.test.js core/**/*.test.js",
+    "preflight": "node is/scripts/preflight.js",
+    "index:gen": "node scripts/app-index-gen.js",
+    "index:fix": "node scripts/app-index-gen.js --fix",
+    "secret:backup": "node is/scripts/secrets/secret-resilience.js --backup",
+    "secret:restore": "node is/scripts/secrets/secret-resilience.js --restore-latest",
+    "secret:check": "node is/scripts/secrets/secret-resilience.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
+  }
+}

@@ -1,0 +1,43 @@
+# Cloudflare Workers конфигурация для app Dataset Integration
+# Документация: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "app-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# D1 база данных
+# Database ID: 887a3f58-98c2-41a4-a512-8dcdaea751e8
+[[d1_databases]]
+binding = "DB"
+database_name = "app-database"
+database_id = "887a3f58-98c2-41a4-a512-8dcdaea751e8"
+
+# R2 хранилище (отложено до добавления платежного метода)
+# [[r2_buckets]]
+# binding = "STORAGE"
+# bucket_name = "app-storage"
+
+# KV хранилище для системных сообщений (отключено - сообщения теперь в хардкоде)
+# [[kv_namespaces]]
+# binding = "MESSAGES_KV"
+# id = "13e758bd02294c5dbb7eb520ebfd2f0c"
+
+# KV хранилище для кэширования API запросов (CoinGecko, Yahoo Finance, Stooq и т.д.)
+[[kv_namespaces]]
+binding = "API_CACHE"
+id = "b3377378d48649aa81c2e24bb1a0426a"
+
+# KV хранилище для настроек приложения (AI-ключи, Folder ID, модели и т.д.)
+[[kv_namespaces]]
+binding = "SETTINGS"
+id = "216d28251733449fadff6b2cd82b0458"
+
+# Переменные окружения (не секретные)
+[vars]
+ENVIRONMENT = "production"
+
+# Секреты добавляются через Wrangler CLI:
+# wrangler secret put GOOGLE_CLIENT_SECRET
+# wrangler secret put JWT_SECRET
+#
+# Секреты доступны через env.GOOGLE_CLIENT_SECRET и env.JWT_SECRET

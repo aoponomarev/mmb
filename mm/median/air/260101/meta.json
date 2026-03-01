@@ -1,0 +1,30 @@
+{
+    "id": "Median/AIR/260101",
+    "family": "Median",
+    "type": "AIR",
+    "versionDate": "260101",
+    "versionName": "Медиана (A.I.R.) 26.01.01",
+    "createdAt": "2026-01-26",
+    "agrFormula": "agrRaw = R * (0.45*I + 0.35*A + 0.20*(I*A)); agr = agrRaw * persistenceMultiplier * 100",
+    "normalizationScheme": "tanh + medianDIN risk scaling",
+    "weightsPolicy": "CPT_BASE_WEIGHTS + CGR_BETAS",
+    "recommendedMethodRules": "mp default; dcs/tsi as selected",
+    "params": {
+        "agrLimit": 100,
+        "normalizationWeight": 0,
+        "weights": {
+            "A": 0.35,
+            "I": 0.45,
+            "IA": 0.20,
+            "I_CGR": 0.60,
+            "I_CPT": 0.40,
+            "riskRegimeStrength": 0.20
+        },
+        "lambda": {
+            "min": 0,
+            "max": 0,
+            "fgiBoost": 0,
+            "vixBoost": 0
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "skills": {
+      "command": "node",
+      "args": ["is/mcp/skills-mcp/server.js"],
+      "env": {}
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "is/memory/memory.jsonl"
+      }
+    }
+  }
+}

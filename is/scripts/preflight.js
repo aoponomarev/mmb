@@ -1,0 +1,60 @@
+/**
+ * @skill arch-foundation
+ * @description Preflight health-check. Runs synchronously before app start or CI.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { PATHS } from '../contracts/paths/paths.js';
+import { validateEnv } from '../contracts/env/env-rules.js';
+
+function parseDotEnv(filePath) {
+    if (!fs.existsSync(filePath)) return {};
+    const content = fs.readFileSync(filePath, 'utf8');
+    const map = {};
+    for (const rawLine of content.split(/\r?\n/)) {
+        const line = rawLine.trim();
+        if (!line || line.startsWith('#')) continue;
+        const idx = line.indexOf('=');
+        if (idx === -1) continue;
+        const k = line.slice(0, idx).trim();
+        const v = line.slice(idx + 1).trim();
+        map[k] = v;
+    }
+    return map;
+}
+
+function runPreflight() {
+    console.log('[preflight] Starting infrastructure health-check...');
+
+    // 1. Check Root Paths from Contract
+    console.log('[preflight] Validating path tree...');
+    const criticalDirs = [PATHS.is, PATHS.core, PATHS.app, PATHS.logs];
+    for (const dir of criticalDirs) {
+        if (!fs.existsSync(dir)) {
+            console.warn(`[preflight] WARNING: Expected directory does not exist: ${dir}`);
+        }
+    }
+
+    // 2. Validate Environment Contracts
+    console.log('[preflight] Validating .env contracts...');
+    const envPath = path.join(PATHS.root, '.env');
+    if (!fs.existsSync(envPath)) {
+        console.error(`[preflight] ERROR: Missing .env file at ${envPath}`);
+        console.error(`[preflight] -> Action: Copy .env.example to .env and fill in values.`);
+        process.exit(1);
+    }
+
+    const localEnv = parseDotEnv(envPath);
+    try {
+        // We merge process.env and local .env so that CI can override values if needed
+        validateEnv({ ...process.env, ...localEnv });
+    } catch (e) {
+        console.error(`[preflight] ERROR: Environment validation failed.`);
+        console.error(e.message);
+        process.exit(1);
+    }
+
+    console.log('[preflight] ALL SYSTEMS GO. Architecture contracts validated.\n');
+}
+
+runPreflight();

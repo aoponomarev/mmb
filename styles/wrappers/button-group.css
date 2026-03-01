@@ -1,0 +1,143 @@
+/**
+ * Стили для компонента BUTTON GROUP
+ *
+ * НАЗНАЧЕНИЕ: Предоставить адаптивную вертикальную ориентацию для компонента cmp-button-group
+ * через CSS классы и медиа-запросы для переключения между вертикальной (мобильные) и
+ * горизонтальной (десктоп) ориентацией.
+ *
+ * ПРИНЦИП РАБОТЫ:
+ * - Mobile-first подход: вертикальная ориентация на мобильных (< 576px), горизонтальная на desktop (>= 576px)
+ * - Использование класса .btn-group-responsive-vertical-sm на корневом элементе группы
+ * - Применение стилей Bootstrap .btn-group-vertical через медиа-запрос для мобильных
+ * - Переопределение видимости текста кнопок: в вертикальной ориентации всегда показываем полный текст
+ *   (не скрываем на мобильных, в отличие от обычных кнопок)
+ *
+ * БРЕЙКПОИНТ: 576px (SM Bootstrap) - стандартный брейкпоинт Bootstrap для перехода mobile → desktop
+ *
+ * ЗАВИСИМОСТИ:
+ * - Bootstrap 5 (классы .btn-group, .btn-group-vertical, .btn)
+ * - button.css (кнопки внутри группы используют .btn-responsive)
+ * - dropdown.css (при схлопывании группы в dropdown используется cmp-dropdown)
+ * - Используется в: cmp-button-group
+ *
+ * ПОРЯДОК ЗАГРУЗКИ:
+ * Загружается последним среди компонентных стилей (после button.css, dropdown-menu-item.css, dropdown.css),
+ * так как использует все предыдущие компоненты: кнопки (через cmp-button) и dropdown (при схлопывании).
+ *
+ * Подробнее: a/skills/app/skills/components/components-styling-principles.md
+ */
+
+/* ============================================================================
+   КОМПОНЕНТ BUTTON GROUP - Адаптивная вертикальная ориентация
+   ============================================================================ */
+
+/* Адаптивная вертикальная ориентация: вертикально на мобильных (< 576px), горизонтально на десктопе (>= 576px) */
+/* Используем нативные стили Bootstrap .btn-group-vertical через медиа-запрос */
+
+/* На мобильных (< 576px) - применяем стили .btn-group-vertical */
+@media (max-width: 575.98px) {
+  .btn-group-responsive-vertical-sm {
+    flex-direction: column;
+  }
+
+  .btn-group-responsive-vertical-sm > * {
+    width: 100%;
+  }
+
+  /* Стили Bootstrap .btn-group-vertical для первой кнопки */
+  .btn-group-responsive-vertical-sm > .btn:first-child,
+  .btn-group-responsive-vertical-sm > label.btn:first-child,
+  .btn-group-responsive-vertical-sm > *:first-child,
+  .btn-group-responsive-vertical-sm > *:first-child > .btn,
+  .btn-group-responsive-vertical-sm > *:first-child > button.btn,
+  .btn-group-responsive-vertical-sm > *:first-child button.btn {
+    border-top-left-radius: 0.375rem !important;
+    border-top-right-radius: 0.375rem !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  /* Убираем 1 пиксель слева у первой кнопки и её обертки */
+  .btn-group-responsive-vertical-sm > .btn:first-child,
+  .btn-group-responsive-vertical-sm > label.btn:first-child,
+  .btn-group-responsive-vertical-sm > *:first-child {
+    margin-left: -1px;
+  }
+
+  /* Стили Bootstrap .btn-group-vertical для последней кнопки */
+  .btn-group-responsive-vertical-sm > .btn:last-child,
+  .btn-group-responsive-vertical-sm > label.btn:last-child,
+  .btn-group-responsive-vertical-sm > *:last-child > .btn {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+
+  /* Стили Bootstrap .btn-group-vertical для промежуточных кнопок */
+  .btn-group-responsive-vertical-sm > .btn:not(:first-child):not(:last-child),
+  .btn-group-responsive-vertical-sm > label.btn:not(:first-child):not(:last-child),
+  .btn-group-responsive-vertical-sm > *:not(:first-child):not(:last-child) > .btn {
+    border-radius: 0;
+  }
+
+  /* Стили Bootstrap .btn-group-vertical для margin */
+  .btn-group-responsive-vertical-sm > .btn + .btn,
+  .btn-group-responsive-vertical-sm > label.btn + label.btn,
+  .btn-group-responsive-vertical-sm > .btn + label.btn,
+  .btn-group-responsive-vertical-sm > label.btn + .btn {
+    margin-top: -1px;
+    margin-left: 0;
+  }
+
+  /* Для компонентов cmp-button - применяем margin к обертке */
+  .btn-group-responsive-vertical-sm > *:not(:first-child) {
+    margin-top: -1px;
+  }
+
+  /* Стили Bootstrap .btn-group-vertical для border */
+  .btn-group-responsive-vertical-sm > .btn:not(:first-child),
+  .btn-group-responsive-vertical-sm > label.btn:not(:first-child),
+  .btn-group-responsive-vertical-sm > *:not(:first-child) > .btn {
+    border-top: 0;
+  }
+
+  /* В вертикальной ориентации группы кнопок всегда показываем текст (не скрываем на мобильных) */
+  .btn-group-responsive-vertical-sm .btn-responsive .label,
+  .btn-group-responsive-vertical-sm .btn-responsive.has-icon .label {
+    visibility: visible !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    max-width: none !important;
+    overflow: visible !important;
+    display: inline !important;
+  }
+
+  .btn-group-responsive-vertical-sm .btn-responsive .label-short,
+  .btn-group-responsive-vertical-sm .btn-responsive.has-icon .label-short {
+    visibility: hidden !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    max-width: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* На десктопе (>= 576px) - Bootstrap сам обрабатывает горизонтальную ориентацию */
+@media (min-width: 576px) {
+  .btn-group-responsive-vertical-sm {
+    flex-direction: row;
+  }
+
+  .btn-group-responsive-vertical-sm > * {
+    width: auto;
+  }
+
+  /* Сбрасываем отрицательный margin для первой кнопки на десктопе */
+  .btn-group-responsive-vertical-sm > .btn:first-child,
+  .btn-group-responsive-vertical-sm > label.btn:first-child,
+  .btn-group-responsive-vertical-sm > *:first-child {
+    margin-left: 0;
+  }
+}
+

@@ -1,0 +1,176 @@
+{
+  "archive_root": "d:\\Clouds\\AO\\OneDrive\\Portfolio-CV\\Refactoring\\ToDo\\Statistics\\app",
+  "archive_zip_root_exists": true,
+  "files_scanned": 164,
+  "files_with_broken_lines": 42,
+  "files_updated": 41,
+  "broken_lines_total": 68,
+  "replaced_lines_total": 67,
+  "updated_files": [
+    {
+      "file": "index.html",
+      "replaced_lines": 2
+    },
+    {
+      "file": "test.html",
+      "replaced_lines": 5
+    },
+    {
+      "file": "app/app-ui-root.js",
+      "replaced_lines": 9
+    },
+    {
+      "file": "core/modules-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "styles/layout/footer.css",
+      "replaced_lines": 1
+    },
+    {
+      "file": "styles/layout/header.css",
+      "replaced_lines": 1
+    },
+    {
+      "file": "styles/layout/messages-splash.css",
+      "replaced_lines": 1
+    },
+    {
+      "file": "shared/components/button-group.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "shared/components/button.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "shared/components/combobox.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "shared/components/dropdown-menu-item.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "shared/components/dropdown.js",
+      "replaced_lines": 4
+    },
+    {
+      "file": "shared/components/modal.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "shared/utils/column-visibility-mixin.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "shared/utils/hash-generator.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/api/coingecko-stablecoins-loader.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/api/data-provider-manager.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/api/market-metrics.js",
+      "replaced_lines": 5
+    },
+    {
+      "file": "core/api/messages-translator.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/api/postgres-client.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/cache/cache-cleanup.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/cache/cache-config.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "core/cache/cache-indexes.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/cache/cache-manager.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/cache/cache-migrations.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "core/cache/storage-layers.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/auth-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/cloudflare-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/data-providers-config.js",
+      "replaced_lines": 2
+    },
+    {
+      "file": "core/config/menus-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/messages-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/modals-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/config/workspace-config.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "core/api/data-providers/coingecko-provider.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/components/app-footer.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/components/app-header.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/components/auth-button.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/components/portfolio-modal-body.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/components/portfolios-manager.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/templates/auth-button-template.js",
+      "replaced_lines": 1
+    },
+    {
+      "file": "app/templates/portfolios-manager-template.js",
+      "replaced_lines": 1
+    }
+  ],
+  "missing_in_archive": []
+}

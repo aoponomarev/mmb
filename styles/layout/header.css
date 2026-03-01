@@ -1,0 +1,91 @@
+/**
+ * ================================================================================================
+ * HEADER STYLES - Стили компонента хедера приложения
+ * ================================================================================================
+ *
+ * ЦЕЛЬ: Стили для компонента хедера приложения (app-header).
+ *
+ * ОСОБЕННОСТИ:
+ * - Фиксированная темная тема (data-bs-theme="dark"), не переключается
+ * - Многослойная тень направленная вниз с белым inset для осветления фона
+ * - Использует только Bootstrap классы для базовой стилизации
+ *
+ * ССЫЛКИ:
+ * - .app-header — корневой элемент хедера
+ *
+ * ССЫЛКИ:
+ * - Компонент: app/components/app-header.js
+ * - Шаблон: app/templates/app-header-template.js
+ */
+
+.app-header {
+    /* Многослойная тень направленная вниз с белым inset для осветления фона */
+    box-shadow:
+        0 2px 4px rgba(30, 35, 45, 0.05),
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 8px 24px rgba(25, 30, 40, 0.1),
+        0 0 0 1000px rgba(255, 255, 255, 0.1) inset;
+}
+
+.header-info-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.8rem;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Отрицательный вертикальный зазор между строками на мобильных при переносе */
+@media (max-width: 991.98px) {
+    .header-info-row > div {
+        margin-top: -4px;
+        margin-bottom: -4px;
+    }
+}
+
+.info-section {
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 4px 12px;
+}
+
+.info-section:last-child {
+    border-right: none;
+}
+
+.info-label {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-right: 8px;
+}
+
+.info-value {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.info-value.positive {
+    color: #2ecc71;
+}
+
+.info-value.negative {
+    color: #e74c3c;
+}
+
+.app-header .header-inset-1 {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 768px) {
+    .header-info-row {
+        flex-wrap: wrap;
+    }
+    .info-section {
+        width: 50%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .info-section:nth-child(even) {
+        border-right: none;
+    }
+}
+

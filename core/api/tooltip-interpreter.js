@@ -1,0 +1,267 @@
+/**
+ * ================================================================================================
+ * TOOLTIP INTERPRETER - Интерпретация значений метрик для динамических подсказок
+ * ================================================================================================
+ *
+ * ЦЕЛЬ: Генерация динамической части tooltip на основе текущих значений метрик.
+ * Статическая часть берется из tooltipsConfig, динамическая — строится здесь.
+ * Skill: a/skills/app/skills/components/components-tooltips.md
+ *
+ * ПРИНЦИПЫ:
+ * - Единый источник правды (ЕИП): пороги и интерпретации хранятся централизованно
+ * - Поддержка мультиязычности через tooltipsConfig
+ * - Минималистичный вывод (нативный title без HTML)
+ *
+ * ИСПОЛЬЗОВАНИЕ:
+ * const tooltip = window.tooltipInterpreter.getTooltip('agr', { value: 12.5, lang: 'ru' });
+ *
+ * ССЫЛКИ:
+ * - Конфигурация tooltips: core/config/tooltips-config.js
+ * - Математические модели: mm/base-model-calculator.js, mm/model-manager.js
+ */
+
+(function() {
+    'use strict';
+
+    /**
+     * Пороговые значения для интерпретации метрик
+     * Структура: { метрика: { уровни: [значения], интерпретации: { ru: [...], en: [...] } } }
+     */
+    const THRESHOLDS = {
+        agr: {
+            levels: [-10, -5, 0, 5, 10], // критические пороги AGR
+            interpretations: {
+                ru: [
+                    '⚠ Экстремально медвежий сигнал.\nShort-позиции предпочтительны.',
+                    '↘ Медвежья динамика.\nОсторожно с Long-позициями.',
+                    '— Нейтральная зона.\nРынок без явного тренда.',
+                    '↗ Бычья динамика.\nLong-позиции предпочтительны.',
+                    '🚀 Экстремально бычий сигнал.\nСильная Long-возможность.'
+                ],
+                en: [
+                    '⚠ Extremely bearish signal.\nShort positions preferred.',
+                    '↘ Bearish dynamics.\nCaution with Long positions.',
+                    '— Neutral zone.\nMarket without clear trend.',
+                    '↗ Bullish dynamics.\nLong positions preferred.',
+                    '🚀 Extremely bullish signal.\nStrong Long opportunity.'
+                ]
+            }
+        },
+        mdn: {
+            levels: [-40, -20, 0, 20, 40],
+            interpretations: {
+                ru: [
+                    '⚠ Рыночная паника.\nВозможна коррекция Short.',
+                    '↘ Медвежье давление доминирует.',
+                    '— Баланс сил.\nБоковое движение вероятно.',
+                    '↗ Бычье давление доминирует.',
+                    '🚀 Рыночная эйфория.\nРиск перегрева.'
+                ],
+                en: [
+                    '⚠ Market panic.\nShort correction possible.',
+                    '↘ Bearish pressure dominates.',
+                    '— Balance of forces.\nSideways movement likely.',
+                    '↗ Bullish pressure dominates.',
+                    '🚀 Market euphoria.\nOverheating risk.'
+                ]
+            }
+        },
+        din: {
+            levels: [-15, -5, 0, 5, 15],
+            interpretations: {
+                ru: [
+                    '⚠ Высокая волатильность вниз.',
+                    '↘ Повышенный риск падения.',
+                    '— Умеренная волатильность.',
+                    '↗ Повышенный потенциал роста.',
+                    '🚀 Высокая волатильность вверх.'
+                ],
+                en: [
+                    '⚠ High downside volatility.',
+                    '↘ Elevated downside risk.',
+                    '— Moderate volatility.',
+                    '↗ Elevated upside potential.',
+                    '🚀 High upside volatility.'
+                ]
+            }
+        },
+        dcs: {
+            levels: [0.3, 0.5, 0.7, 0.85],
+            interpretations: {
+                ru: [
+                    '⚠ Низкая устойчивость.\nТренд может развернуться.',
+                    '↘ Умеренная устойчивость.\nТребуется подтверждение.',
+                    '↗ Хорошая устойчивость.\nТренд вероятен.',
+                    '✓ Высокая устойчивость.\nТренд стабилен.'
+                ],
+                en: [
+                    '⚠ Low persistence.\nTrend may reverse.',
+                    '↘ Moderate persistence.\nConfirmation required.',
+                    '↗ Good persistence.\nTrend likely.',
+                    '✓ High persistence.\nTrend is stable.'
+                ]
+            }
+        },
+        tsi: {
+            levels: [0.3, 0.5, 0.7, 0.85],
+            interpretations: {
+                ru: [
+                    '⚠ Слабый тренд.\nИмпульс отсутствует.',
+                    '↘ Умеренный тренд.\nИмпульс формируется.',
+                    '↗ Сильный тренд.\nИмпульс подтвержден.',
+                    '✓ Экстремальный тренд.\nМаксимальный импульс.'
+                ],
+                en: [
+                    '⚠ Weak trend.\nNo momentum.',
+                    '↘ Moderate trend.\nMomentum forming.',
+                    '↗ Strong trend.\nMomentum confirmed.',
+                    '✓ Extreme trend.\nMaximum momentum.'
+                ]
+            }
+        },
+        mp: {
+            levels: [0.3, 0.5, 0.7, 0.85],
+            interpretations: {
+                ru: [
+                    '⚠ Моментум слаб.\nДвижение может затухнуть.',
+                    '↘ Моментум умеренный.\nТребуется поддержка.',
+                    '↗ Моментум сильный.\nДвижение устойчиво.',
+                    '✓ Моментум экстремальный.\nДвижение инерционно.'
+                ],
+                en: [
+                    '⚠ Weak momentum.\nMovement may fade.',
+                    '↘ Moderate momentum.\nSupport required.',
+                    '↗ Strong momentum.\nMovement is stable.',
+                    '✓ Extreme momentum.\nMovement is inertial.'
+                ]
+            }
+        },
+        fgi: {
+            levels: [25, 45, 55, 75],
+            interpretations: {
+                ru: [
+                    '⚠ Экстремальный страх.\nВозможен разворот вверх.',
+                    '↘ Страх доминирует.\nМедвежьи настроения.',
+                    '— Нейтральный рынок.\nБаланс эмоций.',
+                    '↗ Жадность доминирует.\n🤘 Бычьи настроения.',
+                    '🚀 Экстремальная жадность.\nРиск коррекции.'
+                ],
+                en: [
+                    '⚠ Extreme fear.\nReversal possible.',
+                    '↘ Fear dominates.\nBearish sentiment.',
+                    '— Neutral market.\nBalanced emotions.',
+                    '↗ Greed dominates.\n🤘 Bullish sentiment.',
+                    '🚀 Extreme greed.\nCorrection risk.'
+                ]
+            }
+        },
+        horizonDays: {
+            levels: [1, 3, 7, 14, 30],
+            interpretations: {
+                ru: [
+                    '⏱ Сверхкраткосрочный: 1 день.\nСкальпинг.',
+                    '📅 Краткосрочный: 2-3 дня.\nДневная торговля.',
+                    '📆 Среднесрочный: 4-7 дней.\nНедельные качели.',
+                    '📊 Долгосрочный: 8-30 дней.\nМесячный тренд.',
+                    '🌍 Долгосрочный: >30 дней.\nИнвестиции.'
+                ],
+                en: [
+                    '⏱ Ultra-short: 1 day.\nScalping.',
+                    '📅 Short-term: 2-3 days.\nDay trading.',
+                    '📆 Medium-term: 4-7 days.\nWeekly swings.',
+                    '📊 Long-term: 8-30 days.\nMonthly trend.',
+                    '🌍 Long-term: >30 days.\nInvestments.'
+                ]
+            }
+        },
+        mdnHours: {
+            levels: [4, 8, 12],
+            interpretations: {
+                ru: [
+                    '⏱ 4 часа:\nкраткосрочный рыночный пульс.',
+                    '📅 8 часов:\nсреднесрочный контекст движения.',
+                    '📆 12 часов:\nдолгосрочный индикатор направления.'
+                ],
+                en: [
+                    '⏱ 4 hours:\nshort-term market pulse.',
+                    '📅 8 hours:\nmedium-term movement context.',
+                    '📆 12 hours:\nlong-term direction indicator.'
+                ]
+            }
+        }
+    };
+
+    /**
+     * Получить интерпретацию значения метрики
+     * @param {string} key - ключ метрики ('agr', 'mdn', 'fgi', etc.)
+     * @param {number} value - текущее значение метрики
+     * @param {string} lang - язык ('ru', 'en')
+     * @returns {string} - интерпретация
+     */
+    function getInterpretation(key, value, lang = 'ru') {
+        const threshold = THRESHOLDS[key];
+        if (!threshold) return '';
+
+        const levels = threshold.levels;
+        const interpretations = threshold.interpretations[lang] || threshold.interpretations['ru'];
+
+        // Определяем индекс интерпретации на основе значения
+        let index = 0;
+        for (let i = 0; i < levels.length; i++) {
+            if (value >= levels[i]) {
+                index = i + 1;
+            }
+        }
+
+        return interpretations[Math.min(index, interpretations.length - 1)] || '';
+    }
+
+    /**
+     * Получить полную подсказку (статическая + динамическая части)
+     * @param {string} key - ключ метрики ('agr', 'mdn', 'fgi', etc.)
+     * @param {Object} options - опции { value, lang, skipStatic }
+     * @returns {string} - финальная подсказка
+     */
+    function getTooltip(key, options = {}) {
+        const { value, lang = 'ru', skipStatic = false } = options;
+
+        let tooltip = '';
+
+        // Статическая часть (из tooltipsConfig)
+        if (!skipStatic && window.tooltipsConfig) {
+            const staticKey = `metric.${key}.description`;
+            const staticText = window.tooltipsConfig.getTooltip(staticKey);
+            if (staticText) {
+                tooltip = staticText;
+            }
+        }
+
+        // Динамическая часть (интерпретация текущего значения)
+        if (value !== undefined && value !== null) {
+            const interpretation = getInterpretation(key, value, lang);
+            if (interpretation) {
+                tooltip += tooltip ? `\n${interpretation}` : interpretation;
+            }
+        }
+
+        return tooltip;
+    }
+
+    /**
+     * Получить список всех доступных метрик с порогами
+     * @returns {Array<string>} - массив ключей метрик
+     */
+    function getAvailableMetrics() {
+        return Object.keys(THRESHOLDS);
+    }
+
+    // Экспорт в глобальную область
+    window.tooltipInterpreter = {
+        getTooltip,
+        getInterpretation,
+        getAvailableMetrics,
+        THRESHOLDS
+    };
+
+    console.log('tooltip-interpreter.js: инициализирован');
+})();

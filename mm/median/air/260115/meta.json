@@ -1,0 +1,30 @@
+{
+    "id": "Median/AIR/260115",
+    "family": "Median",
+    "type": "AIR",
+    "versionDate": "260115",
+    "versionName": "Медиана (A.I.R.) 26.01.15",
+    "createdAt": "2026-01-26",
+    "agrFormula": "AGR_final = (1-λ)*AGR_long + λ*AGR_short; AGR_raw = R*(0.45*I + 0.35*A + 0.20*I*A)",
+    "normalizationScheme": "Robust normalization via median+MAD for CDH/CGR/CPT/DIN",
+    "weightsPolicy": "CPT_BASE_WEIGHTS + CGR_BETAS",
+    "recommendedMethodRules": "mp default; dcs/tsi as selected",
+    "params": {
+        "agrLimit": 100,
+        "normalizationWeight": 1,
+        "weights": {
+            "A": 0.40,
+            "I": 0.40,
+            "IA": 0.20,
+            "I_CGR": 0.70,
+            "I_CPT": 0.30,
+            "riskRegimeStrength": 0.30
+        },
+        "lambda": {
+            "min": 0.05,
+            "max": 0.2,
+            "fgiBoost": 0.05,
+            "vixBoost": 0.05
+        }
+    }
+}

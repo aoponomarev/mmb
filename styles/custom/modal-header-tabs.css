@@ -1,0 +1,44 @@
+/**
+ * ================================================================================================
+ * MODAL HEADER TABS CUSTOM STYLES - Кастомные стили для вкладок в заголовке модальных окон
+ * ================================================================================================
+ */
+
+.modal-header-tabs-group {
+    /* Отменяем стандартные стили btn-group */
+    border: none !important;
+    border-radius: 0 !important;
+
+    /* Выравниваем с паддингами модального окна */
+    /* Стандартный padding у .modal-header: 1rem (16px) */
+    margin-top: -1rem;
+    margin-bottom: -1rem;
+}
+
+.modal-header-tabs-group .btn-check + .btn {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* Чтобы кнопки выделялись, делаем активную кнопку чуть темнее */
+.modal-header-tabs-group .btn-check:checked + .btn-outline-primary {
+    background-color: rgba(var(--bs-primary-rgb));
+    border-color: rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* Убираем лишний маргин у последнего элемента перед кнопкой закрытия */
+.modal-header-tabs-group.ms-auto.me-2 {
+    margin-right: 0 !important; /* Отменяем Bootstrap .me-2 */
+}
+
+.modal-body-fixed-size {
+    /* Устанавливаем фиксированную ширину и высоту для содержимого modal-body */
+    /* Это предотвратит "дерганье" модального окна при переключении вкладок с разным контентом */
+    min-width: 450px;
+    min-height: 300px;
+    /* Дополнительно можно добавить flex для выравнивания контента */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}

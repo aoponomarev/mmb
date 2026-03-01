@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app - Statistics</title>
+
+    <!--
+    ================================================================================================
+    ПРИМЕРЫ МОДАЛЬНЫХ ОКОН:
+    ================================================================================================
+
+    ЦЕЛЬ: test.html - страница для тестирования и демонстрации компонентов.
+    Здесь размещаются примеры использования всех компонентов приложения.
+
+    ------------------------------------------------------------------------------------------------
+        }
+    ------------------------------------------------------------------------------------------------
+
+    ПРИМЕРЫ МОДАЛЬНЫХ ОКОН:
+    - Клик по заголовку modal-title в статическом примере открывает всплывающее окно
+    - Все инстансы модального окна должны сохранять полную функциональность
+    - Кнопки в статических примерах выполняют те же действия, что и в реальных окнах
+
+    ПРАВИЛА ОФОРМЛЕНИЯ:
+    - Карточки и поля должны поддерживать темную тему
+    - Запрещено использовать bg-light, bg-white (не адаптируются к темной теме)
+    - Использовать bg-body, bg-body-secondary для темо-зависимых фонов
+    - Для информационных блоков: bg-opacity-10 с border (например, bg-info bg-opacity-10)
+
+    Примеры правильного оформления:
+    - Карточка: <div class="mb-4 p-3 border rounded">
+    - Поле: <div class="p-2 border rounded">
+    - Инфоблок: <div class="p-2 bg-info bg-opacity-10 rounded border border-info">
+
+    ------------------------------------------------------------------------------------------------
+    ДОКУМЕНТАЦИЯ
+    ------------------------------------------------------------------------------------------------
+
+    Компоненты: a/skills/app/skills/components/components-overview.md
+    Принципы: a/skills/app/skills/components/components-ssot.md
+    Реализация: a/skills/app/skills/components/components-responsive-visibility.md
+
+    ================================================================================================
+    -->
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- Стили компонентов (порядок загрузки важен!) -->
+    <!-- 1. Базовые обертки над Bootstrap (независимые) -->
+    <link rel="stylesheet" href="styles/wrappers/button.css">
+    <link rel="stylesheet" href="styles/wrappers/dropdown-menu-item.css">
+    <!-- 2. Составные обертки над Bootstrap (зависят от базовых) -->
+    <link rel="stylesheet" href="styles/wrappers/dropdown.css">
+    <link rel="stylesheet" href="styles/wrappers/button-group.css">
+    <!-- 3. Компоненты макета -->
+    <link rel="stylesheet" href="styles/layout/header.css">
+    <link rel="stylesheet" href="styles/layout/footer.css">
+    <link rel="stylesheet" href="styles/layout/scrollbars.css">
+    <link rel="stylesheet" href="styles/layout/messages-splash.css">
+    <!-- 4. Кастомные стили компонентов -->
+    <link rel="stylesheet" href="styles/custom/combobox.css">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Material Symbols (Sharp) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,400,0,0" />
+
+</head>
+<body class="min-vh-100 d-flex flex-column">
+    <style>
+        [v-cloak] {
+            display: none !important;
+        }
+    </style>
+    <div id="app" class="flex-grow-1 d-flex flex-column">
+        <!-- Header приложения (фиксирован к верху) -->
+        <app-header
+            :is-authenticated="isAuthenticated"
+            :display-tabs="displayTabs"
+            :horizon-days="horizonDays"
+            :mdn-hours="mdnHours"
+            @tab-toggle="handleTabToggle"
+            @horizon-change="handleHorizonChange"
+            @mdn-hours-change="handleMdnHoursChange"
+        >
+            <template #menu-items>
+                <li v-for="item in mainMenuItems" :key="item.id">
+                    <dropdown-menu-item
+                        :title="menusConfig?.getMenuItemTitle(item.title) || item.title"
+                        :icon="item.icon"
+                        :classes-add="item.classesAdd"
+                        :no-wrap="true"
+                        :auto-close-parent="item.handler !== 'switchToMathModelsMenu' && item.handler !== 'switchToMainMenu'"
+                        @click="handleMenuClick(item)">
+                    </dropdown-menu-item>
+                </li>
+            </template>
+            <template #settings-items>
+                <li v-for="item in settingsMenuItems" :key="item.id">
+                    <dropdown-menu-item
+                        :title="menusConfig?.getMenuItemTitle(item.title) || (typeof item.title === 'string' ? item.title : '')"
+                        :no-wrap="true"
+                        @click="handleMenuClick(item)">
+                    </dropdown-menu-item>
+                </li>
+            </template>
+        </app-header>
+
+        <!-- Основной контент с отступами для header и footer (Bootstrap spacing utilities) -->
+        <div class="container-fluid pt-5 pb-5 d-flex flex-column flex-grow-1">
+            <main class="flex-grow-1 d-flex flex-column">
+                <!-- Контент приложения загружается через Vue компоненты -->
+                <div class="container flex-grow-1">
+                        <!-- Вкладки для шагов тестирования -->
+                    <div class="mb-4 p-3 border rounded" style="display: flex; flex-direction: column;">
+                        <h2 class="mb-3">Интеграции</h2>
+                        <p class="text-muted small mb-3">
+                            Тестирование этапов интеграции Google OAuth + Cloudflare R2 + D1.
+                            Здесь будут тестироваться компоненты авторизации, работы с портфелями и датасетами.
+                        </p>
+
+                        <!-- Вкладки для шагов тестирования -->
+                        <ul class="nav nav-tabs mb-3" role="tablist" ref="testStepsTabs">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1-pane" type="button" role="tab" aria-controls="step1-pane" aria-selected="true" title="Проверка загрузки модулей">1</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2-pane" type="button" role="tab" aria-controls="step2-pane" aria-selected="false" title="Проверка feature flags">2</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3-pane" type="button" role="tab" aria-controls="step3-pane" aria-selected="false" title="Проверка компонента auth-button">3</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step4-tab" data-bs-toggle="tab" data-bs-target="#step4-pane" type="button" role="tab" aria-controls="step4-pane" aria-selected="false" title="Проверка состояния авторизации">4</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step5-tab" data-bs-toggle="tab" data-bs-target="#step5-pane" type="button" role="tab" aria-controls="step5-pane" aria-selected="false" title="Инициация входа через Google">5</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step6-tab" data-bs-toggle="tab" data-bs-target="#step6-pane" type="button" role="tab" aria-controls="step6-pane" aria-selected="false" title="Компонент управления портфелями">6</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" style="flex: 1; overflow-y: auto;">
+                        <!-- Шаг 1: Проверка загрузки модулей -->
+                            <div class="tab-pane fade show active" id="step1-pane" role="tabpanel" aria-labelledby="step1-tab">
+                            <h5 class="mb-2">Шаг 1: Проверка загрузки модулей</h5>
+                            <p class="text-muted small mb-2">Проверяем, что все модули загружены и доступны.</p>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    label="Проверить модули"
+                                    variant="outline-primary"
+                                    size="sm"
+                                    @click="testStep1_CheckModules">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep1Result" class="mt-2">
+                                <div v-if="testStep1Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep1Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep1Result.message }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Шаг 2: Проверка feature flags -->
+                            <div class="tab-pane fade" id="step2-pane" role="tabpanel" aria-labelledby="step2-tab">
+                            <h5 class="mb-2">Шаг 2: Проверка feature flags</h5>
+                            <p class="text-muted small mb-2">Проверяем, что feature flags включены.</p>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    label="Проверить feature flags"
+                                    variant="outline-primary"
+                                    size="sm"
+                                    @click="testStep2_CheckFeatureFlags">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep2Result" class="mt-2">
+                                <div v-if="testStep2Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep2Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep2Result.message }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Шаг 3: Проверка компонента auth-button -->
+                            <div class="tab-pane fade" id="step3-pane" role="tabpanel" aria-labelledby="step3-tab">
+                            <h5 class="mb-2">Шаг 3: Проверка компонента auth-button</h5>
+                            <p class="text-muted small mb-2">Проверяем, что компонент auth-button загружен и доступен.</p>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    label="Проверить auth-button"
+                                    variant="outline-primary"
+                                    size="sm"
+                                    @click="testStep3_CheckAuthButton">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep3Result" class="mt-2">
+                                <div v-if="testStep3Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep3Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep3Result.message }}</small>
+                                </div>
+                            </div>
+                            <div v-if="testStep3Result && testStep3Result.hasAuthButton" class="mt-2">
+                                <small class="text-muted">
+                                        <strong>Где смотреть:</strong> Авторизация доступна через модальное окно (кнопка открытия модального окна авторизации).
+                                        <br>В модальном окне можно авторизоваться через Google или выйти из системы.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Шаг 4: Проверка состояния авторизации -->
+                            <div class="tab-pane fade" id="step4-pane" role="tabpanel" aria-labelledby="step4-tab">
+                            <h5 class="mb-2">Шаг 4: Проверка состояния авторизации</h5>
+                            <p class="text-muted small mb-2">Проверяем текущее состояние авторизации и данные пользователя.</p>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    label="Проверить авторизацию"
+                                    variant="outline-primary"
+                                    size="sm"
+                                    @click="testStep4_CheckAuthStatus">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep4Result" class="mt-2">
+                                <div v-if="testStep4Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep4Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep4Result.message }}</small>
+                                </div>
+                            </div>
+                            <div v-if="testStep4Result && testStep4Result.userData" class="mt-2 p-2 bg-white border rounded">
+                                <small>
+                                    <strong>Данные пользователя:</strong><br>
+                                    <span v-if="testStep4Result.userData.email">Email: {{ testStep4Result.userData.email }}<br></span>
+                                    <span v-if="testStep4Result.userData.name">Имя: {{ testStep4Result.userData.name }}<br></span>
+                                    <span v-if="testStep4Result.userData.picture">Avatar: {{ testStep4Result.userData.picture }}<br></span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Шаг 5: Тестирование OAuth flow (инициация входа) -->
+                            <div class="tab-pane fade" id="step5-pane" role="tabpanel" aria-labelledby="step5-tab">
+                            <h5 class="mb-2">Шаг 5: Инициация входа через Google</h5>
+                            <p class="text-muted small mb-2">Нажимаем кнопку "Войти через Google" для начала OAuth flow.</p>
+                            <div class="alert alert-warning alert-sm mb-2">
+                                <small>
+                                    <strong>Внимание:</strong> После нажатия произойдет редирект на страницу Google OAuth.
+                                    Вы будете перенаправлены обратно после авторизации.
+                                </small>
+                            </div>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    :label="testStep4Result && testStep4Result.isAuthenticated ? 'Выйти' : 'Войти через Google'"
+                                    :icon="testStep4Result && testStep4Result.isAuthenticated ? 'fas fa-sign-out-alt' : 'fab fa-google'"
+                                    :variant="testStep4Result && testStep4Result.isAuthenticated ? 'outline-danger' : 'primary'"
+                                    size="sm"
+                                    @click="testStep4Result && testStep4Result.isAuthenticated ? testStep5_Logout() : testStep5_InitiateLogin()">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep5Result" class="mt-2">
+                                <div v-if="testStep5Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep5Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep5Result.message }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Шаг 6: Компонент управления портфелями -->
+                            <div class="tab-pane fade" id="step6-pane" role="tabpanel" aria-labelledby="step6-tab" style="overflow-x: hidden; max-width: 100%;">
+                            <h5 class="mb-2">Шаг 6: Компонент управления портфелями</h5>
+                            <p class="text-muted small mb-2">Проверяем загрузку и доступность компонента portfolios-manager.</p>
+                            <div class="d-flex gap-2 mb-2">
+                                <cmp-button
+                                    label="Проверить portfolios-manager"
+                                    variant="outline-primary"
+                                    size="sm"
+                                    @click="testStep6_CheckPortfoliosManager">
+                                </cmp-button>
+                            </div>
+                            <div v-if="testStep6Result" class="mt-2">
+                                <div v-if="testStep6Result.success" class="alert alert-success alert-sm mb-0">
+                                    <small>{{ testStep6Result.message }}</small>
+                                </div>
+                                <div v-else class="alert alert-danger alert-sm mb-0">
+                                    <small>{{ testStep6Result.message }}</small>
+                            </div>
+                        </div>
+
+                        <!-- Компонент управления портфелями (условно) -->
+                                <div class="mt-3" style="overflow-x: hidden; max-width: 100%;">
+                        <portfolios-manager
+                            v-if="isPortfoliosEnabled"
+                            @portfolio-created="handlePortfolioCreated"
+                            @portfolio-updated="handlePortfolioUpdated"
+                            @portfolio-deleted="handlePortfolioDeleted"
+                        ></portfolios-manager>
+                        <div v-else class="alert alert-info">
+                            <small>
+                                <strong>Информация:</strong> Управление портфелями доступно только после авторизации и включения синхронизации с облаком.
+                            </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Модальное окно авторизации (рабочее, нестатическое) -->
+                    <cmp-modal
+                        ref="authModal"
+                        modal-id="authModal"
+                        :title="modalsConfig?.getModalTitle('authModal')"
+                        :centered="true">
+                        <template #header>
+                            <h5 class="modal-title">{{ modalsConfig?.getModalTitle('authModal') || 'Авторизация' }}</h5>
+                            <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                        </template>
+                        <template #body>
+                            <auth-modal-body
+                                :on-login-success="handleAuthLoginSuccess"
+                                :on-logout-success="handleAuthLogoutSuccess">
+                            </auth-modal-body>
+                        </template>
+                    </cmp-modal>
+
+                    <!-- Примеры системных сообщений -->
+                    <div class="mb-4 p-3 border rounded">
+                        <h2 class="mb-3">Сообщения</h2>
+                        <p class="text-muted small mb-3">
+                            Тестирование интеграции системы сообщений с Cloudflare KV.
+                            Каждый шаг можно протестировать отдельно через кнопки ниже.
+                        </p>
+
+                        <!-- Быстрая инициализация тестовых сообщений -->
+                        <div class="mb-3">
+                            <cmp-button
+                                label="Инициализировать тестовые сообщения"
+                                variant="success"
+                                size="sm"
+                                @click="initTestMessages">
+                            </cmp-button>
+                            <small class="text-muted ms-2">Создает 4 тестовых сообщения всех типов (danger, warning, info, success) в scope "test-messages"</small>
+                        </div>
+
+                        <!-- Контейнер для отображения сообщений в карточке -->
+                        <div class="mb-3">
+                            <h6 class="mb-2">Сообщения в карточке (scope: test-messages):</h6>
+                            <cmp-system-messages scope="test-messages" :include-unscoped="true"></cmp-system-messages>
+                        </div>
+
+                        <!-- Вкладки для шагов тестирования -->
+                        <ul class="nav nav-tabs mb-3" role="tablist" ref="messagesTestTabs">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="msg-step1-tab" data-bs-toggle="tab" data-bs-target="#msg-step1-pane" type="button" role="tab" aria-controls="msg-step1-pane" aria-selected="true" title="Проверка Worker endpoint">1</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="msg-step2-tab" data-bs-toggle="tab" data-bs-target="#msg-step2-pane" type="button" role="tab" aria-controls="msg-step2-pane" aria-selected="false" title="Загрузка модулей из KV">2</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="msg-step3-tab" data-bs-toggle="tab" data-bs-target="#msg-step3-pane" type="button" role="tab" aria-controls="msg-step3-pane" aria-selected="false" title="Интеграция с messages-config">3</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="msg-step4-tab" data-bs-toggle="tab" data-bs-target="#msg-step4-pane" type="button" role="tab" aria-controls="msg-step4-pane" aria-selected="false" title="Миграции и версионирование">4</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="msg-step5-tab" data-bs-toggle="tab" data-bs-target="#msg-step5-pane" type="button" role="tab" aria-controls="msg-step5-pane" aria-selected="false" title="Модульная структура">5</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" style="flex: 1; overflow-y: auto;">
+                            <!-- Шаг 1: Проверка Worker endpoint -->
+                            <div class="tab-pane fade show active" id="msg-step1-pane" role="tabpanel" aria-labelledby="msg-step1-tab">
+                                <h5 class="mb-2">Шаг 1: Проверка Worker endpoint</h5>
+                                <p class="text-muted small mb-2">Проверяем доступность Worker endpoint для сообщений.</p>
+                                <div class="d-flex gap-2 mb-2">
+                                    <cmp-button
+                                        label="Проверить версию"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep1_Version">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Список модулей"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep1_ListModules">
+                                    </cmp-button>
+                                </div>
+                                <div v-if="testMessagesStep1Result" class="mt-2">
+                                    <div v-if="testMessagesStep1Result.success" class="alert alert-success alert-sm mb-0">
+                                        <small>{{ testMessagesStep1Result.message }}</small>
+                                    </div>
+                                    <div v-else class="alert alert-danger alert-sm mb-0">
+                                        <small>{{ testMessagesStep1Result.message }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Шаг 2: Загрузка модулей из KV -->
+                            <div class="tab-pane fade" id="msg-step2-pane" role="tabpanel" aria-labelledby="msg-step2-tab">
+                                <h5 class="mb-2">Шаг 2: Загрузка модулей из KV (с fallback на хардкод)</h5>
+                                <p class="text-muted small mb-2">Тестируем загрузку модулей сообщений из Cloudflare KV. При недоступности KV используется fallback на хардкод из messages-config.js.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <cmp-button
+                                        label="Загрузить 'api'"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep2_LoadModule('api')">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Загрузить 'auth'"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep2_LoadModule('auth')">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Загрузить 'validation'"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep2_LoadModule('validation')">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Загрузить 'portfolios'"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep2_LoadModule('portfolios')">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Загрузить все модули"
+                                        variant="primary"
+                                        size="sm"
+                                        @click="testMessagesStep2_LoadAllModules">
+                                    </cmp-button>
+                                </div>
+                                <div v-if="testMessagesStep2Result" class="mt-2">
+                                    <div v-if="testMessagesStep2Result.success" class="alert alert-success alert-sm mb-0">
+                                        <small>{{ testMessagesStep2Result.message }}</small>
+                                    </div>
+                                    <div v-else class="alert alert-danger alert-sm mb-0">
+                                        <small>{{ testMessagesStep2Result.message }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Шаг 3: Интеграция с messages-config -->
+                            <div class="tab-pane fade" id="msg-step3-pane" role="tabpanel" aria-labelledby="msg-step3-tab">
+                                <h5 class="mb-2">Шаг 3: Интеграция с messages-config и действия</h5>
+                                <p class="text-muted small mb-2">Проверяем, что messages-config использует данные из KV и действия открывают модальные окна.</p>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <cmp-button
+                                        label="Инициализировать messages-config"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep3_InitConfig">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Получить сообщение"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep3_GetMessage">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Проверить действия"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep3_TestActions">
+                                    </cmp-button>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <cmp-button
+                                        label="Открыть настройки (timezone)"
+                                        variant="success"
+                                        size="sm"
+                                        @click="testMessagesStep3_OpenSettings">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Открыть AI API"
+                                        variant="success"
+                                        size="sm"
+                                        @click="testMessagesStep3_OpenAiSettings">
+                                    </cmp-button>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <cmp-button
+                                        label="Перевести сообщения (en)"
+                                        variant="warning"
+                                        size="sm"
+                                        @click="testMessagesStep3_TranslateMessages">
+                                    </cmp-button>
+                                </div>
+                                <div v-if="testMessagesStep3Result" class="mt-2">
+                                    <div v-if="testMessagesStep3Result.success" class="alert alert-success alert-sm mb-0">
+                                        <small>{{ testMessagesStep3Result.message }}</small>
+                                    </div>
+                                    <div v-else class="alert alert-danger alert-sm mb-0">
+                                        <small>{{ testMessagesStep3Result.message }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Шаг 4: Миграции и версионирование -->
+                            <div class="tab-pane fade" id="msg-step4-pane" role="tabpanel" aria-labelledby="msg-step4-tab">
+                                <h5 class="mb-2">Шаг 4: Миграции и версионирование</h5>
+                                <p class="text-muted small mb-2">Тестируем версионирование и миграции датасета сообщений.</p>
+                                <div class="d-flex gap-2 mb-2">
+                                    <cmp-button
+                                        label="Проверить версию датасета"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep4_CheckVersion">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Тест миграции"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep4_TestMigration">
+                                    </cmp-button>
+                                </div>
+                                <div v-if="testMessagesStep4Result" class="mt-2">
+                                    <div v-if="testMessagesStep4Result.success" class="alert alert-success alert-sm mb-0">
+                                        <small>{{ testMessagesStep4Result.message }}</small>
+                                    </div>
+                                    <div v-else class="alert alert-danger alert-sm mb-0">
+                                        <small>{{ testMessagesStep4Result.message }}</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Шаг 5: Модульная структура -->
+                            <div class="tab-pane fade" id="msg-step5-pane" role="tabpanel" aria-labelledby="msg-step5-tab">
+                                <h5 class="mb-2">Шаг 5: Модульная структура</h5>
+                                <p class="text-muted small mb-2">Проверяем работу модульной структуры сообщений.</p>
+                                <div class="d-flex gap-2 mb-2">
+                                    <cmp-button
+                                        label="Показать все модули"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep5_ShowModules">
+                                    </cmp-button>
+                                    <cmp-button
+                                        label="Загрузить конкретный модуль"
+                                        variant="outline-primary"
+                                        size="sm"
+                                        @click="testMessagesStep5_LoadSpecificModule">
+                                    </cmp-button>
+                                </div>
+                                <div v-if="testMessagesStep5Result" class="mt-2">
+                                    <div v-if="testMessagesStep5Result.success" class="alert alert-success alert-sm mb-0">
+                                        <small>{{ testMessagesStep5Result.message }}</small>
+                                    </div>
+                                    <div v-else class="alert alert-danger alert-sm mb-0">
+                                        <small>{{ testMessagesStep5Result.message }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Компонент для отображения сообщений -->
+                        <div class="mt-3">
+                            <cmp-system-messages scope="test-messages"></cmp-system-messages>
+                        </div>
+
+                        <!-- Кнопка для показа сообщений в потоке (сплэш снизу) -->
+                        <div class="mt-3">
+                            <cmp-button
+                                label="Показать в потоке"
+                                icon="fas fa-stream"
+                                variant="primary"
+                                size="sm"
+                                @click="showMessagesInStream">
+                            </cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Пример модального окна -->
+                    <div class="mb-4">
+                        <h2 class="mb-4">Пример модального окна</h2>
+                        <p class="text-muted mb-3">Ниже показаны примеры модальных окон. Все модальные окна приложения используют систему управления кнопками через modalApi.</p>
+                        <!-- Модалка авторизации (статический пример) -->
+                        <cmp-modal
+                            ref="authModalStatic"
+                            modal-id="authModalStatic"
+                            :title="modalsConfig?.getModalTitle('authModal')"
+                            :centered="true"
+                            :static="true">
+                            <template #header>
+                                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('authModal') || 'Авторизация' }}</h5>
+                                <button type="button" class="btn-close" aria-label="Закрыть"></button>
+                            </template>
+                            <template #body>
+                                <auth-modal-body
+                                    :on-login-success="handleAuthLoginSuccess"
+                                    :on-logout-success="handleAuthLogoutSuccess">
+                                </auth-modal-body>
+                            </template>
+                        </cmp-modal>
+                        <cmp-modal
+                            ref="timezoneModalStatic"
+                            modal-id="timezoneModalStatic"
+                            :title="modalsConfig?.getModalTitle('timezoneModal')"
+                            :centered="true"
+                            :static="true">
+                            <template #header>
+                                <h5 class="modal-title" @click="openTimezoneModal" style="cursor: pointer;">{{ modalsConfig?.getModalTitle('timezoneModal') || 'Таймзона & i18n' }}</h5>
+                                <button type="button" class="btn-close" aria-label="Закрыть"></button>
+                            </template>
+                            <template #body>
+                                <timezone-modal-body
+                                    v-model="selectedTimezone"
+                                    :initial-value="initialTimezone"
+                                    :translation-language="selectedTranslationLanguage"
+                                    :initial-translation-language="initialTranslationLanguage"
+                                    :on-save="saveTimezone"
+                                    :on-cancel="cancelTimezone">
+                                </timezone-modal-body>
+                            </template>
+                        </cmp-modal>
+                        <!-- Модальное окно выбора таймзоны и языка перевода -->
+                        <cmp-modal
+                            ref="timezoneModal"
+                            modal-id="timezoneModal"
+                            :title="modalsConfig?.getModalTitle('timezoneModal')"
+                            :centered="true">
+                            <template #header>
+                                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('timezoneModal') || 'Таймзона & i18n' }}</h5>
+                                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                            </template>
+                            <template #body>
+                                <timezone-modal-body
+                                    v-model="selectedTimezone"
+                                    :initial-value="initialTimezone"
+                                    :translation-language="selectedTranslationLanguage"
+                                    :initial-translation-language="initialTranslationLanguage"
+                                    :on-save="saveTimezone"
+                                    :on-cancel="cancelTimezone">
+                                </timezone-modal-body>
+                            </template>
+                        </cmp-modal>
+                        <!-- Автоматически генерируемые модальные окна (без props) -->
+                        <template v-for="modal in registeredModals" :key="modal.id">
+                            <cmp-modal
+                                :ref="modal.ref"
+                                :modal-id="modal.id"
+                                :title="modalsConfig?.getModalTitle(modal.id)"
+                                :centered="modal.centered || false">
+                                <template #header>
+                                    <h5 class="modal-title">{{ modalsConfig?.getModalTitle(modal.id) || modal.title }}</h5>
+                                    <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                                </template>
+                                <template #body>
+                                    <component :is="modal.bodyComponent"></component>
+                                </template>
+                            </cmp-modal>
+                        </template>
+
+                        <!-- Модальное окно управления иконкой -->
+                        <cmp-modal
+                            ref="iconManagerModal"
+                            modal-id="iconManagerModal"
+                            :title="modalsConfig?.getModalTitle('iconManagerModal')"
+                            :centered="true"
+                        >
+                            <template #header>
+                                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('iconManagerModal') }}</h5>
+                                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                            </template>
+                            <template #body>
+                                <icon-manager-modal-body
+                                    v-if="currentIconEditingCoin"
+                                    :coin-data="currentIconEditingCoin"
+                                ></icon-manager-modal-body>
+                            </template>
+                        </cmp-modal>
+
+                        <!-- Пример с новой системой управления кнопками -->
+                        <cmp-modal
+                            ref="exampleModalNew"
+                            modal-id="exampleModalNew"
+                            :centered="true"
+                            :static="true">
+                            <template #header>
+                                <h5 class="modal-title">Пример</h5>
+                                <button type="button" class="btn-close" aria-label="Закрыть"></button>
+                            </template>
+                            <template #body>
+                                <modal-example-body></modal-example-body>
+                            </template>
+                            <!-- Кнопки регистрируются автоматически через modalApi в modal-example-body -->
+                        </cmp-modal>
+                    </div>
+
+                        <!-- Автоматически генерируемые модальные окна (без props) -->
+                    <div class="mb-4 p-3 border rounded">
+                        <h2 class="mb-3">Тестирование системы перевода tooltips</h2>
+                        <p class="text-muted small mb-3">
+                            Проверка работы tooltipsConfig.getTooltip() для разных типов tooltips.
+                            При смене языка перевода в настройках tooltips должны автоматически обновляться.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Сохранить"
+                                icon="fas fa-save"
+                                :tooltip-icon="tooltips['button.save.icon'] || 'Иконка: Сохранить'"
+                                :tooltip-text="tooltips['button.save.text'] || 'Основной текст: Сохранить изменения'"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Удалить"
+                                icon="fas fa-trash"
+                                variant="danger"
+                                :tooltip-icon="tooltips['button.delete.icon'] || 'Иконка: Удалить'"
+                                :tooltip-text="tooltips['button.delete.text'] || 'Основной текст: Удалить элемент'"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Загрузить"
+                                icon="fas fa-download"
+                                variant="success"
+                                :tooltip-icon="tooltips['button.load.icon'] || 'Иконка: Загрузить'"
+                                :tooltip-text="tooltips['button.load.text'] || 'Основной текст: Загрузить файл'"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Уведомления"
+                                icon="fas fa-bell"
+                                :tooltip-icon="tooltips['button.notifications.icon'] || 'Иконка: Уведомления'"
+                                :tooltip-text="tooltips['button.notifications.text'] || 'Основной текст: Просмотр уведомлений'"
+                                :suffix="{ type: 'badge', value: 5, variant: 'secondary', tooltip: tooltips['button.notifications.suffix.badge'] || 'Суффикс: 5 новых уведомлений' }"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Экспорт"
+                                icon="fas fa-download"
+                                :tooltip-icon="tooltips['button.export.icon'] || 'Иконка: Экспорт'"
+                                :tooltip-text="tooltips['button.export.text'] || 'Основной текст: Экспорт данных'"
+                                :suffix="{ type: 'icon', value: 'fas fa-external-link-alt', tooltip: tooltips['button.export.suffix.icon'] || 'Суффикс: Открыть в новой вкладке' }"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Справка"
+                                icon="fas fa-question-circle"
+                                :tooltip-icon="tooltips['button.help.icon'] || 'Иконка: Справка'"
+                                :tooltip-text="tooltips['button.help.text'] || 'Основной текст: Открыть справку'"
+                                :suffix="{ type: 'info', value: 'fas fa-info-circle text-info', tooltip: tooltips['button.help.suffix.info'] || 'Суффикс: Открыть справку' }"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                        <div class="mt-3 p-2 border rounded">
+                            <small class="text-muted">
+                                <strong>Текущий язык:</strong> {{ currentTranslationLanguage || 'ru' }} |
+                                <strong>tooltipsConfig:</strong> {{ tooltipsConfig ? 'загружен' : 'не загружен' }}
+                            </small>
+                        </div>
+                    </div>
+
+                            <!-- Левая колонка: запрос и кнопка -->
+                    <div class="mb-4 p-3 border rounded">
+                        <h2 class="mb-3">Тестирование Yandex API</h2>
+                        <p class="text-muted small mb-3">
+                            Проверка работы YandexGPT API через aiProviderManager.
+                            Введите свой запрос или используйте случайный.
+                        </p>
+                        <div class="row g-3">
+                            <!-- Левая колонка: запрос и кнопка -->
+                            <div class="col-md-6">
+                                <div class="d-flex flex-column h-100">
+                                    <label for="yandex-test-query" class="form-label mb-2">
+                                        <strong>Запрос:</strong>
+                                    </label>
+                                    <textarea
+                                        id="yandex-test-query"
+                                        name="yandex-test-query"
+                                        class="form-control flex-grow-1 mb-3"
+                                        v-model="yandexTestInputQuery"
+                                        placeholder="Введите ваш запрос или оставьте пустым для случайного запроса"
+                                        rows="8"
+                                        :disabled="yandexTestLoading"
+                                        style="resize: vertical; min-height: 150px;">
+                                    </textarea>
+                                    <div class="d-flex gap-2">
+                                        <cmp-button
+                                            label="Отправить"
+                                            icon="fas fa-paper-plane"
+                                            variant="primary"
+                                            :disabled="yandexTestLoading"
+                                            @click="testYandexAPI(false)">
+                                        </cmp-button>
+                                        <cmp-button
+                                            label="Случайный"
+                                            icon="fas fa-dice"
+                                            variant="outline-secondary"
+                                            :disabled="yandexTestLoading"
+                                            @click="testYandexAPI(true)">
+                                        </cmp-button>
+                                    </div>
+                                    <div v-if="yandexTestLoading" class="mt-3 p-2 bg-info bg-opacity-10 rounded border border-info">
+                                        <div class="d-flex align-items-center">
+                                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                                <span class="visually-hidden">Загрузка...</span>
+                                            </div>
+                                            <span class="small">Отправка запроса...</span>
+                                        </div>
+                                    </div>
+                                    <div v-show="yandexTestError && yandexTestError.trim() !== ''" class="mt-3 p-2 bg-danger bg-opacity-10 rounded border border-danger" v-cloak>
+                                        <small class="text-danger d-block mb-1"><strong>Ошибка:</strong></small>
+                                        <div class="text-break text-danger small" v-text="yandexTestError"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Правая колонка: ответ -->
+                            <div class="col-md-6">
+                                <div class="d-flex flex-column h-100">
+                                    <label class="form-label mb-2">
+                                        <strong>Ответ:</strong>
+                                    </label>
+                                    <div class="flex-grow-1 p-3 border rounded" style="min-height: 200px; max-height: 500px; overflow-y: auto;">
+                                        <div v-if="!yandexTestResponse && !yandexTestLoading && (!yandexTestError || yandexTestError === '')" class="text-muted text-center d-flex align-items-center justify-content-center h-100">
+                                            <small>Ответ появится здесь после отправки запроса</small>
+                                        </div>
+                                        <div v-if="yandexTestResponse" class="text-break" style="white-space: pre-wrap;">{{ yandexTestResponse }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Тестовая секция для визуального контроля высоты -->
+                    <div class="mb-4 p-3 border rounded">
+                        <h2 class="mb-4">Визуальный контроль высоты элементов</h2>
+                        <div class="d-flex align-items-center" style="gap: 0;">
+                            <!-- Поле ввода -->
+                            <input type="text" class="form-control form-control-sm" placeholder="Поле" style="width: 100px; border-radius: 0.375rem 0 0 0.375rem; border-right: none;">
+                            <!-- Кнопка -->
+                            <cmp-button label="Кнопка" variant="primary" size="sm" :button-attributes="{ 'style': 'border-radius: 0; border-left: none; border-right: none;' }"></cmp-button>
+                            <!-- Группа радиокнопок -->
+                            <cmp-button-group
+                                size="sm"
+                                :buttons="[
+                                    { type: 'radio', label: 'Опция 1', variant: 'outline-primary' },
+                                    { type: 'radio', label: 'Опция 2', variant: 'outline-primary' }
+                                ]">
+                            </cmp-button-group>
+                            <!-- Dropdown -->
+                            <cmp-dropdown button-text="Меню" button-variant="primary" button-size="sm">
+                                <template #items>
+                                    <li><dropdown-menu-item title="Пункт 1" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 2" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 3" @click="handleClick"></dropdown-menu-item></li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                        <style>
+                            /* Убираем border-radius и промежуточные границы для элементов встык */
+                            .d-flex.align-items-center > input + cmp-button button,
+                            .d-flex.align-items-center > cmp-button + cmp-button-group .btn-group > .btn:first-child {
+                                border-radius: 0 !important;
+                                border-left: none !important;
+                            }
+                            .d-flex.align-items-center > cmp-button-group + cmp-dropdown .dropdown-responsive button {
+                                border-radius: 0 !important;
+                                border-left: none !important;
+                            }
+                            .d-flex.align-items-center > cmp-dropdown:last-child .dropdown-responsive button {
+                                border-radius: 0 0.375rem 0.375rem 0 !important;
+                            }
+                        </style>
+                    </div>
+
+                    <!-- Примеры компонента button-group -->
+                    <div class="mb-4 p-3 border rounded" style="display: flex; flex-direction: column;">
+                        <h2 class="mb-3">Примеры компонента button-group</h2>
+
+                        <!-- Вкладки для примеров -->
+                        <ul class="nav nav-tabs mb-3" role="tablist" ref="buttonGroupTabs">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="btn-group-tab1" data-bs-toggle="tab" data-bs-target="#btn-group-pane1" type="button" role="tab" aria-controls="btn-group-pane1" aria-selected="true" title="Базовые примеры">1</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="btn-group-tab2" data-bs-toggle="tab" data-bs-target="#btn-group-pane2" type="button" role="tab" aria-controls="btn-group-pane2" aria-selected="false" title="Адаптивное схлопывание">2</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="btn-group-tab3" data-bs-toggle="tab" data-bs-target="#btn-group-pane3" type="button" role="tab" aria-controls="btn-group-pane3" aria-selected="false" title="Наследование стилей">3</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="btn-group-tab4" data-bs-toggle="tab" data-bs-target="#btn-group-pane4" type="button" role="tab" aria-controls="btn-group-pane4" aria-selected="false" title="Примеры адаптивности">4</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" style="flex: 1; overflow-y: auto;">
+                    <!-- Базовые примеры -->
+                            <div class="tab-pane fade show active" id="btn-group-pane1" role="tabpanel" aria-labelledby="btn-group-tab1">
+                        <h3 class="mb-3">Базовые примеры</h3>
+
+                        <!-- Простая группа кнопок -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Простая группа кнопок</h4>
+                            <cmp-button-group
+                                :buttons="[
+                                    { type: 'button', label: 'Сохранить', variant: 'primary' },
+                                    { type: 'button', label: 'Отмена', variant: 'secondary' },
+                                    { type: 'button', label: 'Удалить', variant: 'danger' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Группа с checkbox -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Группа с checkbox</h4>
+                            <cmp-button-group
+                                :buttons="[
+                                    { type: 'checkbox', label: 'Фильтр 1', variant: 'outline-primary' },
+                                    { type: 'checkbox', label: 'Фильтр 2', variant: 'outline-primary', active: true },
+                                    { type: 'checkbox', label: 'Фильтр 3', variant: 'outline-primary' }
+                                ]"
+                                @button-change="(event, data) => console.log('Checkbox change:', data)">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Группа с radio -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Группа с radio</h4>
+                            <cmp-button-group
+                                :buttons="[
+                                    { type: 'radio', label: 'Вариант 1', variant: 'outline-success' },
+                                    { type: 'radio', label: 'Вариант 2', variant: 'outline-success', active: true },
+                                    { type: 'radio', label: 'Вариант 3', variant: 'outline-success' }
+                                ]"
+                                @button-change="(event, data) => console.log('Radio change:', data)">
+                            </cmp-button-group>
+                        </div>
+                    </div>
+
+                    <!-- Адаптивное схлопывание -->
+                            <div class="tab-pane fade" id="btn-group-pane2" role="tabpanel" aria-labelledby="btn-group-tab2">
+                        <h3 class="h5 mb-3">Адаптивное схлопывание в dropdown</h3>
+                        <p class="text-muted mb-3">Группы кнопок автоматически превращаются в dropdown при достижении указанного breakpoint. Измените ширину окна браузера, чтобы увидеть переключение.</p>
+
+                        <!-- Breakpoint: sm (576px) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Breakpoint: sm (≥576px видна группа, &lt;576px dropdown) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="sm"
+                                dropdown-label="Действия"
+                                dropdown-icon="fas fa-bars"
+                                :buttons="[
+                                    { type: 'button', label: 'Сохранить', variant: 'primary', icon: 'fas fa-save' },
+                                    { type: 'button', label: 'Редактировать', variant: 'secondary', icon: 'fas fa-edit' },
+                                    { type: 'button', label: 'Удалить', variant: 'danger', icon: 'fas fa-trash' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Breakpoint: md (768px) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Breakpoint: md (≥768px видна группа, &lt;768px dropdown) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="md"
+                                dropdown-label="Опции"
+                                dropdown-icon="fas fa-ellipsis-v"
+                                dropdown-variant="info"
+                                :buttons="[
+                                    { type: 'button', label: 'Экспорт', variant: 'success', icon: 'fas fa-download' },
+                                    { type: 'button', label: 'Импорт', variant: 'warning', icon: 'fas fa-upload' },
+                                    { type: 'checkbox', label: 'Показать скрытые', variant: 'outline-secondary' }
+                                ]"
+                                @button-click="handleButtonGroupClick"
+                                @button-change="(event, data) => console.log('Change:', data)">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Breakpoint: lg (992px) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Breakpoint: lg (≥992px видна группа, &lt;992px dropdown) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="lg"
+                                dropdown-label="Меню"
+                                :buttons="[
+                                    { type: 'button', label: 'Действие 1', variant: 'primary' },
+                                    { type: 'button', label: 'Действие 2', variant: 'secondary' },
+                                    { type: 'button', label: 'Действие 3', variant: 'success' },
+                                    { type: 'button', label: 'Действие 4', variant: 'info' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Breakpoint: xl (1200px) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Breakpoint: xl (≥1200px видна группа, &lt;1200px dropdown) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="xl"
+                                dropdown-label="Инструменты"
+                                dropdown-icon="fas fa-tools"
+                                size="sm"
+                                :buttons="[
+                                    { type: 'button', label: 'Инструмент 1', variant: 'outline-primary', size: 'sm' },
+                                    { type: 'button', label: 'Инструмент 2', variant: 'outline-primary', size: 'sm' },
+                                    { type: 'button', label: 'Инструмент 3', variant: 'outline-primary', size: 'sm' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                        </div>
+
+                        <!-- Смешанный состав с адаптивностью -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Смешанный состав с адаптивностью (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="md"
+                                dropdown-label="Действия"
+                                variant="secondary"
+                                :buttons="[
+                                    { type: 'button', label: 'Действие', variant: 'primary' },
+                                    { type: 'checkbox', label: 'Фильтр', variant: 'outline-secondary' },
+                                    { type: 'radio', label: 'Опция 1', variant: 'outline-info' },
+                                    { type: 'radio', label: 'Опция 2', variant: 'outline-info', active: true }
+                                ]"
+                                @button-click="handleButtonGroupClick"
+                                @button-change="(event, data) => console.log('Change:', data)">
+                            </cmp-button-group>
+                        </div>
+                    </div>
+
+                    <!-- Наследование стилей -->
+                            <div class="tab-pane fade" id="btn-group-pane3" role="tabpanel" aria-labelledby="btn-group-tab3">
+                        <h3 class="h5 mb-3">Наследование variant и size</h3>
+
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Наследование от группы</h4>
+                            <cmp-button-group
+                                variant="success"
+                                size="lg"
+                                :buttons="[
+                                    { type: 'button', label: 'Кнопка 1' },
+                                    { type: 'button', label: 'Кнопка 2', variant: 'danger' },
+                                    { type: 'checkbox', label: 'Чекбокс' }
+                                ]">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Все кнопки наследуют success lg, кроме "Кнопка 2" (danger lg)</p>
+                        </div>
+                    </div>
+
+                    <!-- Примеры адаптивности -->
+                            <div class="tab-pane fade" id="btn-group-pane4" role="tabpanel" aria-labelledby="btn-group-tab4">
+                        <h3 class="h5 mb-3">Примеры компонента группы кнопок с разными вариантами адаптивности</h3>
+                        <p class="text-muted mb-3">Различные варианты настройки адаптивного поведения группы кнопок. Измените ширину окна браузера, чтобы увидеть переключение между группой и dropdown.</p>
+
+                        <!-- Без адаптивности (всегда группа) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Без адаптивности (всегда группа кнопок)</h4>
+                            <cmp-button-group
+                                :buttons="[
+                                    { type: 'button', label: 'Действие 1', variant: 'primary' },
+                                    { type: 'button', label: 'Действие 2', variant: 'secondary' },
+                                    { type: 'button', label: 'Действие 3', variant: 'success' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Группа всегда отображается как группа кнопок, независимо от размера экрана</p>
+                        </div>
+
+                        <!-- Адаптивная вертикальная ориентация (вертикально на мобильном, горизонтально на десктопе) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивная вертикальная ориентация (sm breakpoint)</h4>
+                            <cmp-button-group
+                                vertical-breakpoint="sm"
+                                :buttons="[
+                                    { type: 'button', label: 'Короткая', variant: 'primary' },
+                                    { type: 'button', label: 'Средняя по длине', variant: 'secondary' },
+                                    { type: 'button', label: 'Очень длинная кнопка', variant: 'success' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Группа отображается вертикально на экранах &lt;576px и горизонтально на экранах ≥576px</p>
+                        </div>
+
+                        <!-- Адаптивность с checkbox (sm) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность с checkbox (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="sm"
+                                dropdown-label="Фильтры"
+                                dropdown-icon="fas fa-filter"
+                                dropdown-variant="outline-primary"
+                                :buttons="[
+                                    { type: 'checkbox', label: 'Фильтр 1', variant: 'outline-primary' },
+                                    { type: 'checkbox', label: 'Фильтр 2', variant: 'outline-primary', active: true },
+                                    { type: 'checkbox', label: 'Фильтр 3', variant: 'outline-primary' }
+                                ]"
+                                @button-change="(event, data) => console.log('Checkbox change:', data)">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Группа checkbox превращается в dropdown на экранах &lt;576px</p>
+                        </div>
+
+                        <!-- Адаптивность с radio (md) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность с radio (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="md"
+                                dropdown-label="Выбор"
+                                dropdown-icon="fas fa-check-circle"
+                                dropdown-variant="outline-success"
+                                :buttons="[
+                                    { type: 'radio', label: 'Вариант 1', variant: 'outline-success' },
+                                    { type: 'radio', label: 'Вариант 2', variant: 'outline-success', active: true },
+                                    { type: 'radio', label: 'Вариант 3', variant: 'outline-success' }
+                                ]"
+                                @button-change="(event, data) => console.log('Radio change:', data)">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Группа radio превращается в dropdown на экранах &lt;768px</p>
+                        </div>
+
+                        <!-- Адаптивность с наследованием стилей (lg) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность с наследованием стилей (lg breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="lg"
+                                dropdown-label="Инструменты"
+                                variant="info"
+                                size="sm"
+                                :buttons="[
+                                    { type: 'button', label: 'Инструмент 1', icon: 'fas fa-wrench' },
+                                    { type: 'button', label: 'Инструмент 2', icon: 'fas fa-screwdriver' },
+                                    { type: 'button', label: 'Инструмент 3', variant: 'warning', icon: 'fas fa-hammer' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Все кнопки наследуют info sm, кроме "Инструмент 3" (warning sm). Группа превращается в dropdown на экранах &lt;992px</p>
+                        </div>
+
+                        <!-- Адаптивность с разными размерами dropdown (xl) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность с разными размерами dropdown (xl breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="xl"
+                                dropdown-label="Большое меню"
+                                dropdown-icon="fas fa-bars"
+                                dropdown-variant="primary"
+                                dropdown-size="lg"
+                                :buttons="[
+                                    { type: 'button', label: 'Пункт 1', variant: 'primary', size: 'lg' },
+                                    { type: 'button', label: 'Пункт 2', variant: 'primary', size: 'lg' },
+                                    { type: 'button', label: 'Пункт 3', variant: 'primary', size: 'lg' }
+                                ]"
+                                @button-click="handleButtonGroupClick">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Группа превращается в большой dropdown на экранах &lt;1200px</p>
+                        </div>
+
+                        <!-- Адаптивность со смешанными типами (sm) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность со смешанными типами (sm breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="sm"
+                                dropdown-label="Действия"
+                                dropdown-icon="fas fa-ellipsis-h"
+                                variant="secondary"
+                                :buttons="[
+                                    { type: 'button', label: 'Сохранить', variant: 'primary', icon: 'fas fa-save' },
+                                    { type: 'checkbox', label: 'Автосохранение', variant: 'outline-secondary' },
+                                    { type: 'radio', label: 'Режим 1', variant: 'outline-info' },
+                                    { type: 'radio', label: 'Режим 2', variant: 'outline-info', active: true }
+                                ]"
+                                @button-click="handleButtonGroupClick"
+                                @button-change="(event, data) => console.log('Change:', data)">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Смешанная группа с button, checkbox и radio. Группа превращается в dropdown на экранах &lt;576px</p>
+                        </div>
+
+                        <!-- Адаптивность с кастомным dropdown (md) -->
+                        <div class="mb-3">
+                            <h4 class="h6 mb-2">Адаптивность с кастомным dropdown (md breakpoint) <span class="text-muted small">[Bootstrap-классы]</span></h4>
+                            <cmp-button-group
+                                collapse-breakpoint="md"
+                                dropdown-label="Опции"
+                                dropdown-icon="fas fa-cog"
+                                dropdown-variant="outline-dark"
+                                dropdown-size="sm"
+                                size="sm"
+                                :buttons="[
+                                    { type: 'button', label: 'Таймзона & i18n', variant: 'outline-dark', size: 'sm', icon: 'fas fa-adjust', onClick: () => vm.openTimezoneModal() },
+                                    { type: 'checkbox', label: 'Включить', variant: 'outline-dark' }
+                                ]"
+                                @button-click="handleButtonGroupClick"
+                                @button-change="(event, data) => console.log('Change:', data)">
+                            </cmp-button-group>
+                            <p class="mt-2 text-muted small">Компактная группа с кастомными настройками dropdown. Группа превращается в dropdown на экранах &lt;768px</p>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mb-4">Примеры компонента combobox</h2>
+
+                    <!-- Базовый комбобокс -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Базовый комбобокс</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue1"
+                                :items="comboboxItems"
+                                placeholder="Выберите или введите..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue1 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс с иконкой -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С иконкой</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue2"
+                                :items="comboboxItems"
+                                icon="fas fa-search"
+                                placeholder="Поиск..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue2 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс с автодополнением и подсветкой -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С автодополнением и подсветкой</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue3"
+                                :items="comboboxItems"
+                                :highlight-matches="true"
+                                placeholder="Начните вводить..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue3 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс с прокруткой -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С прокруткой (длинный список)</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue4"
+                                :items="comboboxLongList"
+                                :scrollable="true"
+                                max-height="200px"
+                                placeholder="Выберите из списка..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue4 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс только из списка (strict) -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Только из списка (strict, без произвольного ввода)</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue5"
+                                :items="comboboxItems"
+                                :strict="true"
+                                :allow-custom="false"
+                                placeholder="Только из списка..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue5 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс в режиме простого input -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Режим простого текстового поля (mode="input")</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue6"
+                                mode="input"
+                                placeholder="Простое текстовое поле..."
+                                @input="handleComboboxInput">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Значение: {{ comboboxValue6 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс с кастомной фильтрацией -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С кастомной функцией фильтрации</h3>
+                        <div style="max-width: 400px;">
+                            <cmp-combobox
+                                v-model="comboboxValue7"
+                                :items="comboboxItems"
+                                :filter-function="customFilterFunction"
+                                placeholder="Поиск по описанию..."
+                                @select="handleComboboxSelect">
+                            </cmp-combobox>
+                            <p class="mt-2 text-muted small">Выбрано: {{ comboboxValue7 || '(пусто)' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Комбобокс с длинным списком -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С длинным списком (без прокрутки)</h3>
+                        <div class="input-group mb-3" style="max-width: 400px;">
+                            <input type="text" class="form-control" placeholder="Выберите элемент..." aria-label="Комбобокс">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Элемент 1</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 2</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 3</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 4</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 5</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 6</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 7</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 8</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 9</a></li>
+                                <li><a class="dropdown-item" href="#">Элемент 10</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <hr class="my-5">
+
+                    <h2 class="mb-4">Примеры компонента button</h2>
+
+                    <!-- Базовые варианты -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Базовые варианты</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button label="Primary" variant="primary" @click="handleClick"></cmp-button>
+                            <cmp-button label="Secondary" variant="secondary" @click="handleClick"></cmp-button>
+                            <cmp-button label="Success" variant="success" @click="handleClick"></cmp-button>
+                            <cmp-button label="Danger" variant="danger" @click="handleClick"></cmp-button>
+                            <cmp-button label="Warning" variant="warning" @click="handleClick"></cmp-button>
+                            <cmp-button label="Info" variant="info" @click="handleClick"></cmp-button>
+                            <cmp-button label="Light" variant="light" @click="handleClick"></cmp-button>
+                            <cmp-button label="Dark" variant="dark" @click="handleClick"></cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Outline варианты -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Outline варианты</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button label="Primary" variant="outline-primary" @click="handleClick"></cmp-button>
+                            <cmp-button label="Secondary" variant="outline-secondary" @click="handleClick"></cmp-button>
+                            <cmp-button label="Success" variant="outline-success" @click="handleClick"></cmp-button>
+                            <cmp-button label="Danger" variant="outline-danger" @click="handleClick"></cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Размеры -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Размеры</h3>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <cmp-button label="Small" size="sm" @click="handleClick"></cmp-button>
+                            <cmp-button label="Default" @click="handleClick"></cmp-button>
+                            <cmp-button label="Large" size="lg" @click="handleClick"></cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- С иконками -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С иконками</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Сохранить"
+                                icon="fas fa-save"
+                                tooltip-icon="Иконка: Сохранить"
+                                tooltip-text="Основной текст: Сохранить изменения"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Удалить"
+                                icon="fas fa-trash"
+                                variant="danger"
+                                tooltip-icon="Иконка: Удалить"
+                                tooltip-text="Основной текст: Удалить элемент"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Загрузить"
+                                icon="fas fa-download"
+                                variant="success"
+                                tooltip-icon="Иконка: Загрузить"
+                                tooltip-text="Основной текст: Загрузить файл"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                icon="fas fa-cog"
+                                variant="secondary"
+                                tooltip-icon="Иконка: Настройки"
+                                tooltip-text="Основной текст: Открыть настройки"
+                                @click="handleClick">
+                            </cmp-button>
+                            <!-- С укороченным текстом на мобильных (без иконки) -->
+                            <cmp-button
+                                label="Сохранить изменения"
+                                label-short="Сохранить"
+                                tooltip-text="Основной текст: Сохранить все изменения"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Открыть настройки"
+                                label-short="Настройки"
+                                variant="secondary"
+                                tooltip-text="Основной текст: Открыть настройки приложения"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Размеры с иконками (квадратные обертки иконок) -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Размеры с иконками (квадратные обертки иконок)</h3>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <cmp-button
+                                label="Small"
+                                icon="fas fa-save"
+                                size="sm"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Default"
+                                icon="fas fa-save"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Large"
+                                icon="fas fa-save"
+                                size="lg"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                        <p class="text-muted small">Обратите внимание: обертки иконок квадратные и масштабируются вместе с размером кнопки (height: 1em, width: 1em - квадрат по высоте строки, flexbox центрирование)</p>
+                    </div>
+
+                    <!-- С суффиксами -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">С суффиксами</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Уведомления"
+                                icon="fas fa-bell"
+                                tooltip-icon="Иконка: Уведомления"
+                                tooltip-text="Основной текст: Просмотр уведомлений"
+                                :suffix="{ type: 'badge', value: 5, variant: 'secondary', tooltip: 'Суффикс: 5 новых уведомлений' }"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Экспорт"
+                                icon="fas fa-download"
+                                tooltip-icon="Иконка: Экспорт"
+                                tooltip-text="Основной текст: Экспорт данных"
+                                :suffix="{ type: 'icon', value: 'fas fa-external-link-alt', tooltip: 'Суффикс: Открыть в новой вкладке' }"
+                                @click="handleClick"
+                                @click-suffix="handleSuffixClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Соединение"
+                                icon="fas fa-wifi"
+                                tooltip-icon="Иконка: Соединение"
+                                tooltip-text="Основной текст: Статус подключения"
+                                :suffix="{ type: 'indicator', value: 'fas fa-circle text-success', tooltip: 'Суффикс: Статус: Активен' }"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Меню"
+                                tooltip-text="Основной текст: Раскрыть меню"
+                                :suffix="{ type: 'chevron', value: 'fas fa-chevron-down', expanded: isMenuExpanded, tooltip: 'Суффикс: Раскрыть/свернуть меню' }"
+                                @click="toggleMenu">
+                            </cmp-button>
+                            <cmp-button
+                                label="Справка"
+                                icon="fas fa-question-circle"
+                                tooltip-icon="Иконка: Справка"
+                                tooltip-text="Основной текст: Открыть справку"
+                                :suffix="{ type: 'info', value: 'fas fa-info-circle text-info', tooltip: 'Суффикс: Открыть справку' }"
+                                @click="handleClick"
+                                @click-suffix="handleInfoClick">
+                            </cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Множественные badge -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Множественные badge</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Уведомления"
+                                icon="fas fa-bell"
+                                tooltip-icon="Иконка: Уведомления"
+                                tooltip-text="Основной текст: Просмотр уведомлений"
+                                :suffix="[
+                                    { type: 'badge', value: 5, variant: 'secondary', tooltip: 'Суффикс 1: 5 новых уведомлений' },
+                                    { type: 'badge', value: 'New', variant: 'primary', tooltip: 'Суффикс 2: Новая функция' }
+                                ]"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Состояния -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Состояния</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button label="Active" @click="handleClick"></cmp-button>
+                            <cmp-button label="Disabled" :disabled="true" @click="handleClick"></cmp-button>
+                            <cmp-button label="Loading" :loading="true" @click="handleClick"></cmp-button>
+                            <cmp-button label="Disabled + Loading" :disabled="true" :loading="true" @click="handleClick"></cmp-button>
+                        </div>
+                    </div>
+
+                    <!-- Типы кнопок -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Типы кнопок</h3>
+                        <p class="text-muted small mb-2">На экранах &lt; 576px надписи замещаются иконками</p>
+                        <form class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Button"
+                                icon="fas fa-hand-pointer"
+                                type="button"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Submit"
+                                icon="fas fa-check"
+                                type="submit"
+                                variant="success"
+                                @click="handleClick">
+                            </cmp-button>
+                            <cmp-button
+                                label="Reset"
+                                icon="fas fa-undo"
+                                type="reset"
+                                variant="warning"
+                                @click="handleClick">
+                            </cmp-button>
+                        </form>
+                    </div>
+
+
+                    <!-- Адаптивность (мобильные состояния) -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Адаптивность (мобильные состояния)</h3>
+                        <p class="text-muted small mb-2">На мобильных устройствах текст скрывается, если есть иконка (измените размер окна для проверки)</p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button label="Сохранить" icon="fas fa-save" @click="handleClick"></cmp-button>
+                            <cmp-button label="Удалить" icon="fas fa-trash" variant="danger" @click="handleClick"></cmp-button>
+                            <cmp-button label="Настройки" icon="fas fa-cog" variant="secondary" @click="handleClick"></cmp-button>
+                            <cmp-button
+                                label="Уведомления"
+                                icon="fas fa-bell"
+                                :suffix="{ type: 'badge', value: 5, variant: 'secondary' }"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                        <p class="text-muted small mb-2">Текст всегда виден, если нет иконки:</p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button label="Только текст" @click="handleClick"></cmp-button>
+                            <cmp-button
+                                label="Текст с badge"
+                                :suffix="{ type: 'badge', value: 'New', variant: 'primary' }"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                        <p class="text-muted small mb-2">Адаптивность управляется через CSS классы (измените размер окна для проверки):</p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Сохранить"
+                                icon="fas fa-save"
+                                tooltip-icon="Иконка: Сохранить"
+                                tooltip-text="Основной текст: Сохранить изменения"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                        <p class="text-muted small mb-2">С укороченным текстом на мобильных:</p>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-button
+                                label="Сохранить изменения"
+                                label-short="Сохранить"
+                                @click="handleClick">
+                            </cmp-button>
+                        </div>
+                    </div>
+
+                    <hr class="my-5">
+
+                    <h2 class="mb-4">Примеры компонента dropdown</h2>
+
+                    <!-- Базовый dropdown -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Базовый dropdown</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-dropdown button-text="Выбрать пункт">
+                                <template #items>
+                                    <li><dropdown-menu-item title="Пункт 1" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 2" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 3" @click="handleClick"></dropdown-menu-item></li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С иконкой на мобильных -->
+                            <cmp-dropdown
+                                button-text="Выбрать пункт"
+                                button-icon="fas fa-chevron-down">
+                                <template #items>
+                                    <li><dropdown-menu-item title="Пункт 1" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 2" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 3" @click="handleClick"></dropdown-menu-item></li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С укороченным текстом на мобильных -->
+                            <cmp-dropdown
+                                button-text="Выбрать пункт"
+                                button-text-short="Выбрать">
+                                <template #items>
+                                    <li><dropdown-menu-item title="Пункт 1" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 2" @click="handleClick"></dropdown-menu-item></li>
+                                    <li><dropdown-menu-item title="Пункт 3" @click="handleClick"></dropdown-menu-item></li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown с поиском -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Dropdown с поиском</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-dropdown
+                                button-text="Поиск элементов"
+                                :searchable="true"
+                                :items="dropdownItems">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С иконкой на мобильных -->
+                            <cmp-dropdown
+                                button-text="Поиск элементов"
+                                button-icon="fas fa-search"
+                                :searchable="true"
+                                :items="dropdownItems">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С укороченным текстом на мобильных -->
+                            <cmp-dropdown
+                                button-text="Поиск элементов"
+                                button-text-short="Поиск"
+                                :searchable="true"
+                                :items="dropdownItems">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown с прокруткой -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Dropdown с прокруткой (длинный список)</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-dropdown
+                                button-text="Длинный список"
+                                :scrollable="true"
+                                max-height="300px">
+                                <template #items>
+                                    <li v-for="item in longList" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С иконкой на мобильных -->
+                            <cmp-dropdown
+                                button-text="Длинный список"
+                                button-icon="fas fa-list"
+                                :scrollable="true"
+                                max-height="300px">
+                                <template #items>
+                                    <li v-for="item in longList" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С укороченным текстом на мобильных -->
+                            <cmp-dropdown
+                                button-text="Длинный список"
+                                button-text-short="Список"
+                                :scrollable="true"
+                                max-height="300px">
+                                <template #items>
+                                    <li v-for="item in longList" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown с поиском и прокруткой -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Dropdown с поиском и прокруткой</h3>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <cmp-dropdown
+                                button-text="Поиск в длинном списке"
+                                :searchable="true"
+                                :scrollable="true"
+                                max-height="300px"
+                                :items="longList">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С иконкой на мобильных -->
+                            <cmp-dropdown
+                                button-text="Поиск в длинном списке"
+                                button-icon="fas fa-search"
+                                :searchable="true"
+                                :scrollable="true"
+                                max-height="300px"
+                                :items="longList">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                            <!-- С укороченным текстом на мобильных -->
+                            <cmp-dropdown
+                                button-text="Поиск в длинном списке"
+                                button-text-short="Поиск"
+                                :searchable="true"
+                                :scrollable="true"
+                                max-height="300px"
+                                :items="longList">
+                                <template #items="{ filteredItems }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleSelect(item)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown в режиме select (индикация выбранного пункта) -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Режим select (индикация выбранного пункта на кнопке)</h3>
+                        <p class="text-muted mb-3">Компонент dropdown может работать как ⟨select⟩, показывая выбранный пункт меню на кнопке триггера. Поддерживаются любые комбинации элементов: иконка, полный текст, укороченный текст, value.</p>
+
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <!-- Только иконка -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem1"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                item-icon="icon"
+                                item-label-short="labelShort"
+                                :button-display="{ icon: true, label: false, labelShort: false, value: false }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :icon="item.icon"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+
+                            <!-- Иконка + полный текст -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem2"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                item-icon="icon"
+                                :button-display="{ icon: true, label: true, labelShort: false, value: false }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :icon="item.icon"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+
+                            <!-- Иконка + укороченный текст (на мобильных) -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem3"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                item-icon="icon"
+                                item-label-short="labelShort"
+                                :button-display="{ icon: true, labelShort: true, label: false, value: false }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :icon="item.icon"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+
+                            <!-- Только полный текст -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem4"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                :button-display="{ icon: false, label: true, labelShort: false, value: false }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+
+                            <!-- Только value (id) -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem5"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                :button-display="{ icon: false, label: false, labelShort: false, value: true }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+
+                            <!-- Все вместе: иконка + полный текст + укороченный текст -->
+                            <cmp-dropdown
+                                :select-mode="true"
+                                v-model:selected-item="selectedDropdownItem6"
+                                :items="dropdownItems"
+                                item-label="name"
+                                item-value="id"
+                                item-icon="icon"
+                                item-label-short="labelShort"
+                                :button-display="{ icon: true, label: true, labelShort: true, value: false }"
+                                button-text="Выберите элемент">
+                                <template #items="{ filteredItems, handleItemSelect }">
+                                    <li v-for="item in filteredItems" :key="item.id">
+                                        <dropdown-menu-item
+                                            :title="item.name"
+                                            :icon="item.icon"
+                                            :subtitle="item.description"
+                                            @click="handleItemSelect(item, item.id)">
+                                        </dropdown-menu-item>
+                                    </li>
+                                </template>
+                            </cmp-dropdown>
+                        </div>
+                        <p class="text-muted small">
+                            Выбрано:
+                            Dropdown 1: {{ selectedDropdownItem1 || '(ничего)' }},
+                            Dropdown 2: {{ selectedDropdownItem2 || '(ничего)' }},
+                            Dropdown 3: {{ selectedDropdownItem3 || '(ничего)' }},
+                            Dropdown 4: {{ selectedDropdownItem4 || '(ничего)' }},
+                            Dropdown 5: {{ selectedDropdownItem5 || '(ничего)' }},
+                            Dropdown 6: {{ selectedDropdownItem6 || '(ничего)' }}
+                        </p>
+                    </div>
+
+                    <hr class="my-5">
+
+                    <h2 class="mb-4">Примеры компонента dropdown-menu-item</h2>
+
+                    <!-- Примеры компонента в разных состояниях -->
+                    <ul class="dropdown-menu show position-static d-block border shadow-sm p-0 mb-4" style="max-width: 400px;">
+                        <!-- Базовый пример -->
+                        <dropdown-menu-item
+                            title="Простой пункт меню"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С иконкой и подзаголовком -->
+                        <dropdown-menu-item
+                            title="Аналитика рынков"
+                            subtitle="Детальная статистика по всем торговым парам"
+                            icon="fas fa-chart-line"
+                            tooltip-icon="Иконка: Аналитика рынков"
+                            tooltip-text="Основной текст: Просмотр статистики"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С badge -->
+                        <dropdown-menu-item
+                            title="Уведомления"
+                            subtitle="Новые сообщения и обновления"
+                            icon="fas fa-bell"
+                            :suffix="{ type: 'badge', value: 5, variant: 'secondary', tooltip: 'Количество уведомлений' }"
+                            tooltip-icon="Иконка: Уведомления"
+                            tooltip-text="Основной текст: Просмотр уведомлений"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- Active состояние -->
+                        <dropdown-menu-item
+                            title="Настройки"
+                            subtitle="Конфигурация системы"
+                            icon="fas fa-cog"
+                            :active="true"
+                            tooltip-icon="Иконка: Настройки системы"
+                            tooltip-text="Основной текст: Конфигурация системы"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С иконкой-суффиксом -->
+                        <dropdown-menu-item
+                            title="Экспорт данных"
+                            subtitle="Сохранение в файл"
+                            icon="fas fa-download"
+                            :suffix="{ type: 'icon', value: 'fas fa-external-link-alt', tooltip: 'Открыть в новой вкладке' }"
+                            tooltip-icon="Иконка: Экспорт"
+                            tooltip-text="Основной текст: Экспорт данных"
+                            @click="handleClick"
+                            @click-suffix="handleSuffixClick">
+                        </dropdown-menu-item>
+
+                        <!-- С индикатором -->
+                        <dropdown-menu-item
+                            title="Соединение"
+                            subtitle="Статус подключения"
+                            icon="fas fa-wifi"
+                            :suffix="{ type: 'indicator', value: 'fas fa-circle text-success', tooltip: 'Статус: Активен' }"
+                            tooltip-icon="Иконка: Соединение"
+                            tooltip-text="Основной текст: Статус подключения"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С chevron (закрыт) -->
+                        <dropdown-menu-item
+                            title="Настройки"
+                            subtitle="Конфигурация системы"
+                            icon="fas fa-cog"
+                            :suffix="{ type: 'chevron', value: 'fas fa-chevron-right', expanded: false, tooltip: 'Раскрыть подменю' }"
+                            tooltip-icon="Иконка: Настройки"
+                            tooltip-text="Основной текст: Настройки"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С chevron (открыт) -->
+                        <dropdown-menu-item
+                            title="Настройки"
+                            subtitle="Конфигурация системы"
+                            icon="fas fa-cog"
+                            :suffix="{ type: 'chevron', value: 'fas fa-chevron-right', expanded: true, tooltip: 'Свернуть подменю' }"
+                            tooltip-icon="Иконка: Настройки"
+                            tooltip-text="Основной текст: Настройки"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- С info (справка) -->
+                        <dropdown-menu-item
+                            title="Расширенная аналитика"
+                            subtitle="Премиум функции"
+                            icon="fas fa-chart-bar"
+                            :suffix="{ type: 'info', value: 'fas fa-info-circle text-info', tooltip: 'Открыть справку' }"
+                            tooltip-icon="Иконка: Аналитика"
+                            tooltip-text="Основной текст: Расширенная аналитика"
+                            @click="handleClick"
+                            @click-suffix="handleInfoClick">
+                        </dropdown-menu-item>
+
+                        <!-- Disabled состояние -->
+                        <dropdown-menu-item
+                            title="Заблокировано"
+                            subtitle="Функция недоступна"
+                            icon="fas fa-lock"
+                            :disabled="true"
+                            tooltip-icon="Иконка: Заблокировано"
+                            tooltip-text="Основной текст: Функция недоступна"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+
+                        <!-- Длинный текст с переносом -->
+                        <dropdown-menu-item
+                            title="Очень длинный заголовок пункта меню который должен переноситься на несколько строк"
+                            subtitle="И очень длинный подзаголовок который тоже должен переноситься на несколько строк для проверки работы text-wrap"
+                            icon="fas fa-file-alt"
+                            :suffix="{ type: 'badge', value: 'New', variant: 'primary', tooltip: 'Новая функция' }"
+                            tooltip-icon="Иконка: Документ"
+                            tooltip-text="Основной текст: Длинный текст"
+                            @click="handleClick">
+                        </dropdown-menu-item>
+                    </ul>
+                </div>
+
+                <!-- DEBUG: Тестовые кнопки для Data Provider -->
+                <div class="container mb-4">
+                    <div class="card">
+                        <div class="card-header bg-warning">
+                            <strong>🧪 ТЕСТ: Data Provider API</strong>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3">Провайдер данных:</h6>
+                            <div class="btn-group mb-3" role="group">
+                                <button type="button" class="btn btn-primary" @click="testLoadTopCoins">
+                                    Загрузить топ 10 монет
+                                </button>
+                                <button type="button" class="btn btn-info" @click="testSearchCoins">
+                                    Поиск "bitcoin"
+                                </button>
+                                <button type="button" class="btn btn-secondary" @click="clearTestResults">
+                                    Очистить
+                                </button>
+                            </div>
+                            <hr>
+                            <h6 class="mb-3">Наборы монет (требуется авторизация):</h6>
+                            <div class="btn-group mb-3" role="group">
+                                <button type="button" class="btn btn-success" @click="testCreateCoinSet">
+                                    Создать набор
+                                </button>
+                                <button type="button" class="btn btn-primary" @click="testGetCoinSets">
+                                    Получить наборы
+                                </button>
+                                <button type="button" class="btn btn-danger" @click="testDeleteLastCoinSet">
+                                    Удалить последний
+                                </button>
+                            </div>
+                            <div v-if="testLoading" class="alert alert-info">
+                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                Загрузка...
+                            </div>
+                            <div v-if="testError" class="alert alert-danger">
+                                <strong>Ошибка:</strong> {{ testError }}
+                            </div>
+                            <div v-if="testCoinSets && testCoinSets.length > 0" class="mb-3">
+                                <h6>Ваши наборы монет ({{ testCoinSets.length }}):</h6>
+                                <ul class="list-group">
+                                    <li v-for="set in testCoinSets" :key="set.id" class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ set.name }}</strong>
+                                            <span class="badge bg-secondary ms-2">{{ set.coin_ids.length }} монет</span>
+                                            <span v-if="set.is_active" class="badge bg-success ms-2">Активен</span>
+                                            <span v-else class="badge bg-warning ms-2">Архив</span>
+                                            <br>
+                                            <small class="text-muted">{{ set.description || 'Без описания' }}</small>
+                                        </div>
+                                        <span class="badge bg-primary">ID: {{ set.id }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div v-if="testResults && testResults.length > 0">
+                                <h6>Результаты ({{ testResults.length }} монет):</h6>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Coin</th>
+                                            <th>Price</th>
+                                            <th>24h %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="coin in testResults" :key="coin.id">
+                                            <td>{{ coin.market_cap_rank }}</td>
+                                            <td>
+                                                <coin-block
+                                                    :coin-id="coin.id"
+                                                    :symbol="coin.symbol"
+                                                    :name="coin.name"
+                                                    :image="coin.image"
+                                                    :fallback-image="coin.fallback_image"
+                                                    @context-menu="handleCoinContextMenu">
+                                                </coin-block>
+                                            </td>
+                                            <td>${{ coin.current_price?.toLocaleString() }}</td>
+                                            <td :class="{'text-success': coin.price_change_percentage_24h > 0, 'text-danger': coin.price_change_percentage_24h < 0}">
+                                                {{ coin.price_change_percentage_24h?.toFixed(2) }}%
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer приложения (фиксирован к низу) -->
+        <app-footer ref="appFooter" @open-timezone-modal="openTimezoneModal"></app-footer>
+
+        <!-- Глобальный контейнер системных сообщений (сплэш снизу) -->
+        <div
+            v-if="hasGlobalSystemMessages"
+            class="global-system-messages-container"
+            data-bs-theme="dark"
+        >
+            <div class="container-fluid px-3 px-md-5">
+                <cmp-system-messages scope="global" :horizontal-scroll="true"></cmp-system-messages>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- Модульная система загрузки скриптов -->
+    <!-- Конфигурация модулей (описывает все модули и их зависимости) -->
+    <script src="core/modules-config.js"></script>
+    <!-- Загрузчик модулей (автоматически загружает модули в правильном порядке) -->
+    <script src="core/module-loader.js"></script>
+    <!-- Загрузка всех модулей через модульную систему -->
+    <script>
+        (function() {
+            'use strict';
+            // Загружаем все модули после загрузки DOM
+            function initModules() {
+                if (!window.moduleLoader || !window.moduleLoader.hasConfig()) {
+                    console.error('module-loader: загрузчик модулей или конфигурация не найдены');
+                    return;
+                }
+
+                window.moduleLoader.load()
+                    .then(function() {
+                        console.log('module-loader: все модули загружены, приложение готово');
+                    })
+                    .catch(function(error) {
+                        console.error('module-loader: ошибка загрузки модулей:', error);
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initModules);
+            } else {
+                initModules();
+            }
+        })();
+    </script>
+
+    <!-- X-Templates для Vue компонентов -->
+    <script type="text/x-template" id="coin-block-template">
+        <div
+            :class="['coin-block d-flex align-items-center', instanceHash, cssClasses.container]"
+            :title="tooltipTitle"
+            @click="handleClick"
+            @contextmenu.prevent="handleContextMenu"
+            style="cursor: pointer;">
+            <img
+                v-if="image"
+                :src="image"
+                :alt="symbol || name || coinId"
+                :class="['coin-block__icon', cssClasses.icon]"
+                class="me-2"
+                width="24"
+                height="24">
+            <span
+                :class="['coin-block__symbol', cssClasses.symbol]"
+                class="text-uppercase fw-bold">{{ symbol || coinId }}</span>
+        </div>
+    </script>
+
+</body>
+</html>

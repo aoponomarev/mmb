@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app - Statistics</title>
+
+    <!--
+    ================================================================================================
+    5. Инициализация приложения
+    ================================================================================================
+
+    ЦЕЛЬ: index.html - стартовая страница приложения с минимальной разметкой (header + footer).
+    Примеры и тестирование компонентов находятся в test.html.
+
+    ------------------------------------------------------------------------------------------------
+    МОДУЛЬНАЯ СИСТЕМА
+    ------------------------------------------------------------------------------------------------
+
+    Проект использует модульную систему загрузки без bundler'ов:
+    - core/modules-config.js - конфигурация всех модулей и зависимостей
+    - core/module-loader.js - динамическая загрузка модулей в правильном порядке
+    - core/template-loader.js - загрузка Vue x-template шаблонов
+
+    ------------------------------------------------------------------------------------------------
+    МОДУЛЬНАЯ СИСТЕМА
+    ------------------------------------------------------------------------------------------------
+
+    app/ - корневой компонент приложения
+    core/ - базовые утилиты, конфигурация, API
+    shared/ - переиспользуемые компоненты, стили, утилиты
+    features/ - функциональные модули (markets, portfolios, metrics)
+    styles/ - CSS файлы (wrappers, layout, custom)
+    docs/ - документация проекта
+
+    ------------------------------------------------------------------------------------------------
+    ПОРЯДОК ЗАГРУЗКИ
+    ------------------------------------------------------------------------------------------------
+
+    1. Bootstrap CSS и внешние стили
+    2. Локальные стили (wrappers, layout, custom)
+    3. Bootstrap JS
+    4. Модульная система (modules-config.js + module-loader.js)
+    5. Инициализация приложения
+
+    ------------------------------------------------------------------------------------------------
+    ДОКУМЕНТАЦИЯ
+    ------------------------------------------------------------------------------------------------
+
+    Архитектура: a/skills/app/skills/architecture/
+    Правила документации: a/skills/all/skills/process/process-doc-levels.md
+    Компоненты: a/skills/app/skills/components/components-overview.md
+    Библиотеки: a/skills/app/skills/libs/libs-app-config.md
+
+    ================================================================================================
+    -->
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- Стили компонентов (порядок загрузки важен!) -->
+    <!-- 1. Базовые обертки над Bootstrap (независимые) -->
+    <link rel="stylesheet" href="styles/wrappers/button.css">
+    <link rel="stylesheet" href="styles/wrappers/dropdown-menu-item.css">
+    <!-- 2. Составные обертки над Bootstrap (зависят от базовых) -->
+    <link rel="stylesheet" href="styles/wrappers/dropdown.css">
+    <link rel="stylesheet" href="styles/wrappers/button-group.css">
+    <!-- 3. Компоненты макета -->
+    <link rel="stylesheet" href="styles/layout/header.css">
+    <link rel="stylesheet" href="styles/layout/footer.css">
+    <link rel="stylesheet" href="styles/layout/scrollbars.css">
+    <link rel="stylesheet" href="styles/layout/messages-splash.css">
+    <!-- 4. Кастомные стили компонентов -->
+    <link rel="stylesheet" href="styles/custom/combobox.css">
+    <link rel="stylesheet" href="styles/custom/modal-header-tabs.css">
+    <link rel="stylesheet" href="styles/custom/modal-themed.css">
+    <link rel="stylesheet" href="styles/layout/table-columns.css">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Material Symbols (Sharp) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,400,0,0" />
+
+    <!-- Iconify (иконные коллекции) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+</head>
+<body class="min-vh-100 d-flex flex-column">
+    <style>
+        [v-cloak] {
+            display: none !important;
+        }
+        /* Минимальные стили для счетчика монет */
+        .cg-counter-ring {
+            flex-shrink: 0;
+        }
+        .cg-counter-ring-bg {
+            color: var(--bs-body-color);
+        }
+        .cg-counter-ring-progress {
+            color: var(--bs-primary);
+        }
+        /* Цветизация числовых ячеек через data-value-sign (Bootstrap классы) */
+        [data-value-sign="positive"] > span {
+            color: var(--bs-success) !important;
+        }
+        [data-value-sign="negative"] > span {
+            color: var(--bs-danger) !important;
+        }
+        [data-value-sign="zero"] > span {
+            color: var(--bs-secondary) !important;
+        }
+        /* Подсветка выбранных строк таблицы с учетом темы */
+        /* Подсветка выбранных строк: нейтральный серый 50% с opacity 0.25 */
+        .coin-row-selected,
+        .coin-row-selected > td {
+            background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
+            transition: background-color 150ms ease;
+        }
+        [data-bs-theme="dark"] .coin-row-selected,
+        [data-bs-theme="dark"] .coin-row-selected > td {
+            background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
+        }
+        /* Универсальный класс для мягкой подсветки при наведении (аналог выделенной строки) */
+        /* Используем более специфичный селектор для гарантированного перекрытия Bootstrap */
+        .dropdown-item.bg-hover-secondary-soft:hover,
+        .dropdown-item.bg-hover-secondary-soft:focus,
+        .dropdown-item.bg-hover-secondary-soft.active:hover,
+        .bg-hover-secondary-soft:hover {
+            background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+            color: inherit !important;
+            transition: background-color 150ms ease;
+        }
+        /* Анимация перемещения строк при сортировке */
+        .coin-row-item {
+            position: relative;
+        }
+        .coin-row-move {
+            transition: transform 300ms ease, opacity 200ms ease;
+            z-index: 10;
+            transform: translateZ(0);
+            will-change: transform, opacity;
+            background-color: var(--bs-body-bg) !important;
+            display: table-row;
+        }
+        .coin-row-enter-active,
+        .coin-row-leave-active {
+            transition: opacity 200ms ease, transform 300ms ease;
+            z-index: 10;
+            transform: translateZ(0);
+            will-change: transform, opacity;
+            background-color: var(--bs-body-bg) !important;
+            display: table-row;
+        }
+        .coin-row-enter-from,
+        .coin-row-leave-to {
+            opacity: 0;
+        }
+        /* Выравнивание coin-block по содержимому */
+        .coin-block-wrapper {
+            align-items: center;
+            line-height: 1.1;
+        }
+        .coin-block {
+            min-height: 24px;
+        }
+        .coin-block__icon {
+            width: 24px;
+            height: 24px;
+        }
+
+                /* Стили для IconManager */
+                .icon-drop-zone {
+                    transition: all 0.2s ease;
+                    background-color: var(--bs-body-bg);
+                    min-height: 120px;
+                }
+                .icon-drop-zone:hover {
+                    border-color: var(--bs-primary) !important;
+                    background-color: rgba(var(--bs-primary-rgb), 0.05);
+                }
+                .uppercase {
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                .x-small {
+                    font-size: 0.7rem;
+                }
+    </style>
+    <div id="app" class="flex-grow-1 d-flex flex-column">
+        <!-- Header приложения (фиксирован к верху) -->
+        <app-header
+            :is-authenticated="isAuthenticated"
+            :display-tabs="displayTabs"
+            :horizon-days="horizonDays"
+            :mdn-hours="mdnHours"
+            :mdn-value="mdnValue"
+            :agr-method="agrMethod"
+            :recommended-agr-method="recommendedAgrMethod"
+            :medians="infoBoxMedians"
+            :market-breadth="infoBoxBreadth"
+            :market-direction="infoBoxDirection"
+            :portfolio="infoBoxPortfolio"
+            :user-portfolios="userPortfolios"
+            :current-language="currentTranslationLanguage"
+            @tab-toggle="handleTabToggle"
+            @horizon-change="handleHorizonChange"
+            @mdn-hours-change="handleMdnHoursChange"
+                @agr-method-change="handleAgrMethodChange"
+                @create-portfolio="handleCreatePortfolio"
+                @view-portfolio="handleViewPortfolio"
+        >
+            <template #menu-items>
+                <li v-for="item in mainMenuItems" :key="item.id">
+                    <dropdown-menu-item
+                        :title="menusConfig?.getMenuItemTitle(item.title) || item.title"
+                        :icon="item.icon"
+                        :classes-add="item.classesAdd"
+                        :no-wrap="true"
+                        :auto-close-parent="item.handler !== 'switchToMathModelsMenu' && item.handler !== 'switchToMainMenu'"
+                        @click="handleMenuClick(item)">
+                    </dropdown-menu-item>
+                </li>
+            </template>
+            <template #portfolio-items>
+                <li v-for="item in portfolioActionMenuItems" :key="item.id">
+                    <a class="dropdown-item d-flex align-items-center py-2 px-3"
+                       href="#" @click.prevent="handleMenuClick(item)">
+                        <i :class="[item.icon, 'fa-fw', 'fa-lg', 'me-2']"></i>
+                        <span class="small">{{ menusConfig?.getMenuItemTitle(item.title) || item.title }}</span>
+                    </a>
+                </li>
+            </template>
+            <template #settings-items>
+                <li v-for="item in settingsMenuItems" :key="item.id">
+                    <dropdown-menu-item
+                        :title="menusConfig?.getMenuItemTitle(item.title) || (typeof item.title === 'string' ? item.title : '')"
+                        :no-wrap="true"
+                        @click="handleMenuClick(item)">
+                    </dropdown-menu-item>
+                </li>
+            </template>
+        </app-header>
+
+        <!-- Основной контент с отступами для header и footer (Bootstrap spacing utilities) -->
+        <div class="container-fluid pt-0 pb-5 d-flex flex-column flex-grow-1">
+            <main class="flex-grow-1 d-flex flex-column" style="min-height: 0;">
+                <!-- Простая таблица монет (без обвесов, для проверки импорта данных) -->
+                <div class="container flex-grow-1 d-flex flex-column" style="min-height: 0;">
+                    <div v-if="coinsLoading" class="text-center py-5">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+                    <div v-else-if="coinsError" class="alert alert-danger">
+                        <strong>Ошибка:</strong> {{ coinsError }}
+                    </div>
+                    <div v-else class="table-responsive flex-grow-1" style="overflow: auto; min-height: 0;">
+                        <table class="table table-sm">
+                        <!-- Colgroup для управления видимостью колонок через CSS -->
+                        <colgroup>
+                            <col style="width: 1%; display: none;">
+                            <col style="width: 1%;">
+                            <col style="width: 7em;">
+                            <col :style="priceColumnStyle">
+                            <!-- Percent columns -->
+                            <col :class="columnVisibilityClasses['col-percent-1h']">
+                            <col :class="columnVisibilityClasses['col-percent-24h']">
+                            <col :class="columnVisibilityClasses['col-percent-7d']">
+                            <col :class="columnVisibilityClasses['col-percent-14d']">
+                            <col :class="columnVisibilityClasses['col-percent-30d']">
+                            <col :class="columnVisibilityClasses['col-percent-200d']">
+                            <!-- Complex Deltas columns -->
+                            <col :class="columnVisibilityClasses['col-cd-1w']">
+                            <col :class="columnVisibilityClasses['col-cd-2w']">
+                            <col :class="columnVisibilityClasses['col-cd-3w']">
+                            <col :class="columnVisibilityClasses['col-cd-4w']">
+                            <col :class="columnVisibilityClasses['col-cd-5w']">
+                            <col :class="columnVisibilityClasses['col-cd-6w']">
+                            <col :class="columnVisibilityClasses['col-cd-h']">
+                            <!-- Gradients columns -->
+                            <col :class="columnVisibilityClasses['col-cgr-2']">
+                            <col :class="columnVisibilityClasses['col-cgr-3']">
+                            <col :class="columnVisibilityClasses['col-cgr-4']">
+                            <col :class="columnVisibilityClasses['col-cgr-5']">
+                            <col :class="columnVisibilityClasses['col-cgr-6']">
+                            <col :class="columnVisibilityClasses['col-cgr-sum']">
+                            <!-- Balance AGR column (moved to front) -->
+                            <col :class="columnVisibilityClasses['col-balance-agr']">
+                            <!-- MAX PV column -->
+                            <col :class="columnVisibilityClasses['col-max-pv']">
+                            <!-- min PV column -->
+                            <col :class="columnVisibilityClasses['col-min-pv']">
+                            <!-- Stability methods columns -->
+                            <col :class="columnVisibilityClasses['col-stability-dcs']">
+                            <col :class="columnVisibilityClasses['col-stability-tsi']">
+                            <col :class="columnVisibilityClasses['col-stability-mp']">
+                            <!-- Balance CPT/DIN columns -->
+                            <col :class="columnVisibilityClasses['col-balance-cpt']">
+                            <col :class="columnVisibilityClasses['col-balance-din']">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="d-none"></th>
+                                <th class="p-2">
+                                    <cmp-dropdown
+                                        dropdown-id="dropdown-selected-counter"
+                                        button-variant="link"
+                                        :classes-add="{
+                                            root: 'd-inline-flex',
+                                            button: 'p-0 border-0 text-decoration-none d-flex align-items-center justify-content-center',
+                                            menu: 'shadow-sm'
+                                        }"
+                                        :classes-remove="{ button: 'dropdown-toggle' }">
+
+                                        <template #button="{ toggle }">
+                                            <div
+                                                @click="toggle"
+                                                data-bs-toggle="dropdown"
+                                                class="position-relative d-inline-flex align-items-center justify-content-center"
+                                                style="width: 30px; height: 30px; cursor: pointer;">
+                                                <!-- Круговая диаграмма (разорванное кольцо) при выбранных чекбоксах -->
+                                                <svg v-if="selectedCoinsCount > 0" class="cg-counter-ring" viewBox="0 0 36 36" style="width: 30px; height: 30px; position: absolute;">
+                                                    <circle
+                                                        class="cg-counter-ring-bg"
+                                                        cx="18"
+                                                        cy="18"
+                                                        r="15.915"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="0.5"
+                                                        opacity="0.2"
+                                                    />
+                                                    <circle
+                                                        class="cg-counter-ring-progress"
+                                                        cx="18"
+                                                        cy="18"
+                                                        r="15.915"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        :stroke-dasharray="`${selectedCoinsPercentage * 100} ${(1 - selectedCoinsPercentage) * 100}`"
+                                                        :stroke-dashoffset="selectedCoinsPercentage === 1 ? 0 : 25"
+                                                        transform="rotate(-90 18 18)"
+                                                    />
+                                                </svg>
+                                                <!-- Число: выбранные или общее (по центру) -->
+                                                <span style="position: relative; z-index: 1; font-size: 0.75rem; font-weight: normal;">{{ selectedCoinsCount > 0 ? selectedCoinsCount : totalCoinsCount }}</span>
+                                            </div>
+                                        </template>
+
+                                        <template #items>
+                                            <template v-for="item in coinActionMenuItems" :key="item.id">
+                                                <li v-if="item.type === 'divider'"><hr class="dropdown-divider"></li>
+                                                <dropdown-menu-item
+                                                    v-else
+                                                    :title="menusConfig?.getMenuItemTitle(item.title) || item.title"
+                                                    :icon="item.icon"
+                                                    highlight-class="bg-hover-secondary-soft"
+                                                    @click="handleMenuClick(item)">
+                                                </dropdown-menu-item>
+                                            </template>
+                                        </template>
+                                    </cmp-dropdown>
+                                </th>
+                                <th colspan="999">
+                                    <div class="d-flex gap-2 align-items-center" style="width:100%;">
+                                        <button
+                                            type="button"
+                                            :class="['btn', 'btn-link', 'p-0', 'text-decoration-none', 'text-secondary', headerActionHover === 'load-save' ? 'opacity-100' : 'opacity-50']"
+                                            :title="getCoinSetActionTitle()"
+                                            @mouseenter="headerActionHover = 'load-save'"
+                                            @mouseleave="headerActionHover = null"
+                                            @click="selectedCoinIds.length === 0 ? openCoinSetLoadModal() : openCoinSetSaveModal()">
+                                            <i :class="[selectedCoinIds.length === 0 ? 'fas fa-folder-open' : 'fas fa-save', 'fa-fw', 'text-secondary']"></i>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            :class="[
+                                                'btn',
+                                                'btn-link',
+                                                'p-0',
+                                                'text-decoration-none',
+                                                isCoinsCacheStale ? 'text-primary' : 'text-secondary',
+                                                !isCoinsCacheStale ? (headerActionHover === 'refresh' ? 'opacity-100' : 'opacity-50') : null
+                                            ]"
+                                            :title="getRefreshTitle"
+                                            @mouseenter="headerActionHover = 'refresh'"
+                                            @mouseleave="headerActionHover = null"
+                                            @click="refreshCoinsCache()">
+                                            <i :class="['fas', 'fa-sync-alt', 'fa-fw', isCoinsCacheStale ? 'text-primary' : 'text-secondary']"></i>
+                                        </button>
+                                        <cmp-dropdown
+                                            dropdown-id="dropdown-favorites-header"
+                                            button-variant="link"
+                                            button-icon="fas fa-star"
+                                            button-text="Избранное"
+                                            :classes-add="{
+                                                root: 'd-inline-flex',
+                                                button: headerActionHover === 'favorites' ? 'p-0 border-0 text-decoration-none text-secondary opacity-100' : 'p-0 border-0 text-decoration-none text-secondary opacity-50',
+                                                menu: 'shadow-sm'
+                                            }"
+                                            :classes-remove="{ button: 'dropdown-toggle' }"
+                                            scrollable="true"
+                                            :max-height="'300px'"
+                                            :close-on-outside-click="true"
+                                            @mouseenter="headerActionHover = 'favorites'"
+                                            @mouseleave="headerActionHover = null">
+                                            <template #items>
+                                                <li v-if="favoriteCoinsList.length === 0" class="px-3 py-2 text-muted text-center">
+                                                    Нет избранных монет
+                                                </li>
+                                                <li v-for="coin in favoriteCoinsList" :key="coin.id">
+                                                    <div class="dropdown-item d-flex align-items-center gap-2">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-link p-0 border-0 flex-grow-1 d-flex align-items-center text-body text-decoration-none"
+                                                            @click.prevent="handleSelectFavoriteCoin(coin.id)">
+                                                        <img v-if="coin.image"
+                                                             :src="coin.image"
+                                                             :alt="coin.symbol"
+                                                             class="me-2"
+                                                             width="20"
+                                                             height="20"
+                                                             @error="if (coin.fallbackIcon && $event.target.src !== coin.fallbackIcon) { $event.target.src = coin.fallbackIcon; } else { $event.target.style.visibility = 'hidden'; }">
+                                                        <span class="text-uppercase fw-semibold">{{ coin.symbol }}</span>
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-link p-0 border-0 ms-2 d-inline-flex align-items-center justify-content-center text-decoration-none"
+                                                            :class="[coin.inTable && favoriteActionHoverId !== coin.id ? 'text-success' : 'text-body']"
+                                                            :style="{ opacity: !coin.inTable && favoriteActionHoverId !== coin.id ? 0.5 : (favoriteActionHoverId === coin.id ? 0.6 : 1), cursor: 'pointer' }"
+                                                            @mouseenter="favoriteActionHoverId = coin.id"
+                                                            @mouseleave="favoriteActionHoverId = null"
+                                                            @click.stop="handleFavoriteRemoveFromTableOrFavorites(coin.id)"
+                                                        >
+                                                            <i :class="[getFavoriteIndicatorIcon(coin), 'fa-fw']"></i>
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                        </cmp-dropdown>
+                                        <cmp-dropdown
+                                            dropdown-id="dropdown-search-add"
+                                            button-variant="link"
+                                            button-icon="fa-solid fa-magnifying-glass"
+                                            button-text="Найти монеты"
+                                            :close-on-outside-click="true"
+                                            :auto-close="false"
+                                            :scrollable="true"
+                                            :max-height="'320px'"
+                                            :menu-style="{ marginTop: '-5.5ex' }"
+                                            :classes-add="{
+                                                root: 'd-inline-flex',
+                                                button: headerActionHover === 'search' ? 'p-0 border-0 text-decoration-none text-secondary opacity-100' : 'p-0 border-0 text-decoration-none text-secondary opacity-50',
+                                                menu: 'shadow-sm'
+                                            }"
+                                            :classes-remove="{ button: 'dropdown-toggle' }"
+                                            @show="handleSearchDropdownShow"
+                                            @mouseenter="headerActionHover = 'search'"
+                                            @mouseleave="headerActionHover = null"
+                                        >
+                                            <template #items>
+                                                <li class="px-3 py-2">
+                                                    <input
+                                                        type="text"
+                                                        class="form-control form-control-sm"
+                                                        v-model="searchQuery"
+                                                        placeholder="Поиск тикера"
+                                                        @input="handleSearchInput"
+                                                        @keyup.enter.prevent="handleSearchSubmit"
+                                                        ref="searchInputAdd"
+                                                    />
+                                                </li>
+                                                <li v-if="searchInTableTickers.length" class="px-3 py-2 text-success small">
+                                                    <i class="fa-solid fa-check me-1"></i>
+                                                    <span :title="tooltipsConfig?.getTooltip('ui.search.alreadyInTable')">
+                                                        <span
+                                                            v-for="entry in searchInTableTickers"
+                                                            :key="`in-table-${entry.id}`"
+                                                            class="me-2 cursor-pointer"
+                                                            :style="{ textDecoration: isCoinSelected(entry.id) ? 'underline' : 'none' }"
+                                                            @click.stop.prevent="toggleCoinSelectionById(entry.id)"
+                                                        >
+                                                            {{ entry.symbol }}
+                                                        </span>
+                                                    </span>
+                                                </li>
+                                                <li v-if="searchLoading" class="px-3 py-2 text-muted small">
+                                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>Поиск...
+                                                </li>
+                                                <dropdown-menu-item
+                                                    v-for="res in searchExactResults"
+                                                    :key="`exact-${res.id}`"
+                                                    :title="res.name"
+                                                    :subtitle="res.symbol.toUpperCase()"
+                                                    :icon="getIconUrlForSearch(res)"
+                                                    :fallback-icon="res.image"
+                                                    :auto-close-parent="false"
+                                                    highlight-class="bg-hover-secondary-soft"
+                                                    @click="handleSearchSelect(res)"
+                                                >
+                                                </dropdown-menu-item>
+                                                <li v-if="searchExactResults.length && searchSimilarResults.length" class="dropdown-divider my-1"></li>
+                                                <dropdown-menu-item
+                                                    v-for="res in searchSimilarResults"
+                                                    :key="`similar-${res.id}`"
+                                                    :title="res.name"
+                                                    :subtitle="res.symbol.toUpperCase()"
+                                                    :icon="getIconUrlForSearch(res)"
+                                                    :fallback-icon="res.image"
+                                                    :auto-close-parent="false"
+                                                    highlight-class="bg-hover-secondary-soft"
+                                                    @click="handleSearchSelect(res)"
+                                                >
+                                                </dropdown-menu-item>
+                                            </template>
+                                        </cmp-dropdown>
+                                        <!-- Индикатор монет в облачной БД — прижат вправо через ms-auto -->
+                                        <span
+                                            v-if="dbStatus.loading"
+                                            class="text-muted ms-auto"
+                                            style="font-size: 0.7rem; opacity: 0.5;"
+                                            title="Запрос к облачной БД...">
+                                            <span class="spinner-border spinner-border-sm" style="width: 0.6rem; height: 0.6rem; border-width: 1px;" role="status"></span>
+                                        </span>
+                                        <button
+                                            type="button"
+                                            v-else-if="dbStatus.count !== null"
+                                            class="btn btn-link text-muted ms-auto p-0 border-0 text-decoration-none"
+                                            style="font-size: 0.7rem; opacity: 0.6; white-space: nowrap;"
+                                            :title="`Монет в облачной БД (PostgreSQL): ${dbStatus.count}. Нажмите для истории Cron`"
+                                            @click="openCoinGeckoCronHistoryModal">
+                                            <i class="fas fa-database me-1" style="font-size: 0.6rem;"></i>{{ dbStatus.count }}
+                                        </button>
+                                        <span
+                                            v-else-if="dbStatus.error"
+                                            class="text-danger ms-auto"
+                                            style="font-size: 0.7rem; opacity: 0.5;"
+                                            title="Облачная БД недоступна">
+                                            <i class="fas fa-database me-1" style="font-size: 0.6rem;"></i>—
+                                        </span>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="d-none">#</th>
+                                <th class="text-center">
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        :checked="allCoinsSelected"
+                                        @change="handleToggleAllCoins">
+                                </th>
+                                <th>
+                                    <div class="position-relative d-inline-flex align-items-center" style="overflow: visible;">
+                                        <span class="fw-semibold me-2" style="cursor: pointer;" @click.stop="showCoinSortDropdown = !showCoinSortDropdown">Coin</span>
+                                        <span v-if="coinSortType" class="material-symbols-sharp ms-1" style="font-size: 1rem; cursor: default; opacity: 0.5;" :title="getCoinSortTypeTitle(coinSortType)">{{ getCoinSortTypeIcon(coinSortType) }}</span>
+                                        <ul v-if="showCoinSortDropdown" class="dropdown-menu show position-absolute" style="top: 100%; left: 0; margin-top: 4px; z-index: 1000; min-width: 200px;" @click.stop>
+                                            <dropdown-menu-item
+                                                v-for="item in coinSortMenuItems"
+                                                :key="item.id"
+                                                :title="item.title"
+                                                :active="coinSortType === item.sortType"
+                                                highlight-class="bg-hover-secondary-soft"
+                                                @click="handleSetCoinSortType(item.sortType)">
+                                            </dropdown-menu-item>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <dropdown-menu-item
+                                                :title="getPriceColumnTitle()"
+                                                highlight-class="bg-hover-secondary-soft"
+                                                @click="togglePriceColumn">
+                                            </dropdown-menu-item>
+                                        </ul>
+                                    </div>
+                                </th>
+                                <th v-if="showPriceColumn" class="text-end">
+                                    <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header>
+                                </th>
+                                <!-- Percent columns -->
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-1h']]"><sortable-header field="price_change_percentage_1h" label="1h%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-24h']]"><sortable-header field="price_change_percentage_24h" label="24h%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-7d']]"><sortable-header field="price_change_percentage_7d" label="7d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-14d']]"><sortable-header field="price_change_percentage_14d" label="14d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-30d']]"><sortable-header field="price_change_percentage_30d" label="30d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-percent-200d']]"><sortable-header field="price_change_percentage_200d" label="200d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <!-- Complex Deltas columns -->
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-1w']]"><sortable-header field="metrics.cdWeighted.0" label="CD1w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-2w']]"><sortable-header field="metrics.cdWeighted.1" label="CD2w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-3w']]"><sortable-header field="metrics.cdWeighted.2" label="CD3w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-4w']]"><sortable-header field="metrics.cdWeighted.3" label="CD4w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-5w']]"><sortable-header field="metrics.cdWeighted.4" label="CD5w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-6w']]"><sortable-header field="metrics.cdWeighted.5" label="CD6w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cd-h']]"><sortable-header field="metrics.cdh" label="CDH" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cdh')" @sort="handleSort"></sortable-header></th>
+                                <!-- Gradients columns -->
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-2']]"><sortable-header field="metrics.cgrDeg.0" label="CGR2" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-3']]"><sortable-header field="metrics.cgrDeg.1" label="CGR3" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-4']]"><sortable-header field="metrics.cgrDeg.2" label="CGR4" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-5']]"><sortable-header field="metrics.cgrDeg.3" label="CGR5" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-6']]"><sortable-header field="metrics.cgrDeg.4" label="CGR6" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-cgr-sum']]"><sortable-header field="metrics.cgr" label="CGR Σ" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgr')" @sort="handleSort"></sortable-header></th>
+                                <!-- Balance AGR column (moved to front) -->
+                                <th :class="['text-end', columnVisibilityClasses['col-balance-agr']]"><sortable-header field="metrics.agr" label="AGR" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('agr')" @sort="handleSort"></sortable-header></th>
+                                <!-- MAX PV column -->
+                                <th :class="['text-end', columnVisibilityClasses['col-max-pv']]"><sortable-header field="metrics.maxPV" label="MAX PV" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('maxPV')" @sort="handleSort"></sortable-header></th>
+                                <!-- min PV column -->
+                                <th :class="['text-end', columnVisibilityClasses['col-min-pv']]"><sortable-header field="metrics.minPV" label="min PV" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('minPV')" @sort="handleSort"></sortable-header></th>
+                                <!-- Stability methods columns -->
+                                <th :class="['text-end', columnVisibilityClasses['col-stability-dcs']]"><sortable-header field="metrics.dcs" label="DCS" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('dcs')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-stability-tsi']]"><sortable-header field="metrics.tsi" label="TSI" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('tsi')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-stability-mp']]"><sortable-header field="metrics.mp" label="MPS" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('mp')" @sort="handleSort"></sortable-header></th>
+                                <!-- Balance CPT/DIN columns -->
+                                <th :class="['text-end', columnVisibilityClasses['col-balance-cpt']]"><sortable-header field="metrics.cpt" label="CPT" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cpt')" @sort="handleSort"></sortable-header></th>
+                                <th :class="['text-end', columnVisibilityClasses['col-balance-din']]"><sortable-header field="metrics.din" label="DIN" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('din')" @sort="handleSort"></sortable-header></th>
+                            </tr>
+                        </thead>
+                        <transition-group name="coin-row" tag="tbody">
+                            <tr v-if="!sortedCoins || sortedCoins.length === 0">
+                                <td class="text-center text-muted py-4" colspan="999">
+                                    Данные недоступны. Проверь лимиты API или повтори позже.
+                                </td>
+                            </tr>
+                            <tr v-for="coin in sortedCoins" :key="coin.id" :class="['coin-row-item', 'coin-row', { 'coin-row-selected': isCoinSelected(coin.id) }]">
+                                <td class="d-none">{{ coin.market_cap_rank }}</td>
+                                <td class="text-center">
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        :data-coin-id="coin.id"
+                                        :checked="isCoinSelected(coin.id)"
+                                        @change="handleToggleCoin(coin.id, $event)">
+                                </td>
+                                <td>
+                                    <coin-block
+                                        :coin-id="coin.id"
+                                        :symbol="coin.symbol"
+                                        :name="coin.name"
+                                        :image="coin.image"
+                                        :fallback-image="coin.fallback_image"
+                                        :is-favorite="isCoinFavorite(coin.id)"
+                                        :apply-text-overflow="true"
+                                        @toggle-favorite="handleToggleFavorite"
+                                        @delete-coin="handleDeleteCoin"
+                                        @replace-icon="handleReplaceIcon">
+                                    </coin-block>
+                                </td>
+                                <td v-if="showPriceColumn" class="text-end">
+                                    <cell-num :value="coin.current_price" prefix="$" :precision="2" :hide-positive-sign="true" type="price"></cell-num>
+                                </td>
+                                <!-- Percent columns -->
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-1h']]"><cell-num :value="coin.price_change_percentage_1h" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-24h']]"><cell-num :value="coin.price_change_percentage_24h" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-7d']]"><cell-num :value="coin.price_change_percentage_7d" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-14d']]"><cell-num :value="coin.price_change_percentage_14d" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-30d']]"><cell-num :value="coin.price_change_percentage_30d" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-percent-200d']]"><cell-num :value="coin.price_change_percentage_200d" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <!-- Complex Deltas columns -->
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-1w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.0')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-2w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.1')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-3w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.2')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-4w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.3')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-5w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.4')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-6w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.5')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cd-h']]"><cell-num :value="getCellValue(coin, 'metrics.cdh')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
+                                <!-- Gradients columns -->
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-2']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.0')" :precision="1" unit="°" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-3']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.1')" :precision="1" unit="°" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-4']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.2')" :precision="1" unit="°" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-5']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.3')" :precision="1" unit="°" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-6']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.4')" :precision="1" unit="°" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-cgr-sum']]"><cell-num :value="getCellValue(coin, 'metrics.cgr')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
+                                <!-- Balance AGR column (moved to front) -->
+                                <td :class="['text-end', columnVisibilityClasses['col-balance-agr']]"><cell-num :value="getCellValue(coin, 'metrics.agr')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
+                                <!-- MAX PV column -->
+                                <td :class="['text-end', columnVisibilityClasses['col-max-pv']]"><cell-num :value="getCellValue(coin, 'metrics.maxPV')" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <!-- min PV column -->
+                                <td :class="['text-end', columnVisibilityClasses['col-min-pv']]"><cell-num :value="getCellValue(coin, 'metrics.minPV')" :precision="2" :colorize="true" unit="%"></cell-num></td>
+                                <!-- Stability methods columns -->
+                                <td :class="['text-end', columnVisibilityClasses['col-stability-dcs']]"><cell-num :value="getCellValue(coin, 'metrics.dcs')" :precision="2" :colorize="true" unit=""></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-stability-tsi']]"><cell-num :value="getCellValue(coin, 'metrics.tsi')" :precision="2" :colorize="true" unit=""></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-stability-mp']]"><cell-num :value="getCellValue(coin, 'metrics.mp')" :precision="2" :colorize="true" unit=""></cell-num></td>
+                                <!-- Balance CPT/DIN columns -->
+                                <td :class="['text-end', columnVisibilityClasses['col-balance-cpt']]"><cell-num :value="getCellValue(coin, 'metrics.cpt')" :precision="2" :colorize="true"></cell-num></td>
+                                <td :class="['text-end', columnVisibilityClasses['col-balance-din']]"><cell-num :value="getCellValue(coin, 'metrics.din')" :precision="2" :colorize="true"></cell-num></td>
+                            </tr>
+                        </transition-group>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer приложения (фиксирован к низу) -->
+        <app-footer ref="appFooter" @open-timezone-modal="openTimezoneModal"></app-footer>
+
+        <!-- Модальное окно авторизации -->
+                    <cmp-modal
+                        ref="authModal"
+                        modal-id="authModal"
+                        :title="modalsConfig?.getModalTitle('authModal')"
+                        :centered="true">
+                        <template #header>
+                            <h5 class="modal-title">{{ modalsConfig?.getModalTitle('authModal') || 'Авторизация' }}</h5>
+                            <div id="authModal-header-extra" class="ms-auto me-2"></div>
+                            <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                        </template>
+                        <template #body>
+                            <auth-modal-body
+                                :on-login-success="handleAuthLoginSuccess"
+                                :on-logout-success="handleAuthLogoutSuccess">
+                            </auth-modal-body>
+                        </template>
+                    </cmp-modal>
+
+        <!-- Модальное окно выбора таймзоны и языка перевода -->
+                        <cmp-modal
+            ref="timezoneModal"
+            modal-id="timezoneModal"
+                            :title="modalsConfig?.getModalTitle('timezoneModal')"
+            :centered="true">
+                            <template #header>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('timezoneModal') || 'Таймзона & i18n' }}</h5>
+                <div id="timezoneModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                            </template>
+                            <template #body>
+                                <timezone-modal-body
+                                    v-model="selectedTimezone"
+                                    :initial-value="initialTimezone"
+                                    :translation-language="selectedTranslationLanguage"
+                                    :initial-translation-language="initialTranslationLanguage"
+                                    :on-save="saveTimezone"
+                                    :on-cancel="cancelTimezone">
+                                </timezone-modal-body>
+                            </template>
+                        </cmp-modal>
+
+        <!-- Автоматически генерируемые модальные окна (без props) -->
+        <template v-for="modal in registeredModals" :key="modal.id">
+            <cmp-modal
+                :ref="modal.ref"
+                :modal-id="modal.id"
+                :title="modalsConfig?.getModalTitle(modal.id)"
+                :centered="modal.centered || false">
+                <template #header>
+                    <h5 class="modal-title">{{ modalsConfig?.getModalTitle(modal.id) || modal.title }}</h5>
+                    <div :id="modal.id + '-header-extra'" class="ms-auto me-2"></div>
+                    <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+                </template>
+                <template #body>
+                    <component :is="modal.bodyComponent"></component>
+                </template>
+            </cmp-modal>
+        </template>
+
+        <!-- Модальное окно сохранения набора монет -->
+        <cmp-modal
+            ref="coinSetSaveModal"
+            modal-id="coinSetSaveModal"
+            :title="modalsConfig?.getModalTitle('coinSetSaveModal')"
+            :centered="true"
+        >
+            <template #header>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('coinSetSaveModal') || 'Сохранить набор монет' }}</h5>
+                <div id="coinSetSaveModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <coin-set-save-modal-body
+                    :selected-coin-ids="selectedCoinIds"
+                    :coins="coins"
+                    :on-save="handleSaveCoinSet"
+                    :on-cancel="handleCancelCoinSetSave"
+                    :on-save-to-draft="saveToDraft"
+                    :on-open-auth="openAuthModal"
+                ></coin-set-save-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно загрузки набора монет -->
+        <cmp-modal
+            ref="coinSetLoadModal"
+            modal-id="coinSetLoadModal"
+            :title="modalsConfig?.getModalTitle('coinSetLoadModal')"
+            :centered="true"
+            :disable-close="!coins || coins.length === 0"
+        >
+            <template #header>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('coinSetLoadModal') || 'Загрузить набор монет' }}</h5>
+                <div id="coinSetLoadModal-header-extra" class="ms-auto me-2"></div>
+                <button v-if="coins && coins.length > 0" type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <coin-set-load-modal-body
+                    :on-load="handleLoadCoinSet"
+                    :on-delete="handleDeleteCoinSets"
+                    :on-cancel="handleCancelCoinSetLoad"
+                    :on-open-auth="openAuthModal"
+                ></coin-set-load-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно для обработки отсутствующих монет -->
+        <cmp-modal
+            ref="missingCoinsModal"
+            modal-id="missingCoinsModal"
+            :title="modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title')"
+            :centered="true"
+        >
+            <template #header>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title') }}</h5>
+                <div id="missingCoinsModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <missing-coins-modal-body
+                    :missing-coins="missingCoins"
+                    :on-resolve="handleResolveMissingCoins"
+                ></missing-coins-modal-body>
+            </template>
+        </cmp-modal>
+
+                <!-- Модальное окно управления иконкой -->
+                <cmp-modal
+                    ref="iconManagerModal"
+                    modal-id="iconManagerModal"
+                    :title="modalsConfig?.getModalTitle('iconManagerModal')"
+                    :centered="true"
+                    @hidden="currentIconEditingCoin = null"
+                >
+            <template #header>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('iconManagerModal') }}</h5>
+                <div id="iconManagerModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <icon-manager-modal-body
+                    v-if="currentIconEditingCoin"
+                    :coin-data="currentIconEditingCoin"
+                ></icon-manager-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно формирования портфеля -->
+        <cmp-modal
+            ref="portfolioFormModal"
+            modal-id="portfolioFormModal"
+            :title="modalsConfig?.getModalTitle('portfolioFormModal') || tooltipsConfig?.getTooltip('ui.modal.portfolioForm.title')"
+            :centered="true"
+            size="lg"
+        >
+            <template #header>
+                <h5 class="modal-title">
+                    {{ modalsConfig?.getModalTitle('portfolioFormModal') }}
+                </h5>
+                <div id="portfolioFormModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <portfolio-form-modal-body
+                    v-if="coins && coins.length > 0"
+                    :key="portfolioFormKey"
+                    :all-coins="coins"
+                    :preselected-coin-ids="selectedCoinIds"
+                    :initial-data="currentViewingPortfolio"
+                    :on-save="handleSaveCreatedPortfolio"
+                ></portfolio-form-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно просмотра портфеля -->
+        <cmp-modal
+            ref="portfolioViewModal"
+            modal-id="portfolioViewModal"
+            :title="modalsConfig?.getModalTitle('portfolioViewModal') || tooltipsConfig?.getTooltip('ui.modal.portfolioView.title')"
+            :centered="true"
+            size="lg"
+        >
+            <template #header>
+                <h5 class="modal-title">
+                    {{ modalsConfig?.getModalTitle('portfolioViewModal') }}
+                </h5>
+                <div id="portfolioViewModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <portfolio-view-modal-body
+                    v-if="currentViewingPortfolio"
+                    :key="currentViewingPortfolio.id"
+                    :portfolio="currentViewingPortfolio"
+                    :on-rebalance="handleRebalancePortfolio"
+                    :on-delete="handleDeletePortfolio"
+                ></portfolio-view-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Глобальный контейнер системных сообщений (сплэш снизу) -->
+        <div
+            v-if="hasGlobalSystemMessages"
+            class="global-system-messages-container"
+            data-bs-theme="dark"
+        >
+            <div class="container-fluid px-3 px-md-5">
+                <cmp-system-messages scope="global" :horizontal-scroll="true"></cmp-system-messages>
+                        </div>
+                    </div>
+    </div>
+
+    <!-- X-Templates для Vue компонентов загружаются через модульную систему -->
+    <!-- См. shared/templates/ для шаблонов компонентов -->
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- Session Log Store и Console Interceptor загружаются СИНХРОННО в самом начале для перехвата всех логов -->
+    <script src="core/utils/session-log-store.js"></script>
+    <script src="core/utils/console-interceptor.js"></script>
+    <script>
+        // Опционально: отключить вывод в браузерную консоль (логи будут только в Session Log)
+        // Раскомментируйте следующую строку, чтобы убрать логи из браузерной консоли:
+        // if (window.consoleInterceptor) { window.consoleInterceptor.setSuppressBrowserConsole(true); }
+    </script>
+
+    <!-- Модульная система загрузки скриптов -->
+    <!-- Конфигурация модулей (описывает все модули и их зависимости) -->
+    <script src="core/modules-config.js"></script>
+    <!-- Загрузчик модулей (автоматически загружает модули в правильном порядке) -->
+    <script src="core/module-loader.js"></script>
+    <!-- Загрузка всех модулей через модульную систему -->
+    <script>
+        (function() {
+            'use strict';
+            // Загружаем все модули после загрузки DOM
+            function initModules() {
+                if (!window.moduleLoader || !window.moduleLoader.hasConfig()) {
+                    console.error('module-loader: загрузчик модулей или конфигурация не найдены');
+                    return;
+                }
+
+                window.moduleLoader.load()
+                    .then(function() {
+                        console.log('module-loader: все модули загружены, приложение готово');
+                    })
+                    .catch(function(error) {
+                        console.error('module-loader: ошибка загрузки модулей:', error);
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initModules);
+            } else {
+                initModules();
+            }
+        })();
+    </script>
+</body>
+</html>
