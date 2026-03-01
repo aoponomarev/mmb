@@ -71,7 +71,21 @@ We use the built-in `node:test` (introduced in Node.js v18+) for all tests, to a
 - Running tests is done via `npm run test` (which calls `node --test` under the hood).
 - For assertions, the built-in `node:assert/strict` module is used.
 
-## 8. Control Plane (Protection and State Checks)
+## 8. Security Boundaries
+
+**Core principle:** Secrets stay in the local runtime boundary and never enter tracked files.
+
+- `.env` is always gitignored. Only `.env.example` (with placeholders) is committed.
+- Real secrets are backed up as AES-256 encrypted archives in `is/secrets/archives/` (gitignored).
+- Preflight validates `.env` contract before every test or deployment run.
+- AI agents must NOT read, log, or output actual secret values — only verify key presence and format.
+- See `process-secrets-hygiene.md` for the full incident-response protocol.
+
+**Rejected alternatives:**
+- Single mega security doc in `docs/` — low machine discoverability.
+- Ad-hoc comments in code only — cannot enforce global policy.
+
+## 9. Control Plane (Protection and State Checks)
 The Control Plane is a set of infrastructure scripts that guarantee the safe and reliable operation of the application before deployment, testing, or launch.
 - **health-check:** Integral check of all contours (Knowledge, Contracts, Runtime) via `npm run health-check`.
 - **single-writer guard:** Protection against race conditions when working with external cloud resources. Started via `npm run validate:single-writer`. The `DATA_PLANE_ACTIVE_APP` variable ensures that only one environment (TARGET, LEGACY, etc.) can write data to the cloud, while others work in Read-Only mode.
