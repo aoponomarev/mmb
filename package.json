@@ -6,6 +6,8 @@
   "scripts": {
     "test": "node --test is/**/*.test.js core/**/*.test.js",
     "preflight": "node is/scripts/preflight.js",
+    "health-check": "node is/scripts/infrastructure/health-check.js",
+    "validate:single-writer": "node is/scripts/infrastructure/validate-single-writer.js",
     "index:gen": "node scripts/app-index-gen.js",
     "index:fix": "node scripts/app-index-gen.js --fix",
     "secret:backup": "node is/scripts/secrets/secret-resilience.js --backup",
