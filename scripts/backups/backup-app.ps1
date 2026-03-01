@@ -11,8 +11,8 @@ It prompts the user for a suffix to include in the filename.
 
 $ErrorActionPreference = "Stop"
 
-# Define paths
-$sourcePath = (Resolve-Path "$PSScriptRoot\..").Path
+# Define paths (PSScriptRoot = scripts/backups, so ..\.. = project root)
+$sourcePath = (Resolve-Path "$PSScriptRoot\..\..").Path
 $destDir = "D:\Clouds\AO\OneDrive\AI\Projects\MMB\zip"
 $dateStr = Get-Date -Format "yyMMddHH"
 
