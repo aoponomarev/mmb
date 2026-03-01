@@ -31,6 +31,7 @@
 ## 3. Этапы миграции (Ревизия под текущий проект)
 
 ### Этап 1: Фундамент и Интеграция базы знаний (Скилы) — *В процессе*
+*(Связанные планы: `plan-naming-and-paths.md`, `plan-skills-mcp.md`, `plan-causality-rationale.md`, `plan-migration-sync.md`)*
 - [x] Настройка жестких SSOT-политик: валидация путей (`paths.js`), генерация `paths-reference.md`.
 - [x] Создание базовых архитектурных скилов (`arch-foundation.md`).
 - [x] Внедрение Causality: фиксация архитектурных решений (Active Causality Recording) прямо в скилах.
@@ -39,12 +40,14 @@
 - [ ] Интегральный health-gate базы скилов.
 
 ### Этап 2: Базовая инфраструктура и Control Plane — *Активная фаза*
+*(Связанные планы: `plan-control-plane.md`, `plan-infrastructure-docker.md`, `plan-external-infrastructure-parity.md`)*
 - [x] Очистка истории Git от случайно попавших секретов, настройка переменных окружения (Secret Resilience MVP).
 - [x] Перенос утилит Control Plane (например, `scripts/infrastructure/health-check.js`).
 - [x] Внедрение и верификация single-writer guard (`DATA_PLANE_ACTIVE_APP`) для защиты общих данных в облаке.
 - [ ] Настройка split-контуров Docker (если будет принято решение использовать Docker в целевой архитектуре).
 
 ### Этап 3: Ядро приложения и Backend — *Активная фаза (большая часть перенесена)*
+*(Связанные планы: `plan-backend-core.md`, `plan-domain-models.md`, `plan-libs.md`)*
 - [x] Перенос `core/api/providers/coingecko-provider.js` и `backend-request-registry.js`.
 - [x] Перенос `core/api/market-metrics-service.js` (FGI/VIX/BTC dominance/OI/FR/LSR) и провайдеров.
 - [x] Перенос `core/api/market-snapshot-service.js` (orchestration-контракт).
@@ -55,6 +58,7 @@
 - [ ] Завершение инфраструктурных проверок ядра (cache integrity gate).
 
 ### Этап 4: Frontend и UI — *Активная фаза*
+*(Связанные планы: `plan-frontend-ui.md`)*
 - [x] Подтверждение и обеспечение работоспособности на GitHub Pages (CORS proxy) и `file:///`.
 - [x] Внедрение **Reactive Reliability Gate (RRG)** (запрет прямых мутаций `window` и `innerHTML`).
 - [x] Hardcode-text guard: AST-линтер (`espree`) для запрета хардкода строк в DOM.
@@ -64,11 +68,13 @@
 - [ ] Завершение wrapper-first Vue migration (если потребуется для No-Build).
 
 ### Этап 5: Интеграции и Оркестрация — *Отложено*
+*(Связанные планы: `plan-ai-orchestration.md`, `plan-integrations-n8n.md`, `plan-cloudflare.md`, `plan-yandex-cloud.md`)*
 - [ ] AI-Orchestration (управление моделями, fallback контракты).
 - [ ] Интеграции n8n.
 - [ ] Деплой облачных функций (Yandex Cloud) - *частично скрипты развертывания уже адаптированы под env*.
 
 ### Этап 6: Надежность и операционная зрелость — *В процессе*
+*(Связанные планы: `plan-testing-strategy.md`, `plan-monitoring.md`, `plan-github-workspace.md`, `plan-rollback.md`)*
 - [x] Внедрение стратегии тестирования (`plan-testing-strategy.md`) с упором на `node:test`.
 - [ ] Настройка CI/CD (GitHub Actions) для автоматического запуска preflight и тестов.
 - [ ] Внедрение мониторинга и диагностических контрактов.
