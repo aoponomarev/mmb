@@ -1,7 +1,8 @@
 ---
 title: "Process: Reasoning Audit Protocol"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "f15d3797"
 ---
 
 # Process: Reasoning Audit Protocol
@@ -16,7 +17,7 @@ reasoning_audited_at: "2026-03-01"
 
 ---
 
-## Mandatory Order of Operations
+## Core Rules
 
 The Reasoning audit MUST be performed in this exact sequence. Skipping or reordering invalidates the audit.
 
@@ -27,7 +28,7 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 | **3** | **Score** — Assign a confidence score (0–1) to each Reasoning. The AI agent evaluates how well the Reasoning reflects the actual implementation. | AI agent |
 | **4** | **Gate** — Run `npm run skills:reasoning:check`. The gate fails if any skill violates the Reasoning contract. | CI / preflight |
 
-## Reasoning Format Contract (Hash-Tagged List)
+## Contracts
 
 **Reasoning MUST be the first substantive section** (immediately after Context/Scope). Rules and implementation details follow Reasoning.
 
@@ -50,13 +51,14 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 - **#not-hardcoded-paths** Hardcoded paths in scripts — CWD-dependent failures.
 ```
 
-**Hash registry:** Hashes are canonical. Reuse the same hash across skills and in code (`@causality`, `@skill-anchor`). **Identical formulation:** when reusing a hash, the text after it MUST be verbatim identical to the canonical formulation in `causality-registry.md`. This enables grep/search to find all occurrences of the same reason.
+**Hash registry:** Hashes are canonical. Reuse the same hash across skills and in code (`@causality`, `@skill-anchor`).
+**Local Context Rule:** When using a hash inside a skill's `## Reasoning` section, DO NOT copy the generic text from the registry verbatim. Instead, write a **short, local context** explaining how that generic reason applies specifically to this skill's domain.
 
 **Registry:** All hashes live in `is/skills/causality-registry.md`. Add new hashes there before using in skills or code.
 
 **Section headers:** No numbering. Use `## Rejection of Old Abbreviations` not `## 1. Rejection of Old Abbreviations`.
 
-## Reasoning Formats by Skill Type
+### Reasoning Formats by Skill Type
 
 | Skill type | Required Reasoning format | Example |
 |------------|---------------------------|---------|
@@ -67,7 +69,7 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 
 **Context** (the `> **Context**:` block) is NOT sufficient. Context describes *when* to use the skill; Reasoning explains *why* specific rules or decisions were made.
 
-## Confidence Scoring
+### Confidence Scoring
 
 Every skill with Reasoning MUST include a confidence score in frontmatter:
 
@@ -75,6 +77,7 @@ Every skill with Reasoning MUST include a confidence score in frontmatter:
 ---
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-01"
+reasoning_checksum: "a1b2c3d4"
 ---
 ```
 
@@ -82,6 +85,7 @@ reasoning_audited_at: "2026-03-01"
 |-------|------|----------|-------------|
 | `reasoning_confidence` | float 0–1 | Yes | AI agent's assessment: how well Reasoning matches the codebase. See scale below. |
 | `reasoning_audited_at` | ISO date | Yes | Date of last audit. Used to detect stale Reasoning. |
+| `reasoning_checksum` | string (MD5/SHA) | Yes | Tamper-evident hash of all causality hashes inside the skill. |
 
 ### Confidence Scale
 
@@ -95,7 +99,7 @@ reasoning_audited_at: "2026-03-01"
 
 **Gate threshold**: `reasoning_confidence >= 0.5`. Below 0.5, the skill fails the gate.
 
-## Causality Invalidation Protocol
+### Causality Invalidation Protocol
 
 When you remove or change a causality hash (`#for-X`) from code (`@causality` or `@skill-anchor`), you MUST ensure that this hash is not orphaned in other files where the reason no longer applies.
 
@@ -112,7 +116,7 @@ Add a line to `docs/audits/causality-exceptions.jsonl`:
 ```
 *Note: The gate output will provide the exact JSON template to copy-paste.*
 
-## Gate Contract
+### Gate Contract
 
 The `validate-reasoning.js` script enforces:
 
@@ -125,7 +129,7 @@ The `validate-reasoning.js` script enforces:
 - `0` — All skills pass.
 - `1` — One or more skills fail (missing Reasoning, missing/low confidence, or stale audit).
 
-## When to Run the Audit
+### When to Run the Audit
 
 | Trigger | Scope |
 |---------|-------|
@@ -134,20 +138,20 @@ The `validate-reasoning.js` script enforces:
 | After adding a new skill | That skill only |
 | Periodic (e.g. quarterly) | Full audit |
 
-## Relationship to Other Skills
+### Relationship to Other Skills
 
 - **arch-causality**: Defines *what* causality is and *where* it lives. This skill defines *how* to keep it accurate.
 - **process-skill-placement**: Defines where skills live. This skill defines what each skill must contain.
 - **process-ai-collaboration**: "Active Causality Recording" — when writing code, record why. This skill — when auditing, verify and score.
 
-## Transitional Period (Initial Audit)
+### Transitional Period (Initial Audit)
 
 Until all skills have Reasoning and confidence scores, preflight will fail the Reasoning gate. Options:
 
 - **Run full audit**: Add Reasoning and `reasoning_confidence` / `reasoning_audited_at` to all skills. Then preflight passes.
 - **Temporary bypass**: `PREFLIGHT_SKIP_REASONING=1 npm run preflight` — skips the Reasoning gate. Use only during the audit phase; remove before release.
 
-## Anti-Patterns
+### Anti-Patterns
 
 | Anti-pattern | Correct action |
 |--------------|----------------|

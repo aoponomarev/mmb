@@ -1,21 +1,22 @@
 ---
 title: "Cache Layer Architecture"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "cd189ff0"
 ---
 
 # Cache Layer Architecture
 
-> **Scope**: `core/cache/`
 > **Context**: Defines the multi-tier browser cache system that persists market data, user settings, and UI state across sessions.
+> **Scope**: `core/cache/`
 
 ## Reasoning
 
-- **#for-key-versioning** External API data format changes (e.g., CoinGecko adds/removes fields) must invalidate cached data automatically, without manual intervention. User data must survive updates — it uses schema migrations instead.
+- **#for-key-versioning** Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead.
 
 ---
 
-## Three-Tier Storage Model
+## Core Rules
 
 The cache operates across three named layers managed by `core/cache/storage-layers.js`:
 
@@ -27,7 +28,7 @@ The cache operates across three named layers managed by `core/cache/storage-laye
 
 The `cacheManager` abstracts all three layers behind a single API. Callers use a key name; the layer is resolved automatically by `storageLayers.getLayerForKey(key)`.
 
-## 2. Key Versioning Contract
+## Contracts
 
 Cache keys fall into two categories:
 
@@ -41,19 +42,19 @@ Cache keys fall into two categories:
 
 **#for-key-versioning** External API data format changes (e.g., CoinGecko adds/removes fields) must invalidate cached data automatically, without manual intervention. User data must survive updates — it uses schema migrations instead.
 
-## Schema Migrations
+### Schema Migrations
 
 `core/cache/cache-migrations.js` handles forward-migration of cached data when the in-code schema version is higher than the stored `cached.version`. This applies only to unversioned keys (user data).
 
 On `cacheManager.get()`: if `cached.version` is present and migrations are available, the data is migrated before being returned to the caller. The migrated form is written back immediately.
 
-## TTL (Time-To-Live)
+### TTL (Time-To-Live)
 
 TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt = Date.now() + ttl` is stored. On `get()`, expired entries are deleted and `null` is returned (cache miss).
 
 `cacheManager.set(key, value, { ttl: 86400000 })` — caller can override TTL explicitly.
 
-## Public API (`window.cacheManager`)
+### Public API (`window.cacheManager`)
 
 | Method | Signature | Description |
 |---|---|---|
@@ -64,11 +65,11 @@ TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt =
 | `clear` | `(layer?) → Promise<bool>` | Clear one layer or all |
 | `clearOldVersions` | `() → Promise<number>` | Purge orphaned versioned keys |
 
-## Module Load Order
+### Module Load Order
 
 `storage-layers.js` and `cache-config.js` must be loaded before `cache-manager.js`. `cache-migrations.js` is optional (checked at runtime).
 
-## File Map
+### File Map
 
 | File | Responsibility |
 |---|---|

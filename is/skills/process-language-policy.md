@@ -2,7 +2,8 @@
 title: "Process: Language & Terminology Governance"
 tags: ["#process", "#language", "#terminology", "#naming", "#anti-calque"]
 reasoning_confidence: 0.95
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "254ee5f7"
 ---
 
 # Process: Language & Terminology Governance
@@ -11,14 +12,14 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-anti-calque** Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, Target App, Legacy App) is unambiguous.
-- **#for-skills-english** Skills are MCP-indexed and consumed by AI agents. Mixed language causes hallucination and inconsistent application of rules.
-- **#for-code-english** Variable names and comments are part of the codebase contract. Future maintainers and AI agents must understand without translation.
-- **#for-russian-in-docs** Migration plans and runbooks may require Russian for stakeholder communication. Skills and code remain English-only.
+- **#for-anti-calque** Transliterated Russian abbreviations (mbb, mmb, EIP) break text searches, increase cognitive load, and cause AI hallucination. Use standard English IT terminology instead.
+- **#for-skills-english** Skills must be in English since they are indexed and consumed by MCP servers and AI agents.
+- **#for-code-english** Code comments and variables must be universally readable by future maintainers and agents.
+- **#for-russian-in-docs** Stakeholder-facing docs (migration plans, runbooks) may use Russian, but implementation artifacts must stay English.
 
 ---
 
-## Language Policy for Skills and Code (Mandatory)
+## Core Rules
 
 - All files under `skills/**` (including `is/skills`, `core/skills`, `app/skills`) MUST be authored in **English**.
 - All code comments, variable names, and commit messages MUST be authored in **English**.
@@ -26,7 +27,7 @@ reasoning_audited_at: "2026-03-01"
 - Legacy non-English content is allowed only as quoted historical context when strictly needed for migration fidelity, including legacy abbreviations and their original Russian expansions.
 - Russian is permitted in ALL documentation files across different folders (not just `docs/plans/`). However, all code, code comments, variable names, commit messages, and skills (`skills/**`) MUST remain strictly in English.
 
-## 2. The Translation Mapping (Do vs Don't)
+## Contracts
 
 When a Russian concept must be named in English (e.g. for code or file paths), you must translate its *meaning* to standard IT terminology.
 
@@ -35,6 +36,7 @@ When a Russian concept must be named in English (e.g. for code or file paths), y
 | **ЕИП** (Единый Источник Правды) | Single Source of Truth | `EIP` | `SSOT` |
 | **MBB/MMB** | Legacy / Target App | `MBB`, `MMB` | `Legacy App`, `Target App` |
 
-## Enforcement
+## Implementation Status
+
 - **Trigger:** Whenever an agent generates variable names, writes documentation, translates concepts, or creates new files based on Russian prompts.
 - **Migration Guardrail:** When migrating legacy code, agents must actively translate Russian comments to English and scan for banned calques, replacing them with correct standard terminology.

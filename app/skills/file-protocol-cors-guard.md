@@ -1,7 +1,8 @@
 ---
 title: "Guard: file:// Protocol & CORS"
 reasoning_confidence: 0.95
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "1f7750de"
 ---
 
 # Guard: file:// Protocol & CORS
@@ -11,12 +12,12 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-file-protocol** No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes.
-- **#for-file-origin-null** Browsers treat `file://` as opaque origin. CORS preflight fails for cross-origin requests — CoinGecko, Binance, Yandex APIs block direct calls.
-- **#for-cloudflare-proxy** One proxy endpoint handles CORS headers, auth, and rate limiting. Same code path for `file://` and `https://` — Zero-Config Portability per arch-foundation.
-- **#for-no-direct-fetch** Any `fetch('https://api.coingecko.com/...')` from frontend fails on file://. Routing through `cloudflareConfig.getApiProxyEndpoint()` is mandatory.
+- **#for-file-protocol** The Target App runs from `index.html` on GitHub Pages, so we cannot depend on a local Node.js server.
+- **#for-file-origin-null** Browsers treat `file://` as an opaque origin, meaning direct CORS preflight requests to strict APIs will fail.
+- **#for-cloudflare-proxy** Routing through our Cloudflare proxy standardizes CORS, authentication, and rate limiting regardless of whether the app runs locally or on HTTPS.
+- **#for-no-direct-fetch** Direct fetches to external APIs from the frontend will inevitably fail for users running the app locally without a backend.
 
-## Non-Negotiable Rule
+## Contracts
 
 Before any `fetch()` to an external API from frontend code, the runtime protocol must be checked:
 
@@ -29,7 +30,7 @@ if (window.location.protocol === 'file:') {
 
 All external API calls from the UI **must** go through `cloudflareConfig.getApiProxyEndpoint()` — in **both** `file://` and `https://` modes. The Cloudflare Worker handles CORS, auth headers, and rate limiting.
 
-## Symptoms of a Violation
+## Examples
 
 Classic console signature when a direct call is attempted:
 ```
@@ -40,7 +41,7 @@ net::ERR_FAILED
 
 If the UI keeps working only after a fallback fires but the console is noisy with CORS errors — root cause is: **direct call is attempted first, proxy fallback second**. Fix: route through proxy from the start.
 
-## Canonical Fix Pattern
+### Canonical Fix Pattern
 
 ```javascript
 // BAD — direct call, fails on file:// protocol
@@ -51,7 +52,7 @@ const proxyUrl = cloudflareConfig.getApiProxyEndpoint('/coingecko/markets');
 const response = await fetch(proxyUrl);
 ```
 
-## Which APIs Are CORS-Restricted in file:// Mode
+### Which APIs Are CORS-Restricted in file:// Mode
 
 | Provider | Direct browser call | Status |
 |---|---|---|
@@ -60,7 +61,7 @@ const response = await fetch(proxyUrl);
 | Yandex Cloud functions | `functions.yandexcloud.net` | ❌ CORS-blocked — use Cloudflare proxy |
 | GitHub Pages assets | Same origin | ✅ OK — no proxy needed |
 
-## Code Review Checklist
+### Code Review Checklist
 
 When reviewing any new frontend data-fetch:
 - [ ] Does it check `window.location.protocol` before calling an external API?
@@ -68,6 +69,6 @@ When reviewing any new frontend data-fetch:
 - [ ] Is the fallback/proxy path tested and confirmed to return valid data for the UI?
 - [ ] Is there no CORS `ERR_FAILED` spam in the browser console?
 
-## Relationship to Hosting Contract
+### Relationship to Hosting Contract
 
 This guard is a concrete implementation of the **Zero-Config Portability** constraint in `arch-foundation.md` §6: the UI must function on both `file://` and `https://aoponomarev.github.io/...` without code changes. The Cloudflare proxy is the mechanism that enables this.

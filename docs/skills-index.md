@@ -31,7 +31,7 @@
 - [process-migration-prioritization](../is/skills/process-migration-prioritization.md) — Process: Migration Prioritization Criteria
 - [process-reasoning-audit](../is/skills/process-reasoning-audit.md) — Process: Reasoning Audit Protocol
 - [process-secrets-hygiene](../is/skills/process-secrets-hygiene.md) — Process: Secrets Hygiene & Git Boundary
-- [process-skill-placement](../is/skills/process-skill-placement.md) — Process: Skill Placement & Profiling
+- [process-skill-governance](../is/skills/process-skill-governance.md) — Process: Skill Placement & Profiling
 - [process-windows-shell](../is/skills/process-windows-shell.md) — Process: Windows & PowerShell Patterns for AI Agents
 - [README](../is/skills/README.md) — Knowledge Base & MCP Skills (`is/skills/`)
 

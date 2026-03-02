@@ -1,7 +1,8 @@
 ---
 title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "d0185ad5"
 ---
 
 # Process: Skill Placement & Profiling
@@ -10,12 +11,12 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-distributed-skill-placement** Skills live next to their domain (`is/skills/` for infra, `core/skills/` for API, `app/skills/` for UI) rather than in a monolithic `skills/` vault. Ensures natural co-evolution with code.
-- **#for-arch-vs-process** Architecture = why (decisions, alternatives). Process = how (agent behavior, workflows). Domain = what (invariants, contracts). Prefix signals intent and discoverability.
-- **#for-layer-ownership** Layer ownership matches folder structure. UI rules in `app/skills/`; backend in `core/skills/`; infra in `is/skills/`. Prevents "everything in is/" sprawl.
-- **#for-60-overlap-update** Duplicate skills cause conflicting guidance. Search first; update or merge before creating. >60% overlap → update, not create.
+- **#for-distributed-skill-placement** Placing skills next to their domain (`is/skills/`, `core/skills/`) instead of a single central vault ensures they co-evolve naturally with the code they govern.
+- **#for-arch-vs-process** Naming prefixes (`arch-`, `process-`) explicitly signal a skill's intent (why vs how) and improve discoverability.
+- **#for-layer-ownership** Distributing skills by folder boundary prevents a massive "everything-in-one-folder" sprawl.
+- **#for-60-overlap-update** Updating an existing skill instead of creating a duplicate prevents conflicting guidance for AI agents.
 
-## The Core Rule
+## Core Rules
 
 **A skill lives where the code it governs lives.**
 
@@ -23,7 +24,22 @@ Skills are not documentation stored centrally — they are contracts co-located 
 
 ---
 
-## Placement Decision Table
+### Formatting Rules (Skill Structure)
+
+To reduce hallucinations and ensure AI agents can reliably parse skills, all `.md` files in `skills/` directories must strictly follow the AST-like structure enforced by `validate-skills.js`.
+
+1. **Frontmatter**: Must include `title`, `reasoning_confidence`, `reasoning_audited_at`, and `reasoning_checksum`.
+2. **H1 and Context**: The file must start with `# [Title]` immediately followed by a blockquote starting with `> **Context**:`.
+3. **Allowed H2 Sections**: Only the following exact H2 headers are permitted. Do not invent new H2 names, use H3 (`###`) instead:
+   - `## Reasoning` (Must be the first H2 if present)
+   - `## Core Rules`
+   - `## Contracts`
+   - `## Implementation Status` (or `## Implementation Status in Target App`)
+   - `## Migration Strategy`
+   - `## Examples`
+4. **Scaffolding Tool**: Always use `npm run skill:create "Skill Title" --type=[arch|process|core|app]` to generate the correct boilerplate.
+
+## Contracts
 
 Use this table when deciding where to place a new or migrated skill:
 
@@ -37,7 +53,7 @@ Use this table when deciding where to place a new or migrated skill:
 
 ---
 
-## Location Contract by Folder
+### Location Contract by Folder
 
 ### `is/skills/` — Infrastructure & Process Knowledge
 
@@ -112,7 +128,7 @@ When a new significant subdomain is added to `core/`, a skill must be created he
 
 ---
 
-## Decision Checklist (for agent use)
+### Decision Checklist
 
 Before creating or placing a skill file, answer these in order:
 
@@ -134,7 +150,7 @@ Before creating or placing a skill file, answer these in order:
 
 ---
 
-## Anti-Patterns to Avoid
+### Anti-Patterns
 
 | Anti-pattern | Correct action |
 |---|---|

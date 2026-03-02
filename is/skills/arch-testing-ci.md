@@ -4,7 +4,8 @@ tags: ["#architecture", "#testing", "#ci", "#github"]
 dependencies: ["arch-foundation"]
 updated_at: "2026-03-01T00:00:00.000Z"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "febd586c"
 ---
 
 # Architecture: Testing Strategy & CI
@@ -14,11 +15,11 @@ reasoning_audited_at: "2026-03-01"
 ## Reasoning
 
 - **#for-node-test** Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale.
-- **#for-contract-first-preflight** Relying on strict Zod-based contracts (`preflight.js`) paired with `node:test` provides the best cost/reliability ratio, immediately failing on invalid environment states.
-- **#for-minimal-ci** Migration-at-scale requires formal gates at the PR/commit level. CI pipeline is intentionally kept minimal (Lint, Health, Test) to ensure fast feedback loops and avoid flaky checks.
-- **#not-manual-verification** Manual verification only — too high a risk of hidden regressions.
-- **#not-heavy-test-frameworks** Heavy test frameworks (Jest, Mocha) — unnecessary weight for this project scale.
-- **#not-complex-ci-e2e** Complex multi-stage CI / Heavy E2E Frameworks (Playwright/Cypress) — deferred. Start with simple, fast gates; introduce heavy E2E when baseline runtime is fully stabilized.
+- **#for-contract-first-preflight** Strict Zod-based contracts (`preflight.js`) paired with `node:test` provide immediate failure on invalid environment states.
+- **#for-minimal-ci** Migration-at-scale requires fast feedback loops. CI is kept minimal (Lint, Health, Test) to avoid flaky checks.
+- **#not-manual-verification** Too high a risk of hidden regressions.
+- **#not-heavy-test-frameworks** Jest and Mocha add unnecessary weight for this scale.
+- **#not-complex-ci-e2e** Heavy E2E is deferred until the baseline runtime is fully stabilized.
 
 ---
 

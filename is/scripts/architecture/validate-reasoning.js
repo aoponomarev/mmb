@@ -5,6 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,6 +69,11 @@ function hasReasoning(text) {
     );
 }
 
+function calculateReasoningChecksum(text) {
+    const hashes = (text.match(/#(?:for|not)-[\w-]+/g) || []).sort();
+    return crypto.createHash("md5").update(hashes.join(",")).digest("hex").slice(0, 8);
+}
+
 function main() {
     const errors = [];
     const warnings = [];
@@ -121,6 +127,14 @@ function main() {
                         warnings.push(`${rel}: reasoning audit stale (${Math.round(ageDays)} days since reasoning_audited_at)`);
                     }
                 }
+            }
+
+            const expectedChecksum = calculateReasoningChecksum(text);
+            const actualChecksum = fm.reasoning_checksum;
+            if (!actualChecksum) {
+                errors.push(`${rel}: missing reasoning_checksum in frontmatter. Expected: "${expectedChecksum}"`);
+            } else if (actualChecksum !== expectedChecksum) {
+                errors.push(`${rel}: reasoning_checksum mismatch. The Reasoning section has changed, but the confidence score was not re-audited. Expected: "${expectedChecksum}", Actual: "${actualChecksum}"`);
             }
 
             passed++;

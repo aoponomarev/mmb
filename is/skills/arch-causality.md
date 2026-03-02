@@ -1,7 +1,8 @@
 ---
 title: "Architecture: Causality & Rationale Tracking"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "8d65409b"
 ---
 
 # Architecture: Causality & Rationale Tracking
@@ -10,14 +11,14 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-skill-anchors** Textual reasoning in skills (with #for-/#not- hashes) provides causality value. Skill anchors connect code to reasoning without a separate causality ID namespace.
-- **#for-textual-over-registry** The donor project's causality registry (with MD5-hashed IDs, boolean formulas) is powerful but heavyweight. For current scale, textual reasoning in `arch-*.md` files provides 80% of the value at 10% of the cost.
-- **#for-skill-anchors-code** `/** @skill is/skills/arch-foundation */` comments in code files connect implementation to reasoning without requiring a separate causality ID namespace. One mechanism (skill anchors) replaces two.
-- **#for-plan-finalization-trigger** Rather than maintaining a living causality graph, we extract reasoning at a natural checkpoint — when a migration plan is completed and moved to `docs/done/`. Batch-efficient and ensures nothing is lost.
-- **#not-causality-registry-day-one** Full causality registry from day one — maintenance cost exceeds value at current scale.
-- **#not-no-causality** No causality tracking at all — context loss is the #1 risk in long-running projects.
-- **#not-causality-in-comments-only** Causality in code comments only — too scattered, not discoverable by AI agents.
-- **#not-causality-database** Causality in a separate database — violates zero-dependency and `file://` portability.
+- **#for-skill-anchors** Skill anchors in code (`@skill-anchor`) connect directly to the Reasoning section without a separate ID namespace.
+- **#for-textual-over-registry** A heavyweight causality registry with boolean formulas is overkill. Textual reasoning in these markdown files provides enough value.
+- **#for-skill-anchors-code** We use `/** @skill ... */` to link entire files to these architecture documents.
+- **#for-plan-finalization-trigger** Reasoning is extracted from migration plans into these skills at a natural checkpoint — when a plan is completed.
+- **#not-causality-registry-day-one** Full causality registry (GC.*) maintenance cost exceeds value at the current scale.
+- **#not-no-causality** Complete lack of causality tracking risks context loss, the #1 risk in long-running projects.
+- **#not-causality-in-comments-only** Causality in scattered code comments is not discoverable by AI agents without a centralized anchor.
+- **#not-causality-database** Using a database for causality violates the zero-dependency, local-first portability rule.
 
 ---
 
@@ -27,7 +28,7 @@ reasoning_audited_at: "2026-03-01"
 - `Implemented`: Active Causality Recording pattern — every plan finalization extracts decisions into new `arch-*.md` skill files.
 - `Out of scope`: Full causality registry, machine-readable IDs (GC.*), and code-level causality anchors. Textual reasoning and skill anchors are the canonical mechanism.
 
-## Migration Strategy for Causality
+### Migration Strategy for Causality
 
 When finalizing any migration plan:
 1. Read the plan thoroughly (not just checkboxes).
@@ -35,7 +36,7 @@ When finalizing any migration plan:
 3. Create or update `is/skills/arch-*.md` with "Architectural Reasoning" section.
 4. Mark the plan complete and move to `docs/done/`.
 
-## Reasoning Confidence & Audit Gate
+### Reasoning Confidence & Audit Gate
 
 Every skill with Reasoning MUST include a confidence score (assigned by AI agent during audit):
 

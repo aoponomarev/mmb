@@ -1,7 +1,8 @@
 ---
 title: "Architecture: Layout & README Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "7ebe9e38"
 ---
 
 # Architecture: Layout & README Governance
@@ -10,12 +11,12 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-readme-local-contract** A `README.md` inside a directory acts as a local architectural contract. It explains the boundary, what is allowed, and what is forbidden in that directory, without forcing the developer to search through global architecture docs.
-- **#for-cognitive-load-reduction** By documenting subfolders within a parent `README.md` (e.g., in `is/scripts/`), we reduce visual noise and make the ownership and purpose of each subfolder immediately clear.
-- **#for-migration-exit-policy** Any folder created as a temporary layer during migration MUST have a `README.md` with a strict Exit Policy or Mandatory Removal condition. Prevents temporary "crutches" from becoming permanent technical debt.
-- **#for-automated-enforcement** Documentation that isn't checked becomes stale. The `validate-readmes.js` script enforces the existence of these critical boundary documents.
-- **#not-central-docs** Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed.
-- **#not-no-folder-docs** No folder-level documentation — leads to structure degradation as new files are added randomly.
+- **#for-readme-local-contract** A `README.md` acts as a localized architectural contract for a boundary, explaining rules without forcing devs to search global docs.
+- **#for-cognitive-load-reduction** Documenting subfolders inside a parent `README.md` makes ownership clear and reduces visual noise.
+- **#for-migration-exit-policy** Temporary migration folders must have strict Exit Policies so they don't become permanent tech debt.
+- **#for-automated-enforcement** The `validate-readmes.js` script enforces documentation presence so it doesn't decay.
+- **#not-central-docs** Monolithic docs lose context quickly; folder-level READMEs scale better.
+- **#not-no-folder-docs** Skipping folder docs leads to structure degradation over time.
 
 ---
 
@@ -27,14 +28,7 @@ reasoning_audited_at: "2026-03-01"
 - `Implemented`: Required README.md files for supplemental root folders (`shared/`, `styles/`, `scripts/`, `mm/`). Enforced by `validate-readmes.js`.
 - `Implemented`: Automated enforcement via `npm run readmes:check` (runs `is/scripts/architecture/validate-readmes.js`) and integrated into `health-check`.
 
-## Architectural Reasoning (Why this way)
-
-- **Local Contracts**: A `README.md` inside a directory acts as a local architectural contract. It explains the boundary, what is allowed, and what is forbidden in that directory, without forcing the developer to search through global architecture docs.
-- **Cognitive Load Reduction**: By documenting subfolders within a parent `README.md` (e.g., in `is/scripts/`), we reduce visual noise and make the ownership and purpose of each subfolder immediately clear.
-- **Migration & Temporary Layers**: Any folder created as a temporary layer during migration MUST have a `README.md` with a strict `Exit Policy` or `Mandatory Removal` condition. This prevents temporary "crutches" from becoming permanent technical debt.
-- **Automated Enforcement**: Documentation that isn't checked becomes stale. The `validate-readmes.js` script enforces the existence of these critical boundary documents.
-
-## Directory Policies
+## Core Rules
 
 1. **Root Bounds**: The root layer is divided into strictly separated domains:
    - `app/`: Frontend UI (No-build architecture). Root component, domain-specific components, templates.
@@ -47,12 +41,12 @@ reasoning_audited_at: "2026-03-01"
    - `scripts/`: Project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation).
    - `mm/`: Math models (domain-specific calculators). Legacy structure.
 2. **Script Layout**: `is/scripts/` root must contain only `README.md`, top-level entrypoints (`preflight.js`), and one-off migration utilities (e.g. `migrate-plans.js`). All other scripts go into subfolders: `architecture/`, `infrastructure/`, `secrets/`, `tests/`. See `is/scripts/README.md`.
-3. **Skill Layout**: Skills are distributed per `process-skill-placement.md`:
+3. **Skill Layout**: Skills are distributed per `process-skill-governance.md`:
    - `is/skills/`: Infrastructure and process knowledge (`arch-*.md`, `process-*.md`).
    - `core/skills/`: Backend and shared domain knowledge (e.g. `api-layer.md`, `cache-layer.md`, `config-contracts.md`).
    - `app/skills/`: UI layer knowledge (e.g. `ui-architecture.md`, `file-protocol-cors-guard.md`, `ux-principles.md`).
 
-## README Maintenance Procedure
+## Contracts
 
 ### When to Update
 
@@ -74,7 +68,7 @@ reasoning_audited_at: "2026-03-01"
 - `npm run readmes:sync` — Auto-updates Subdirectories/Subfolders/Structure sections to match filesystem. Adds missing entries (with placeholder description), removes stale entries. Does not overwrite existing descriptions.
 - `health-check` runs `readmes:check` — structural drift blocks health.
 
-## Agent Triggers
+### Agent Triggers
 
 When an AI agent (Cursor, Continue) performs any of the following, it MUST:
 

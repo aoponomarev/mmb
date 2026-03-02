@@ -1,7 +1,8 @@
 ---
 title: "Architecture: Monitoring & Observability"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "e9024df0"
 ---
 
 # Architecture: Monitoring & Observability
@@ -10,16 +11,16 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-observability** Standardized startup contracts (`npm run preflight`, `npm run health-check`) increase system observability without adding heavy external dependencies.
-- **#for-observability-before-migration** Without health-checks and monitoring, migration becomes opaque. Early investment in lightweight diagnostics catches regressions before they cascade.
-- **#for-preflight-over-postmortem** Proactive validation (running scripts before deployment/commits) is cheaper and more reliable than reactive debugging after failures.
-- **#for-three-plane-model** Separating health checks by concern area (knowledge/contract/runtime) ensures no single plane failure can mask issues in another.
-- **#for-jsonl-over-database** Using append-only `.jsonl` files for trend data keeps the monitoring stack zero-dependency and compatible with `file://` portability constraint.
-- **#for-redaction-by-design** Monitoring snapshots and logs must never contain secrets or PII. All logging paths use structured output with known safe fields only.
-- **#for-rollback-linkage** Monitoring triggers (Sev-2+ sustained, unhealthy health-check) are explicitly defined as rollback triggers in the protocol, creating a formal decision chain.
-- **#not-prometheus-grafana** Enterprise observability stack (Prometheus/Grafana) — over-engineering for a portfolio project. JSONL + console scripts provide sufficient signal.
-- **#not-manual-diagnosis** Manual-only diagnosis — unreproducible and error-prone during active migration.
-- **#not-defer-monitoring** Monitoring deferred until after migration — high operational risk of invisible regressions.
+- **#for-observability** Early setup of lightweight standard checks (`preflight`, `health-check`) avoids migration regressions without heavy deps.
+- **#for-observability-before-migration** Catch regressions early during migration.
+- **#for-preflight-over-postmortem** Proactive validation is cheaper and more reliable than reactive debugging after failures.
+- **#for-three-plane-model** Separating checks by plane (knowledge/contract/runtime) ensures failures in one don't mask issues in another.
+- **#for-jsonl-over-database** Append-only `.jsonl` files for trend data keep monitoring zero-dependency and local-first (`file://`).
+- **#for-redaction-by-design** Monitoring logs must never contain secrets or PII; structured outputs use known safe fields only.
+- **#for-rollback-linkage** Explicitly tying monitoring to rollback triggers removes emotional decision-making.
+- **#not-prometheus-grafana** Enterprise observability stacks are over-engineering for a portfolio project.
+- **#not-manual-diagnosis** Unreproducible and error-prone during active migration.
+- **#not-defer-monitoring** Waiting until after migration risks invisible regressions.
 
 ---
 

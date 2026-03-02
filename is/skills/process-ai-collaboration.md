@@ -1,7 +1,8 @@
 ---
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "0b0cf754"
 ---
 
 # AI Collaboration Protocol
@@ -10,44 +11,46 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-skepticism-over-pleasing** Migration has high cost of errors. Agreeing with flawed proposals accumulates technical debt. Direct criticism with alternatives prevents silent contract violations.
-- **#for-micro-steps** Large changes without verification hide regressions. Fail-fast after each atomic step catches errors before they cascade.
-- **#for-skills-before-code** AI agents in new chats have no memory. Knowledge must live in files; `search_skills`/`read_skill` are mandatory before acting in a new domain.
-- **#for-active-causality** Future agents will retry rejected paths. Recording "why not X" in skills or `@causality` comments prevents repeated mistakes.
-- **#for-no-implicit-commit** User must explicitly request commits. Nagging about uncommitted changes is noise; progress summary and next candidates are actionable.
+- **#for-skepticism-over-pleasing** Blindly agreeing with flawed user proposals accumulates technical debt; direct criticism with alternatives prevents contract violations.
+- **#for-micro-steps** Unverified large changes hide regressions. Execute tasks atomically with fail-fast validation.
+- **#for-skills-before-code** AI agents lack persistent memory across chats. You must use `read_skill` to understand the domain before acting.
+- **#for-active-causality** To prevent future agents from repeating mistakes, you must record rejected paths and nuances using `@causality` or `docs/audits/causality-exceptions.jsonl`.
+- **#for-no-implicit-commit** You must never commit without explicit user instruction. Nagging the user to commit adds noise.
 
 ---
 
-## Skepticism and Objectivity (Primary Directive)
+## Core Rules
 - **DO NOT try to please:** Never agree with a user's (developer's) proposal just out of politeness.
 - **Criticize:** If a proposed path violates current contracts (SSOT, Naming, Isolation, Language Policy), state this directly and offer an alternative with reasoning.
 - **Weigh old plans:** What was written in `AI/PRO/mmb/docs/plan_*.md` is not dogma. Migration circumstances have changed (e.g., dropping MMB/MBB terms, dropping strict Causality, English language policy). Apply plans by adapting them to the new reality, not blindly copying them.
 - **No Git amateurism:** IT IS STRICTLY FORBIDDEN to perform a `git commit` without an explicit and direct command from the user. It is forbidden to nag the user with phrases about how you didn't commit, or to suggest they do it. Instead, at the end of your response, provide a brief summary of overall migration progress (in percentage) and suggest the next candidates for execution.
 
-## Micro-steps (Fail-Fast Approach)
+## Contracts
+
+### Micro-steps (Fail-Fast Approach)
 - Execute large tasks through small, verifiable steps.
 - After every significant change, run `npm run test` or profile gate scripts (e.g., `npm run secret:check`).
 - If something breaks, stop immediately and report the error; do not try to "sweep it under the rug".
 
-## Read Documentation Before Acting
+### Read Documentation Before Acting
 - Before writing code in a new domain, use the `search_skills` or `read_skill` tool to gain context from `is/skills/` or `core/skills/`.
 - If the required rule doesn't exist — stop and suggest to the developer that they create it (document it in Markdown).
 - **Proactive skill transfer:** When migrating code modules from the donor (`AI/PRO/mmb`), the agent MUST scan the donor in parallel for skills and causalities related to this code. If a skill/causality from the donor is relevant for the new architecture, it must be transferred to the target project and adapted before writing or transferring the code itself.
 - **Language Policy:** Ensure all transferred or newly created skills, comments, and variables are translated to **English** in accordance with `process-language-policy.md`.
 
-## Obsolete Code Management
+### Obsolete Code Management
 - **Zero-Tolerance for garbage:** During migration, old files and scripts (e.g., old index generators or environment checks) that are duplicated by the new infrastructure layer `is/` must be deleted immediately.
 - **Clean working directory:** If a function is replaced by a new one, the old function cannot simply be commented out "just in case". It must be deleted (Git remembers everything).
 - **Backlog for non-critical debt:** If renaming a file breaks external integrations (e.g., third-party Python scripts), do not delete it, but create a task in `docs/backlog/` explaining why the file is left for now.
 
-## Long-term Memory (Chat-Agreement Memory)
+### Long-term Memory (Chat-Agreement Memory)
 - **Fixing agreements:** Any architectural, infrastructural, or process agreements reached in dialogue (chat) with the developer must be immediately transferred to the knowledge base (in the appropriate `*.md` file in `is/skills/` or `core/skills/`).
 - You cannot rely on another agent in a new chat to "read the history". Knowledge must live in files.
 - **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/drafts/causality-questions.md`. After receiving an answer from the developer — format it as a Skill and add a precise Anchor to the code.
 - **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from `causality-registry.md`: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
 - **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.
 
-## Skills Curation (Before Creating Any Skill)
+### Skills Curation (Before Creating Any Skill)
 Before creating a new skill file:
 1. **Search first**: Use `search_skills` with synonyms to check existing coverage.
 2. **Decision logic**:
@@ -59,7 +62,7 @@ Before creating a new skill file:
 
 ---
 
-## Agent Command Dictionary
+### Agent Command Dictionary
 
 Short commands that predictably switch agent behavior mode.
 

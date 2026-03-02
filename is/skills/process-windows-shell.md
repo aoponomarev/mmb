@@ -1,7 +1,8 @@
 ---
 title: "Process: Windows & PowerShell Patterns for AI Agents"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "41c0dbe9"
 ---
 
 # Process: Windows & PowerShell Patterns for AI Agents
@@ -11,12 +12,12 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-bash-ban-powershell** Windows Defender blocks Unix pipe creation when Cursor spawns bash. OneDrive file locks compound the issue. This is an OS-level conflict with no fix — PowerShell is the only reliable shell.
-- **#for-path-format-context** PowerShell `-Path` expects backslashes; Node.js `path.join()` uses forward slashes for cross-platform. Wrong format causes silent failures.
-- **#for-semicolon-over-and** PowerShell uses `;` for command chaining. `&&` is bash syntax and fails in PowerShell.
-- **#for-sqlite-no-onedrive** File locking during sync causes database corruption. Store `.db` in non-synced path or gitignored `data/`.
+- **#for-bash-ban-powershell** Windows Defender and OneDrive file locks block Unix pipe creation in Git Bash, resulting in unfixable OS-level `Win32 error 5`. PowerShell is required for reliable execution.
+- **#for-path-format-context** Mixing forward slashes (Node.js) with backslashes (PowerShell `-Path`) causes silent failures.
+- **#for-semicolon-over-and** The `&&` operator is bash syntax; PowerShell uses `;` for chaining commands.
+- **#for-sqlite-no-onedrive** OneDrive locking during file sync corrupts SQLite databases.
 
-## HARD BAN: Never Use Bash in Cursor
+### HARD BAN: Never Use Bash in Cursor
 
 Git Bash + Cursor = `Win32 error 5 (Access Denied)`. This is a known OS-level conflict with no fix.
 
@@ -29,13 +30,13 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 
 **Rule**: Always use PowerShell. If a command starts with `bash`, rewrite it for PowerShell before executing.
 
-## Quick Check Before Any Shell Command
+## Core Rules
 
 1. Does the command start with `bash`? → **STOP. Rewrite for PowerShell.**
 2. Using Unix operators (`&&`, `|`, `>`, backtick)? → **Wrap in `powershell -Command`.**
 3. Path uses forward slashes for PowerShell `-Path`? → **Convert to backslashes.**
 
-## Command Translation Table
+### Command Translation Table
 
 | Bash | PowerShell |
 |---|---|
@@ -47,7 +48,7 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 | `test -f file` | `Test-Path 'file'` |
 | `cmd1 && cmd2` | `cmd1; cmd2` (or use `;` in `-Command` string) |
 
-## Path Format Rules
+### Path Format Rules
 
 | Context | Format | Example |
 |---|---|---|
@@ -56,14 +57,16 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 | Node.js `path.join()` | Forward slash (cross-platform) | `path.join('D:/Clouds', 'file.txt')` |
 | Docker volume mount | Forward slash | `D:/Clouds/AO:/data` |
 
-## Multiple Operations
+### Multiple Operations
 
 ```powershell
 # Chain with semicolons (NOT &&):
 powershell -Command "New-Item -ItemType Directory -Force -Path 'path1'; Copy-Item 'src' 'dest' -Force"
 ```
 
-## Common Error Patterns & Fixes
+### Troubleshooting
+
+### Common Error Patterns & Fixes
 
 ### `Win32 error 5` in Git Bash
 Use PowerShell instead of bash for the operation.
@@ -77,7 +80,7 @@ OneDrive sync has the file locked. Wait for sync to complete (check tray icon), 
 ### SQLite files + OneDrive
 Never sync SQLite `.db` files through OneDrive — file locking causes corruption. Store them in a non-synced path or `data/` (gitignored).
 
-## Debugging Checklist
+### Debugging Checklist
 
 When any file operation fails:
 1. Is OneDrive syncing? (blue arrows in Explorer tray)

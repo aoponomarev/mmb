@@ -20,6 +20,7 @@ const CODE_DIRS = [
 const EXCLUDE_FILES = [
   "is/mcp/skills/server.js",
   "is/scripts/architecture/validate-causality.js",
+  "is/scripts/architecture/validate-causality-invariant.js",
 ];
 
 const HASH_REGEX = /#(?:for|not)-[\w-]+/g;

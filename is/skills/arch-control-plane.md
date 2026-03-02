@@ -4,7 +4,8 @@ tags: ["#architecture", "#control-plane", "#infrastructure", "#health"]
 dependencies: ["arch-foundation"]
 updated_at: "2026-03-01T00:00:00.000Z"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "7dea41f2"
 ---
 
 # Architecture: Control Plane
@@ -13,13 +14,13 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-control-plane-isolation** Isolating the control plane prevents cascading failures during the migration process.
-- **#for-observability** Standardized startup contracts (`npm run preflight`, `npm run health-check`) increase system observability without adding heavy external dependencies.
-- **#for-simplicity-over-orchestration** Instead of complex legacy PowerShell orchestration, we rely on simple `node` execution and explicit `.js` scripts to maintain a clear and debuggable dependency map.
-- **#for-single-writer-guard** A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races.
-- **#not-orchestration-in-backend** Embedding orchestration into backend services — mixing of responsibilities (domain logic vs infrastructure state).
-- **#not-abandon-control-plane** Temporarily abandoning the control plane — loss of control over the application state and safety during migration.
-- **#not-legacy-orchestration-port** Full legacy orchestration port — would transfer unnecessary technical debt.
+- **#for-control-plane-isolation** Isolating the control plane from the app runtime prevents cascading failures during the migration.
+- **#for-observability** Standardized startup contracts (`preflight`, `health-check`) increase observability without heavy external dependencies.
+- **#for-simplicity-over-orchestration** Simple `node` execution of `.js` scripts provides a clear, debuggable dependency map compared to legacy PowerShell.
+- **#for-single-writer-guard** The `DATA_PLANE_ACTIVE_APP` contract in preflight ensures only one environment writes to cloud resources, preventing data races.
+- **#not-orchestration-in-backend** Embedding orchestration into backend services mixes domain logic with infrastructure state.
+- **#not-abandon-control-plane** Abandoning the control plane would lead to a loss of safety during the migration.
+- **#not-legacy-orchestration-port** Fully porting legacy orchestration transfers unnecessary technical debt.
 
 ---
 

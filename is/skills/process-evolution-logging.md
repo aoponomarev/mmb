@@ -1,7 +1,8 @@
 ---
 title: "Process: Project Evolution Logging"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "0f5fa6f6"
 ---
 
 # Process: Project Evolution Logging
@@ -11,24 +12,26 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-cumulative-log** Git history is low-level; "what happened over N months" requires reading many commits. A single living document answers that question at a glance.
-- **#for-two-layer-model** Commits capture what changed; agents add rationale, tradeoffs, blocked items — context git cannot store.
-- **#for-tier-classification** Not all changes are equal. Critical (A) vs structural (B) vs operational (C) ensures important decisions stay prominent; housekeeping is aggregated.
-- **#for-hand-maintained** Automation for evolution log adds overhead. At 500+ lines, extract older months to `docs/done/` to keep the file scannable.
+- **#for-cumulative-log** Reading `git log` is too low-level. A living document provides an at-a-glance project history over time.
+- **#for-two-layer-model** Commits state *what* changed, but the agent adds the *why* (trade-offs, blocked items) that Git cannot easily store.
+- **#for-tier-classification** Grouping by tiers (A: Critical, B: Structural, C: Operational) ensures major decisions stand out and housekeeping doesn't add noise.
+- **#for-hand-maintained** Automation adds overhead; when the log exceeds 500 lines, older entries are manually extracted.
 
 ---
 
-## Purpose
+## Core Rules
 
 `docs/project-evolution.md` is the cumulative project log — a living record of what changed, when, and why. It is the go-to source for answering "what happened in this project over the past N months" without reading git log line by line.
 
-## Architecture (Two Layers)
+## Contracts
+
+### Architecture (Two Layers)
 
 **Layer 1 — Commit-driven**: After a significant session, record what was committed in a dated block.
 
 **Layer 2 — Agent-assisted**: At session close or after completing a major migration step, the agent enriches the block with context that git commits alone cannot capture (rationale, tradeoffs, blocked items, architectural decisions).
 
-## Tier Classification
+### Tier Classification
 
 When writing entries, classify each item:
 
@@ -38,7 +41,7 @@ When writing entries, classify each item:
 | **B** (Structural) | New skills, new scripts, new tests, integration links, reliability gates, major refactors | Keep grouped |
 | **C** (Operational) | `.gitignore` tweaks, formatting, README-only changes, housekeeping | Aggregate into one tail phrase |
 
-## Block Format
+### Block Format
 
 One date block per day. Never create two blocks for the same date.
 
@@ -55,14 +58,14 @@ Service → Transport → HTTP Handler → Node Server.
 **[Tier C]** README files restored for 8 boundary directories.
 ```
 
-## 5. Agent Trigger
+### 5. Agent Trigger
 
 After any non-trivial session (3+ files changed, or architectural decision made):
 1. Check if today's dated block exists in `docs/project-evolution.md`.
 2. If missing or incomplete — write or extend it.
 3. Do NOT log: pure documentation reformatting, typo fixes, trivial housekeeping.
 
-## Commands
+### Commands
 
 ```bash
 # View recent history

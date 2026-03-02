@@ -1,7 +1,8 @@
 ---
 title: "Architecture: Backend Core & Data Pipeline"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "70eadb33"
 ---
 
 # Architecture: Backend Core & Data Pipeline
@@ -10,18 +11,18 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-incremental-migration** Incremental migration over big-bang rewrite reduces regression risk. Each slice (provider, service, transport, HTTP) is independently testable.
-- **#for-data-contracts-first** Data contracts first, UI second. Backend stability is foundational — UI and integrations depend on stable API/data shapes.
-- **#for-ssot-paths** Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness.
-- **#for-layer-separation** Layer separation (Service → Transport → HTTP Handler → Node Server): each layer has single responsibility, making testing trivial and replacement easy. Transport maps domain errors to HTTP status codes; handler manages routing; server provides socket binding.
-- **#for-composition-root** Composition Root pattern: `backend-market-runtime.js` assembles all dependencies in one place, enabling test-time injection of mocks and ensuring no hidden coupling.
-- **#for-fail-fast** Fail-fast over graceful degradation during migration: fallback chains for external critical contracts are intentionally avoided. Failed provider = visible failure, not silent data corruption.
-- **#for-partial-failure-tolerance** `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot.
-- **#for-request-id-traceability** Every HTTP request carries a sanitized `x-request-id` through all layers, making distributed debugging possible from day one.
-- **#for-node-test** Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale.
-- **#not-big-bang-rewrite** Full big-bang backend rewrite — too risky for migration phase.
-- **#not-rewrite-from-scratch** Full rewrite from scratch — expensive, and most Legacy App patterns are sound.
-- **#not-express-fastify** Express/Fastify for HTTP — thin native `http.createServer` sufficient for portfolio project.
+- **#for-incremental-migration** Instead of a big-bang rewrite, we migrate slice by slice. Each slice (provider, service, transport, HTTP) is independently testable.
+- **#for-data-contracts-first** Backend stability is foundational — UI and integrations depend on stable API/data shapes, so we validate inputs early.
+- **#for-ssot-paths** Absolute paths from `paths.js` guarantee correctness regardless of CWD.
+- **#for-layer-separation** Service → Transport → HTTP Handler → Node Server. Each layer has single responsibility, making testing trivial and replacement easy.
+- **#for-composition-root** `backend-market-runtime.js` assembles all dependencies, enabling test-time injection of mocks and ensuring no hidden coupling.
+- **#for-fail-fast** Data providers must throw BackendCoreError instead of infinite retries.
+- **#for-partial-failure-tolerance** The orchestrator uses `getAllBestEffort` to return healthy metrics alongside error reports for failed ones.
+- **#for-request-id-traceability** Every HTTP request carries a sanitized `x-request-id` through all layers for distributed debugging.
+- **#for-node-test** Zero external test dependency; built-in test runner is sufficient.
+- **#not-big-bang-rewrite** Full big-bang backend rewrite is too risky for the migration phase.
+- **#not-rewrite-from-scratch** Full rewrite from scratch is expensive, and most Legacy App patterns are sound.
+- **#not-express-fastify** Thin native `http.createServer` is sufficient for a portfolio project.
 
 ---
 

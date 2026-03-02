@@ -1,22 +1,23 @@
 ---
 title: "Domain: Portfolio Engine"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "a2b1b94b"
 ---
 
 # Domain: Portfolio Engine
 
-> **Scope**: `core/domain/`
 > **Context**: Pure domain logic for portfolio allocation, rebalancing, and weight management. Framework and storage independent.
+> **Scope**: `core/domain/`
 
 ## Reasoning
 
-- **#for-domain-invariants** Portfolio math breaks silently if weights don't sum to 100. Enforcing this as a domain invariant (not a UI concern) prevents invalid state from ever reaching persistence.
-- **#for-compatibility-facade** A direct cutover of all callers at once would be too risky. The facade translates calls from the old imperative API to the new pure-function domain model, allowing incremental migration.
+- **#for-domain-invariants** Portfolio math breaks silently if weights don't sum to 100. Enforcing this as a strict domain invariant prevents invalid state from persisting.
+- **#for-compatibility-facade** Direct cutover to pure functions is risky. A facade translates imperative calls to pure domain operations, enabling incremental migration.
 
 ---
 
-## Core Invariants (Always Enforced)
+## Contracts
 
 These invariants must hold after every portfolio operation:
 
@@ -28,7 +29,7 @@ These invariants must hold after every portfolio operation:
 
 **#for-domain-invariants** Portfolio math breaks silently if weights don't sum to 100. Enforcing this as a domain invariant (not a UI concern) prevents invalid state from ever reaching persistence.
 
-## Key Functions (`core/domain/portfolio-engine.js`)
+## Core Rules
 
 All functions are **pure** — they receive a draft object and return a new draft object. No side effects, no global state.
 
@@ -44,21 +45,21 @@ All functions are **pure** — they receive a draft object and return a new draf
 
 **Priority order in rebalance**: locked assets are skipped; unlocked assets receive weight proportional to their priority mode setting.
 
-## Compatibility Facade
+### Compatibility Facade
 
 `core/config/portfolio-config.js` acts as a **bridge** between legacy callers (UI components, event handlers) that use the old Legacy App portfolio API shape and the new pure-function engine in `core/domain/`.
 
 **#for-compatibility-facade** A direct cutover of all callers at once would be too risky. The facade translates calls from the old imperative API to the new pure-function domain model, allowing incremental migration.
 
-## Validation (`core/domain/portfolio-validation.js`)
+### Validation (`core/domain/portfolio-validation.js`)
 
 Validates the draft object shape and invariants before persistence. Returns a structured error list — never throws. Callers decide whether to block save or warn the user.
 
-## Storage Separation
+### Storage Separation
 
 The domain engine has **no knowledge of storage** (localStorage, Cloudflare, PostgreSQL). Persistence is handled by the caller (UI component or service layer) after receiving the validated draft from the engine.
 
-## File Map
+### File Map
 
 | File | Responsibility |
 |---|---|

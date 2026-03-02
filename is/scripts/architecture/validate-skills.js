@@ -27,6 +27,90 @@ function walkMarkdownFiles(dir, result = []) {
     return result;
 }
 
+function validateSkillFormat(file, text, rel, errors) {
+    const lines = text.split("\n");
+    let inFrontmatter = false;
+    let frontmatterEndsAt = -1;
+
+    // 1. Check Frontmatter
+    if (lines[0] && lines[0].trim() === "---") {
+        inFrontmatter = true;
+        for (let i = 1; i < lines.length; i++) {
+            if (lines[i].trim() === "---") {
+                inFrontmatter = false;
+                frontmatterEndsAt = i;
+                break;
+            }
+        }
+    }
+
+    // Ignore READMEs completely from this strict structure validation
+    if (rel.endsWith("README.md") || rel.endsWith("causality-registry.md")) return;
+
+    if (frontmatterEndsAt === -1) {
+        errors.push(`${rel}: Missing or unclosed YAML frontmatter`);
+        return; // Can't proceed safely
+    }
+
+    // Must have required fields
+    const requiredFields = ["title", "reasoning_confidence", "reasoning_audited_at", "reasoning_checksum"];
+    const frontmatterText = lines.slice(1, frontmatterEndsAt).join("\n");
+    for (const field of requiredFields) {
+        if (!new RegExp(`^${field}:`, "m").test(frontmatterText)) {
+            errors.push(`${rel}: Missing required frontmatter field '${field}'`);
+        }
+    }
+
+    // 2. Check H1 and Context
+    let firstContentLine = frontmatterEndsAt + 1;
+    while (firstContentLine < lines.length && lines[firstContentLine].trim() === "") {
+        firstContentLine++;
+    }
+
+    if (firstContentLine >= lines.length || !lines[firstContentLine].startsWith("# ")) {
+        errors.push(`${rel}: File must start with an H1 heading (# ...) immediately after frontmatter (ignoring empty lines)`);
+    }
+
+    let contextLine = firstContentLine + 1;
+    while (contextLine < lines.length && lines[contextLine].trim() === "") {
+        contextLine++;
+    }
+
+    if (contextLine < lines.length && !lines[contextLine].startsWith("> **Context**:")) {
+        // Exempt the causality-registry.md from strict context rule as it's a special registry file
+        if (!rel.endsWith("causality-registry.md")) {
+            errors.push(`${rel}: H1 must be immediately followed by a '> **Context**:' blockquote`);
+        }
+    }
+
+    // 3. Check H2 Headers
+    const ALLOWED_H2_HEADERS = [
+        "## Reasoning",
+        "## Core Rules",
+        "## Contracts",
+        "## Implementation Status in Target App",
+        "## Implementation Status",
+        "## Migration Strategy",
+        "## Examples"
+    ];
+
+    let foundH2s = [];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.startsWith("## ")) {
+            const h2Text = line.trim();
+            foundH2s.push(h2Text);
+            if (!ALLOWED_H2_HEADERS.includes(h2Text) && !rel.endsWith("causality-registry.md")) {
+                 errors.push(`${rel}: Disallowed H2 header found: '${h2Text}'. Allowed H2s are strictly defined.`);
+            }
+        }
+    }
+
+    if (foundH2s.length > 0 && foundH2s.includes("## Reasoning") && foundH2s[0] !== "## Reasoning" && !rel.endsWith("causality-registry.md")) {
+        errors.push(`${rel}: '## Reasoning' must be the first H2 section if it exists`);
+    }
+}
+
 function main() {
     const errors = [];
     const warnings = [];
@@ -44,10 +128,8 @@ function main() {
             const text = fs.readFileSync(file, "utf8");
             const stat = fs.statSync(file);
 
-            const hasTitle = /^title:\s*['"]?([^'"]+)['"]?/m.test(text) || /^#\s+(.+)$/m.test(text);
-            if (!hasTitle) {
-                errors.push(`${rel}: missing H1 heading or 'title:' frontmatter`);
-            }
+            // Detailed format validation
+            validateSkillFormat(file, text, rel, errors);
 
             const ageDays = (now - stat.mtimeMs) / (1000 * 60 * 60 * 24);
             if (ageDays > STALE_DAYS) {

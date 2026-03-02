@@ -1,7 +1,8 @@
 ---
 title: "Architecture: External Infrastructure Parity"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-01"
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "2e1079c9"
 ---
 
 # Architecture: External Infrastructure Parity
@@ -10,14 +11,14 @@ reasoning_audited_at: "2026-03-01"
 
 ## Reasoning
 
-- **#for-functional-parity** Target App must produce equivalent external behavior (same API contracts, env keys, health responses) without copying Legacy App's internal implementation flaws. Anti-calque principle applied to infrastructure.
-- **#for-single-writer-guard** A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races.
-- **#for-time-separated-operation** Legacy App and Target App share Cloudflare/Yandex data stores but never operate simultaneously in write mode. Eliminates race conditions without distributed locking.
-- **#for-fail-fast** Fail-fast over graceful degradation during migration: fallback chains for external critical contracts are intentionally avoided. Failed provider = visible failure, not silent data corruption.
-- **#for-env-contract-sync** `.env.example` defines the union of all required keys. Both Legacy App and Target App can be validated against it. Divergence in env keys is the most common source of parity bugs.
-- **#not-simultaneous-read-write** Simultaneous read-write from both apps — race conditions, API rate limit conflicts.
-- **#not-infra-duplication** Full infrastructure duplication (separate Cloudflare/Yandex per app) — cost, complexity.
-- **#not-no-parity-checks** No parity checks — drift between apps causes silent failures during handoff.
+- **#for-functional-parity** Target App must produce equivalent external behavior to Legacy without copying its flawed internal implementations.
+- **#for-single-writer-guard** Target and Legacy share Cloudflare/Yandex stores, so a strict `DATA_PLANE_ACTIVE_APP` variable guarantees only one app can mutate data at a time.
+- **#for-time-separated-operation** Operating sequentially (never simultaneously) avoids race conditions without needing distributed locking.
+- **#for-fail-fast** If external parity checks or integrations fail, we crash loudly rather than silently corrupting state.
+- **#for-env-contract-sync** `.env.example` serves as the exact intersection contract for both Legacy and Target apps.
+- **#not-simultaneous-read-write** Prevents rate limit conflicts and overlapping writes.
+- **#not-infra-duplication** Keeps cloud costs down and avoids migrating data across separate Cloudflare buckets.
+- **#not-no-parity-checks** Unchecked drift leads to silent production handoff failures.
 
 ---
 
