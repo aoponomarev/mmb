@@ -3,6 +3,8 @@
 All hashes used in `@causality` and `@skill-anchor` MUST exist in this registry.
 Add new hashes here before using in code. Skills and code share the same namespace.
 
+**Semantic Duplication Check:** Before adding a new hash, read this entire table. If a semantically equivalent reason already exists (e.g., `#for-fail-fast` vs `#for-timeout-fail-fast`), REUSE the existing hash. You may expand the existing formulation to cover your nuance, but DO NOT create a duplicate hash.
+
 **Formats:**
 - `// @causality #for-X` or `// @causality #for-X #not-Y` or `// @causality #for-X: short context`
 - `// @skill-anchor skill-id #for-X` or `// @skill-anchor skill-id #for-X #not-Y`

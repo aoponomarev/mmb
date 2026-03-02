@@ -95,6 +95,23 @@ reasoning_audited_at: "2026-03-01"
 
 **Gate threshold**: `reasoning_confidence >= 0.5`. Below 0.5, the skill fails the gate.
 
+## Causality Invalidation Protocol
+
+When you remove or change a causality hash (`#for-X`) from code (`@causality` or `@skill-anchor`), you MUST ensure that this hash is not orphaned in other files where the reason no longer applies.
+
+The **Causality Invariant Gate** (`is/scripts/architecture/validate-causality-invariant.js`) runs during preflight and will fail if a hash is removed from one file but remains in others.
+
+If the gate fails, you have two options:
+1. **Clean wipe**: Audit the remaining files and remove/update the hash there as well if the reason no longer applies.
+2. **Acknowledge divergence**: If the hash removal applies *only* to the first file (e.g., you added a cache to service A, so it no longer needs fail-fast, but provider B still needs it), you MUST add an exception.
+
+**Exception format (JSONL):**
+Add a line to `docs/audits/causality-exceptions.jsonl`:
+```json
+{"hash":"#for-fail-fast", "removed_from":"core/api/market-metrics-service.js", "reason":"Metrics service now uses a fallback cache, but the underlying provider must still fail-fast on timeout."}
+```
+*Note: The gate output will provide the exact JSON template to copy-paste.*
+
 ## Gate Contract
 
 The `validate-reasoning.js` script enforces:

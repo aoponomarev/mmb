@@ -66,6 +66,7 @@ function runPreflight() {
         }
         if (!process.env.PREFLIGHT_SKIP_CAUSALITY) {
             execSync('node is/scripts/architecture/validate-causality.js', { stdio: 'inherit', cwd: PATHS.root });
+            execSync('node is/scripts/architecture/validate-causality-invariant.js', { stdio: 'inherit', cwd: PATHS.root });
         } else {
             console.log('[preflight] Skipping Causality gate (PREFLIGHT_SKIP_CAUSALITY=1)');
         }

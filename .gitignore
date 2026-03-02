@@ -19,6 +19,7 @@ is/secrets/archives/
 is/logs/
 is/memory/*.jsonl
 is/memory/*.json
+is/contracts/.causality-lock.json
 
 # Compromised or local operational files
 docs/CRON.txt
