@@ -6,12 +6,10 @@
  * PURPOSE: Единая точка доступа for работы с AI провайдером (YandexGPT).
  * Управляет переключением между провайдерами и предоставляет единый интерфейс.
  *
- * Skill: core/skills/api-layer
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
- * PRINCIPLES:
- * - Единый интерфейс for всех провайдеров
- * - Автоматическое получение настроек (API ключ, модель) for текущего провайдера
- * - Кэширование переводов/новостей отдельно for каждого провайдера
+ * Skill: core/skills/api-layer
  *
  * ОСОБЕННОСТИ:
  * - Дефолтный провайдер: YandexGPT
@@ -28,10 +26,7 @@
  * // Get текущий провайдер
  * const provider = await window.aiProviderManager.getCurrentProvider();
  *
- * REFERENCES:
- * - Провайдеры: core/api/ai-providers/
- * - Кэш-менеджер: core/cache/cache-manager.js
- */
+*/
 
 // @skill-anchor core/skills/ai-providers-architecture #for-ai-provider-abstraction #for-ai-manager-switching
 (function() {

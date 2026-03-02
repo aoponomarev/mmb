@@ -5,6 +5,9 @@
  * PURPOSE: Отслеживание времени последних запросов к эндпоинтам for соблюдения rate limits.
  * Хранит состояние в localStorage, выживает после перезагрузки страницы.
  *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ *
  * Skill: core/skills/api-layer
  */
 

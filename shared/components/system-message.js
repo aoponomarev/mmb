@@ -6,11 +6,9 @@
  * PURPOSE: SSOT for отображения одного системного сообщения.
  * Используется компонентом cmp-system-messages for рендеринга каждого сообщения.
  *
- * PRINCIPLES:
- * - Единый шаблон for всех типов сообщений (danger, warning, info, success)
- * - Mapping типов в Bootstrap классы
- * - Поддержка actions (кнопки действий)
- * - Эмиты событий вместо прямых вызовов
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * USAGE:
  * <cmp-system-message
@@ -19,11 +17,7 @@
  *     @action="handleAction"
  * />
  *
- * REFERENCES:
- * - Родительский компонент: shared/components/system-messages.js
- * - Хранилище: shared/utils/messages-store.js
- * - Конфигурация: core/config/messages-config.js
- */
+*/
 
 (function() {
     'use strict';

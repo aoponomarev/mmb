@@ -5,6 +5,9 @@
  *
  * PURPOSE: Interact with Cloudflare Workers API for managing coin sets.
  *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ *
  * Skill: core/skills/config-contracts
  *
  * METHODS:
@@ -23,11 +26,7 @@
  * const sets = await window.coinSetsClient.getCoinSets();
  * const newSet = await window.coinSetsClient.createCoinSet({ name: 'My Set', coin_ids: ['bitcoin'] });
  *
- * REFERENCES:
- * - Workers API: cloud/cloudflare/workers/src/coin-sets.js
- * - D1 Helpers: cloud/cloudflare/workers/src/utils/d1-helpers.js
- * - Portfolios Client (analogy): core/api/cloudflare/portfolios-client.js
- */
+*/
 
 (function() {
     'use strict';

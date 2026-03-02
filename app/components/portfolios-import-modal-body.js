@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Выборочный импорт портфелей из JSON с фильтрацией по дате и базовой валидацией.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: core/skills/domain-portfolio
  *
  * ОСОБЕННОСТИ:
@@ -18,11 +22,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Конфигурация портфелей: core/config/portfolio-config.js
- * - Конфигурация модалок: core/config/modals-config.js
- * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 4)
- */
+*/
 
 window.portfoliosImportModalBody = {
     template: `

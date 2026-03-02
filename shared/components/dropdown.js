@@ -3,6 +3,10 @@
 // Vue-обёртка над Bootstrap dropdown с поддержкой поиска и прокрутки
 // =========================
 // PURPOSE: Переиспользуемый компонент выпадающего списка с поддержкой:
+//
+// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
 // - Поиска по элементам
 // - Прокрутки for длинных списков
 // - Полной совместимости with Bootstrap JS API
@@ -19,16 +23,6 @@
 // - Поддержка любых комбинаций элементов на кнопке
 // - Автоматическое закрытие dropdown после выбора
 // - Поддержка v-model через update:selectedItem
-//
-// PRINCIPLES:
-// - Максимальная совместимость with Bootstrap JS API (обязательное требование)
-// - Использование только Bootstrap классов (запрет кастомных стилей)
-// - Инициализация Bootstrap Dropdown через JavaScript API
-// - Подписка на события Bootstrap (show.bs.dropdown, hide.bs.dropdown)
-// - Программный доступ к Bootstrap API через ref
-// - Поддержка тем Bootstrap через CSS-переменные
-// - Использование компонента cmp-button for кнопки триггера: атрибуты Bootstrap передаются через buttonAttributes,
-//   доступ к реальному DOM-элементу через $refs.dropdownButton.$el for инициализации Bootstrap API
 //
 // API КОМПОНЕНТА:
 //

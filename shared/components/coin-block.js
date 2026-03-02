@@ -6,18 +6,9 @@
  * PURPOSE: Переиспользуемый компонент for отображения информации о монете.
  * Адаптирован из do-overs/BOT/ui/components/cell-coin.js с удалением привязки к CoinGecko.
  *
- * PRINCIPLES:
- * - Независимость от конкретного провайдера данных (CoinGecko, CoinMarketCap и т.д.)
- * - Принимает нормализованные данные через props
- * - Поддержка кликов и контекстного меню
- * - Кастомизация через CSS-классы
- *
- * PROPS:
- * - coinId: ID монеты (обязательно)
- * - symbol: Тикер монеты (BTC, ETH и т.д.)
- * - name: Полное название монеты
- * - image: URL иконки монеты
- * - cssClasses: Объект с CSS-классами for кастомизации
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * USAGE:
  * <coin-block
@@ -28,10 +19,7 @@
  *   @context-menu="handleContextMenu">
  * </coin-block>
  *
- * REFERENCES:
- * - Старая версия: do-overs/BOT/ui/components/cell-coin.js
- * - Data Provider Manager: core/api/data-provider-manager.js
- */
+*/
 
 (function() {
     'use strict';

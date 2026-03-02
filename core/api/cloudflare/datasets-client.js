@@ -5,13 +5,10 @@
  *
  * PURPOSE: Браузерный клиент for работы с временными рядами и метриками через Cloudflare Workers API.
  *
- * Skill: core/skills/config-contracts
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
- * PRINCIPLES:
- * - SSOT: Использовать `cloudflare-config.js` for всех endpoints
- * - Авторизация: Использовать `auth-client.js` for получения токена
- * - Обработка ошибок: Использовать существующую систему обработки ошибок
- * - Модульность: Независимый модуль без зависимостей от UI компонентов
+ * Skill: core/skills/config-contracts
  *
  * ОСОБЕННОСТИ:
  * - Автоматическое добавление Authorization заголовка с JWT токеном
@@ -21,11 +18,7 @@
  * ПРИМЕЧАНИЕ: R2 хранилище отложено, поэтому endpoints возвращают заглушки.
  * После активации R2 будет реализована полная функциональность.
  *
- * REFERENCES:
- * - Конфигурация Workers: core/config/cloudflare-config.js
- * - OAuth клиент: core/api/cloudflare/auth-client.js
- * - План интеграции: core/skills/config-contracts
- */
+*/
 
 (function() {
     'use strict';

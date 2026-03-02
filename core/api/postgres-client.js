@@ -5,17 +5,12 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Базовый клиент for CRUD операций с данными в Yandex Cloud PostgreSQL.
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Реализует паттерн "Data Provider" for горячих данных (портфели, настройки).
  *
- * REFERENCES:
- * - users: id, email, created_at, settings (jsonb)
- * - portfolios: id, user_id, name, created_at, updated_at, settings (jsonb), model_mix (jsonb)
- * - snapshots: id, portfolio_id, type (market/assets/metrics), data (jsonb), created_at
- *
- * REFERENCES:
- * - Конфигурация: core/config/postgres-config.js
- * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 3.2)
- */
+*/
 
 (function() {
     'use strict';

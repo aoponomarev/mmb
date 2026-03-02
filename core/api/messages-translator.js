@@ -6,12 +6,8 @@
  *
  * PURPOSE: Перевод системных сообщений через AI провайдеры с кэшированием.
  *
- * PRINCIPLES:
- * - Упрощённый формат промпта: KEY|TEXT|DETAILS
- * - Компактное хранение в localStorage: { key: [text, details] }
- * - Lazy translation — перевод только при смене языка
- * - Fallback на русский при ошибках
- * - Версионирование кэша — привязка к версии приложения for автоматической инвалидации
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
  * ФОРМАТ КЭША (localStorage):
  * Ключ: 'tr-{lang}-{versionHash}' (например: 'tr-en-aBc12XyZ')
@@ -28,12 +24,7 @@
  * await messagesTranslator.updateLanguage('es');
  * const translated = messagesTranslator.translate('e.net');
  *
- * REFERENCES:
- * - Конфигурация: core/config/messages-config.js
- * - AI провайдеры: core/api/ai-provider-manager.js
- * - i18n конфиг: core/config/i18n-config.js
- * - Версионирование: core/config/app-config.js (getVersionHash)
- */
+*/
 
 (function() {
     'use strict';

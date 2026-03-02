@@ -5,6 +5,10 @@
  *
  * PURPOSE: Список сохраненных sets монет for загрузки с возможностью множественного выбора.
  *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ *
  * ОСОБЕННОСТИ:
  * - Отображает список сохраненных sets монет пользователя
  * - Загружает наборы из Cloudflare D1 через coin-sets-client
@@ -24,11 +28,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Система управления кнопками: shared/components/modal.js
- * - Coin Sets Client: core/api/cloudflare/coin-sets-client.js
- * - Skill: core/skills/api-layer
- */
+*/
 
 window.coinSetLoadModalBody = {
     template: `

@@ -5,6 +5,9 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Загружать централизованные метаданные монет (стейблкоины, обертки, LST)
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * из внешнего JSON-файла на GitHub CDN.
  *
  * ФАЙЛ: libs/assets/data/coins.json

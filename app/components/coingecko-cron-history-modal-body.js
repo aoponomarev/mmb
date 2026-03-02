@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Показывает историю последних циклов забора данных из CoinGecko (через cron).
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Источник данных: GET /api/coins/cycles (Yandex app-api).
  */
 

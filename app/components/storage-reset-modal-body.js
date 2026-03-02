@@ -5,6 +5,10 @@
  *
  * PURPOSE: Выборочное удаление данных из кэша по категориям.
  *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ *
  * Skill: core/skills/cache-layer
  *
  * ОСОБЕННОСТИ:
@@ -28,10 +32,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Система управления кнопками: shared/components/modal.js
- * - Cache Manager: core/cache/cache-manager.js
- */
+*/
 
 window.storageResetModalBody = {
     template: `

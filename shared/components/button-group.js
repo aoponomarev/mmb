@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Vue-обёртка над Bootstrap .btn-group с поддержкой:
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * - Трёх типов кнопок: button (через cmp-button), checkbox, radio (нативный HTML)
  * - Наследования стилей (variant, size) от группы к кнопкам
  * - Адаптивного схлопывания в dropdown при брейкпоинте
@@ -86,12 +90,7 @@
  * - Состояние синхронизируется с dropdown при схлопывании
  * - События синхронизируются между кнопками и пунктами меню
  *
- * REFERENCES:
- * - General principles работы с компонентами: app/skills/ux-principles
- * - Стратегия совместимости with Bootstrap: app/skills/ux-principles
- * - Responsiveness: app/skills/ui-architecture
- * - Шаблон: shared/templates/button-group-template.js
- */
+*/
 
 window.cmpButtonGroup = {
     template: '#button-group-template',

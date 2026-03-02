@@ -9,31 +9,6 @@
  * Обработка событий:
  * // @skill-anchor is/skills/process-code-documentation #for-template-logic-separation #not-doc-duplication
  * Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/button-template.js`
- * Bootstrap-совместимость:
- * - Компонент использует классы btn, btn-{variant}, btn-{size} Bootstrap for базовой стилизации
- * - Состояния disabled и loading применяются через атрибут disabled и классы Bootstrap
- * - Поддержка тем Bootstrap через CSS-переменные (var(--bs-body-color), var(--bs-secondary-color) и т.п.)
- * - Полная обратная совместимость: компонент — обёртка над нативной Bootstrap кнопкой, все стандартные классы и атрибуты Bootstrap работают корректно
- * Использование в комплексных компонентах:
- * - Компонент cmp-button может использоваться в других компонентах (например, cmp-dropdown) for кнопок триггеров Bootstrap
- * - Для этого using prop buttonAttributes с атрибутами Bootstrap (data-bs-toggle, aria-expanded, id, class)
- * - Атрибуты из buttonAttributes передаются на реальный DOM-элемент ⟨button⟩ через v-bind
- * - Bootstrap API работает напрямую с реальным DOM-элементом (не с Vue-компонентом)
- * - Доступ к реальному DOM-элементу через $refs.componentName.$el for инициализации Bootstrap
- * - Классы из buttonAttributes.class объединяются с классами из buttonClasses
- * Подсказки (tooltips):
- * - Нативные подсказки браузера через атрибут title (не Bootstrap Tooltip)
- * - Не требуют инициализации и уничтожения — работают автоматически через браузер
- * - Раздельные подсказки for иконки (tooltipIcon), текста (tooltipText) и каждого элемента суффикса (если suffix — массив, каждый элемент может иметь свой tooltip)
- * Обработка событий:
- * - По умолчанию все зоны (иконка, текст, суффикс) эмитят общее событие 'click'
- * - Раздельные события (click-icon, click-text, click-suffix) эмитятся всегда при клике на соответствующую зону
- * - Обработчики событий используют .stop for предотвращения всплытия
- * Множественные суффиксы:
- * - suffix can be массивом элементов for поддержки нескольких badge/icon/indicator одновременно
- * - Каждый элемент массива может иметь свой tooltip
- * Анимация chevron:
- * - Анимация chevron через Font Awesome классы (fa-rotate-90) + inline transition (единственное исключение из запрета inline-стилей)
  *
  * API КОМПОНЕНТА:
  *
@@ -65,13 +40,7 @@
  *
  * Note: Все зоны (иконка, текст, суффикс) эмитят общее событие click по умолчанию. Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно в родительском компоненте.
  *
- * REFERENCES:
- * - General principles работы с компонентами: app/skills/ux-principles
- * - Responsiveness: app/skills/ui-architecture
- * - Height alignment: app/skills/ui-architecture
- * - Детерминированные хэши: is/skills/arch-foundation
- * - Шаблон: shared/templates/button-template.js
- */
+*/
 
 window.cmpButton = {
     template: '#button-template',

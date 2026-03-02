@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Форма for сохранения выбранных монет в набор с названием.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
  * ОСОБЕННОСТИ:
@@ -23,11 +27,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Система управления кнопками: shared/components/modal.js
- * - Компонент кнопки: shared/components/button.js
- * - Coin Sets Client: core/api/cloudflare/coin-sets-client.js
- */
+*/
 
 window.coinSetSaveModalBody = {
     template: `

@@ -2,18 +2,11 @@
  * ================================================================================================
  * DATA PROVIDER MANAGER - Менеджер for переключения между провайдерами данных
  * ================================================================================================
- * Skill: core/skills/api-layer
- * Skill: core/skills/api-layer
+ * // @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-dual-channel-fallback
  *
  * PURPOSE: Единая точка доступа for работы с разными провайдерами данных о монетах
  * (CoinGecko, CoinMarketCap, Binance и т.д.). Управляет переключением между провайдерами
  * и предоставляет единый интерфейс.
- *
- * PRINCIPLES:
- * - Единый интерфейс for всех провайдеров
- * - Автоматическое получение настроек (API ключ) for текущего провайдера
- * - Бесшовное переключение между источниками данных
- * - Кэширование данных отдельно for каждого провайдера
  *
  * ОСОБЕННОСТИ:
  * - Дефолтный провайдер: CoinGecko
@@ -34,12 +27,7 @@
  * // Set API ключ for провайдера
  * await window.dataProviderManager.setApiKey('coingecko', 'my-api-key');
  *
- * REFERENCES:
- * - AI Provider Manager (аналогия): core/api/ai-provider-manager.js
- * - Провайдеры: core/api/data-providers/
- * - Конфигурация: core/config/data-providers-config.js
- * - Кэш-менеджер: core/cache/cache-manager.js
- */
+*/
 
 (function() {
     'use strict';

@@ -5,15 +5,16 @@
  *
  * PURPOSE: Демонстрация использования системы управления кнопками модального окна.
  *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ *
  * ОСОБЕННОСТИ:
  * - Регистрация кнопок через inject modalApi
  * - Реактивное обновление состояния кнопок при изменении данных формы
  * - Демонстрация кнопок в header и footer одновременно
  *
- * REFERENCES:
- * - Система управления кнопками: shared/components/modal.js
- * - Принципы: app/skills/ux-principles
- */
+*/
 
 window.modalExampleBody = {
     template: `

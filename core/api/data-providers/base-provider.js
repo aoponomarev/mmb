@@ -5,40 +5,10 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Единый интерфейс for работы с различными источниками данных о криптовалютах
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * (CoinGecko, CoinMarketCap, Binance и т.д.).
- *
- * PRINCIPLES:
- * - Абстракция различий между API провайдеров
- * - Нормализация данных к единому формату
- * - Обработка rate limiting и ошибок
- * - Поддержка кэширования
- *
- * ОБЯЗАТЕЛЬНЫЕ МЕТОДЫ (должны быть реализованы в дочерних классах):
- * - getTopCoins(count, sortBy) — получить топ N монет
- * - searchCoins(query) — поиск монет по названию/тикеру
- * - getCoinData(coinIds) — получить данные монет по ID
- * - getCoinIdBySymbol(symbol) — получить ID монеты по тикеру
- * - getName() — внутреннее имя провайдера
- * - getDisplayName() — отображаемое имя провайдера
- * - validateApiKey(apiKey) — валидация API ключа (если требуется)
- *
- * НОРМАЛИЗОВАННЫЙ ФОРМАТ ДАННЫХ:
- * {
- *   id: string,
- *   symbol: string,
- *   name: string,
- *   image: string,
- *   current_price: number,
- *   market_cap: number,
- *   market_cap_rank: number,
- *   total_volume: number,
- *   price_change_percentage_1h: number,
- *   price_change_percentage_24h: number,
- *   price_change_percentage_7d: number,
- *   price_change_percentage_14d: number,
- *   price_change_percentage_30d: number,
- *   price_change_percentage_200d: number
- * }
  *
  * USAGE:
  * class MyProvider extends BaseDataProvider {
@@ -46,11 +16,7 @@
  *   // ... остальные методы
  * }
  *
- * REFERENCES:
- * - Data Provider Manager: core/api/data-provider-manager.js
- * - AI Provider for аналогии: core/api/ai-providers/base-provider.js
- * - Нормализация: core/validation/normalizer.js
- */
+*/
 
 (function() {
     'use strict';

@@ -5,6 +5,9 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Получать список стейблкоинов из CoinGecko (официальный источник),
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * сохранять в кэш (версионированный ключ stablecoins-list) и пробрасывать
  * в coinsConfig (единый источник правды). Поддерживает не-USD стейблы путем
  * определения базовой валюты по близости к 1 for нескольких валют.

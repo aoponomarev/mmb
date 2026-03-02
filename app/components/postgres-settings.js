@@ -4,17 +4,15 @@
  * ================================================================================================
  *
  * PURPOSE: Управление базовыми настройками будущего API слоя PostgreSQL.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Без выполнения запросов к БД и без создания таблиц.
  *
  * Skill: core/skills/api-layer
  *
- * REFERENCES:
- * - Конфигурация: core/config/postgres-config.js
- * - UI state: core/state/ui-state.js
- * - Шаблон: app/templates/postgres-settings-template.js
- *
- * ВАЖНО: Компонент должен быть зарегистрирован в app/app-ui-root.js и core/modules-config.js.
- */
+*/
 
 window.postgresSettings = {
     template: '#postgres-settings-template',

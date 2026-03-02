@@ -6,6 +6,9 @@
  *
  * PURPOSE: Автоматическая генерация и обновление файла coins.json на GitHub.
  *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ *
  * ФУНКЦИИ:
  * 1. Сбор списка стейблкоинов через coingecko-stablecoins-loader
  * 2. Определение Wrapped и LST монет через эвристику и API

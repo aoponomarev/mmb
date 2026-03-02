@@ -3,6 +3,10 @@
 // Vue-обёртка над Bootstrap input-group + dropdown с поддержкой автодополнения
 // =========================
 // PURPOSE: Переиспользуемый компонент комбобокса с поддержкой:
+//
+// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
 // - Автодополнения и фильтрации
 // - Клавиатурной навигации
 // - Выбора значения из списка
@@ -12,14 +16,6 @@
 // - Полной совместимости with Bootstrap JS API
 // - Переключения в режим простого текстового поля
 // - Структура for: подсветки найденного текста, виртуального скроллинга, множественного выбора
-//
-// PRINCIPLES:
-// - Максимальная совместимость with Bootstrap JS API (обязательное требование)
-// - Использование только Bootstrap классов (запрет кастомных стилей, кроме CSS for крестика)
-// - Инициализация Bootstrap Dropdown через JavaScript API
-// - Подписка на события Bootstrap (show.bs.dropdown, hide.bs.dropdown)
-// - Программный доступ к Bootstrap API через ref
-// - Поддержка тем Bootstrap через CSS-переменные
 //
 // API КОМПОНЕНТА:
 //

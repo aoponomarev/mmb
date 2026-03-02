@@ -5,18 +5,14 @@
  *
  * PURPOSE: Заголовок колонки с возможностью сортировки.
  *
- * PRINCIPLES:
- * - Минимальная кастомизация, дефолтный Bootstrap
- * - Показывает иконку сортировки в зависимости от состояния (null, asc, desc)
- * - Эмитит событие при клике for обработки сортировки родительским компонентом
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * USAGE:
  * <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header>
  *
- * REFERENCES:
- * - Старая версия: do-overs/BOT/ui/components/sortable-header.js
- * - Архитектура: is/skills/arch-foundation
- */
+*/
 
 (function() {
     'use strict';

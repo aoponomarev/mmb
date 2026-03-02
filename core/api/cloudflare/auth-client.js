@@ -4,15 +4,12 @@
  * ================================================================================================
  *
  * PURPOSE: Реализация клиентской части OAuth flow: инициирование авторизации,
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * обработка callback, code-to-token exchange, управление токенами.
  *
  * Skill: app/skills/file-protocol-cors-guard
- *
- * PRINCIPLES:
- * - SSOT: Использовать `auth-config.js` for всех параметров OAuth
- * - Модульность: Независимый модуль без зависимостей от UI компонентов
- * - Безопасность: Токены хранятся через `cacheManager` БЕЗ версионирования (пользовательские данные)
- * - Обработка ошибок: Использование существующей системы обработки ошибок
  *
  * ОСОБЕННОСТИ:
  * - Initiation Google OAuth с генерацией state for CSRF protection
@@ -21,11 +18,7 @@
  * - Хранение токена в кэше с проверкой срока действия
  * - Автоматическое обновление токена при необходимости
  *
- * REFERENCES:
- * - Конфигурация OAuth: core/config/auth-config.js
- * - Конфигурация Workers: core/config/cloudflare-config.js
- * - План интеграции: core/skills/config-contracts
- */
+*/
 
 (function() {
     'use strict';

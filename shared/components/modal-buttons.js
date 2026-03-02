@@ -5,11 +5,9 @@
  *
  * PURPOSE: Рендеринг кнопок модального окна в header или footer на основе единой системы управления.
  *
- * PRINCIPLES:
- * - Компонент получает кнопки через inject от cmp-modal
- * - Отображает кнопки только for указанного места (header или footer)
- * - Использует cmp-button for рендеринга каждой кнопки
- * - Реагирует на изменения состояния кнопок (disabled, visible)
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * API КОМПОНЕНТА:
  *
@@ -19,11 +17,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Шаблон: shared/templates/modal-buttons-template.js
- * - Компонент модального окна: shared/components/modal.js
- * - Компонент кнопки: shared/components/button.js
- */
+*/
 
 window.cmpModalButtons = {
     template: '#modal-buttons-template',

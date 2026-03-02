@@ -5,15 +5,12 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Предотвратить блокировку API из-за превышения лимитов запросов.
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Адаптивные таймауты, очередь запросов, приоритизация.
  *
- * PRINCIPLES:
- * - Адаптивные таймауты (увеличение при 429, уменьшение при успехе)
- * - Очередь запросов с приоритизацией
- * - Обработка rate limiting for всех внешних API
- *
- * ССЫЛКА: Критически важные структуры описаны в `is/skills/arch-foundation`
- */
+*/
 
 (function() {
     'use strict';

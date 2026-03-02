@@ -6,6 +6,9 @@
  * Skill: core/skills/api-layer
  *
  * PURPOSE: Реализация провайдера данных for CoinGecko API.
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Наследует BaseDataProvider и реализует все обязательные методы.
  *
  * ИСТОЧНИК: Адаптирован из do-overs/BOT/core/api/coingecko.js
@@ -14,51 +17,7 @@
  * - Интегрирована система сообщений for ошибок
  * - Использованы конфигурация и rate limiting из новой архитектуры
  *
- * PRINCIPLES:
- * - Нормализация данных CoinGecko к единому формату приложения
- * - Обработка rate limiting (429) через адаптивный таймаут
- * - Трансформация данных for совместимости с математической моделью (pvs, PV1h, PV24h и т.д.)
- * - Логирование ошибок через систему сообщений
- *
- * НОРМАЛИЗАЦИЯ ДАННЫХ:
- * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
- * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
- * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Details: `app/skills/file-protocol-cors-guard`
- *
- * RATE LIMITING:
- * - Бесплатный tier: 10-50 запросов/минуту
- * - При 429 ошибке: увеличение задержки между запросами
- * - При успешном запросе: уменьшение задержки
- * - Управление через встроенный rate limiter
- *
- * НОРМАЛИЗАЦИЯ ДАННЫХ:
- * Преобразует ответ CoinGecko API к единому формату:
- * {
- *   id: 'bitcoin',
- *   symbol: 'btc',
- *   name: 'Bitcoin',
- *   image: 'https://...',
- *   current_price: 50000,
- *   market_cap: 1000000000,
- *   market_cap_rank: 1,
- *   total_volume: 50000000,
- *   price_change_percentage_1h: 0.5,
- *   price_change_percentage_24h: 2.1,
- *   price_change_percentage_7d: 5.3,
- *   price_change_percentage_14d: 8.2,
- *   price_change_percentage_30d: 12.5,
- *   price_change_percentage_200d: 150.0,
- *   pvs: [0.5, 2.1, 5.3, 8.2, 12.5, 150.0], // Для математической модели
- *   PV1h, PV24h, PV7d, PV14d, PV30d, PV200d  // Отдельные поля for удобства
- * }
- *
- * REFERENCES:
- * - Base Provider: core/api/data-providers/base-provider.js
- * - Config: core/config/data-providers-config.js
- * - Rate Limiter: core/api/rate-limiter.js
- * - Старый код: do-overs/BOT/core/api/coingecko.js
- */
+*/
 
 (function() {
     'use strict';

@@ -4,22 +4,18 @@
  * ================================================================================================
  *
  * PURPOSE: Базовый класс for всех AI провайдеров (YandexGPT и т.д.)
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Обеспечивает единый интерфейс for работы с разными провайдерами.
  *
  * Skill: core/skills/api-layer
- *
- * PRINCIPLES:
- * - Единый интерфейс for всех провайдеров
- * - Абстракция различий в форматах запросов/ответов
- * - Независимость от конкретной реализации
  *
  * USAGE:
  * Наследуйте этот класс for создания новых провайдеров:
  * class MyProvider extends BaseAIProvider { ... }
  *
- * REFERENCES:
- * - Менеджер провайдеров: core/api/ai-provider-manager.js
- */
+*/
 
 (function() {
     'use strict';

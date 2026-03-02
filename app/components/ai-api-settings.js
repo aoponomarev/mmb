@@ -6,6 +6,10 @@
  * PURPOSE: Компонент настроек AI API провайдеров (YandexGPT) for модального окна.
  * Позволяет переключаться между провайдерами и настраивать их параметры.
  *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ *
  * Skill: core/skills/api-layer
  *
  * ОСОБЕННОСТИ:
@@ -53,11 +57,7 @@
  * - toggleYandexApiKeyVisibility() — переключение видимости API ключа Yandex
  * - toggleGithubTokenVisibility() — переключение видимости GitHub token
  *
- * REFERENCES:
- * - Шаблон: app/templates/ai-api-settings-template.js
- * - AI Provider Manager: core/api/ai-provider-manager.js
- * - Система управления кнопками: shared/components/modal.js
- */
+*/
 
 window.aiApiSettings = {
     template: '#ai-api-settings-template',

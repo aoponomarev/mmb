@@ -4,23 +4,12 @@
  * ================================================================================================
  *
  * PURPOSE: Независимый модуль for получения метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR).
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Экспортирует функции через window.marketMetrics.
  *
  * Skill: app/skills/file-protocol-cors-guard
- *
- * PRINCIPLES:
- * - Чистая логика без UI
- * - Fallback стратегия for VIX (3 источника + Cloudflare proxy)
- * - Кэширование VIX на 24 часа (TTL в cache-config.js)
- * - Глобальные переменные for совместимости с математическими моделями
- *
- * ПРОКСИРОВАНИЕ (КРИТИЧЕСКИ ВАЖНО):
- * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
- * - Fallback стратегия: Cloudflare proxy (file://) → прямые запросы (HTTP/HTTPS)
- * - Yahoo Finance, Stooq: через cloudflareConfig.getApiProxyEndpoint() на file://
- * - BTC Dominance (CoinGecko): через cloudflareConfig.getApiProxyEndpoint() на file://
- * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
- * - Details: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
  * - VIX: кэширование 24ч + fallback (Yahoo Finance, Stooq, Alpha Vantage)
@@ -28,11 +17,7 @@
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
  *
- * REFERENCES:
- * - Конфигурация API: core/config/app-config.js
- * - Конфигурация кэша: core/cache/cache-config.js (vix-index: 24h)
- * - Cloudflare Config: core/config/cloudflare-config.js
- */
+*/
 
 (function() {
     'use strict';

@@ -5,11 +5,9 @@
  *
  * PURPOSE: Форматирование и отображение числовых значений в таблице.
  *
- * PRINCIPLES:
- * - Минимальная кастомизация, дефолтный Bootstrap
- * - Разбиение числа на части (префикс, знак, целая часть, разделитель, дробная часть, единица)
- * - Цветизация на основе знака значения (for процентов)
- * - Разделители разрядов (пробелы каждые 3 цифры)
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * USAGE:
  * <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price"></cell-num>
@@ -20,10 +18,7 @@
  * - 'price': динамическая точность for отображения минимум 2 значащих цифр
  *   (например: $0.000023 вместо $0.00)
  *
- * REFERENCES:
- * - Старая версия: do-overs/BOT/ui/components/cell-num.js
- * - Архитектура: is/skills/arch-foundation
- */
+*/
 
 (function() {
     'use strict';

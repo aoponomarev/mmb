@@ -5,6 +5,10 @@
  *
  * PURPOSE: Компонент for отображения состояния авторизации и управления авторизацией через Google OAuth.
  *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ *
  * Skill: app/skills/file-protocol-cors-guard
  *
  * ОСОБЕННОСТИ:
@@ -24,11 +28,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - OAuth клиент: core/api/cloudflare/auth-client.js
- * - Централизованное состояние: core/state/auth-state.js
- * - Система управления кнопками: shared/components/modal.js
- */
+*/
 
 window.authModalBody = {
     template: '#auth-modal-body-template',

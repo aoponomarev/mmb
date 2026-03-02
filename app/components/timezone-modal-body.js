@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Интеграция timezone-selector и выбора языка перевода с системой управления кнопками модального окна.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
  * ОСОБЕННОСТИ:
@@ -27,10 +31,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Компонент выбора таймзоны: shared/components/timezone-selector.js
- * - Система управления кнопками: shared/components/modal.js
- */
+*/
 
 window.timezoneModalBody = {
     template: `

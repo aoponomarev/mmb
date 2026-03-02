@@ -5,13 +5,11 @@
  *
  * PURPOSE: Vue-компонент for managing портфелями пользователя через Cloudflare API.
  *
- * Skill: core/skills/domain-portfolio
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
- * REFERENCES:
- * - Список портфелей пользователя (загрузка через portfolios-client)
- * - Создание/редактирование/удаление портфелей
- * - Модальное окно for создания/редактирования
- * - Проверка авторизации перед загрузкой данных
+ * Skill: core/skills/domain-portfolio
  *
  * API КОМПОНЕНТА:
  *
@@ -22,11 +20,7 @@
  * - portfolio-updated — эмитируется после обновления портфеля
  * - portfolio-deleted — эмитируется после удаления портфеля
  *
- * REFERENCES:
- * - Шаблон: app/templates/portfolios-manager-template.js
- * - API клиент: core/api/cloudflare/portfolios-client.js
- * - Конфигурация модальных окон: core/config/modals-config.js
- */
+*/
 
 window.portfoliosManager = {
     template: '#portfolios-manager-template',

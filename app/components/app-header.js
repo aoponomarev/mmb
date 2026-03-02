@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Vue-компонент хедера приложения с кнопками меню и настроек.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
  * Слоты:
@@ -18,10 +22,7 @@
  * - #portfolio-items — пункты меню портфелей (между созданием и списком)
  * - #settings-items — элементы меню настроек справа
  *
- * REFERENCES:
- * - Шаблон: app/templates/app-header-template.js
- * - Стили: styles/layout/header.css
- */
+*/
 
 window.appHeader = {
     template: '#app-header-template',

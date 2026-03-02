@@ -5,12 +5,9 @@
  *
  * PURPOSE: Vue-обёртка над Bootstrap Modal с полной проницаемостью for Bootstrap API.
  *
- * PRINCIPLES:
- * - Максимальная совместимость with Bootstrap JS API (обязательное требование)
- * - Использование только Bootstrap классов (запрет кастомных стилей)
- * - Инициализация Bootstrap Modal через JavaScript API
- * - Подписка на события Bootstrap (show.bs.modal, hide.bs.modal)
- * - Программный доступ к Bootstrap API через ref
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * API КОМПОНЕНТА:
  *
@@ -74,11 +71,7 @@
  * в корневом экземпляре Vue (app/app-ui-root.js) и указан в deps for app-ui-root в modules-config.js.
  * Без этого тело модального окна будет пустым.
  *
- * REFERENCES:
- * - Шаблон: shared/templates/modal-template.js
- * - Компонент кнопок: shared/components/modal-buttons.js
- * - Bootstrap Modal API: https://getbootstrap.com/docs/5.3/components/modal/
- */
+*/
 
 window.cmpModal = {
     template: '#modal-template',

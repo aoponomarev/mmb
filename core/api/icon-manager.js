@@ -5,14 +5,12 @@
  * Skill: app/skills/ui-architecture
  *
  * PURPOSE: SSOT for получения URL иконок монет.
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Приоритизирует наш GitHub CDN над внешними источниками (CoinGecko).
  *
- * PRINCIPLES:
- * 1. GitHub CDN (наш "золотой фонд") - приоритет #1.
- * 2. Fallback на CoinGecko - если иконки нет у нас.
- * 3. Поддержка Alias Map for разрешения конфликтов именования.
- * 4. Cache Busting через "соль" (версия приложения).
- */
+*/
 
 (function() {
     'use strict';

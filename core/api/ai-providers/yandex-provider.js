@@ -5,14 +5,11 @@
  *
  * PURPOSE: Реализация провайдера for работы с YandexGPT через Yandex Cloud API.
  *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ *
  * Skill: core/skills/api-layer
  * Skill: app/skills/file-protocol-cors-guard
- *
- * PRINCIPLES:
- * - Использует Yandex Cloud Foundation Models API
- * - Поддерживает yandexgpt и yandexgpt-lite
- * - Аутентификация через Api-Key
- * - Прокси через Yandex Cloud Functions for CORS bypass (обязателен for работы из браузера)
  *
  * ОСОБЕННОСТИ:
  * - Endpoint: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
@@ -35,12 +32,7 @@
  * const provider = new YandexProvider();
  * const response = await provider.sendRequest(apiKey, model, messages);
  *
- * REFERENCES:
- * - Базовый класс: core/api/ai-providers/base-provider.js
- * - Конфигурация прокси: core/config/app-config.js
- * - Yandex Cloud API: https://yandex.cloud/ru/docs/foundation-models/
- * - Documentation прокси: docs/archive/yandex/ya-cloud-function-code.md
- */
+*/
 
 (function() {
     'use strict';

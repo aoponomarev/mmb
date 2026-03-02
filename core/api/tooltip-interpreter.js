@@ -4,21 +4,16 @@
  * ================================================================================================
  *
  * PURPOSE: Генерация динамической части tooltip на основе текущих значений метрик.
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  * Статическая часть берется из tooltipsConfig, динамическая — строится здесь.
  * Skill: app/skills/ux-principles
- *
- * PRINCIPLES:
- * - SSOT (ЕИП): пороги и интерпретации хранятся централизованно
- * - Поддержка мультиязычности через tooltipsConfig
- * - Минималистичный вывод (нативный title без HTML)
  *
  * USAGE:
  * const tooltip = window.tooltipInterpreter.getTooltip('agr', { value: 12.5, lang: 'ru' });
  *
- * REFERENCES:
- * - Конфигурация tooltips: core/config/tooltips-config.js
- * - Математические модели: mm/base-model-calculator.js, mm/model-manager.js
- */
+*/
 
 (function() {
     'use strict';

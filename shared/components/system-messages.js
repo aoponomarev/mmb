@@ -6,28 +6,16 @@
  * PURPOSE: Контейнер for отображения списка системных сообщений.
  * Делегирует рендеринг каждого сообщения компоненту cmp-system-message (SSOT шаблона).
  *
- * PRINCIPLES:
- * - Фильтрация по scope
- * - Ограничение количества сообщений (limit)
- * - Реактивность через Vue.reactive
- * - Делегирование событий от дочерних компонентов
- *
- * PROPS:
- * - scope (String, default: 'global') - фильтр по scope
- * - includeUnscoped (Boolean, default: true) - показывать сообщения без scope
- * - limit (Number, default: 0) - ограничение количества (0 = без ограничения)
- * - horizontalScroll (Boolean, default: false) - горизонтальная прокрутка
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
  * USAGE:
  * <cmp-system-messages scope="global" />
  * <cmp-system-messages scope="test-messages" :limit="3" />
  * <cmp-system-messages scope="global" :horizontal-scroll="true" />
  *
- * REFERENCES:
- * - Дочерний компонент: shared/components/system-message.js
- * - Хранилище: shared/utils/messages-store.js
- * - Конфигурация: core/config/messages-config.js
- */
+*/
 
 (function() {
     'use strict';

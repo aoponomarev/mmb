@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Vue-компонент футера приложения с метриками рынка.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
  * ДАННЫЕ:
@@ -46,11 +50,7 @@
  * СОБЫТИЯ:
  * - open-timezone-modal — эмитируется при клике на время в футере for открытия модального окна выбора таймзоны
  *
- * REFERENCES:
- * - Шаблон: app/templates/app-footer-template.js
- * - Стили: styles/layout/footer.css
- * - API метрик: core/api/market-metrics.js
- */
+*/
 
 window.appFooter = {
     template: '#app-footer-template',

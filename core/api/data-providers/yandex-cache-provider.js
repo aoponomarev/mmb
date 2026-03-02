@@ -4,6 +4,9 @@
  * ================================================================================================
  *
  * PURPOSE: Читает данные монет из coin_market_cache (PostgreSQL Yandex Cloud),
+ *
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *       которая обновляется кроном каждые 15 минут через coingecko-fetcher.
  *
  * ПРЕИМУЩЕСТВА перед прямым CoinGecko:
@@ -18,11 +21,7 @@
  * ФОРМАТ ОТВЕТА:
  * { coins: [...], count: 250, fetched_at: "2026-02-27T..." }
  *
- * REFERENCES:
- * - CoinGecko Provider (аналог): core/api/data-providers/coingecko-provider.js
- * - Base Provider: core/api/data-providers/base-provider.js
- * - Fetcher function: app/cloud/yandex/functions/coingecko-fetcher/
- */
+*/
 
 (function() {
     'use strict';

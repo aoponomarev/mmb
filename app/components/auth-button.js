@@ -4,13 +4,11 @@
  * ================================================================================================
  *
  * PURPOSE: Vue-компонент for отображения кнопки входа через Google или профиля пользователя.
- * Skill: app/skills/file-protocol-cors-guard
  *
- * REFERENCES:
- * - Условное отображение: кнопка входа или dropdown с профилем
- * - Реактивное обновление при изменении состояния авторизации
- * - Обработка callback от Google OAuth при загрузке страницы
- * - Использование auth-client for проверки состояния авторизации
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * Skill: app/skills/file-protocol-cors-guard
  *
  * API КОМПОНЕНТА:
  *
@@ -20,10 +18,7 @@
  * - login-success — эмитируется после успешного входа
  * - logout-success — эмитируется после успешного logoutа
  *
- * REFERENCES:
- * - Шаблон: app/templates/auth-button-template.js
- * - OAuth клиент: core/api/cloudflare/auth-client.js
- */
+*/
 
 window.authButton = {
     template: '#auth-button-template',

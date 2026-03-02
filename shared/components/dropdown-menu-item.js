@@ -3,6 +3,10 @@
 // Универсальный компонент for пунктов dropdown-меню с иконкой, текстом и суффиксом
 // =========================
 // PURPOSE: Переиспользуемый компонент пункта выпадающего меню с поддержкой:
+//
+// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
 // - Левая иконка с tooltip
 // - Заголовок и подзаголовок с переносом текста
 // - Суффикс (badge/icon/indicator/chevron/info) с tooltip
@@ -10,16 +14,6 @@
 // - Раздельные события for кликов по зонам (по умолчанию все эмитят общий click)
 // - Адаптивности элементов через CSS классы (.dropdown-menu-item-responsive)
 // - Детерминированных хэшей экземпляров (instanceHash) for идентификации и кастомной стилизации
-//
-// PRINCIPLES:
-// - Использование только Bootstrap классов (запрет кастомных стилей, кроме inline transition for chevron)
-// - Поддержка тем Bootstrap через CSS-переменные
-// - Анимация chevron через Font Awesome классы (fa-rotate-90) + inline transition
-// - Условный рендеринг всех опциональных элементов
-// - Нативные подсказки браузера через атрибут title (по умолчанию)
-// - Опциональное использование Bootstrap tooltips через props tooltipIconBootstrap, tooltipTextBootstrap, tooltipSuffixBootstrap
-// - По умолчанию все зоны (иконка, текст, суффикс) эмитят общее событие 'click'
-//   Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно
 //
 // API КОМПОНЕНТА:
 //

@@ -4,6 +4,10 @@
  * ================================================================================================
  *
  * PURPOSE: Отображение логов сессии в модальном окне for отладки.
+ *
+ * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
+ * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
+ * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: is/skills/arch-foundation
  *
  * ОСОБЕННОСТИ:
@@ -19,10 +23,7 @@
  * Inject:
  * - modalApi — API for managing кнопками (предоставляется cmp-modal)
  *
- * REFERENCES:
- * - Система управления кнопками: shared/components/modal.js
- * - Logger: core/logging/logger.js
- */
+*/
 
 window.sessionLogModalBody = {
     template: `

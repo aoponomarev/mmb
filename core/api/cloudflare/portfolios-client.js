@@ -5,24 +5,15 @@
  *
  * PURPOSE: Браузерный клиент for CRUD операций с портфелями через Cloudflare Workers API.
  *
- * PRINCIPLES:
- * - SSOT: Использовать `cloudflare-config.js` for всех endpoints
- * - Авторизация: Использовать `auth-client.js` for получения токена
- * - Обработка ошибок: Использовать существующую систему обработки ошибок
- * - Модульность: Независимый модуль без зависимостей от UI компонентов
+ * @skill-anchor core/skills/api-layer #for-layer-separation
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
  * ОСОБЕННОСТИ:
  * - Автоматическое добавление Authorization заголовка с JWT токеном
  * - Обработка ошибок сети и авторизации
  * - Возврат структурированных данных портфелей
  *
- * REFERENCES:
- * - Doc: docs/A_PORTFOLIO_SYSTEM.md, docs/A_CLOUDFLARE.md
- * - Конфигурация Workers: core/config/cloudflare-config.js
- * - OAuth клиент: core/api/cloudflare/auth-client.js
- * - Skill: core/skills/config-contracts
- * - Skill: core/skills/config-contracts
- */
+*/
 
 (function() {
     'use strict';
