@@ -1,8 +1,7 @@
 /**
  * @skill core/skills/api-layer
  * @description Market Snapshot Service: orchestrates data and metrics fetching to build a unified snapshot payload.
- *
- * @causality: We keep snapshot structure logic in a separate service to decouple it from individual fetch flows.
+ * @causality #for-layer-separation
  */
 
 import { buildSnapshotPayload, parseMarketQuery } from "../contracts/market-contracts.js";
@@ -14,7 +13,7 @@ export class MarketSnapshotService {
   }
 
   async getSnapshot(params = {}) {
-    // @causality: Validate input near the edge before orchestrating heavy calls.
+    // @causality #for-validation-at-edge
         const query = parseMarketQuery(params);
         const topCount = query.topCount;
         const sortBy = query.sortBy;

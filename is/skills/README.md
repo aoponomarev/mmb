@@ -24,7 +24,8 @@ This directory is the brain of the Target App's AI-assisted development. It cont
 
 **Process skills** (`process-*.md`) — Governance processes and agent behavior rules:
 - `process-ai-collaboration` — Agent directives, skepticism, micro-steps, no unprompted commits, 7 command dictionary (ВЗП/КАИ/АИС/ЕИП/ФИН/ФИНС/ОМК)
-- `process-code-anchors` — Linking code to skills via @skill / @skill-anchor
+- `process-code-anchors` — Linking code to skills via @skill / @skill-anchor / @causality (hash-based)
+- `causality-registry` — Canonical hash registry for #for-/#not- used in skills and code
 - `process-env-sync` — .env / .env.example EIP sync contract
 - `process-evolution-logging` — Session work and milestone recording in project-evolution.md
 - `process-language-policy` — English-only for skills/code; Russian allowed in docs

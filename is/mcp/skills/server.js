@@ -262,6 +262,67 @@ async function auditSkillCoverage() {
   };
 }
 
+async function searchAnchors({ skillId, hash, limit }) {
+  const maxResults = limit ?? 100;
+  const allFiles = [];
+  for (const dir of CODE_DIRS) {
+    const files = await walkJsFiles(dir);
+    allFiles.push(...files);
+  }
+
+  const results = [];
+  const hashRegex = /#(?:for|not)-[\w-]+/g;
+
+  for (const filePath of allFiles) {
+    const content = await fs.readFile(filePath, "utf8");
+    const relPath = normalizePath(path.relative(targetAppRoot, filePath));
+    const lines = content.split("\n");
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineNum = i + 1;
+
+      if (/@skill-anchor/i.test(line)) {
+        const match = line.match(/@skill-anchor\s+(.+?)(?:\s*$)/i);
+        const rest = match ? match[1].trim() : "";
+        const hashes = rest.match(hashRegex) || [];
+        const skillPart = rest.split(/#(?:for|not)-/)[0].trim().split(/\s+/)[0] || "";
+        if (skillId && !rest.toLowerCase().includes(skillId.toLowerCase())) continue;
+        const normHash = hash ? (hash.startsWith("#") ? hash : `#${hash}`).toLowerCase() : null;
+        if (normHash && !hashes.some(h => h.toLowerCase() === normHash) && !rest.toLowerCase().includes(normHash)) continue;
+        results.push({
+          file: relPath,
+          line: lineNum,
+          type: "skill-anchor",
+          skillId: skillPart || undefined,
+          hashes,
+          text: rest.slice(0, 120),
+        });
+      }
+
+      if (/@causality/i.test(line)) {
+        const match = line.match(/@causality\s*[:]?\s*(.+?)(?:\s*$)/i);
+        const rest = match ? match[1].trim() : "";
+        const hashes = rest.match(hashRegex) || [];
+        const normHash = hash ? (hash.startsWith("#") ? hash : `#${hash}`).toLowerCase() : null;
+        if (normHash && !hashes.some(h => h.toLowerCase() === normHash) && !rest.toLowerCase().includes(normHash)) continue;
+        results.push({
+          file: relPath,
+          line: lineNum,
+          type: "causality",
+          hashes,
+          text: rest.slice(0, 120),
+        });
+      }
+    }
+  }
+
+  return {
+    total: results.length,
+    results: results.slice(0, maxResults),
+  };
+}
+
 // =============================================================================
 // REGISTER TOOLS
 // =============================================================================
@@ -318,6 +379,18 @@ server.registerTool("audit_skill_coverage", {
 }, async () => {
   try { return successResponse(await auditSkillCoverage()); }
   catch (e) { return errorResponse("AUDIT_ERROR", e?.message ?? "Unknown error"); }
+});
+
+server.registerTool("search_anchors", {
+  description: "Search for @skill-anchor and @causality in code. Returns file:line for each match. Filter by skillId or hash.",
+  inputSchema: z.object({
+    skillId: z.string().optional().describe("Filter by skill ID (e.g. arch-foundation, process-secrets-hygiene)"),
+    hash: z.string().optional().describe("Filter by causality hash (e.g. #for-fail-fast)"),
+    limit: z.number().int().positive().optional().describe("Max results (default 100)"),
+  }),
+}, async (input) => {
+  try { return successResponse(await searchAnchors(input)); }
+  catch (e) { return errorResponse("SEARCH_ANCHORS_ERROR", e?.message ?? "Unknown error"); }
 });
 
 // =============================================================================

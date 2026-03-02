@@ -16,7 +16,7 @@ export class BinanceMetricsProvider {
     this.timeoutMs = Number.isFinite(params.timeoutMs) ? Math.max(1, Math.floor(params.timeoutMs)) : 10_000;
   }
 
-  // @causality: We wrap fetch with AbortSignal to avoid hanging requests if Binance API stalls.
+  // @causality #for-fail-fast
   // Explicit timeout handling maps to standardized ExternalTimeout error.
   async fetchJson(url, op) {
     let response;

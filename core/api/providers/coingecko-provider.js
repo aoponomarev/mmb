@@ -102,7 +102,7 @@ export class CoinGeckoProvider {
         
         for (let attempt = 1; attempt <= this.maxAttempts; attempt += 1) {
             try {
-                // @skill-anchor process-ai-collaboration: explicit AbortSignal for timeouts avoids hanging promises
+                // @skill-anchor core/skills/api-layer #for-fail-fast
                 const response = await this.fetchFn(url, { signal: AbortSignal.timeout(this.timeoutMs) });
                 
                 if (!response.ok) {

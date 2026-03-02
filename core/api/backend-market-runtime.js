@@ -1,8 +1,7 @@
 /**
  * @skill core/skills/api-layer
  * @description Composition root for the backend market subsystem. Assembles all dependencies.
- *
- * @causality: Centralized composition root enables easy mocking for e2e tests and avoids singleton side-effects.
+ * @causality #for-composition-root
  */
 
 import { createDataProviderManager } from "./providers/backend-data-provider-manager.js";
@@ -75,7 +74,7 @@ export function createBackendMarketRuntime(params = {}) {
     snapshotService: marketSnapshotService,
   });
   
-  // @causality: Readiness probe ensures server only marks as ready if a basic snapshot flow succeeds without errors.
+  // @causality #for-readiness-probe
   const readinessProbe = async () => {
     const result = await marketSnapshotTransport.handleGetSnapshot({
       topCount: "1",

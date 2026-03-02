@@ -50,35 +50,11 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 - **#not-hardcoded-paths** Hardcoded paths in scripts — CWD-dependent failures.
 ```
 
-**Hash registry:** Hashes are canonical. Reuse the same hash across skills. **Identical formulation:** when reusing a hash, the text after it MUST be verbatim identical to the canonical formulation in the registry below. This enables grep/search to find all occurrences of the same reason.
+**Hash registry:** Hashes are canonical. Reuse the same hash across skills and in code (`@causality`, `@skill-anchor`). **Identical formulation:** when reusing a hash, the text after it MUST be verbatim identical to the canonical formulation in `causality-registry.md`. This enables grep/search to find all occurrences of the same reason.
+
+**Registry:** All hashes live in `is/skills/causality-registry.md`. Add new hashes there before using in skills or code.
 
 **Section headers:** No numbering. Use `## Rejection of Old Abbreviations` not `## 1. Rejection of Old Abbreviations`.
-
-### Canonical Hash Registry (Formulations)
-
-When a skill references a hash, use the exact formulation below. Add new hashes here when introducing new concepts.
-
-| Hash | Formulation |
-|------|-------------|
-| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, Target App, Legacy App) is unambiguous. |
-| `#for-ssot-paths` | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
-| `#for-imports-relative` | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
-| `#for-file-protocol` | No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes. |
-| `#for-node-test` | Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale. |
-| `#for-skill-anchors` | Textual reasoning in skills (with #for-/#not- hashes) provides causality value. Skill anchors connect code to reasoning without a separate causality ID namespace. |
-| `#not-central-docs` | Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed. |
-| `#not-hardcoded-paths` | Hardcoded paths in scripts — CWD-dependent failures. |
-| `#not-bundler-ui` | Bundler for UI — violates file:// and GitHub Pages static hosting. |
-| `#for-order-as-contract` | The sequence (Review → Add → Score → Gate) prevents agents from adding confidence scores without verifying alignment. Scoring before review would be meaningless. |
-| `#for-confidence-by-agent` | Only an AI (or human) that has analyzed the codebase can assign a meaningful score. Automated checks cannot verify semantic alignment. |
-| `#for-gate-enforcement` | Without a failing gate, the protocol would be advisory. The gate makes Reasoning accuracy a release blocker, matching the project's "high cost of errors" stance. |
-| `#for-fail-fast` | Fail-fast over graceful degradation during migration: fallback chains for external critical contracts are intentionally avoided. Failed provider = visible failure, not silent data corruption. |
-| `#for-partial-failure-tolerance` | `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot. |
-| `#for-rate-limiting` | Free-tier APIs have strict rate limits. Proactive waiting avoids persistent 429 failures. |
-| `#for-single-writer-guard` | A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races. |
-| `#for-hardcode-ban` | Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point. |
-| `#for-zod-ui-validation` | A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment. |
-| `#for-eip` | Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding. |
 
 ## Reasoning Formats by Skill Type
 

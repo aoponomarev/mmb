@@ -52,14 +52,36 @@ For files governed by multiple skills:
 
 ## Inline Anchor (For Non-Obvious Decisions)
 
-Use inline anchors only for non-trivial decisions inside logic that a reader would not understand without architectural context:
+Use inline anchors only for non-trivial decisions inside logic that a reader would not understand without architectural context.
+Use hashes from `causality-registry.md` — one or more `#for-...` or `#not-...`. Optional short context after colon.
 
 ```javascript
-// @skill-anchor arch-foundation: using PATHS.REPO_ROOT here, not __dirname, because preflight runs from different CWDs
+// @skill-anchor arch-foundation #for-ssot-paths
 const configPath = join(PATHS.REPO_ROOT, '.env.example');
 ```
 
+```javascript
+// @skill-anchor core/skills/api-layer #for-fail-fast: Binance API stalls
+const response = await this.fetchFn(url, { signal: AbortSignal.timeout(this.timeoutMs) });
+```
+
 **Do NOT** add inline anchors to obvious code — they become noise.
+
+## @causality (Fragment-Level Reasons)
+
+For local causality without skill reference, use `@causality` with hashes from the registry:
+
+```javascript
+// @causality #for-partial-failure-tolerance
+const settled = await Promise.allSettled(entries.map(([, fn]) => fn()));
+```
+
+```javascript
+// @causality #for-distinct-ttls: VIX daily, funding 4h/8h
+this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
+```
+
+**Registry:** All hashes must exist in `is/skills/causality-registry.md`. Add new hashes there before using.
 
 ## Where Anchors Are Required
 
@@ -82,3 +104,4 @@ const configPath = join(PATHS.REPO_ROOT, '.env.example');
 
 The Target App currently uses anchors in infrastructure scripts and key backend files.
 The `audit_skill_coverage` MCP tool (in `is/mcp/skills/server.js`) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
+The `search_anchors` MCP tool returns file:line for all `@skill-anchor` and `@causality` occurrences, filterable by skill or hash.

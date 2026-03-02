@@ -109,7 +109,7 @@ export class MarketSnapshotHttpHandler {
       || toRequestId(request.headers?.["x-request-id"])
       || buildRequestId();
 
-    // @causality: Standardizing OPTIONS preflight centrally ensures we don't duplicate CORS logic.
+    // @causality #for-cors-central
     if (method === "OPTIONS" && (path === this.routePath || path === this.healthPath || path === this.readyPath)) {
       return toCorsPreflightResponse(requestId);
     }

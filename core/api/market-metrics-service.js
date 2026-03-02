@@ -25,7 +25,7 @@ export class MarketMetricsService {
       fetchFn: this.fetchFn,
       timeoutMs: this.timeoutMs,
     });
-    // @causality: We use distinct TTLs per metric because VIX updates daily, while funding rate updates much more frequently (every 4h/8h).
+    // @causality #for-distinct-ttls: VIX daily, funding 4h/8h
     this.ttl = {
       fgi: 60 * 60 * 1000,
       vix: 24 * 60 * 60 * 1000,
@@ -37,7 +37,7 @@ export class MarketMetricsService {
     };
   }
 
-  // @causality: A shared helper to enforce timeout signals locally if we don't delegate it to a provider class
+  // @causality #for-fail-fast
   async fetchJson(url, op) {
     let response;
     try {
@@ -123,7 +123,7 @@ export class MarketMetricsService {
   }
 
   async getAll() {
-    // @causality: Use Promise.all here only if the caller explicitly wants an all-or-nothing failure model.
+    // @causality #for-fail-fast
     const [fgi, vix, btcDominance, openInterest, fundingRate, longShortRatio] = await Promise.all([
       this.getFearGreedIndex(),
       this.getVix(),
@@ -136,7 +136,7 @@ export class MarketMetricsService {
   }
 
   async getAllBestEffort() {
-    // @causality: Use allSettled here so that a failure in one provider (e.g. Yahoo blocking VIX) doesn't ruin the whole dashboard.
+    // @causality #for-partial-failure-tolerance
     const entries = [
       ["fgi", () => this.getFearGreedIndex()],
       ["vix", () => this.getVix()],

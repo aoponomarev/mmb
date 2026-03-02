@@ -64,6 +64,11 @@ function runPreflight() {
         } else {
             console.log('[preflight] Skipping Reasoning gate (PREFLIGHT_SKIP_REASONING=1)');
         }
+        if (!process.env.PREFLIGHT_SKIP_CAUSALITY) {
+            execSync('node is/scripts/architecture/validate-causality.js', { stdio: 'inherit', cwd: PATHS.root });
+        } else {
+            console.log('[preflight] Skipping Causality gate (PREFLIGHT_SKIP_CAUSALITY=1)');
+        }
         execSync('node is/scripts/architecture/generate-skills-index.js', { stdio: 'inherit', cwd: PATHS.root });
     } catch (e) {
         console.error(`[preflight] ERROR: Skills validation, Reasoning gate, or index generation failed.`);

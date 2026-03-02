@@ -12,7 +12,7 @@ const { execSync } = require('child_process');
 // ─── Конфигурация ──────────────────────────────────────────────────────────────
 const FOLDER_ID       = 'b1gv03a122le5a934cqj';
 const SERVICE_ACCOUNT_ID = 'ajeudqscq65r5d5u7ras';
-// @skill-anchor is/skills/process-secrets-hygiene: API keys are injected via CI/CD env, not hardcoded here.
+// @skill-anchor is/skills/process-secrets-hygiene #for-eip
 const API_KEY_ID      = process.env.YC_API_KEY_ID;
 const API_KEY_SECRET  = process.env.YC_API_KEY_SECRET;
 
@@ -25,7 +25,7 @@ const TIMEOUT_SEC     = 600; // 10 минут (5 страниц × 2 × 21s = ~2
 const DB_HOST     = 'rc1b-dgs1vgc130gbme2n.mdb.yandexcloud.net';
 const DB_PORT     = '6432';
 const DB_NAME     = 'app_db';
-// @skill-anchor is/skills/process-secrets-hygiene: DB credentials injected via CI/CD env
+// @skill-anchor is/skills/process-secrets-hygiene #for-eip
 const DB_USER     = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 

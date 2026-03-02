@@ -24,6 +24,7 @@ const MIN_CONFIDENCE = 0.5;
 const EXEMPT_PATTERNS = [
     /README\.md$/i,
     /^index\.md$/i,
+    /causality-registry\.md$/i,
 ];
 
 function walkMarkdownFiles(dir, result = []) {

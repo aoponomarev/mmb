@@ -1,8 +1,7 @@
 /**
  * @skill core/skills/api-layer
  * @description Transport adapter for Market Snapshot. Maps internal domain responses and errors to transport-friendly format.
- *
- * @causality: Isolates the domain logic from HTTP specifics.
+ * @causality #for-layer-separation
  */
 import { BACKEND_ERROR_CODES, toBackendCoreError, toBackendHttpStatus } from "./providers/errors.js";
 
@@ -25,7 +24,7 @@ export class MarketSnapshotTransport {
         },
       };
     } catch (error) {
-      // @causality: Always map errors to a known envelope so the client doesn't get raw stack traces.
+      // @causality #for-error-envelope
       const mapped = toBackendCoreError(
         error,
         BACKEND_ERROR_CODES.ExternalUnknown,
