@@ -2,6 +2,11 @@
 
 You are operating in a codebase with strict architectural and causality rules.
 
+## STRICT GIT POLICY
+1. **NEVER** run `git commit` unless the user explicitly asks you to do so. 
+2. You may use `git status` or `git diff` to analyze changes, but you must leave the actual committing to the user or wait for a direct command (e.g., "commit these changes").
+3. This is an absolute invariant. Do not act proactively with Git history.
+
 ## MANDATORY COMMENT REWRITE POLICY
 Whenever you modify, review, or touch any piece of code in this repository, you **MUST** proactively rewrite nearby legacy comments according to the following rules:
 
