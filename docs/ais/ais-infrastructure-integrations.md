@@ -1,0 +1,35 @@
+---
+id: ais-infrastructure-integrations
+status: active
+last_updated: "2026-03-02"
+related_skills:
+  - is/skills/arch-cloudflare-infrastructure.md
+  - is/skills/arch-external-parity.md
+  - core/skills/ai-providers-architecture.md
+  - core/skills/external-integrations.md
+  - docs/ais/ais-yandex-cloud.md
+---
+
+# AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
+
+> **Спецификации (AIS)** пишутся на **русском языке** и служат макро-документацией. Микро-правила вынесены в английские скиллы.
+
+## 1. Концепция (High-Level Concept)
+Так как приложение является статичным (No-Build) и не имеет монолитного бэкенда, вся тяжелая инфраструктурная работа (обход CORS, защита API-ключей, авторизация) вынесена на граничные Serverless-решения (Edge Computing). Мы используем Cloudflare Workers как основной проксирующий слой и D1/KV как серверлесс-базы данных.
+
+## 2. Инфраструктура и Потоки данных (Infrastructure & Data Flow)
+- **Cloudflare Workers (CORS Proxy):** Браузеры блокируют кросс-доменные запросы с `file://`. Worker выступает в роли "прокладки", которая добавляет нужные CORS-заголовки и скрывает реальные эндпоинты (CoinGecko, Binance).
+- **Yandex Cloud (Geo-оптимизация):** Для пользователей из РФ/СНГ некоторые сервисы (например, YandexGPT или кэши) маршрутизируются через инфраструктуру Яндекса. Ingest/read контуры данных монет (cron fetcher, API Gateway, PostgreSQL) — см. `docs/ais/ais-yandex-cloud.md`.
+- **N8N (Рабочие процессы):** Внешние автоматизации (например, сбор новостей или тяжелая агрегация) вынесены в N8N-вебхуки.
+- **AI Providers (Абстракция):** В приложении заложен интерфейс `BaseAIProvider` для работы с LLM. Основной провайдер сейчас — YandexGPT (через прокси).
+
+## 3. Локальные Политики (Module Policies)
+- **CORS Centralization:** Настройка CORS (в том числе обработка OPTIONS-запросов) должна производиться централизованно на уровне Worker'а, а не размазываться по отдельным HTTP-хэндлерам.
+- **Безопасность OAuth на file://:** Так как стандартный OAuth-редирект на `file://` не работает (браузеры запрещают), используется механизм открытия всплывающего окна (`window.open`) с последующей передачей токена обратно через `postMessage`.
+- **Запрет на мутацию схемы D1 в рантайме:** Cloudflare D1 (SQLite) схема управляется исключительно через SQL-миграции (`wrangler d1 migrations`). Приложение не имеет права делать `CREATE TABLE` на лету.
+- **Отказоустойчивость AI:** `AIProviderManager` должен поддерживать механизм fallback-провайдеров на случай, если основная модель (например, YandexGPT) недоступна или превышен лимит.
+
+## 4. Компоненты и Контракты (Components & Contracts)
+- `core/api/cloudflare/*` — клиенты для взаимодействия с Cloudflare Workers.
+- `core/api/ai-provider-manager.js` — роутер AI-моделей.
+- `is/yandex/` — код серверлесс-функций Яндекса.

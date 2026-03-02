@@ -34,7 +34,7 @@ reasoning_checksum: "7ebe9e38"
    - `app/`: Frontend UI (No-build architecture). Root component, domain-specific components, templates.
    - `core/`: Backend services, API, config, domain logic, and framework-agnostic business logic.
    - `is/`: Infrastructure space (scripts, skills, contracts, MCP, cloudflare, yandex, secrets).
-   - `docs/`: Architectural history, plans, runbooks, backlog, cheatsheets, policies.
+   - `docs/`: Plans, done, ais, audits (system), backlog, cheatsheets, runbooks. See `process-docs-lifecycle.md`.
    - `data/`: Local storage, caches (git-ignored). MCP memory lives in `is/memory/`.
    - `shared/`: Reusable components, styles, utils (shared across app).
    - `styles/`: CSS files (wrappers, layout, custom).

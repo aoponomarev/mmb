@@ -1,10 +1,13 @@
-# Operational Runbook: Data Contour Monitoring & Troubleshooting
+# Data Contour: Monitoring & Troubleshooting
+
+> Runbook для диагностики контура данных монет (PostgreSQL + CoinGecko dual-channel).
+> См. `docs/ais/ais-yandex-cloud.md`, `docs/ais/ais-data-pipeline.md`.
 
 ## Pre-Flight Checks
 
 Before investigating any data issue, verify:
 
-1. **Cron is running** — Check Yandex Cloud console for `coingecko-fetcher` invocation logs
+1. **Cron is running** — Check Yandex Cloud console for `market-fetcher` (coingecko-fetcher) invocation logs
 2. **DB is reachable** — `GET /health` should return `{ status: "OK", server_time: "..." }`
 3. **API Gateway is up** — `GET /api/coins/market-cache?limit=1` should return data
 4. **Time window** — Fetcher only runs 06:00-24:00 MSK; night hours return `SKIPPED`
@@ -123,7 +126,7 @@ Expected: exactly 2 rows (2 most recent cycle_ids).
 
 ## Environment Variables Reference
 
-### coingecko-fetcher (Yandex Cloud Function)
+### market-fetcher (Yandex Cloud Function)
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DB_HOST` | Yes | PostgreSQL host |
@@ -133,7 +136,7 @@ Expected: exactly 2 rows (2 most recent cycle_ids).
 | `DB_PASSWORD` | Yes | Database password |
 | `COINGECKO_API_KEY` | No | Demo/Pro key for higher rate limits |
 
-### app-api (Yandex Cloud Function)
+### api-gateway (Yandex Cloud Function)
 Same DB variables as above. Serves the `/api/coins/market-cache` and `/api/coins/cycles` endpoints.
 
 ### Cloudflare Worker (app-api)

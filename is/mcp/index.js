@@ -12,6 +12,7 @@ import { createSkillToolDef, createSkillHandler } from "./tools/create-skill.js"
 import { queryTelemetryToolDef, queryTelemetryHandler } from "./tools/query-telemetry.js";
 import { harvestCausalitiesToolDef, harvestCausalitiesHandler } from "./tools/harvester.js";
 import { cfD1QueryToolDef, cfD1QueryHandler, cfKvGetToolDef, cfKvGetHandler } from "./tools/cloudflare.js";
+import { distillPlanToolDef, distillPlanHandler } from "./tools/distill-plan.js";
 import { handleSkillResource, handleCausalityGraphResource, handleCausalityBacklogResource } from "./resources.js";
 
 const server = new Server({
@@ -38,6 +39,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             harvestCausalitiesToolDef,
             cfD1QueryToolDef,
             cfKvGetToolDef,
+            distillPlanToolDef,
             {
                 name: "ping",
                 description: "Test the MCP server connection",
@@ -85,6 +87,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (name === "cf_kv_get") {
         return await cfKvGetHandler(args);
+    }
+
+    if (name === "distill_plan") {
+        return await distillPlanHandler(args);
     }
 
     throw new Error(`Tool not found: ${name}`);

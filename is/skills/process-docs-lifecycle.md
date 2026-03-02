@@ -1,0 +1,57 @@
+---
+title: "Docs Lifecycle Pipeline"
+reasoning_confidence: 1.0
+reasoning_audited_at: "2026-03-02"
+reasoning_checksum: "559f5ba7"
+---
+
+# Documentation Lifecycle
+
+> **Context**: How plans evolve into specifications and skills, and the full structure of `docs/`.
+> **Scope**: `docs/plans/`, `docs/done/`, `docs/ais/`, `docs/audits/`, `docs/backlog/`, `docs/cheatsheets/`, `docs/runbooks/`, `is/skills/`
+
+## Reasoning
+
+- **#for-docs-pipeline** A codebase clutters quickly if plans, policies, and specifications are dumped in one folder. A strict pipeline (`plans` -> `done` -> `ais`) ensures agents and developers know exactly where to find active tasks versus established architecture.
+- **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
+- **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
+- **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
+- **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.
+- **#not-redundant-folders** Creating new folders when a functionally suitable one exists (e.g., `docs/misc/`, `docs/temp/`, `docs/archive/`) clutters the structure. Use the existing folders.
+
+## Core Rules
+
+1.  **Phase 1: Planning (`docs/plans/`)**
+    - All new work starts here as markdown files with `[ ]` checkboxes.
+    - Language: Russian.
+
+2.  **Phase 2: Archiving (`docs/done/`)**
+    - Once all checkboxes are complete, the plan is moved here exactly as it was.
+    - It becomes a staging ground for distillation.
+
+3.  **Phase 3: Distillation (`docs/ais/` and `is/skills/`)**
+    - Upon user request, an AI agent performs "distillation" of the completed plan.
+    - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian.
+    - **Micro-Rules**: The agent extracts strict invariants and adds them to `is/skills/` (Language: English) and registers new causality hashes.
+    - Note: Information from one plan can fan out into multiple AIS files or Skills.
+
+4.  **Phase 4: Cleanup (`#for-distillation-cleanup`)**
+    - After the distillation process is fully complete and verified, the agent MUST delete the original plan markdown file from `docs/done/`.
+    - Do NOT delete the `docs/done/` folder itself.
+
+## Contracts
+
+- **No Standalone Policies**: The `docs/policies/` folder is deprecated. All policies must live either inside the relevant `docs/ais/` file (as "Локальные Политики") or as an English contract in `is/skills/`.
+- **Audits Path Invariant**: The path `docs/audits/causality-exceptions.jsonl` is a system contract. Do not rename `docs/audits/` or the file.
+- **No Redundant Folders**: Do not create new subfolders under `docs/` when a functionally suitable one already exists. Place documents in `plans/`, `backlog/`, `runbooks/`, `cheatsheets/`, or `ais/` as appropriate. Do not invent `misc/`, `temp/`, `archive/`, or similar.
+- **Full `docs/` folder structure:**
+
+| Folder | Purpose | System? | Relation to Skills |
+|--------|---------|---------|-------------------|
+| `plans/` | Active plans with `[ ]` checkboxes. New work starts here. | No | Plans are distilled into skills. |
+| `done/` | Staging for completed plans before distillation. Empty after cleanup. | No | Source for distillation. |
+| `ais/` | Architecture & Infrastructure Specifications (Russian). Macro-docs. | No | Policies from AIS may become skills. |
+| `audits/` | `causality-exceptions.jsonl` — exceptions for the invariant gate. | **YES** | Path hardcoded in `validate-causality-invariant.js`. **Never rename or move.** |
+| `backlog/` | Deferred plans and future drafts. Not for distillation. | No | May later become plans. |
+| `cheatsheets/` | Quick reference (e.g., architecture layers). Human-oriented. | No | Overlaps conceptually with skills. |
+| `runbooks/` | Step-by-step operational procedures (monitoring, rollback). | No | Implements "how" for `arch-monitoring`, `arch-rollback`. |
