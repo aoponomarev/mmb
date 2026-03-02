@@ -236,6 +236,7 @@
      * @param {string} proxyType - тип прокси ('cloudflare' | 'yandex' и т.д.)
      * @returns {string|null} URL прокси или null, если не найден
      */
+    // @skill-anchor core/skills/external-integrations #for-geo-optimization
     function getProxyUrl(providerName, proxyType = null) {
         const providerConfig = CONFIG.defaults[providerName];
         if (!providerConfig) return null;

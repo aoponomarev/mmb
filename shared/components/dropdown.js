@@ -790,6 +790,7 @@ window.cmpDropdown = {
     },
 
     beforeUnmount() {
+        // @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-dispose
         // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
         if (this.dropdownInstance) {
             this.dropdownInstance.dispose();

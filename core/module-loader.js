@@ -38,6 +38,7 @@
  * - Конфигурация модулей: core/modules-config.js
  */
 
+// @skill-anchor is/skills/process-lib-governance #for-umd-libraries #for-cdn-fallback
 (function() {
     'use strict';
 

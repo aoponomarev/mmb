@@ -30,6 +30,7 @@
  * - Модуль перевода: core/api/messages-translator.js
  */
 
+// @skill-anchor core/skills/messages-architecture #for-short-message-keys #for-short-message-types
 (function() {
     'use strict';
 

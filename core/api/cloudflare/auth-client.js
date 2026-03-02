@@ -159,6 +159,7 @@
 
             // Note: проверка authWindow.closed удалена из-за COOP (Cross-Origin-Opener-Policy)
             // Браузер блокирует доступ к window.closed for cross-origin окон и выводит ошибку в консоль
+            // @skill-anchor is/skills/arch-cloudflare-infrastructure #for-oauth-postmessage
             // Авторизация работает через postMessage
         } catch (error) {
             console.error('auth-client.initiateGoogleAuth:', error);

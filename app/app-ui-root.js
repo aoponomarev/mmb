@@ -1443,6 +1443,7 @@
                         const timezoneToSave = timezone || this.selectedTimezone;
                         const languageToSave = translationLanguage || this.selectedTranslationLanguage;
 
+                        // @skill-anchor app/skills/reactive-localization #for-reactive-translations
                         if (window.cacheManager) {
                             await window.cacheManager.set('timezone', timezoneToSave);
                             await window.cacheManager.set('translation-language', languageToSave);

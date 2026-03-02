@@ -33,6 +33,7 @@
  * - Кэш-менеджер: core/cache/cache-manager.js
  */
 
+// @skill-anchor core/skills/ai-providers-architecture #for-ai-provider-abstraction #for-ai-manager-switching
 (function() {
     'use strict';
 

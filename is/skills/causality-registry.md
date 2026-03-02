@@ -42,3 +42,32 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-explicit-links` | Without anchors, AI agents and developers lack context for why a file is structured the way it is. Refactors violate contracts silently. |
 | `#for-machine-readable` | `@skill` JSDoc is parseable by MCP tools (`audit_skill_coverage`, `search_anchors`). Scattered prose docs are not discoverable. |
 | `#for-inline-anchors-sparing` | Obvious code needs no anchor; noise reduces signal. Use `@skill-anchor` when the rationale is not self-evident. |
+| `#for-classes-add-remove` | A universal mechanism to inject or override CSS classes inside generic Vue components without breaking encapsulation. |
+| `#not-hardcoded-classes` | Hardcoded classes in `x-template` conflict with the `classesAdd`/`classesRemove` mechanism and cannot be dynamically overridden by parents. |
+| `#for-fixed-class-objects` | Vue reactivity expects consistent object structures. Returning varying structures (e.g., `{}` then `{icon: 'p-0'}`) breaks computed reactivity. |
+| `#for-classes-merge-order` | Merging classes in a specific sequence (base -> adaptive -> instanceHash -> conditional -> remove -> add) ensures overrides take precedence. |
+| `#for-vue-comment-node-fallback` | Vue 3 fragments often leave `this.$el` as a Comment node in `x-template`. Direct DOM selection fails unless we fall back to nextSibling or parent. |
+| `#not-methods-in-computed` | Methods placed inside the `computed` object block cannot be called properly and lead to structural errors. |
+| `#not-dom-in-computed` | Computed properties can execute before the component is fully mounted, causing DOM-dependent functions to fail. |
+| `#for-utility-availability-check` | Global utilities like `window.classManager` load asynchronously; failing to check their existence causes crashes during initial render. |
+| `#for-bootstrap-nexttick-init` | Bootstrap components require the DOM to be fully rendered before initialization. `$nextTick` ensures the elements exist. |
+| `#for-bootstrap-dispose` | Failing to call `instance.dispose()` in `beforeUnmount` causes memory leaks and ghost event listeners in SPAs. |
+| `#for-bootstrap-event-proxying` | Vue components must proxy native Bootstrap events (e.g., `show.bs.modal`) to Vue events (`@show`) to maintain reactivity and component boundaries. |
+| `#for-reactive-translations` | Using a reactive translation function ensures that changing the language state instantly updates all UI text without requiring a page reload. |
+| `#for-tooltip-reactivity` | Tooltips must be re-initialized or their titles reactively bound so that language switches affect hover text immediately. |
+| `#for-model-extensibility` | Using a base class (`BaseModelCalculator`) and a manager (`ModelManager`) allows adding new mathematical models without modifying the core application logic. |
+| `#for-air-math-contract` | The A.I.R. formula (Alignment, Impulse, Risk) is a strict domain contract. AI agents must not alter the mathematical weights or logic without explicit architectural approval. |
+| `#for-ai-provider-abstraction` | A unified `BaseAIProvider` interface ensures the application code remains agnostic to specific AI service APIs (YandexGPT, Perplexity), enabling seamless switching. |
+| `#for-ai-manager-switching` | `AIProviderManager` centralizes the logic for retrieving API keys, models, and routing requests, preventing scattered API calls across components. |
+| `#for-short-message-keys` | Using short keys (`e.net`) instead of long strings (`error.api.network`) reduces payload size and minimizes typos in code. |
+| `#for-short-message-types` | Using single-character types (`d`, `w`, `i`, `s`) maps directly to Bootstrap variants (`danger`, `warning`, `info`, `success`) efficiently. |
+| `#for-compact-translation-format` | The `KEY\|TEXT\|DETAILS` format for translations is highly optimized for parsing and storage compared to verbose JSON or XML. |
+| `#for-integration-fallbacks` | External services (like AI providers or proxies) must implement fallback chains to ensure high availability when the primary provider fails. |
+| `#for-geo-optimization` | Routing requests based on geography (e.g., Yandex Cloud for RU/CIS, Cloudflare for ROW) minimizes latency and complies with data localization policies. |
+| `#for-oauth-postmessage` | Browsers block HTTPS to `file://` redirects. Using a popup window (`window.open`) and sending the token back via `postMessage` is the only reliable way to complete OAuth flows in a pure local static context. |
+| `#for-cloudflare-kv-proxy` | External APIs enforce CORS, blocking `file://` requests. A Cloudflare Worker proxy with KV caching bypasses CORS and reduces rate-limit exhaustion. |
+| `#for-d1-schema-migrations` | D1 is serverless SQLite. All schema changes must be tracked in SQL migration files and applied via Wrangler, never manually mutated in production. |
+| `#for-umd-libraries` | The No-Build architecture requires libraries to be loaded directly in the browser via `<script>` tags. Only libraries providing UMD or Global builds are compatible. |
+| `#for-cdn-fallback` | Relying on a single CDN (e.g., jsdelivr) creates a single point of failure. A fallback chain (GitHub Pages -> jsdelivr -> cdnjs) ensures the UI loads even if one CDN is down. |
+| `#for-template-logic-separation` | In a No-Build Vue architecture, templates and logic are split into separate files. Documentation must follow this split: layout/DOM details in the template file, API/state details in the JS file. |
+| `#not-doc-duplication` | Duplicating documentation across multiple files guarantees that one will eventually become outdated. Use cross-references instead. |

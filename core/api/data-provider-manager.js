@@ -393,6 +393,7 @@
         }
 
         /**
+         * @skill-anchor core/skills/external-integrations #for-integration-fallbacks
          * Dual-channel coin data fetch: PostgreSQL primary, CoinGecko fallback.
          * Phase 1: resolve as many IDs as possible from YandexCacheProvider (PG).
          * Phase 2: fetch remaining missing IDs from the active provider (CoinGecko).

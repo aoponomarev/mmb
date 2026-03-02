@@ -27,6 +27,7 @@
             name: 'Медиана (A.I.R.) 26.01.01',
             description: 'Каноническая версия: Alignment, Impulse, Risk (фиксированная)',
             calculator: 'MedianAir260101Calculator',
+            // @skill-anchor core/skills/metrics-air-model #for-model-extensibility #for-air-math-contract
             legacyIds: ['mmMedian'],
             meta: Object.freeze({
                 id: 'Median/AIR/260101',

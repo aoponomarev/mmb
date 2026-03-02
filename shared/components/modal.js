@@ -423,6 +423,7 @@ window.cmpModal = {
     },
 
     beforeUnmount() {
+        // @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-dispose
         // Уничтожение Bootstrap Modal for предотвращения утечек памяти
         if (this.modalInstance) {
             this.modalInstance.dispose();
