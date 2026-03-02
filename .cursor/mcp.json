@@ -1,16 +1,10 @@
 {
   "mcpServers": {
-    "skills-target-app": {
+    "MMB-Causality": {
       "command": "node",
-      "args": ["D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/mcp/skills/server.js"],
-      "env": {}
-    },
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
-      "env": {
-        "MEMORY_FILE_PATH": "D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/memory/memory.jsonl"
-      }
+      "args": [
+        "D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/mcp/index.js"
+      ]
     }
   }
 }

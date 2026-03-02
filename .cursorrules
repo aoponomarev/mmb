@@ -16,3 +16,12 @@ This is a strict requirement governed by the `#for-mandatory-comment-rewrite` ca
 If you encounter a recurring edge case or non-obvious logic that lacks a formal skill, leave a raw marker:
 `// @causality Because the File API throws on X, we must do Y...`
 This allows future "skill-watcher" agents to harvest these patterns into formal skills.
+
+## MCP Ecosystem (LLMOps)
+This project is deeply integrated with a local Model Context Protocol (MCP) server.
+When managing architecture, you **MUST** prioritize MCP tools over CLI commands:
+1. **Preflight**: Always use the `run_preflight` tool instead of `npm run preflight` to ensure telemetry is logged.
+2. **Skills**: Use the `create_skill` tool to generate new skills.
+3. **Context**: Read `skill://[path]` resources to get injected telemetry (e.g. how many anchors a skill has) before making architectural decisions.
+4. **Harvester**: Use the `harvest_causalities` tool to scan the codebase, and read the `causality_backlog://` resource to find patterns that need formalization.
+5. **Graph**: Use `causality_graph://[hash]` to instantly find all files dependent on a specific causality hash.

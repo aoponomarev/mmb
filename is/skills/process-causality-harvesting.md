@@ -33,4 +33,5 @@ reasoning_checksum: "514aa3d6"
 
 ## Contracts
 
-- **Watcher Trigger**: The command `npm run preflight` or explicit prompt "run causality harvester" should trigger an agent to search for unhashed `@causality` strings via grep and analyze them for pattern promotion.
+- **Watcher Trigger**: The `harvest_causalities` MCP tool should be run periodically. It scans the codebase and deposits raw causalities into the SQLite `raw_causalities` table.
+- **Review Loop**: Agents must occasionally read the `causality_backlog://` MCP resource to review the pending patterns, formalize them into hashes, create skills via `create_skill` tool, and update the codebase.

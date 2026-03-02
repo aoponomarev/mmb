@@ -5,6 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { db } from "../../mcp/db.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -152,6 +153,24 @@ function main() {
   // 4. Update lockfile
   saveLock(currentState);
   console.log("[validate-causality-invariant] OK: Invariant check passed, lockfile updated.");
+
+  // 5. Sync to SQLite
+  try {
+    const clearStmt = db.prepare('DELETE FROM dependency_graph');
+    const insertStmt = db.prepare('INSERT INTO dependency_graph (source_hash, target_file, anchor_type) VALUES (?, ?, ?)');
+    
+    db.transaction(() => {
+        clearStmt.run();
+        for (const [hash, files] of Object.entries(currentState.hashes)) {
+            for (const file of files) {
+                insertStmt.run(hash, file, 'anchor');
+            }
+        }
+    })();
+    console.log("[validate-causality-invariant] OK: SQLite dependency_graph synced.");
+  } catch (e) {
+    console.warn("[validate-causality-invariant] WARN: Could not sync SQLite dependency_graph:", e.message);
+  }
 }
 
 main();
