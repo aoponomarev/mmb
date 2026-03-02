@@ -1,15 +1,31 @@
+---
+title: "Protocol: Node.js Async Safety & Timeout Contracts"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Protocol: Node.js Async Safety & Timeout Contracts
 
 > **Context**: Defines mandatory async patterns for all Node.js code in the Target App to prevent hanging I/O, silent swallowed errors, and unpredictable failure modes.
 > **Scope**: `core/api/`, `is/scripts/`, any Node.js module making external calls.
 
-## 1. Async Failure Rules
+## Reasoning
+
+- **#for-try-catch-await** Unhandled promise rejections crash the process or produce opaque errors. Every async boundary must either re-throw, log with context, or return a typed error.
+- **#for-partial-failure-tolerance** `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot.
+- **#for-timeout-external** Network hangs leave requests dangling indefinitely. AbortController + setTimeout ensures bounded wait; timeout errors are classified for retry logic.
+- **#for-error-classification** Rate limit (429) and timeout are retryable with backoff; 4xx client errors are not. Classification drives correct retry behavior.
+- **#for-rate-limiting** Free-tier APIs have strict rate limits. Proactive waiting avoids persistent 429 failures.
+
+---
+
+## Async Failure Rules
 
 - Wrap all top-level `await` boundaries in `try/catch`. Never leave a promise chain without `.catch()` in service code.
 - Use structured error types where possible (e.g., `BackendCoreError` with `{ code, message, cause }`).
 - Never swallow errors silently — if you catch, you must either re-throw, log with context, or return a typed error value.
 
-## 2. Parallel Execution Rules
+## Parallel Execution Rules
 
 | Pattern | Use When |
 |---|---|
@@ -18,7 +34,7 @@
 
 **Default**: prefer `Promise.allSettled` for external provider calls. The `MarketMetricsService.getAllBestEffort()` pattern is the canonical example.
 
-## 3. Timeout & AbortController Contract
+## Timeout & AbortController Contract
 
 Every external HTTP call (fetch, provider request) **MUST** define timeout behavior:
 
@@ -44,7 +60,7 @@ try {
 - Timeout errors must be classified: retryable (network flap) vs non-retryable (provider down).
 - Differentiate: **transport failure** (network) vs **timeout** vs **provider business error** (4xx/5xx with body).
 
-## 4. Error Classification
+## Error Classification
 
 | Error class | Code pattern | Retryable? |
 |---|---|---|
@@ -54,14 +70,14 @@ try {
 | Provider business error (4xx) | `PROVIDER_CLIENT_ERROR` | No |
 | Provider server error (5xx) | `PROVIDER_SERVER_ERROR` | Sometimes |
 
-## 5. Rate Limiting Integration
+## Rate Limiting Integration
 
 All external provider calls must go through `core/api/request-registry.js`:
 - On HTTP 429: interval multiplied by backoff factor.
 - On success: interval resets to base value.
 - The registry journals all calls to prevent ban accumulation.
 
-## 6. Verification After Any Async Change
+## Verification After Any Async Change
 
 After modifying async flow, timeout logic, or error handling:
 1. Run `npm run test` — all provider and service tests must pass.

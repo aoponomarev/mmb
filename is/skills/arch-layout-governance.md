@@ -1,6 +1,23 @@
+---
+title: "Architecture: Layout & README Governance"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Architecture: Layout & README Governance
 
 > **Context**: Defines the rules for folder structures and mandatory directory documentation (README.md files) in the Target App.
+
+## Reasoning
+
+- **#for-readme-local-contract** A `README.md` inside a directory acts as a local architectural contract. It explains the boundary, what is allowed, and what is forbidden in that directory, without forcing the developer to search through global architecture docs.
+- **#for-cognitive-load-reduction** By documenting subfolders within a parent `README.md` (e.g., in `is/scripts/`), we reduce visual noise and make the ownership and purpose of each subfolder immediately clear.
+- **#for-migration-exit-policy** Any folder created as a temporary layer during migration MUST have a `README.md` with a strict Exit Policy or Mandatory Removal condition. Prevents temporary "crutches" from becoming permanent technical debt.
+- **#for-automated-enforcement** Documentation that isn't checked becomes stale. The `validate-readmes.js` script enforces the existence of these critical boundary documents.
+- **#not-central-docs** Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed.
+- **#not-no-folder-docs** No folder-level documentation — leads to structure degradation as new files are added randomly.
+
+---
 
 ## Implementation Status in Target App
 
@@ -77,7 +94,3 @@ When an AI agent (Cursor, Continue) performs any of the following, it MUST:
 4. **Before committing structural changes**:
    - Ensure `npm run readmes:check` passes. If not, fix or run `readmes:sync`.
 
-## Alternatives Considered
-
-- A single monolithic architecture document — rejected (too large to read, context gets lost).
-- No folder-level documentation — rejected (leads to structure degradation as new files are added randomly).

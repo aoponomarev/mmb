@@ -1,9 +1,24 @@
+---
+title: "Process: Secrets Hygiene & Git Boundary"
+reasoning_confidence: 0.95
+reasoning_audited_at: "2026-03-01"
+---
+
 # Process: Secrets Hygiene & Git Boundary
 
 > **Context**: Zero-tolerance policy for secrets in Git. Covers pre-commit rules, recovery protocol, and the `.env` / `.env.example` boundary.
 > **Scope**: Root `.env`, `is/secrets/`, `is/contracts/env/`, `.gitignore`
 
-## 1. Hard Rules (Non-Negotiable)
+## Reasoning
+
+- **#for-zero-tolerance-secrets** Once committed, secrets propagate to clones, forks, and CI logs. Revocation and rotation are costly; prevention is the only reliable strategy.
+- **#for-encrypted-backup** Machine loss or migration without backup means manual reconstruction of env. AES-256 archives in `is/secrets/archives/` enable one-command restore.
+- **#for-no-bypass-push** GitHub secret detection blocks dangerous pushes. Using `--no-verify` or `--force` to bypass defeats the safety net — fix the leak instead.
+- **#for-eip** Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding.
+
+---
+
+## Hard Rules (Non-Negotiable)
 
 1. **No secrets in Git.** Tokens, API keys, passwords, archive keys are **FORBIDDEN** in any tracked file.
 2. **`.env` is always gitignored.** Only `.env.example` (with placeholders) is committed.
@@ -11,7 +26,7 @@
 4. **Encrypted backup is mandatory.** Before any system migration or machine move, run `npm run secret:backup`.
 5. **Push protection must not be bypassed.** If GitHub blocks a push due to secret detection, fix the leak — do not use `--force` or `--no-verify` to bypass.
 
-## 2. Pre-Commit Verification
+## Pre-Commit Verification
 
 Before committing any change touching `.env`, `is/contracts/env/`, or `is/secrets/`:
 
@@ -20,7 +35,7 @@ Before committing any change touching `.env`, `is/contracts/env/`, or `is/secret
 3. If `is/secrets/archives/` contains non-encrypted files — do not commit.
 4. Run `npm run preflight` to trigger the full contract validation chain.
 
-## 3. `.env` / `.env.example` Sync Contract (EIP — Every Item Present)
+## `.env` / `.env.example` Sync Contract (EIP — Every Item Present)
 
 Every key defined in `.env` MUST have a matching entry in `.env.example` (with a placeholder or description comment).
 Every key in `.env.example` MUST still be expected in `.env` — no stale placeholders.
@@ -36,7 +51,7 @@ Every key in `.env.example` MUST still be expected in `.env` — no stale placeh
 - Use `#` comments to explain the purpose of each variable.
 - If a variable is used in Docker or cloud functions, it must exist in both files.
 
-## 4. Incident Response (Secret Leaked to Git)
+## Incident Response (Secret Leaked to Git)
 
 If a secret is accidentally committed:
 1. **Revoke the key immediately** in the provider console (before anything else).
@@ -44,7 +59,7 @@ If a secret is accidentally committed:
 3. **Purge from git history** only if the commit has NOT been pushed yet (interactive rebase). If already pushed, force-push cleanup is required (coordinate with team if any).
 4. Verify `.gitignore` is correct and run a fresh `git status` check.
 
-## 5. File Map
+## File Map
 
 | File | Purpose |
 |---|---|
@@ -54,7 +69,7 @@ If a secret is accidentally committed:
 | `is/contracts/env/env-rules.js` | Zod validation schema for required env variables. |
 | `is/scripts/secrets/secret-resilience.js` | Backup/restore/check scripts. |
 
-## 6. Commands
+## Commands
 
 ```bash
 npm run secret:backup     # Encrypt .env -> is/secrets/archives/
@@ -63,7 +78,7 @@ npm run secret:check      # Verify archive integrity
 npm run preflight         # Full validation chain (includes env contract check)
 ```
 
-## 7. Placeholders (Standard Format)
+## Placeholders (Standard Format)
 
 Use these placeholder patterns in `.env.example`:
 

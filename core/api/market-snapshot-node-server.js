@@ -1,8 +1,8 @@
 /**
- * Skill: architecture/arch-infrastructure
- * Skill: process/process-env-sync-governance
- * Causality: GC.v6w7.fail-fast-external-contract
- * Formula: G.m1n2.fail-fast-migration && C.q1r2.external-contract-only
+ * @skill is/skills/arch-backend-core
+ * @skill is/skills/process-env-sync
+ *
+ * Market Snapshot Node.js HTTP server — fail-fast on external contract violations.
  */
 import http from "http";
 

@@ -1,6 +1,26 @@
+---
+title: "Architecture: Skills & MCP System"
+reasoning_confidence: 0.85
+reasoning_audited_at: "2026-03-01"
+---
+
 # Architecture: Skills & MCP System
 
 > **Context**: Defines the knowledge management architecture: skills storage, validation, MCP server integration, Cursor rules, and the skill migration strategy from Legacy App.
+
+## Reasoning
+
+- **#for-demand-driven-migration** Skills are not copied wholesale from Legacy App. A skill is migrated only when the corresponding code or pattern appears in Target App. Prevents knowledge pollution — stale skills describing non-existent code actively mislead AI agents.
+- **#for-distributed-skill-placement** Skills live next to their domain (`is/skills/` for infra, `core/skills/` for API, `app/skills/` for UI) rather than in a monolithic `skills/` vault. Ensures natural co-evolution with code.
+- **#for-plain-markdown** The Legacy App had 195 skills with complex YAML frontmatter. For current scale, plain Markdown with H1 as minimum structural contract is sufficient. Frontmatter can be added when skill count justifies it.
+- **#for-validate-skills-single** One script (`validate-skills.js`) validates format, detects staleness (>90 days), and identifies orphaned files. JSON output feeds into health-check and trend tracking.
+- **#for-simplified-mcp** Legacy App had 4+ validation scripts for skills alone. Target App consolidates into one `validate-skills.js` with `--json` flag, sufficient for current scale.
+- **#for-always-apply-true** Testing showed `.cursorrules` and `alwaysApply: false` rules are unreliable in Cursor Agent mode. Critical rules must use `alwaysApply: true` MDC format.
+- **#not-wholesale-skill-import** Wholesale skill import from Legacy App (195 skills) — most describe Legacy App-specific code not present in Target App.
+- **#not-central-vault** Central `skills/` vault with Obsidian — deferred (reconsider at 50+).
+- **#not-skill-submodule** Git submodule for skill sharing — single-project scope, high sync overhead.
+
+---
 
 ## Implementation Status in Target App
 
@@ -16,16 +36,6 @@
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
 - `Simplified`: No `skills/MIGRATION.md` registry (migration tracked via `docs/plans/` and this skill).
 
-## Architectural Reasoning (Why this way)
-
-- **Demand-driven skill migration**: Skills are not copied wholesale from Legacy App. A skill is migrated only when the corresponding code or pattern appears in Target App. This prevents knowledge pollution — stale skills describing non-existent code actively mislead AI agents.
-- **Distributed skill placement over central vault**: Skills live next to their domain (`is/skills/` for infra, `core/skills/` for API, `app/skills/` for UI) rather than in a monolithic `skills/` vault. This ensures natural co-evolution with code.
-- **Plain Markdown over full YAML frontmatter**: The Legacy App had 195 skills with complex YAML frontmatter (`id`, `scope`, `tags`, `priority`, `relations`, `decision_id`, `supersedes`). For 8 skills, this overhead is unjustified. The validation script checks for H1 headings as minimum structural contract. Frontmatter can be added when the skill count justifies it.
-- **`validate-skills.js` as the single quality gate**: One script validates format, detects staleness (>90 days), and identifies orphaned files. JSON output feeds into health-check and trend tracking.
-- **Simplified MCP over full graph/health system**: Legacy App had `validate-skill-graph.js`, `validate-skills-health.js`, `validate-ssot.js`, `validate-symlinks.js` — 4+ validation scripts for skills alone. Target App consolidates into one `validate-skills.js` with `--json` flag, sufficient for current scale.
-- **No submodule for skills**: Legacy App used git submodule for skills sharing across projects. Target App has a single project — submodule would add synchronization overhead without benefit.
-- **`alwaysApply: true` for critical Cursor rules**: Testing showed `.cursorrules` and `alwaysApply: false` rules are unreliable in Cursor Agent mode. Critical rules must use `alwaysApply: true` MDC format.
-
 ## Key Contracts
 
 - Every skill file must have an H1 heading or `title:` frontmatter.
@@ -33,9 +43,3 @@
 - Files with content < 50 chars are flagged as potentially orphaned.
 - `npm run skills:check` must pass before any migration stage can be marked complete.
 
-## Alternatives Considered
-
-- Wholesale skill import from Legacy App (195 skills) — rejected (most describe Legacy App-specific code not present in Target App).
-- Central `skills/` vault with Obsidian — deferred (reconsider at 50+).
-- Git submodule for skill sharing — rejected (single-project scope, high sync overhead).
-- Full YAML frontmatter on all skills — deferred (justified only at scale).

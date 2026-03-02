@@ -1,9 +1,26 @@
+---
+title: "UX: Design Principles & Interface Contracts"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # UX: Design Principles & Interface Contracts
 
 > **Context**: Rules for consistent, predictable user experience across all UI components.
 > **Scope**: `app/`, `core/config/`, all UI-visible elements.
 
-## 1. Consistency Contracts
+## Reasoning
+
+- **#for-modal-button-match** User opens "Edit Portfolio" — modal must say "Edit Portfolio". Mismatch causes confusion and breaks mental model.
+- **#for-color-semantics** Finance domain has established conventions. Green = profit, red = loss, grey = neutral. Violations cause misreading of data.
+- **#for-action-feedback** Silent success leaves user uncertain. Toast or inline status confirms the action completed — reduces repeated clicks and support burden.
+- **#for-nonblocking-async** Frozen UI suggests crash. Loading spinner or skeleton signals "working." User can distinguish idle vs in-progress.
+- **#for-reversible-destructive** Single-click delete causes accidental data loss. Confirmation modal or two-step button prevents regret.
+- **#for-hardcode-ban** Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point.
+
+---
+
+## Consistency Contracts
 
 **Modal titles**: A modal's heading MUST match the exact text of the button or link that opened it. If the button says "Edit Portfolio", the modal title is "Edit Portfolio" — not "Portfolio Management" or "Settings".
 
@@ -16,13 +33,13 @@
 
 **Action feedback**: Every user-initiated action (Save, Delete, Refresh) MUST produce visible System Feedback — either a Toast notification or an inline status update. Silent success is not acceptable.
 
-## 2. Interaction Contracts
+## Interaction Contracts
 
 **Non-blocking async**: Long operations (data fetch, save) MUST show a loading spinner or skeleton state. The UI must never appear frozen. The user must always be able to tell whether the system is working or idle.
 
 **Reversible destructive actions**: Any delete or irreversible operation MUST require explicit confirmation (confirmation modal or two-step button). No single-click deletes.
 
-## 3. SSOT for UI Strings
+## SSOT for UI Strings
 
 All user-visible text (button labels, modal titles, tooltips, toast messages) comes from centralized config files — never hardcoded inline in component code.
 
@@ -34,7 +51,7 @@ All user-visible text (button labels, modal titles, tooltips, toast messages) co
 
 Enforcement: The AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test.js` catches any hardcoded user-facing string assignments.
 
-## 4. Naming Conventions for UI Code
+## Naming Conventions for UI Code
 
 | Pattern | Convention | Example |
 |---|---|---|
@@ -43,7 +60,7 @@ Enforcement: The AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test
 | Event names | Past tense | `portfolioSaved`, `assetDeleted` |
 | Container CSS classes | `avto-{descriptor}` | `avto-table-row`, `avto-modal-header` |
 
-## 5. Zod Validation Gate
+## Zod Validation Gate
 
 UI config files (`modals-config.js`, `tooltips-config.js`) are validated against Zod schemas in `core/contracts/ui-contracts.js` before the app is considered production-ready.
 

@@ -1,13 +1,24 @@
 ---
 title: "Process: Language & Terminology Governance"
 tags: ["#process", "#language", "#terminology", "#naming", "#anti-calque"]
+reasoning_confidence: 0.95
+reasoning_audited_at: "2026-03-01"
 ---
 
 # Process: Language & Terminology Governance
 
 > **Context**: During the migration, a severe terminology collision was discovered: Russian abbreviations were being directly transliterated into English letters (calquing) by AI agents or developers. To prevent cognitive load, broken searches, and AI hallucination, **transliterating Russian abbreviations into Latin letters is STRICTLY FORBIDDEN** in any code, filename, variable name, or English documentation.
 
-## 1. Language Policy for Skills and Code (Mandatory)
+## Reasoning
+
+- **#for-anti-calque** Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, Target App, Legacy App) is unambiguous.
+- **#for-skills-english** Skills are MCP-indexed and consumed by AI agents. Mixed language causes hallucination and inconsistent application of rules.
+- **#for-code-english** Variable names and comments are part of the codebase contract. Future maintainers and AI agents must understand without translation.
+- **#for-russian-in-docs** Migration plans and runbooks may require Russian for stakeholder communication. Skills and code remain English-only.
+
+---
+
+## Language Policy for Skills and Code (Mandatory)
 
 - All files under `skills/**` (including `is/skills`, `core/skills`, `app/skills`) MUST be authored in **English**.
 - All code comments, variable names, and commit messages MUST be authored in **English**.
@@ -24,6 +35,6 @@ When a Russian concept must be named in English (e.g. for code or file paths), y
 | **ЕИП** (Единый Источник Правды) | Single Source of Truth | `EIP` | `SSOT` |
 | **MBB/MMB** | Legacy / Target App | `MBB`, `MMB` | `Legacy App`, `Target App` |
 
-## 3. Enforcement
+## Enforcement
 - **Trigger:** Whenever an agent generates variable names, writes documentation, translates concepts, or creates new files based on Russian prompts.
 - **Migration Guardrail:** When migrating legacy code, agents must actively translate Russian comments to English and scan for banned calques, replacing them with correct standard terminology.

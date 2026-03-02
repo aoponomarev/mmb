@@ -1,9 +1,23 @@
+---
+title: "Config Layer & SSOT Governance"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Config Layer & SSOT Governance
 
 > **Scope**: `core/config/`
 > **Context**: Defines how application configuration is structured, where each type of config lives, and how SSOT is enforced across the config layer.
 
-## 1. Config as SSOT — The Contract
+## Reasoning
+
+- **#for-hardcode-ban** Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point.
+- **#for-zod-ui-validation** A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment.
+- **#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
+
+---
+
+## Config as SSOT — The Contract
 
 `core/config/` is the **only** place where application-level configuration is defined. All other modules read from config objects — they never define configuration inline.
 
@@ -21,7 +35,7 @@ const title = window.modalsConfig.getModalTitle('portfolio-edit');
 const text = window.tooltipsConfig.get('refresh-data');
 ```
 
-## 2. Config File Responsibilities
+## Config File Responsibilities
 
 | File | What it defines |
 |---|---|
@@ -41,26 +55,26 @@ const text = window.tooltipsConfig.get('refresh-data');
 | `menus-config.js` | Navigation menu structure |
 | `i18n-config.js` | Internationalization locale mappings |
 
-## 3. Zod Validation Contract
+## Zod Validation Contract
 
 UI-facing configs (`modals-config.js`, `tooltips-config.js`) are validated against Zod schemas in `core/contracts/ui-contracts.js`.
 
 The validation runs in `is/scripts/tests/validate-frontend-ui-configs.test.js`. A missing required key or wrong type causes a **test failure** — not a silent runtime defect.
 
-**Reasoning**: Config typos surface in production as blank tooltips, broken modals, or silent UI failures. Validating the config shape before deployment catches this at zero cost.
+**#for-zod-ui-validation** Config typos surface in production as blank tooltips, broken modals, or silent UI failures. Validating the config shape before deployment catches this at zero cost.
 
-## 4. `cloudflare-config.js` — The Proxy Gateway
+## `cloudflare-config.js` — The Proxy Gateway
 
 `cloudflareConfig.getApiProxyEndpoint(path)` is the **single point of truth** for constructing Cloudflare Worker proxy URLs. All frontend API calls that need CORS bypass or auth headers must go through this method.
 
 This is the key enabler of Zero-Config Portability: the same method returns the correct URL in both `file://` and `https://` runtime modes. See `app/skills/file-protocol-cors-guard.md`.
 
-## 5. Schema Migrations (`messages-migrations.js`)
+## Schema Migrations (`messages-migrations.js`)
 
 `core/config/messages-migrations.js` handles forward-migration of persisted message formats in the cache when the schema version advances. Works in conjunction with `core/cache/cache-migrations.js`.
 
-## 6. `modules-config.js` — Module Load Registry
+## `modules-config.js` — Module Load Registry
 
 `core/modules-config.js` (at root of `core/`) defines the **ordered list of all JS modules** that must be loaded before the app initializes. `core/module-loader.js` reads this registry and injects `<script>` tags in dependency order.
 
-**Reasoning**: No-Build Vue architecture has no bundler to resolve dependencies. The module registry is the manual equivalent of `import` graph resolution.
+**#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).

@@ -1,6 +1,8 @@
 ---
 title: "Process: Migration Prioritization Criteria"
 tags: ["#process", "#migration", "#prioritization", "#heuristics"]
+reasoning_confidence: 0.85
+reasoning_audited_at: "2026-03-01"
 ---
 
 # Migration Prioritization Steps (Heuristic Weights)
@@ -8,7 +10,16 @@ tags: ["#process", "#migration", "#prioritization", "#heuristics"]
 > **Context**: In a complex migration from Legacy App to Target App with dozens of plans, it is crucial to choose the next step correctly to avoid creating chaos and accumulating technical debt.
 > **Scope**: Global (migration process management)
 
-## 1. Base Criteria and their Weights (Heuristics)
+## Reasoning
+
+- **#for-weighted-formula** Dozens of plans with hundreds of checkboxes — human intuition fails. Explicit weights (Fundamentality 0.5, Absence of Gaps 0.3, Risk Reduction 0.2) make decisions reproducible and auditable.
+- **#for-fundamentality-first** SSOT, paths, security block everything else. UI polish can wait. Weight 0.5 reflects that blocking dependencies matter most.
+- **#for-gap-closure** Half-transferred modules with open tasks create context-switching cost. Completing a logical piece before jumping elsewhere reduces cognitive load.
+- **#for-debt-risk-weight** Delaying tests, CI gates, or secret hygiene creates production risk. The 0.2 weight captures "what rots if we wait."
+
+---
+
+## Base Criteria and their Weights (Heuristics)
 
 When selecting the next migration step (or the next uncompleted checkbox from the plans), the AI agent must evaluate candidates against three criteria with the following weights:
 
@@ -40,7 +51,7 @@ The agent MUST calculate this Score (explicitly in its mind or in the report) wh
 
 ---
 
-## 3. Calculation Example
+## Calculation Example
 
 Candidate 1: Write E2E tests for transferred API providers.
 - Fundamentality: 0.9 (data is the foundation of the app).

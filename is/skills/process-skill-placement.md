@@ -1,6 +1,19 @@
+---
+title: "Process: Skill Placement & Profiling"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Process: Skill Placement & Profiling
 
 > **Context**: Defines where each type of skill file must be placed, and what criteria determine its location. This is the decision contract for any agent or developer creating or migrating a skill.
+
+## Reasoning
+
+- **#for-distributed-skill-placement** Skills live next to their domain (`is/skills/` for infra, `core/skills/` for API, `app/skills/` for UI) rather than in a monolithic `skills/` vault. Ensures natural co-evolution with code.
+- **#for-arch-vs-process** Architecture = why (decisions, alternatives). Process = how (agent behavior, workflows). Domain = what (invariants, contracts). Prefix signals intent and discoverability.
+- **#for-layer-ownership** Layer ownership matches folder structure. UI rules in `app/skills/`; backend in `core/skills/`; infra in `is/skills/`. Prevents "everything in is/" sprawl.
+- **#for-60-overlap-update** Duplicate skills cause conflicting guidance. Search first; update or merge before creating. >60% overlap → update, not create.
 
 ## The Core Rule
 

@@ -1,6 +1,25 @@
+---
+title: "Architecture: Dependency Governance"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Architecture: Dependency Governance
 
 > **Context**: Defines the dependency management policy for the Target App, ensuring minimal footprint, version stability, and controlled upgrades.
+
+## Reasoning
+
+- **#for-minimal-deps** Every added dependency is a maintenance liability and a security attack surface. The Target App intentionally keeps production deps to 2, preferring built-in Node.js APIs (`node:test`, `node:fs`, `node:crypto`, `node:http`).
+- **#for-node-test** Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale.
+- **#for-zod-single** Zod as the single validation library: TypeScript-first design, zero-dependency nature, ubiquity. Used across env validation, naming contracts, market data schemas, and UI config validation.
+- **#for-lockfile-ssot** `package-lock.json` is the SSOT for exact dependency versions. Direct `package.json` ranges kept narrow (caret `^`). Major upgrades require explicit review and rollback plan.
+- **#for-no-bundler** The `file://` portability constraint means no Webpack/Vite/esbuild in the critical path. Browser modules use native ES imports.
+- **#not-adhoc-deps** Ad-hoc dependency updates — high regression chain risk.
+- **#not-deps-freeze** Full dependency freeze — accumulates security debt.
+- **#not-heavy-test-frameworks** Heavy test frameworks (Jest, Mocha) — unnecessary weight for this project scale.
+
+---
 
 ## Implementation Status in Target App
 
@@ -35,8 +54,3 @@
 - **Native addon updates** (e.g., `better-sqlite3`): Require ABI compatibility check against target Node.js version.
 - **Security advisories**: `npm audit` run as part of CI. Critical CVEs trigger immediate patch.
 
-## Alternatives Considered
-
-- Ad-hoc dependency updates — rejected (high regression chain risk).
-- Full dependency freeze — rejected (accumulates security debt).
-- Heavy test frameworks (Jest, Mocha) — rejected (unnecessary weight for this project scale).

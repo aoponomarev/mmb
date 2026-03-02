@@ -1,6 +1,8 @@
 /**
- * Skill: architecture/arch-infrastructure
- * Skill: process/process-env-sync-governance
+ * @skill is/skills/arch-backend-core
+ * @skill is/skills/process-env-sync
+ *
+ * Market Snapshot server entrypoint — env-driven host/port, graceful shutdown.
  */
 import { createBackendMarketRuntime } from "../../../core/api/backend-market-runtime.js";
 import { createMarketSnapshotNodeServer } from "../../../core/api/market-snapshot-node-server.js";

@@ -1,9 +1,22 @@
+---
+title: "State, Events & Module Loading"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # State, Events & Module Loading
 
 > **Scope**: `core/state/`, `core/events/`, `core/module-loader.js`, `core/modules-config.js`
 > **Context**: Defines the application's reactive state architecture, event communication pattern, and no-build module loading mechanism.
 
-## 1. State Architecture
+## Reasoning
+
+- **#for-mutation-discipline** Uncontrolled mutation spread causes the RRG (Reactive Reliability Gate) violation — two components independently mutating the same field produce unpredictable render order.
+- **#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
+
+---
+
+## State Architecture
 
 **Rule**: UI flags and metadata live in `core/state/`. Business data (portfolios, market prices) does NOT go into shared state — it lives in the cache layer or is passed directly between components.
 
@@ -31,9 +44,9 @@ let isLoggedIn = false;
 
 - State is mutated only through explicit setter functions exposed by each state module (`uiState.set(path, value)`).
 - Components never mutate state objects directly via property assignment outside of the state module.
-- **Reasoning**: Uncontrolled mutation spread causes the RRG (Reactive Reliability Gate) violation — two components independently mutating the same field produce unpredictable render order.
+- **#for-mutation-discipline** Uncontrolled mutation spread causes the RRG (Reactive Reliability Gate) violation — two components independently mutating the same field produce unpredictable render order.
 
-## 3. Event Bus (`core/events/event-bus.js`)
+## Event Bus (`core/events/event-bus.js`)
 
 The event bus handles **cross-component communication** that is not suitable for reactive state (one-time events, notifications, imperative triggers).
 
@@ -44,7 +57,7 @@ The event bus handles **cross-component communication** that is not suitable for
 
 **Anti-pattern**: Do not use the event bus as a state substitute — emitting an event and expecting consumers to hold the value is a disguised global variable.
 
-## 4. Module Loading (No-Build Architecture)
+## Module Loading (No-Build Architecture)
 
 `core/module-loader.js` reads the ordered module registry from `core/modules-config.js` and dynamically injects `<script>` tags into `<head>` in dependency order.
 
@@ -55,11 +68,11 @@ The event bus handles **cross-component communication** that is not suitable for
 4. Domain / state / services — after config
 5. UI components (`app/components/`) — last, after all dependencies are ready
 
-**Reasoning**: Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
+**#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
 
 **Adding a new module**: Register it in `core/modules-config.js` at the correct position in the load sequence. Never rely on script tag order in `index.html` for non-library modules.
 
-## 5. Error Handling Integration
+## Error Handling Integration
 
 `core/errors/error-handler.js` and `core/errors/error-types.js` define the shared error taxonomy. All service-level errors must use these types — never throw raw `new Error('string')` from domain or service code.
 

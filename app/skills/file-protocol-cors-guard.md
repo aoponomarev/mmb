@@ -1,7 +1,20 @@
+---
+title: "Guard: file:// Protocol & CORS"
+reasoning_confidence: 0.95
+reasoning_audited_at: "2026-03-01"
+---
+
 # Guard: file:// Protocol & CORS
 
 > **Context**: The Target App runs from local `index.html` (`origin = null`, protocol `file:`). In this mode, direct browser `fetch()` calls to external APIs are blocked by CORS preflight.
 > **Scope**: All frontend data-fetching code in `app/`, any direct API call from `index.html`.
+
+## Reasoning
+
+- **#for-file-protocol** No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes.
+- **#for-file-origin-null** Browsers treat `file://` as opaque origin. CORS preflight fails for cross-origin requests — CoinGecko, Binance, Yandex APIs block direct calls.
+- **#for-cloudflare-proxy** One proxy endpoint handles CORS headers, auth, and rate limiting. Same code path for `file://` and `https://` — Zero-Config Portability per arch-foundation.
+- **#for-no-direct-fetch** Any `fetch('https://api.coingecko.com/...')` from frontend fails on file://. Routing through `cloudflareConfig.getApiProxyEndpoint()` is mandatory.
 
 ## Non-Negotiable Rule
 

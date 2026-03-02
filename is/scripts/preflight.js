@@ -55,13 +55,18 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 3. Validate Skills (Format and Index Generation)
+    // 3. Validate Skills (Format, Reasoning Gate, Index Generation)
     console.log('[preflight] Validating skills...');
     try {
         execSync('node is/scripts/architecture/validate-skills.js', { stdio: 'inherit', cwd: PATHS.root });
+        if (!process.env.PREFLIGHT_SKIP_REASONING) {
+            execSync('node is/scripts/architecture/validate-reasoning.js', { stdio: 'inherit', cwd: PATHS.root });
+        } else {
+            console.log('[preflight] Skipping Reasoning gate (PREFLIGHT_SKIP_REASONING=1)');
+        }
         execSync('node is/scripts/architecture/generate-skills-index.js', { stdio: 'inherit', cwd: PATHS.root });
     } catch (e) {
-        console.error(`[preflight] ERROR: Skills validation or index generation failed.`);
+        console.error(`[preflight] ERROR: Skills validation, Reasoning gate, or index generation failed.`);
         process.exit(1);
     }
 

@@ -22,7 +22,7 @@ const appSkillsRoot = PATHS.appSkills;
 const targetAppRoot = PATHS.root;
 const logsDir = PATHS.logs;
 
-const SKIP_DIRS = new Set(["drafts", "archive", "meta", "causality"]);
+const SKIP_DIRS = new Set(["drafts", "archive", "meta"]);
 const CODE_DIRS = [PATHS.is, PATHS.core, PATHS.app];
 
 const ANCHOR_PATTERN = /\/\/\s*@skill-anchor\s+/i;

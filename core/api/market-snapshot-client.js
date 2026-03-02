@@ -1,8 +1,8 @@
 /**
- * Skill: architecture/arch-infrastructure
- * Skill: process/process-env-sync-governance
- * Causality: GC.a3b4.security-boundary
- * Formula: G.a1b2.single-source && G.e5f6.secrets-local-only && C.o5p6.no-secrets-in-git
+ * @skill is/skills/arch-backend-core
+ * @skill is/skills/process-env-sync
+ *
+ * Market Snapshot HTTP client — security boundary, request validation, backend error handling.
  */
 import { parseMarketQuery } from "../contracts/market-contracts.js";
 import { BACKEND_ERROR_CODES, BackendCoreError } from "./providers/errors.js";

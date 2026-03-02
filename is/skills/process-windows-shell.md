@@ -1,7 +1,20 @@
+---
+title: "Process: Windows & PowerShell Patterns for AI Agents"
+reasoning_confidence: 0.9
+reasoning_audited_at: "2026-03-01"
+---
+
 # Process: Windows & PowerShell Patterns for AI Agents
 
 > **Context**: AI agents (Cursor, Continue) running on Windows encounter shell errors when using Git Bash for file operations. This skill provides mandatory patterns to avoid known failures.
 > **Scope**: All shell commands issued by AI agents in Cursor on Windows.
+
+## Reasoning
+
+- **#for-bash-ban-powershell** Windows Defender blocks Unix pipe creation when Cursor spawns bash. OneDrive file locks compound the issue. This is an OS-level conflict with no fix — PowerShell is the only reliable shell.
+- **#for-path-format-context** PowerShell `-Path` expects backslashes; Node.js `path.join()` uses forward slashes for cross-platform. Wrong format causes silent failures.
+- **#for-semicolon-over-and** PowerShell uses `;` for command chaining. `&&` is bash syntax and fails in PowerShell.
+- **#for-sqlite-no-onedrive** File locking during sync causes database corruption. Store `.db` in non-synced path or gitignored `data/`.
 
 ## HARD BAN: Never Use Bash in Cursor
 
