@@ -1,0 +1,18 @@
+# AI Agent Behavior Rules
+
+You are operating in a codebase with strict architectural and causality rules.
+
+## MANDATORY COMMENT REWRITE POLICY
+Whenever you modify, review, or touch any piece of code in this repository, you **MUST** proactively rewrite nearby legacy comments according to the following rules:
+
+1. **Language**: Strictly English.
+2. **Focus**: Explain ONLY the *Why* (the underlying reason/edge case) and *For what* (the intended business goal).
+3. **Ban**: Never describe *What* the code is doing (e.g., `// filter active users`). If the code is not self-documenting, refactor the code first.
+4. **Legacy**: Replace Russian comments and descriptive noise with English causal comments.
+
+This is a strict requirement governed by the `#for-mandatory-comment-rewrite` causality hash. Do not wait for the user to ask you to rewrite comments; do it automatically as part of your edits.
+
+## Causality Harvesting
+If you encounter a recurring edge case or non-obvious logic that lacks a formal skill, leave a raw marker:
+`// @causality Because the File API throws on X, we must do Y...`
+This allows future "skill-watcher" agents to harvest these patterns into formal skills.

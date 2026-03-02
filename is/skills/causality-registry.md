@@ -71,5 +71,9 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-cdn-fallback` | Relying on a single CDN (e.g., jsdelivr) creates a single point of failure. A fallback chain (GitHub Pages -> jsdelivr -> cdnjs) ensures the UI loads even if one CDN is down. |
 | `#for-template-logic-separation` | In a No-Build Vue architecture, templates and logic are split into separate files. Documentation must follow this split: layout/DOM details in the template file, API/state details in the JS file. |
 | `#not-doc-duplication` | Duplicating documentation across multiple files guarantees that one will eventually become outdated. Use cross-references instead. |
+| `#for-header-skill-separation` | File headers must contain only technical API contracts (What/How). Philosophical principles and systemic rules belong in skills to prevent context bloat and divergence. |
+| `#for-english-why-comments` | Inline comments must be in English and explain the "Why" and "For what", never the "What". Describing what code does creates noise; describing why it exists creates value. |
+| `#for-mandatory-comment-rewrite` | AI agents must proactively rewrite legacy Russian or descriptive comments into English causal comments whenever touching a piece of code. |
+| `#for-causality-harvesting` | Using raw `@causality` markers in code allows developers/agents to log rationale instantly without breaking flow to update the registry, creating a searchable backlog of potential patterns. |
 | `#for-data-provider-interface` | A unified interface for data providers (e.g., CoinGecko, Yandex Cache) abstracts the specific data fetching mechanisms from the orchestrator logic. |
 | `#for-dual-channel-fallback` | Implementing a dual-channel fetch (primary + fallback) ensures data availability even when the primary external service goes down or hits rate limits. |

@@ -2,42 +2,39 @@
 title: "Code Documentation"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-02"
-reasoning_checksum: "6dbfb3f4"
+reasoning_checksum: "208c2136"
 ---
 
 # Code Documentation
 
-> **Context**: Rules for documenting Vue components that are split into separate template and script files.
-> **Scope**: `shared/components/*`, `shared/templates/*`, `app/components/*`, `app/templates/*`
+> **Context**: Rules for documenting Vue components, separating API contracts from architectural principles, and formatting inline code comments.
+> **Scope**: `shared/components/*`, `shared/templates/*`, `app/components/*`, `app/templates/*`, all `.js` files
 
 ## Reasoning
 
-- **#for-template-logic-separation** In our No-Build Vue architecture, templates (`*-template.js`) and logic (`*.js`) are physically separated. Documenting DOM structure in the logic file or API props in the template file creates cognitive dissonance and leads to outdated comments.
-- **#not-doc-duplication** Duplicating documentation (e.g., listing props in both the template and the component file) guarantees that one will eventually drift and become incorrect. Cross-referencing is the only scalable approach.
+- **#for-header-skill-separation** File headers must act as strict API contracts answering "What is this?" and "How do I use it?". Broad philosophical principles and "Why" statements belong in the `skills/` registry. Mixing them causes context window bloat and rule divergence across the codebase.
+- **#for-template-logic-separation** In our No-Build Vue architecture, templates (`*-template.js`) and logic (`*.js`) are physically separated. Documenting DOM structure in the logic file or API props in the template file creates cognitive dissonance.
+- **#not-doc-duplication** Duplicating documentation (e.g., listing props in both the template and the component file) guarantees that one will eventually drift and become incorrect.
+- **#for-english-why-comments** Inline comments describing "what" the code does (e.g., `// loop through array`) are noise. Comments must exclusively explain "Why" (circumstances) and "For what" (goal) in English to build a raw causality base.
+- **#for-mandatory-comment-rewrite** Legacy code contains Russian comments and descriptive noise. AI agents are contractually obligated to rewrite these into English causal comments whenever they edit a surrounding block.
 
 ## Core Rules
 
-1.  **Template Headers (`*-template.js`):**
-    Must ONLY contain documentation about:
-    - HTML structure and nesting.
-    - Layout decisions (flexbox, grid, paddings).
-    - CSS classes used for layout.
-    - Conditional rendering logic (`v-if`, `v-show`).
-    - Slots and their scope.
-    - *Do not document props or methods here.*
+1.  **Header vs. Skill Separation:**
+    - **File Header**: Only contains technical API (Props, Emits, Methods) and the `PURPOSE:` (1-2 sentences). Must include `@skill-anchor` pointing to relevant architecture skills.
+    - **Skill Files**: Contains the "Why", the principles, and the systemic rules. Do not put global rules in file headers.
 
-2.  **Component Headers (`*.js`):**
-    Must ONLY contain documentation about:
-    - Component API (props, emits, exposed methods).
-    - Internal state and reactivity.
-    - Business logic and data transformations.
-    - Integration with external APIs (e.g., Bootstrap JS).
-    - *Do not document HTML structure here.*
+2.  **Template vs. Component Headers:**
+    - `*-template.js`: HTML structure, layout decisions, CSS classes, slots.
+    - `*.js`: API (props/emits), state, business logic, integrations.
+    - *Cross-Reference*: Use "Logic and API: see `X.js`" or "Layout: see `Y-template.js`". Never duplicate.
 
-3.  **Cross-Referencing:**
-    - In the template header, add: "Logic and API: see `component-name.js`".
-    - In the component header, add: "Layout and DOM structure: see `component-name-template.js`".
+3.  **Inline Code Comments (MANDATORY REWRITE POLICY):**
+    When an AI agent modifies or reviews code, it **MUST** proactively rewrite nearby comments according to these rules:
+    - **Language**: Strictly English.
+    - **Focus**: Explain ONLY the *Why* (the underlying reason/edge case) and *For what* (the intended business goal).
+    - **Ban**: Never describe *What* the code is doing (e.g., `// filter active users`). If the code is not self-documenting, refactor the code first.
 
 ## Contracts
 
-- **No Duplication**: Never copy-paste descriptions of props or state into the template file.
+- **AI Enforcement**: Agents modifying code without simultaneously upgrading its comments to English causality format violate the `#for-mandatory-comment-rewrite` contract.
