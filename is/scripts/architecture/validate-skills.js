@@ -19,6 +19,7 @@ function walkMarkdownFiles(dir, result = []) {
     if (!fs.existsSync(dir)) return result;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
         if (entry.isDirectory()) {
+            if (entry.name === "references") continue; // skip reference subfolder (not skills)
             walkMarkdownFiles(path.join(dir, entry.name), result);
         } else if (entry.isFile() && entry.name.endsWith(".md")) {
             result.push(path.join(dir, entry.name));
@@ -88,6 +89,7 @@ function validateSkillFormat(file, text, rel, errors) {
         "## Reasoning",
         "## Core Rules",
         "## Contracts",
+        "## Risk Mitigation",
         "## Implementation Status in Target App",
         "## Implementation Status",
         "## Migration Strategy",

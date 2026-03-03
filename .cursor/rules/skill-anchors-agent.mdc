@@ -1,44 +1,19 @@
 ---
 description: Apply when writing or editing code that involves risk, architectural decisions, or complex infrastructure. Instructs the agent to anchor the code to existing skills.
-globs: *.js, *.ts, *.vue, *.html
+globs:
+  - "**/*.js"
+  - "**/*.ts"
+  - "**/*.vue"
+  - "**/*.html"
 alwaysApply: false
 ---
 
 # Skill Anchor Protocol
 
-## What Are Skill Anchors?
+**Full reference:** `is/skills/process-code-anchors.md` (read via MCP for complete format and examples).
 
-In this project, architectural decisions, invariants, and policies are stored in `is/skills/`, `core/skills/`, and `app/skills/`.
-When you write code that relies on these skills, you must leave an anchor.
-
-## Anchor Format
-
-**File-level (Module Header):**
-For declaring the contract of the entire module.
-`/** @skill layer/skills/skill-name */`
-
-**Inline-level (Risk Branches):**
-For non-trivial logic, fallbacks, or architectural constraints.
-`// @skill-anchor layer/skills/skill-name: reason for this logic`
-
-## Examples
-
-<example>
-/**
- * @skill is/skills/arch-foundation
- * @description Preflight health-check.
- */
-</example>
-
-<example>
-// @skill-anchor app/skills/ui-architecture: avoiding innerHTML for RRG compliance
-el.textContent = 'Safe string';
-</example>
-
-<example type="invalid">
-// Skill anchor: fixed bug
-// (too vague — doesn't explain the invariant or link to a specific skill file)
-</example>
-
-## Action Required
-Whenever you make a significant architectural or infra choice, add a skill anchor.
+## Summary
+- **File-level:** `/** @skill path/to/skill */`
+- **Inline:** `// @skill-anchor skill-id #for-hash: reason`
+- Use hashes from `is/skills/causality-registry.md`.
+- Add anchors for non-trivial architectural choices.

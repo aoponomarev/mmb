@@ -2,7 +2,7 @@
 title: "Architecture: Skills & MCP System"
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-02"
-reasoning_checksum: "645a210c"
+reasoning_checksum: "c243f8c0"
 id: sk-7d810a
 
 ---
@@ -22,6 +22,7 @@ id: sk-7d810a
 - **#not-wholesale-skill-import** Most Legacy skills describe code not present here.
 - **#not-central-vault** Obsidian vaults are deferred until 50+ skills.
 - **#not-skill-submodule** High sync overhead for single-project scope.
+- **#for-token-budget** alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided for domain-specific rules.
 
 ---
 
@@ -38,6 +39,12 @@ id: sk-7d810a
 - `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy App's full frontmatter format). Frontmatter can be adopted incrementally.
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
 - `Simplified`: No `skills/MIGRATION.md` registry (migration tracked via `docs/plans/` and this skill).
+
+### Token Budget (alwaysApply Rules)
+
+- **Budget:** Total alwaysApply rules MUST stay under 1,000 lines (~5,000 tokens). Current: 3 rules, ~55 lines.
+- **Justification:** Each new alwaysApply rule must justify why it cannot be glob-scoped or agent-decided.
+- **Audit:** Run `grep -l "alwaysApply: true" .cursor/rules/**/*.mdc | xargs wc -l` quarterly.
 
 ### Key Contracts
 

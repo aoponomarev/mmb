@@ -30,3 +30,7 @@ When managing architecture, you **MUST** prioritize MCP tools over CLI commands:
 3. **Context**: Read `skill://[path]` resources to get injected telemetry (e.g. how many anchors a skill has) before making architectural decisions.
 4. **Harvester**: Use the `harvest_causalities` tool to scan the codebase, and read the `causality_backlog://` resource to find patterns that need formalization.
 5. **Graph**: Use `causality_graph://[hash]` to instantly find all files dependent on a specific causality hash.
+
+## TOKEN DISCIPLINE
+- **Scripts layout**: When adding or moving scripts, apply `.cursor/rules/global-rules/scripts-layout.mdc` (glob or agent-decided).
+- **Domain navigation**: When exploring a new domain, read `docs/index-skills.md` or `docs/index-ais.md` first to find relevant skills before deep-diving.

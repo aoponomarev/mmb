@@ -47,7 +47,7 @@ function generateIndex() {
         
         categories[category] = categories[category] || [];
         
-        const files = walkMarkdownFiles(dir);
+        const files = walkMarkdownFiles(dir).filter((f) => !f.includes(path.sep + "references" + path.sep));
         for (const file of files) {
             const relativePath = path.relative(ROOT, file).split(path.sep).join("/");
             const content = fs.readFileSync(file, "utf8");

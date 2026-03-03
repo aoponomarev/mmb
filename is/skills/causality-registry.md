@@ -96,4 +96,9 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-stable-ids` | AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; `related_skills` and `related_ais` reference ids. Index files use `index-` prefix. |
 | `#for-docs-ids-gate` | Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling. |
 | `#for-memory-to-skills` | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
+| `#for-token-efficiency` | Long context degrades model attention ("lost in the middle"). Minimal viable context produces better results. |
+| `#for-front-load` | Putting all relevant context in the first message avoids 3x token waste from incremental context building. |
+| `#for-fresh-chats` | After 6–8 exchanges or when switching domains, start a new chat — condensation loses detail. |
+| `#for-minimum-viable-at` | Attach only files the agent actually needs; agent can explore more if needed. |
+| `#for-token-budget` | alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided. |
 | `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains, but keeping distilled files creates redundant, dead knowledge. |

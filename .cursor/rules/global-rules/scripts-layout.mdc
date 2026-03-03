@@ -1,0 +1,26 @@
+---
+description: |
+  Script layout governance for is/scripts/ and scripts/.
+  Use when creating, moving, or modifying files in is/scripts/, scripts/, or package.json.
+  Triggers: "add script", "new script", "move script", "create script", "npm run", package.json changes.
+globs:
+  - "is/scripts/**"
+  - "scripts/**"
+  - "package.json"
+alwaysApply: false
+---
+
+# Scripts Layout Rule
+
+## Critical Rule
+When creating or moving scripts, preserve layout governance.
+
+**Reference (read via MCP when applying):**
+- `is/skills/arch-layout-governance.md` — Section "Script Layout"
+- `is/scripts/README.md` — Layout Governance Contract
+
+**Summary:**
+1. `is/scripts/` root: only `is/scripts/README.md`, `preflight.js`, one-off migration utilities.
+2. All other scripts → subfolders: `architecture/`, `infrastructure/`, `secrets/`, `tests/`.
+3. `scripts/` (root): non-Node only (PowerShell backups, encoding utilities).
+4. Register new scripts in `package.json` with `namespace:action` format.
