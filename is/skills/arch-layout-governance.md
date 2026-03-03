@@ -3,6 +3,7 @@ title: "Architecture: Layout & README Governance"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "7ebe9e38"
+
 ---
 
 # Architecture: Layout & README Governance

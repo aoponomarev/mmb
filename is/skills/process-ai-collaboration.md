@@ -3,6 +3,7 @@ title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "0b0cf754"
+
 ---
 
 # AI Collaboration Protocol

@@ -3,6 +3,7 @@ title: "Messages Architecture"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "969bc573"
+
 ---
 
 # Messages Architecture

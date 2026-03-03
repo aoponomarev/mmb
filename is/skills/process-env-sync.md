@@ -3,6 +3,7 @@ title: "Process: Environment Sync Governance"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "e6167b8e"
+
 ---
 
 # Process: Environment Sync Governance

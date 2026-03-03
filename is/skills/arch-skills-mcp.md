@@ -3,6 +3,7 @@ title: "Architecture: Skills & MCP System"
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "645a210c"
+
 ---
 
 # Architecture: Skills & MCP System

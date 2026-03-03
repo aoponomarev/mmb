@@ -3,6 +3,7 @@ title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "559f5ba7"
+
 ---
 
 # Documentation Lifecycle
@@ -19,6 +20,7 @@ reasoning_checksum: "559f5ba7"
 - **#for-ais-mermaid-diagrams** AIS documents without visual diagrams are harder for humans and agents to grasp. Mermaid diagrams in fenced code blocks render on GitHub, VS Code, and GitLab; they are version-controlled as text and avoid stale image files. See `docs/ais/ais-yandex-cloud.md` for the reference format.
 - **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.
 - **#not-redundant-folders** Creating new folders when a functionally suitable one exists (e.g., `docs/misc/`, `docs/temp/`, `docs/archive/`) clutters the structure. Use the existing folders.
+- **#for-frontmatter-format** Any markdown file with YAML frontmatter MUST have a blank line before the closing `---`. Without it, CommonMark parses the second `---` as setext underline and `id: ...` (or similar) renders as huge h2 in Cursor preview. Applies everywhere: `docs/`, `is/skills/`, `core/skills/`, `app/skills/`, plans, runbooks, cheatsheets, etc.
 
 ## Core Rules
 
@@ -32,8 +34,8 @@ reasoning_checksum: "559f5ba7"
 
 3.  **Phase 3: Distillation (`docs/ais/` and `is/skills/`)**
     - Upon user request, an AI agent performs "distillation" of the completed plan.
-    - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian.
-    - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "2. Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: `docs/ais/ais-yandex-cloud.md`.
+    - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian. The AIS intro sentence ("Спецификации (AIS)...") must be an HTML comment `<!-- ... -->` so it is hidden in preview. **Frontmatter**: See `#for-frontmatter-format`.
+    - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: `docs/ais/ais-yandex-cloud.md`.
     - **Micro-Rules**: The agent extracts strict invariants and adds them to `is/skills/` (Language: English) and registers new causality hashes.
     - Note: Information from one plan can fan out into multiple AIS files or Skills.
 

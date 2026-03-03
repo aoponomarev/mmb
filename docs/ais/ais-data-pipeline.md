@@ -8,16 +8,17 @@ related_skills:
   - core/skills/metrics-air-model.md
   - core/skills/cache-layer.md
   - docs/ais/ais-yandex-cloud.md
+
 ---
 
 # AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
 
-> **Спецификации (AIS)** пишутся на **русском языке** и служат макро-документацией. Микро-правила вынесены в английские скиллы.
+<!-- Спецификации (AIS) пишутся на русском языке и служат макро-документацией. Микро-правила вынесены в английские скиллы. Скрыто в preview. -->
 
-## 1. Концепция (High-Level Concept)
+## Концепция (High-Level Concept)
 Ядро приложения отвечает за сбор, кэширование и математическую обработку рыночных данных (криптовалют). Так как приложение может запускаться локально (file://) без собственного бэкенда, вся оркестрация данных происходит прямо в браузере или через легкие Cloudflare-прокси.
 
-## 2. Инфраструктура и Потоки данных (Infrastructure & Data Flow)
+## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
 - **Дуальный канал (Dual-Channel Fetch):** В связи с жесткими лимитами публичных API (например, CoinGecko: 3 запроса в минуту), реализована отказоустойчивая схема:
   1. **Phase 1 (PostgreSQL):** `YandexCacheProvider` → `GET /api/coins/market-cache?ids=...` — быстрая bulk-выдача без rate limit.
   2. **Phase 2 (CoinGecko):** Если `missingIds.length > 0` — `getCoinData(missingIds)` через `CoinGeckoProvider` (chunk 50, задержка 21s между chunk'ами).
@@ -25,7 +26,7 @@ related_skills:
 - **A.I.R. Model (Alignment, Impulse, Risk):** Сердцевина финансовой логики. Сырые данные о цене/объемах пропускаются через математическую модель A.I.R. для расчета инвестиционного рейтинга каждой монеты. Эти алгоритмы изолированы в `models-config.js` и не должны смешиваться с UI-кодом.
 - **Менеджер Провайдеров:** `DataProviderManager` абстрагирует конкретные источники (Binance, CoinGecko) под единый интерфейс. UI-слой ничего не знает о том, откуда именно пришли цены.
 
-### 2.1 Dual-Channel: Fallback-поведение
+### Dual-Channel: Fallback-поведение
 
 | Сценарий | Поведение |
 |----------|-----------|
@@ -37,7 +38,7 @@ related_skills:
 
 Все события деградации — через `fallbackMonitor.notify()`.
 
-### 2.2 SSOT Timing (`core/ssot/policies.js`)
+### SSOT Timing (`core/ssot/policies.js`)
 
 | Contract | Value | Использование |
 |----------|-------|---------------|
@@ -46,12 +47,12 @@ related_skills:
 | `topCoins.requestRegistryMinIntervalMs` | 2h | Rate limit check для getTopCoins |
 | `marketMetrics.minIntervalMs` | 4h | BTC dom, OI, FR, LSR registry checks |
 
-## 3. Локальные Политики (Module Policies)
+## Локальные Политики (Module Policies)
 - **Отсутствие единой точки отказа (Partial Failure Tolerance):** Если один из провайдеров падает или отдает 429 Too Many Requests, система не должна "умирать". Метод `getAllBestEffort` вернет те метрики, которые успели загрузиться, а для упавших отобразит предупреждение (Warning).
 - **Раздельный TTL:** Разные метрики живут в кэше разное время. Цена обновляется часто (5 мин), индекс VIX — редко (24 часа).
 - **Математический контракт:** Формула A.I.R. является строгим контрактом предметной области. ИИ-агентам запрещено модифицировать весовые коэффициенты без явного указания пользователя-архитектора.
 
-## 4. Компоненты и Контракты (Components & Contracts)
+## Компоненты и Контракты (Components & Contracts)
 - `core/api/data-provider-manager.js` — точка входа, `getCoinDataDualChannel()` — dual-channel оркестрация.
 - `core/api/data-providers/*` — `coingecko-provider`, `yandex-cache-provider` (PostgreSQL через API Gateway).
 - `core/config/models-config.js` — SSOT конфигурация математических доменных моделей.

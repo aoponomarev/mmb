@@ -3,6 +3,7 @@ title: "Component Classes Management"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "801bc71f"
+
 ---
 
 # Component Classes Management

@@ -3,6 +3,7 @@ title: "Architecture: Causality & Rationale Tracking"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "8d65409b"
+
 ---
 
 # Architecture: Causality & Rationale Tracking

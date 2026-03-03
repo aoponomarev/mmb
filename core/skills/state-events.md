@@ -3,6 +3,7 @@ title: "State, Events & Module Loading"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "7273b1e9"
+
 ---
 
 # State, Events & Module Loading

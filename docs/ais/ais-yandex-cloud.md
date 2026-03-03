@@ -7,13 +7,14 @@ related_skills:
   - core/skills/api-layer.md
   - core/api/data-providers/yandex-cache-provider.js
   - docs/ais/ais-data-pipeline.md
+
 ---
 
 # AIS: Yandex Cloud — Ingest и Read контуры данных монет
 
-> **Спецификации (AIS)** пишутся на **русском языке** и служат макро-документацией. Микро-правила вынесены в английские скиллы.
+<!-- Спецификации (AIS) пишутся на русском языке и служат макро-документацией. Микро-правила вынесены в английские скиллы. Скрыто в preview. -->
 
-## 1. Концепция (High-Level Concept)
+## Концепция (High-Level Concept)
 
 Yandex Cloud обеспечивает два контура работы с рыночными данными криптовалют:
 
@@ -22,9 +23,9 @@ Yandex Cloud обеспечивает два контура работы с ры
 
 Это устраняет давление rate-limit на CoinGecko для типичного случая (~350 кэшированных монет) и обеспечивает быструю отдачу для пользователей из РФ/СНГ.
 
-## 2. Инфраструктура и Потоки данных (Infrastructure & Data Flow)
+## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
 
-### 2.1 Верхнеуровневая схема
+### Верхнеуровневая схема
 
 ```mermaid
 flowchart TD
@@ -42,7 +43,7 @@ flowchart TD
     G -- Чтение данных --> C
 ```
 
-### 2.2 Ingest-контур (market-fetcher)
+### Ingest-контур (market-fetcher)
 
 | Этап | Компонент | Описание |
 |------|-----------|----------|
@@ -50,7 +51,7 @@ flowchart TD
 | 2 | `is/yandex/functions/market-fetcher/index.js` | Функция запрашивает CoinGecko API (топ-250 по market_cap + топ-250 по volume) |
 | 3 | PostgreSQL | Запись в `coin_market_cache_history` с уникальным `cycle_id`, обновление `coin_market_cache` |
 
-### 2.3 Read-контур (api-gateway)
+### Read-контур (api-gateway)
 
 | Этап | Компонент | Описание |
 |------|-----------|----------|
@@ -59,27 +60,27 @@ flowchart TD
 | 3 | `is/yandex/functions/api-gateway/index.js` | Чтение из PostgreSQL через `GET /api/coins/market-cache` |
 | 4 | PostgreSQL | Выборка из `coin_market_cache` |
 
-## 3. Локальные Политики (Module Policies)
+## Локальные Политики (Module Policies)
 
-### 3.1 Дневное окно (Time Window Gate)
+### Дневное окно (Time Window Gate)
 
 Фетчер работает **только с 06:00 до 24:00 по Москве** (Europe/Moscow, UTC+3).  
 Вне окна функция возвращает `200 OK` с `status: SKIPPED`.  
 Код в `market-fetcher` — это gate на уровне приложения; cron в Yandex Cloud остаётся без изменений.
 
-### 3.2 Ротация циклов
+### Ротация циклов
 
 - Каждый полный цикл (market_cap + volume) создаёт уникальный `cycle_id = YYYYMMDDHHMMSS`.
 - В истории хранятся **только 2 последних** цикла.
 
-### 3.3 Секреты
+### Секреты
 
 - Секреты не хранятся в репозитории.
 - Фактические значения — в `do-overs/Secrets/` или переменных окружения Yandex Cloud.
 
-## 4. Компоненты и Контракты (Components & Contracts)
+## Компоненты и Контракты (Components & Contracts)
 
-### 4.1 market-fetcher (CoinGecko → PostgreSQL)
+### market-fetcher (CoinGecko → PostgreSQL)
 
 | Параметр | Значение |
 |----------|----------|
@@ -94,7 +95,7 @@ flowchart TD
 - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
 - `COINGECKO_API_KEY` (опционально)
 
-### 4.2 api-gateway (PostgreSQL → HTTP)
+### api-gateway (PostgreSQL → HTTP)
 
 | Параметр | Значение |
 |----------|----------|
@@ -108,7 +109,7 @@ flowchart TD
 - `GET /api/coins/cycles` — метаданные циклов
 - `POST /api/coins/market-cache` — upsert из браузера (CoinGecko fallback)
 
-### 4.3 Схема таблиц
+### Схема таблиц
 
 | Таблица | Назначение |
 |---------|------------|
@@ -117,7 +118,7 @@ flowchart TD
 
 Ключевые поля `coin_market_cache_history`: `cycle_id`, `coin_id`, `symbol`, `name`, `image`, `current_price`, `market_cap`, `market_cap_rank`, `total_volume`, `pv_1h`..`pv_200d`, `sort_type`, `sort_rank`, `fetched_at`.
 
-## 5. API Contract (Base URL)
+## API Contract (Base URL)
 
 `https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net`
 
@@ -134,7 +135,7 @@ flowchart TD
 
 Возвращает метаданные сохранённых циклов (`cycle_id`, `row_count`, `coin_count`, `started_at`, `finished_at`).
 
-## 6. Интеграция с клиентом
+## Интеграция с клиентом
 
 - `core/api/data-providers/yandex-cache-provider.js` — провайдер для `DataProviderManager`.
 - `getCoinDataDualChannel()` — сначала PG, затем CoinGecko для недостающих монет.

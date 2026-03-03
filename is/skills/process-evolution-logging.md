@@ -3,6 +3,7 @@ title: "Process: Project Evolution Logging"
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "0f5fa6f6"
+
 ---
 
 # Process: Project Evolution Logging
