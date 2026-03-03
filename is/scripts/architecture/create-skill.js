@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -46,6 +47,8 @@ switch (type) {
 
 const filename = `${prefix}${kebabTitle}.md`;
 const fullPath = path.join(folderPath, filename);
+const relPath = path.relative(ROOT, fullPath).replace(/\.md$/, "").split(path.sep).join("/");
+const skillId = "sk-" + crypto.createHash("sha256").update(relPath).digest("hex").slice(0, 6);
 
 if (fs.existsSync(fullPath)) {
     console.error(`Skill already exists: ${fullPath}`);
@@ -54,6 +57,7 @@ if (fs.existsSync(fullPath)) {
 
 const template = `---
 title: "${title}"
+id: ${skillId}
 reasoning_confidence: 0.0
 reasoning_audited_at: "${new Date().toISOString().split('T')[0]}"
 reasoning_checksum: "placeholder"

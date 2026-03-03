@@ -1,13 +1,14 @@
 ---
-id: ais-infrastructure-integrations
+id: ais-775420
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - is/skills/arch-cloudflare-infrastructure.md
-  - is/skills/arch-external-parity.md
-  - core/skills/ai-providers-architecture.md
-  - core/skills/external-integrations.md
-  - docs/ais/ais-yandex-cloud.md
+  - sk-5cd3c9
+  - sk-73dcca
+  - sk-d76b68
+  - sk-7b4ee5
+related_ais:
+  - ais-e41384
 
 ---
 

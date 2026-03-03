@@ -3,6 +3,7 @@ title: "Process: Windows & PowerShell Patterns for AI Agents"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "41c0dbe9"
+id: sk-905c12
 
 ---
 

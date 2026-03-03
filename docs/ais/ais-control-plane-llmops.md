@@ -1,13 +1,13 @@
 ---
-id: ais-control-plane-llmops
+id: ais-b7a9ba
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - is/skills/arch-control-plane.md
-  - is/skills/arch-mcp-ecosystem.md
-  - is/skills/process-causality-harvesting.md
-  - is/skills/arch-rollback.md
-  - is/skills/arch-testing-ci.md
+  - sk-d7a2cc
+  - sk-3225b2
+  - sk-802f3b
+  - sk-6eeb9a
+  - sk-d6777d
 
 ---
 

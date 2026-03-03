@@ -1,3 +1,8 @@
+---
+id: sk-95710f
+
+---
+
 # Frontend Application Skills (`app/skills/`)
 
 ## Scope

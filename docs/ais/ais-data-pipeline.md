@@ -1,13 +1,14 @@
 ---
-id: ais-data-pipeline
+id: ais-3732ce
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - core/skills/data-providers-architecture.md
-  - core/skills/api-layer.md
-  - core/skills/metrics-air-model.md
-  - core/skills/cache-layer.md
-  - docs/ais/ais-yandex-cloud.md
+  - sk-224210
+  - sk-bb7c8e
+  - sk-22dc19
+  - sk-3c832d
+related_ais:
+  - ais-e41384
 
 ---
 

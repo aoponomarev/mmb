@@ -4,6 +4,7 @@ tags: ["#process", "#language", "#terminology", "#naming", "#anti-calque"]
 reasoning_confidence: 0.95
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "254ee5f7"
+id: sk-883639
 
 ---
 

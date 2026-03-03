@@ -91,13 +91,13 @@ function generateIndex() {
 }
 
 function main() {
-    console.log("[docs-index] Generating docs/skills-index.md...");
+    console.log("[docs-index] Generating docs/index-skills.md...");
     const content = generateIndex();
     const docsDir = path.join(ROOT, "docs");
     if (!fs.existsSync(docsDir)) {
         fs.mkdirSync(docsDir, { recursive: true });
     }
-    const outPath = path.join(docsDir, "skills-index.md");
+    const outPath = path.join(docsDir, "index-skills.md");
     fs.writeFileSync(outPath, content, "utf8");
     console.log(`[docs-index] Successfully updated ${outPath}`);
 }

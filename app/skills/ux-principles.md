@@ -3,6 +3,7 @@ title: "UX: Design Principles & Interface Contracts"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "b8da0dec"
+id: sk-e0b8f3
 
 ---
 

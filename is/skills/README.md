@@ -1,3 +1,8 @@
+---
+id: sk-a3f46c
+
+---
+
 # Knowledge Base & MCP Skills (`is/skills/`)
 
 ## Scope

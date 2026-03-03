@@ -6,6 +6,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "febd586c"
+id: sk-d6777d
 
 ---
 

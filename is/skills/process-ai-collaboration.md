@@ -2,7 +2,8 @@
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
-reasoning_checksum: "0b0cf754"
+reasoning_checksum: "2966c9bc"
+id: sk-cecbcc
 
 ---
 
@@ -17,6 +18,7 @@ reasoning_checksum: "0b0cf754"
 - **#for-skills-before-code** AI agents lack persistent memory across chats. You must use `read_skill` to understand the domain before acting.
 - **#for-active-causality** To prevent future agents from repeating mistakes, you must record rejected paths and nuances using `@causality` or `docs/audits/causality-exceptions.jsonl`.
 - **#for-no-implicit-commit** You must never commit without explicit user instruction. Nagging the user to commit adds noise.
+- **#for-memory-to-skills** Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. The Memory → Skills protocol ensures knowledge lives in files, not only in ephemeral chat history.
 
 ---
 
@@ -47,6 +49,14 @@ reasoning_checksum: "0b0cf754"
 ### Long-term Memory (Chat-Agreement Memory)
 - **Fixing agreements:** Any architectural, infrastructural, or process agreements reached in dialogue (chat) with the developer must be immediately transferred to the knowledge base (in the appropriate `*.md` file in `is/skills/` or `core/skills/`).
 - You cannot rely on another agent in a new chat to "read the history". Knowledge must live in files.
+
+### Memory → Skills/AIS Protocol
+When the Memory MCP (`is/memory/memory.jsonl`) contains entries that describe architectural decisions, policies, or process rules:
+1. **Trigger:** At task finalization (`ФИН`) or when the user asks to sync memory, scan recent memory entries.
+2. **Classification:** If an entry describes a rule, constraint, or "why" that applies beyond the current chat → it is a candidate for formalization.
+3. **Action:** Create or update a Skill (or AIS policy) using `create_skill` or manual edit. Add causality hashes from `causality-registry.md`. Register new hashes if needed.
+4. **Cleanup:** After formalization, the memory entry may remain as historical context; the canonical source is now the skill/AIS file.
+5. **Id references:** When adding `related_skills` or `related_ais` to AIS, use short hash ids (`sk-xxxxxx`, `ais-xxxxxx`). Resolve via `is/contracts/docs/id-registry.json` or `docs/index-skills.md` / `docs/index-ais.md`.
 - **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/drafts/causality-questions.md`. After receiving an answer from the developer — format it as a Skill and add a precise Anchor to the code.
 - **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from `causality-registry.md`: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
 - **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.

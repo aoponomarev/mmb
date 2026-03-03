@@ -1,9 +1,9 @@
 ---
-id: ais-template
+id: ais-1c4d92
 status: draft
 last_updated: "2026-03-02"
 related_skills:
-  - is/skills/process-docs-lifecycle.md
+  - sk-0e193a
 
 ---
 

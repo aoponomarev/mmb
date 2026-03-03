@@ -3,6 +3,7 @@ title: "Causality Harvesting"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "514aa3d6"
+id: sk-802f3b
 
 ---
 

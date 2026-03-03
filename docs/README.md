@@ -15,7 +15,8 @@ This directory serves as the historical ledger and runbook repository for the pr
 ## Root Files
 - `migration-roadmap.md`: Master roadmap tracking all migration stages.
 - `project-evolution.md`: SSOT log of significant project milestones and decisions.
-- `skills-index.md`: Auto-generated index of all skills (updated by `npm run skills:index`).
+- `index-skills.md`: Auto-generated index of all skills (updated by `npm run skills:index`).
+- `index-ais.md`: Auto-generated index of AIS specifications (updated by `npm run ais:index`).
 - `СИМЛИНКИ.txt`: Personal Cursor symlink/junction instructions (not project architecture).
 
 ## Constraints

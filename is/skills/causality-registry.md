@@ -1,3 +1,8 @@
+---
+id: sk-3b1519
+
+---
+
 # Causality Hash Registry
 
 All hashes used in `@causality` and `@skill-anchor` MUST exist in this registry.
@@ -88,4 +93,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains as a staging ground, but keeping distilled files creates redundant, dead knowledge. |
 | `#for-audits-path-contract` | The path `docs/audits/causality-exceptions.jsonl` is hardcoded in `validate-causality-invariant.js`. Agents must never rename or move this folder; doing so breaks the invariant gate. |
 | `#not-redundant-folders` | Do not create new folders when a functionally suitable one already exists. Place documents in the existing structure (plans, backlog, runbooks, etc.) instead of inventing `docs/misc/`, `docs/temp/`, or similar. |
+| `#for-stable-ids` | AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; `related_skills` and `related_ais` reference ids. Index files use `index-` prefix. |
+| `#for-docs-ids-gate` | Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling. |
+| `#for-memory-to-skills` | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
 | `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains, but keeping distilled files creates redundant, dead knowledge. |

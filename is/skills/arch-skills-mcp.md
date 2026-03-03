@@ -3,6 +3,7 @@ title: "Architecture: Skills & MCP System"
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "645a210c"
+id: sk-7d810a
 
 ---
 
@@ -28,7 +29,7 @@ reasoning_checksum: "645a210c"
 
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
 - `Implemented`: `validate-skills.js` — structural validation with JSON output for automation.
-- `Implemented`: `generate-skills-index.js` — auto-generates skills index.
+- `Implemented`: `generate-skills-index.js` — auto-generates `docs/index-skills.md`.
 - `Implemented`: `skills-health-trend.js` — trend tracking with JSONL append and degradation alerts.
 - `Implemented`: `skills-health-trend-report.js` — summary report over configurable window.
 - `Implemented`: MCP server at `is/mcp/skills/server.js` (adapted from Legacy App).

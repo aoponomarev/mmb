@@ -3,6 +3,7 @@ title: "Process: Secrets Hygiene & Git Boundary"
 reasoning_confidence: 0.95
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "a580359e"
+id: sk-b7e114
 
 ---
 

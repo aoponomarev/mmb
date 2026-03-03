@@ -1,13 +1,13 @@
 ---
-id: ais-frontend-ui
+id: ais-c6c35b
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - app/skills/ui-architecture.md
-  - app/skills/vue-implementation-patterns.md
-  - app/skills/component-classes-management.md
-  - app/skills/bootstrap-vue-integration.md
-  - is/skills/process-lib-governance.md
+  - sk-318305
+  - sk-cb75ec
+  - sk-add9a6
+  - sk-eeb23d
+  - sk-130fa2
 
 ---
 

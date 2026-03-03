@@ -25,7 +25,7 @@ const noForbiddenTerms = (val) => {
 /**
  * Allowed prefixes for the new architecture.
  */
-export const ALLOWED_PREFIXES = ['app-', 'sys-', 'is-', 'core-', 'cmp-'];
+export const ALLOWED_PREFIXES = ['app-', 'sys-', 'is-', 'core-', 'cmp-', 'index-'];
 
 const hasAllowedPrefix = (val) => {
     return ALLOWED_PREFIXES.some(prefix => val.startsWith(prefix));

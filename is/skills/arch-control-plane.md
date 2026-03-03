@@ -6,6 +6,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "7dea41f2"
+id: sk-d7a2cc
 
 ---
 
@@ -27,3 +28,4 @@ reasoning_checksum: "7dea41f2"
 
 ## Implementation Status in Target App
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).
+- `Implemented`: Docs-ids gate — `validate-docs-ids.js` checks `related_skills`/`related_ais` id resolution; `generate-id-registry.js` produces `is/contracts/docs/id-registry.json`.

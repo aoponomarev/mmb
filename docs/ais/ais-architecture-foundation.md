@@ -1,10 +1,10 @@
 ---
-id: ais-architecture-foundation
+id: ais-bfd150
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - is/skills/process-language-policy.md
-  - core/skills/config-contracts.md
+  - sk-883639
+  - sk-02d3ea
 
 ---
 

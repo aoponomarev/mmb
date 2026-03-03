@@ -3,6 +3,7 @@ title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-02"
 reasoning_checksum: "d0185ad5"
+id: sk-d763e7
 
 ---
 

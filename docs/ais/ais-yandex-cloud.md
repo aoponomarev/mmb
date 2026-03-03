@@ -1,12 +1,12 @@
 ---
-id: ais-yandex-cloud
+id: ais-e41384
 status: active
 last_updated: "2026-03-02"
 related_skills:
-  - core/skills/data-providers-architecture.md
-  - core/skills/api-layer.md
-  - core/api/data-providers/yandex-cache-provider.js
-  - docs/ais/ais-data-pipeline.md
+  - sk-224210
+  - sk-bb7c8e
+related_ais:
+  - ais-3732ce
 
 ---
 

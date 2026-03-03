@@ -1,0 +1,89 @@
+/**
+ * @skill process-docs-lifecycle
+ * @description Generates id→path registry for AIS and Skills.
+ * Used by MCP (ais://, skill resolution) and tooling for fast id lookup.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT = path.resolve(__dirname, "..", "..", "..");
+
+const SKILL_DIRS = [
+    path.join(ROOT, "is", "skills"),
+    path.join(ROOT, "core", "skills"),
+    path.join(ROOT, "app", "skills"),
+];
+const AIS_DIR = path.join(ROOT, "docs", "ais");
+const REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
+
+function parseFrontmatter(text) {
+    const match = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
+    if (!match) return {};
+    const block = match[1];
+    const out = {};
+    for (const line of block.split(/\r?\n/)) {
+        const m = line.match(/^([\w-]+):\s*(.*)$/);
+        if (m) {
+            const val = m[2].trim().replace(/^["']|["']$/g, "");
+            if (val) out[m[1]] = val;
+        }
+    }
+    return out;
+}
+
+function walkMarkdown(dir, result = []) {
+    if (!fs.existsSync(dir)) return result;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            walkMarkdown(full, result);
+        } else if (entry.isFile() && entry.name.endsWith(".md")) {
+            result.push(full);
+        }
+    }
+    return result;
+}
+
+function buildRegistry() {
+    const registry = { skills: {}, ais: {} };
+
+    for (const dir of SKILL_DIRS) {
+        for (const file of walkMarkdown(dir)) {
+            const content = fs.readFileSync(file, "utf8");
+            const fm = parseFrontmatter(content);
+            const id = fm.id;
+            if (id) {
+                const rel = path.relative(ROOT, file).split(path.sep).join("/");
+                registry.skills[id] = rel;
+            }
+        }
+    }
+    if (fs.existsSync(AIS_DIR)) {
+        for (const file of walkMarkdown(AIS_DIR)) {
+            const content = fs.readFileSync(file, "utf8");
+            const fm = parseFrontmatter(content);
+            const id = fm.id;
+            if (id) {
+                const rel = path.relative(ROOT, file).split(path.sep).join("/");
+                registry.ais[id] = rel;
+            }
+        }
+    }
+    return registry;
+}
+
+function main() {
+    const registry = buildRegistry();
+    const dir = path.dirname(REGISTRY_PATH);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2), "utf8");
+    const total = Object.keys(registry.skills).length + Object.keys(registry.ais).length;
+    console.log(`[generate-id-registry] OK: ${total} ids written to ${path.relative(ROOT, REGISTRY_PATH)}`);
+}
+
+main();

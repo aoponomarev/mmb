@@ -1,3 +1,8 @@
+---
+id: sk-635743
+
+---
+
 # Domain Skills (`core/skills/`)
 
 ## Scope
