@@ -1,7 +1,7 @@
 ---
 title: "Architecture: Dependency Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "c221f6b1"
 id: sk-bb5cf3
 

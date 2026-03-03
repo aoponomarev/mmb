@@ -1,7 +1,7 @@
 ---
 title: "Domain: Portfolio Engine"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "a2b1b94b"
 id: sk-c3d639
 

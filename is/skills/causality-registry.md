@@ -102,3 +102,8 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-minimum-viable-at` | Attach only files the agent actually needs; agent can explore more if needed. |
 | `#for-token-budget` | alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided. |
 | `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains, but keeping distilled files creates redundant, dead knowledge. |
+| `#for-prefix-ssot` | A single prefix registry prevents ad-hoc prefixes and naming drift. All consumers read from one source. |
+| `#for-prefix-gate` | The validate-skills gate fails preflight on unregistered prefixes, forcing registration before use. |
+| `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
+| `#for-prefix-semantics` | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
+| `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |

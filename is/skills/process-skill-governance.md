@@ -1,7 +1,7 @@
 ---
 title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "d0185ad5"
 id: sk-d763e7
 
@@ -39,7 +39,7 @@ To reduce hallucinations and ensure AI agents can reliably parse skills, all `.m
    - `## Implementation Status` (or `## Implementation Status in Target App`)
    - `## Migration Strategy`
    - `## Examples`
-4. **Scaffolding Tool**: Always use `npm run skill:create "Skill Title" --type=[arch|process|core|app]` to generate the correct boilerplate.
+4. **Scaffolding Tool**: Always use `npm run skills:create "Skill Title" --type=[...]` to generate the correct boilerplate. See `is/contracts/prefixes.js` for available types.
 
 ## Contracts
 
@@ -59,9 +59,30 @@ Use this table when deciding where to place a new or migrated skill:
 
 ### `is/skills/` — Infrastructure & Process Knowledge
 
-**Mandatory prefix rules:**
-- `arch-*.md` — Architectural Decision Records: *why* a system is structured the way it is. Cross-cutting constraints, rejected alternatives, causality.
-- `process-*.md` — Agent and developer process rules: *how* to work with the project.
+**Mandatory prefix rules:** SSOT `is/contracts/prefixes.js` — enforced by `validate-skills.js` (gate).
+
+| Category | Prefixes | Example |
+|----------|-----------|---------|
+| Layer | `a-`, `ai-`, `ais-`, `is-` | `a-foundation`, `ai-collaboration`, `yc-functions` |
+| Concept | `ssot-`, `protocol-`, `contract-` | `ssot-paths`, `protocol-commit` |
+| Vendor | `yc-`, `cf-`, `gh-` | `yc-functions`, `cf-workers`, `gh-actions` |
+| Lifecycle | `migrate-`, `rollback-`, `deploy-` | `migrate-plans`, `rollback-triggers` |
+| Domain | `sec-`, `test-`, `ci-` | `sec-secrets`, `test-strategy` |
+| Tech | `db-`, `mcp-`, `n8n-`, `docker-` | `db-sqlite`, `mcp-ecosystem`, `n8n-workflows` |
+| Doc | `runbook-`, `plan-` | `runbook-rollback`, `plan-migration` |
+| app/skills | `vue-`, `ui-`, `ux-`, `component-`, `guard-` | `vue-implementation-patterns`, `ui-architecture` |
+| Legacy | `arch-`, `process-` | `arch-foundation`, `process-env-sync` |
+
+Every file in `is/skills/` (except `README.md`, `causality-registry.md`, `references/`) MUST start with a prefix from `SKILL_ALLOWED`. Gate fails preflight if violated.
+
+**AI Agent Obligation — New Prefixes:** When creating a skill that needs a prefix not in the registry:
+1. Check `is/contracts/prefixes.js` for an existing prefix that fits the domain.
+2. If nothing similar exists — **register the new prefix** in the registry (add to the appropriate category array, `SKILL_SEMANTICS`, `SKILL_TYPE_TO_PREFIX`, and ensure it is included in `SKILL_ALLOWED`).
+3. Do NOT invent ad-hoc prefixes without registering them. Unregistered prefixes fail the gate.
+
+**Prefix registry health:** See `process-prefix-registry.md` — registration checklist, deprecation policy, review cadence.
+
+**Full prefix spectrum & Donor→Target mapping:** See `docs/plans/plan-skills-migration-registry.md`.
 
 **Belongs here:**
 - Decisions about folder layout, naming conventions, SSOT
@@ -82,7 +103,7 @@ Use this table when deciding where to place a new or migrated skill:
 
 ### `core/skills/` — Backend & Shared Domain Knowledge
 
-**Naming convention:** `<subdomain>.md` (no mandatory prefix)
+**Naming convention:** SSOT `is/contracts/prefixes.js` — `CORE_RECOMMENDED` prefixes or descriptive `<subdomain>.md`. No mandatory prefix.
 
 **Belongs here:**
 - How a specific `core/` subdomain works and what invariants it enforces
@@ -114,7 +135,7 @@ When a new significant subdomain is added to `core/`, a skill must be created he
 
 ### `app/skills/` — Frontend & UI Knowledge
 
-**Naming convention:** `<topic>.md` (no mandatory prefix)
+**Naming convention:** SSOT `is/contracts/prefixes.js` — `APP_RECOMMENDED` prefixes or descriptive `<topic>.md`. No mandatory prefix.
 
 **Belongs here:**
 - Vue No-Build architecture rules (module loading, template structure)

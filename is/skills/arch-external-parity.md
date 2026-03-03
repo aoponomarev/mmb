@@ -1,7 +1,7 @@
 ---
 title: "Architecture: External Infrastructure Parity"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "2e1079c9"
 id: sk-73dcca
 

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { SKILL_TYPE_TO_PREFIX } from "../../contracts/prefixes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +17,8 @@ if (typeArg) {
 }
 
 if (!title) {
-    console.error("Usage: npm run skill:create \"Skill Title\" [--type=arch|process|core|app]");
+    console.error("Usage: npm run skills:create \"Skill Title\" [--type=...]");
+    console.error("  Types: a|ai|ais|is|ssot|protocol|contract|yc|cf|gh|migrate|rollback|deploy|sec|test|ci|db|mcp|n8n|docker|runbook|plan|arch|process|core|app");
     process.exit(1);
 }
 
@@ -25,24 +27,17 @@ const kebabTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|
 let folderPath;
 let prefix = "";
 
-switch (type) {
-    case "arch":
-        folderPath = path.join(ROOT, "is", "skills");
-        prefix = "arch-";
-        break;
-    case "process":
-        folderPath = path.join(ROOT, "is", "skills");
-        prefix = "process-";
-        break;
-    case "core":
-        folderPath = path.join(ROOT, "core", "skills");
-        break;
-    case "app":
-        folderPath = path.join(ROOT, "app", "skills");
-        break;
-    default:
-        console.error("Invalid type. Use arch, process, core, or app.");
-        process.exit(1);
+const skillPrefix = SKILL_TYPE_TO_PREFIX[type];
+if (skillPrefix) {
+    folderPath = path.join(ROOT, "is", "skills");
+    prefix = skillPrefix;
+} else if (type === "core") {
+    folderPath = path.join(ROOT, "core", "skills");
+} else if (type === "app") {
+    folderPath = path.join(ROOT, "app", "skills");
+} else {
+    console.error("Invalid type. Use a, ai, ais, is, arch, process, core, or app.");
+    process.exit(1);
 }
 
 const filename = `${prefix}${kebabTitle}.md`;

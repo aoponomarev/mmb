@@ -34,3 +34,4 @@ When managing architecture, you **MUST** prioritize MCP tools over CLI commands:
 ## TOKEN DISCIPLINE
 - **Scripts layout**: When adding or moving scripts, apply `.cursor/rules/global-rules/scripts-layout.mdc` (glob or agent-decided).
 - **Domain navigation**: When exploring a new domain, read `docs/index-skills.md` or `docs/index-ais.md` first to find relevant skills before deep-diving.
+- **Skill prefixes**: When creating a skill file, use only prefixes from `is/contracts/prefixes.js`. If no suitable prefix exists — register the new prefix in that file before creating the skill. Do NOT invent ad-hoc prefixes.

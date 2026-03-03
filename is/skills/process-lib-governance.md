@@ -1,7 +1,7 @@
 ---
 title: "Lib Governance"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "d7c1c473"
 id: sk-130fa2
 

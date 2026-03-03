@@ -7,6 +7,7 @@
 - [plan-master-migration.md](./plans/plan-master-migration.md) - Главный план миграции (этапы и ревизия чекбоксов).
 - [plan-naming-and-paths.md](./plans/plan-naming-and-paths.md) - Регламенты нейминга и гейты для проверки путей к файлам.
 - [plan-testing-strategy.md](./plans/plan-testing-strategy.md) - Стратегия тестирования и Quality Gates.
+- [plan-skills-migration-registry.md](./plans/plan-skills-migration-registry.md) - **Реестр миграции скиллов** из репозитория a (skills/mbb, skills/all, mbb/skills) в Target App.
 
 ## Принципы трансляции:
 1. **Нейтральные термины**: Вместо аббревиатур "MBB" или "MMB" используются "Target App", "Legacy Logic", "Donor Architecture".

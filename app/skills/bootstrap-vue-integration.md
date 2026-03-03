@@ -1,7 +1,7 @@
 ---
 title: "Bootstrap Vue Integration"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "d72fe70c"
 id: sk-eeb23d
 

@@ -1,7 +1,7 @@
 ---
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "8b7bd353"
 id: sk-0e193a
 

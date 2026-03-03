@@ -1,6 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+    isValidSkillPrefix,
+    shouldValidateSkillPrefix,
+    SKILL_ALLOWED,
+} from "../../contracts/prefixes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -113,6 +118,15 @@ function validateSkillFormat(file, text, rel, errors) {
     }
 }
 
+// 4. Check is/skills/ prefix gate (SSOT: is/contracts/prefixes.js)
+function validateSkillPrefixGate(rel, errors) {
+    if (!shouldValidateSkillPrefix(rel)) return;
+    const base = path.basename(rel);
+    if (!isValidSkillPrefix(base)) {
+        errors.push(`${rel}: is/skills/ files must use prefix ${SKILL_ALLOWED.join(", ")} (SSOT: is/contracts/prefixes.js)`);
+    }
+}
+
 function main() {
     const errors = [];
     const warnings = [];
@@ -132,6 +146,7 @@ function main() {
 
             // Detailed format validation
             validateSkillFormat(file, text, rel, errors);
+            validateSkillPrefixGate(rel, errors);
 
             const ageDays = (now - stat.mtimeMs) / (1000 * 60 * 60 * 24);
             if (ageDays > STALE_DAYS) {

@@ -3,6 +3,7 @@
  * @description Gatekeeper for file and module naming contracts (kebab-case, anti-calque).
  */
 import { z } from 'zod';
+import { MODULE_PREFIXES } from '../prefixes.js';
 
 const FORBIDDEN_TERMS = ['mbb', 'mmb'];
 const CLOUD_EXCEPTIONS = ['cloudflare', 'yandex'];
@@ -22,13 +23,11 @@ const noForbiddenTerms = (val) => {
     return !FORBIDDEN_TERMS.some(term => lower.includes(term));
 };
 
-/**
- * Allowed prefixes for the new architecture.
- */
-export const ALLOWED_PREFIXES = ['app-', 'sys-', 'is-', 'core-', 'cmp-', 'index-'];
+/** @deprecated Use MODULE_PREFIXES from is/contracts/prefixes.js */
+export const ALLOWED_PREFIXES = MODULE_PREFIXES;
 
 const hasAllowedPrefix = (val) => {
-    return ALLOWED_PREFIXES.some(prefix => val.startsWith(prefix));
+    return MODULE_PREFIXES.some(prefix => val.startsWith(prefix));
 };
 
 // Base string with kebab-case validation (allows optional leading dot for system files/folders like .github)

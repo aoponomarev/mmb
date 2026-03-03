@@ -1,7 +1,7 @@
 ---
 title: "Token Discipline (Context Efficiency)"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "8f904eb5"
 id: sk-a304ea
 

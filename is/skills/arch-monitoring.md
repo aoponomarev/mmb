@@ -1,7 +1,7 @@
 ---
 title: "Architecture: Monitoring & Observability"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-02"
+reasoning_audited_at: "2026-03-03"
 reasoning_checksum: "e9024df0"
 id: sk-92384e
 
