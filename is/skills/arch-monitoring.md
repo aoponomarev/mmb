@@ -26,6 +26,40 @@ id: sk-92384e
 
 ---
 
+## Core Rules
+
+### 1. Logging & Tracking Strategy
+
+**Context**: Unified logging for transparency and debugging. Location: `logs/` directory.
+
+**Log types**: (1) Tracking (Git tracked) — `changelog.md`, `fixes-tracking.md`, `issues-backlog.md`; (2) Operational — `session-report.md`, `handoff-note.md`; (3) Runtime (gitignored) — `skills-events.log`, `infra-manager.log`, `mcp-debug.log`.
+
+**Agent workflow**: Start → read `handoff-note.md` + `issues-backlog.md`; Error → check `skills-events.log` (tail 50); Success → update `fixes-tracking.md`; End → write `session-report.md`.
+
+**Hard constraints**: All log filenames lowercase/kebab-case; logs must NOT contain API keys or tokens; markdown logs newest entries at top.
+
+### 2. SQLite Health Snapshot
+
+**Goal**: Lightweight operational visibility for SQLite health. SSOT: `scripts/sqlite-health-snapshot.js`.
+
+**Trigger**: Node/runtime dependency changes; Docker compose/volume/path changes; SQLite incident symptoms (timeouts, lock errors, slow workflows).
+
+**Command**: `node scripts/sqlite-health-snapshot.js`. Expected output: JSON summary with detected SQLite files, WAL/SHM and DB size signals, better-sqlite3 load check result.
+
+**Preflight integration**: Script used by staged-only preflight when SQLite-risk zones are touched; strict mode via env gates in CI/local policy.
+
+### 3. SQLite Readonly Diagnostics Protocol
+
+**Goal**: Collect SQLite evidence without risking data integrity. First step is read-only snapshot; do not run destructive cleanup/rebuild before diagnostics.
+
+**Required command**: `node scripts/sqlite-health-snapshot.js`.
+
+**Evidence checklist**: Presence/size of `database.sqlite`; WAL/SHM size and growth behavior; better-sqlite3 loadability and reported sqlite version.
+
+**Escalation**: If snapshot shows severe anomalies, continue with controlled recovery protocol; recovery steps explicit and reversible where possible.
+
+---
+
 ## Implementation Status in Target App
 
 - `Implemented`: Full monitoring baseline v1.

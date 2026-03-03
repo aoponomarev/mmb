@@ -28,6 +28,62 @@ id: sk-5c0ef8
 
 ---
 
+## Core Rules
+
+### Docker Resource Governance
+
+**Goal**: Keep Docker stack stable under mixed load. SSOT: `docker-compose.yml`, `INFRASTRUCTURE_CONFIG.yaml`.
+
+**Network**: Split networks — `public` for externally exposed services, `internal` for private service-to-service traffic; keep sensitive communication on `internal`.
+
+**Storage**: Named volume with `nocopy: true` for faster startup; large mutable data in dedicated mounted paths, not container layers.
+
+**Logging**: Mandatory rotation — `driver: json-file`, `max-size: 10m`, `max-file: 3-5`.
+
+**Profiles**: `core` for production runtime; `maintenance` for diagnostics and one-off containers.
+
+**Verification**: `docker compose --profile core config`, `docker compose --profile maintenance config`, `docker compose ps`, `docker network ls`.
+
+### SQLite Runtime Compatibility Gate
+
+**Context**: sqlite3 runtime stability in n8n/local scripts. SSOT: `n8n/package.json`.
+
+**Trigger**: New sqlite3 release; errors around bindings/prebuilds/package install; infrastructure changes affecting SQLite files.
+
+**Gate checklist**: (1) sqlite3 baseline in `n8n/package.json` on known-good line; (2) `GET /api/infra/dependency-health` confirm sqlite3 ok; (3) `node scripts/sqlite-health-snapshot.js`; (4) run workflow with SQLite access; (5) check n8n logs for binding errors.
+
+**Rollback rule**: If workflow fails after upgrade, pin to last known good patch; do not downgrade below baseline without recording reason; prefer read-only evidence before destructive action.
+
+### WSL2 & Docker Optimization
+
+**Context**: WSL settings depend on hardware profile in `INFRASTRUCTURE_CONFIG.yaml`. File: `C:\Users\[User]\.wslconfig`.
+
+**Profiles**: Home (high perf) — processors=12, memory=32GB, swap=8GB; Office — processors=4, memory=8GB, swap=4GB.
+
+**Docker Desktop**: WSL Integration for Ubuntu-22.04; Resource Saver Auto; enable containerd and Docker MCP Toolkit; DISABLE Kubernetes.
+
+**Applying changes**: `wsl --shutdown` → restart Docker Desktop → verify with `free -h` and `nproc` in Ubuntu.
+
+### Client vs Cloud Responsibility
+
+**Core principle**: Client = functionality tied to application version (deterministic, static); Cloud = data tied to user (persistent, mutable).
+
+**Client**: App config, business logic, UI components, system messages, cache config, versioned cache. **Cloud**: D1 (profiles, portfolios, preferences); R2 (future: models, datasets, snapshots).
+
+**Hard constraints**: No logic in Cloud (Workers route/auth, not calculate); no config in DB (belongs in code); client cache keys MUST include `appVersionHash`.
+
+### Loading Strategy (Boot Sequence)
+
+**Context**: Boot sequence, dependency management, template injection. SSOT: `core/module-loader.js`, `core/modules-config.js`.
+
+**Critical order**: Bootstrap JS → Templates (`x-template`) → Vue.js → Components → App Root. **Invariant**: `x-template` scripts MUST be in DOM before Vue initialization.
+
+**Module loader**: Topological sort (Kahn), cycle detection, `file://` & `http://` support; critical modules halt boot, optional log warning.
+
+**Hard constraints**: No NPM bundling — native `<script>` injection; strict order Templates→Vue→Components→App.
+
+---
+
 ## Implementation Status in Target App
 
 - `Implemented`: Full backend core v1.

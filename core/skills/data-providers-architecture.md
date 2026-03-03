@@ -67,6 +67,10 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 - **Sanity**: `core/validation/normalizer.js` — common fixes (string to float).
 - **Hard constraints**: No NaNs; `pvs` array must have exactly 6 elements.
 
+### Provider Metadata vs Domain Data
+
+**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use `/coins/markets` `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations. File Map: `core/domain/portfolio-adapters.js`, `core/config/portfolio-config.js`, `core/api/data-providers/coingecko-provider.js`.
+
 ### Backend Sync (PostgreSQL)
 
 When using managed PostgreSQL for heavy data:

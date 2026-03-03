@@ -61,6 +61,14 @@ Validates the draft object shape and invariants before persistence. Returns a st
 
 The domain engine has **no knowledge of storage** (localStorage, Cloudflare, PostgreSQL). Persistence is handled by the caller (UI component or service layer) after receiving the validated draft from the engine.
 
+### Portfolio Schema & Storage
+
+**Schema**: `{ id: "YYMMDD-hhmm", name: string, coins: [{ coinId, ticker, portfolioPercent, delegatedBy: { modelId } }], settings: { horizon } }`. **Invariant**: Every coin MUST have `delegatedBy` pointing to a valid Model ID. **Storage**: Local `localStorage` key (e.g. `mbb-portfolios`); Cloud Cloudflare D1 table `portfolios`. File Map: `core/api/cloudflare/portfolios-client.js`.
+
+### Coin Set Management
+
+Auto-generation of coin sets: parse requirements, identify token types (fungible, stablecoins), determine relationship rules. For each token: generate parameters (name, symbol, decimals), create data mappings, set distribution rules. Establish cross-token relationships; document in machine-readable format (`coins.json`). Validation: verify against master registry, economic model, data integrity. File Map: `core/config/coins-config.js`, `coins.json`.
+
 ### File Map
 
 | File | Responsibility |
@@ -69,3 +77,5 @@ The domain engine has **no knowledge of storage** (localStorage, Cloudflare, Pos
 | `core/domain/portfolio-validation.js` | Draft invariant validation |
 | `core/domain/portfolio-adapters.js` | Shape adapters between domain model and external formats (Cloudflare API, localStorage schema) |
 | `core/config/portfolio-config.js` | Compatibility facade for legacy callers |
+| `core/api/cloudflare/portfolios-client.js` | Portfolio schema DAO (local + Cloud) |
+| `core/config/coins-config.js` | Coin set definitions and defaults |

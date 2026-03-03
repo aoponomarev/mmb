@@ -45,6 +45,46 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 - **Parallelism**: Limit parallel branches to 3–5 to avoid CPU saturation.
 - **MCP synergy**: Prefer `mode: "webhook"` or `/execute` for sync responses; pass `agent_id` and `session_id` for traceability.
 
+### Cursor Settings Sync
+
+**Context**: Managing IDE settings and extensions across environments. SSOT: `INFRASTRUCTURE_CONFIG.yaml` for profile-specific paths.
+
+**Scope**: `settings.json` (keybindings, UI preferences); extensions list. **Sync strategy**: Use `powershell .\scripts\sync-cursor-settings.ps1 [backup|restore]`; master copies in defined path; local paths via environment variables.
+
+**Hard constraint**: No secrets in `settings.json`; use `.env` for sensitive API keys.
+
+### GitHub Agentic Collaboration
+
+**Goal**: Leverage GitHub cloud intelligence while maintaining local self-sufficiency and minimizing token costs.
+
+**Beacon strategy**: `.github/copilot-instructions.md` as SSOT for cloud agent context; updated automatically by index generator.
+
+**Token-saving workflow (L3 tasks)**: Create Issue → add label `L3-Discovery` → open in Copilot Workspace → request plan only ("Provide step-by-step plan, do not generate code yet") → execute locally via ВЗП protocol.
+
+**Quality control**: GitHub Actions run `env:check`, index-gen, syntax checks on MCP servers. **Hard constraints**: No direct cloud commits; cloud agents propose via PR/Plans; verify locally before merge; zero-cost (free tier only).
+
+### MCP-to-n8n Interaction Protocol
+
+**Goal**: Standardize communication between AI Agents (via MCP) and n8n Workflows.
+
+**Trigger modes**: Manual Sync `/execute` (default, waits for result); Manual Async `/run` (long-running, returns execution ID); Webhook `/webhook/...` (high-performance).
+
+**Input structure**: `{ action, payload, metadata: { agent, timestamp } }`. **Output**: `{ success, result, error }`.
+
+**Troubleshooting**: 404 → check workflow Active; 401 → verify `N8N_API_KEY`; Timeout → use async mode and poll.
+
+### Node MCP Development Protocol
+
+**Goal**: Standardize development of Node-based MCP services for safe operations.
+
+**Architecture**: Official MCP SDK, stdio transport; validate inputs with zod; null-safe handlers (`params || {}`).
+
+**Safety**: Side-effecting tools support dry-run and confirmation gates; logger failures never crash execution; expose health-check; classify tools as `read-only`, `mutating`, or `external`; mutating requires approval path and traceable error code.
+
+**Connectivity**: Timeout + abort for external requests; normalize/validate URLs; consistent error surfacing.
+
+**Solo validation**: `node --check control-plane/server.js` → `node control-plane/scripts/self-test.js` → `curl http://127.0.0.1:3002/health`.
+
 ## Contracts
 
 - **Telemetry Completeness**: Any new architectural script or process must be exposed through the `is/mcp/index.js` server to maintain 100% observability of agent actions.

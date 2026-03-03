@@ -19,8 +19,8 @@ id: sk-130fa2
 
 ## Core Rules
 
-1.  **Library Priority:**
-    Before writing a custom module for complex UI or logic (e.g., charts, drag-and-drop), always check if a suitable library exists.
+1.  **Library Priority (Check Libs First):**
+    Before writing a custom module for complex UI or logic (e.g., charts, drag-and-drop), always check if a suitable library exists. Prefer a library if: extensible API (plugins, composables, config injection); CDN support (UMD via `<script>`); active maintenance. **Exceptions — write custom if**: no suitable library exists; library too heavy for the feature; highly specific domain requirements.
 2.  **UMD Requirement:**
     Any library added to the project MUST have a UMD or Global build available. You cannot use `import { ... } from 'library'` if the library requires a bundler.
 3.  **Loading Mechanism:**

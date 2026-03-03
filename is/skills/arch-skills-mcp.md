@@ -26,6 +26,38 @@ id: sk-7d810a
 
 ---
 
+## Core Rules
+
+### Autonomous Skill Synthesis Pipeline
+
+**Context**: How the system transforms raw logs into structured knowledge.
+
+**Pipeline**: (1) Watcher — scans external releases and Git for updates; (2) Swarm — analyzes content; (3) Synthesis — LLM generates candidate (JSON or MD) for review.
+
+**Selection heuristics** (skill-worthy if): Fixes recurring architectural bug; introduces new integration pattern; defines new naming convention; solves complex environment issue (Docker/WSL).
+
+**Hard constraints**: Human gate — no skill published without approval; context limit — analysis passes use optimized context windows (~1500 tokens).
+
+### Commit Analysis Heuristics
+
+**Context**: Rules for determining if a commit is worth analyzing for skill extraction.
+
+**Worthiness decision tree**: Lines >1500 → REJECT (too_large); Files >15 → REJECT (too_many_files); All files .md or docs/ → REJECT (docs_only); Has keyword (implement, integrate, refactor, fix, add, create, auth, api, cache) → ACCEPT; Otherwise → ACCEPT if Swarm analysis confirms value.
+
+**Noise patterns (always filtered)**: `package-lock.json`, `node_modules/`, `*.sqlite`, `*.min.js`, `*.min.css`, `workflows_export.json`.
+
+### Skill Impact Analysis
+
+**Context**: Evaluating how a new feature or change affects the existing knowledge base.
+
+**Analysis steps**: (1) Search — find all skills related to target module; (2) Conflict check — does change violate Hard Constraints in those skills?; (3) Update requirement — list which skills need `action=update`; (4) New skill — determine if change introduces new pattern worth capturing.
+
+**Decision gate**: If change impacts >5 skills → Major Architectural Shift → requires dedicated document update.
+
+**Hard constraint**: No orphan rules — never implement a feature that contradicts a Skill without updating the Skill first.
+
+---
+
 ## Implementation Status in Target App
 
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.

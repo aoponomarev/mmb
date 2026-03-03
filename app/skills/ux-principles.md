@@ -54,6 +54,14 @@ All user-visible text (button labels, modal titles, tooltips, toast messages) co
 
 Enforcement: The AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test.js` catches any hardcoded user-facing string assignments.
 
+### Styling Principles (CSS)
+
+**Bootstrap First**: Use utility classes (`d-flex`, `mb-3`) before custom CSS. **Neutral tones**: `text-secondary` + `opacity` for Light/Dark themes; avoid HEX/RGB hardcoding. **Backgrounds**: `bg-body`, `bg-surface`, `bg-transparent`. **Borders**: `border-secondary` (subtle). **Scoping**: Prefix `avto-{hash}` from `hash-generator.js`; e.g. `.avto-Xy7z .custom-element { ... }`. **Workflow**: (1) Bootstrap utilities in template; (2) if insufficient, add `classesAdd` prop; (3) if custom CSS needed, document in `styles/wrappers/`. File Map: `styles/layout/`, `styles/wrappers/`.
+
+### Interface Terms (Glossary)
+
+**Interface**: Visual styling and static components. **Interaction**: Dynamic behavior and user flows. **Container**: Structural wrapper (`avto-*`). **Signal**: Visual indicator of data status (color/icon). **SSOT**: `core/config/tooltips-config.js` for terminology dictionary.
+
 ### Naming Conventions for UI Code
 
 | Pattern | Convention | Example |

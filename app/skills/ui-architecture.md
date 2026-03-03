@@ -96,3 +96,19 @@ Use **raw Bootstrap** (HTML + classes) for static layout. Create **Vue wrappers*
 ### Column Visibility (CSS-Driven)
 
 Toggling table columns without re-rendering. State in `columnVisibilityConfig`; mixin computes classes; CSS `display: none` on parent class. **Benefit**: Instant switching, preserves scroll position. Edge case: Bootstrap radio `@change` on hidden input fails in Vue — bind `@click` to `<label>` instead.
+
+### Layout & Alignment
+
+Use vertical padding on the **inner container** based on size class (e.g. `.component-responsive.size-sm > .inner-container`). Avoid fixed `height` or `line-height` for alignment. Horizontal spacing: Bootstrap utilities (`me-2`, `gap-3`); `gap-2` for button groups, `mb-3` for form fields. Sizing: `sm` (compact: tables, sidebars), `md` (default: forms, modals), `lg` (prominent: hero sections). File Map: `styles/wrappers/`, `shared/components/button.js`.
+
+### Responsive Visibility (Mobile-First)
+
+Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS — components render all elements, CSS hides based on viewport. Classes: `.label` (desktop), `.label-short` (mobile), `.icon` (always visible). Mobile default: `.label { display: none; }` `.label-short { display: block; }`. Desktop `@media (min-width: 576px)`: swap. Component props: `label`, `labelShort`, `icon`. File Map: `styles/wrappers/button.css`, `shared/components/button.js`.
+
+### Unified Component Library
+
+**Generic (`cmp-*`)**: `cmp-button`, `cmp-dropdown`, `cmp-combobox`, `cmp-modal`, `cmp-modal-buttons`, `cmp-timezone-selector`. **App (`app-*`)**: `app-header`, `app-sidebar`, `app-footer`. All components MUST document in file header: `props`, `emits`, `slots`, `expose`. File Map: `shared/components/`, `shared/templates/`.
+
+### DOM Markup & Hashing
+
+**Auto-markup**: Mark significant containers with `avto-{Base58_8char}` for DevTools and agent visibility. Deterministic hash from DOM path; stable across reloads. Scope: major sections, headers, wrappers. Exclusions: inside Vue components, minor wrappers, elements with IDs. **Instance hashing**: `computed: { instanceHash }` from `shared/utils/hash-generator.js`; usage `<div :class="['my-component', instanceHash]">`. **Layout sync**: `shared/utils/layout-sync.js` — `ResizeObserver` + `MutationObserver`; API `window.layoutSync.start()`, `.stop()`, `.update()`. Constraints: `avto-*` classes for identification ONLY, no functional CSS; hashing must be deterministic. File Map: `shared/utils/auto-markup.js`, `shared/utils/hash-generator.js`, `shared/utils/layout-sync.js`.

@@ -28,6 +28,24 @@ id: sk-7b4ee5
 3.  **Geographic Optimization:**
     When configuring endpoints, prefer Yandex Cloud (Cloud Functions, API Gateway) for low-latency access within RU/CIS, and Cloudflare (Workers, Pages) for global edge-computing distribution.
 
+### API Proxy (CORS Bypass & Caching)
+
+**Context**: CORS bypass and response caching at the Edge. Allows `file://` frontend to access external APIs by routing through Cloudflare Worker that adds CORS headers and hides API keys.
+
+**Supported routes**: `GET /api/coingecko/*` → api.coingecko.com; `GET /api/yahoo-finance/*` → query1.finance.yahoo.com; `GET /api/stooq/*` → stooq.com.
+
+**Caching (KV)**: `/coins/markets` 5 min; `/coins/list` 24h; `/simple/price` 1 min; Yahoo/Stooq Charts 1h.
+
+**Hard constraints**: Whitelist only — generic proxy must validate target URLs against strict whitelist; strip sensitive headers (Cookies, Auth) before forwarding.
+
+### External Strategy Overview
+
+**Core principles**: On-demand — integrate only what is necessary; Resilience — every cloud service must have local or secondary fallback; Geo-selection — Yandex for CIS, Cloudflare for Global Edge.
+
+**Current stack**: Auth (Google OAuth via Workers); AI (YandexGPT primary + Perplexity fallback); Data (CoinGecko + Yahoo Finance); Storage (D1 + OneDrive).
+
+**Hard constraints**: No vendor lock-in — business logic provider-agnostic via BaseProvider; secrets hygiene — no API keys in code, use `.env` and Wrangler Secrets.
+
 ## Contracts
 
 - **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in `core/config/app-config.js` or `core/config/integration-config.js`.

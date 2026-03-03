@@ -76,3 +76,29 @@ Before creating a new skill file:
 **Full reference:** `is/skills/references/commands.md` (read on demand for ВЗП, КАИ, АИС, ЕИП, ФИН, ФИНС, ОМК).
 
 **Summary:** `ВЗП`=Planned Execution | `КАИ`=Full Analysis | `АИС`=Arch Scan | `ЕИП`=SSOT Check | `ФИН`=Finalization | `ФИНС`=Discovery Blocks | `ОМК`=Brevity.
+
+### Agentic Self-Correction Protocol
+
+**Context**: Protocol for agents to identify and fix their own errors or outdated rules.
+
+**The loop**: (1) Detect — agent encounters a rule that contradicts reality or causes failure; (2) Propose — agent uses `propose_skill` with `action=update` to flag discrepancy; (3) Halt — if error is critical, agent stops and asks for clarification.
+
+**Triggers**: Broken links (relative paths leading to 404s); stale configs (rules referencing renamed/deleted files); logic gaps (missing edge cases in documented workflow).
+
+**Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks in `drafts/tasks/`.
+
+### Bug Resolution Protocol
+
+**Context**: Standardized approach to fixing errors and documenting them.
+
+**Resolution steps**: (1) Reproduce — confirm bug with log or screenshot; (2) Trace — find root cause in code; (3) Fix — apply code change; (4) Log — add entry to `logs/fixes-tracking.md`; (5) Skill check — should this fix be a new Skill? If yes → `propose_skill`.
+
+**Logging format** (in `fixes-tracking.md`): Date (YYYY-MM-DD), Issue (short description), Root Cause, Solution.
+
+**Hard constraints**: No ghost fixes — every code change that fixes a bug MUST be logged; verify first — run `health-check.js` before and after the fix.
+
+### Project Secretary Agent (Automation Boundaries)
+
+**Context**: When integrating automation agents (e.g., n8n with Office365/OneDrive), define clear scope and identity.
+
+**Guidelines**: Scope — agent handles only administrative tasks (calendar, mail, file sorting); Identity — agent acts under dedicated "Service Identity" or delegated access; Integration — use appropriate triggers (e.g., "Microsoft Agent 365 Trigger") for reactions to incoming events.

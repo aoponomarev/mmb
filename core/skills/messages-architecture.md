@@ -2,7 +2,7 @@
 title: "Messages Architecture"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "969bc573"
+reasoning_checksum: "6acd2165"
 id: sk-f2bc48
 
 ---
@@ -41,6 +41,14 @@ id: sk-f2bc48
         type: 'd'
     }
     ```
+
+### Key Workflow
+
+Add key to `messages-config.js`; assign `type` and default RU/EN text; access via `messagesConfig.get(key, params)`. Prefix `ai.*` reserved for AI/LLM events.
+
+### Translation (i18n)
+
+**#for-compact-translation-format** Messages stored as `KEY|TEXT|DETAILS`. **Storage**: `localStorage` key `tr-{lang}`; structure `[text, details]`. **Workflow**: `messagesTranslator.init(lang)` loads cache; if key missing, request from AI Provider; parse response; `updateDisplayedMessages()` triggers Vue reactivity. **Constraints**: AI MUST NOT translate `{name}` or `{value}` placeholders; translation is non-blocking (show "Translating..." or default).
 
 ## Contracts
 

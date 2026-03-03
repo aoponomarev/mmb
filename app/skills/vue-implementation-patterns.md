@@ -44,6 +44,10 @@ id: sk-cb75ec
     }
     ```
 
+### Template Externalization (x-template)
+
+**Directory**: `shared/templates/{name}-template.js` (global), `app/templates/{name}-template.js` (app-specific). **Pattern**: Each file exports `TEMPLATE` string; registers via `script type="text/x-template"` appended to `document.body`. **Boot sequence**: Templates MUST be loaded and injected **before** Vue initializes components. **Constraints**: Template script IDs must match component `template` property; templates contain only HTML and Vue directives, no complex JS. File Map: `core/module-loader.js`, `shared/templates/`, `app/templates/`.
+
 ## Contracts
 
 - **No-Build Restrictions**: These rules exist strictly because we operate without a bundler and use `x-template`. They ensure robustness in an environment where execution order can slightly vary.

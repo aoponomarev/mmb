@@ -99,6 +99,10 @@ TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt =
 | **Cache Miss on Every Load** | TTL expired; App Version changed (invalidates versioned keys); `localStorage` full (>5MB) |
 | **Data Not Saving** | Verify key is in `storage-layers.js`; check `cacheManager.set()` return value (must be `true`) |
 
+### App Version & Boot Cleanup
+
+**Mechanism**: `appConfig.getVersionHash()` (Git commit hash or manual version). Versioned keys use prefix `v:{hash}:` (e.g. `v:a1b2c3:market-metrics`). **Boot cleanup**: On startup, app MUST scan and delete `v:{old_hash}:*` keys via `cacheManager.clearOldVersions()` to free space. **CSS**: Body class `app-version-{hash}` allows version-specific styling overrides. **User data safety**: Never version keys containing user preferences or secrets.
+
 ### Module Load Order
 
 `storage-layers.js` and `cache-config.js` must be loaded before `cache-manager.js`. `cache-migrations.js` is optional (checked at runtime).

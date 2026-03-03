@@ -50,6 +50,26 @@ id: sk-bb5cf3
 - **Lockfile as the version contract**: `package-lock.json` is the SSOT for exact dependency versions. Direct `package.json` ranges are kept narrow (caret `^`). Major upgrades require explicit review and rollback plan.
 - **No bundler/build step**: The `file://` portability constraint means no Webpack/Vite/esbuild in the critical path. Browser modules use native ES imports.
 
+### Node Dependency Lifecycle
+
+**Goal**: Keep Node dependencies reproducible, secure, and compatible with runtime policy. SSOT: `package.json`, `control-plane/package.json`.
+
+**Baseline**: Lockfiles versioned for deterministic installs; `engines.node` in service packages with strict requirements; prefer explicit minor/patch updates over unbounded upgrade waves.
+
+**ABI and native**: For native packages (`better-sqlite3`), validate ABI compatibility before rollout; when Node major changes, run ABI gate first; align Docker image Node version with service engine policy.
+
+**Security and stability**: Run dependency checks in local preflight for touched package zones; treat security upgrade as controlled rollout; avoid new dependencies without clear runtime ROI.
+
+**Solo validation**: `node control-plane/scripts/self-test.js`, `npm run env:check`, `npm run index:gen`.
+
+### Node.js Version Migration Preview
+
+**Context**: Docker uses `node:20-slim`. Node v25+ is current mainline. Document new APIs for future migration planning.
+
+**Current decision**: STAY on Node 20 LTS. Migrate when: Node 20 EOL (April 2026); v25+ API critically needed; next LTS (v24/v26) declared stable.
+
+**Migration checklist**: Check `engines`; update Dockerfile; test `require()`/ESM; review OpenSSL/TLS; update CI Node constraints.
+
 ## Contracts
 
 - **Patch/minor**: Auto-acceptable via `npm update` with test suite validation.

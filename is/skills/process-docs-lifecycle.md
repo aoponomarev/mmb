@@ -53,7 +53,15 @@ id: sk-0e193a
 - **No Standalone Policies**: The `docs/policies/` folder is deprecated. All policies must live either inside the relevant `docs/ais/` file (as "Локальные Политики") or as an English contract in `is/skills/`.
 - **Audits Path Invariant**: The path `docs/audits/causality-exceptions.jsonl` is a system contract. Do not rename `docs/audits/` or the file.
 - **No Redundant Folders**: Do not create new subfolders under `docs/` when a functionally suitable one already exists. Place documents in `plans/`, `backlog/`, `runbooks/`, `cheatsheets/`, or `ais/` as appropriate. Do not invent `misc/`, `temp/`, `archive/`, or similar.
-- **Full `docs/` folder structure:**
+### Documentation Levels (Hierarchy)
+
+**Level 1 (`.cursorrules`)**: Agent protocols, Git workflow, critical routing. **Level 2 (`skills/` & `docs/`)**: Skills = granular "How-To" and constraints; Docs = high-level specs. **Level 3 (File Headers)**: Purpose of file, links to L2 skills. **Level 4 (Inline Comments)**: Implementation nuances, algorithm explanations, edge cases. **Rule**: No overlap — L4 must not repeat L2 rules; L3 links to L2.
+
+### Documentation Sync (Code ↔ Docs)
+
+**Trigger**: Update docs IMMEDIATELY when changing project structure, architecture, UI/UX principles, agent protocols. **Workflow**: (1) Code change; (2) Doc check — does this violate existing Skills?; (3) Update relevant Skill or create via Backlog; (4) Verify cross-links. **Atomic sync**: Code and docs updates ideally in same PR/commit sequence.
+
+### Full `docs/` folder structure:
 
 | Folder | Purpose | System? | Relation to Skills |
 |--------|---------|---------|-------------------|

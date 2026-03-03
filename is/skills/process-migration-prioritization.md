@@ -69,3 +69,13 @@ Candidate 2: Transfer UI table for coin list.
 **Score: (0.2 * 0.5) + (0.5 * 0.3) + (0.2 * 0.2) = 0.1 + 0.15 + 0.04 = 0.29**
 
 Conclusion: Provider tests first, UI can wait.
+
+---
+
+### Release Categorization (Task vs Skill vs Task&Skill)
+
+When processing releases from external sources (NEWS_SOURCES), each release must be correctly categorized. **Task**: Requires concrete actions in code, config, or infra (new features to adopt, breaking changes, security patches). **Skill**: Information for future decisions, no immediate actions (bug fixes in tools we use but don't affect our code, new APIs in versions we haven't upgraded to). **Task & Skill**: Mix of actionable items and knowledge (e.g. security patch + informational fixes).
+
+**Algorithm**: (1) Do we use this exact version? NO → likely Skill. (2) Breaking changes or security patches? YES → Task (or Task&Skill). (3) Do new features require changes in our code? YES → Task. (4) Mix of actions and knowledge? YES → Task&Skill. **Hard constraints**: Never assign Task for features in versions we don't use; always check current dependency version before categorizing; security patches always >= Task; pure bug fixes without our actions = Skill.
+
+**Scoring by category**: Task 70–100; Skill 40–70; Task&Skill 60–90.

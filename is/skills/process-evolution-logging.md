@@ -67,6 +67,20 @@ After any non-trivial session (3+ files changed, or architectural decision made)
 2. If missing or incomplete — write or extend it.
 3. Do NOT log: pure documentation reformatting, typo fixes, trivial housekeeping.
 
+### Project Evolution Aggregation
+
+**Goal**: Keep `docs/project-evolution.md` cumulative, compact, and non-duplicative.
+
+**Core rule**: One date = one record. New session outcomes for an existing date must be merged into the existing date record, not appended as a duplicate.
+
+**Aggregation algorithm**: (1) Find date record; (2) Extract new milestones from current session; (3) Merge into existing narrative — remove repeated phrasing, preserve unique architectural decisions; (4) Compress wording while keeping technical meaning; (5) Keep reverse chronology intact.
+
+**Compression rules**: Prefer one dense paragraph per date with semicolon-separated milestone clusters; avoid low-value operational noise; keep names of critical files/protocols/skills.
+
+**Significance-aware compression**: Tier A (system-critical) — explicit, beginning of record; Tier B (structure-important) — grouped in middle; Tier C (operational-minor) — aggregate into one short tail phrase. On repeated compressions, Tier C merges first; Tier A preserved longest.
+
+**Acceptance**: No duplicate date headers; record readable and technically complete; net log growth controlled via cumulative compression; critical changes remain visible after compression.
+
 ### Commands
 
 ```bash

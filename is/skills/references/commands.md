@@ -93,3 +93,17 @@ Respond as briefly as possible without losing technical accuracy.
 3. Preserve precision and all actionable details.
 
 **Combination:** `ОМК` + `ЕИП` → short SSOT/path consistency report only.
+
+---
+
+## Slash Commands (Continue / Cursor)
+
+Shortcut protocols into executable IDE commands.
+
+| Command | Protocol | Purpose |
+|---------|----------|---------|
+| `/vzp` | ВЗП | Planned Execution (step-by-step with verification) |
+| `/fin` | ФИН | Task Finalization (closure & discovery) |
+| `/edit` | — | Standard file modifications |
+
+**Usage**: Combine with context providers (e.g. `/vzp @file`). Every command that modifies the system must end with a verification summary. **Future**: Custom slash commands mapped to n8n workflows via control-plane for multi-step processes (e.g. "Create New Skill", "Sync All Sources").

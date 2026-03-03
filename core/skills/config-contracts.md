@@ -54,7 +54,7 @@ const text = window.tooltipsConfig.get('refresh-data');
 | `portfolio-config.js` | Portfolio domain compatibility facade (bridges legacy callers to `core/domain/`) |
 | `auth-config.js` | OAuth provider settings (Google), token handling rules |
 | `postgres-config.js` | Yandex Cloud PostgreSQL connection parameters |
-| `workspace-config.js` | Developer workspace settings, local override flags |
+| `workspace-config.js` | Persistent user workspace state: activeModelId, activeCoinSetIds, mainTable, metrics. SSOT for all workspace reads/writes. |
 | `menus-config.js` | Navigation menu structure |
 | `i18n-config.js` | Internationalization locale mappings |
 
@@ -81,3 +81,22 @@ This is the key enabler of Zero-Config Portability: the same method returns the 
 `core/modules-config.js` (at root of `core/`) defines the **ordered list of all JS modules** that must be loaded before the app initializes. `core/module-loader.js` reads this registry and injects `<script>` tags in dependency order.
 
 **#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
+
+### Workspace Config (Persistent User State)
+
+`core/config/workspace-config.js` manages **persistent user workspace state** that survives page reloads:
+
+- `activeModelId` — current math model (e.g. `'Median/AIR/260101'`).
+- `activeCoinSetIds` — array of active coin IDs displayed in the main table.
+- `mainTable` — table presentation: `selectedCoinIds`, `sortBy`, `sortOrder`, `coinSortType`, `showPriceColumn`.
+- `metrics` — calculation parameters: `horizonDays`, `mdnHours`, `activeTabId`, `agrMethod`.
+
+**Storage contract**: Primary `cacheManager.get/set('workspaceConfig')` (IndexedDB); fallback `localStorage` key `'workspaceConfig'` when cacheManager is unavailable. Both hold the same JSON structure.
+
+**API**: `saveWorkspace(patch)` — merges partial update, writes to both layers. `loadWorkspace()` — reads cacheManager first, falls back to localStorage. `mergeWorkspace(partial)` — deep-merge utility.
+
+**Rules**: (1) All components MUST read/write workspace via `workspaceConfig` methods. (2) Always use `saveWorkspace({ field: value })`, never replace the entire object. (3) After saving to cacheManager, always write a parallel copy to localStorage for fallback resilience.
+
+### Lib Loader (External Dependencies)
+
+Lib loading is governed by `process-lib-governance`. `core/lib-loader.js` holds `LIB_SOURCES` — the SSOT for library versions. Directory structure: `libs/vue/`, `libs/chartjs/`, `libs/assets/`. Load priority: GitHub Pages (primary for Web) → CDN (backup) → Local `file://` (primary for Dev/Offline). Usage: `await window.libLoader.load('vue', '3.4.0')`. Version lock in `LIB_SOURCES` is mandatory; the browser cannot write to disk — user must run `download-libs.sh` for offline support.

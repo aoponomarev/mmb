@@ -151,6 +151,14 @@ When a new significant subdomain is added to `core/`, a skill must be created he
 
 ---
 
+### Granularity & Size
+
+**Atomic**: One skill = one domain/task. **Size**: Max 150 lines (4 screens). **Focus**: "How-To" + "Rules" — not a textbook. **Workflow**: (1) Draft content; (2) Check size; (3) If too big, split sub-topics to new files; (4) Add `See also` / `related_skills` references.
+
+### Scope Routing (skills vs project-specific)
+
+**Global** (`is/skills/`): Universal standards (Git, security), process definitions (lifecycle, documentation), general architecture patterns. **Project/Domain** (`core/skills/`, `app/skills/`): Specific integrations, project configs, business logic, UI rules. **Relocation**: If misplaced, mark `action=move`, move file, update cross-refs.
+
 ### Decision Checklist
 
 Before creating or placing a skill file, answer these in order:

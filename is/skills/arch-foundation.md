@@ -115,10 +115,62 @@ The Control Plane is a set of infrastructure scripts that guarantee the safe and
 
 **Drift control**: Submodule pointer MUST stay in sync with upstream. Check via `git submodule status`; `+` = local changes, `-` = uninitialized. Sync: `git submodule update --remote --merge`. **Recovery**: If detached/dirty — `git submodule foreach --recursive git reset --hard` then `git submodule update --init --recursive`. **Commit order**: Push submodule changes BEFORE parent repo pointer update. Use `git clone --recursive` for new environments.
 
-### 10. Git Commit Template
+### 10. Git Commit Protocol
+
+**Workflow**: (1) `git status` — check staging; (2) Separate infra/config from logic/features; (3) Message: concise imperative ("Add user auth", not "Added..."); (4) `git add` → `git commit -m "..."`; (5) Verify with `git status`. **Constraints**: Commit ONLY when explicitly asked ("commit", "save"); during session reporting or project-evolution updates, list changes and ask permission before committing; atomic — no mixing massive refactors with tiny fixes; no destructive commands (`reset --hard`, `push -f`) without confirmation. Source: `.cursorrules`.
+
+### 11. Git Commit Template
 
 If `commit.template` points to `.gitmessage`, the file must exist and stay in sync with active protocol. Verify: `git config --get commit.template`; ensure `.gitmessage` exists; content: concise imperative subject, optional Why block. Never force metadata that increases solo workflow friction without clear ROI.
 
-### 11. SSOT Cross-Links
+### 12. SSOT Cross-Links
 
 **One Home**: A rule exists in ONE place. Do not copy — link or reference. Every new skill MUST be listed in the relevant index (`docs/index-skills.md`). Use `related_skills` in frontmatter for cross-references.
+
+### 13. Git Foundation Reliability (Solo Baseline)
+
+**Goal**: Keep Git workflow stable for solo development without unnecessary team overhead. SSOT: `git status`, `.gitmodules`, local hooks scripts.
+
+- Prefer one active branch for runtime work unless a risky experiment is isolated.
+- Always inspect `git status --short` before and after each iteration.
+- Use staged-only checks to reduce noise and speed up cycles.
+- Commit messages follow `.gitmessage` in lightweight mode (`Why` required, `FINS` optional).
+
+**Reliability gates**: (1) Submodule drift — validate `skills-core` pointer before commit/push; (2) Secrets — scan staged diff for tokens/keys before commit; (3) Targeted runtime — if Docker files changed run `docker compose config`; if control-plane files changed run `node control-plane/scripts/self-test.js`.
+
+**Stash hygiene**: Use stash only for short-lived context switching; add meaningful message; keep compact catalog; drop stale entries after successful integration.
+
+**Minimum command set**: `git status --short`, `git submodule status`, `git stash list`, `powershell -ExecutionPolicy Bypass -File .\scripts\git\preflight-solo.ps1`.
+
+### 14. Infrastructure Maintenance
+
+**Context**: Routine checks, updates, and recovery for Docker-based infrastructure. SSOT: `INFRASTRUCTURE_CONFIG.yaml`.
+
+**Migration protocol (Home ↔ Office)**: Sync paths in `INFRASTRUCTURE_CONFIG.yaml` profiles; copy `.env` from secure storage; `docker volume create n8n_data`; run `node scripts/health-check.js`.
+
+**Routine maintenance**: Daily — check `health-check.js`, all Critical services MUST be `HEALTHY`; review `logs/skills-events.log`; `docker compose pull` for latest images.
+
+**Recovery**: `node scripts/infra-manager.js recover`; manual `docker restart continue-cli`; rebuild `docker compose build --no-cache continue-cli && docker compose up -d`.
+
+**Hard constraints**: No secrets in Git; `.env` gitignored, use `env-subst.js` for runtime injection; sanitize inputs (basename only); always run `health-check.js` before and after changes.
+
+### 15. Node Foundation Reliability
+
+**Goal**: Stable Node foundation for services and scripts. SSOT: `control-plane/package.json`, root `package.json`, `docker/continue-cli/Dockerfile`.
+
+- Node LTS baseline consistent across host and container.
+- Service packages with strict requirements declare `engines.node`.
+- Native dependency changes must pass ABI compatibility checks.
+- Async external calls require timeout and abort support.
+- Critical Node services must have self-test entrypoints.
+- Runtime errors use stable, machine-readable categories.
+
+**Integration gates**: MCP service changed → `node control-plane/scripts/self-test.js`; compose/docker changed → `docker compose --profile core config`; env/governance changed → `npm run env:check`.
+
+### 16. Components SSOT (Extraction Rule)
+
+If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be extracted to SSOT.
+
+**Extraction targets**: Titles/Icons → `core/config/modals-config.js`; API Endpoints → `core/config/app-config.js`; Cache Rules → `core/cache/cache-config.js`; UI Text → `core/config/tooltips-config.js`.
+
+**Decision matrix**: Repeated HTML → `shared/component`; Repeated Options → `core/config`; Repeated Logic → `shared/utility`.
