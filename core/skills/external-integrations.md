@@ -46,6 +46,15 @@ id: sk-7b4ee5
 
 **Hard constraints**: No vendor lock-in — business logic provider-agnostic via BaseProvider; secrets hygiene — no API keys in code, use `.env` and Wrangler Secrets.
 
+### News Intelligence Pipeline
+
+**Context**: Automated collection and sentiment analysis of news.
+
+**Pipeline**: Fetch (RSS/sources) → Filter (AI removes noise) → Score (sentiment -1.0 to +1.0) → Store (news-queue).
+
+**Rules**: Source weight — official > Tier 1 > influencers; deduplication — group similar stories.
+
+**Hard constraints**: No FOMO — flag sensationalist language, reduce impact; verification — high-impact requires 2+ independent sources.
 ## Contracts
 
 - **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in `core/config/app-config.js` or `core/config/integration-config.js`.

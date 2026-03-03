@@ -8,6 +8,15 @@ Skills that are useful but do not fit the current infrastructure state. Not tied
 - Target App (mmb) does not yet have this infrastructure
 - Content is valuable — do not discard, but not ready for active skills
 
+## Current backlog skills
+
+- `docker-infrastructure.md` — Docker governance, WSL2, image hardening, networking, port shadow, v29 overlay, recovery, Compose validation, Windows paths
+- `n8n-infrastructure.md` — n8n workflow hygiene, MCP-to-n8n, local setup, Docker internals, Code Nodes, API & security, OAuth & webhook, Continue CLI integration
+
+## Compliance
+
+Backlog skills must align with arch-foundation when promoted: no mbb/mmb in paths or names (anti-calque); paths via `PATHS` from paths.js; naming contracts (kebab-case). See `AUDIT.md` for findings and promotion checklist.
+
 ## What goes here
 
 - Adapted markdown files (MBB references removed, frontmatter added)

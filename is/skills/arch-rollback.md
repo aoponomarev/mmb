@@ -34,15 +34,7 @@ See `docs/runbooks/rollback-protocol.md` for the full protocol. Summary:
 - **Checkpoint**: `npm run cache:integrity:check` before nontrivial secret/path/writer changes.
 - **Post-rollback**: `npm run preflight` + `npm run test`; post-mortem with action list.
 
-### Infrastructure Recovery (Docker/Compose)
-
-When the stack includes Docker Compose services:
-
-1. **Fast health triage**: `docker compose ps`, `docker compose logs --tail=100`, `docker stats --no-stream`. If healthy, stop.
-2. **Safe recovery first**: `docker compose config` to validate; restart only affected service (`docker compose restart <service>`).
-3. **Controlled recreate**: Only if restart failed — `docker compose up -d --force-recreate --no-deps <service>`.
-4. **Data protection**: Never remove named volumes before backup.
-5. **Clean slate** (corrupted system): `docker compose down --remove-orphans`; verify env and mounts; rebuild if needed; start.
+*Infrastructure Recovery (Docker/Compose) moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
 
 ## Implementation Status in Target App
 

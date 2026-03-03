@@ -95,10 +95,20 @@ Before creating a new skill file:
 
 **Logging format** (in `fixes-tracking.md`): Date (YYYY-MM-DD), Issue (short description), Root Cause, Solution.
 
-**Hard constraints**: No ghost fixes — every code change that fixes a bug MUST be logged; verify first — run `health-check.js` before and after the fix.
+**Hard constraints**: No ghost fixes — every code change that fixes a bug MUST be logged; verify first — run `npm run health-check` before and after the fix.
 
 ### Project Secretary Agent (Automation Boundaries)
 
 **Context**: When integrating automation agents (e.g., n8n with Office365/OneDrive), define clear scope and identity.
 
 **Guidelines**: Scope — agent handles only administrative tasks (calendar, mail, file sorting); Identity — agent acts under dedicated "Service Identity" or delegated access; Integration — use appropriate triggers (e.g., "Microsoft Agent 365 Trigger") for reactions to incoming events.
+
+### Session Handoff & Auto-Backup
+
+**Context**: Protocol for ensuring all local changes (settings, secrets, logs) are synced before closing the session.
+
+**Triggers**: Session termination phrases; completion of major task; mention of project-evolution or session reporting.
+
+**Handoff ritual**: (1) Sync ALL settings to cloud (Cursor, Continue, project, secrets); (2) Update project-evolution with single-date aggregation; (3) Generate session-report (tasks, pending issues, handoff-note); (4) Final git sync — list uncommitted changes, draft message, ASK user before commit.
+
+**Hard constraints**: No data loss — never terminate if .env has new keys not synced; verifiable sync — agent must state "Cloud SSOT updated"; no unsolicited commits — always wait for user confirmation.

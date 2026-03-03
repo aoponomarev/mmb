@@ -20,6 +20,8 @@ id: sk-3225b2
 
 ## Core Rules
 
+*n8n and Continue CLI (Docker) content moved to `docs/backlog/skills/n8n-infrastructure.md` and `docs/backlog/skills/docker-infrastructure.md` — not yet deployed in Target App.*
+
 1.  **SQLite Isolation:**
     The telemetry database (`data/telemetry.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.
 
@@ -35,19 +37,11 @@ When multiple MCP servers exist (skills, agents, control-plane, etc.), complex t
 
 ### Unified MCP (Single Source)
 
-All logic for external APIs (knowledge base, task management, Git) must live in MCP servers under `is/mcp/`. **Dual integration**: Cursor connects via settings; n8n (when used) connects via MCP Client node. Same tools, same contracts — no duplicate HTTP Request nodes.
-
-### n8n Workflow Hygiene (When n8n Is Used)
-
-- **Data pruning**: Max age 168h, max 1000 executions; save failed executions only for high-frequency workflows.
-- **Performance**: WAL mode; use "Split in Batches" for large datasets; limit "Wait" nodes in high-frequency flows.
-- **Error handling**: Global Error Trigger → notification; Retry on Failure (3×, 5s) for HTTP nodes; defaults for optional data.
-- **Parallelism**: Limit parallel branches to 3–5 to avoid CPU saturation.
-- **MCP synergy**: Prefer `mode: "webhook"` or `/execute` for sync responses; pass `agent_id` and `session_id` for traceability.
+All logic for external APIs (knowledge base, task management, Git) must live in MCP servers under `is/mcp/`. Cursor connects via settings. *(When n8n is deployed: dual integration via MCP Client node.)*
 
 ### Cursor Settings Sync
 
-**Context**: Managing IDE settings and extensions across environments. SSOT: `INFRASTRUCTURE_CONFIG.yaml` for profile-specific paths.
+**Context**: Managing IDE settings and extensions across environments. SSOT: `INFRASTRUCTURE_CONFIG.yaml` for profile-specific paths *(when file exists; see config-contracts)*.
 
 **Scope**: `settings.json` (keybindings, UI preferences); extensions list. **Sync strategy**: Use `powershell .\scripts\sync-cursor-settings.ps1 [backup|restore]`; master copies in defined path; local paths via environment variables.
 
@@ -63,16 +57,6 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Quality control**: GitHub Actions run `env:check`, index-gen, syntax checks on MCP servers. **Hard constraints**: No direct cloud commits; cloud agents propose via PR/Plans; verify locally before merge; zero-cost (free tier only).
 
-### MCP-to-n8n Interaction Protocol
-
-**Goal**: Standardize communication between AI Agents (via MCP) and n8n Workflows.
-
-**Trigger modes**: Manual Sync `/execute` (default, waits for result); Manual Async `/run` (long-running, returns execution ID); Webhook `/webhook/...` (high-performance).
-
-**Input structure**: `{ action, payload, metadata: { agent, timestamp } }`. **Output**: `{ success, result, error }`.
-
-**Troubleshooting**: 404 → check workflow Active; 401 → verify `N8N_API_KEY`; Timeout → use async mode and poll.
-
 ### Node MCP Development Protocol
 
 **Goal**: Standardize development of Node-based MCP services for safe operations.
@@ -83,7 +67,49 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Connectivity**: Timeout + abort for external requests; normalize/validate URLs; consistent error surfacing.
 
-**Solo validation**: `node --check control-plane/server.js` → `node control-plane/scripts/self-test.js` → `curl http://127.0.0.1:3002/health`.
+**Solo validation**: `node --check is/mcp/index.js` → `curl http://127.0.0.1:PORT/health` (when MCP HTTP server exists).
+
+### MCP SDK Security Rollout
+
+**Context**: MCP SDK security consistent across all active MCP servers. SSOT: package manifests in `is/mcp/*`.
+
+**When to apply**: After MCP SDK release detection; before recruiting new MCP-driven agents; during infra hardening.
+
+**Required actions**: Keep `@modelcontextprotocol/sdk` on hardened baseline (>=1.26.0) across all servers; run `node scripts/mcp-sdk-drift-check.js` (Zod baseline, cross-package consistency); verify `/health` endpoints when available.
+
+**What matters**: Server-side isolation; consistent schema/runtime across MCP servers; no partial upgrade drift.
+
+### MCP Server YAML Parsing
+
+**Context**: Processing YAML configuration for MCP servers. Structure parsing, validation of mandatory parameters, extraction of key configs.
+
+**Load YAML**: Use js-yaml; handle env var substitution `${VAR}`; fallback to line-by-line parser for components where official parsers fail (empty arrays, specific flags).
+
+**Extract**: `apiBase`, `apiKey`, `model`; validate API hostnames and paths; ensure sensitive data via env vars, not hardcoded.
+
+**Validation**: Structural (required sections); type (ports, timeouts, IDs); semantic (valid provider names).
+
+### Continue AI Subagents & Agent Skills
+
+**Context**: Continue v1.2.15 introduces subagents (delegate to specialized agents) and Agent Skills (reusable capabilities).
+
+**Subagents**: Primary delegates subtask → subagent executes → returns result. MCP servers can be leveraged by subagents.
+
+**Agent Skills**: Native Continue skills complement MCP approach; evaluate migration of some MCP skills for better integration.
+
+**Config filtering**: Continue filters out `.md` files when loading agent configs; only `.yaml`, `.yml`, `.json` loaded. Ensure no agent configs use `.md`.
+
+### MCP-UI Interaction Architecture
+
+**Context**: Interaction protocol between frontend and backend MCP services. Reactive, state-aware interface for AI-driven tasks (commit scanning, skill curation).
+
+**Scan flow**: UI triggers webhook/check-updates → backend orchestrates scan → returns summary → UI updates sources/task list.
+
+**Approve/curation flow**: User action triggers confirm → API updates status; drafting part of initial pass.
+
+**Log sync**: UI fetches `/api/logs` for real-time events; consecutive events collapsed for readability.
+
+**Guidelines**: Use `data-hash` attributes to map UI to backend; visual feedback (spinners, alerts) for long-running LLM tasks; optimistic UI — fade out rejected items while waiting for server.
 
 ## Contracts
 

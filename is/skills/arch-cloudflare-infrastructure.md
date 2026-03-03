@@ -30,6 +30,76 @@ id: sk-5cd3c9
 4.  **Secrets Management:**
     Never commit `.env` or `wrangler.toml` files containing real API tokens or Client Secrets. Use `wrangler secret put` for production and `.dev.vars` for local development.
 
+### Cloudflare Core (Infrastructure Map)
+
+**Context**: Edge infrastructure for API Proxy, Auth, Settings, State. SSOT: `core/config/cloudflare-config.js`.
+
+**Infrastructure**: Workers (logic); D1 (Users, Portfolios, Coin Sets); KV — `API_CACHE` (ephemeral), `SETTINGS` (persistent app settings).
+
+**Route map**: `/auth/*`, `/api/portfolios/*`, `/api/coin-sets/*`, `/api/datasets/*`, `/api/coingecko/*`, `/api/yahoo-finance/*`, `/api/stooq/*`, `/api/proxy`, `/api/settings`, `/health`.
+
+**Component bindings**: D1, API_CACHE, SETTINGS, GOOGLE_CLIENT_SECRET, JWT_SECRET, SETTINGS_TOKEN.
+
+**KV cache key limit (critical)**: 512-byte limit. Hash query strings via SHA-256 when key >480 bytes. Format: short keys readable; long keys `api-cache:coingecko:/coins/markets?h=<sha256hex>`. Symptoms: Worker 500 with "KV GET failed: 414 UTF-8 encoded length exceeds 512"; affects `/coins/markets?ids=<50+ coins>`. Prevention: test with max-size requests; use `X-Cache-Key` header for debugging.
+
+**Security**: Generic proxy whitelist only; Settings require `Authorization: Bearer <token>`.
+
+**Deployment**: `npx wrangler deploy`; auth via OAuth token.
+
+### Cloudflare Roadmap (Edge Infrastructure)
+
+**Context**: Status of Edge infrastructure integration. SSOT: `docs/A_CLOUDFLARE.md`.
+
+**Completed phases**: Infrastructure (Workers, D1, KV); Auth (Google OAuth 2.0); Proxy (CoinGecko/Yahoo); Storage (Portfolios CRUD via D1).
+
+**Pending phases**: R2 Storage (object storage for datasets, requires payment method); Edge Analytics (tracking API usage per user).
+
+**Hard constraint**: Local-First Fallback — app must remain functional via `localStorage` if Cloudflare is unreachable.
+
+### Auth Worker Deployment (OAuth Restore)
+
+**Context**: Protocol for deploying or restoring the Cloudflare Worker responsible for OAuth. Scope: secrets management, bindings verification, deployment.
+
+**Prerequisites**: Wrangler CLI authenticated; Account ID; `GOOGLE_CLIENT_SECRET` and `JWT_SECRET` ready.
+
+**Steps**: (1) Verify bindings in `wrangler.toml` (DB, API_CACHE); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy`; (4) Health check at `/health`.
+
+**Client config**: Update `core/config/auth-config.js` with correct `clientId` and `redirectUri`.
+
+### Cloud Functions (Yandex / Serverless Parity)
+
+**Context**: When using Yandex Cloud Functions for API proxying (e.g. YandexGPT). Runtime: Node.js 18+.
+
+**Rules**: Use native `fetch()`; respond to OPTIONS with 204 and CORS headers; read secrets from `process.env`; validate `modelUri` and `messages` before forwarding.
+
+**CORS pattern**: OPTIONS → 204, Access-Control-Allow-Origin: *, Allow-Methods: POST OPTIONS, Allow-Headers: Content-Type Authorization.
+
+**Constraints**: Function set to Public in console; timeout 30s for LLM latency.
+
+### Yandex IAM Binding (PermissionDenied)
+
+**Context**: `PermissionDenied` when deploying Cloud Functions. Role must be assigned to the **Folder**, not just the Service Account.
+
+**Fix**: `yc resource-manager folder add-access-binding <folder-id> --role editor --subject serviceAccount:<sa-id>`. Validate via "Access Bindings" tab in Yandex Console.
+
+### Yandex CORS (file:// Mode)
+
+**Context**: "Preflight request failed" errors. Checklist: (1) Function must be Public; (2) Code MUST handle `httpMethod === 'OPTIONS'` and return 200 with headers; (3) `Access-Control-Allow-Origin: *`, `Access-Control-Allow-Headers: Content-Type, Authorization`.
+
+**file:// mode**: MBB runs from `index.html` directly (`origin = null`). Detect `window.location.protocol === 'file:'` before direct external fetch; skip CORS-restricted direct call; use proxy/server endpoint or safe fallback so UI rendering does not break.
+
+### Yandex Function Deployment (yandexgpt-proxy)
+
+**Context**: Step-by-step guide for deploying Yandex Cloud Functions. Setup: Create Function in Console; Runtime Node.js 22; paste code; add `YANDEX_API_KEY`; Memory 128MB, Timeout 30s; enable "Public function". Verification: `curl -X POST https://functions.yandexcloud.net/... -H "Content-Type: application/json" -d '{"messages":[...]}'`. Troubleshooting: 403 → Public toggle ON; 504 → increase timeout; CORS → check OPTIONS handling.
+
+### Yandex API Key Retrieval
+
+**Context**: Obtaining credentials for Yandex Cloud. Procedure: IAM → Service Account → Create API Key; copy immediately (shown once). Usage: add to `.env` as `YANDEX_API_KEY`; add to Function env vars. Security: if leaked, delete and rotate; if lost, create new (old keys unrecoverable).
+
+### Yandex mbb-api Function (PostgreSQL Gateway)
+
+**Context**: Deploying `mbb-api` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; `yc serverless function version create` with `--source-path` ZIP; preserve DB credentials from existing version. DB migration pattern: add temporary `POST /api/admin/migrate` with safe DDL; deploy; call endpoint; remove endpoint; redeploy. Cleanup: delete profile, remove ZIP.
+
 ## Contracts
 
 - **Worker Structure**: The Worker code must remain modular (`src/index.js`, `src/auth.js`, `src/utils/`). Do not bundle everything into a single massive file.

@@ -73,6 +73,10 @@ try {
 | Provider business error (4xx) | `PROVIDER_CLIENT_ERROR` | No |
 | Provider server error (5xx) | `PROVIDER_SERVER_ERROR` | Sometimes |
 
+### Verification (Timeout-Related Changes)
+
+When changing timeout/abort logic: run `npm run test`; keep HTTP status mapping stable (e.g. `N8N_HTTP_<status>` style). *(When Docker/control-plane exist: `node control-plane/scripts/self-test.js`; `curl http://127.0.0.1:3002/health`; `docker compose --profile core config`.)*
+
 ### Rate Limiting Integration
 
 All external provider calls must go through `core/api/request-registry.js`:

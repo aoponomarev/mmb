@@ -56,6 +56,25 @@ id: sk-7d810a
 
 **Hard constraint**: No orphan rules — never implement a feature that contradicts a Skill without updating the Skill first.
 
+### Skills Curation Intelligence
+
+**Context**: Meta-protocol for deciding how to modify the knowledge base. Goal: prevent duplication and rot.
+
+**Algorithm (before creating skill)**: (1) Deep search with synonyms; (2) Decision: >60% overlap → Update existing; overlaps multiple → Merge; >150 lines → Decompose; unique → Create.
+
+**Coherence check**: Update index; add cross-links; delete obsolete files after synthesis.
+
+**Hard constraints**: Search first — never create without searching; agent must state why Update vs Create; skills >150 lines are decomposition candidates.
+
+### Skills Lifecycle
+
+**Context**: From idea to deprecation.
+
+**States**: Pending (SKILL_CANDIDATES.json) → Draft (drafts/tasks/) → Active (skills/) → Deprecated (archive/).
+
+**Actions**: Create, Update, Merge, Split, Deprecate.
+
+**Gates**: Valid frontmatter; valid links; no overlaps.
 ---
 
 ## Implementation Status in Target App
@@ -94,6 +113,10 @@ Skills are "cartridges" loaded into the agent. **Principles**: File-centric (Mar
 ### Skill Extraction (When Pipeline Exists)
 
 When an extraction pipeline (e.g. n8n, Swarm) is used: Signal (commit/release) → analysis → JSON/Markdown candidate → human review. **Quality criteria**: Actionable, reusable, focused, traceable. Every proposal must have `suggested_by`; humans MUST confirm before promotion.
+
+### Skill Quality Validation (LLM-Generated)
+
+**Mandatory fields**: SKILL_ID (kebab-case), CATEGORY (enum), DESCRIPTION (2-3 sentences). Reject with `incomplete_extraction` if missing. **Good signals**: Actionable verbs, specific references (paths, keys), clear scope, measurable outcome. **Bad signals**: Abstract nouns (resilience, scalability), philosophy, vague benefits, missing HOW. **Rejection**: Log to skills-events.log; mark commit scanned. **Human review triggers**: `unclear_intent`, `UPDATE [skill-id]:` in description, category=security.
 
 ### Key Contracts
 

@@ -29,6 +29,10 @@ id: sk-22dc19
 3.  **Persistence Multiplier:**
     The final AGR calculation includes a `persistenceMultiplier` based on the selected `agrMethod` (DCS, TSI, or MP). This logic must remain intact to ensure trend stability.
 
+### Model Registry & Extensibility
+
+**Architecture**: `ModelManager` loads classes; `BaseModelCalculator` ensures input/output consistency. **Inputs**: `NormalizedCoinData` (PVS, Market Cap). **Outputs**: `Signal` (Direction, Confidence). **Active models**: Median AIR (median deviation from historical window); Volatility Guard (filters low-amplitude noise). **Extensibility**: New models extend `BaseModelCalculator`, implement `calculate(snapshot)`, register in `models-config.js`. File Map: `core/metrics/base-model-calculator.js`, `core/metrics/model-manager.js`.
+
 ## Contracts
 
 - **Inputs**: The model expects Price Variations (PV) from CoinGecko `[1h%, 24h%, 7d%, 14d%, 30d%, 200d%]`.

@@ -50,6 +50,10 @@ Add key to `messages-config.js`; assign `type` and default RU/EN text; access vi
 
 **#for-compact-translation-format** Messages stored as `KEY|TEXT|DETAILS`. **Storage**: `localStorage` key `tr-{lang}`; structure `[text, details]`. **Workflow**: `messagesTranslator.init(lang)` loads cache; if key missing, request from AI Provider; parse response; `updateDisplayedMessages()` triggers Vue reactivity. **Constraints**: AI MUST NOT translate `{name}` or `{value}` placeholders; translation is non-blocking (show "Translating..." or default).
 
+### Messages UI & Lifecycle
+
+**Lifecycle**: Creation (`messagesConfig.get(key, params)`) → Dispatch (`AppMessages.push`) → Translation (async via `messagesTranslator`) → Display (reactive list `cmp-system-messages`) → Removal (TTL or manual close). **Constraints**: Every message MUST retain `key` for re-translation on language switch; use `{ ...msg }` when modifying; `cmp-system-message` registered locally within `cmp-system-messages`. **Components**: `cmp-system-messages` (container, positioning); `cmp-system-message` (item, animations). File Map: `shared/utils/messages-store.js`, `shared/components/system-messages.js`, `shared/components/system-message.js`.
+
 ## Contracts
 
 - **Legacy Compatibility**: `messages-config.js` must maintain a `LEGACY_KEY_MAP` to ensure backward compatibility with older components that still use long keys.

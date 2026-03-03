@@ -100,3 +100,11 @@ This is the key enabler of Zero-Config Portability: the same method returns the 
 ### Lib Loader (External Dependencies)
 
 Lib loading is governed by `process-lib-governance`. `core/lib-loader.js` holds `LIB_SOURCES` — the SSOT for library versions. Directory structure: `libs/vue/`, `libs/chartjs/`, `libs/assets/`. Load priority: GitHub Pages (primary for Web) → CDN (backup) → Local `file://` (primary for Dev/Offline). Usage: `await window.libLoader.load('vue', '3.4.0')`. Version lock in `LIB_SOURCES` is mandatory; the browser cannot write to disk — user must run `download-libs.sh` for offline support.
+
+### Settings Sync (Development Environment)
+
+**Context**: Unified sync of development environment settings (Cursor, Continue, Git, Terminal) between machines via cloud storage. SSOT: `INFRASTRUCTURE_CONFIG.yaml` for paths and profiles *(file created when settings sync is deployed; may not exist yet)*.
+
+**What gets synced**: Cursor (settings.json, keybindings.json); Continue (config.yaml); Git (.gitconfig); Project (.cursorrules, .cursor/rules). **Commands**: `backup` (Local → Cloud) at session end; `restore` (Cloud → Local) only when requested.
+
+**Agent protocol**: Session end — run backup, confirm "Cloud SSOT updated"; Session start — restore only if explicitly requested. **Safety**: Backup before overwrite; structure validation; no destructive operations.

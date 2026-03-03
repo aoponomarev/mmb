@@ -32,6 +32,14 @@ id: sk-d76b68
 3.  **Manager Routing:**
     Components must never instantiate providers directly. They must call `window.aiProviderManager.sendRequest(...)`, which automatically resolves the current active provider and its credentials.
 
+### Key Recovery (Cloudflare KV Fallback)
+
+When `getApiKey(providerName)` finds no key in local cache: (1) Call `resolveSettingsToken()` — check `localStorage('mbb_github_token')`, then bootstrap from `/api/infra/bootstrap/github-token`; (2) Fetch all settings from `/api/settings` with resolved token; (3) Save recovered keys to `cacheManager` so subsequent calls are instant. Active provider and models stored in `cacheManager` (keys `ai-provider`, `yandex-api-key`, `perplexity-api-key`, `yandex-model`, `perplexity-model`).
+
+### CORS & Timing
+
+All cloud AI calls MUST go through the Cloudflare Proxy (Yandex via Cloud Function, Perplexity via Worker). Components that depend on API keys at startup must wait for key availability (polling pattern).
+
 ## Contracts
 
 - **Stateless Requests**: Providers must be stateless. They receive the API key and model on every request, rather than storing them internally.
@@ -52,3 +60,47 @@ Handle failures: generation timeouts, content filtering, model unavailability, q
 ### Provider Configuration Patterns
 
 Use provider-specific model IDs (exact slugs from provider docs). Respect rate limits (TPM, RPM). API keys from centralized config; no env interpolation in runtime config. Delete legacy `config.ts` if it overrides YAML and causes confusion.
+
+### Artificial Analysis IQ Scoring
+
+**Context**: Agent/model scoring via Artificial Analysis API benchmarks. SSOT: benchmark-service script.
+
+**Scope**: Adding model via API; recruiting agent; bulk re-scoring; displaying quality in UI.
+
+**Key rules**: API key in `.env`; fallback `DEFAULT_IQ=50` if no key or API down; score priority: livecodebench*100 > coding_index > intelligence_index; fuzzy matching via slug normalization; EMA blending on sync: `new_iq = 0.3*benchmark + 0.7*current`. **Hard constraints**: Never add model without IQ lookup; never trust IQ=50 as "real" (means no benchmark); always run origin detection for security.
+
+### Unified LLM Management (Model Registry)
+
+**Context**: Unified management of LLM models across config, registry, stats. SSOT: `.continue/config.yaml` or equivalent.
+
+**Controller**: All operations via unified controller (list, add, remove, sync). **Protected models**: Critical models cannot be removed via automated scripts.
+
+**Maintenance flow**: Automated discovery → testing → registration via controller → health monitoring → sync. **Hard constraints**: No manual config edits; registry consistency; fallback chain follows config order.
+
+### Ollama Node Integration Checks
+
+**Goal**: Ensure Node/MCP edits do not silently break Ollama fallback. SSOT: preflight script.
+
+**Trigger**: Staged files include `.continue/*`, `mcp/*`, `docker-compose*.yml`, `.env.example`.
+
+**Checks**: Preflight run; wrapper reachability (`curl /health`) when HTTP wrapper exists. **Acceptance**: No preflight failures; no unexpected timeout/cooldown; core runtime healthy. *(When control-plane exists: control-plane self-test.)*
+
+### Ollama Runtime Governance
+
+**Goal**: Keep local Ollama integration stable as fallback layer.
+
+**Runtime policy**: Ollama is fallback, not primary; use pinned model profiles (`OLLAMA_MODEL_FAST`, `OLLAMA_MODEL_HEAVY`); keep concurrency low.
+
+**Timeout policy**: Fast/heavy timeout classes; behavior explicit and observable. **Warm pool**: At least one warm model; compact to avoid memory bloat.
+
+**Verification**: preflight; health probe. *(When Docker exists: `docker compose config`.)*
+
+### Ollama v0.15+ Improvements
+
+**Context**: Ollama v0.15.6+ improvements for local LLM fallback.
+
+**Auto-download**: `ollama launch` now auto-downloads missing models instead of error; improves reliability of automated workflows.
+
+**Context fixes**: Fixed context limits and compaction bug with vision models/large context.
+
+**Config**: `OLLAMA_BASE_URL: http://host.docker.internal:11434` for Docker containers. Access via `host.docker.internal:11434`.

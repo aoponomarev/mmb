@@ -26,6 +26,26 @@ id: sk-d7a2cc
 
 ---
 
+### Orchestrator Evolution
+
+**Context**: Control plane orchestration evolves with migration. Isolate from app runtime; use standardized startup contracts.
+
+**Principles**: Simple node execution of .js scripts; single-writer guard; no orchestration embedded in backend services.
+
+### Hybrid Bridge (Control Plane ↔ n8n)
+
+*Deferred until Docker/n8n deployed. See `docs/backlog/skills/docker-infrastructure.md`, `docs/backlog/skills/n8n-infrastructure.md`.*
+
+**Context**: Safe MCP control plane for orchestrating n8n workflows from agent tools. Agent side stateless and provider-agnostic; strict execution safety.
+
+**Scope**: Control plane in `control-plane/`; dedicated MCP server (stdio); proxies to n8n API, logs every action.
+
+**Mandatory tools**: `check_system_health`, `list_active_workflows`, `execute_workflow`, `get_workflow_logs`.
+
+**Safety gates**: Default dry-run; runtime writes disabled unless `CONTROL_PLANE_ALLOW_MUTATIONS=true`; destructive ops require `confirmToken`; invalid gate returns `blocked`, not raw errors.
+
+**Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events to `logs/control-plane.log`; never log secrets.
+
 ## Implementation Status in Target App
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).
 - `Implemented`: Docs-ids gate — `validate-docs-ids.js` checks `related_skills`/`related_ais` id resolution; `generate-id-registry.js` produces `is/contracts/docs/id-registry.json`.

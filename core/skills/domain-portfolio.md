@@ -69,6 +69,28 @@ The domain engine has **no knowledge of storage** (localStorage, Cloudflare, Pos
 
 Auto-generation of coin sets: parse requirements, identify token types (fungible, stablecoins), determine relationship rules. For each token: generate parameters (name, symbol, decimals), create data mappings, set distribution rules. Establish cross-token relationships; document in machine-readable format (`coins.json`). Validation: verify against master registry, economic model, data integrity. File Map: `core/config/coins-config.js`, `coins.json`.
 
+**Structured Process**: (1) Requirement Analysis — parse architectural requirements, identify token types, determine relationship rules (e.g. index weighting); (2) Token Generation — for each token generate unique parameters, create data mappings, set distribution rules; (3) Relationship Establishment — implement cross-token relationships (staking, conversion, pairing), document in `coins.json`; (4) Validation — verify against master registry, economic model, data integrity; test inter-token data flows; check security/liquidity vulnerabilities.
+
+### Coins Metadata Generation
+
+**Context**: Creating `coins.json` registry from CoinGecko. SSOT: `libs/assets/data/coins.json` or equivalent.
+
+**Process**: Fetch (generator pulls coin list) → Filter (top N + watchlist) → Map (symbols to icon URLs) → Save to coins.json.
+
+**Loader**: Runtime reads coins.json to hydrate IconManager. **Constraints**: Generated JSON must match IconManager schema; regeneration periodic (n8n or script).
+
+### Coin Set Merge Consistency
+
+**Context**: "Loaded N coins" toast can diverge from table counter after merge if active IDs updated incorrectly.
+
+**Trigger**: Debugging add/merge flow; counter mismatch (toast ≠ table count); Vue reactivity issues after merge.
+
+**Canonical rule**: After merge — (1) treat `coins[]` as source of truth; (2) rebuild `activeCoinSetIds` from `coins.map(c => c.id)` (set-union); (3) never overwrite active IDs by "last loaded set IDs" only.
+
+**Data loading**: Prefer full coin payload attached to incoming set; fetch by IDs only for truly missing; preserve deterministic order.
+
+**Regression checklist**: After first load — coins == activeCoinSetIds == totalCoinsCount; after second merge — all counters reflect union; no unresolved IDs on happy path.
+
 ### File Map
 
 | File | Responsibility |

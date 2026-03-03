@@ -97,6 +97,10 @@ this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 | UI state mutations | `app/skills/ui-architecture` |
 | Health / preflight checks | `arch-control-plane` |
 
+### Anchor Placement (Risk Branches)
+
+Place inline anchors in branches where developers would otherwise "search from scratch": retry/backoff and 429 handling; fallback branches (local cache, stale cache); merge + dedup logic; error/status classification. File header alone is insufficient — risk branches need explicit anchors.
+
 ### Where Anchors Are Optional
 
 - Simple utility functions with no architectural risk.

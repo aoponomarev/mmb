@@ -63,3 +63,13 @@ This special variable controls which application instance is allowed to write da
 The health-check (`npm run health-check`) validates this variable explicitly. An invalid or missing value will cause the `contracts` plane to show a warning.
 
 **Rule**: Only one value (`TARGET`) should be active during normal Target App operation. Switch to `LEGACY` only when intentionally handing over write authority.
+
+### Env Key Governance
+
+**Goal**: One authoritative key source, deterministic rotation, mandatory verification. Root `.env` is SSOT for shared keys; service-local `.env` only for service-specific toggles; service-local MUST NOT redefine shared keys unless documented emergency override.
+
+**Rotation protocol**: Generate new key → update root first → remove stale duplicates → search for token fingerprints → run verification → update docs/skills.
+
+**Drift detection**: Scan `**/.env*` and scripts for duplicate declarations; fix root first, eliminate duplicates, log in project-evolution.
+
+**Verification**: Control-plane health probe; n8n API probe; service startup smoke test; `.env.example` same key set; `npm run env:check` after any key change.

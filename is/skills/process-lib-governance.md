@@ -36,6 +36,13 @@ id: sk-130fa2
 
 When migrating Zod versions: wrap error formatting into a stable internal shape; centralize helpers that may differ between versions; prevent version-specific quirks from spreading into tool handlers. **Activation criteria**: preflight drift checks green, all MCP servers pass self-tests, no contract regressions. Full migration in one shot is high-risk — use compatibility adapters to reduce blast radius.
 
+### Zod v4 Migration Plan
+
+**Context**: Zod v4 has breaking changes (import path, strict mode, transform pipeline, error API). Current: v3 baseline in MCP servers.
+
+**Migration checklist**: Update package.json to ^4.0.0; change imports to `zod/v4` or compat layer; review z.object() strict behavior; test all MCP tool validations; verify tool calls; use compat layer before broad rollout.
+
+**Decision**: WAIT. Migrate when v4-only feature needed, v3 EOL, or major dependency requires v4.
 ## Contracts
 
 - **No `node_modules` in UI**: The `app/` and `core/` UI code must never rely on `node_modules`.

@@ -49,7 +49,11 @@ id: sk-eeb23d
     });
     ```
 4.  **Programmatic API:**
-    Provide wrapper methods (`show()`, `hide()`, `toggle()`) that safely call the Bootstrap instance if it exists.
+    Provide wrapper methods (`show()`, `hide()`, `toggle()`) that safely call the Bootstrap instance if it exists. Expose instance via `getBootstrapInstance()` for parent access.
+5.  **Data Attributes:**
+    Preserve `data-bs-*` attributes for native Bootstrap functionality.
+6.  **Styling:**
+    Use Bootstrap utility classes first; use CSS variables (`--bs-body-bg`) for Light/Dark mode; no inline styles unless dynamically calculated (e.g. progress bars).
 
 ## Contracts
 

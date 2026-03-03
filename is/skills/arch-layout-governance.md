@@ -48,6 +48,22 @@ id: sk-c62fb6
    - `core/skills/`: Backend and shared domain knowledge (e.g. `api-layer.md`, `cache-layer.md`, `config-contracts.md`).
    - `app/skills/`: UI layer knowledge (e.g. `ui-architecture.md`, `file-protocol-cors-guard.md`, `ux-principles.md`).
 
+### Libs Repository Setup
+
+**Context**: Initialize or restore `libs` submodule. Type: standalone Git repo; role: CDN via GitHub Pages; branch: main.
+
+**Workflow**: Clone libs repo; run download script; enable Pages (Source: Deploy from branch main/root). **Maintenance**: Add version folder → commit → push; remove old unused versions.
+
+### Libs Repo Workflow
+
+**Context**: Managing libs repository and dependency updates. Trigger: new lib needed or version update.
+
+**Automation**: Check if file in libs/<name>/<version>/; if missing, download UMD from CDN; update lib-loader; notify user to commit. **Constraints**: Explicit commit (automation prepares, user commits); UMD only for browser loading.
+
+### Libs Directory Structure & Load Priority
+
+**Context**: Layout of vendor libs repository. Structure: `libs/vue/<version>/`, `libs/chartjs/<version>/`, `libs/assets/coins/`. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage: `await window.libLoader.load('vue', '3.4.0')`.
+
 ## Contracts
 
 ### When to Update

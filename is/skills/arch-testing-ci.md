@@ -35,25 +35,25 @@ id: sk-d6777d
 
 **Blocker**: Release blocked if Quality Gate fails.
 
-### Docker Compose Release Validation
+*Docker Compose Release Validation moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
 
-**Context**: Docker Compose releases can affect watch mode, healthchecks, service orchestration. SSOT: `docker-compose.yml`.
-
-**Trigger**: New Docker Compose release; anomalies in container restart/healthcheck.
-
-**Validation path**: (1) `docker compose config` must pass; (2) Restart key services; (3) Validate `GET /health`, `GET /api/health-check`; (4) Confirm webhooks respond.
-
-**Release notes priority**: Verify when notes mention watch-mode fixes, healthcheck handling, env-file path parsing.
-
-### Git Local CI Mirror
+### Git Local CI Mirror (Preflight)
 
 **Goal**: Run high-value local checks before commit/push in solo mode. SSOT: `scripts/git/preflight-solo.ps1`.
 
-**Trigger**: Before commit; before push; after large infra or control-plane edits.
+**Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When Docker/control-plane exist: also `control-plane/*`, `docker-compose*.yml`.)*
 
-**Checks**: Staged file map (identify changed areas); Docker — `docker compose --profile core config` when compose changed; MCP — `node control-plane/scripts/self-test.js` when control-plane changed; Secrets — fail if staged diff looks like secret leakage.
+**Checks**: (1) Secret leakage scan on staged diff; (2) Root env schema check if env governance changed; (3) MCP SDK drift check when MCP/dependency manifests touched (Zod baseline + cross-package consistency). *(When Docker/control-plane exist: Compose config validation, control-plane self-test.)*
 
-**Success criteria**: No secret-like strings; valid compose config (if touched); control-plane self-test passes (if touched).
+**Success criteria**: Preflight exits 0; no secret-like tokens in staged diff; runtime health endpoints available; MCP SDK baseline consistent.
+
+### Preflight Diagnostics Quality Gate
+
+**Goal**: Keep preflight diagnostics accurate; avoid false failures that block safe rollout.
+
+**Gate rules**: Diagnostics must be read-only and deterministic; each path runnable in isolation from CLI; new diagnostics require one positive and one failure-path test; dependency drift must verify baseline and cross-package consistency.
+
+**Acceptance**: Check runs without side effects; output machine-readable (JSON or stable markers); strict mode explicit and documented; warnings vs blocking failures clearly separated. Any change to preflight-solo.ps1: direct execution, related self-test, lint on touched files.
 
 ### Cloudflare Testing Protocol
 

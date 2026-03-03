@@ -24,6 +24,20 @@ id: sk-73dcca
 
 ---
 
+## Core Rules
+
+### External Integration Closure (Task Finalization)
+
+**Goal**: Finalize tasks while identifying high-value growth opportunities (F-I-N-S) using ranked multi-variant analysis.
+
+**Trigger**: Command initiates two-phase process — Closure (mandatory) and Discovery (conditional). Levels: L1 Routine (closure only); L2 Module (local discovery); L3 System (full + web intelligence).
+
+**Phase 1 Closure**: Sync config/state paths; update project-evolution; run index-gen; sync .env keys to .env.example; add skill anchors in code.
+
+**Phase 2 Discovery** (L2/L3): Ranked F-I-N-S analysis; ROI filter >1.5x; recommended selection; argumentation blocks per category. Zero-cost policy for integrations.
+
+---
+
 ## Implementation Status in Target App
 
 - `Implemented`: Single-writer guard (`DATA_PLANE_ACTIVE_APP`) with blocking validation.

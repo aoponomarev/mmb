@@ -52,7 +52,7 @@ id: sk-bb5cf3
 
 ### Node Dependency Lifecycle
 
-**Goal**: Keep Node dependencies reproducible, secure, and compatible with runtime policy. SSOT: `package.json`, `control-plane/package.json`.
+**Goal**: Keep Node dependencies reproducible, secure, and compatible with runtime policy. SSOT: `package.json`, `is/mcp/package.json`. *(When control-plane exists: `control-plane/package.json`.)*
 
 **Baseline**: Lockfiles versioned for deterministic installs; `engines.node` in service packages with strict requirements; prefer explicit minor/patch updates over unbounded upgrade waves.
 
@@ -60,7 +60,7 @@ id: sk-bb5cf3
 
 **Security and stability**: Run dependency checks in local preflight for touched package zones; treat security upgrade as controlled rollout; avoid new dependencies without clear runtime ROI.
 
-**Solo validation**: `node control-plane/scripts/self-test.js`, `npm run env:check`, `npm run index:gen`.
+**Solo validation**: `npm run env:check`, `npm run index:gen`. *(When control-plane exists: `node control-plane/scripts/self-test.js`.)*
 
 ### Node.js Version Migration Preview
 

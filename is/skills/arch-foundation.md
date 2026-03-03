@@ -136,41 +136,55 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 - Use staged-only checks to reduce noise and speed up cycles.
 - Commit messages follow `.gitmessage` in lightweight mode (`Why` required, `FINS` optional).
 
-**Reliability gates**: (1) Submodule drift — validate `skills-core` pointer before commit/push; (2) Secrets — scan staged diff for tokens/keys before commit; (3) Targeted runtime — if Docker files changed run `docker compose config`; if control-plane files changed run `node control-plane/scripts/self-test.js`.
+**Reliability gates**: (1) Submodule drift — validate `skills-core` pointer before commit/push; (2) Secrets — scan staged diff for tokens/keys before commit; (3) Targeted runtime — if MCP files changed run MCP self-test when available. *(When Docker/control-plane exist: `docker compose config`, `node control-plane/scripts/self-test.js`.)*
 
 **Stash hygiene**: Use stash only for short-lived context switching; add meaningful message; keep compact catalog; drop stale entries after successful integration.
 
 **Minimum command set**: `git status --short`, `git submodule status`, `git stash list`, `powershell -ExecutionPolicy Bypass -File .\scripts\git\preflight-solo.ps1`.
 
-### 14. Infrastructure Maintenance
+### 14. Infrastructure Reconstruction Pattern
 
-**Context**: Routine checks, updates, and recovery for Docker-based infrastructure. SSOT: `INFRASTRUCTURE_CONFIG.yaml`.
+**Context**: Workflow for AI agent when tasked with large-scale infrastructure refactoring. Phases: (1) Discovery — inventory configs, registries, logs, env vars; map dependencies; find hardcoded values. (2) Conflict Analysis — find contradictions between sources; check "Schrödinger state"; assess race conditions. (3) Complex Planning — create living doc (e.g. `INFRA_RECONSTRUCTION.md`); every item MUST have `[ ]` checkbox; maximum detail (paths, functions, formats); SSOT principle; backward compatibility. (4) Execution — atomic steps; self-check after each; if new facts emerge, pause and revise plan (v1.0 → v2.0). (5) Closing — update docs; remove temp files and backups.
 
-**Migration protocol (Home ↔ Office)**: Sync paths in `INFRASTRUCTURE_CONFIG.yaml` profiles; copy `.env` from secure storage; `docker volume create n8n_data`; run `node scripts/health-check.js`.
+*Infrastructure Maintenance (Docker) moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
 
-**Routine maintenance**: Daily — check `health-check.js`, all Critical services MUST be `HEALTHY`; review `logs/skills-events.log`; `docker compose pull` for latest images.
+### 16. Node Foundation Reliability
 
-**Recovery**: `node scripts/infra-manager.js recover`; manual `docker restart continue-cli`; rebuild `docker compose build --no-cache continue-cli && docker compose up -d`.
+**Goal**: Stable Node foundation for services and scripts. SSOT: root `package.json`, `is/mcp/package.json`.
 
-**Hard constraints**: No secrets in Git; `.env` gitignored, use `env-subst.js` for runtime injection; sanitize inputs (basename only); always run `health-check.js` before and after changes.
-
-### 15. Node Foundation Reliability
-
-**Goal**: Stable Node foundation for services and scripts. SSOT: `control-plane/package.json`, root `package.json`, `docker/continue-cli/Dockerfile`.
-
-- Node LTS baseline consistent across host and container.
+- Node LTS baseline consistent across host.
 - Service packages with strict requirements declare `engines.node`.
 - Native dependency changes must pass ABI compatibility checks.
 - Async external calls require timeout and abort support.
 - Critical Node services must have self-test entrypoints.
 - Runtime errors use stable, machine-readable categories.
 
-**Integration gates**: MCP service changed → `node control-plane/scripts/self-test.js`; compose/docker changed → `docker compose --profile core config`; env/governance changed → `npm run env:check`.
+**Integration gates**: MCP service changed → run MCP self-test when available; env/governance changed → `npm run env:check`. *(When Docker/control-plane exist: compose config, control-plane self-test.)*
 
-### 16. Components SSOT (Extraction Rule)
+### 17. Components SSOT (Extraction Rule)
 
 If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be extracted to SSOT.
 
 **Extraction targets**: Titles/Icons → `core/config/modals-config.js`; API Endpoints → `core/config/app-config.js`; Cache Rules → `core/cache/cache-config.js`; UI Text → `core/config/tooltips-config.js`.
 
 **Decision matrix**: Repeated HTML → `shared/component`; Repeated Options → `core/config`; Repeated Logic → `shared/utility`.
+
+### 18. Core Tech Stack (Execution Environment)
+
+**Context**: Foundational technology choices. All paths via `PATHS` from `paths.js`.
+
+**Execution environment**: Frontend — static SPA (Vanilla JS + Vue 3 Reactivity), `file://` or GitHub Pages; Local backend — Node.js HTTP server (raw `http.createServer`), skills MCP; Edge — API Proxy, Auth, D1/KV; Cloud — serverless functions as needed. *(n8n when deployed — see `docs/backlog/skills/n8n-infrastructure.md`.)*
+
+**Tech stack**: Runtime Node.js v20+; API raw `http.createServer` / Workers; MCP for agent tools; multi-provider LLM fallback. Frontend: no-build Vue 3, Bootstrap 5, 3-layer cache, fetch via Cloudflare Proxy.
+
+**Hard constraints**: No NPM build for frontend; secrets hygiene (no keys in client); skills-first — code changes preceded by skill updates.
+
+### 19. Global Infrastructure Management (SSOT)
+
+**Context**: Critical registries, logs, configs in global zone for consistency across machines.
+
+**Core principles**: SSOT — master registry for agents/models; centralized proxy — single gateway for data access; atomic operations — locking for JSON writes; computed status — availability from software, hardware, health.
+
+**Access**: Use path resolver or `GLOBAL_ROOT`; atomic writes via registry-service; hot reload via `fs.watch`. *(When Docker deployed: mount global zone via `GLOBAL_ROOT`.)*
+
+*Windows Docker Paths & Lifecycle moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*

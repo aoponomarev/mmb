@@ -62,6 +62,10 @@ When exploring a new domain:
 
 **Enforcement:** If a tool returns "File too large" or thousands of grep matches — STOP, switch to Plan mode, use indexer for surgical approach.
 
+**Skill Anchors for Safety:** Every file > 2000 lines MUST have a safety anchor at the top: `// Skill anchor: process-token-safety (Large file: use chunked reads only)`.
+
+**Shadow Index:** Skills can use `shadow_index` in frontmatter — a concise summary for index-first search. Enables agents to find relevant skills without reading full content.
+
 ### 6. Context Modes (Cursor CLI)
 
 When switching domains, use Cursor CLI to minimize active tools:

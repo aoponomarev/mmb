@@ -29,12 +29,37 @@ id: sk-224210
     UI components must never call `fetch` directly for market data. All requests must go through `window.dataProviderManager` or appropriate service layers.
 4.  **Isolated Storage of API Keys and Caches:**
     API keys and cached responses must be stored separately for each provider to prevent key collision and ensure that clearing one provider's cache doesn't destroy another's.
+5.  **Normalization:**
+    All provider responses MUST be normalized to internal schema via `normalizeCoinData()`.
+6.  **Proxying:**
+    `buildUrl()` method automatically routes requests through Cloudflare Worker when on `file://`.
+
+### Provider Add/Register/Config Workflow
+
+When adding a new provider: (1) Create `core/api/data-providers/{name}-provider.js` extending `BaseDataProvider`; (2) Register in `data-provider-manager.js`; (3) Define limits and URLs in `data-providers-config.js`.
+
+### Additional Provider API
+
+`getCoinData(coinIds)` — chunked loading for coin ID arrays. `getCoinIdBySymbol(symbol)` — reverse lookup. `tryLocalTopCoinsFallback()` — fallback to local infra (e.g. `http://127.0.0.1:3002/api/market/top-coins`) when CoinGecko is rate-limited. `BaseDataProvider` utilities: `requiresApiKey()`, `handleHttpError()`, `logError()`, `logWarning()`. `DataProviderManager.getTopCoins()` integrates with `request-registry.js` (4-hour minimum interval between heavy calls).
+
+### Merge Rule for Multiple Coin Sets
+
+When user loads one default set and merges another: (1) Union actual coins — `coins[]` is source of truth; rebuild `activeCoinSetIds` from `coins.map(c => c.id)`; (2) Never overwrite active IDs by last set only (anti-pattern: `activeCoinSetIds = coinIdsFromLastLoad`); (3) Avoid redundant refetch — prefer `coinSet.coins` from loader; call `loadCoinsByIds` only for truly missing IDs.
+
+### Regression Checklist (Top-N & Merge)
+
+After first load: `coins == activeCoinSetIds == totalCoinsCount`. After merge: all counters reflect union size. `missingLen`/unresolved = 0 on happy path. Progress bar and fallback states visible during long loads.
+
+### Code Anchor Policy
+
+When this skill is updated, place or refresh inline code anchors in risk branches (retry/fallback/merge), not only in file headers. See `process-code-anchors`.
 
 ### Rate Limiting & 429 Recovery
 
 **#for-rate-limiting** Free-tier APIs (e.g. CoinGecko) enforce strict limits. Proactive throttling avoids persistent 429 bans.
 
-- **Token Bucket**: `core/api/rate-limiter.js` — adaptive `requestsPerMinute` / `requestsPerSecond`. One limiter per API domain.
+- **Token Bucket**: `core/api/rate-limiter.js` — adaptive `requestsPerMinute` / `requestsPerSecond`. One limiter per API domain. Usage: `RateLimiter.getOrCreate('coingecko', 15, 0.5)`; `await limiter.waitForToken()`; on 429 `limiter.increaseTimeout()`; on success `limiter.decreaseTimeout()`.
+- **Request Registry API**: `isAllowed(key)`, `recordCall(key)`, `getTimeUntilNext(key)`, `clear()`. Limits in `data-providers-config.js` (e.g. CoinGecko: 15 rpm, 0.5 rps).
 - **Feedback Loop**: MUST call `increaseTimeout()` on 429 and `decreaseTimeout()` on success.
 - **Request Registry**: `core/api/request-registry.js` — call-frequency guard (localStorage). Enforces minimum intervals (e.g. 4h for `getTopCoins`), 3× multiplier after 429.
 - **429 Recovery Protocol**:
@@ -54,9 +79,10 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 
 ### Health Monitoring & Resilience
 
-- **Health tracking**: Store successes/failures per provider; log latency for every call.
+- **Health tracking**: Store successes/failures per provider; log latency for every call (`avgLatency`, `totalCalls`, `totalSuccesses`). Log rotation for monitoring history (e.g. 5MB per file).
 - **Fallback logic**: Sort providers by health and priority; use recovery window (e.g. 5 min) to re-test degraded providers.
 - **Graceful degradation**: If all providers fail, serve cached data or minimal response.
+- **Validation criteria**: API uptime >99.5%; avg response time under thresholds (e.g. 1s); fallback must trigger within 1 retry of failed call.
 
 ### Data Validation
 
@@ -69,7 +95,7 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 
 ### Provider Metadata vs Domain Data
 
-**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use `/coins/markets` `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations. File Map: `core/domain/portfolio-adapters.js`, `core/config/portfolio-config.js`, `core/api/data-providers/coingecko-provider.js`.
+**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use `/coins/markets` `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations; avoid adding columns for every provider field. **Migration**: `rank` column dropped from `asset_snapshots`; `extra_json JSONB` added. File Map: `core/domain/portfolio-adapters.js`, `core/config/portfolio-config.js`, `core/api/data-providers/coingecko-provider.js`.
 
 ### Backend Sync (PostgreSQL)
 
@@ -80,6 +106,12 @@ When using managed PostgreSQL for heavy data:
 - **Schema SSOT**: Canonical schema in `cloud/yandex/schema-postgres.sql`; migrations in `cloud/yandex/migrations/`.
 - **Extensibility**: Use `extra_json JSONB` for provider-specific fields instead of rigid columns.
 - **Transactional**: All financial record updates must use SQL transactions.
+- **Secrets**: DB credentials only in Cloud Function env vars; backup outside repo.
+- **No `rank` in domain**: `market_cap_rank` is provider metadata, NOT a portfolio domain field; never persist as top-level column.
+
+**Schema Migration Pattern**: (1) Write migration SQL in `cloud/yandex/migrations/YYYY-MM-DD-description.sql`; (2) Update `schema-postgres.sql`; (3) Update Function code if INSERT/SELECT change; (4) Deploy with temporary admin endpoint; (5) Execute migration; (6) Remove admin endpoint, redeploy; (7) Use `IF EXISTS`/`IF NOT EXISTS` in DDL.
+
+**Guard Layers**: Feature toggle `isFeatureEnabled('postgresSync')`; UI toggle `isUiToggleEnabled()`; `classifySyncSkipReason()` for expected skips; EventBus `auth-state-changed` triggers `syncUser()` and `syncPortfoliosFromCloud()`.
 
 ### File Map
 

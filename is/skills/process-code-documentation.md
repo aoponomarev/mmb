@@ -37,6 +37,16 @@ id: sk-f449b3
     - **Focus**: Explain ONLY the *Why* (the underlying reason/edge case) and *For what* (the intended business goal).
     - **Ban**: Never describe *What* the code is doing (e.g., `// filter active users`). If the code is not self-documenting, refactor the code first.
 
+### Documentation Style (Telegraphic Technical)
+
+**Context**: "Telegraphic Technical" standard for skills and docs.
+
+**Style guide**: Tone — dry, precise, imperative; Structure — Context, Rules, Workflow, File Map; Lists — numbered for sequences, bullets for sets; Links — relative paths; Argumentation — critical rules need *why*; Commands — backticks.
+
+**Cyrillic anchors**: Core protocol commands use Cyrillic abbreviations as semantic anchors; ALWAYS wrap in backticks (e.g. `ЕИП`, `ОМК`, `АИС`).
+
+**Constraints**: Docs freeze — no new files in old `docs/`; use `skills/`; English for new content (except anchors).
+
 ## Contracts
 
 - **AI Enforcement**: Agents modifying code without simultaneously upgrading its comments to English causality format violate the `#for-mandatory-comment-rewrite` contract.
