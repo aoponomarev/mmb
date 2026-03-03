@@ -8,6 +8,7 @@
 - [plan-naming-and-paths.md](./plans/plan-naming-and-paths.md) - Регламенты нейминга и гейты для проверки путей к файлам.
 - [plan-testing-strategy.md](./plans/plan-testing-strategy.md) - Стратегия тестирования и Quality Gates.
 - [plan-skills-migration-registry.md](./plans/plan-skills-migration-registry.md) - **Реестр миграции скиллов** из репозитория a (skills/mbb, skills/all, mbb/skills) в Target App.
+- [plan-skill-anti-staleness.md](./plans/plan-skill-anti-staleness.md) - **Антиустареватель скиллов** — Static validation, Change-triggered review, Periodic batch review.
 
 ## Принципы трансляции:
 1. **Нейтральные термины**: Вместо аббревиатур "MBB" или "MMB" используются "Target App", "Legacy Logic", "Donor Architecture".

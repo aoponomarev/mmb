@@ -55,6 +55,7 @@
     "sk-cb75ec": "app/skills/vue-implementation-patterns.md"
   },
   "ais": {
+    "ais-9f4e2d": "docs/ais/ais-anti-staleness.md",
     "ais-bfd150": "docs/ais/ais-architecture-foundation.md",
     "ais-b7a9ba": "docs/ais/ais-control-plane-llmops.md",
     "ais-3732ce": "docs/ais/ais-data-pipeline.md",
