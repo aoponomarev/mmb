@@ -110,3 +110,15 @@ We use the built-in `node:test` (introduced in Node.js v18+) for all tests, to a
 The Control Plane is a set of infrastructure scripts that guarantee the safe and reliable operation of the application before deployment, testing, or launch.
 - **health-check:** Integral check of all contours (Knowledge, Contracts, Runtime) via `npm run health-check`.
 - **single-writer guard:** Protection against race conditions when working with external cloud resources. Started via `npm run validate:single-writer`. The `DATA_PLANE_ACTIVE_APP` variable ensures that only one environment (TARGET, LEGACY, etc.) can write data to the cloud, while others work in Read-Only mode.
+
+### 9. Git Submodule (When Submodules Exist)
+
+**Drift control**: Submodule pointer MUST stay in sync with upstream. Check via `git submodule status`; `+` = local changes, `-` = uninitialized. Sync: `git submodule update --remote --merge`. **Recovery**: If detached/dirty — `git submodule foreach --recursive git reset --hard` then `git submodule update --init --recursive`. **Commit order**: Push submodule changes BEFORE parent repo pointer update. Use `git clone --recursive` for new environments.
+
+### 10. Git Commit Template
+
+If `commit.template` points to `.gitmessage`, the file must exist and stay in sync with active protocol. Verify: `git config --get commit.template`; ensure `.gitmessage` exists; content: concise imperative subject, optional Why block. Never force metadata that increases solo workflow friction without clear ROI.
+
+### 11. SSOT Cross-Links
+
+**One Home**: A rule exists in ONE place. Do not copy — link or reference. Every new skill MUST be listed in the relevant index (`docs/index-skills.md`). Use `related_skills` in frontmatter for cross-references.

@@ -46,6 +46,23 @@ id: sk-7d810a
 - **Justification:** Each new alwaysApply rule must justify why it cannot be glob-scoped or agent-decided.
 - **Audit:** Run `grep -l "alwaysApply: true" .cursor/rules/**/*.mdc | xargs wc -l` quarterly.
 
+### Batch Skills Review
+
+Periodic audit to prevent rot. **Trigger**: Monthly or after major architectural shifts.
+
+- **Dead links**: Scan `.md` files for broken paths or references to deleted scripts.
+- **Redundancy**: Identify skills covering similar topics; MERGE when appropriate.
+- **Staleness**: Skills older than 90 days need re-validation.
+- **No orphans**: Every skill MUST be linked from at least one index (`docs/index-skills.md` or equivalent).
+
+### Skills as Playbooks
+
+Skills are "cartridges" loaded into the agent. **Principles**: File-centric (Markdown, not vectors); self-contained How-To; agent-readable (metadata + clear instructions). **Workflow**: Load (search/read) → Act (follow Steps) → Verify (check Validation). **Structure**: Scope, When to Use, Steps, Constraints.
+
+### Skill Extraction (When Pipeline Exists)
+
+When an extraction pipeline (e.g. n8n, Swarm) is used: Signal (commit/release) → analysis → JSON/Markdown candidate → human review. **Quality criteria**: Actionable, reusable, focused, traceable. Every proposal must have `suggested_by`; humans MUST confirm before promotion.
+
 ### Key Contracts
 
 - Every skill file must have an H1 heading or `title:` frontmatter.

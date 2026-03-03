@@ -24,6 +24,26 @@ id: sk-6eeb9a
 
 ---
 
+## Core Rules
+
+### Deployment Rollback (Primary)
+
+See `docs/runbooks/rollback-protocol.md` for the full protocol. Summary:
+- **Triggers**: health-check unhealthy, cache:integrity:check fail, Sev-2+ monitoring, validate:single-writer critical fail.
+- **Order**: External Integrations → Backend/Transport → Control-plane.
+- **Checkpoint**: `npm run cache:integrity:check` before nontrivial secret/path/writer changes.
+- **Post-rollback**: `npm run preflight` + `npm run test`; post-mortem with action list.
+
+### Infrastructure Recovery (Docker/Compose)
+
+When the stack includes Docker Compose services:
+
+1. **Fast health triage**: `docker compose ps`, `docker compose logs --tail=100`, `docker stats --no-stream`. If healthy, stop.
+2. **Safe recovery first**: `docker compose config` to validate; restart only affected service (`docker compose restart <service>`).
+3. **Controlled recreate**: Only if restart failed — `docker compose up -d --force-recreate --no-deps <service>`.
+4. **Data protection**: Never remove named volumes before backup.
+5. **Clean slate** (corrupted system): `docker compose down --remove-orphans`; verify env and mounts; rebuild if needed; start.
+
 ## Implementation Status in Target App
 
 - `Implemented`: Rollback protocol v1 at `docs/runbooks/rollback-protocol.md`.

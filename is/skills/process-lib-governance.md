@@ -2,7 +2,7 @@
 title: "Lib Governance"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "d7c1c473"
+reasoning_checksum: "2d3d963b"
 id: sk-130fa2
 
 ---
@@ -27,6 +27,14 @@ id: sk-130fa2
     All libraries must be registered and loaded through `core/lib-loader.js`. Do not add `<script>` tags directly to `index.html` for third-party libraries unless absolutely necessary (like Vue itself).
 4.  **Fallback Chain:**
     Every library registered in `lib-loader.js` must define multiple sources in its `LIB_SOURCES` array, typically starting with the custom GitHub Pages CDN, followed by `jsdelivr` or `cdnjs`.
+
+### Zod Schema Governance (MCP)
+
+**#for-zod-ui-validation** Use explicit Zod schemas for every MCP tool input. Do not mix incompatible validation patterns across servers. Naming: `<toolName>Schema`. Error shape must be normalized: stable error code, human-readable message, optional details map. Validation failure must be fail-fast before tool execution. Any schema change requires drift checks and self-tests.
+
+### Zod v3/v4 Compatibility Layer
+
+When migrating Zod versions: wrap error formatting into a stable internal shape; centralize helpers that may differ between versions; prevent version-specific quirks from spreading into tool handlers. **Activation criteria**: preflight drift checks green, all MCP servers pass self-tests, no contract regressions. Full migration in one shot is high-risk — use compatibility adapters to reduce blast radius.
 
 ## Contracts
 

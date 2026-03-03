@@ -1,3 +1,7 @@
+---
+related_skills: [is/skills/arch-rollback]
+---
+
 # Rollback Protocol v1 (Target App)
 
 ## Principle
