@@ -108,3 +108,4 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
 | `#for-prefix-semantics` | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
 | `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |
+| `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |

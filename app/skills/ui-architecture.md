@@ -3,7 +3,7 @@ title: "Frontend UI Architecture (RRG & UI Contracts)"
 tags: ["#frontend", "#rrg", "#vue", "#ui", "#no-build"]
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "be281023"
+reasoning_checksum: "f5e9e931"
 id: sk-318305
 
 ---
@@ -19,6 +19,7 @@ id: sk-318305
 - **#for-zod-ui-validation** Validating UI config ensures typos don't become silent runtime errors.
 - **#for-file-protocol** The frontend must run purely as static files; no local Node backend.
 - **#not-bundler-ui** We avoid UI bundlers to maintain absolute zero-config portability with `file://`.
+- **#for-tooltip-reactivity** Tooltips must be re-initialized or titles reactively bound so that language switches affect hover text immediately.
 
 ---
 
@@ -69,3 +70,29 @@ The UI must be functional in two modes without code changes:
 - `https://aoponomarev.github.io/...` (GitHub Pages)
 
 In both modes, external API calls subject to CORS must go through the Cloudflare Worker proxy (`cloudflareConfig.getApiProxyEndpoint`). No local Node.js server may be a dependency of the UI runtime.
+
+### Tooltip System
+
+**#for-tooltip-reactivity** Tooltips must be re-initialized or titles reactively bound so that language switches affect hover text immediately.
+
+- **SSOT**: `core/config/tooltips-config.js`
+- **Principle**: Use native browser tooltips (`title` attribute). HTML-based tooltips are forbidden.
+- **Structure**: Static part from config + newline + dynamic part from `tooltip-interpreter.js`
+- **Usage**: `tooltipsConfig.getTooltip(key)` or `tooltipInterpreter.getTooltip(key, { value, lang })`
+- **Constraints**: UTF-8 only, under 2000 chars, no HTML
+
+### Modal Action Manager
+
+`cmp-modal` provides `modalApi` via `provide/inject`. Buttons register to appear in Header or Footer.
+
+- **API**: `registerButton(id, config)`, `updateButton(id, updates)`, `removeButton(id)`
+- **Layout**: Cancel footer left; Save/Action footer right; Close header right
+- **Constraints**: Buttons MUST be removed in `beforeUnmount()`; check `modalApi` exists before calling
+
+### Composition Boundaries
+
+Use **raw Bootstrap** (HTML + classes) for static layout. Create **Vue wrappers** only when dynamic logic is required (search/filter, async lists, complex state, 3+ reuse). Wrap items/logic, not necessarily the outer container — container should remain accessible to Bootstrap's native JS.
+
+### Column Visibility (CSS-Driven)
+
+Toggling table columns without re-rendering. State in `columnVisibilityConfig`; mixin computes classes; CSS `display: none` on parent class. **Benefit**: Instant switching, preserves scroll position. Edge case: Bootstrap radio `@change` on hidden input fails in Vue — bind `@click` to `<label>` instead.

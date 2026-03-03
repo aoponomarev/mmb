@@ -133,9 +133,9 @@
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `cache/cache-strategy.md` | PARTIAL | `core/skills/cache-layer` | MERGE |
-| `cache/cache-keys.md` | NOT_MIGRATED | `core/skills/cache-layer` | MERGE |
-| `cache/cache-versioning.md` | NOT_MIGRATED | `core/skills/cache-layer` | MERGE |
+| `cache/cache-strategy.md` | MIGRATED | `core/skills/cache-layer` | — |
+| `cache/cache-keys.md` | MIGRATED | `core/skills/cache-layer` | — |
+| `cache/cache-versioning.md` | MIGRATED | `core/skills/cache-layer` | — |
 
 ### 1.4 Cloud
 
@@ -151,18 +151,18 @@
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
 | `components/components-bootstrap.md` | MIGRATED | `app/skills/bootstrap-vue-integration` | — |
-| `components/components-boundaries.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
+| `components/components-boundaries.md` | MIGRATED | `app/skills/ui-architecture` | — |
 | `components/components-class-manager.md` | MIGRATED | `app/skills/component-classes-management` | — |
-| `components/components-column-visibility.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
+| `components/components-column-visibility.md` | MIGRATED | `app/skills/ui-architecture` | — |
 | `components/components-icon-manager.md` | MIGRATED | `app/skills/` (icon-manager) | Проверить |
 | `components/components-layout-alignment.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
 | `components/components-localization.md` | MIGRATED | `app/skills/reactive-localization` | — |
-| `components/components-modal-buttons.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
+| `components/components-modal-buttons.md` | MIGRATED | `app/skills/ui-architecture` | — |
 | `components/components-responsive-visibility.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
 | `components/components-ssot.md` | PARTIAL | `arch-foundation` | MERGE |
 | `components/components-styling-principles.md` | NOT_MIGRATED | `app/skills/ux-principles` | MERGE |
 | `components/components-template-split.md` | NOT_MIGRATED | `app/skills/vue-implementation-patterns` | MERGE |
-| `components/components-tooltips.md` | NOT_MIGRATED | `app/skills/` | ADAPT |
+| `components/components-tooltips.md` | MIGRATED | `app/skills/ui-architecture` | — |
 | `components/ui-components-unified.md` | NOT_MIGRATED | `app/skills/ui-architecture` | MERGE |
 
 ### 1.6 Core Systems
@@ -190,7 +190,7 @@
 | `integrations/integrations-cloudflare-testing.md` | NOT_MIGRATED | `is/skills/arch-testing-ci` | MERGE |
 | `integrations/integrations-continue-cli-mistral.md` | NOT_MIGRATED | `arch-mcp-ecosystem` | ADAPT |
 | `integrations/integrations-continue-mcp-setup.md` | NOT_MIGRATED | `docs/runbooks/` | ADAPT |
-| `integrations/integrations-data-provider-resilience.md` | NOT_MIGRATED | `core/skills/data-providers-architecture` | MERGE |
+| `integrations/integrations-data-provider-resilience.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
 | `integrations/integrations-data-providers.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
 | `integrations/integrations-llm-providers-config.md` | NOT_MIGRATED | `core/skills/ai-providers-architecture` | MERGE |
 | `integrations/integrations-n8n-api-access.md` | NOT_MIGRATED | `arch-mcp-ecosystem` | ADAPT |
@@ -199,8 +199,8 @@
 | `integrations/integrations-n8n-local-setup.md` | NOT_MIGRATED | `docs/runbooks/` | ADAPT |
 | `integrations/integrations-oauth-file-protocol.md` | NOT_MIGRATED | `app/skills/file-protocol-cors-guard` | MERGE |
 | `integrations/integrations-overview.md` | PARTIAL | `core/skills/external-integrations` | MERGE |
-| `integrations/integrations-postgres.md` | NOT_MIGRATED | `core/skills/data-providers-architecture` | MERGE |
-| `integrations/integrations-rate-limiting.md` | NOT_MIGRATED | `core/skills/data-providers-architecture` | MERGE |
+| `integrations/integrations-postgres.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
+| `integrations/integrations-rate-limiting.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
 | `integrations/mcp-server-yaml-parsing.md` | NOT_MIGRATED | `arch-mcp-ecosystem` | ADAPT |
 | `integrations/perplexity-connect.md` | NOT_MIGRATED | `core/skills/ai-providers-architecture` | MERGE |
 
@@ -220,7 +220,7 @@
 |------|--------|---------------|----------|
 | `metrics/metrics-models.md` | MIGRATED | `core/skills/metrics-air-model` | — |
 | `metrics/metrics-portfolio-structure.md` | PARTIAL | `core/skills/domain-portfolio` | MERGE |
-| `metrics/metrics-validation.md` | NOT_MIGRATED | `core/skills/data-providers-architecture` | MERGE |
+| `metrics/metrics-validation.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
 
 ### 1.10 Process (skills/mbb/skills/process/)
 
@@ -241,7 +241,7 @@
 | `process-docker-compose-release-validation.md` | NOT_MIGRATED | `arch-testing-ci` | ADAPT |
 | `process-docker-disaster-recovery.md` | NOT_MIGRATED | `arch-rollback` | MERGE |
 | `process-docker-resource-governance.md` | NOT_MIGRATED | `arch-backend-core` | ADAPT |
-| `process-dynamic-context-management.md` | NOT_MIGRATED | `process-token-discipline` | MERGE |
+| `process-dynamic-context-management.md` | MIGRATED | `process-token-discipline` | — |
 | `process-env-sync-governance.md` | MIGRATED | `is/skills/process-env-sync` | — |
 | `process-external-integration-closure.md` | PARTIAL | `arch-external-parity` | MERGE |
 | `process-future-skill-impact-analysis.md` | NOT_MIGRATED | `arch-skills-mcp` | ADAPT |
@@ -276,7 +276,7 @@
 | `process-skills-curation-intelligence.md` | NOT_MIGRATED | `arch-skills-mcp` | ADAPT |
 | `process-sqlite-health-snapshot.md` | NOT_MIGRATED | `arch-monitoring` | ADAPT |
 | `process-sqlite-runtime-compatibility.md` | NOT_MIGRATED | `arch-backend-core` | ADAPT |
-| `process-token-safety.md` | PARTIAL | `process-token-discipline` | MERGE |
+| `process-token-safety.md` | MIGRATED | `process-token-discipline` | — |
 | `process-unified-mcp-orchestration.md` | NOT_MIGRATED | `arch-mcp-ecosystem` | MERGE |
 | `process-wf-ui-v2-bootstrap.md` | DEPRECATED | — | Не переносить (WF UI v2) |
 | `process-wf-ui-v2-standards.md` | DEPRECATED | — | Не переносить |
@@ -340,7 +340,7 @@
 | `process/process-agent-commands.md` | MIGRATED | `references/commands.md` | — |
 | `process/process-code-header-skill-links.md` | MIGRATED | `process-code-anchors` | — |
 | `process/process-coin-set-merge-consistency.md` | NOT_MIGRATED | `core/skills/domain-portfolio` | MERGE |
-| `process/process-coingecko-file-protocol-topn.md` | NOT_MIGRATED | `core/skills/data-providers-architecture` | MERGE |
+| `process/process-coingecko-file-protocol-topn.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
 | `process/process-continue-ai-subagents.md` | NOT_MIGRATED | `arch-mcp-ecosystem` | ADAPT |
 | `process/process-doc-levels.md` | NOT_MIGRATED | `process-docs-lifecycle` | MERGE |
 | `process/process-doc-style.md` | PARTIAL | `process-code-documentation` | MERGE |
@@ -512,10 +512,10 @@
 
 | [ ] | Кластер | Target | Donors (кратко) | Фаза |
 |-----|---------|--------|-----------------|------|
-| [ ] | cache-layer | `core/skills/cache-layer` | cache-keys, cache-versioning, cache-strategy | 1 |
-| [ ] | data-providers | `core/skills/data-providers-architecture` | integrations-postgres, rate-limiting, data-provider-resilience, coingecko-file-protocol, metrics-validation, … | 1 |
-| [ ] | token-discipline | `process-token-discipline` | process-token-safety, process-dynamic-context | 1 |
-| [ ] | components-ui | `app/skills/ui-architecture` | components-tooltips, modal-buttons, boundaries, column-visibility, … | 1 |
+| [x] | cache-layer | `core/skills/cache-layer` | cache-keys, cache-versioning, cache-strategy | 1 |
+| [x] | data-providers | `core/skills/data-providers-architecture` | integrations-postgres, rate-limiting, data-provider-resilience, coingecko-file-protocol, metrics-validation | 1 |
+| [x] | token-discipline | `process-token-discipline` | process-token-safety, process-dynamic-context | 1 |
+| [x] | components-ui | `app/skills/ui-architecture` | components-tooltips, modal-buttons, boundaries, column-visibility | 1 |
 | [ ] | arch-rollback | `arch-rollback` | process-disaster-recovery, process-docker-disaster-recovery | 2 |
 | [ ] | arch-mcp-ecosystem | `arch-mcp-ecosystem` | process-continue-mcp-synergy, unified-mcp-orchestration, n8n-workflow-hygiene, … | 2 |
 | [ ] | arch-skills-mcp | `arch-skills-mcp` | batch-skills-review, commit-skill-extraction, skill-pipeline, skill-based-playbooks, … | 2 |

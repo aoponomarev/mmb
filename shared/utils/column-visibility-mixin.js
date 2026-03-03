@@ -1,8 +1,7 @@
-// =========================
-// Переиспользуемая фича for переключения видимости колонок в зависимости от активной вкладки
-// Переиспользуемая фича for переключения видимости колонок в зависимости от активной вкладки
-// =========================
-
+/**
+ * Column Visibility Mixin - CSS-driven column toggling without DOM re-render.
+ * @skill-anchor app/skills/ui-architecture
+ */
 window.columnVisibilityMixin = {
   computed: {
     /**

@@ -2,8 +2,7 @@
  * ================================================================================================
  * CACHE MANAGER - Единый интерфейс for работы с кэшем
  * ================================================================================================
- * Skill: core/skills/cache-layer
- * Skill: core/skills/cache-layer
+ * @skill core/skills/cache-layer
  *
  * PURPOSE: Единая точка доступа к кэшу for всех компонентов. Абстракция над localStorage и IndexedDB.
  *
@@ -90,8 +89,7 @@
     function getVersionedKey(key, useVersioning = null) {
         // Автоматическое определение необходимости версионирования
         if (useVersioning === null) {
-            // Версионируем ключи, которые зависят от структуры данных приложения
-            // Критерии: данные из внешних API, структура может измениться, парсинг зависит от формата
+            // @skill-anchor core/skills/cache-layer #for-key-versioning
             const versionedKeys = [
                 'icons-cache',        // Иконки монет (структура CoinGecko API)
                 'coins-list',         // Список монет (структура CoinGecko API)

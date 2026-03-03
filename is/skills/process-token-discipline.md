@@ -2,7 +2,7 @@
 title: "Token Discipline (Context Efficiency)"
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "8f904eb5"
+reasoning_checksum: "229eecc2"
 id: sk-a304ea
 
 ---
@@ -45,6 +45,36 @@ When exploring a new domain:
 - Read `docs/index-skills.md` or `docs/index-ais.md` first
 - Find relevant skills before deep-diving
 - Resolve ids via `is/contracts/docs/id-registry.json`
+
+### 5. Token-Safe Search Protocol (Anti-Token-Eater)
+
+**#for-token-efficiency** Unoptimized searches consume millions of tokens. Index-first, path-limited grep, and chunked reads prevent "Token Eater" incidents.
+
+**Anti-patterns to avoid:**
+- Blind grep on workspace root without path filters
+- `read_file` on files > 100KB without `offset`/`limit`
+- Repeated broad search in a loop
+
+**Mandatory protocol:**
+1. **Index-first**: Use `search_skills`, `Glob`, or `find_skills_for_file` before grep/read.
+2. **Scoped grep**: Never search root `[]` if a directory can narrow; use `type`/`glob` filters and `head_limit`.
+3. **Chunked read**: For files > 50KB or > 1000 lines — use grep to find line numbers, then `read_file` with `offset` and `limit` (e.g. 100 lines around match).
+
+**Enforcement:** If a tool returns "File too large" or thousands of grep matches — STOP, switch to Plan mode, use indexer for surgical approach.
+
+### 6. Context Modes (Cursor CLI)
+
+When switching domains, use Cursor CLI to minimize active tools:
+
+- **architect**: `filesystem`, `search` enabled; `coding-tools` disabled.
+- **coder**: `coding-tools`, `linter`, `terminal` enabled.
+
+```bash
+cursor /mcp disable all
+cursor /mcp enable needed-server
+```
+
+At session start for complex tasks: explicitly activate only the minimal tool set needed.
 
 ## Risk Mitigation
 

@@ -67,6 +67,38 @@ TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt =
 | `clear` | `(layer?) → Promise<bool>` | Clear one layer or all |
 | `clearOldVersions` | `() → Promise<number>` | Purge orphaned versioned keys |
 
+### Caching Strategies
+
+| Strategy | Use case |
+|----------|----------|
+| **cache-first** | Static/slow-changing data (`icons-cache`, `coins-list`) |
+| **network-first** | Critical real-time data (`market-metrics`, `api-cache`) |
+| **stale-while-revalidate** | Background updates (`time-series`, `top-coins`) |
+| **cache-only** | Local-first user data (`portfolios`, `settings`) |
+
+### Decision Matrix (New Key)
+
+| Feature | Rule | Action |
+|---------|------|--------|
+| **Versioning** | Depends on App Version? | Add to `versionedKeys` in `cache-manager.js` |
+| **Persistence** | User Data? | No TTL, No Versioning |
+| **Freshness** | External API? | Define `TTL` in `cache-config.js` |
+| **Rate Limits** | CoinGecko/API? | Use **Preload Strategy** (fetch once, slice from cache) |
+
+### Implementation Workflow
+
+1. **Register Key**: Add to `LAYERS.{layer}.keys` in `storage-layers.js`.
+2. **Set TTL**: Define in `cache-config.js` → `TTL`.
+3. **Set Strategy**: Define in `cache-config.js` → `STRATEGIES` (e.g., `cache-first`).
+4. **Migration**: If schema changes, update `VERSIONS` and `cache-migrations.js`.
+
+### Troubleshooting
+
+| Symptom | Check |
+|---------|-------|
+| **Cache Miss on Every Load** | TTL expired; App Version changed (invalidates versioned keys); `localStorage` full (>5MB) |
+| **Data Not Saving** | Verify key is in `storage-layers.js`; check `cacheManager.set()` return value (must be `true`) |
+
 ### Module Load Order
 
 `storage-layers.js` and `cache-config.js` must be loaded before `cache-manager.js`. `cache-migrations.js` is optional (checked at runtime).

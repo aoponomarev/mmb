@@ -286,8 +286,7 @@
                         const canRetry = retriableHttpStatuses.has(response.status) && attempt < maxAttempts;
 
                         if (canRetry) {
-                            // Skill anchor: предотвращает регрессии в 429 recovery (Retry-After приоритетнее fallback delay).
-                            // See core/skills/api-layer
+                            // @skill-anchor core/skills/data-providers-architecture #for-rate-limiting
                             const fallbackDelay = retryBaseDelayMs * attempt;
                             const retryDelayMs = response.status === 429
                                 ? this.getRetryDelayMs(response, fallbackDelay)

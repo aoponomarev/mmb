@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * PURPOSE: Распределение ключей кэша по хранилищам (localStorage/IndexedDB) в зависимости от объема и частоты доступа.
- * Skill: core/skills/cache-layer
+ * @skill core/skills/cache-layer
  *
  * HOT (localStorage, ≤5MB) — синхронный доступ, быстрый:
  * - settings, theme, timezone, favorites, ui-state, active-tab — настройки и UI-состояние

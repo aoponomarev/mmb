@@ -2,7 +2,8 @@
  * ================================================================================================
  * TOOLTIPS CONFIG - Конфигурация всплывающих подсказок
  * ================================================================================================
- * Skill: app/skills/ux-principles
+ * @skill app/skills/ux-principles
+ * @skill-anchor app/skills/ui-architecture #for-tooltip-reactivity
  */
 
 (function() {

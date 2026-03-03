@@ -7,7 +7,7 @@
  * PURPOSE: Предотвратить блокировку API из-за превышения лимитов запросов.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-rate-limiting
  * Адаптивные таймауты, очередь запросов, приоритизация.
  *
 */
