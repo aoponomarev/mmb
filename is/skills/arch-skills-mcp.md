@@ -82,6 +82,7 @@ id: sk-7d810a
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
 - `Implemented`: `validate-skills.js` — structural validation with JSON output for automation.
 - `Implemented`: `validate-affected-skills.js` — git diff --cached → affected skills and causality hashes (pre-commit flow, informational).
+- `Implemented`: `validate-dead-links.js`, `validate-causality-exceptions-stale.js`, `skills-batch-review.js` — batch audit via `npm run skills:batch-review`.
 - `Implemented`: `generate-skills-index.js` — auto-generates `docs/index-skills.md`.
 - `Implemented`: `skills-health-trend.js` — trend tracking with JSONL append and degradation alerts.
 - `Implemented`: `skills-health-trend-report.js` — summary report over configurable window.
@@ -100,11 +101,12 @@ id: sk-7d810a
 
 ### Batch Skills Review
 
-Periodic audit to prevent rot. **Trigger**: Monthly or after major architectural shifts.
+Periodic audit to prevent rot. **Trigger**: Monthly or after major architectural shifts. **Command**: `npm run skills:batch-review`.
 
-- **Dead links**: Scan `.md` files for broken paths or references to deleted scripts.
+- **Dead links**: `validate-dead-links.js` — scan `.md` files for broken paths or references to deleted scripts.
 - **Redundancy**: Identify skills covering similar topics; MERGE when appropriate.
-- **Staleness**: Skills older than 90 days need re-validation.
+- **Staleness**: Skills older than 90 days need re-validation. `validate-skills.js` flags them.
+- **Stale causality exceptions**: `validate-causality-exceptions-stale.js` — exceptions for hashes fully removed from code.
 - **No orphans**: Every skill MUST be linked from at least one index (`docs/index-skills.md` or equivalent).
 
 ### Skills as Playbooks

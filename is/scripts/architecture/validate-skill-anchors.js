@@ -23,6 +23,8 @@ const EXCLUDE_FILES = [
   "is/scripts/architecture/validate-skill-anchors.test.js",
   "is/scripts/architecture/validate-skills.test.js",
   "is/scripts/architecture/validate-affected-skills.test.js",
+  "is/scripts/architecture/validate-dead-links.test.js",
+  "is/scripts/architecture/validate-causality-exceptions-stale.test.js",
   "is/mcp/skills/server.js",
 ];
 const PLACEHOLDER_PATHS = /^path\/to\//;

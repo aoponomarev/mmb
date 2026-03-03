@@ -17,6 +17,7 @@
     "skills:check": "node is/scripts/architecture/validate-skills.js",
     "skills:anchors:check": "node is/scripts/architecture/validate-skill-anchors.js",
     "skills:affected": "node is/scripts/architecture/validate-affected-skills.js",
+    "skills:batch-review": "node is/scripts/architecture/skills-batch-review.js",
     "skills:create": "node is/scripts/architecture/create-skill.js",
     "skills:reasoning:check": "node is/scripts/architecture/validate-reasoning.js",
     "skills:causality:check": "node is/scripts/architecture/validate-causality.js",

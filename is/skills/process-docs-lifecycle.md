@@ -2,7 +2,7 @@
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "b290704b"
+reasoning_checksum: "7c132af3"
 id: sk-0e193a
 
 ---
@@ -24,7 +24,8 @@ id: sk-0e193a
 - **#for-frontmatter-format** Any markdown file with YAML frontmatter MUST have a blank line before the closing `---`. Without it, CommonMark parses the second `---` as setext underline and `id: ...` (or similar) renders as huge h2 in Cursor preview. Applies everywhere: `docs/`, `is/skills/`, `core/skills/`, `app/skills/`, plans, runbooks, cheatsheets, etc.
 - **#for-stable-ids** AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; links use ids, not paths. `related_skills` and `related_ais` reference ids. Index files use `index-` prefix: `docs/index-skills.md`, `docs/index-ais.md`.
 - **#for-docs-ids-gate** Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. Broken links fail the gate. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling.
-- **#for-plan-iterative-improvement** Plans are living documents. When an AI agent notices a deficiency in a plan's protocols or algorithms (affecting work quality), it MUST augment the plan directly. Future work benefits. Condition: backward compatibility — improvements must not invalidate results already obtained before the change.
+- **#for-plan-iterative-improvement** Plans are living documents. When an AI agent notices a deficiency in a plan's protocols or algorithms (affecting work quality), it MUST augment the plan directly. Future work benefits. Condition: backward compatibility — improvements must not invalidate results already obtained before the improvement.
+- **#for-plan-backlog** Each plan gets a dedicated backlog file in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a plan.
 
 ## Core Rules
 
@@ -32,6 +33,7 @@ id: sk-0e193a
     - All new work starts here as markdown files with `[ ]` checkboxes.
     - Language: Russian.
     - **Iterative improvement (`#for-plan-iterative-improvement`)**: When creating or executing any plan, the AI agent has freedom to modernize the plan (add steps, anti-patterns, clarifications) if it notices a deficiency. Condition: **backward compatibility** — changes must not invalidate results already obtained before the improvement. No human approval required before editing.
+    - **Plan backlog (`#for-plan-backlog`)**: Every plan MUST have an associated backlog in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a new plan.
 
 2.  **Phase 2: Archiving (`docs/done/`)**
     - Once all checkboxes are complete, the plan is moved here exactly as it was.
@@ -69,7 +71,7 @@ id: sk-0e193a
 | `done/` | Staging for completed plans before distillation. Empty after cleanup. | No | Source for distillation. |
 | `ais/` | Architecture & Infrastructure Specifications (Russian). Macro-docs. | No | Policies from AIS may become skills. |
 | `audits/` | `causality-exceptions.jsonl` — exceptions for the invariant gate. | **YES** | Path hardcoded in `validate-causality-invariant.js`. **Never rename or move.** |
-| `backlog/` | Deferred plans and future drafts. Not for distillation. | No | May later become plans. |
+| `backlog/` | Deferred plans and future drafts; also `fix-<plan-slug>.md` for cleanup tails per plan (#for-plan-backlog). | No | May later become plans. |
 | `backlog/skills/` | Deferred skills (Docker, n8n, YC, etc.) — not wired until infra exists. | No | May later move to is/core/app skills. |
 | `cheatsheets/` | Quick reference (e.g., architecture layers). Human-oriented. | No | Overlaps conceptually with skills. |
 | `runbooks/` | Step-by-step operational procedures (monitoring, rollback). | No | Implements "how" for `arch-monitoring`, `arch-rollback`. |

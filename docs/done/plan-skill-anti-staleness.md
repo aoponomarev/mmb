@@ -1,10 +1,12 @@
 # План: Антиустареватель скиллов (Skill Anti-Staleness)
 
+> **Статус**: Завершён (Фазы 1–3); перенесён в `docs/done/`
 > **Категория**: План внедрения
 > **Дата**: 2026-03-01
 > **Связанные скиллы**: `arch-skills-mcp`, `process-skill-governance`, `process-code-anchors`, `arch-testing-ci`, `arch-causality`, `process-causality-harvesting`
 > **Цель**: Систематическое обнаружение и предотвращение устаревания скиллов относительно кода и архитектуры.
 > **AIS-спецификация**: `docs/ais/ais-anti-staleness.md` — образец полноты покрытия; после каждой фазы дополнять разделами «как работает» + казуальность + схема.
+> **Бэклог чистки**: `docs/backlog/fix-anti-staleness.md` — хвосты (dead links, false positives).
 > **Аналогия**: По образцу `plan-skills-migration-registry` — регламенты, чеклисты, верификация, антипаттерны, итеративное улучшение.
 
 **ИИ-агент:** При обнаружении недостатка в протоколах — дополнить документ. Согласование не требуется.
@@ -441,7 +443,7 @@ npm run skills:batch-review         [новый: periodic]
 | 3.4 | npm scripts | package.json | skills:batch-review |
 | 3.5 | Обновить arch-skills-mcp | arch-skills-mcp.md | Batch Skills Review: добавить команду npm run skills:batch-review |
 
-**Чекбокс фазы 3:** [ ] skills:batch-review запускается; dead links и stale causality exceptions в отчёте; arch-skills-mcp обновлён.
+**Чекбокс фазы 3:** [x] skills:batch-review запускается; dead links и stale causality exceptions в отчёте; arch-skills-mcp обновлён.
 
 **Документирование в AIS (после фазы 3):** Добавить в `docs/ais/ais-anti-staleness.md` раздел **«Фаза 3: Batch Review — как работает»**:
 - **Точное описание:** skills-batch-review оркестрирует validate-skills, validate-dead-links, validate-causality-exceptions-stale; формат отчёта (JSON/текст); что такое stale exception, как определяется.

@@ -1,6 +1,6 @@
 ---
 id: ais-9f4e2d
-status: draft
+status: active
 last_updated: "2026-03-01"
 related_skills:
   - sk-7d810a
@@ -73,7 +73,7 @@ flowchart TB
 
 ## Локальные Политики (Module Policies)
 
-- **Обязательное документирование в AIS:** После завершения каждой фазы внедрения — добавить в этот документ раздел «Фаза N — как работает» с точным описанием, казуальностью и схемой.
+- **Обновление спецификации:** При изменении контура (новые скрипты, смена триггеров) — обновить соответствующий раздел «Уровень N — как работает».
 - **Не блокировать change-triggered:** skills:affected выводит список, но не прерывает preflight; решение о коммите — за человеком.
 - **Stale exceptions — housekeeping:** validate-causality-exceptions-stale не блокирует preflight; отчёт в batch для ручной очистки.
 
@@ -91,19 +91,25 @@ flowchart TB
 | causality-registry.md | is/skills/ | SSOT хешей; ghost/unknown проверяются validate-causality |
 | causality-exceptions.jsonl | docs/audits/ | Исключения при частичном удалении хеша (#for-audits-path-contract) |
 
+### Исключения и особые случаи
+
+| Объект | Правило |
+|--------|---------|
+| `docs/backlog/skills/*` | Не сканируются validate-skills, validate-skill-anchors (backlog вне active skills). Ссылки на backlog из active skills могут указывать на несуществующие пути. |
+| `causality-registry.md` | Path existence не парсит (нет Implementation Status). SSOT для хешей. |
+| `README.md` | Path existence не требует путей из README; dead links проверяются. |
+| `PREFLIGHT_SKIP_CAUSALITY=1` | validate-causality и validate-causality-invariant не выполняются (preflight). |
+
 ---
 
-## Фаза 1: Static Validation — как работает
+## Уровень 1: Static Validation — как работает
 
-> **Статус:** Реализовано. Фаза 1 завершена.
-> **Рекурсия:** При документировании фаз 2 и 3 — проверить, не изменилась ли функциональность фазы 1; при необходимости обновить этот раздел.
+### Описание
 
-### Точное описание
-
-1. **preflight.js** при запуске вызывает (в порядке): `validate-skills.js`, затем `validate-skill-anchors.js`.
+1. **preflight.js** при запуске вызывает (в порядке): `validate-skills.js`, `validate-skill-anchors.js`; при отсутствии `PREFLIGHT_SKIP_CAUSALITY=1` также `validate-causality.js` и `validate-causality-invariant.js`.
 2. **validate-skills.js** — парсит секции `## Implementation Status in Target App` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
 3. **validate-skill-anchors.js** — сканирует core/, app/, is/, shared/, .cursor/rules/ (первые 50 строк каждого .js, .ts, .mdc). Извлекает `@skill <path>`. Проверяет: файл скилла существует (is/skills/, core/skills/, app/skills/). При битой ссылке — error, exit 1.
-4. **Условие fail:** Любая ошибка в validate-skills или validate-skill-anchors прерывает preflight.
+4. **Условие fail:** Любая ошибка в validate-skills, validate-skill-anchors, validate-causality или validate-causality-invariant прерывает preflight.
 
 ### Казуальность
 
@@ -127,12 +133,9 @@ flowchart TD
 
 ---
 
-## Фаза 2: Change-Triggered Review — как работает
+## Уровень 2: Change-Triggered Review — как работает
 
-> **Статус:** Реализовано. Фаза 2 завершена.
-> **Рекурсия:** При документировании фазы 3 — проверить, не изменилась ли функциональность фазы 2; при необходимости обновить этот раздел и раздел фазы 1.
-
-### Точное описание
+### Описание
 
 1. **preflight-solo.ps1** вызывается вручную перед коммитом (SSOT: arch-testing-ci). Выполняет: проверка, что `.env` не в staged; `npm run skills:check` (блокирует при ошибке); `npm run skills:affected` (информационно, не блокирует).
 2. **validate-affected-skills.js** — читает `git diff --cached --name-only`; для каждого staged-файла парсит первые 50 строк: `@skill`, `@causality`, `@skill-anchor`. Собирает affected_skills (скиллы по @skill) и affected_hashes (#for-X из @causality/@skill-anchor). Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
@@ -159,22 +162,33 @@ flowchart TB
 
 ---
 
-## Фаза 3: Batch Review — как работает
+## Уровень 3: Batch Review — как работает
 
-> **Статус:** Заполняется после завершения фазы 3.
-> **Рекурсия:** При последующих изменениях контура (фаза 4 и др.) — проверить, не затронули ли они фазы 1–3; при необходимости обновить предыдущие разделы.
+### Описание
 
-### Точное описание
-
-*(После фазы 3: оркестрация, validate-dead-links, validate-causality-exceptions-stale, формат отчёта.)*
+1. **skills-batch-review.js** оркестрирует три проверки: validate-skills (--json), validate-dead-links (--json), validate-causality-exceptions-stale (--json).
+2. **validate-dead-links.js** — сканирует is/skills, core/skills, app/skills, docs; ищет markdown-ссылки `](path)` и inline-пути в backticks; проверяет существование; выводит dead_links.
+3. **validate-causality-exceptions-stale.js** — загружает docs/audits/causality-exceptions.jsonl; строит usedHashes из кода и skills; exception считается stale, если hash полностью удалён из кода.
+4. **Формат отчёта:** JSON (--json) или текстовый summary. Ни одна проверка не блокирует preflight; batch — периодический аудит.
 
 ### Казуальность
 
-*(После фазы 3: #for-token-efficiency, почему batch не в preflight, housekeeping для stale exceptions.)*
+- **#for-token-efficiency** — batch-отчёт не в preflight; объёмный вывод только по запросу (npm run skills:batch-review).
+- **#for-housekeeping** — stale exceptions не блокируют; исключение уже применено при partial removal; удаление строки — ручная очистка.
 
 ### Схема
 
-*(После фазы 3: Mermaid — skills:batch-review → подскрипты → агрегация → отчёт.)*
+```mermaid
+flowchart TB
+    SBR[npm run skills:batch-review]
+    SBR --> VS[validate-skills.js]
+    SBR --> VDL[validate-dead-links.js]
+    SBR --> VCES[validate-causality-exceptions-stale.js]
+    VS --> AGG[агрегация отчёта]
+    VDL --> AGG
+    VCES --> AGG
+    AGG --> OUT[summary + dead_links + stale_exceptions]
+```
 
 ---
 
@@ -189,7 +203,35 @@ flowchart TB
 
 ---
 
+## Протокол верификации
+
+| Контур | Команда |
+|--------|---------|
+| Path existence, @skill resolution | `npm run skills:check`, `npm run skills:anchors:check` |
+| Affected skills/hashes | `npm run skills:affected` (после git add) |
+| Dead links, stale exceptions | `npm run skills:batch-review` |
+| Все гейты | `npm run preflight` |
+
+**Порядок:** skills:check → skills:anchors:check → preflight. При ошибке — исправить и повторить.
+
+---
+
+## Антипаттерны
+
+| Антипаттерн | Правильно |
+|-------------|-----------|
+| Коммитить без проверки affected-skills | Перед коммитом прочитать вывод skills:affected; обновить скилл или отложить осознанно |
+| Переименовать файл без обновления Implementation Status | Обновить пути в скилле |
+| Добавить @skill без проверки существования файла | Убедиться, что скилл существует |
+| Оставить stale exception в causality-exceptions.jsonl | Запустить validate-causality-exceptions-stale; удалить stale строки |
+| Менять код с @causality без ревью formulation | Прочитать affected hashes; обновить formulation или удалить хеш |
+
+*(Полный список — `docs/done/plan-skill-anti-staleness.md`, раздел 14.)*
+
+---
+
 ## Ссылки
 
-- План внедрения: `docs/plans/plan-skill-anti-staleness.md`
-- arch-skills-mcp, process-skill-governance, process-code-anchors, arch-causality
+- План внедрения: `docs/done/plan-skill-anti-staleness.md` (завершён)
+- Бэклог чистки: `docs/backlog/fix-anti-staleness.md` — dead links, опциональные улучшения
+- Скиллы: arch-skills-mcp, process-skill-governance, process-code-anchors, arch-testing-ci, arch-causality
