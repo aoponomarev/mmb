@@ -99,7 +99,7 @@ This is the key enabler of Zero-Config Portability: the same method returns the 
 
 ### Lib Loader (External Dependencies)
 
-Lib loading is governed by `process-lib-governance`. `core/lib-loader.js` holds `LIB_SOURCES` — the SSOT for library versions. Directory structure: `libs/vue/`, `libs/chartjs/`, `libs/assets/`. Load priority: GitHub Pages (primary for Web) → CDN (backup) → Local `file://` (primary for Dev/Offline). Usage: `await window.libLoader.load('vue', '3.4.0')`. Version lock in `LIB_SOURCES` is mandatory; the browser cannot write to disk — user must run `download-libs.sh` for offline support.
+Lib loading is governed by process-lib-governance. SSOT для library versions — см. core/ (module-loader, libs config). Directory structure: vue, chartjs, assets (по имени и версии в libs). Load priority: GitHub Pages (primary for Web) → CDN (backup) → Local `file://` (primary for Dev/Offline). Usage: `await window.libLoader.load('vue', '3.4.0')`. Version lock in `LIB_SOURCES` is mandatory; the browser cannot write to disk — user must run `download-libs.sh` for offline support.
 
 ### Settings Sync (Development Environment)
 

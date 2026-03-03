@@ -38,7 +38,7 @@ id: sk-cecbcc
 ### Read Documentation Before Acting
 - Before writing code in a new domain, use the `search_skills` or `read_skill` tool to gain context from `is/skills/` or `core/skills/`.
 - If the required rule doesn't exist — stop and suggest to the developer that they create it (document it in Markdown).
-- **Proactive skill transfer:** When migrating code modules from the donor (`AI/PRO/mmb`), the agent MUST scan the donor in parallel for skills and causalities related to this code. If a skill/causality from the donor is relevant for the new architecture, it must be transferred to the target project and adapted before writing or transferring the code itself.
+- **Proactive skill transfer:** When migrating code modules from the donor (см. внешний репозиторий), the agent MUST scan the donor in parallel for skills and causalities related to this code. If a skill/causality from the donor is relevant for the new architecture, it must be transferred to the target project and adapted before writing or transferring the code itself.
 - **Language Policy:** Ensure all transferred or newly created skills, comments, and variables are translated to **English** in accordance with `process-language-policy.md`.
 
 ### Obsolete Code Management
@@ -57,7 +57,7 @@ When the Memory MCP (`is/memory/memory.jsonl`) contains entries that describe ar
 3. **Action:** Create or update a Skill (or AIS policy) using `create_skill` or manual edit. Add causality hashes from `causality-registry.md`. Register new hashes if needed.
 4. **Cleanup:** After formalization, the memory entry may remain as historical context; the canonical source is now the skill/AIS file.
 5. **Id references:** When adding `related_skills` or `related_ais` to AIS, use short hash ids (`sk-xxxxxx`, `ais-xxxxxx`). Resolve via `is/contracts/docs/id-registry.json` or `docs/index-skills.md` / `docs/index-ais.md`.
-- **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/drafts/causality-questions.md`. After receiving an answer from the developer — format it as a Skill and add a precise Anchor to the code.
+- **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question в docs/drafts/ или docs/backlog/ (см. process-docs-lifecycle). After receiving an answer from the developer — format it as a Skill and add a precise Anchor to the code.
 - **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from `causality-registry.md`: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
 - **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.
 
@@ -85,13 +85,13 @@ Before creating a new skill file:
 
 **Triggers**: Broken links (relative paths leading to 404s); stale configs (rules referencing renamed/deleted files); logic gaps (missing edge cases in documented workflow).
 
-**Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks in `drafts/tasks/`.
+**Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks в docs/backlog/ или drafts/ (см. process-docs-lifecycle).
 
 ### Bug Resolution Protocol
 
 **Context**: Standardized approach to fixing errors and documenting them.
 
-**Resolution steps**: (1) Reproduce — confirm bug with log or screenshot; (2) Trace — find root cause in code; (3) Fix — apply code change; (4) Log — add entry to `logs/fixes-tracking.md`; (5) Skill check — should this fix be a new Skill? If yes → `propose_skill`.
+**Resolution steps**: (1) Reproduce — confirm bug with log or screenshot; (2) Trace — find root cause in code; (3) Fix — apply code change; (4) Log — add entry (см. docs/ или arch-monitoring); (5) Skill check — should this fix be a new Skill? If yes → `propose_skill`.
 
 **Logging format** (in `fixes-tracking.md`): Date (YYYY-MM-DD), Issue (short description), Root Cause, Solution.
 

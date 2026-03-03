@@ -9,11 +9,11 @@
 - **Performance**: WAL mode; use "Split in Batches" for large datasets; limit "Wait" nodes in high-frequency flows.
 - **Error handling**: Global Error Trigger → notification; Retry on Failure (3×, 5s) for HTTP nodes.
 - **Parallelism**: Limit parallel branches to 3–5 to avoid CPU saturation.
-- **MCP synergy**: Prefer `mode: "webhook"` or `/execute` for sync responses; pass `agent_id` and `session_id` for traceability.
+- **MCP synergy**: Prefer mode webhook or execute endpoint for sync responses; pass agent_id and session_id for traceability.
 
 ## MCP-to-n8n Interaction Protocol
 
-**Trigger modes**: Manual Sync `/execute` (default); Manual Async `/run` (long-running); Webhook `/webhook/...`.
+**Trigger modes**: Manual Sync execute endpoint (default); Manual Async run (long-running); Webhook endpoint.
 
 **Input**: `{ action, payload, metadata: { agent, timestamp } }`. **Output**: `{ success, result, error }`.
 
@@ -25,7 +25,7 @@
 
 ## n8n Docker Internals
 
-**SSOT**: `/home/node/.n8n/` (container path). Data: `database.sqlite`, `config`, `binaryData/`. Rule: use Named Volumes (`n8n_data`), not bind mounts on Windows. SQLite access: stop container; `docker cp n8n:/home/node/.n8n/database.sqlite ./backup.sqlite` (replace `n8n` with actual service name from docker-compose); start. Constraints: reset ownership to `node:node` (UID 1000); when restoring, delete `-shm` and `-wal`. *Anti-calque: no mbb/mmb in container names (arch-foundation).*
+**SSOT**: Container data directory (.n8n). Data: database.sqlite, config, binaryData. Rule: use Named Volumes (`n8n_data`), not bind mounts on Windows. SQLite access: stop container; `docker cp n8n:/home/node/.n8n/database.sqlite ./backup.sqlite` (replace `n8n` with actual service name from docker-compose); start. Constraints: reset ownership to `node:node` (UID 1000); when restoring, delete `-shm` and `-wal`. *Anti-calque: no mbb/mmb in container names (arch-foundation).*
 
 ## n8n Browser Cache (404 After DB Reset)
 
@@ -45,9 +45,9 @@ Browser `localStorage` caches workflow IDs that no longer exist. Fix: F12 → Ap
 
 ## n8n & MCP Integration (Orchestration)
 
-**MCP Tools (Fast/Read)**: `list_skills`, `read_skill`, `propose_skill`; write ONLY to `events/SKILL_CANDIDATES.json`.
+**MCP Tools (Fast/Read)**: list_skills, read_skill, propose_skill; write ONLY to SKILL_CANDIDATES (events).
 
-**n8n Workflows (Slow/Write)**: Lifecycle automation (drafting, archiving); creates files in `drafts/tasks/`.
+**n8n Workflows (Slow/Write)**: Lifecycle automation (drafting, archiving); creates files in drafts/tasks.
 
 **Flow**: Agent calls `propose_skill` → entry in SKILL_CANDIDATES; n8n detects `pending`; n8n drafts via LLM; human review required.
 
@@ -75,4 +75,4 @@ Browser `localStorage` caches workflow IDs that no longer exist. Fix: F12 → Ap
 
 **Trigger**: New sqlite3 release; errors around bindings; infrastructure changes affecting SQLite.
 
-**Gate checklist**: (1) sqlite3 baseline in n8n image or `n8n/package.json` if custom build; (2) when control-plane exists: `GET /api/infra/dependency-health`; otherwise: `node scripts/sqlite-health-snapshot.js` if available; (3) run workflow with SQLite access; (4) check n8n logs.
+**Gate checklist**: (1) sqlite3 baseline in n8n image or n8n package.json if custom build; (2) when control-plane exists: `GET /api/infra/dependency-health`; otherwise: `node scripts/sqlite-health-snapshot.js` if available; (3) run workflow with SQLite access; (4) check n8n logs.

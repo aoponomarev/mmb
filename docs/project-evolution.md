@@ -34,7 +34,7 @@ in 8 boundary directories. All READMEs created. Integrated into `npm run health-
 **[Tier B]** Secret Resilience MVP: AES-256 backup/restore via `npm run secret:backup/restore/check`.
 `process-secrets-hygiene.md` skill defines the zero-tolerance policy.
 
-**[Tier B]** Old GitHub repository (`aoponomarev/mmb`) deleted. New repo initialized and pushed.
+**[Tier B]** Old GitHub repository (aoponomarev/mmb) deleted. New repo initialized and pushed.
 GitHub Pages deployment active at `https://aoponomarev.github.io/mmb`.
 
 **[Tier C]** Language policy enforced: all `is/skills/*.md` files translated to English.

@@ -89,4 +89,4 @@ cat docs/project-evolution.md | head -100
 ```
 
 The log is hand-maintained — no automation script is required at current scale.
-When the log exceeds 500 lines, consider extracting older months to `docs/done/evolution-YYYY-MM.md`.
+When the log exceeds 500 lines, consider extracting older months to separate files in docs/done/.

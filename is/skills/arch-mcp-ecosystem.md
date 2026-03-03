@@ -51,7 +51,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Goal**: Leverage GitHub cloud intelligence while maintaining local self-sufficiency and minimizing token costs.
 
-**Beacon strategy**: `.github/copilot-instructions.md` as SSOT for cloud agent context; updated automatically by index generator.
+**Beacon strategy**: .github/copilot-instructions.md (при наличии) как SSOT для cloud agent context; обновляется index generator.
 
 **Token-saving workflow (L3 tasks)**: Create Issue → add label `L3-Discovery` → open in Copilot Workspace → request plan only ("Provide step-by-step plan, do not generate code yet") → execute locally via ВЗП protocol.
 
@@ -75,7 +75,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **When to apply**: After MCP SDK release detection; before recruiting new MCP-driven agents; during infra hardening.
 
-**Required actions**: Keep `@modelcontextprotocol/sdk` on hardened baseline (>=1.26.0) across all servers; run `node scripts/mcp-sdk-drift-check.js` (Zod baseline, cross-package consistency); verify `/health` endpoints when available.
+**Required actions**: Keep `@modelcontextprotocol/sdk` on hardened baseline (>=1.26.0) across all servers; run `node scripts/mcp-sdk-drift-check.js` (Zod baseline, cross-package consistency); verify health-check endpoints when available.
 
 **What matters**: Server-side isolation; consistent schema/runtime across MCP servers; no partial upgrade drift.
 
@@ -107,7 +107,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Approve/curation flow**: User action triggers confirm → API updates status; drafting part of initial pass.
 
-**Log sync**: UI fetches `/api/logs` for real-time events; consecutive events collapsed for readability.
+**Log sync**: UI fetches the logs API endpoint for real-time events; consecutive events collapsed for readability.
 
 **Guidelines**: Use `data-hash` attributes to map UI to backend; visual feedback (spinners, alerts) for long-running LLM tasks; optimistic UI — fade out rejected items while waiting for server.
 

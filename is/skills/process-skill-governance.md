@@ -28,7 +28,7 @@ Skills are not documentation stored centrally — they are contracts co-located 
 
 ### Formatting Rules (Skill Structure)
 
-To reduce hallucinations and ensure AI agents can reliably parse skills, all `.md` files in `skills/` directories must strictly follow the AST-like structure enforced by `validate-skills.js`.
+To reduce hallucinations and ensure AI agents can reliably parse skills, all `.md` files in `is/skills/, core/skills/, app/skills/` directories must strictly follow the AST-like structure enforced by `validate-skills.js`.
 
 1. **Frontmatter**: Must include `title`, `reasoning_confidence`, `reasoning_audited_at`, and `reasoning_checksum`.
 2. **H1 and Context**: The file must start with `# [Title]` immediately followed by a blockquote starting with `> **Context**:`.
@@ -49,8 +49,8 @@ Use this table when deciding where to place a new or migrated skill:
 |---|---|---|
 | Does it govern **how the infrastructure works** (scripts, CI, health, secrets, paths, MCP)? | Yes | `is/skills/arch-*.md` |
 | Does it govern **how agents/developers should behave** (process, commands, language, committing)? | Yes | `is/skills/process-*.md` |
-| Does it govern **a specific `core/` subdomain** (cache, state, domain logic, config, async)? | Yes | `core/skills/<subdomain>.md` |
-| Does it govern **the UI layer** (Vue components, reactivity, CORS, UX rules)? | Yes | `app/skills/<topic>.md` |
+| Does it govern **a specific `core/` subdomain** (cache, state, domain logic, config, async)? | Yes | `core/is/skills/, core/skills/, app/skills/<subdomain>.md` |
+| Does it govern **the UI layer** (Vue components, reactivity, CORS, UX rules)? | Yes | `app/is/skills/, core/skills/, app/skills/<topic>.md` |
 | Does it span **multiple layers** with no clear owner? | Yes | `is/skills/arch-*.md` (architecture level) |
 
 ---
@@ -97,7 +97,7 @@ Every file in `is/skills/` (except `README.md`, `causality-registry.md`, `refere
 **Does NOT belong here:**
 - Business logic patterns (→ `core/skills/`)
 - UI component rules (→ `app/skills/`)
-- Domain-specific invariants (→ the domain's own `skills/` folder)
+- Domain-specific invariants (→ the domain's own `is/skills/, core/skills/, app/skills/` folder)
 
 ---
 
@@ -188,5 +188,5 @@ Before creating or placing a skill file, answer these in order:
 | Placing a `core/` domain skill in `is/skills/` because "skills go in is/" | Move to `core/skills/` — co-location with domain code |
 | Creating `arch-cache.md` in `is/skills/` to document the browser cache | Belongs in `core/skills/cache-layer.md` |
 | Placing a Windows PowerShell rule in `core/skills/` | Belongs in `is/skills/process-windows-shell.md` |
-| One monolithic `core/skills/everything.md` | Split by subdomain — one file per coherent domain area |
+| One monolithic everything.md в skills/ | Split by subdomain — one file per coherent domain area (см. process-skill-governance) |
 | Skills folder in `is/` growing beyond 30 files without a review | Trigger a profiling review using this skill |

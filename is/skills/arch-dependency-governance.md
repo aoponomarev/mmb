@@ -52,7 +52,7 @@ id: sk-bb5cf3
 
 ### Node Dependency Lifecycle
 
-**Goal**: Keep Node dependencies reproducible, secure, and compatible with runtime policy. SSOT: `package.json`, `is/mcp/package.json`. *(When control-plane exists: `control-plane/package.json`.)*
+**Goal**: Keep Node dependencies reproducible, secure, and compatible with runtime policy. SSOT: package.json корня; для MCP — см. is/mcp/ при наличии; для control-plane — см. arch-control-plane.
 
 **Baseline**: Lockfiles versioned for deterministic installs; `engines.node` in service packages with strict requirements; prefer explicit minor/patch updates over unbounded upgrade waves.
 

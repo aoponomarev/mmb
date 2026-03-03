@@ -10,7 +10,7 @@ id: sk-130fa2
 # Lib Governance
 
 > **Context**: Rules for adding, updating, and loading external third-party libraries in the No-Build architecture.
-> **Scope**: `core/lib-loader.js`, external dependencies.
+> **Scope**: core/ (lib loading), external dependencies.
 
 ## Reasoning
 
@@ -24,7 +24,7 @@ id: sk-130fa2
 2.  **UMD Requirement:**
     Any library added to the project MUST have a UMD or Global build available. You cannot use `import { ... } from 'library'` if the library requires a bundler.
 3.  **Loading Mechanism:**
-    All libraries must be registered and loaded through `core/lib-loader.js`. Do not add `<script>` tags directly to `index.html` for third-party libraries unless absolutely necessary (like Vue itself).
+    All libraries must be registered and loaded through core module-loader (см. core/). Do not add `<script>` tags directly to index.html for third-party libraries unless absolutely necessary (like Vue itself).
 4.  **Fallback Chain:**
     Every library registered in `lib-loader.js` must define multiple sources in its `LIB_SOURCES` array, typically starting with the custom GitHub Pages CDN, followed by `jsdelivr` or `cdnjs`.
 
@@ -40,7 +40,7 @@ When migrating Zod versions: wrap error formatting into a stable internal shape;
 
 **Context**: Zod v4 has breaking changes (import path, strict mode, transform pipeline, error API). Current: v3 baseline in MCP servers.
 
-**Migration checklist**: Update package.json to ^4.0.0; change imports to `zod/v4` or compat layer; review z.object() strict behavior; test all MCP tool validations; verify tool calls; use compat layer before broad rollout.
+**Migration checklist**: Update package.json to ^4.0.0; change imports to zod/v4 or compat layer; review z.object() strict behavior; test all MCP tool validations; verify tool calls; use compat layer before broad rollout.
 
 **Decision**: WAIT. Migrate when v4-only feature needed, v3 EOL, or major dependency requires v4.
 ## Contracts

@@ -33,5 +33,5 @@ flowchart TD
 
 ## Компоненты и Контракты (Components & Contracts)
 Список ключевых файлов/директорий, реализующих эту спецификацию.
-- `app/components/example.js` — UI слой.
-- `core/api/example-service.js` — API клиент.
+- app/components/ — UI слой (пример пути).
+- core/api/ — API клиент (пример пути).

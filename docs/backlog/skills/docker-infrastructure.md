@@ -82,7 +82,7 @@ Docker 29.0–29.2.0 — encrypted overlay networks fail. Fix: upgrade to v29.2.
 
 **Migration protocol**: When `INFRASTRUCTURE_CONFIG.yaml` exists, sync paths; copy `.env`; `docker volume create n8n_data`; run `npm run health-check` (invokes `is/scripts/infrastructure/health-check.js`).
 
-**Routine**: `npm run health-check`; `docker compose pull`. **Recovery**: when `scripts/infra-manager.js` exists: `node scripts/infra-manager.js recover`; `docker restart continue-cli`; `docker compose build --no-cache continue-cli && docker compose up -d`.
+**Routine**: `npm run health-check`; `docker compose pull`. **Recovery**: when infra-manager script exists: run recover; `docker restart continue-cli`; `docker compose build --no-cache continue-cli && docker compose up -d`.
 
 ## Windows Docker Paths & Lifecycle
 

@@ -1,0 +1,1838 @@
+{
+  "dead_links": [
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 25,
+      "link": "src/auth.js",
+      "resolved": "src/auth.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 29,
+      "link": "cloud/cloudflare/workers/migrations/",
+      "resolved": "cloud/cloudflare/workers/migrations",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 39,
+      "link": "/api/proxy",
+      "resolved": "../../../../../../../../api/proxy",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 39,
+      "link": "/api/settings",
+      "resolved": "../../../../../../../../api/settings",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 39,
+      "link": "/health",
+      "resolved": "../../../../../../../../health",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 51,
+      "link": "docs/A_CLOUDFLARE.md",
+      "resolved": "docs/A_CLOUDFLARE.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 65,
+      "link": "/health",
+      "resolved": "../../../../../../../../health",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 105,
+      "link": "src/index.js",
+      "resolved": "src/index.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 105,
+      "link": "src/auth.js",
+      "resolved": "src/auth.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-cloudflare-infrastructure.md",
+      "line": 105,
+      "link": "src/utils/",
+      "resolved": "src/utils",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-control-plane.md",
+      "line": 41,
+      "link": "control-plane/",
+      "resolved": "control-plane",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-control-plane.md",
+      "line": 47,
+      "link": "logs/control-plane.log",
+      "resolved": "logs/control-plane.log",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-dependency-governance.md",
+      "line": 55,
+      "link": "is/mcp/package.json",
+      "resolved": "is/mcp/package.json",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-dependency-governance.md",
+      "line": 55,
+      "link": "control-plane/package.json",
+      "resolved": "control-plane/package.json",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-foundation.md",
+      "line": 153,
+      "link": "is/mcp/package.json",
+      "resolved": "is/mcp/package.json",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-foundation.md",
+      "line": 170,
+      "link": "shared/component",
+      "resolved": "shared/component",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-foundation.md",
+      "line": 170,
+      "link": "shared/utility",
+      "resolved": "shared/utility",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-layout-governance.md",
+      "line": 45,
+      "link": "architecture/",
+      "resolved": "architecture",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-layout-governance.md",
+      "line": 45,
+      "link": "infrastructure/",
+      "resolved": "infrastructure",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-layout-governance.md",
+      "line": 45,
+      "link": "secrets/",
+      "resolved": "secrets",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-layout-governance.md",
+      "line": 45,
+      "link": "tests/",
+      "resolved": "tests",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-layout-governance.md",
+      "line": 65,
+      "link": "libs/assets/coins/",
+      "resolved": "libs/assets/coins",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-mcp-ecosystem.md",
+      "line": 54,
+      "link": ".github/copilot-instructions.md",
+      "resolved": ".github/copilot-instructions.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-mcp-ecosystem.md",
+      "line": 78,
+      "link": "/health",
+      "resolved": "../../../../../../../../health",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-mcp-ecosystem.md",
+      "line": 110,
+      "link": "/api/logs",
+      "resolved": "../../../../../../../../api/logs",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-monitoring.md",
+      "line": 43,
+      "link": "scripts/sqlite-health-snapshot.js",
+      "resolved": "scripts/sqlite-health-snapshot.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/arch-skills-mcp.md",
+      "line": 94,
+      "link": "skills/MIGRATION.md",
+      "resolved": "skills/MIGRATION.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/causality-registry.md",
+      "line": 95,
+      "link": "docs/misc/",
+      "resolved": "docs/misc",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/causality-registry.md",
+      "line": 95,
+      "link": "docs/temp/",
+      "resolved": "docs/temp",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-ai-collaboration.md",
+      "line": 41,
+      "link": "AI/PRO/mmb",
+      "resolved": "AI/PRO/mmb",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-ai-collaboration.md",
+      "line": 60,
+      "link": "docs/drafts/causality-questions.md",
+      "resolved": "docs/drafts/causality-questions.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-ai-collaboration.md",
+      "line": 88,
+      "link": "drafts/tasks/",
+      "resolved": "drafts/tasks",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-ai-collaboration.md",
+      "line": 94,
+      "link": "logs/fixes-tracking.md",
+      "resolved": "logs/fixes-tracking.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-code-documentation.md",
+      "line": 17,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-code-documentation.md",
+      "line": 48,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 23,
+      "link": "docs/misc/",
+      "resolved": "docs/misc",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 23,
+      "link": "docs/temp/",
+      "resolved": "docs/temp",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 23,
+      "link": "docs/archive/",
+      "resolved": "docs/archive",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 55,
+      "link": "docs/policies/",
+      "resolved": "docs/policies",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "plans/",
+      "resolved": "plans",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "backlog/",
+      "resolved": "backlog",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "runbooks/",
+      "resolved": "runbooks",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "cheatsheets/",
+      "resolved": "cheatsheets",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "misc/",
+      "resolved": "misc",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "temp/",
+      "resolved": "temp",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 57,
+      "link": "archive/",
+      "resolved": "archive",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 60,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 70,
+      "link": "plans/",
+      "resolved": "plans",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 71,
+      "link": "done/",
+      "resolved": "done",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 73,
+      "link": "audits/",
+      "resolved": "audits",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 74,
+      "link": "backlog/",
+      "resolved": "backlog",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 75,
+      "link": "backlog/skills/",
+      "resolved": "backlog/skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 76,
+      "link": "cheatsheets/",
+      "resolved": "cheatsheets",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-docs-lifecycle.md",
+      "line": 77,
+      "link": "runbooks/",
+      "resolved": "runbooks",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-evolution-logging.md",
+      "line": 92,
+      "link": "docs/done/evolution-YYYY-MM.md",
+      "resolved": "docs/done/evolution-YYYY-MM.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-legacy-unknowns-causality.md",
+      "line": 18,
+      "link": "docs/drafts/causality-questions.md",
+      "resolved": "docs/drafts/causality-questions.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-lib-governance.md",
+      "line": 13,
+      "link": "core/lib-loader.js",
+      "resolved": "core/lib-loader.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-lib-governance.md",
+      "line": 27,
+      "link": "core/lib-loader.js",
+      "resolved": "core/lib-loader.js",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-lib-governance.md",
+      "line": 43,
+      "link": "zod/v4",
+      "resolved": "zod/v4",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-skill-governance.md",
+      "line": 31,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-skill-governance.md",
+      "line": 100,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/process-skill-governance.md",
+      "line": 191,
+      "link": "core/skills/everything.md",
+      "resolved": "core/skills/everything.md",
+      "exists": false
+    },
+    {
+      "source_file": "is/skills/references/commands.md",
+      "line": 107,
+      "link": "/edit",
+      "resolved": "../../../../../../../../edit",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/ai-providers-architecture.md",
+      "line": 37,
+      "link": "/api/infra/bootstrap/github-token",
+      "resolved": "../../../../../../../../api/infra/bootstrap/github-token",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/ai-providers-architecture.md",
+      "line": 37,
+      "link": "/api/settings",
+      "resolved": "../../../../../../../../api/settings",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/ai-providers-architecture.md",
+      "line": 50,
+      "link": "core/api/ai-providers/perplexity-provider.js",
+      "resolved": "core/api/ai-providers/perplexity-provider.js",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/ai-providers-architecture.md",
+      "line": 74,
+      "link": ".continue/config.yaml",
+      "resolved": ".continue/config.yaml",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/async-contracts.md",
+      "line": 27,
+      "link": "try/catch",
+      "resolved": "try/catch",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/config-contracts.md",
+      "line": 102,
+      "link": "core/lib-loader.js",
+      "resolved": "core/lib-loader.js",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/config-contracts.md",
+      "line": 102,
+      "link": "libs/vue/",
+      "resolved": "libs/vue",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/config-contracts.md",
+      "line": 102,
+      "link": "libs/chartjs/",
+      "resolved": "libs/chartjs",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/config-contracts.md",
+      "line": 102,
+      "link": "libs/assets/",
+      "resolved": "libs/assets",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/data-providers-architecture.md",
+      "line": 98,
+      "link": "/coins/markets",
+      "resolved": "../../../../../../../../coins/markets",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/data-providers-architecture.md",
+      "line": 106,
+      "link": "cloud/yandex/schema-postgres.sql",
+      "resolved": "cloud/yandex/schema-postgres.sql",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/data-providers-architecture.md",
+      "line": 106,
+      "link": "cloud/yandex/migrations/",
+      "resolved": "cloud/yandex/migrations",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/data-providers-architecture.md",
+      "line": 112,
+      "link": "cloud/yandex/migrations/YYYY-MM-DD-description.sql",
+      "resolved": "cloud/yandex/migrations/YYYY-MM-DD-description.sql",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/domain-portfolio.md",
+      "line": 76,
+      "link": "libs/assets/data/coins.json",
+      "resolved": "libs/assets/data/coins.json",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/external-integrations.md",
+      "line": 13,
+      "link": "core/api/integration-manager.js",
+      "resolved": "core/api/integration-manager.js",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/external-integrations.md",
+      "line": 37,
+      "link": "/coins/markets",
+      "resolved": "../../../../../../../../coins/markets",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/external-integrations.md",
+      "line": 37,
+      "link": "/coins/list",
+      "resolved": "../../../../../../../../coins/list",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/external-integrations.md",
+      "line": 37,
+      "link": "/simple/price",
+      "resolved": "../../../../../../../../simple/price",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/external-integrations.md",
+      "line": 60,
+      "link": "core/config/integration-config.js",
+      "resolved": "core/config/integration-config.js",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/metrics-air-model.md",
+      "line": 34,
+      "link": "core/metrics/base-model-calculator.js",
+      "resolved": "core/metrics/base-model-calculator.js",
+      "exists": false
+    },
+    {
+      "source_file": "core/skills/metrics-air-model.md",
+      "line": 34,
+      "link": "core/metrics/model-manager.js",
+      "resolved": "core/metrics/model-manager.js",
+      "exists": false
+    },
+    {
+      "source_file": "app/skills/icon-manager.md",
+      "line": 13,
+      "link": "libs/assets/coins/",
+      "resolved": "libs/assets/coins",
+      "exists": false
+    },
+    {
+      "source_file": "app/skills/icon-manager.md",
+      "line": 24,
+      "link": "libs/assets/coins/",
+      "resolved": "libs/assets/coins",
+      "exists": false
+    },
+    {
+      "source_file": "app/skills/icon-manager.md",
+      "line": 35,
+      "link": "libs/assets/coins/",
+      "resolved": "libs/assets/coins",
+      "exists": false
+    },
+    {
+      "source_file": "app/skills/ui-architecture.md",
+      "line": 62,
+      "link": "dist/",
+      "resolved": "dist",
+      "exists": false
+    },
+    {
+      "source_file": "app/skills/ui-architecture.md",
+      "line": 86,
+      "link": "provide/inject",
+      "resolved": "provide/inject",
+      "exists": false
+    },
+    {
+      "source_file": "docs/ais/ais-yandex-cloud.md",
+      "line": 79,
+      "link": "do-overs/Secrets/",
+      "resolved": "do-overs/Secrets",
+      "exists": false
+    },
+    {
+      "source_file": "docs/ais/TEMPLATE.md",
+      "line": 36,
+      "link": "app/components/example.js",
+      "resolved": "app/components/example.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/ais/TEMPLATE.md",
+      "line": 37,
+      "link": "core/api/example-service.js",
+      "resolved": "core/api/example-service.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-anti-staleness.md",
+      "line": 23,
+      "link": "docs/audits/dead-links-registry.jsonl",
+      "resolved": "docs/audits/dead-links-registry.jsonl",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 14,
+      "link": "docs/done/ARCHITECTURE_REVIEW.md",
+      "resolved": "docs/done/ARCHITECTURE_REVIEW.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 15,
+      "link": "docs/done/OBSOLETE_CODE_REPORT.md",
+      "resolved": "docs/done/OBSOLETE_CODE_REPORT.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 20,
+      "link": "scripts/check_fallback_observability.py",
+      "resolved": "scripts/check_fallback_observability.py",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 21,
+      "link": "scripts/check_ssot_guardrails.py",
+      "resolved": "scripts/check_ssot_guardrails.py",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 22,
+      "link": "scripts/enforce_utf8.py",
+      "resolved": "scripts/enforce_utf8.py",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 23,
+      "link": "scripts/fix_mojibake.py",
+      "resolved": "scripts/fix_mojibake.py",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 24,
+      "link": "scripts/fix_mojibake_full.mjs",
+      "resolved": "scripts/fix_mojibake_full.mjs",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 25,
+      "link": "scripts/fix_syntax_errors.mjs",
+      "resolved": "scripts/fix_syntax_errors.mjs",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/fix-naming-violations-a8b2c4.md",
+      "line": 26,
+      "link": "scripts/recover_mojibake_from_archive.py",
+      "resolved": "scripts/recover_mojibake_from_archive.py",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/mcp-ecosystem-roadmap.md",
+      "line": 61,
+      "link": "docs/arch-mcp-ecosystem.md",
+      "resolved": "docs/arch-mcp-ecosystem.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/AUDIT.md",
+      "line": 22,
+      "link": "is/events/",
+      "resolved": "is/events",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/AUDIT.md",
+      "line": 23,
+      "link": "docs/drafts/tasks/",
+      "resolved": "docs/drafts/tasks",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/docker-infrastructure.md",
+      "line": 85,
+      "link": "scripts/infra-manager.js",
+      "resolved": "scripts/infra-manager.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 12,
+      "link": "/execute",
+      "resolved": "../../../../../../../../execute",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 16,
+      "link": "/execute",
+      "resolved": "../../../../../../../../execute",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 16,
+      "link": "/webhook/...",
+      "resolved": "../../../../../../../../webhook/...",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 28,
+      "link": "/home/node/.n8n/",
+      "resolved": "../../../../../../../../home/node/.n8n",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 28,
+      "link": "binaryData/",
+      "resolved": "binaryData",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 48,
+      "link": "events/SKILL_CANDIDATES.json",
+      "resolved": "events/SKILL_CANDIDATES.json",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 50,
+      "link": "drafts/tasks/",
+      "resolved": "drafts/tasks",
+      "exists": false
+    },
+    {
+      "source_file": "docs/backlog/skills/n8n-infrastructure.md",
+      "line": 78,
+      "link": "n8n/package.json",
+      "resolved": "n8n/package.json",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 242,
+      "link": "path",
+      "resolved": "path",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 548,
+      "link": "(.+?",
+      "resolved": "(.+?",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 116,
+      "link": "core/api/foo.js",
+      "resolved": "core/api/foo.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 135,
+      "link": "path/to/dir/",
+      "resolved": "path/to/dir",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 135,
+      "link": "path/to/file.js",
+      "resolved": "path/to/file.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 210,
+      "link": ".git/hooks/pre-commit",
+      "resolved": ".git/hooks/pre-commit",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 242,
+      "link": "path/to/file",
+      "resolved": "path/to/file",
+      "exists": false
+    },
+    {
+      "source_file": "docs/done/plan-skill-anti-staleness.md",
+      "line": 248,
+      "link": "core/api/foo.js",
+      "resolved": "core/api/foo.js",
+      "exists": false
+    },
+    {
+      "source_file": "docs/migration-roadmap.md",
+      "line": 7,
+      "link": "./plans/plan-master-migration.md",
+      "resolved": "plans/plan-master-migration.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/migration-roadmap.md",
+      "line": 8,
+      "link": "./plans/plan-naming-and-paths.md",
+      "resolved": "plans/plan-naming-and-paths.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/migration-roadmap.md",
+      "line": 9,
+      "link": "./plans/plan-testing-strategy.md",
+      "resolved": "plans/plan-testing-strategy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 5,
+      "link": "a/skills/mbb/skills/",
+      "resolved": "a/skills/mbb/skills",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 5,
+      "link": "a/skills/all/skills/",
+      "resolved": "a/skills/all/skills",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 5,
+      "link": "a/mbb/skills/",
+      "resolved": "a/mbb/skills",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 113,
+      "link": "architecture/architecture-core-stack.md",
+      "resolved": "architecture/architecture-core-stack.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 114,
+      "link": "architecture/architecture-client-vs-cloud.md",
+      "resolved": "architecture/architecture-client-vs-cloud.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 115,
+      "link": "architecture/architecture-dom-markup.md",
+      "resolved": "architecture/architecture-dom-markup.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 116,
+      "link": "architecture/architecture-loading.md",
+      "resolved": "architecture/architecture-loading.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 117,
+      "link": "architecture/architecture-mcp-ui-interaction.md",
+      "resolved": "architecture/architecture-mcp-ui-interaction.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 118,
+      "link": "architecture/architecture-provider-metadata.md",
+      "resolved": "architecture/architecture-provider-metadata.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 119,
+      "link": "architecture/architecture-relative-paths.md",
+      "resolved": "architecture/architecture-relative-paths.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 120,
+      "link": "architecture/architecture-ssot.md",
+      "resolved": "architecture/architecture-ssot.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 121,
+      "link": "architecture/architecture-versioning.md",
+      "resolved": "architecture/architecture-versioning.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 122,
+      "link": "architecture/llm-fallback-mechanism.md",
+      "resolved": "architecture/llm-fallback-mechanism.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 123,
+      "link": "architecture/skills-architecture-ssot.md",
+      "resolved": "architecture/skills-architecture-ssot.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 129,
+      "link": "archive/integrations-status.md",
+      "resolved": "archive/integrations-status.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 130,
+      "link": "archive/integrations-strategy.md",
+      "resolved": "archive/integrations-strategy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 136,
+      "link": "cache/cache-strategy.md",
+      "resolved": "cache/cache-strategy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 137,
+      "link": "cache/cache-keys.md",
+      "resolved": "cache/cache-keys.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 138,
+      "link": "cache/cache-versioning.md",
+      "resolved": "cache/cache-versioning.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 144,
+      "link": "cloud/yandex-cloud-function-code.md",
+      "resolved": "cloud/yandex-cloud-function-code.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 145,
+      "link": "cloud/yandex-cloud-function-steps-guide.md",
+      "resolved": "cloud/yandex-cloud-function-steps-guide.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 146,
+      "link": "cloud/yandex-get-api-key.md",
+      "resolved": "cloud/yandex-get-api-key.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 147,
+      "link": "cloud/yandex-mbb-api-deploy.md",
+      "resolved": "cloud/yandex-mbb-api-deploy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 153,
+      "link": "components/components-bootstrap.md",
+      "resolved": "components/components-bootstrap.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 154,
+      "link": "components/components-boundaries.md",
+      "resolved": "components/components-boundaries.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 155,
+      "link": "components/components-class-manager.md",
+      "resolved": "components/components-class-manager.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 156,
+      "link": "components/components-column-visibility.md",
+      "resolved": "components/components-column-visibility.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 157,
+      "link": "components/components-icon-manager.md",
+      "resolved": "components/components-icon-manager.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 158,
+      "link": "components/components-layout-alignment.md",
+      "resolved": "components/components-layout-alignment.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 159,
+      "link": "components/components-localization.md",
+      "resolved": "components/components-localization.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 160,
+      "link": "components/components-modal-buttons.md",
+      "resolved": "components/components-modal-buttons.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 161,
+      "link": "components/components-responsive-visibility.md",
+      "resolved": "components/components-responsive-visibility.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 162,
+      "link": "components/components-ssot.md",
+      "resolved": "components/components-ssot.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 163,
+      "link": "components/components-styling-principles.md",
+      "resolved": "components/components-styling-principles.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 164,
+      "link": "components/components-template-split.md",
+      "resolved": "components/components-template-split.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 165,
+      "link": "components/components-tooltips.md",
+      "resolved": "components/components-tooltips.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 166,
+      "link": "components/ui-components-unified.md",
+      "resolved": "components/ui-components-unified.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 172,
+      "link": "core-systems/auto-coin-sets.md",
+      "resolved": "core-systems/auto-coin-sets.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 173,
+      "link": "core-systems/messages-keys-and-config.md",
+      "resolved": "core-systems/messages-keys-and-config.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 174,
+      "link": "core-systems/messages-translator.md",
+      "resolved": "core-systems/messages-translator.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 175,
+      "link": "core-systems/messages-ui-and-lifecycle.md",
+      "resolved": "core-systems/messages-ui-and-lifecycle.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 176,
+      "link": "core-systems/workspace-config.md",
+      "resolved": "core-systems/workspace-config.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 182,
+      "link": "integrations/continue-cli-mcp-integration-nuances.md",
+      "resolved": "integrations/continue-cli-mcp-integration-nuances.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 183,
+      "link": "integrations/integration-artificial-analysis-iq.md",
+      "resolved": "integrations/integration-artificial-analysis-iq.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 184,
+      "link": "integrations/integration-mcp-sdk-security-rollout.md",
+      "resolved": "integrations/integration-mcp-sdk-security-rollout.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 185,
+      "link": "integrations/integrations-ai-core.md",
+      "resolved": "integrations/integrations-ai-core.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 186,
+      "link": "integrations/integrations-api-proxy.md",
+      "resolved": "integrations/integrations-api-proxy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 187,
+      "link": "integrations/integrations-auth-worker-restore.md",
+      "resolved": "integrations/integrations-auth-worker-restore.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 188,
+      "link": "integrations/integrations-cloudflare-core.md",
+      "resolved": "integrations/integrations-cloudflare-core.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 189,
+      "link": "integrations/integrations-cloudflare-plan.md",
+      "resolved": "integrations/integrations-cloudflare-plan.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 190,
+      "link": "integrations/integrations-cloudflare-testing.md",
+      "resolved": "integrations/integrations-cloudflare-testing.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 191,
+      "link": "integrations/integrations-continue-cli-mistral.md",
+      "resolved": "integrations/integrations-continue-cli-mistral.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 192,
+      "link": "integrations/integrations-continue-mcp-setup.md",
+      "resolved": "integrations/integrations-continue-mcp-setup.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 193,
+      "link": "integrations/integrations-data-provider-resilience.md",
+      "resolved": "integrations/integrations-data-provider-resilience.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 194,
+      "link": "integrations/integrations-data-providers.md",
+      "resolved": "integrations/integrations-data-providers.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 195,
+      "link": "integrations/integrations-llm-providers-config.md",
+      "resolved": "integrations/integrations-llm-providers-config.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 196,
+      "link": "integrations/integrations-n8n-api-access.md",
+      "resolved": "integrations/integrations-n8n-api-access.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 197,
+      "link": "integrations/integrations-n8n-code-node-v2.md",
+      "resolved": "integrations/integrations-n8n-code-node-v2.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 198,
+      "link": "integrations/integrations-n8n-docker-internals.md",
+      "resolved": "integrations/integrations-n8n-docker-internals.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 199,
+      "link": "integrations/integrations-n8n-local-setup.md",
+      "resolved": "integrations/integrations-n8n-local-setup.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 200,
+      "link": "integrations/integrations-oauth-file-protocol.md",
+      "resolved": "integrations/integrations-oauth-file-protocol.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 201,
+      "link": "integrations/integrations-overview.md",
+      "resolved": "integrations/integrations-overview.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 202,
+      "link": "integrations/integrations-postgres.md",
+      "resolved": "integrations/integrations-postgres.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 203,
+      "link": "integrations/integrations-rate-limiting.md",
+      "resolved": "integrations/integrations-rate-limiting.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 204,
+      "link": "integrations/mcp-server-yaml-parsing.md",
+      "resolved": "integrations/mcp-server-yaml-parsing.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 205,
+      "link": "integrations/perplexity-connect.md",
+      "resolved": "integrations/perplexity-connect.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 211,
+      "link": "libs/libs-mbb-auto-activation.md",
+      "resolved": "libs/libs-mbb-auto-activation.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 212,
+      "link": "libs/libs-mbb-config.md",
+      "resolved": "libs/libs-mbb-config.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 213,
+      "link": "libs/libs-metadata-generation.md",
+      "resolved": "libs/libs-metadata-generation.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 214,
+      "link": "libs/libs-repo-setup.md",
+      "resolved": "libs/libs-repo-setup.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 215,
+      "link": "libs/libs-zod-v3-v4-compat-layer.md",
+      "resolved": "libs/libs-zod-v3-v4-compat-layer.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 221,
+      "link": "metrics/metrics-models.md",
+      "resolved": "metrics/metrics-models.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 222,
+      "link": "metrics/metrics-portfolio-structure.md",
+      "resolved": "metrics/metrics-portfolio-structure.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 223,
+      "link": "metrics/metrics-validation.md",
+      "resolved": "metrics/metrics-validation.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 310,
+      "link": "troubleshooting/cloudflare-kv-key-limit.md",
+      "resolved": "troubleshooting/cloudflare-kv-key-limit.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 311,
+      "link": "troubleshooting/docker-container-networking-debug.md",
+      "resolved": "troubleshooting/docker-container-networking-debug.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 312,
+      "link": "troubleshooting/file-protocol-cors-guard.md",
+      "resolved": "troubleshooting/file-protocol-cors-guard.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 313,
+      "link": "troubleshooting/process-n8n-browser-cache.md",
+      "resolved": "troubleshooting/process-n8n-browser-cache.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 314,
+      "link": "troubleshooting/troubleshoot-continue-cli-api-keys.md",
+      "resolved": "troubleshooting/troubleshoot-continue-cli-api-keys.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 315,
+      "link": "troubleshooting/troubleshoot-continue-cli-response-mismatch.md",
+      "resolved": "troubleshooting/troubleshoot-continue-cli-response-mismatch.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 316,
+      "link": "troubleshooting/yandex-access-binding-issue.md",
+      "resolved": "troubleshooting/yandex-access-binding-issue.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 317,
+      "link": "troubleshooting/yandex-cors-troubleshooting.md",
+      "resolved": "troubleshooting/yandex-cors-troubleshooting.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 323,
+      "link": "ux/ux-interface-terms.md",
+      "resolved": "ux/ux-interface-terms.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 324,
+      "link": "ux/ux-principles.md",
+      "resolved": "ux/ux-principles.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 330,
+      "link": "index/index-mbb.md",
+      "resolved": "index/index-mbb.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 340,
+      "link": "process/process-agent-commands.md",
+      "resolved": "process/process-agent-commands.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 341,
+      "link": "process/process-code-header-skill-links.md",
+      "resolved": "process/process-code-header-skill-links.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 342,
+      "link": "process/process-coin-set-merge-consistency.md",
+      "resolved": "process/process-coin-set-merge-consistency.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 343,
+      "link": "process/process-coingecko-file-protocol-topn.md",
+      "resolved": "process/process-coingecko-file-protocol-topn.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 344,
+      "link": "process/process-continue-ai-subagents.md",
+      "resolved": "process/process-continue-ai-subagents.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 345,
+      "link": "process/process-doc-levels.md",
+      "resolved": "process/process-doc-levels.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 346,
+      "link": "process/process-doc-style.md",
+      "resolved": "process/process-doc-style.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 347,
+      "link": "process/process-doc-updates.md",
+      "resolved": "process/process-doc-updates.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 348,
+      "link": "process/process-multi-agent-collaboration.md",
+      "resolved": "process/process-multi-agent-collaboration.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 349,
+      "link": "process/process-n8n-mcp-integration.md",
+      "resolved": "process/process-n8n-mcp-integration.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 350,
+      "link": "process/process-n8n-security-oauth-protocols.md",
+      "resolved": "process/process-n8n-security-oauth-protocols.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 351,
+      "link": "process/process-n8n-workflow-hygiene.md",
+      "resolved": "process/process-n8n-workflow-hygiene.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 352,
+      "link": "process/process-nodejs-v25-api-preview.md",
+      "resolved": "process/process-nodejs-v25-api-preview.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 353,
+      "link": "process/process-ollama-v015-improvements.md",
+      "resolved": "process/process-ollama-v015-improvements.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 354,
+      "link": "process/process-paths-management.md",
+      "resolved": "process/process-paths-management.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 355,
+      "link": "process/process-release-categorization.md",
+      "resolved": "process/process-release-categorization.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 356,
+      "link": "process/process-session-handoff.md",
+      "resolved": "process/process-session-handoff.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 357,
+      "link": "process/process-skill-code-loop-anchors.md",
+      "resolved": "process/process-skill-code-loop-anchors.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 358,
+      "link": "process/process-skill-template.md",
+      "resolved": "process/process-skill-template.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 359,
+      "link": "process/process-skills-granularity.md",
+      "resolved": "process/process-skills-granularity.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 360,
+      "link": "process/process-skills-language-policy.md",
+      "resolved": "process/process-skills-language-policy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 361,
+      "link": "process/process-skills-lifecycle.md",
+      "resolved": "process/process-skills-lifecycle.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 362,
+      "link": "process/process-skills-scope-routing.md",
+      "resolved": "process/process-skills-scope-routing.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 363,
+      "link": "process/process-ssot-crosslinks.md",
+      "resolved": "process/process-ssot-crosslinks.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 364,
+      "link": "process/process-windows-docker-paths.md",
+      "resolved": "process/process-windows-docker-paths.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 365,
+      "link": "process/protocol-command-omk.md",
+      "resolved": "process/protocol-command-omk.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 366,
+      "link": "process/protocol-command-vzp.md",
+      "resolved": "process/protocol-command-vzp.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 367,
+      "link": "process/protocol-slash-commands-usage.md",
+      "resolved": "process/protocol-slash-commands-usage.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 373,
+      "link": "libs/libs-policy.md",
+      "resolved": "libs/libs-policy.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 374,
+      "link": "libs/libs-repo-workflow.md",
+      "resolved": "libs/libs-repo-workflow.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 375,
+      "link": "libs/libs-zod-v4-migration-plan.md",
+      "resolved": "libs/libs-zod-v4-migration-plan.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 381,
+      "link": "protocols/protocol-commit.md",
+      "resolved": "protocols/protocol-commit.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 387,
+      "link": "security/skill-secrets-hygiene.md",
+      "resolved": "security/skill-secrets-hygiene.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 393,
+      "link": "troubleshooting/docker-code-not-updating.md",
+      "resolved": "troubleshooting/docker-code-not-updating.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 394,
+      "link": "troubleshooting/docker-port-shadow-diagnosis.md",
+      "resolved": "troubleshooting/docker-port-shadow-diagnosis.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 395,
+      "link": "troubleshooting/docker-v29-overlay-regression.md",
+      "resolved": "troubleshooting/docker-v29-overlay-regression.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 401,
+      "link": "index/index-architecture.md",
+      "resolved": "index/index-architecture.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 402,
+      "link": "index/index-operations.md",
+      "resolved": "index/index-operations.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 410,
+      "link": "architecture/architecture-hybrid-bridge.md",
+      "resolved": "architecture/architecture-hybrid-bridge.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 411,
+      "link": "process/process-env-key-governance.md",
+      "resolved": "process/process-env-key-governance.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 412,
+      "link": "process/process-external-integration-closure.md",
+      "resolved": "process/process-external-integration-closure.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 413,
+      "link": "process/process-github-workflow.md",
+      "resolved": "process/process-github-workflow.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 414,
+      "link": "process/process-project-evolution-logging.md",
+      "resolved": "process/process-project-evolution-logging.md",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 430,
+      "link": "core-systems/workspace-config",
+      "resolved": "core-systems/workspace-config",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 613,
+      "link": "a/...",
+      "resolved": "a/...",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 817,
+      "link": "docs/backlog/skills/...",
+      "resolved": "docs/backlog/skills/...",
+      "exists": false
+    },
+    {
+      "source_file": "docs/plans/plan-skills-migration-registry.md",
+      "line": 822,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "docs/project-evolution.md",
+      "line": 37,
+      "link": "aoponomarev/mmb",
+      "resolved": "aoponomarev/mmb",
+      "exists": false
+    },
+    {
+      "source_file": "docs/README.md",
+      "line": 24,
+      "link": "skills/",
+      "resolved": "skills",
+      "exists": false
+    },
+    {
+      "source_file": "docs/runbooks/data-contour-troubleshooting.md",
+      "line": 57,
+      "link": "/api/coins/market-cache",
+      "resolved": "../../../../../../../../api/coins/market-cache",
+      "exists": false
+    },
+    {
+      "source_file": "docs/runbooks/data-contour-troubleshooting.md",
+      "line": 140,
+      "link": "/api/coins/market-cache",
+      "resolved": "../../../../../../../../api/coins/market-cache",
+      "exists": false
+    },
+    {
+      "source_file": "docs/runbooks/data-contour-troubleshooting.md",
+      "line": 140,
+      "link": "/api/coins/cycles",
+      "resolved": "../../../../../../../../api/coins/cycles",
+      "exists": false
+    }
+  ]
+}

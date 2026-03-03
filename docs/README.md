@@ -21,5 +21,5 @@ This directory serves as the historical ledger and runbook repository for the pr
 - `СИМЛИНКИ.txt`: Personal Cursor symlink/junction instructions (not project architecture).
 
 ## Constraints
-- **Russian Language Allowed**: Unlike `skills/` and code, `.md` files in `docs/` are permitted to be in Russian to lower the cognitive barrier for historical planning.
+- **Russian Language Allowed**: Unlike skills (см. is/skills/, core/skills/, app/skills/) and code, `.md` files in `docs/` are permitted to be in Russian to lower the cognitive barrier for historical planning.
 - **Active Causality**: When a plan is moved to `done/`, its architectural reasoning MUST be extracted into an `is/skills/arch-*.md` file.

@@ -73,7 +73,7 @@ Auto-generation of coin sets: parse requirements, identify token types (fungible
 
 ### Coins Metadata Generation
 
-**Context**: Creating `coins.json` registry from CoinGecko. SSOT: `libs/assets/data/coins.json` or equivalent.
+**Context**: Creating coins.json registry from CoinGecko. SSOT: libs assets or equivalent data source.
 
 **Process**: Fetch (generator pulls coin list) → Filter (top N + watchlist) → Map (symbols to icon URLs) → Save to coins.json.
 

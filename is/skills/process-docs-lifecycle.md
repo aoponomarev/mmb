@@ -20,7 +20,7 @@ id: sk-0e193a
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
 - **#for-ais-mermaid-diagrams** AIS documents without visual diagrams are harder for humans and agents to grasp. Mermaid diagrams in fenced code blocks render on GitHub, VS Code, and GitLab; they are version-controlled as text and avoid stale image files. See `docs/ais/ais-yandex-cloud.md` for the reference format.
 - **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.
-- **#not-redundant-folders** Creating new folders when a functionally suitable one exists (e.g., `docs/misc/`, `docs/temp/`, `docs/archive/`) clutters the structure. Use the existing folders.
+- **#not-redundant-folders** Creating new folders when a functionally suitable one exists clutters the structure. Use the existing folders (см. структуру docs/ в репозитории).
 - **#for-frontmatter-format** Any markdown file with YAML frontmatter MUST have a blank line before the closing `---`. Without it, CommonMark parses the second `---` as setext underline and `id: ...` (or similar) renders as huge h2 in Cursor preview. Applies everywhere: `docs/`, `is/skills/`, `core/skills/`, `app/skills/`, plans, runbooks, cheatsheets, etc.
 - **#for-stable-ids** AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; links use ids, not paths. `related_skills` and `related_ais` reference ids. Index files use `index-` prefix: `docs/index-skills.md`, `docs/index-ais.md`.
 - **#for-docs-ids-gate** Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. Broken links fail the gate. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling.
@@ -52,12 +52,12 @@ id: sk-0e193a
 
 ## Contracts
 
-- **No Standalone Policies**: The `docs/policies/` folder is deprecated. All policies must live either inside the relevant `docs/ais/` file (as "Локальные Политики") or as an English contract in `is/skills/`.
+- **No Standalone Policies**: Папка policies deprecated. All policies must live either inside the relevant docs/ais/ file (as "Локальные Политики") or as an English contract in is/skills/.
 - **Audits Path Invariant**: The path `docs/audits/causality-exceptions.jsonl` is a system contract. Do not rename `docs/audits/` or the file.
-- **No Redundant Folders**: Do not create new subfolders under `docs/` when a functionally suitable one already exists. Place documents in `plans/`, `backlog/`, `runbooks/`, `cheatsheets/`, or `ais/` as appropriate. Do not invent `misc/`, `temp/`, `archive/`, or similar.
+- **No Redundant Folders**: Do not create new subfolders under `docs/` when a functionally suitable one already exists. Place documents in the existing docs structure (plans, backlog, runbooks, cheatsheets, ais). Do not invent new top-level folders.
 ### Documentation Levels (Hierarchy)
 
-**Level 1 (`.cursorrules`)**: Agent protocols, Git workflow, critical routing. **Level 2 (`skills/` & `docs/`)**: Skills = granular "How-To" and constraints; Docs = high-level specs. **Level 3 (File Headers)**: Purpose of file, links to L2 skills. **Level 4 (Inline Comments)**: Implementation nuances, algorithm explanations, edge cases. **Rule**: No overlap — L4 must not repeat L2 rules; L3 links to L2.
+**Level 1 (`.cursorrules`)**: Agent protocols, Git workflow, critical routing. **Level 2 (skills & docs)**: Skills = granular "How-To" (см. is/skills/, core/skills/, app/skills/); Docs = high-level specs. **Level 3 (File Headers)**: Purpose of file, links to L2 skills. **Level 4 (Inline Comments)**: Implementation nuances, algorithm explanations, edge cases. **Rule**: No overlap — L4 must not repeat L2 rules; L3 links to L2.
 
 ### Documentation Sync (Code ↔ Docs)
 
@@ -67,13 +67,13 @@ id: sk-0e193a
 
 | Folder | Purpose | System? | Relation to Skills |
 |--------|---------|---------|-------------------|
-| `plans/` | Active plans with `[ ]` checkboxes. New work starts here. | No | Plans are distilled into skills. |
-| `done/` | Staging for completed plans before distillation. Empty after cleanup. | No | Source for distillation. |
-| `ais/` | Architecture & Infrastructure Specifications (Russian). Macro-docs. | No | Policies from AIS may become skills. |
-| `audits/` | `causality-exceptions.jsonl` — exceptions for the invariant gate. | **YES** | Path hardcoded in `validate-causality-invariant.js`. **Never rename or move.** |
-| `backlog/` | Deferred plans and future drafts; also `fix-<plan-slug>.md` for cleanup tails per plan (#for-plan-backlog). | No | May later become plans. |
-| `backlog/skills/` | Deferred skills (Docker, n8n, YC, etc.) — not wired until infra exists. | No | May later move to is/core/app skills. |
-| `cheatsheets/` | Quick reference (e.g., architecture layers). Human-oriented. | No | Overlaps conceptually with skills. |
-| `runbooks/` | Step-by-step operational procedures (monitoring, rollback). | No | Implements "how" for `arch-monitoring`, `arch-rollback`. |
+| docs/plans/ | Active plans with checkboxes. New work starts here. | No | Plans are distilled into skills. |
+| docs/done/ | Staging for completed plans before distillation. Empty after cleanup. | No | Source for distillation. |
+| docs/ais/ | Architecture & Infrastructure Specifications (Russian). Macro-docs. | No | Policies from AIS may become skills. |
+| docs/audits/ | causality-exceptions.jsonl — exceptions for the invariant gate. | **YES** | Path hardcoded in validate-causality-invariant.js. **Never rename or move.** |
+| docs/backlog/ | Deferred plans and future drafts; also fix-\<plan-slug\>.md for cleanup tails per plan (#for-plan-backlog). | No | May later become plans. |
+| docs/backlog/skills/ | Deferred skills (Docker, n8n, YC, etc.) — not wired until infra exists. | No | May later move to is/core/app skills. |
+| docs/cheatsheets/ | Quick reference (e.g., architecture layers). Human-oriented. | No | Overlaps conceptually with skills. |
+| docs/runbooks/ | Step-by-step operational procedures (monitoring, rollback). | No | Implements "how" for arch-monitoring, arch-rollback. |
 | `index-skills.md` | Auto-generated index of skills. | No | Generated by `npm run skills:index`. |
 | `index-ais.md` | Auto-generated index of AIS. | No | Generated by `npm run ais:index`. |

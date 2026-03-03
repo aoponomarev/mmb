@@ -93,8 +93,8 @@ this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 | Path resolution using `PATHS` | `arch-foundation` |
 | Env variable access (SSOT files only) | `arch-foundation` (exception note) |
 | Secret loading / encryption | `process-secrets-hygiene` |
-| Provider data fetching | `core/skills/api-layer` |
-| UI state mutations | `app/skills/ui-architecture` |
+| Provider data fetching | `core/skills/api-layer.md` |
+| UI state mutations | `app/skills/ui-architecture.md` |
 | Health / preflight checks | `arch-control-plane` |
 
 ### Anchor Placement (Risk Branches)

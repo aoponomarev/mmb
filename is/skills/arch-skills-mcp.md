@@ -91,7 +91,7 @@ id: sk-7d810a
 - `Implemented`: Cursor `.cursor/mcp.json` configuration for both MCP servers.
 - `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy App's full frontmatter format). Frontmatter can be adopted incrementally.
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
-- `Simplified`: No `skills/MIGRATION.md` registry (migration tracked via `docs/plans/` and this skill).
+- `Simplified`: No skills/MIGRATION.md (migration tracked via docs/plans/ and this skill).
 
 ### Token Budget (alwaysApply Rules)
 

@@ -10,7 +10,7 @@ id: sk-5cd3c9
 # Cloudflare Infrastructure
 
 > **Context**: The architectural rules for Cloudflare Workers, KV caching, D1 databases, and the OAuth flow.
-> **Scope**: `cloud/cloudflare/workers/*`, `core/api/cloudflare/*`
+> **Scope**: Edge API Worker (is/cloudflare/edge-api/), core/config (cloudflare, auth)
 
 ## Reasoning
 
@@ -22,11 +22,11 @@ id: sk-5cd3c9
 
 1.  **OAuth on `file://` Protocol:**
     Do not attempt to use standard `window.location.href` redirects for OAuth when the app is running locally. Always use the `auth-client.js` popup mechanism.
-    The Worker endpoint (`src/auth.js`) must detect the `file://` origin in the state and return the `postMessage` HTML payload instead of a 302 redirect.
+    The Worker endpoint (OAuth handler в Edge API) must detect the `file://` origin in the state and return the `postMessage` HTML payload instead of a 302 redirect.
 2.  **Worker Proxying:**
     All external API requests from the UI when running on `file://` MUST go through the Cloudflare Worker proxy (`cloudflareConfig.getApiProxyEndpoint`).
 3.  **D1 Migrations:**
-    Database schema changes must be placed in `cloud/cloudflare/workers/migrations/`. Apply them using `wrangler d1 migrations apply`.
+    Database schema changes must be placed in the Edge API migrations folder and applied using `wrangler d1 migrations apply`.
 4.  **Secrets Management:**
     Never commit `.env` or `wrangler.toml` files containing real API tokens or Client Secrets. Use `wrangler secret put` for production and `.dev.vars` for local development.
 
@@ -36,11 +36,11 @@ id: sk-5cd3c9
 
 **Infrastructure**: Workers (logic); D1 (Users, Portfolios, Coin Sets); KV — `API_CACHE` (ephemeral), `SETTINGS` (persistent app settings).
 
-**Route map**: `/auth/*`, `/api/portfolios/*`, `/api/coin-sets/*`, `/api/datasets/*`, `/api/coingecko/*`, `/api/yahoo-finance/*`, `/api/stooq/*`, `/api/proxy`, `/api/settings`, `/health`.
+**Route map**: /auth/*, /api/portfolios/*, /api/coin-sets/*, /api/datasets/*, /api/coingecko/*, /api/yahoo-finance/*, /api/stooq/*, /api/proxy, /api/settings, /health (HTTP routes, not file paths).
 
 **Component bindings**: D1, API_CACHE, SETTINGS, GOOGLE_CLIENT_SECRET, JWT_SECRET, SETTINGS_TOKEN.
 
-**KV cache key limit (critical)**: 512-byte limit. Hash query strings via SHA-256 when key >480 bytes. Format: short keys readable; long keys `api-cache:coingecko:/coins/markets?h=<sha256hex>`. Symptoms: Worker 500 with "KV GET failed: 414 UTF-8 encoded length exceeds 512"; affects `/coins/markets?ids=<50+ coins>`. Prevention: test with max-size requests; use `X-Cache-Key` header for debugging.
+**KV cache key limit (critical)**: 512-byte limit. Hash query strings via SHA-256 when key >480 bytes. Format: short keys readable; long keys `api-cache:coingecko:/coins/markets?h=<sha256hex>`. Symptoms: Worker 500 with "KV GET failed: 414 UTF-8 encoded length exceeds 512"; affects /coins/markets?ids= (HTTP route). Prevention: test with max-size requests; use `X-Cache-Key` header for debugging.
 
 **Security**: Generic proxy whitelist only; Settings require `Authorization: Bearer <token>`.
 
@@ -48,7 +48,7 @@ id: sk-5cd3c9
 
 ### Cloudflare Roadmap (Edge Infrastructure)
 
-**Context**: Status of Edge infrastructure integration. SSOT: `docs/A_CLOUDFLARE.md`.
+**Context**: Status of Edge infrastructure integration. SSOT: см. arch-cloudflare-infrastructure.md.
 
 **Completed phases**: Infrastructure (Workers, D1, KV); Auth (Google OAuth 2.0); Proxy (CoinGecko/Yahoo); Storage (Portfolios CRUD via D1).
 
@@ -62,7 +62,7 @@ id: sk-5cd3c9
 
 **Prerequisites**: Wrangler CLI authenticated; Account ID; `GOOGLE_CLIENT_SECRET` and `JWT_SECRET` ready.
 
-**Steps**: (1) Verify bindings in `wrangler.toml` (DB, API_CACHE); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy`; (4) Health check at `/health`.
+**Steps**: (1) Verify bindings in `wrangler.toml` (DB, API_CACHE); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy`; (4) Health check at /health.
 
 **Client config**: Update `core/config/auth-config.js` with correct `clientId` and `redirectUri`.
 
@@ -102,5 +102,5 @@ id: sk-5cd3c9
 
 ## Contracts
 
-- **Worker Structure**: The Worker code must remain modular (`src/index.js`, `src/auth.js`, `src/utils/`). Do not bundle everything into a single massive file.
+- **Worker Structure**: The Worker code must remain modular (entrypoint, auth handler, utils). Do not bundle everything into a single massive file.
 - **CORS Headers**: The Worker must consistently return `Access-Control-Allow-Origin: *` for all proxy and API endpoints.

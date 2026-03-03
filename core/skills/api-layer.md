@@ -89,7 +89,7 @@ Every HTTP request carries a sanitized `x-request-id` header through all layers 
 | `core/api/market-data-service.js` | Raw market data fetching orchestration |
 | `core/api/market-metrics-service.js` | FGI, VIX, BTC dominance aggregation |
 | `core/api/market-snapshot-service.js` | Composite snapshot (data + metrics) |
-| `core/api/market-contracts.js` | Zod schemas for query + payload validation |
+| `core/contracts/market-contracts.js` | Zod schemas for query + payload validation |
 | `core/api/backend-market-runtime.js` | Composition root |
 | `core/api/market-snapshot-transport.js` | Transport adapter |
 | `core/api/market-snapshot-http.js` | HTTP handler |

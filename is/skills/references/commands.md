@@ -104,6 +104,6 @@ Shortcut protocols into executable IDE commands.
 |---------|----------|---------|
 | `/vzp` | ВЗП | Planned Execution (step-by-step with verification) |
 | `/fin` | ФИН | Task Finalization (closure & discovery) |
-| `/edit` | — | Standard file modifications |
+| edit (slash command) | — | Standard file modifications |
 
 **Usage**: Combine with context providers (e.g. `/vzp @file`). Every command that modifies the system must end with a verification summary. **Future**: Custom slash commands mapped to n8n workflows via control-plane for multi-step processes (e.g. "Create New Skill", "Sync All Sources").

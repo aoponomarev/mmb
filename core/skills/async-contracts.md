@@ -24,7 +24,7 @@ id: sk-471974
 
 ## Contracts
 
-- Wrap all top-level `await` boundaries in `try/catch`. Never leave a promise chain without `.catch()` in service code.
+- Wrap all top-level `await` boundaries in try/catch. Never leave a promise chain without `.catch()` in service code.
 - Use structured error types where possible (e.g., `BackendCoreError` with `{ code, message, cause }`).
 - Never swallow errors silently — if you catch, you must either re-throw, log with context, or return a typed error value.
 

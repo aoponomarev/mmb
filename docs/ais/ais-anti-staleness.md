@@ -81,10 +81,11 @@ flowchart TB
 
 | Компонент | Путь | Назначение |
 |-----------|------|------------|
+| path-contracts.js | is/contracts/ | SSOT: EXCLUDE_SOURCE_REL, SKIP_LINK_PATTERNS, SEARCH_DIRS, resolvePath; используют validate-skills и validate-dead-links |
 | validate-skills.js | is/scripts/architecture/ | Path existence в Implementation Status, format, prefix, stale, orphan |
 | validate-skill-anchors.js | is/scripts/architecture/ | @skill resolution — каждый @skill ведёт на существующий скилл |
 | validate-affected-skills.js | is/scripts/architecture/ | git diff → affected skills и affected hashes |
-| validate-dead-links.js | is/scripts/architecture/ | Битые ссылки в skills и docs |
+| validate-dead-links.js | is/scripts/architecture/ | Битые ссылки; --all — полный скан без фильтров |
 | validate-causality-exceptions-stale.js | is/scripts/architecture/ | Stale exceptions в causality-exceptions.jsonl |
 | skills-batch-review.js | is/scripts/architecture/ | Оркестратор batch-проверок |
 | preflight-solo.ps1 | scripts/git/ | Pre-commit flow: secrets, skills:check, skills:affected |
@@ -167,7 +168,7 @@ flowchart TB
 ### Описание
 
 1. **skills-batch-review.js** оркестрирует три проверки: validate-skills (--json), validate-dead-links (--json), validate-causality-exceptions-stale (--json).
-2. **validate-dead-links.js** — сканирует is/skills, core/skills, app/skills, docs; ищет markdown-ссылки `](path)` и inline-пути в backticks; проверяет существование; выводит dead_links.
+2. **validate-dead-links.js** — сканирует is/skills, core/skills, app/skills, docs (исключая docs/plans, docs/backlog, docs/done); ищет markdown-ссылки и inline-пути в backticks; пропускает API-пути, donor-пути, placeholder; проверяет существование; выводит dead_links. Флаг `--all` — полный скан без исключений (для аудита 400+ ссылок). Подтверждение «исправлено» — только через повторный запуск (агент).
 3. **validate-causality-exceptions-stale.js** — загружает docs/audits/causality-exceptions.jsonl; строит usedHashes из кода и skills; exception считается stale, если hash полностью удалён из кода.
 4. **Формат отчёта:** JSON (--json) или текстовый summary. Ни одна проверка не блокирует preflight; batch — периодический аудит.
 

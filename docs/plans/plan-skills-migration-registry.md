@@ -112,14 +112,14 @@
 |------|--------|---------------|----------|
 | `architecture/architecture-core-stack.md` | MIGRATED | `arch-foundation` | — |
 | `architecture/architecture-client-vs-cloud.md` | MIGRATED | `arch-backend-core` | — |
-| `architecture/architecture-dom-markup.md` | MIGRATED | `app/skills/ui-architecture` | — |
+| `architecture/architecture-dom-markup.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
 | `architecture/architecture-loading.md` | MIGRATED | `arch-backend-core` | — |
 | `architecture/architecture-mcp-ui-interaction.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `architecture/architecture-provider-metadata.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
+| `architecture/architecture-provider-metadata.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
 | `architecture/architecture-relative-paths.md` | MIGRATED | `arch-foundation` (PATHS) | — |
 | `architecture/architecture-ssot.md` | MIGRATED | `arch-foundation` | — |
-| `architecture/architecture-versioning.md` | MIGRATED | `core/skills/cache-layer` | — |
-| `architecture/llm-fallback-mechanism.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `architecture/architecture-versioning.md` | MIGRATED | `core/skills/cache-layer.md` | — |
+| `architecture/llm-fallback-mechanism.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `architecture/skills-architecture-ssot.md` | MIGRATED | `arch-skills-mcp` | — |
 
 ### 1.2 Archive (не переносить)
@@ -133,105 +133,105 @@
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `cache/cache-strategy.md` | MIGRATED | `core/skills/cache-layer` | — |
-| `cache/cache-keys.md` | MIGRATED | `core/skills/cache-layer` | — |
-| `cache/cache-versioning.md` | MIGRATED | `core/skills/cache-layer` | — |
+| `cache/cache-strategy.md` | MIGRATED | `core/skills/cache-layer.md` | — |
+| `cache/cache-keys.md` | MIGRATED | `core/skills/cache-layer.md` | — |
+| `cache/cache-versioning.md` | MIGRATED | `core/skills/cache-layer.md` | — |
 
 ### 1.4 Cloud
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `cloud/yandex-cloud-function-code.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `cloud/yandex-cloud-function-steps-guide.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `cloud/yandex-get-api-key.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `cloud/yandex-mbb-api-deploy.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
+| `cloud/yandex-cloud-function-code.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `cloud/yandex-cloud-function-steps-guide.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `cloud/yandex-get-api-key.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `cloud/yandex-mbb-api-deploy.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
 
 ### 1.5 Components
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `components/components-bootstrap.md` | MIGRATED | `app/skills/bootstrap-vue-integration` | — |
-| `components/components-boundaries.md` | MIGRATED | `app/skills/ui-architecture` | — |
-| `components/components-class-manager.md` | MIGRATED | `app/skills/component-classes-management` | — |
-| `components/components-column-visibility.md` | MIGRATED | `app/skills/ui-architecture` | — |
-| `components/components-icon-manager.md` | MIGRATED | `app/skills/icon-manager` | — |
-| `components/components-layout-alignment.md` | MIGRATED | `app/skills/ui-architecture` | — |
-| `components/components-localization.md` | MIGRATED | `app/skills/reactive-localization` | — |
-| `components/components-modal-buttons.md` | MIGRATED | `app/skills/ui-architecture` | — |
-| `components/components-responsive-visibility.md` | MIGRATED | `app/skills/ui-architecture` | — |
+| `components/components-bootstrap.md` | MIGRATED | `app/skills/bootstrap-vue-integration.md` | — |
+| `components/components-boundaries.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
+| `components/components-class-manager.md` | MIGRATED | `app/skills/component-classes-management.md` | — |
+| `components/components-column-visibility.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
+| `components/components-icon-manager.md` | MIGRATED | `app/skills/icon-manager.md` | — |
+| `components/components-layout-alignment.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
+| `components/components-localization.md` | MIGRATED | `app/skills/reactive-localization.md` | — |
+| `components/components-modal-buttons.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
+| `components/components-responsive-visibility.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
 | `components/components-ssot.md` | MIGRATED | `arch-foundation` | — |
-| `components/components-styling-principles.md` | MIGRATED | `app/skills/ux-principles` | — |
-| `components/components-template-split.md` | MIGRATED | `app/skills/vue-implementation-patterns` | — |
-| `components/components-tooltips.md` | MIGRATED | `app/skills/ui-architecture` | — |
-| `components/ui-components-unified.md` | MIGRATED | `app/skills/ui-architecture` | — |
+| `components/components-styling-principles.md` | MIGRATED | `app/skills/ux-principles.md` | — |
+| `components/components-template-split.md` | MIGRATED | `app/skills/vue-implementation-patterns.md` | — |
+| `components/components-tooltips.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
+| `components/ui-components-unified.md` | MIGRATED | `app/skills/ui-architecture.md` | — |
 
 ### 1.6 Core Systems
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `core-systems/auto-coin-sets.md` | MIGRATED | `core/skills/domain-portfolio` | — |
-| `core-systems/messages-keys-and-config.md` | MIGRATED | `core/skills/messages-architecture` | — |
-| `core-systems/messages-translator.md` | MIGRATED | `core/skills/messages-architecture` | — |
-| `core-systems/messages-ui-and-lifecycle.md` | MIGRATED | `core/skills/messages-architecture` | — |
-| `core-systems/workspace-config.md` | MIGRATED | `core/skills/config-contracts` | — |
+| `core-systems/auto-coin-sets.md` | MIGRATED | `core/skills/domain-portfolio.md` | — |
+| `core-systems/messages-keys-and-config.md` | MIGRATED | `core/skills/messages-architecture.md` | — |
+| `core-systems/messages-translator.md` | MIGRATED | `core/skills/messages-architecture.md` | — |
+| `core-systems/messages-ui-and-lifecycle.md` | MIGRATED | `core/skills/messages-architecture.md` | — |
+| `core-systems/workspace-config.md` | MIGRATED | `core/skills/config-contracts.md` | — |
 
 ### 1.7 Integrations
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `integrations/continue-cli-mcp-integration-nuances.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `integrations/integration-artificial-analysis-iq.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
-| `integrations/integration-mcp-sdk-security-rollout.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `integrations/integrations-ai-core.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
-| `integrations/integrations-api-proxy.md` | MIGRATED | `core/skills/external-integrations` | — |
-| `integrations/integrations-auth-worker-restore.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `integrations/integrations-cloudflare-core.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `integrations/integrations-cloudflare-plan.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `integrations/integrations-cloudflare-testing.md` | MIGRATED | `is/skills/arch-testing-ci` | — |
+| `integrations/continue-cli-mcp-integration-nuances.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `integrations/integration-artificial-analysis-iq.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
+| `integrations/integration-mcp-sdk-security-rollout.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `integrations/integrations-ai-core.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
+| `integrations/integrations-api-proxy.md` | MIGRATED | `core/skills/external-integrations.md` | — |
+| `integrations/integrations-auth-worker-restore.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `integrations/integrations-cloudflare-core.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `integrations/integrations-cloudflare-plan.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `integrations/integrations-cloudflare-testing.md` | MIGRATED | `is/skills/arch-testing-ci.md` | — |
 | `integrations/integrations-continue-cli-mistral.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `integrations/integrations-continue-mcp-setup.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `integrations/integrations-data-provider-resilience.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
-| `integrations/integrations-data-providers.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
-| `integrations/integrations-llm-providers-config.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `integrations/integrations-continue-mcp-setup.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `integrations/integrations-data-provider-resilience.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
+| `integrations/integrations-data-providers.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
+| `integrations/integrations-llm-providers-config.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `integrations/integrations-n8n-api-access.md` | MIGRATED | `arch-mcp-ecosystem` | — |
 | `integrations/integrations-n8n-code-node-v2.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `integrations/integrations-n8n-docker-internals.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `integrations/integrations-n8n-local-setup.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `integrations/integrations-oauth-file-protocol.md` | MIGRATED | `app/skills/file-protocol-cors-guard` | — |
-| `integrations/integrations-overview.md` | MIGRATED | `core/skills/external-integrations` | — |
-| `integrations/integrations-postgres.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
-| `integrations/integrations-rate-limiting.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
+| `integrations/integrations-n8n-docker-internals.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `integrations/integrations-n8n-local-setup.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `integrations/integrations-oauth-file-protocol.md` | MIGRATED | `app/skills/file-protocol-cors-guard.md` | — |
+| `integrations/integrations-overview.md` | MIGRATED | `core/skills/external-integrations.md` | — |
+| `integrations/integrations-postgres.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
+| `integrations/integrations-rate-limiting.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
 | `integrations/mcp-server-yaml-parsing.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `integrations/perplexity-connect.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `integrations/perplexity-connect.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 
 ### 1.8 Libs
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `libs/libs-mbb-auto-activation.md` | MIGRATED | `core/skills/config-contracts` | — |
-| `libs/libs-mbb-config.md` | MIGRATED | `core/skills/config-contracts` | — |
-| `libs/libs-metadata-generation.md` | MIGRATED | `core/skills/domain-portfolio` | — |
-| `libs/libs-repo-setup.md` | MIGRATED | `is/skills/arch-layout-governance` | — |
-| `libs/libs-zod-v3-v4-compat-layer.md` | MIGRATED | `is/skills/process-lib-governance` | — |
+| `libs/libs-mbb-auto-activation.md` | MIGRATED | `core/skills/config-contracts.md` | — |
+| `libs/libs-mbb-config.md` | MIGRATED | `core/skills/config-contracts.md` | — |
+| `libs/libs-metadata-generation.md` | MIGRATED | `core/skills/domain-portfolio.md` | — |
+| `libs/libs-repo-setup.md` | MIGRATED | `is/skills/arch-layout-governance.md` | — |
+| `libs/libs-zod-v3-v4-compat-layer.md` | MIGRATED | `is/skills/process-lib-governance.md` | — |
 
 ### 1.9 Metrics
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `metrics/metrics-models.md` | MIGRATED | `core/skills/metrics-air-model` | — |
-| `metrics/metrics-portfolio-structure.md` | MIGRATED | `core/skills/domain-portfolio` | — |
-| `metrics/metrics-validation.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
+| `metrics/metrics-models.md` | MIGRATED | `core/skills/metrics-air-model.md` | — |
+| `metrics/metrics-portfolio-structure.md` | MIGRATED | `core/skills/domain-portfolio.md` | — |
+| `metrics/metrics-validation.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
 
 ### 1.10 Process (skills/mbb/skills/process/)
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `process-agentic-self-correction.md` | MIGRATED | `is/skills/process-ai-collaboration` | — |
+| `process-agentic-self-correction.md` | MIGRATED | `is/skills/process-ai-collaboration.md` | — |
 | `autonomous-skill-synthesis.md` | MIGRATED | `arch-skills-mcp` | — |
 | `process-autonomous-quality-gate.md` | MIGRATED | `arch-testing-ci` | — |
 | `process-batch-skills-review.md` | MIGRATED | `arch-skills-mcp` | — |
 | `process-better-sqlite3-node-abi-gate.md` | MIGRATED | `arch-backend-core` | — |
-| `process-bug-resolution-protocol.md` | MIGRATED | `is/skills/process-ai-collaboration` | — |
+| `process-bug-resolution-protocol.md` | MIGRATED | `is/skills/process-ai-collaboration.md` | — |
 | `process-commit-analysis-heuristics.md` | MIGRATED | `arch-skills-mcp` | — |
 | `process-commit-skill-extraction.md` | MIGRATED | `arch-skills-mcp` | — |
 | `process-continue-config-ssot.md` | MIGRATED | `arch-foundation` | — |
@@ -242,7 +242,7 @@
 | `process-docker-disaster-recovery.md` | MIGRATED | `arch-rollback` | — |
 | `process-docker-resource-governance.md` | MIGRATED | `arch-backend-core` | — |
 | `process-dynamic-context-management.md` | MIGRATED | `process-token-discipline` | — |
-| `process-env-sync-governance.md` | MIGRATED | `is/skills/process-env-sync` | — |
+| `process-env-sync-governance.md` | MIGRATED | `is/skills/process-env-sync.md` | — |
 | `process-external-integration-closure.md` | MIGRATED | `arch-external-parity` | — |
 | `process-future-skill-impact-analysis.md` | MIGRATED | `arch-skills-mcp` | — |
 | `process-git-foundation-reliability.md` | MIGRATED | `arch-foundation` | — |
@@ -253,20 +253,20 @@
 | `process-infrastructure-maintenance.md` | MIGRATED | `arch-foundation` | — |
 | `process-km-v2-maintenance.md` | DEPRECATED | — | Не переносить (KM v2 устарел) |
 | `process-logging-strategy.md` | MIGRATED | `arch-monitoring` | — |
-| `process-model-registry-maintenance.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `process-model-registry-maintenance.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `process-n8n-docker-code-nodes.md` | MIGRATED | `arch-mcp-ecosystem` | — |
 | `process-n8n-workflow-hygiene.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `process-news-intelligence.md` | MIGRATED | `core/skills/external-integrations` | — |
+| `process-news-intelligence.md` | MIGRATED | `core/skills/external-integrations.md` | — |
 | `process-node-dependency-lifecycle.md` | MIGRATED | `arch-dependency-governance` | — |
 | `process-node-foundation-reliability.md` | MIGRATED | `arch-foundation` | — |
 | `process-node-preflight-checks.md` | MIGRATED | preflight.js | — |
-| `process-ollama-node-integration-checks.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
-| `process-ollama-runtime-governance.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `process-ollama-node-integration-checks.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
+| `process-ollama-runtime-governance.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `process-orchestrator-evolution.md` | MIGRATED | `arch-control-plane` | — |
 | `process-preflight-diagnostics-quality-gate.md` | MIGRATED | preflight.js | — |
 | `process-project-evolution-aggregation.md` | MIGRATED | `process-evolution-logging` | — |
-| `process-project-secretary-agent.md` | MIGRATED | `is/skills/process-ai-collaboration` | — |
-| `process-settings-sync.md` | MIGRATED | `core/skills/config-contracts` | — |
+| `process-project-secretary-agent.md` | MIGRATED | `is/skills/process-ai-collaboration.md` | — |
+| `process-settings-sync.md` | MIGRATED | `core/skills/config-contracts.md` | — |
 | `process-skill-code-loop-anchors.md` | MIGRATED | `process-code-anchors` | — |
 | `process-skill-frontmatter-rules.md` | MIGRATED | `arch-skills-mcp` (validate-skills) | — |
 | `process-skill-pipeline.md` | MIGRATED | `arch-skills-mcp` | — |
@@ -284,15 +284,15 @@
 | `process-windows-powershell-patterns.md` | MIGRATED | `process-windows-shell` | — |
 | `process-wsl-optimization.md` | MIGRATED | `arch-backend-core` | — |
 | `process-zod-schema-governance.md` | MIGRATED | `process-lib-governance` | — |
-| `protocol-agent-core.md` | MIGRATED | `process-ai-collaboration` + `references/commands.md` | — |
+| `protocol-agent-core.md` | MIGRATED | `process-ai-collaboration` + `is/skills/references/commands.md` | — |
 | `protocol-docker-image-hardening.md` | MIGRATED | `arch-backend-core` | — |
 | `protocol-git-commit-template-consistency.md` | MIGRATED | `arch-foundation` | — |
 | `protocol-git-secrets-and-env-boundary.md` | MIGRATED | `process-secrets-hygiene` | — |
 | `protocol-n8n-mcp-interaction.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `protocol-node-async-safety.md` | MIGRATED | `core/skills/async-contracts` | — |
+| `protocol-node-async-safety.md` | MIGRATED | `core/skills/async-contracts.md` | — |
 | `protocol-node-mcp-development.md` | MIGRATED | `arch-mcp-ecosystem` | — |
-| `protocol-node-timeout-abort-contract.md` | MIGRATED | `core/skills/async-contracts` | — |
-| `protocol-ollama-timeout-fallback-contract.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `protocol-node-timeout-abort-contract.md` | MIGRATED | `core/skills/async-contracts.md` | — |
+| `protocol-ollama-timeout-fallback-contract.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `protocol-sqlite-readonly-diagnostics.md` | MIGRATED | `arch-monitoring` | — |
 | `skill-based-playbooks.md` | MIGRATED | `arch-skills-mcp` | — |
 
@@ -301,27 +301,27 @@
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
 | `infra-global-management.md` | MIGRATED | `arch-foundation` | — |
-| `infra-reconstruction-pattern.md` | MIGRATED | `is/skills/arch-foundation` | — |
+| `infra-reconstruction-pattern.md` | MIGRATED | `is/skills/arch-foundation.md` | — |
 
 ### 1.12 Troubleshooting
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `troubleshooting/cloudflare-kv-key-limit.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `troubleshooting/docker-container-networking-debug.md` | MIGRATED | `is/skills/arch-backend-core` | — |
-| `troubleshooting/file-protocol-cors-guard.md` | MIGRATED | `app/skills/file-protocol-cors-guard` | — |
-| `troubleshooting/process-n8n-browser-cache.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `troubleshooting/troubleshoot-continue-cli-api-keys.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `troubleshooting/troubleshoot-continue-cli-response-mismatch.md` | MIGRATED | `is/skills/arch-mcp-ecosystem` | — |
-| `troubleshooting/yandex-access-binding-issue.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
-| `troubleshooting/yandex-cors-troubleshooting.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure` | — |
+| `troubleshooting/cloudflare-kv-key-limit.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `troubleshooting/docker-container-networking-debug.md` | MIGRATED | `is/skills/arch-backend-core.md` | — |
+| `troubleshooting/file-protocol-cors-guard.md` | MIGRATED | `app/skills/file-protocol-cors-guard.md` | — |
+| `troubleshooting/process-n8n-browser-cache.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `troubleshooting/troubleshoot-continue-cli-api-keys.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `troubleshooting/troubleshoot-continue-cli-response-mismatch.md` | MIGRATED | `is/skills/arch-mcp-ecosystem.md` | — |
+| `troubleshooting/yandex-access-binding-issue.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
+| `troubleshooting/yandex-cors-troubleshooting.md` | MIGRATED | `is/skills/arch-cloudflare-infrastructure.md` | — |
 
 ### 1.13 UX
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `ux/ux-interface-terms.md` | MIGRATED | `app/skills/ux-principles` | — |
-| `ux/ux-principles.md` | MIGRATED | `app/skills/ux-principles` | — |
+| `ux/ux-interface-terms.md` | MIGRATED | `app/skills/ux-principles.md` | — |
+| `ux/ux-principles.md` | MIGRATED | `app/skills/ux-principles.md` | — |
 
 ### 1.14 Index
 
@@ -337,10 +337,10 @@
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `process/process-agent-commands.md` | MIGRATED | `references/commands.md` | — |
+| `process/process-agent-commands.md` | MIGRATED | `is/skills/references/commands.md` | — |
 | `process/process-code-header-skill-links.md` | MIGRATED | `process-code-anchors` | — |
-| `process/process-coin-set-merge-consistency.md` | MIGRATED | `core/skills/domain-portfolio` | — |
-| `process/process-coingecko-file-protocol-topn.md` | MIGRATED | `core/skills/data-providers-architecture` | — |
+| `process/process-coin-set-merge-consistency.md` | MIGRATED | `core/skills/domain-portfolio.md` | — |
+| `process/process-coingecko-file-protocol-topn.md` | MIGRATED | `core/skills/data-providers-architecture.md` | — |
 | `process/process-continue-ai-subagents.md` | MIGRATED | `arch-mcp-ecosystem` | — |
 | `process/process-doc-levels.md` | MIGRATED | `process-docs-lifecycle` | — |
 | `process/process-doc-style.md` | MIGRATED | `process-code-documentation` | — |
@@ -350,7 +350,7 @@
 | `process/process-n8n-security-oauth-protocols.md` | MIGRATED | `arch-mcp-ecosystem` | — |
 | `process/process-n8n-workflow-hygiene.md` | MIGRATED | `arch-mcp-ecosystem` | — |
 | `process/process-nodejs-v25-api-preview.md` | MIGRATED | `arch-dependency-governance` | — |
-| `process/process-ollama-v015-improvements.md` | MIGRATED | `core/skills/ai-providers-architecture` | — |
+| `process/process-ollama-v015-improvements.md` | MIGRATED | `core/skills/ai-providers-architecture.md` | — |
 | `process/process-paths-management.md` | MIGRATED | `arch-foundation` (PATHS) | — |
 | `process/process-release-categorization.md` | MIGRATED | `process-migration-prioritization` | — |
 | `process/process-session-handoff.md` | MIGRATED | `process-ai-collaboration` | — |
@@ -362,9 +362,9 @@
 | `process/process-skills-scope-routing.md` | MIGRATED | `process-skill-governance` | — |
 | `process/process-ssot-crosslinks.md` | MIGRATED | `arch-foundation` | — |
 | `process/process-windows-docker-paths.md` | MIGRATED | `arch-foundation` | — |
-| `process/protocol-command-omk.md` | MIGRATED | `references/commands.md` | — |
-| `process/protocol-command-vzp.md` | MIGRATED | `references/commands.md` | — |
-| `process/protocol-slash-commands-usage.md` | MIGRATED | `references/commands.md` | — |
+| `process/protocol-command-omk.md` | MIGRATED | `is/skills/references/commands.md` | — |
+| `process/protocol-command-vzp.md` | MIGRATED | `is/skills/references/commands.md` | — |
+| `process/protocol-slash-commands-usage.md` | MIGRATED | `is/skills/references/commands.md` | — |
 
 ### 2.2 Libs
 
@@ -390,9 +390,9 @@
 
 | Файл | Статус | Целевой скилл | Действия |
 |------|--------|---------------|----------|
-| `troubleshooting/docker-code-not-updating.md` | MIGRATED | `is/skills/arch-backend-core` | — |
-| `troubleshooting/docker-port-shadow-diagnosis.md` | MIGRATED | `is/skills/arch-backend-core` | — |
-| `troubleshooting/docker-v29-overlay-regression.md` | MIGRATED | `is/skills/arch-backend-core` | — |
+| `troubleshooting/docker-code-not-updating.md` | MIGRATED | `is/skills/arch-backend-core.md` | — |
+| `troubleshooting/docker-port-shadow-diagnosis.md` | MIGRATED | `is/skills/arch-backend-core.md` | — |
+| `troubleshooting/docker-v29-overlay-regression.md` | MIGRATED | `is/skills/arch-backend-core.md` | — |
 
 ### 2.6 Index
 
@@ -419,8 +419,8 @@
 
 ### Фаза 1: Высокий приоритет (критичные для работы)
 
-1. **Cache**: `cache-keys`, `cache-versioning` → MERGE в `core/skills/cache-layer`
-2. **Integrations**: `integrations-postgres`, `integrations-rate-limiting` → MERGE в `core/skills/data-providers-architecture`
+1. **Cache**: `cache-keys`, `cache-versioning` → MERGE в `core/skills/cache-layer.md`
+2. **Integrations**: `integrations-postgres`, `integrations-rate-limiting` → MERGE в `core/skills/data-providers-architecture.md`
 3. **Components**: `components-tooltips`, `components-modal-buttons` → ADAPT в `app/skills/`
 4. **Process**: `process-token-safety` → MERGE в `process-token-discipline`
 
@@ -457,8 +457,8 @@
 
 | Критерий | Пример |
 |----------|--------|
-| Один целевой скилл | `cache-keys`, `cache-versioning`, `cache-strategy` → все в `core/skills/cache-layer` |
-| Одна категория/слой | Несколько `integrations-*` → `core/skills/data-providers-architecture` |
+| Один целевой скилл | `cache-keys`, `cache-versioning`, `cache-strategy` → все в `core/skills/cache-layer.md` |
+| Одна категория/слой | Несколько `integrations-*` → `core/skills/data-providers-architecture.md` |
 | Общие causality-хеши | Donor-скиллы ссылаются на одни и те же `#for-*` |
 | Связанные по смыслу | `process-token-safety` + `process-dynamic-context` → `process-token-discipline` |
 
@@ -512,28 +512,28 @@
 
 | [ ] | Кластер | Target | Donors (кратко) | Фаза |
 |-----|---------|--------|-----------------|------|
-| [x] | cache-layer | `core/skills/cache-layer` | cache-keys, cache-versioning, cache-strategy | 1 |
-| [x] | data-providers | `core/skills/data-providers-architecture` | integrations-postgres, rate-limiting, data-provider-resilience, coingecko-file-protocol, metrics-validation | 1 |
+| [x] | cache-layer | `core/skills/cache-layer.md` | cache-keys, cache-versioning, cache-strategy | 1 |
+| [x] | data-providers | `core/skills/data-providers-architecture.md` | integrations-postgres, rate-limiting, data-provider-resilience, coingecko-file-protocol, metrics-validation | 1 |
 | [x] | token-discipline | `process-token-discipline` | process-token-safety, process-dynamic-context | 1 |
-| [x] | components-ui | `app/skills/ui-architecture` | components-tooltips, modal-buttons, boundaries, column-visibility | 1 |
+| [x] | components-ui | `app/skills/ui-architecture.md` | components-tooltips, modal-buttons, boundaries, column-visibility | 1 |
 | [x] | arch-rollback | `arch-rollback` | process-disaster-recovery, process-docker-disaster-recovery | 2 |
 | [x] | arch-mcp-ecosystem | `arch-mcp-ecosystem` | process-continue-mcp-synergy, unified-mcp-orchestration, n8n-workflow-hygiene, process-cursor-settings-management, process-github-workflow, protocol-n8n-mcp-interaction, protocol-node-mcp-development | 2 |
 | [x] | arch-skills-mcp | `arch-skills-mcp` | batch-skills-review, commit-skill-extraction, skill-pipeline, skill-based-playbooks, autonomous-skill-synthesis, process-commit-analysis-heuristics, process-future-skill-impact-analysis | 2 |
 | [x] | process-lib-governance | `process-lib-governance` | libs-zod-v3-v4-compat-layer, process-zod-schema-governance | 2 |
 | [x] | arch-foundation | `arch-foundation` | process-continue-config-ssot, git-submodule-drift/resilience, protocol-git-commit, ssot-crosslinks, architecture-relative-paths, process-git-foundation-reliability, process-infrastructure-maintenance, process-node-foundation-reliability, components-ssot | 2 |
-| [x] | messages-architecture | `core/skills/messages-architecture` | messages-keys-and-config, messages-translator | 2 |
-| [x] | config-contracts | `core/skills/config-contracts` | workspace-config, libs-mbb-auto-activation, libs-mbb-config | 2 |
-| [x] | ui-architecture | `app/skills/ui-architecture` | layout-alignment, responsive-visibility, ui-components-unified, dom-markup | 2 |
-| [x] | ai-providers-architecture | `core/skills/ai-providers-architecture` | llm-providers-config, perplexity-connect, llm-fallback-mechanism, ollama-timeout-fallback | 2 |
-| [x] | cache-versioning | `core/skills/cache-layer` | architecture-versioning | 2 |
-| [x] | data-providers-metadata | `core/skills/data-providers-architecture` | architecture-provider-metadata | 2 |
-| [x] | ux-principles | `app/skills/ux-principles` | components-styling-principles, ux-interface-terms | 2 |
-| [x] | domain-portfolio | `core/skills/domain-portfolio` | auto-coin-sets, metrics-portfolio-structure | 2 |
-| [x] | process-skill-governance | `is/skills/process-skill-governance` | process-skills-granularity, process-skills-scope-routing | 2 |
-| [x] | file-protocol-cors-guard | `app/skills/file-protocol-cors-guard` | integrations-oauth-file-protocol | 2 |
-| [x] | vue-implementation-patterns | `app/skills/vue-implementation-patterns` | components-template-split | 2 |
+| [x] | messages-architecture | `core/skills/messages-architecture.md` | messages-keys-and-config, messages-translator | 2 |
+| [x] | config-contracts | `core/skills/config-contracts.md` | workspace-config, libs-mbb-auto-activation, libs-mbb-config | 2 |
+| [x] | ui-architecture | `app/skills/ui-architecture.md` | layout-alignment, responsive-visibility, ui-components-unified, dom-markup | 2 |
+| [x] | ai-providers-architecture | `core/skills/ai-providers-architecture.md` | llm-providers-config, perplexity-connect, llm-fallback-mechanism, ollama-timeout-fallback | 2 |
+| [x] | cache-versioning | `core/skills/cache-layer.md` | architecture-versioning | 2 |
+| [x] | data-providers-metadata | `core/skills/data-providers-architecture.md` | architecture-provider-metadata | 2 |
+| [x] | ux-principles | `app/skills/ux-principles.md` | components-styling-principles, ux-interface-terms | 2 |
+| [x] | domain-portfolio | `core/skills/domain-portfolio.md` | auto-coin-sets, metrics-portfolio-structure | 2 |
+| [x] | process-skill-governance | `is/skills/process-skill-governance.md` | process-skills-granularity, process-skills-scope-routing | 2 |
+| [x] | file-protocol-cors-guard | `app/skills/file-protocol-cors-guard.md` | integrations-oauth-file-protocol | 2 |
+| [x] | vue-implementation-patterns | `app/skills/vue-implementation-patterns.md` | components-template-split | 2 |
 | [x] | protocol-commit | `arch-foundation` | protocol-commit | 2 |
-| [x] | commands-slash | `references/commands.md` | protocol-slash-commands-usage | 2 |
+| [x] | commands-slash | `is/skills/references/commands.md` | protocol-slash-commands-usage | 2 |
 | [x] | libs-policy | `process-lib-governance` | libs-policy | 2 |
 | [x] | process-docs-lifecycle | `process-docs-lifecycle` | process-doc-levels, process-doc-updates | 2 |
 | [x] | process-migration-prioritization | `process-migration-prioritization` | process-release-categorization | 2 |
@@ -542,44 +542,44 @@
 | [x] | arch-backend-core | `arch-backend-core` | process-docker-resource-governance, process-sqlite-runtime-compatibility, process-wsl-optimization, architecture-client-vs-cloud, architecture-loading | 2 |
 | [x] | arch-testing-ci | `arch-testing-ci` | process-autonomous-quality-gate, process-docker-compose-release-validation, process-git-local-ci-mirror, integrations-cloudflare-testing | 2 |
 | [x] | process-evolution-logging | `process-evolution-logging` | process-project-evolution-aggregation | 2 |
-| [x] | external-integrations | `core/skills/external-integrations` | integrations-api-proxy, integrations-overview | 2 |
+| [x] | external-integrations | `core/skills/external-integrations.md` | integrations-api-proxy, integrations-overview | 2 |
 | [x] | arch-dependency-governance | `arch-dependency-governance` | process-node-dependency-lifecycle, process-nodejs-v25-api-preview | 2 |
 | [x] | arch-mcp-ecosystem-batch2 | `arch-mcp-ecosystem` | continue-cli-mcp-nuances, mcp-sdk-security-rollout, mcp-server-yaml-parsing, process-n8n-docker-code-nodes, process-n8n-mcp-integration | 2 |
 | [x] | arch-mcp-ecosystem-batch3 | `arch-mcp-ecosystem` | integrations-n8n-api-access, integrations-n8n-code-node-v2, process-continue-ai-subagents, process-n8n-security-oauth-protocols | 2 |
 | [x] | arch-foundation-batch2 | `arch-foundation` | architecture-core-stack, infra-global-management, process-windows-docker-paths | 2 |
-| [x] | ai-providers-architecture | `core/skills/ai-providers-architecture` | integration-artificial-analysis-iq, process-model-registry-maintenance, process-ollama-node-integration-checks, process-ollama-runtime-governance | 2 |
+| [x] | ai-providers-architecture | `core/skills/ai-providers-architecture.md` | integration-artificial-analysis-iq, process-model-registry-maintenance, process-ollama-node-integration-checks, process-ollama-runtime-governance | 2 |
 | [x] | arch-skills-mcp-batch2 | `arch-skills-mcp` | process-skills-curation-intelligence, process-skills-lifecycle | 2 |
 | [x] | arch-layout-governance | `arch-layout-governance` | libs-repo-setup, libs-repo-workflow | 2 |
 | [x] | arch-control-plane | `arch-control-plane` | process-orchestrator-evolution, architecture-hybrid-bridge | 2 |
 | [x] | arch-backend-core-batch2 | `arch-backend-core` | protocol-docker-image-hardening | 2 |
-| [x] | domain-portfolio | `core/skills/domain-portfolio` | process-coin-set-merge-consistency | 2 |
+| [x] | domain-portfolio | `core/skills/domain-portfolio.md` | process-coin-set-merge-consistency | 2 |
 | [x] | arch-external-parity | `arch-external-parity` | process-external-integration-closure | 2 |
 | [x] | process-env-sync | `process-env-sync` | process-env-key-governance | 2 |
 | [x] | process-code-documentation | `process-code-documentation` | process-doc-style | 2 |
 | [x] | process-ai-collaboration-batch2 | `process-ai-collaboration` | process-session-handoff | 2 |
-| [x] | config-contracts | `core/skills/config-contracts` | process-settings-sync | 2 |
+| [x] | config-contracts | `core/skills/config-contracts.md` | process-settings-sync | 2 |
 | [x] | arch-mcp-ecosystem-batch4 | `arch-mcp-ecosystem` | architecture-mcp-ui-interaction, integrations-continue-cli-mistral, process-github-workflow | 2 |
 | [x] | arch-cloudflare-infrastructure | `arch-cloudflare-infrastructure` | integrations-cloudflare-core, yandex-cloud-function-code | 2 |
-| [x] | ai-providers-ollama | `core/skills/ai-providers-architecture` | process-ollama-v015-improvements | 2 |
+| [x] | ai-providers-ollama | `core/skills/ai-providers-architecture.md` | process-ollama-v015-improvements | 2 |
 | [x] | arch-backend-core-batch3 | `arch-backend-core` | process-better-sqlite3-node-abi-gate | 2 |
 | [x] | process-lib-governance-batch2 | `process-lib-governance` | libs-zod-v4-migration-plan | 2 |
-| [x] | domain-portfolio-batch2 | `core/skills/domain-portfolio` | libs-metadata-generation | 2 |
-| [x] | external-integrations-batch2 | `core/skills/external-integrations` | process-news-intelligence | 2 |
-| [x] | icon-manager | `app/skills/icon-manager` | components-icon-manager | 2 |
-| [x] | ai-providers-partial | `core/skills/ai-providers-architecture` | integrations-ai-core (Key Recovery, CORS) | 2 |
-| [x] | arch-layout-libs | `is/skills/arch-layout-governance` | libs-mbb-config (Libs structure) | 2 |
-| [x] | process-token-partial | `is/skills/process-token-discipline` | process-token-safety, process-dynamic-context (Skill Anchors, shadow_index) | 2 |
-| [x] | data-providers-postgres | `core/skills/data-providers-architecture` | integrations-postgres (Schema Migration, Guard Layers) | 2 |
-| [x] | domain-portfolio-partial | `core/skills/domain-portfolio` | auto-coin-sets (Structured Process) | 2 |
-| [x] | arch-backend-partial | `is/skills/arch-backend-core` | architecture-client-vs-cloud, architecture-loading (Version-Bound, Component boundaries) | 2 |
-| [x] | data-providers-completion | `core/skills/data-providers-architecture` | integrations-data-providers, integrations-data-provider-resilience, architecture-provider-metadata, integrations-rate-limiting | 2 |
-| [x] | messages-architecture-completion | `core/skills/messages-architecture` | messages-ui-and-lifecycle | 2 |
-| [x] | metrics-air-completion | `core/skills/metrics-air-model` | metrics-models | 2 |
-| [x] | bootstrap-vue-completion | `app/skills/bootstrap-vue-integration` | components-bootstrap | 2 |
-| [x] | process-code-anchors-completion | `is/skills/process-code-anchors` | process-skill-code-loop-anchors (Anchor Placement) | 2 |
-| [x] | async-contracts-completion | `core/skills/async-contracts` | protocol-node-timeout-abort-contract (Verification) | 2 |
-| [x] | arch-testing-preflight | `is/skills/arch-testing-ci` | process-node-preflight-checks, process-preflight-diagnostics-quality-gate | 2 |
-| [x] | arch-skills-quality-validation | `is/skills/arch-skills-mcp` | process-skill-quality-validation | 2 |
+| [x] | domain-portfolio-batch2 | `core/skills/domain-portfolio.md` | libs-metadata-generation | 2 |
+| [x] | external-integrations-batch2 | `core/skills/external-integrations.md` | process-news-intelligence | 2 |
+| [x] | icon-manager | `app/skills/icon-manager.md` | components-icon-manager | 2 |
+| [x] | ai-providers-partial | `core/skills/ai-providers-architecture.md` | integrations-ai-core (Key Recovery, CORS) | 2 |
+| [x] | arch-layout-libs | `is/skills/arch-layout-governance.md` | libs-mbb-config (Libs structure) | 2 |
+| [x] | process-token-partial | `is/skills/process-token-discipline.md` | process-token-safety, process-dynamic-context (Skill Anchors, shadow_index) | 2 |
+| [x] | data-providers-postgres | `core/skills/data-providers-architecture.md` | integrations-postgres (Schema Migration, Guard Layers) | 2 |
+| [x] | domain-portfolio-partial | `core/skills/domain-portfolio.md` | auto-coin-sets (Structured Process) | 2 |
+| [x] | arch-backend-partial | `is/skills/arch-backend-core.md` | architecture-client-vs-cloud, architecture-loading (Version-Bound, Component boundaries) | 2 |
+| [x] | data-providers-completion | `core/skills/data-providers-architecture.md` | integrations-data-providers, integrations-data-provider-resilience, architecture-provider-metadata, integrations-rate-limiting | 2 |
+| [x] | messages-architecture-completion | `core/skills/messages-architecture.md` | messages-ui-and-lifecycle | 2 |
+| [x] | metrics-air-completion | `core/skills/metrics-air-model.md` | metrics-models | 2 |
+| [x] | bootstrap-vue-completion | `app/skills/bootstrap-vue-integration.md` | components-bootstrap | 2 |
+| [x] | process-code-anchors-completion | `is/skills/process-code-anchors.md` | process-skill-code-loop-anchors (Anchor Placement) | 2 |
+| [x] | async-contracts-completion | `core/skills/async-contracts.md` | protocol-node-timeout-abort-contract (Verification) | 2 |
+| [x] | arch-testing-preflight | `is/skills/arch-testing-ci.md` | process-node-preflight-checks, process-preflight-diagnostics-quality-gate | 2 |
+| [x] | arch-skills-quality-validation | `is/skills/arch-skills-mcp.md` | process-skill-quality-validation | 2 |
 
 #### Протокол обновления
 
@@ -696,7 +696,7 @@
 | `causality-registry` | `validate-causality.js`, `validate-causality-invariant.js` |
 | `process-skill-governance` | `validate-skills.js`, `is/contracts/prefixes.js` |
 | `arch-foundation` (env) | `env-rules.js`, `validateEnv` |
-| `core/skills/cache-layer` | `validate-cache-integrity-delta.js` |
+| `core/skills/cache-layer.md` | `validate-cache-integrity-delta.js` |
 
 **Антипаттерн:** Мигрировать скилл про cache-keys, не создав проверку формата ключей — при первом же нарушении контракт «рассыплется». Лучше сразу предусмотреть gate или явно зафиксировать в скилле: «Gate: deferred until cache refactor».
 

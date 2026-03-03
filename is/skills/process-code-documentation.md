@@ -14,7 +14,7 @@ id: sk-f449b3
 
 ## Reasoning
 
-- **#for-header-skill-separation** File headers must act as strict API contracts answering "What is this?" and "How do I use it?". Broad philosophical principles and "Why" statements belong in the `skills/` registry. Mixing them causes context window bloat and rule divergence across the codebase.
+- **#for-header-skill-separation** File headers must act as strict API contracts answering "What is this?" and "How do I use it?". Broad philosophical principles and "Why" statements belong in the skills registry (см. is/skills/, core/skills/, app/skills/). Mixing them causes context window bloat and rule divergence across the codebase.
 - **#for-template-logic-separation** In our No-Build Vue architecture, templates (`*-template.js`) and logic (`*.js`) are physically separated. Documenting DOM structure in the logic file or API props in the template file creates cognitive dissonance.
 - **#not-doc-duplication** Duplicating documentation (e.g., listing props in both the template and the component file) guarantees that one will eventually drift and become incorrect.
 - **#for-english-why-comments** Inline comments describing "what" the code does (e.g., `// loop through array`) are noise. Comments must exclusively explain "Why" (circumstances) and "For what" (goal) in English to build a raw causality base.
@@ -45,7 +45,7 @@ id: sk-f449b3
 
 **Cyrillic anchors**: Core protocol commands use Cyrillic abbreviations as semantic anchors; ALWAYS wrap in backticks (e.g. `ЕИП`, `ОМК`, `АИС`).
 
-**Constraints**: Docs freeze — no new files in old `docs/`; use `skills/`; English for new content (except anchors).
+**Constraints**: Docs freeze — no new files in old docs/; use skills (см. is/skills/ и т.д.); English for new content (except anchors).
 
 ## Contracts
 

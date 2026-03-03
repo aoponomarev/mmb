@@ -59,7 +59,7 @@ The project uses Vue 3 loaded via a global `<script>` tag without bundlers (Vite
 **Rules**:
 - Templates are defined in separate JS files as strings (`app/templates/`).
 - Module loading order is controlled by `core/module-loader.js`.
-- No bundler output, no `dist/` directory — `index.html` is the deployment artifact directly.
+- No bundler output, no dist/ directory — index.html is the deployment artifact directly.
 
 **#for-file-protocol** No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes.
 
@@ -83,7 +83,7 @@ In both modes, external API calls subject to CORS must go through the Cloudflare
 
 ### Modal Action Manager
 
-`cmp-modal` provides `modalApi` via `provide/inject`. Buttons register to appear in Header or Footer.
+`cmp-modal` provides `modalApi` via provide/inject. Buttons register to appear in Header or Footer.
 
 - **API**: `registerButton(id, config)`, `updateButton(id, updates)`, `removeButton(id)`
 - **Layout**: Cancel footer left; Save/Action footer right; Close header right

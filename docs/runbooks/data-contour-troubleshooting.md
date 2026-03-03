@@ -54,10 +54,10 @@ Open browser DevTools (Console) and look for log lines during coin loading:
 
 ## Scenario: Data is Stale (Not Updating)
 
-**Symptoms:** `fetched_at` in `/api/coins/market-cache` is hours old
+**Symptoms:** `fetched_at` in the market-cache API response is hours old
 
 **Diagnosis:**
-1. Check `GET /api/coins/cycles` — are new cycles being created?
+1. Check the cycles API — are new cycles being created?
 2. Check fetcher logs in Yandex Cloud — is it returning `SKIPPED`?
 3. Verify the cron trigger is active (Yandex Cloud Triggers page)
 
@@ -137,7 +137,7 @@ Expected: exactly 2 rows (2 most recent cycle_ids).
 | `COINGECKO_API_KEY` | No | Demo/Pro key for higher rate limits |
 
 ### api-gateway (Yandex Cloud Function)
-Same DB variables as above. Serves the `/api/coins/market-cache` and `/api/coins/cycles` endpoints.
+Same DB variables as above. Serves the market-cache and cycles API endpoints.
 
 ### Cloudflare Worker (app-api)
 | Variable | Type | Description |

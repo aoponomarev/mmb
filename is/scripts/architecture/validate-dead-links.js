@@ -1,14 +1,16 @@
 /**
  * @skill is/skills/arch-skills-mcp
  * @description Finds dead links in skills and docs — references to non-existent files.
+ * @see is/contracts/path-contracts.js — SSOT for exclusions and resolve logic.
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import {
+  ROOT,
+  shouldSkipLink,
+  isExcludedSource,
+  resolvePath,
+} from "../../contracts/path-contracts.js";
 
 const SCAN_DIRS = [
   path.join(ROOT, "is", "skills"),
@@ -18,41 +20,23 @@ const SCAN_DIRS = [
 ];
 
 const JSON_MODE = process.argv.includes("--json");
-const SKIP_PATTERNS = [
-  /^https?:\/\//,
-  /^mailto:/,
-  /^#/,
-  /^sk-[a-z0-9]+$/i,
-  /^ais-[a-z0-9]+$/i,
-  /^docs\/backlog\//,
-  /^path\/to\//,
-  /^\.(js|ts|md|mdc|json|yaml|yml)$/,  // extension-only like ".js"
-];
+const ALL_MODE = process.argv.includes("--all");
 
 const LINK_REGEX = /\[([^\]]*)\]\(([^)\s]+)\)/g;
 const BACKTICK_REGEX = /`([a-zA-Z0-9_/.-]+)`/g;
 
+/** In --all mode: only skip URLs, anchors, empty. No donor/API/placeholder filters. */
 function shouldSkip(link) {
   const trimmed = link.trim();
   if (!trimmed) return true;
-  if (SKIP_PATTERNS.some((p) => p.test(trimmed))) return true;
-  if (trimmed.includes(" ")) return true;
-  return false;
-}
-
-function resolvePath(link, sourceFile) {
-  const trimmed = link.trim().replace(/\\/g, "/");
-  const sourceDir = path.dirname(sourceFile);
-  const candidates = [
-    path.join(ROOT, trimmed),
-    path.join(sourceDir, trimmed),
-    path.normalize(path.join(sourceDir, trimmed)),
-  ];
-  for (const c of candidates) {
-    const normalized = path.normalize(c);
-    if (fs.existsSync(normalized)) return normalized;
+  if (ALL_MODE) {
+    if (/^https?:\/\//.test(trimmed)) return true;
+    if (/^mailto:/.test(trimmed)) return true;
+    if (/^#/.test(trimmed)) return true;
+    if (trimmed.includes(" ")) return true;
+    return false;
   }
-  return path.join(ROOT, trimmed);
+  return shouldSkipLink(link);
 }
 
 function walkMarkdown(dir, result = []) {
@@ -63,7 +47,7 @@ function walkMarkdown(dir, result = []) {
       if (entry.name === "node_modules" || entry.name === ".git") continue;
       walkMarkdown(full, result);
     } else if (entry.isFile() && entry.name.endsWith(".md")) {
-      result.push(full);
+      if (ALL_MODE || !isExcludedSource(full)) result.push(full);
     }
   }
   return result;
@@ -76,14 +60,15 @@ function extractLinks(content, sourceFile) {
   let m;
   const linkLooksLikePath = (l) =>
     l.includes("/") ||
-    /^(is|core|app|docs|shared)\//i.test(l) ||
-    /\.(md|js|ts|json|yaml|yml)$/i.test(l);
+    /^(is|core|app|docs|shared|a|architecture|archive|cache|cloud|process)\//i.test(l) ||
+    /\.(md|js|ts|json|yaml|yml)$/i.test(l) ||
+    (ALL_MODE && l.length >= 3);
   LINK_REGEX.lastIndex = 0;
   while ((m = LINK_REGEX.exec(content)) !== null) {
     const link = m[2];
     if (shouldSkip(link)) continue;
     if (!linkLooksLikePath(link)) continue;
-    const resolved = resolvePath(link, sourceFile);
+    const resolved = resolvePath(link, { sourceFile });
     if (!fs.existsSync(resolved)) {
       dead.push({
         source_file: relSource,
@@ -103,9 +88,10 @@ function extractLinks(content, sourceFile) {
     const looksLikePath =
       link.includes("/") ||
       /^[a-z-]+\/[a-z0-9_/.-]+\.(js|ts|md|json)$/i.test(link) ||
-      /^(is|core|app|docs|shared)\/[a-z0-9_/.-]+/i.test(link);
+      /^(is|core|app|docs|shared|a|architecture|archive|cache|cloud|process)\/[a-z0-9_/.-]+/i.test(link) ||
+      (ALL_MODE && /[a-z0-9]+\/[a-z0-9_/.-]+/i.test(link));
     if (!looksLikePath) continue;
-    const resolved = resolvePath(link, sourceFile);
+    const resolved = resolvePath(link, { sourceFile });
     if (!fs.existsSync(resolved)) {
       dead.push({
         source_file: relSource,

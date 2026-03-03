@@ -10,7 +10,7 @@ id: sk-icon-mgr
 # Icon Manager
 
 > **Context**: Resolving coin icon URLs with caching and fallbacks for the portfolio UI.
-> **Scope**: `core/api/icon-manager.js`, `libs/assets/coins/`
+> **Scope**: core/api/icon-manager.js, libs assets (coin icons)
 
 ## Reasoning
 
@@ -32,4 +32,4 @@ id: sk-icon-mgr
 ## Contracts
 
 - **SSOT**: `core/api/icon-manager.js` — resolution logic.
-- **Storage**: `libs/assets/coins/` — icon files.
+- **Storage**: libs assets — icon files.

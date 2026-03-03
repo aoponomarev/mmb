@@ -105,7 +105,7 @@ npm run skills:batch-review         [новый: periodic]
 **Формат парсинга:**
 
 - Секция начинается с `## Implementation Status in Target App` или `## Implementation Status`.
-- Строки вида `- \`path/to/file.js\`` или `- path/to/file.js` — извлекать путь.
+- Строки вида `- <path>` (например path/to/file.js) — извлекать путь.
 - Строки вида `| path | desc |` в таблицах — извлекать первый столбец.
 - Игнорировать: `Implemented`, `Simplified`, `Deferred`, общие фразы без путей.
 - Путь считается относительным к корню проекта (`ROOT`).
@@ -113,7 +113,7 @@ npm run skills:batch-review         [новый: periodic]
 **Регулярные выражения (примеры):**
 
 ```regex
-# Bullet list: - `core/api/foo.js` or - core/api/foo.js
+# Bullet list: - path or - path (пример)
 - `?([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`?
 
 # Table: | path | desc |
@@ -130,9 +130,9 @@ npm run skills:batch-review         [новый: periodic]
 
 ### 3.2 Path Existence (Core Rules, Context)
 
-**Цель:** Критичные пути в Core Rules и Context, упомянутые явно (например, `core/api/providers/`, `is/scripts/`), должны существовать.
+**Цель:** Критичные пути в Core Rules и Context, упомянутые явно (например core/api/providers/, is/scripts/), должны существовать.
 
-**Подход:** Эвристика. Ищем паттерны `path/to/dir/`, `path/to/file.js` в секциях `## Core Rules` и `> **Context**`. Проверяем только пути, начинающиеся с `core/`, `app/`, `is/`, `shared/`, `scripts/`.
+**Подход:** Эвристика. Ищем паттерны путей (dir/, file.js) в секциях `## Core Rules` и `> **Context**`. Проверяем только пути, начинающиеся с `core/`, `app/`, `is/`, `shared/`, `scripts/`.
 
 **Сложность:** Высокая (много false positives). **Рекомендация:** Фаза 2. В Фазе 1 — только Implementation Status.
 
@@ -148,9 +148,9 @@ npm run skills:batch-review         [новый: periodic]
 ```
 
 **Парсинг:** Сканировать все `.js`, `.ts`, `.mdc` в `core/`, `app/`, `is/`, `shared/`. Извлекать `@skill <path>`. Path может быть:
-- `is/skills/arch-foundation` (без .md)
+- `is/skills/arch-foundation.md` (без .md)
 - `is/skills/arch-foundation.md`
-- `core/skills/api-layer`
+- `core/skills/api-layer.md`
 
 **Проверка:** Файл `ROOT/<path>` или `ROOT/<path>.md` существует.
 
@@ -207,7 +207,7 @@ npm run skills:batch-review         [новый: periodic]
 
 | Вариант | Триггер | Где |
 |---------|---------|-----|
-| A | Pre-commit hook | `.git/hooks/pre-commit` → вызывает скрипт |
+| A | Pre-commit hook | .git/hooks/pre-commit → вызывает скрипт |
 | B | Preflight-solo | `scripts/git/preflight-solo.ps1` — перед коммитом вручную |
 | C | CI | GitHub Actions — на PR выводить affected skills в комментарий |
 
@@ -239,14 +239,14 @@ npm run skills:batch-review         [новый: periodic]
 
 ### 5.2 Dead Links
 
-**Цель:** Найти в skills (и docs) ссылки вида `[text](path)`, `path/to/file`, `` `path` ``, которые ведут на несуществующие файлы.
+**Цель:** Найти в skills (и docs) ссылки вида [text](путь), path/to/file, backtick-path, которые ведут на несуществующие файлы.
 
 **Паттерны:**
 
-- `](path)` — markdown link
+- markdown link [text](url)
 - `](../path)` — relative
-- `` `core/api/foo.js` `` — backtick path
-- `is/scripts/architecture/validate-skills.js` — plain path
+- backtick path (например core/api/example.js)
+- plain path (например is/scripts/architecture/validate-skills.js)
 
 **Проверка:** `fs.existsSync(path.join(ROOT, normalizedPath))`. Нормализация: разрешить `../` от расположения текущего файла. При исправлении битых ссылок — см. чеклист раздела 7 и антипаттерн «Dead link» в разделе 14.
 
@@ -291,7 +291,7 @@ npm run skills:batch-review         [новый: periodic]
 **Механизм:** Расширить `validate-affected-skills.js` или создать `validate-affected-annotations.js`:
 1. `git diff --cached --name-only`. Для каждого файла: парсить `@causality` и `@skill-anchor` (первые 30–50 строк).
 2. Собрать множество `{ hash, file }`.
-3. Вывод: `[affected-causalities] The following hashes may need review (file changed): #for-rate-limiting (core/api/foo.js)`.
+3. Вывод: `[affected-causalities] The following hashes may need review (file changed): #for-rate-limiting (<path>)`.
 
 **Связь с validate-affected-skills:** Один скрипт может выводить и affected skills, и affected hashes — оба используют `git diff` и парсинг изменённых файлов. SSOT: `validate-affected-annotations.js` или расширение validate-affected-skills.
 
@@ -545,7 +545,7 @@ npm run skills:batch-review         [новый: periodic]
 
 **Логика:**
 1. Рекурсивно читать .md файлы.
-2. Regex для markdown links `[.*?]((.+?))`, inline paths `` `([a-zA-Z0-9_/.-]+)` ``, plain paths (сложнее).
+2. Regex для markdown links и inline paths в backticks; plain paths (сложнее).
 3. Нормализовать путь относительно текущего файла.
 4. Проверить exists. Исключить http(s), #, mailto.
 
@@ -586,7 +586,7 @@ npm run skills:batch-review         [новый: periodic]
 {
   "ok": false,
   "errors": [
-    { "file": "core/api/foo.js", "line": 3, "skill": "is/skills/arch-missing", "reason": "File not found" }
+    { "file": "<path>", "line": 3, "skill": "is/skills/arch-missing", "reason": "File not found" }
   ]
 }
 ```
@@ -595,7 +595,7 @@ npm run skills:batch-review         [новый: periodic]
 
 ```json
 {
-  "changed_files": ["core/api/market-snapshot-service.js"],
+  "changed_files": ["<path>"],
   "affected_skills": [
     { "skill": "is/skills/arch-backend-core.md", "via_file": "core/api/market-snapshot-service.js" }
   ]
@@ -607,7 +607,7 @@ npm run skills:batch-review         [новый: periodic]
 ```json
 {
   "dead_links": [
-    { "source_file": "is/skills/arch-backend-core.md", "line": 72, "link": "core/api/old-provider.js", "resolved": "core/api/old-provider.js" }
+    { "source_file": "<source>", "line": 72, "link": "<path>", "resolved": "<path>" }
   ]
 }
 ```

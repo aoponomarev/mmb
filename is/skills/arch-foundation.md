@@ -150,7 +150,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 
 ### 16. Node Foundation Reliability
 
-**Goal**: Stable Node foundation for services and scripts. SSOT: root `package.json`, `is/mcp/package.json`.
+**Goal**: Stable Node foundation for services and scripts. SSOT: root package.json; для MCP — см. is/mcp/ при наличии.
 
 - Node LTS baseline consistent across host.
 - Service packages with strict requirements declare `engines.node`.
@@ -167,7 +167,7 @@ If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be
 
 **Extraction targets**: Titles/Icons → `core/config/modals-config.js`; API Endpoints → `core/config/app-config.js`; Cache Rules → `core/cache/cache-config.js`; UI Text → `core/config/tooltips-config.js`.
 
-**Decision matrix**: Repeated HTML → `shared/component`; Repeated Options → `core/config`; Repeated Logic → `shared/utility`.
+**Decision matrix**: Repeated HTML → shared/component (концептуально); Repeated Options → core/config; Repeated Logic → shared/utility (см. arch-foundation).
 
 ### 18. Core Tech Stack (Execution Environment)
 

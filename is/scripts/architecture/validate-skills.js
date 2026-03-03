@@ -1,24 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import {
     isValidSkillPrefix,
     shouldValidateSkillPrefix,
     SKILL_ALLOWED,
 } from "../../contracts/prefixes.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT, resolvePath, EXCLUDE_PATH_PATTERNS } from "../../contracts/path-contracts.js";
 
 const IMPL_STATUS_HEADERS = ["## Implementation Status in Target App", "## Implementation Status"];
 const PATH_EXTENSIONS = /\.(js|ts|json|md|yaml|yml)$/;
-const EXCLUDE_PATTERNS = [
-    /node_modules/,
-    /\bwrangler\b/,
-    /\bnpm\b/,
-    /\*|\.\.\./,
-];
 
 const SKILL_DIRS = [
     path.join(ROOT, "is", "skills"),
@@ -148,39 +138,26 @@ function validateImplementationStatusPaths(file, text, rel, errors, warnings) {
         const bulletMatch = line.match(/^-\s*`?([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`?\s/);
         if (bulletMatch) {
             const p = bulletMatch[1].trim();
-            if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+            if (!EXCLUDE_PATH_PATTERNS.some((re) => re.test(p))) paths.add(p);
         }
 
         const tableMatch = line.match(/^\|\s*`?([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`?\s*\|/);
         if (tableMatch) {
             const p = tableMatch[1].trim();
-            if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+            if (!EXCLUDE_PATH_PATTERNS.some((re) => re.test(p))) paths.add(p);
         }
 
         const inlineMatch = line.match(/`([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`/g);
         if (inlineMatch && /Implemented|Simplified|Deferred/i.test(line) && !/\bNo\s+`|not\s+`|without\s+`/i.test(line)) {
             for (const m of inlineMatch) {
                 const p = m.replace(/^`|`$/g, "");
-                if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+                if (!EXCLUDE_PATH_PATTERNS.some((re) => re.test(p))) paths.add(p);
             }
         }
     }
 
-    const resolvePath = (p) => {
-        if (path.isAbsolute(p)) return p;
-        const atRoot = path.join(ROOT, p);
-        if (fs.existsSync(atRoot)) return atRoot;
-        if (p.includes("/")) return atRoot;
-        const searchDirs = ["is/scripts/architecture", "is/scripts", "is/skills", "core/skills", "app/skills", ".github/workflows", "core", "app", "is", "shared", "docs"];
-        for (const d of searchDirs) {
-            const candidate = path.join(ROOT, d, p);
-            if (fs.existsSync(candidate)) return candidate;
-        }
-        return atRoot;
-    };
-
     for (const p of paths) {
-        const fullPath = resolvePath(p);
+        const fullPath = resolvePath(p, {});
         if (!fs.existsSync(fullPath)) {
             const isDocOrSkill = /^(docs\/|is\/skills\/|core\/skills\/|app\/skills\/)/.test(p);
             if (isDocOrSkill) {

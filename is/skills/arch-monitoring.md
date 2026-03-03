@@ -40,11 +40,11 @@ id: sk-92384e
 
 ### 2. SQLite Health Snapshot
 
-**Goal**: Lightweight operational visibility for SQLite health. SSOT: `scripts/sqlite-health-snapshot.js`.
+**Goal**: Lightweight operational visibility for SQLite health. SSOT: см. is/scripts/infrastructure/ (health-check, validate-*).
 
 **Trigger**: Node/runtime dependency changes; Docker compose/volume/path changes; SQLite incident symptoms (timeouts, lock errors, slow workflows).
 
-**Command**: `node scripts/sqlite-health-snapshot.js`. Expected output: JSON summary with detected SQLite files, WAL/SHM and DB size signals, better-sqlite3 load check result.
+**Command**: `node is/scripts/infrastructure/health-check.js` (или аналог). Expected output: JSON summary with detected SQLite files, WAL/SHM and DB size signals, better-sqlite3 load check result.
 
 **Preflight integration**: Script used by staged-only preflight when SQLite-risk zones are touched; strict mode via env gates in CI/local policy.
 
@@ -52,7 +52,7 @@ id: sk-92384e
 
 **Goal**: Collect SQLite evidence without risking data integrity. First step is read-only snapshot; do not run destructive cleanup/rebuild before diagnostics.
 
-**Required command**: `node scripts/sqlite-health-snapshot.js`.
+**Required command**: `node is/scripts/infrastructure/health-check.js` (или аналог).
 
 **Evidence checklist**: Presence/size of `database.sqlite`; WAL/SHM size and growth behavior; better-sqlite3 loadability and reported sqlite version.
 

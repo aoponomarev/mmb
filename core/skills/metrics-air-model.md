@@ -31,7 +31,7 @@ id: sk-22dc19
 
 ### Model Registry & Extensibility
 
-**Architecture**: `ModelManager` loads classes; `BaseModelCalculator` ensures input/output consistency. **Inputs**: `NormalizedCoinData` (PVS, Market Cap). **Outputs**: `Signal` (Direction, Confidence). **Active models**: Median AIR (median deviation from historical window); Volatility Guard (filters low-amplitude noise). **Extensibility**: New models extend `BaseModelCalculator`, implement `calculate(snapshot)`, register in `models-config.js`. File Map: `core/metrics/base-model-calculator.js`, `core/metrics/model-manager.js`.
+**Architecture**: ModelManager loads classes; BaseModelCalculator ensures input/output consistency. **Inputs**: NormalizedCoinData (PVS, Market Cap). **Outputs**: Signal (Direction, Confidence). **Active models**: Median AIR; Volatility Guard. **Extensibility**: New models extend BaseModelCalculator, implement calculate(snapshot), register in models-config.js. File Map: core/metrics/ (см. base-model-calculator, model-manager).
 
 ## Contracts
 

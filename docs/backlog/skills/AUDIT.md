@@ -19,8 +19,8 @@
 ### 2. Paths SSOT (arch-foundation, paths.js)
 
 - **scripts/health-check.js** — Wrong. Actual: `is/scripts/infrastructure/health-check.js`, invoked via `npm run health-check`.
-- **events/SKILL_CANDIDATES.json** — Not in PATHS. When promoting: use `PATHS` or add to paths.js. arch-skills-mcp uses short form; clarify as `core/events/` or `is/events/` per project layout.
-- **drafts/tasks/** — PATHS has `drafts: docs/drafts`. So `docs/drafts/tasks/` is canonical.
+- **events/SKILL_CANDIDATES.json** — Not in PATHS. When promoting: use PATHS or add to paths.js; clarify location per project layout.
+- **drafts/tasks/** — PATHS has drafts: docs/drafts. Канонично: docs/drafts/tasks/ при создании.
 
 ### 3. INFRASTRUCTURE_CONFIG.yaml
 

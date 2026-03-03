@@ -76,7 +76,7 @@ id: sk-5c0ef8
   - `core/api/market-data-service.js` — orchestration of raw market data fetching.
   - `core/api/market-metrics-service.js` — FGI/VIX/BTC dominance with cache + live strategy.
   - `core/api/market-snapshot-service.js` — composite snapshot (data + metrics).
-  - `core/api/market-contracts.js` — Zod-validated query/payload contracts.
+  - `core/contracts/market-contracts.js` — Zod-validated query/payload contracts.
   - `core/api/backend-market-runtime.js` — composition root assembling all services.
   - `core/api/market-snapshot-transport.js` — query-to-response transport adapter.
   - `core/api/market-snapshot-http.js` — framework-agnostic HTTP handler.

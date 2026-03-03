@@ -58,4 +58,4 @@
 
 ## Phase 5: Final Documentation
 *Objective: Provide a comprehensive human-readable guide.*
-- [ ] Create `docs/arch-mcp-ecosystem.md`: The grand manual combining MCP, Skills, Causality, SQLite, Invariant Checks, and Agent Rules into one narrative.
+- [ ] Create arch-mcp-ecosystem doc in docs/: The grand manual combining MCP, Skills, Causality, SQLite, Invariant Checks, and Agent Rules into one narrative.

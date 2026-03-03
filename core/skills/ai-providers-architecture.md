@@ -34,7 +34,7 @@ id: sk-d76b68
 
 ### Key Recovery (Cloudflare KV Fallback)
 
-When `getApiKey(providerName)` finds no key in local cache: (1) Call `resolveSettingsToken()` — check `localStorage('mbb_github_token')`, then bootstrap from `/api/infra/bootstrap/github-token`; (2) Fetch all settings from `/api/settings` with resolved token; (3) Save recovered keys to `cacheManager` so subsequent calls are instant. Active provider and models stored in `cacheManager` (keys `ai-provider`, `yandex-api-key`, `perplexity-api-key`, `yandex-model`, `perplexity-model`).
+When `getApiKey(providerName)` finds no key in local cache: (1) Call `resolveSettingsToken()` — check `localStorage('mbb_github_token')`, then bootstrap from the settings API; (2) Fetch all settings with resolved token; (3) Save recovered keys to `cacheManager` so subsequent calls are instant. Active provider and models stored in `cacheManager` (keys `ai-provider`, `yandex-api-key`, `perplexity-api-key`, `yandex-model`, `perplexity-model`).
 
 ### CORS & Timing
 
@@ -47,7 +47,7 @@ All cloud AI calls MUST go through the Cloudflare Proxy (Yandex via Cloud Functi
 
 ### Perplexity Integration
 
-Perplexity serves as secondary AI provider and primary engine for real-time web search and market sentiment. **API**: OpenAI-compatible Chat Completions; endpoint `https://api.perplexity.ai/chat/completions`; model `sonar-pro`. **Workflow**: Key in Settings → AI API; stored in `localStorage` (`perplexity-api-key`); `aiProviderManager.sendRequest()` routes when selected. **Constraints**: Respect tier-based rate limits; do not send sensitive portfolio data — use for public market analysis only. File Map: `core/api/ai-providers/perplexity-provider.js`, `core/config/app-config.js`.
+Perplexity serves as secondary AI provider and primary engine for real-time web search and market sentiment. **API**: OpenAI-compatible Chat Completions; endpoint `https://api.perplexity.ai/chat/completions`; model `sonar-pro`. **Workflow**: Key in Settings → AI API; stored in `localStorage` (`perplexity-api-key`); `aiProviderManager.sendRequest()` routes when selected. **Constraints**: Respect tier-based rate limits; do not send sensitive portfolio data — use for public market analysis only. File Map: core/api/ai-providers/, core/config/app-config.js.
 
 ### LLM Fallback Mechanism
 
@@ -71,7 +71,7 @@ Use provider-specific model IDs (exact slugs from provider docs). Respect rate l
 
 ### Unified LLM Management (Model Registry)
 
-**Context**: Unified management of LLM models across config, registry, stats. SSOT: `.continue/config.yaml` or equivalent.
+**Context**: Unified management of LLM models across config, registry, stats. SSOT: .continue/config.yaml или app config (см. core/config/).
 
 **Controller**: All operations via unified controller (list, add, remove, sync). **Protected models**: Critical models cannot be removed via automated scripts.
 

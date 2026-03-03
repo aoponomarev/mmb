@@ -95,7 +95,7 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 
 ### Provider Metadata vs Domain Data
 
-**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use `/coins/markets` `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations; avoid adding columns for every provider field. **Migration**: `rank` column dropped from `asset_snapshots`; `extra_json JSONB` added. File Map: `core/domain/portfolio-adapters.js`, `core/config/portfolio-config.js`, `core/api/data-providers/coingecko-provider.js`.
+**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use the markets API `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations; avoid adding columns for every provider field. **Migration**: `rank` column dropped from `asset_snapshots`; `extra_json JSONB` added. File Map: `core/domain/portfolio-adapters.js`, `core/config/portfolio-config.js`, `core/api/data-providers/coingecko-provider.js`.
 
 ### Backend Sync (PostgreSQL)
 
@@ -103,13 +103,13 @@ When using managed PostgreSQL for heavy data:
 
 - **No Direct Connection**: Frontend MUST NOT connect to port 5432. Use HTTPS API gateway.
 - **Batching**: Sync operations batched to minimize invocations.
-- **Schema SSOT**: Canonical schema in `cloud/yandex/schema-postgres.sql`; migrations in `cloud/yandex/migrations/`.
+- **Schema SSOT**: Canonical schema in `is/yandex/` (schema и migrations в соответствующих function-папках).
 - **Extensibility**: Use `extra_json JSONB` for provider-specific fields instead of rigid columns.
 - **Transactional**: All financial record updates must use SQL transactions.
 - **Secrets**: DB credentials only in Cloud Function env vars; backup outside repo.
 - **No `rank` in domain**: `market_cap_rank` is provider metadata, NOT a portfolio domain field; never persist as top-level column.
 
-**Schema Migration Pattern**: (1) Write migration SQL in `cloud/yandex/migrations/YYYY-MM-DD-description.sql`; (2) Update `schema-postgres.sql`; (3) Update Function code if INSERT/SELECT change; (4) Deploy with temporary admin endpoint; (5) Execute migration; (6) Remove admin endpoint, redeploy; (7) Use `IF EXISTS`/`IF NOT EXISTS` in DDL.
+**Schema Migration Pattern**: (1) Write migration SQL (YYYY-MM-DD-description.sql); (2) Update schema file; (3) Update Function code if INSERT/SELECT change; (4) Deploy with temporary admin endpoint; (5) Execute migration; (6) Remove admin endpoint, redeploy; (7) Use `IF EXISTS`/`IF NOT EXISTS` in DDL.
 
 **Guard Layers**: Feature toggle `isFeatureEnabled('postgresSync')`; UI toggle `isUiToggleEnabled()`; `classifySyncSkipReason()` for expected skips; EventBus `auth-state-changed` triggers `syncUser()` and `syncPortfoliosFromCloud()`.
 

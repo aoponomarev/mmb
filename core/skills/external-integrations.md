@@ -10,7 +10,7 @@ id: sk-7b4ee5
 # External Integrations
 
 > **Context**: Strategic integration of external services (Yandex Cloud, Cloudflare, GitHub) to ensure high availability, performance, and fault tolerance.
-> **Scope**: `core/api/integration-manager.js`, `core/config/app-config.js`
+> **Scope**: core/api/, core/config/app-config.js
 
 ## Reasoning
 
@@ -34,7 +34,7 @@ id: sk-7b4ee5
 
 **Supported routes**: `GET /api/coingecko/*` → api.coingecko.com; `GET /api/yahoo-finance/*` → query1.finance.yahoo.com; `GET /api/stooq/*` → stooq.com.
 
-**Caching (KV)**: `/coins/markets` 5 min; `/coins/list` 24h; `/simple/price` 1 min; Yahoo/Stooq Charts 1h.
+**Caching (KV)**: CoinGecko markets 5 min; list 24h; simple price 1 min; Yahoo/Stooq Charts 1h.
 
 **Hard constraints**: Whitelist only — generic proxy must validate target URLs against strict whitelist; strip sensitive headers (Cookies, Auth) before forwarding.
 
@@ -57,5 +57,5 @@ id: sk-7b4ee5
 **Hard constraints**: No FOMO — flag sensationalist language, reduce impact; verification — high-impact requires 2+ independent sources.
 ## Contracts
 
-- **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in `core/config/app-config.js` or `core/config/integration-config.js`.
+- **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in core/config/ (app-config.js, integration-config при наличии).
 - **Monitoring**: The integration layer must log when a fallback occurs so the system health can be monitored without disrupting the user.
