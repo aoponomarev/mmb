@@ -43,7 +43,7 @@ id: sk-d6777d
 
 **Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When Docker/control-plane exist: also `control-plane/*`, `docker-compose*.yml`.)*
 
-**Checks**: (1) Secret leakage scan on staged diff; (2) Root env schema check if env governance changed; (3) MCP SDK drift check when MCP/dependency manifests touched (Zod baseline + cross-package consistency). *(When Docker/control-plane exist: Compose config validation, control-plane self-test.)*
+**Checks**: (1) `.env` must not be staged; (2) `npm run skills:check` — path existence, @skill resolution (blocking); (3) `npm run skills:affected` — affected skills and causality hashes from staged files (informational, does not block). *(Secret leakage scan, MCP SDK drift check — to be added as needed.)*
 
 **Success criteria**: Preflight exits 0; no secret-like tokens in staged diff; runtime health endpoints available; MCP SDK baseline consistent.
 
@@ -67,3 +67,4 @@ id: sk-d6777d
 
 ## Implementation Status in Target App
 - `Implemented`: `node:test` adopted globally. Minimal CI pipeline created via GitHub Actions (`ci.yml`).
+- `Implemented`: `scripts/git/preflight-solo.ps1` — pre-commit flow with skills:check (blocking) and skills:affected (informational).

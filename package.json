@@ -15,6 +15,8 @@
     "validate:single-writer": "node is/scripts/infrastructure/validate-single-writer.js",
     "single-writer:switch": "node is/scripts/infrastructure/switch-active-writer.js",
     "skills:check": "node is/scripts/architecture/validate-skills.js",
+    "skills:anchors:check": "node is/scripts/architecture/validate-skill-anchors.js",
+    "skills:affected": "node is/scripts/architecture/validate-affected-skills.js",
     "skills:create": "node is/scripts/architecture/create-skill.js",
     "skills:reasoning:check": "node is/scripts/architecture/validate-reasoning.js",
     "skills:causality:check": "node is/scripts/architecture/validate-causality.js",

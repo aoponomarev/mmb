@@ -19,6 +19,7 @@ related_ais:
 
 <!-- Спецификации (AIS) пишутся на русском языке и служат макро-документацией. Микро-правила вынесены в английские скиллы. -->
 <!-- Этот AIS — образец полноты покрытия: детальное описание всего контура и каждого аспекта. -->
+<!-- Схемы Mermaid: вертикальная ориентация (flowchart TD), узлы сверху вниз — читабельность при дефиците ширины экрана. -->
 
 ## Концепция (High-Level Concept)
 
@@ -30,23 +31,36 @@ related_ais:
 
 ### Общая схема контура
 
+Три блока схем расположены вертикально — каждый на всю ширину.
+
+**Уровень 1: Static Validation**
+
 ```mermaid
-flowchart TD
-    subgraph L1[Уровень 1: Static Validation]
-        P[preflight.js] --> VS[validate-skills.js]
-        P --> VSA[validate-skill-anchors.js]
-        P --> VC[validate-causality.js]
-        P --> VCI[validate-causality-invariant.js]
-    end
-    subgraph L2[Уровень 2: Change-Triggered]
-        PS[preflight-solo.ps1] --> VAF[validate-affected-skills.js]
-        VAF --> |affected skills + hashes| OUT[stdout]
-    end
-    subgraph L3[Уровень 3: Batch]
-        SBR[skills-batch-review.js] --> VDL[validate-dead-links.js]
-        SBR --> VCES[validate-causality-exceptions-stale.js]
-        SBR --> VS2[validate-skills.js]
-    end
+flowchart TB
+    P1[preflight.js]
+    P1 --> VS[validate-skills.js]
+    VS --> VSA[validate-skill-anchors.js]
+    VSA --> VC[validate-causality.js]
+    VC --> VCI[validate-causality-invariant.js]
+```
+
+**Уровень 2: Change-Triggered**
+
+```mermaid
+flowchart TB
+    PS[preflight-solo.ps1]
+    PS --> VAF[validate-affected-skills.js]
+    VAF --> OUT[stdout: affected skills + hashes]
+```
+
+**Уровень 3: Batch**
+
+```mermaid
+flowchart TB
+    SBR[skills-batch-review.js]
+    SBR --> VDL[validate-dead-links.js]
+    SBR --> VCES[validate-causality-exceptions-stale.js]
+    SBR --> VS2[validate-skills.js]
 ```
 
 ### Триггеры и точки входа
@@ -81,39 +95,67 @@ flowchart TD
 
 ## Фаза 1: Static Validation — как работает
 
-> **Статус:** Заполняется после завершения фазы 1. Шаблон: точное описание + казуальность + схема.
+> **Статус:** Реализовано. Фаза 1 завершена.
 > **Рекурсия:** При документировании фаз 2 и 3 — проверить, не изменилась ли функциональность фазы 1; при необходимости обновить этот раздел.
 
 ### Точное описание
 
-*(После фазы 1: пошагово описать порядок вызовов, условия fail, формат ошибок.)*
+1. **preflight.js** при запуске вызывает (в порядке): `validate-skills.js`, затем `validate-skill-anchors.js`.
+2. **validate-skills.js** — парсит секции `## Implementation Status in Target App` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
+3. **validate-skill-anchors.js** — сканирует core/, app/, is/, shared/, .cursor/rules/ (первые 50 строк каждого .js, .ts, .mdc). Извлекает `@skill <path>`. Проверяет: файл скилла существует (is/skills/, core/skills/, app/skills/). При битой ссылке — error, exit 1.
+4. **Условие fail:** Любая ошибка в validate-skills или validate-skill-anchors прерывает preflight.
 
 ### Казуальность
 
-*(После фазы 1: #for-fail-fast, #for-gate-enforcement, #for-validate-skills-single и др.)*
+- **#for-fail-fast** — preflight падает при первом нарушении; не деградирует в рантайме.
+- **#for-gate-enforcement** — path existence и @skill resolution — блокирующие гейты; без них контракт «скилл описывает существующий код» рассыпается.
+- **#for-validate-skills-single** — @skill resolution вынесен в отдельный скрипт (validate-skill-anchors), а не в validate-skills; допустимо по arch-testing-ci.
 
 ### Схема
 
-*(После фазы 1: Mermaid-диаграмма preflight → validate-skills → validate-skill-anchors → pass/fail.)*
+```mermaid
+flowchart TD
+    P[preflight.js]
+    P --> VS[validate-skills.js]
+    VS --> VSP{paths exist?}
+    VSP -->|no| FAIL1[exit 1]
+    VSP -->|yes| VSA[validate-skill-anchors.js]
+    VSA --> VSA2{all @skill resolve?}
+    VSA2 -->|no| FAIL2[exit 1]
+    VSA2 -->|yes| PASS[continue preflight]
+```
 
 ---
 
 ## Фаза 2: Change-Triggered Review — как работает
 
-> **Статус:** Заполняется после завершения фазы 2.
+> **Статус:** Реализовано. Фаза 2 завершена.
 > **Рекурсия:** При документировании фазы 3 — проверить, не изменилась ли функциональность фазы 2; при необходимости обновить этот раздел и раздел фазы 1.
 
 ### Точное описание
 
-*(После фазы 2: git diff --cached, парсинг @skill/@causality/@skill-anchor, вывод, preflight-solo flow.)*
+1. **preflight-solo.ps1** вызывается вручную перед коммитом (SSOT: arch-testing-ci). Выполняет: проверка, что `.env` не в staged; `npm run skills:check` (блокирует при ошибке); `npm run skills:affected` (информационно, не блокирует).
+2. **validate-affected-skills.js** — читает `git diff --cached --name-only`; для каждого staged-файла парсит первые 50 строк: `@skill`, `@causality`, `@skill-anchor`. Собирает affected_skills (скиллы по @skill) и affected_hashes (#for-X из @causality/@skill-anchor). Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
+3. **Условие блокировки:** Только skills:check блокирует; skills:affected — только информирует. Решение о коммите — за человеком.
 
 ### Казуальность
 
-*(После фазы 2: #for-confidence-by-agent, почему не блокирует, arch-testing-ci.)*
+- **#for-confidence-by-agent** — skills:affected не блокирует preflight; только человек решает, коммитить сразу или обновить скилл/formulation и затем коммитить.
+- **#for-preflight-solo-not-hook** — preflight-solo.ps1 вызывается вручную, а не как git hook; контроль над flow (arch-testing-ci), возможность пропустить при срочных фиксах.
 
 ### Схема
 
-*(После фазы 2: Mermaid — git add → preflight-solo → skills:affected → решение человека.)*
+```mermaid
+flowchart TB
+    A[git add]
+    A --> B[preflight-solo.ps1]
+    B --> C[skills:check]
+    C --> D{pass?}
+    D -->|no| E[exit 1]
+    D -->|yes| F[skills:affected]
+    F --> G[stdout: affected skills + hashes]
+    G --> H[Решение человека]
+```
 
 ---
 

@@ -11,6 +11,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..", "..", "..");
 
+const IMPL_STATUS_HEADERS = ["## Implementation Status in Target App", "## Implementation Status"];
+const PATH_EXTENSIONS = /\.(js|ts|json|md|yaml|yml)$/;
+const EXCLUDE_PATTERNS = [
+    /node_modules/,
+    /\bwrangler\b/,
+    /\bnpm\b/,
+    /\*|\.\.\./,
+];
+
 const SKILL_DIRS = [
     path.join(ROOT, "is", "skills"),
     path.join(ROOT, "core", "skills"),
@@ -118,6 +127,71 @@ function validateSkillFormat(file, text, rel, errors) {
     }
 }
 
+function validateImplementationStatusPaths(file, text, rel, errors, warnings) {
+    if (rel.endsWith("README.md") || rel.endsWith("causality-registry.md")) return;
+    if (rel.includes("docs/backlog/skills/")) return;
+
+    const lines = text.split("\n");
+    let inSection = false;
+    const paths = new Set();
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (IMPL_STATUS_HEADERS.some((h) => line.trim().startsWith(h))) {
+            inSection = true;
+            continue;
+        }
+        if (inSection && line.startsWith("## ")) break;
+
+        if (!inSection) continue;
+
+        const bulletMatch = line.match(/^-\s*`?([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`?\s/);
+        if (bulletMatch) {
+            const p = bulletMatch[1].trim();
+            if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+        }
+
+        const tableMatch = line.match(/^\|\s*`?([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`?\s*\|/);
+        if (tableMatch) {
+            const p = tableMatch[1].trim();
+            if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+        }
+
+        const inlineMatch = line.match(/`([a-zA-Z0-9_/.-]+\.(js|ts|json|md|yaml|yml))`/g);
+        if (inlineMatch && /Implemented|Simplified|Deferred/i.test(line) && !/\bNo\s+`|not\s+`|without\s+`/i.test(line)) {
+            for (const m of inlineMatch) {
+                const p = m.replace(/^`|`$/g, "");
+                if (!EXCLUDE_PATTERNS.some((re) => re.test(p))) paths.add(p);
+            }
+        }
+    }
+
+    const resolvePath = (p) => {
+        if (path.isAbsolute(p)) return p;
+        const atRoot = path.join(ROOT, p);
+        if (fs.existsSync(atRoot)) return atRoot;
+        if (p.includes("/")) return atRoot;
+        const searchDirs = ["is/scripts/architecture", "is/scripts", "is/skills", "core/skills", "app/skills", ".github/workflows", "core", "app", "is", "shared", "docs"];
+        for (const d of searchDirs) {
+            const candidate = path.join(ROOT, d, p);
+            if (fs.existsSync(candidate)) return candidate;
+        }
+        return atRoot;
+    };
+
+    for (const p of paths) {
+        const fullPath = resolvePath(p);
+        if (!fs.existsSync(fullPath)) {
+            const isDocOrSkill = /^(docs\/|is\/skills\/|core\/skills\/|app\/skills\/)/.test(p);
+            if (isDocOrSkill) {
+                warnings.push(`${rel}: Implementation Status path "${p}" does not exist (doc/skill)`);
+            } else {
+                errors.push(`${rel}: Implementation Status path "${p}" does not exist`);
+            }
+        }
+    }
+}
+
 // 4. Check is/skills/ prefix gate (SSOT: is/contracts/prefixes.js)
 function validateSkillPrefixGate(rel, errors) {
     if (!shouldValidateSkillPrefix(rel)) return;
@@ -147,6 +221,7 @@ function main() {
             // Detailed format validation
             validateSkillFormat(file, text, rel, errors);
             validateSkillPrefixGate(rel, errors);
+            validateImplementationStatusPaths(file, text, rel, errors, warnings);
 
             const ageDays = (now - stat.mtimeMs) / (1000 * 60 * 60 * 24);
             if (ageDays > STALE_DAYS) {

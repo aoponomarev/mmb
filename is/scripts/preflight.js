@@ -59,6 +59,7 @@ function runPreflight() {
     console.log('[preflight] Validating skills...');
     try {
         execSync('node is/scripts/architecture/validate-skills.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/validate-skill-anchors.js', { stdio: 'inherit', cwd: PATHS.root });
         if (!process.env.PREFLIGHT_SKIP_REASONING) {
             execSync('node is/scripts/architecture/validate-reasoning.js', { stdio: 'inherit', cwd: PATHS.root });
         } else {

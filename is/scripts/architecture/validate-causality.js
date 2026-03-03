@@ -21,6 +21,7 @@ const EXCLUDE_FILES = [
   "is/mcp/skills/server.js",
   "is/scripts/architecture/validate-causality.js",
   "is/scripts/architecture/validate-causality-invariant.js",
+  "is/scripts/architecture/validate-affected-skills.js",
 ];
 
 const HASH_REGEX = /#(?:for|not)-[\w-]+/g;

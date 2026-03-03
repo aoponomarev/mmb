@@ -4,11 +4,12 @@
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 7
+> Auto-generated. Total: 8
 
 ---
 
 - [ais-1c4d92](ais/TEMPLATE.md) — AIS: [Название Модуля/Подсистемы]
+- [ais-9f4e2d](ais/ais-anti-staleness.md) — AIS: Антиустареватель скиллов и казуальностей (Skill & Causality Anti-Staleness)
 - [ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
 - [ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
 - [ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)

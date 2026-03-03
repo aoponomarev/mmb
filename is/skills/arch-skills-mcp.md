@@ -81,6 +81,7 @@ id: sk-7d810a
 
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
 - `Implemented`: `validate-skills.js` — structural validation with JSON output for automation.
+- `Implemented`: `validate-affected-skills.js` — git diff --cached → affected skills and causality hashes (pre-commit flow, informational).
 - `Implemented`: `generate-skills-index.js` — auto-generates `docs/index-skills.md`.
 - `Implemented`: `skills-health-trend.js` — trend tracking with JSONL append and degradation alerts.
 - `Implemented`: `skills-health-trend-report.js` — summary report over configurable window.
@@ -124,4 +125,7 @@ When an extraction pipeline (e.g. n8n, Swarm) is used: Signal (commit/release) �
 - Skills older than 90 days without updates are flagged as stale (warning, not blocking).
 - Files with content < 50 chars are flagged as potentially orphaned.
 - `npm run skills:check` must pass before any migration stage can be marked complete.
+- **Path existence:** Paths in `## Implementation Status` / `## Implementation Status in Target App` must exist in the project. Gate: `validate-skills.js`.
+- **@skill resolution:** Every `@skill` in code must point to an existing skill file. Gate: `validate-skill-anchors.js`.
+- **Affected skills (pre-commit):** Before commit, run `scripts/git/preflight-solo.ps1`; it calls `skills:affected` to list affected skills and hashes — human decides whether to update before commit. Gate: `validate-affected-skills.js` (informational only).
 

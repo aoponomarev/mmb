@@ -405,7 +405,9 @@ npm run skills:batch-review         [новый: periodic]
 | 1.4 | Тесты | validate-skills.test.js, validate-skill-anchors.test.js | node:test, позитивные и негативные кейсы |
 | 1.5 | Обновить arch-skills-mcp | arch-skills-mcp.md | Добавить в Key Contracts: path existence, @skill resolution |
 
-**Чекбокс фазы 1:** [ ] Все задачи 1.0–1.5 выполнены; preflight падает на битых путях и битых @skill; тесты проходят.
+**Чекбокс фазы 1:** [x] Все задачи 1.0–1.5 выполнены; preflight падает на битых путях и битых @skill; тесты проходят.
+
+**Пожелание по схемам Mermaid:** При составлении схем придерживаться вертикальной ориентации (`flowchart TD`), узлы сверху вниз — из-за дефицита места по ширине экрана. Читабельность важнее компактности.
 
 **Документирование в AIS (после фазы 1):** Добавить в `docs/ais/ais-anti-staleness.md` раздел **«Фаза 1: Static Validation — как работает»**:
 - **Точное описание:** Пошагово: preflight вызывает validate-skills (path existence), validate-skill-anchors; что проверяется, в каком порядке, при каком условии fail.
@@ -422,7 +424,7 @@ npm run skills:batch-review         [новый: periodic]
 | 2.4 | npm scripts | package.json | skills:affected |
 | 2.5 | Документация | arch-testing-ci.md | Уточнить preflight-solo: когда вызывать affected-skills |
 
-**Чекбокс фазы 2:** [ ] preflight-solo создан; skills:affected выводит affected skills и affected hashes; документация обновлена.
+**Чекбокс фазы 2:** [x] preflight-solo создан; skills:affected выводит affected skills и affected hashes; документация обновлена.
 
 **Документирование в AIS (после фазы 2):** Добавить в `docs/ais/ais-anti-staleness.md` раздел **«Фаза 2: Change-Triggered Review — как работает»**:
 - **Точное описание:** git diff --cached → список файлов → парсинг @skill, @causality, @skill-anchor → вывод affected skills и affected hashes; preflight-solo вызывает skills:affected; не блокирует.
