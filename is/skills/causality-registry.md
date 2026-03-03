@@ -95,6 +95,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#not-redundant-folders` | Do not create new folders when a functionally suitable one already exists. Place documents in the existing structure (plans, backlog, runbooks, etc.) instead of inventing `docs/misc/`, `docs/temp/`, or similar. |
 | `#for-stable-ids` | AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; `related_skills` and `related_ais` reference ids. Index files use `index-` prefix. |
 | `#for-docs-ids-gate` | Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling. |
+| `#for-plan-iterative-improvement` | Plans are living documents. When an agent notices a deficiency in a plan's protocols, it MUST augment the plan. Condition: backward compatibility — improvements must not invalidate results already obtained. |
 | `#for-memory-to-skills` | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
 | `#for-token-efficiency` | Long context degrades model attention ("lost in the middle"). Minimal viable context produces better results. |
 | `#for-front-load` | Putting all relevant context in the first message avoids 3x token waste from incremental context building. |

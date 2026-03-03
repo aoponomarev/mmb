@@ -9,6 +9,7 @@ This directory serves as the historical ledger and runbook repository for the pr
 - `ais/`: Architecture & Infrastructure Specifications (Russian). Macro-docs distilled from plans. Includes `ais-yandex-cloud.md` (ingest/read contours, Mermaid diagrams).
 - `audits/`: **SYSTEM** — `causality-exceptions.jsonl` consumed by `validate-causality-invariant.js`. **Do not rename or move.**
 - `backlog/`: Deferred plans and future architecture drafts. Not for distillation.
+- `backlog/skills/`: Deferred skills (Docker, n8n, Yandex Cloud, etc.) — useful but not wired until infrastructure exists. See plan-skills-migration-registry § 9.
 - `cheatsheets/`: Quick reference materials (e.g., architecture layers, data-contour-debug). Human-oriented.
 - `runbooks/`: Step-by-step operational procedures (monitoring, rollback, data-contour-troubleshooting). Implements skills.
 
