@@ -16,6 +16,7 @@ reasoning_checksum: "559f5ba7"
 - **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
 - **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
+- **#for-ais-mermaid-diagrams** AIS documents without visual diagrams are harder for humans and agents to grasp. Mermaid diagrams in fenced code blocks render on GitHub, VS Code, and GitLab; they are version-controlled as text and avoid stale image files. See `docs/ais/ais-yandex-cloud.md` for the reference format.
 - **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.
 - **#not-redundant-folders** Creating new folders when a functionally suitable one exists (e.g., `docs/misc/`, `docs/temp/`, `docs/archive/`) clutters the structure. Use the existing folders.
 
@@ -32,6 +33,7 @@ reasoning_checksum: "559f5ba7"
 3.  **Phase 3: Distillation (`docs/ais/` and `is/skills/`)**
     - Upon user request, an AI agent performs "distillation" of the completed plan.
     - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian.
+    - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "2. Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: `docs/ais/ais-yandex-cloud.md`.
     - **Micro-Rules**: The agent extracts strict invariants and adds them to `is/skills/` (Language: English) and registers new causality hashes.
     - Note: Information from one plan can fan out into multiple AIS files or Skills.
 
