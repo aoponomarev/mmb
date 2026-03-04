@@ -26,7 +26,8 @@ id: sk-f7e2a1
 2. **@description** — Required when file id is present. One sentence summary for tooling and agents.
 3. **Slot order** — After file id and optional title line: @description → @skill → @skill-anchor → @causality → @ssot → @gate → @contract → @see. Then free-form PURPOSE, PRINCIPLES, USAGE, REFERENCES.
 4. **Language** — All header text in English (enforced by validate-code-comments-english).
-5. **New files** — Copy header from `shared/templates/file-header-template.js`; run assign-file-ids to set file id and update code-file-registry.
+5. **New files** — Copy header from `shared/templates/file-header-template.js`; run `npm run file-headers:fix` to update registry and get correct file id.
+6. **After code changes** — Header must be fully re-checked. Run `npm run file-headers:fix` (or at least `file-headers:check`) before commit. If information in the header is false or outdated, correct it or remove it; the gate only auto-fixes file id mismatch (`--fix`).
 
 ---
 
@@ -34,7 +35,6 @@ id: sk-f7e2a1
 
 ### Contract and Gate
 
-- **Contract**: `is/contracts/file-header-contract.js` — FILE_ID_PATTERN, REQUIRED_HEADER_FIELDS, ALLOWED_HEADER_TAGS, extractHeaderComment, validateHeader.
-- **Gate**: `is/scripts/architecture/validate-file-headers.js` — Scans SCAN_DIRS; for each file with a file id in the first comment block, requires @description; exit 1 on violation.
-- **Preflight**: Gate runs after validate-code-comments-english. npm: `npm run file-headers:check`.
-- Template, AIS, plan, contract, skill, and gate are in place. Rollout: assign file ids gradually (see plan); keep code-file-registry updated.
+- **Contract**: `is/contracts/file-header-contract.js` — FILE_ID_PATTERN, REQUIRED_HEADER_FIELDS, ALLOWED_HEADER_TAGS, getExpectedFileId, getFileIdFromHeader, validateHeaderFull, extractHeaderComment.
+- **Gate**: `is/scripts/architecture/validate-file-headers.js` — Full check: file id must match path, @description required when id present. `--fix`: writes correct file id into file when mismatch. npm: `file-headers:check`, `file-headers:fix`, `file-headers:audit`.
+- **Preflight**: Gate runs after validate-code-comments-english. Run `npm run file-headers:fix` after tree changes; run full check before commit / in CI.

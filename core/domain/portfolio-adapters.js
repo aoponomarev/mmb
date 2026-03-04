@@ -4,7 +4,8 @@
  * @skill id:sk-02d3ea
  * @skill id:sk-bb7c8e
  *
- * REFERENCES: docs/A_PORTFOLIO_SYSTEM.md
+ * REFERENCES:
+ * - docs/A_PORTFOLIO_SYSTEM.md
  */
 (function() {
     'use strict';

@@ -1,6 +1,10 @@
 /**
  * #JS-3w3f6pz7
- * @description Yandex Cloud Function (cron): CoinGecko top-250 → coin_market_cache_history + coin_market_cache; rotate 2 cycles; 06:00–24:00 MSK.
+ * @description Yandex Cloud Function (cron): CoinGecko top-250 by cap/volume → coin_market_cache_history + coin_market_cache; rotate 2 cycles; day window 06:00–24:00 MSK.
+ *
+ * PURPOSE: Each run loads top-250 from CoinGecko, writes to history with cycle_id, updates main table, keeps last 2 cycles. Night calls return 200 + status: SKIPPED.
+ *
+ * ENV VARS: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD; COINGECKO_API_KEY (optional, for higher rate limit).
  */
 
 'use strict';

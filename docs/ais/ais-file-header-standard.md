@@ -28,8 +28,8 @@ related_ais:
 
 Ключевые принципы:
 
-- **Файловый идентификатор** — каждый файл помечается хэшем вида `#<EXT>-<short_hash>`, где EXT — тип (JS, TS, CSS, HTML и т.д.), hash — детерминированный короткий хэш от канонического относительного пути. Документация и скиллы ссылаются на файл по этому id; при перемещении файла обновляется реестр код-файлов, поиск по id остаётся валидным.
-- **Единый порядок слотов** — обязательные и опциональные поля в фиксированной последовательности: file id → описание → @description → @skill → @skill-anchor → @causality → @ssot → @gate → @contract → @see → свободные блоки (PURPOSE, PRINCIPLES, USAGE, REFERENCES).
+- **Файловый идентификатор** — каждый файл помечается хэшем вида `#<EXT>-<short_hash>`, где EXT — тип (JS, TS, CSS, HTML и т.д.), hash — детерминированный короткий хэш от канонического относительного пути (алгоритм: djb2 от пути с нормализованными слэшами, затем Base58, длина 8 символов). Документация и скиллы ссылаются на файл по этому id. При переименовании или перемещении файла путь меняется — id пересчитывается; после запуска `assign-file-ids.js` реестр и шапку в файле нужно обновить.
+- **Единый порядок слотов** — обязательные и опциональные поля в фиксированной последовательности: file id → описание → @description → @skill → @skill-anchor → @causality → @ssot → @gate → @contract → @see → свободные блоки (см. список секций ниже).
 - **Пополняемость** — новые теги (например @protocol, @spec) вносятся в контракт и скилл; гейт проверяет только обязательные поля и разрешённый список тегов.
 - **Язык** — все комментарии в коде только на английском (SSOT: process-language-policy); гейт `validate-code-comments-english` уже обеспечивает это.
 
@@ -52,6 +52,7 @@ flowchart LR
   subgraph Automation
     R[code-file-registry.json]
     V[validate-file-headers.js]
+    A2[assign-file-ids.js]
     P[preflight]
   end
   T --> F
@@ -63,14 +64,14 @@ flowchart LR
   H --> V
   I --> V
   J --> V
-  V --> R
+  A2 --> R
   V --> P
 ```
 
-- Агент или разработчик при создании/правке файла берёт шаблон из `shared/templates/file-header-template.js` и заполняет слоты.
-- Скрипт `assign-file-ids.js` (или аналог) обходит целевые директории, вычисляет хэш от пути, подставляет или проверяет `#<EXT>-<hash>` в шапке.
-- Гейт `validate-file-headers.js` проверяет наличие file id и @description, опционально — соответствие тегов контракту и актуальность реестра.
-- Реестр `is/contracts/docs/code-file-registry.json` хранит соответствие `#JS-xxxx` → относительный путь; при перемещении файла реестр обновляется (скрипт или правило в плане).
+- Агент или разработчик при создании/правке файла берёт шаблон из `shared/templates/file-header-template.js` и заполняет слоты; file id берётся из реестра (после запуска `assign-file-ids.js`) или подставляется вручную по тому же алгоритму.
+- Скрипт `assign-file-ids.js` обходит целевые директории (`SCAN_DIRS`: core, app, shared, mm, is), для каждого .js/.ts вычисляет file id от канонического относительного пути (djb2 + Base58, 8 символов) и **только обновляет реестр** `code-file-registry.json`; содержимое файлов скрипт не меняет. Режим `--dry-run` — вывод без записи. Вставка `#<EXT>-<hash>` в шапки — вручную или будущим режимом (если появится).
+- Гейт `validate-file-headers.js` выполняет **полную проверку** по контракту: (1) при наличии file id в шапке обязан быть @description; (2) file id в шапке должен совпадать с ожидаемым для пути файла (getExpectedFileId). Режим `--fix`: при несовпадении id гейт подставляет в файле правильный id и сохраняет файл. Запуск: `npm run file-headers:check` или в составе preflight; `npm run file-headers:fix` — обновить реестр и автоматически исправить id в шапках.
+- Реестр `is/contracts/docs/code-file-registry.json` хранит соответствие `#JS-xxxx` → относительный путь; при добавлении/переименовании/перемещении файла запустить `npm run file-headers:fix` (или assign-file-ids + validate --fix).
 
 ## Локальные Политики (Module Policies)
 
@@ -79,6 +80,18 @@ flowchart LR
 - Шапка должна быть в начале файла (первые строки); для блоковых комментариев — один блок `/** ... */`, для построчных — последовательность `//` с тем же порядком слотов.
 - Язык шапки — только английский (проверяется существующим гейтом `validate-code-comments-english`).
 - **Единый вид (no visual clutter):** без декоративных баннеров (`====...====`), без дублирования: если есть `@skill`, отдельная строка «Skill: …» не дублируется. Списки в формате `PRINCIPLES:` / `USAGE:` / `REFERENCES:` с маркерами `-` сохраняются; один короткий блок PURPOSE при необходимости, без повтора смысла из @description.
+- **Актуальность шапки:** при проверке шапка должна приводиться в соответствие с реальным кодом. Ложная или устаревшая информация — либо исправляется, либо удаляется. Гейт автоматически правит только несовпадение file id с путём (`--fix`); смысловое соответствие @description и секций коду обеспечивается процессом (запуск проверки после изменений, правка агентом/разработчиком).
+
+**Расширяемый список секций** (использовать по необходимости; полный перечень — в `shared/templates/file-header-template.js`): PURPOSE, PRINCIPLES, USAGE, REFERENCES, PROBLEM, SOLUTION, HOW, FEATURES, STRUCTURE, TTL, STRATEGIES, LAYERS, CACHE, EXAMPLE, HOW TO ADD, CHANGE HISTORY, ENDPOINTS, ROUTES, FIELDS, SECURITY и др. Секции не догма — можно добавлять новые; оформление: заголовок секции, затем пункты с маркером `-`.
+
+## Процедуры (Processes)
+
+| Ситуация | Действия |
+|----------|----------|
+| **Новый кодовый файл** | 1) Создать файл в одной из SCAN_DIRS. 2) Запустить `npm run file-headers:assign` (или `node is/scripts/architecture/assign-file-ids.js`) — реестр обновится. 3) Открыть `code-file-registry.json`, найти путь нового файла и соответствующий file id. 4) Вставить шапку из шаблона в начало файла, подставить file id и @description (и при необходимости остальные слоты). 5) Запустить `npm run file-headers:check` или preflight. |
+| **Переименование или перемещение файла** | 1) Переименовать/переместить файл. 2) Запустить `assign-file-ids.js` — реестр пересчитается (у старого пути пропадёт id, у нового появится новый id). 3) В самом файле заменить старый file id в шапке на новый (из обновлённого реестра по новому пути). 4) В документации/скиллах заменить ссылки на старый file id на новый (или оставить старый, если ссылка по смыслу на «удалённый» артефакт). |
+| **Проверка соответствия стандарту** | `npm run file-headers:check` — полная проверка (id совпадает с путём, есть @description). `npm run file-headers:fix` — обновить реестр и автоматически исправить неверный file id в шапках. Полная проверка инфраструктуры: `npm run preflight`. |
+| **Сразу после изменений в коде** | Шапка должна перепроверяться полностью после любых правок в файле. Запускать `npm run file-headers:fix` (или как минимум `file-headers:check`) перед коммитом; в CI — preflight. Ложная или устаревшая информация в шапке подлежит исправлению или удалению (агент/разработчик). |
 
 ## Нюансы по типам файлов (File-type nuances)
 
@@ -96,16 +109,16 @@ flowchart LR
 | `docs/plans/file-header-rollout.md` | План внедрения: фазы, чек-листы, порядок обхода. |
 | `is/contracts/file-header-contract.js` | Разрешённые теги, обязательные поля, формат file id. |
 | `is/skills/process-file-header-standard.md` | Скилл для агентов: правила заполнения, примеры, связь с causality. |
-| `is/scripts/architecture/validate-file-headers.js` | Гейт: проверка шапок и при необходимости реестра. |
-| `is/scripts/architecture/assign-file-ids.js` | Назначение/обновление file id в шапках по путям. |
+| `is/scripts/architecture/validate-file-headers.js` | Гейт полной проверки: file id должен совпадать с путём (getExpectedFileId), при наличии id — @description обязателен. Режим `--fix`: запись в файл правильного id при несовпадении. Вызов: preflight, `npm run file-headers:check`, `npm run file-headers:fix`. |
+| `is/scripts/architecture/assign-file-ids.js` | Построение и запись реестра: обход SCAN_DIRS, вычисление file id (djb2+Base58 от пути); файлы не изменяет. Вызов: `npm run file-headers:assign`. |
 | `is/contracts/docs/code-file-registry.json` | Реестр: file id → относительный путь (генерируется/обновляется скриптами). |
 
-## Контракты и гейты
+## Контракт полной проверки и правки
 
-- **Контракт** `file-header-contract.js`: перечень разрешённых тегов (@description, @skill, @skill-anchor, @causality, @ssot, @gate, @contract, @see), формат file id (`#<EXT>-<hash>`, hash — Base58 или hex, длина по контракту), обязательность полей (file id, @description).
-- **Гейт** `validate-file-headers.js`: для каждого целевого .js/.ts (и при необходимости .css) проверка: первая строка комментария содержит паттерн file id; присутствует @description; при включённой строгой проверке — все теги из разрешённого списка. Опционально: сверка с code-file-registry (все file id из реестра присутствуют в файлах, пути совпадают).
-- **Preflight**: после гейта «code comments English» выполняется `validate-file-headers.js`; при падении preflight не проходит.
-- Существующие гейты: `validate-code-comments-english`, `validate-skills`, `validate-causality` — остаются в силе; шапка дополняет их, не подменяет.
+- **Контракт** `file-header-contract.js`: (1) перечень разрешённых тегов и формат file id; (2) обязательность @description при наличии file id; (3) **полная проверка**: file id в шапке должен совпадать с ожидаемым для пути файла (`getExpectedFileId(relPath)` — тот же алгоритм, что в assign-file-ids). Функции: `validateHeaderFull(headerText, relPath)`, `getFileIdFromHeader(headerText)`, `getExpectedFileId(relPath)`.
+- **Гейт** `validate-file-headers.js`: для каждого .js/.ts из SCAN_DIRS — извлечь шапку; при наличии file id проверить @description и совпадение id с путём. Режим `--fix`: при несовпадении id подставить в файле правильный id и сохранить. Не исправляет автоматически отсутствие @description или смысловое устаревание — только id.
+- **Preflight**: после гейта «code comments English» выполняется `validate-file-headers.js` (без --fix); при падении preflight не проходит.
+- **Политика:** шапка перепроверяется полностью сразу после внесения изменений в код (перед коммитом / в CI). Ложная информация в шапке исправляется или удаляется; автоматическая правка по контракту — только file id.
 
 ## Лог перепривязки путей (Path Rewrite Log)
 
@@ -117,5 +130,6 @@ flowchart LR
 
 ## Завершение / completeness
 
-- Добавить в causality-registry хэш `#for-file-header-standard` (связь с данной AIS и гейтом).
-- После внедрения гейта и реестра перевести status в `incomplete`, после массового прохода по файлам — в `complete` по согласованному чек-листу.
+- В causality-registry присутствует хэш `#for-file-header-standard` (связь с данной AIS и гейтом).
+- **Status:** после внедрения гейта и реестра — `incomplete`; после массового прохода по целевым файлам (core, app, shared, mm, is) и успешного preflight — перевести в `complete`. Текущее состояние отражено в плане id:plan-f7e2a1.
+- **npm-скрипты:** `file-headers:check` — полная проверка (id + @description); `file-headers:fix` — обновить реестр и исправить неверный file id в шапках; `file-headers:audit` — то же для разовой ревизии; `file-headers:assign` — только обновление реестра.

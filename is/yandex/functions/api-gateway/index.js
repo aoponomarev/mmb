@@ -4,7 +4,11 @@
  * @skill id:sk-73dcca
  * @see id:sk-7cf3f7
  *
- * ENV VARS: DB_HOST, DB_PORT (6432), DB_NAME, DB_USER, DB_PASSWORD.
+ * PURPOSE: Health check and future CRUD over PostgreSQL; invoked via API Gateway (OpenAPI spec in Yandex Cloud).
+ *
+ * ENV VARS:
+ * - DB_HOST, DB_PORT (default 6432), DB_NAME, DB_USER, DB_PASSWORD
+ * - Values from secrets dir or Yandex Console (not in repo)
  */
 const { Client } = require('pg');
 

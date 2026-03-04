@@ -1,9 +1,17 @@
 /**
  * #JS-2fGHr2c5
- * @description App settings in Cloudflare KV (SETTINGS); GET/POST /api/settings, GET/PUT /api/settings/:key; Bearer SETTINGS_TOKEN.
+ * @description App settings in Cloudflare KV (SETTINGS namespace); get/set all or by key; auth via Bearer SETTINGS_TOKEN or JWT.
  * @skill id:sk-02d3ea
  *
+ * ROUTES:
+ * - GET /api/settings — all settings (import into UI)
+ * - POST /api/settings — save all (export from UI)
+ * - GET /api/settings/:key — single field
+ * - PUT /api/settings/:key — set single field
+ *
  * FIELDS: provider, yandexApiKey, yandexFolderId, yandexModel, perplexityApiKey, perplexityModel, githubToken, apiBaseUrl, syncEnabled.
+ *
+ * SECURITY: Bearer token (SETTINGS_TOKEN or OAuth JWT); without SETTINGS_TOKEN endpoint unavailable.
  */
 
 import { jsonResponse } from './utils/cors.js';

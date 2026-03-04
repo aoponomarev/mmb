@@ -1,9 +1,14 @@
 /**
  * #JS-oi2C6djt
- * @description OAuth endpoints: code-to-token, user in D1, JWT; /auth/callback, /auth/me, /auth/logout.
+ * @description OAuth endpoints: code-to-token exchange, user persistence in D1, JWT issuance; /auth/callback, /auth/me, /auth/logout.
  * @skill id:sk-7cf3f7
  *
- * ENDPOINTS: POST /auth/callback (code→JWT, D1), GET /auth/me, POST /auth/logout. Usage: handleAuth(request, env, path).
+ * ENDPOINTS:
+ * - POST /auth/callback — exchange code for JWT, persist user in D1
+ * - GET /auth/me — current user by JWT
+ * - POST /auth/logout
+ *
+ * USAGE: handleAuth(request, env, path).
  */
 
 import { jsonResponse, handleOptions, getCorsHeaders } from './utils/cors.js';

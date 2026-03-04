@@ -1,9 +1,15 @@
 /**
  * #JS-d3cQ6czR
- * @description Datasets API: time-series and metrics CRUD; R2 deferred (stubs); handleDatasets(request, env, path).
+ * @description Datasets API: time-series and metrics CRUD; R2 storage deferred (stubs for now); handleDatasets(request, env, path).
  * @skill id:sk-02d3ea
  *
- * ENDPOINTS: GET/POST /api/datasets/time-series, GET/POST /api/datasets/metrics.
+ * ENDPOINTS:
+ * - GET /api/datasets/time-series/:coin/:date — get time series
+ * - POST /api/datasets/time-series — save (batch)
+ * - GET /api/datasets/metrics/:coin/:date — get metrics
+ * - POST /api/datasets/metrics — save (batch)
+ *
+ * USAGE: handleDatasets(request, env, path). Full R2 implementation after R2 binding added.
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

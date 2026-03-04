@@ -8,41 +8,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { SCAN_DIRS } from "../../contracts/file-header-contract.js";
+import { SCAN_DIRS, getExpectedFileId } from "../../contracts/file-header-contract.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..", "..", "..");
 const EXCLUDE = new Set(["node_modules", ".git", ".cursor", "docs"]);
-const HASH_LEN = 8;
-
-function djb2(str) {
-  let h = 5381;
-  for (let i = 0; i < str.length; i++) {
-    h = ((h << 5) + h) + str.charCodeAt(i);
-    h = h & 0x7fffffff;
-  }
-  return h;
-}
-
-const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
-function toBase58(n, len) {
-  let s = "";
-  let x = Math.abs(n);
-  for (let i = 0; i < len; i++) {
-    s = BASE58[x % BASE58.length] + s;
-    x = Math.floor(x / BASE58.length);
-    if (x === 0) x = Math.abs(n) + (i + 1) * 37;
-  }
-  return s;
-}
-
-function fileIdFromPath(relPath) {
-  const ext = path.extname(relPath).slice(1).toUpperCase();
-  const prefix = ext === "JS" ? "JS" : ext === "TS" ? "TS" : ext === "CSS" ? "CSS" : "JS";
-  const hash = toBase58(djb2(relPath.replace(/\\/g, "/")), HASH_LEN);
-  return `#${prefix}-${hash}`;
-}
 
 function walk(dir, ext, out = []) {
   if (!fs.existsSync(dir)) return out;
@@ -68,7 +38,7 @@ function main() {
     for (const ext of [".js", ".ts"]) {
       for (const file of walk(dirPath, ext)) {
         const rel = path.relative(ROOT, file).replace(/\\/g, "/");
-        const id = fileIdFromPath(rel);
+        const id = getExpectedFileId(rel);
         registry[id] = rel;
       }
     }

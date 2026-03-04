@@ -29,6 +29,87 @@ export const SCAN_DIRS = Object.freeze(['core', 'app', 'is', 'shared', 'mm']);
 /** Extensions to scan */
 export const SCAN_EXTENSIONS = Object.freeze(['.js', '.ts']);
 
+/** Hash length for file id (must match assign-file-ids.js) */
+export const HASH_LEN = 8;
+
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+function djb2(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) + h) + str.charCodeAt(i);
+    h = h & 0x7fffffff;
+  }
+  return h;
+}
+
+function toBase58(n, len) {
+  let s = '';
+  let x = Math.abs(n);
+  for (let i = 0; i < len; i++) {
+    s = BASE58[x % BASE58.length] + s;
+    x = Math.floor(x / BASE58.length);
+    if (x === 0) x = Math.abs(n) + (i + 1) * 37;
+  }
+  return s;
+}
+
+/**
+ * Compute expected file id for a given relative path (same algorithm as assign-file-ids).
+ * @param {string} relPath - Relative path with forward slashes
+ * @returns {string} e.g. "#JS-1E2YRywQ"
+ */
+export function getExpectedFileId(relPath) {
+  const normalized = relPath.replace(/\\/g, '/');
+  const ext = normalized.split('.').pop()?.toUpperCase() || 'JS';
+  const prefix = ext === 'JS' ? 'JS' : ext === 'TS' ? 'TS' : ext === 'CSS' ? 'CSS' : 'JS';
+  const hash = toBase58(djb2(normalized), HASH_LEN);
+  return `#${prefix}-${hash}`;
+}
+
+/**
+ * Extract file id from header text (first match of FILE_ID_PATTERN).
+ * @param {string} headerText - Concatenated header lines
+ * @returns {string|null} e.g. "#JS-1E2YRywQ" or null
+ */
+export function getFileIdFromHeader(headerText) {
+  const m = headerText.match(FILE_ID_PATTERN);
+  return m ? m[0] : null;
+}
+
+/**
+ * Full validation: file id must match path; when file id present, @description required.
+ * @param {string} headerText - Concatenated header lines
+ * @param {string} relPath - Relative path (forward slashes) for expected id computation
+ * @returns {{ valid: boolean, error?: string, expectedId?: string, actualId?: string }}
+ */
+export function validateHeaderFull(headerText, relPath = '') {
+  if (!headerText || !headerText.trim()) {
+    return { valid: true };
+  }
+  const actualId = getFileIdFromHeader(headerText);
+  const hasDesc = hasDescriptionTag(headerText);
+  if (actualId && !hasDesc) {
+    return {
+      valid: false,
+      error: relPath ? `${relPath}: header has file id but missing @description` : 'Header has file id but missing @description',
+      actualId,
+    };
+  }
+  if (actualId && relPath) {
+    const expectedId = getExpectedFileId(relPath);
+    if (actualId !== expectedId) {
+      return {
+        valid: false,
+        error: `${relPath}: file id in header (${actualId}) does not match path (expected ${expectedId})`,
+        expectedId,
+        actualId,
+      };
+    }
+  }
+  return { valid: true };
+}
+
 /**
  * Extract first block comment or leading // lines from content.
  * @param {string} content - Full file content

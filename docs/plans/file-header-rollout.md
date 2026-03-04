@@ -40,11 +40,13 @@ related_ais:
 - [x] Реестр `is/contracts/docs/code-file-registry.json`: структура id → path; assign-file-ids пишет при каждом запуске.
 - [ ] (Опционально) Режим --write для подстановки file id в шапки файлов — при необходимости в следующих итерациях.
 
-## Фаза 3: Гейт валидации
+## Фаза 3: Гейт валидации и полная проверка
 
 - [x] Реализовать `is/scripts/architecture/validate-file-headers.js`: при наличии file id в шапке проверка @description; exit 1 при нарушении.
+- [x] Полная проверка по контракту: file id в шапке должен совпадать с путём (getExpectedFileId); контракт: validateHeaderFull, getExpectedFileId, getFileIdFromHeader.
+- [x] Режим `--fix`: автоматическая правка неверного file id в файле.
 - [x] Вызов в preflight после validate-code-comments-english.
-- [x] npm: `file-headers:check`, `file-headers:assign`.
+- [x] npm: `file-headers:check`, `file-headers:assign`, `file-headers:fix`, `file-headers:audit`.
 
 ## Фаза 4: Causality и индекс
 
@@ -59,7 +61,7 @@ related_ais:
 - [x] Файлы с баннерами обработаны: core, shared, app, mm, is (edge-api, yandex functions).
 - [x] Для файлов без шапки: добавлены file id и @description во все целевые .js (256 файлов в core, app, shared, mm, is).
 - [x] После батчей: file-headers:check и preflight.
-- [ ] Обновлять code-file-registry при добавлении/переименовании (assign-file-ids при изменении дерева).
+- [x] Обновлять реестр и шапки при изменении дерева: `npm run file-headers:fix` (assign-file-ids + validate --fix). После изменений в коде — полная перепроверка шапки; ложное в шапке исправлять или удалять (AIS).
 
 **Прогресс:** Все 256 целевых .js/.ts (core, app, shared, mm, is) имеют шапку нового формата: #JS-xxx + @description. Баннеры убраны; файлы без шапки дополнены (generate-skills-index, pluralize, query-telemetry, run-migration, create-skill, layout-sync, deploy, V2_logic, тесты, modal-buttons-template, combobox-template, naming-rules.test, market-snapshot-node-server и др.). Preflight проходит.
 

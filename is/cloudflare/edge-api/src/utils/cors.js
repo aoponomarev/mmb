@@ -2,6 +2,12 @@
  * #JS-Mw21ipJ7
  * @description CORS headers for Workers; preflight OPTIONS; addCorsHeaders, handleOptions.
  * @skill id:sk-7cf3f7
+ *
+ * PRINCIPLES:
+ * - All responses include CORS headers; configurable origins (restrict in production)
+ * - Handle OPTIONS preflight via handleOptions(request)
+ *
+ * USAGE: jsonResponse(data, { headers: addCorsHeaders() }); if (request.method === 'OPTIONS') return handleOptions(request);
  */
 
 /**

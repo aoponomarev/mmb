@@ -1,7 +1,16 @@
 /**
  * #JS-WP2ioNSZ
- * @description Portfolios API: CRUD from D1; GET/POST/PUT/DELETE /api/portfolios; handlePortfolios(request, env, path).
+ * @description Portfolios API: CRUD from D1; list, get, create, update, delete; handlePortfolios(request, env, path).
  * @skill id:sk-02d3ea
+ *
+ * ENDPOINTS:
+ * - GET /api/portfolios — list user portfolios
+ * - GET /api/portfolios/:id — get one
+ * - POST /api/portfolios — create
+ * - PUT /api/portfolios/:id — update
+ * - DELETE /api/portfolios/:id — delete
+ *
+ * USAGE: handlePortfolios(request, env, path).
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

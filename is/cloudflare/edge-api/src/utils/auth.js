@@ -2,6 +2,12 @@
  * #JS-ceKiAcb8
  * @description JWT verification and auth; verifyToken, requireAuth; JWT_SECRET; middleware for protected endpoints.
  * @skill id:sk-7cf3f7
+ *
+ * PRINCIPLES:
+ * - Verify JWT signature via JWT_SECRET
+ * - Extract user_id from token; requireAuth(request, env) for protected routes
+ *
+ * USAGE: const userId = await requireAuth(request, env); if (!userId) return jsonResponse({ error: 'Unauthorized' }, { status: 401 });
  */
 
 /**

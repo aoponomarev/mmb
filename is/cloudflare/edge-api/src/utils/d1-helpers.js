@@ -2,6 +2,11 @@
  * #JS-GHghtGEV
  * @description D1 helpers: users, portfolios, rebalances; Promise-based; transactions, validation.
  * @skill id:sk-02d3ea
+ *
+ * PRINCIPLES:
+ * - All functions return Promise; SQL error handling; transactions for atomic ops; validate before save
+ *
+ * USAGE: createUser(env.DB, { google_id, email }); createPortfolio(env.DB, user_id, data); getPortfolio(env.DB, id);
  */
 
 /**

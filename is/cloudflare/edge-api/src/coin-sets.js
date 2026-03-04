@@ -1,9 +1,17 @@
 /**
  * #JS-j1384efB
- * @description Coin sets API: CRUD + toggle; auth required; handleCoinSets(request, env).
+ * @description Coin sets API: CRUD + archive toggle; auth required; user-scoped sets; handleCoinSets(request, env).
  * @skill id:sk-02d3ea
  *
- * ENDPOINTS: POST/GET /api/coin-sets, GET/PUT/DELETE /api/coin-sets/:id, PATCH :id/toggle.
+ * ENDPOINTS:
+ * - POST /api/coin-sets — create
+ * - GET /api/coin-sets — list user sets
+ * - GET /api/coin-sets/:id — get one
+ * - PUT /api/coin-sets/:id — update
+ * - DELETE /api/coin-sets/:id — delete
+ * - PATCH /api/coin-sets/:id/toggle — archive/unarchive
+ *
+ * USAGE: handleCoinSets(request, env). All requests require Bearer token; coin_ids validated as string array.
  */
 
 import { requireAuth } from './utils/auth.js';

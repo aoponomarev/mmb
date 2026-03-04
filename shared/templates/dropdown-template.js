@@ -4,9 +4,12 @@
  *
  * PURPOSE: Template in DOM before Vue init; string → <script type="text/x-template"> → document.body; template: '#dropdown-template'.
  *
- * FEATURES: Root dropdown + trigger (cmp-button or slot #button) + dropdown-menu; searchable, scrollable; slots #button (isOpen, toggle), #items (filteredItems, searchQuery, handleItemSelect); responsive trigger (buttonIcon, buttonTextShort).
+ * FEATURES:
+ * - Root dropdown + trigger (cmp-button or slot #button) + dropdown-menu; searchable, scrollable
+ * - Slots: #button (isOpen, toggle), #items (filteredItems, searchQuery, handleItemSelect); responsive trigger (buttonIcon, buttonTextShort)
  *
- * REFERENCES: id:sk-483943 (x-template extraction); shared/components/dropdown.js
+ * REFERENCES:
+ * - id:sk-483943 (x-template extraction); shared/components/dropdown.js
  */
 
 (function() {

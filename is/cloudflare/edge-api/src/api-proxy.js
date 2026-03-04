@@ -1,9 +1,16 @@
 /**
  * #JS-9Mg559JV
- * @description Universal proxy for CoinGecko, Yahoo Finance, Stooq; CORS bypass; KV caching (TTL by type); domain whitelist, rate limit, path validation.
+ * @description Universal proxy for CoinGecko, Yahoo Finance, Stooq; CORS bypass; KV caching; domain whitelist, rate limit, path validation.
  * @skill id:sk-7cf3f7
  *
- * ROUTES: /api/coingecko/*, /api/yahoo-finance/*, /api/stooq/*. CACHING: KV, Cache-Control. SECURITY: whitelist, env.RATE_LIMIT.
+ * ROUTES:
+ * - /api/coingecko/*
+ * - /api/yahoo-finance/*
+ * - /api/stooq/*
+ *
+ * CACHING: KV store, Cache-Control headers; TTL by data type (e.g. coins 5 min, metrics 1 h).
+ *
+ * SECURITY: domain whitelist, path validation, optional env.RATE_LIMIT.
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

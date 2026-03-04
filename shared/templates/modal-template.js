@@ -6,9 +6,12 @@
  *
  * HOW: TEMPLATE constant → script element → document.body id="modal-template".
  *
- * FEATURES: Root modal fade + modal-dialog (size, centered) + modal-content; slots #header, #body, #footer; dynamic buttons via cmp-modal-buttons and modalApi.
+ * FEATURES:
+ * - Root modal fade + modal-dialog (size, centered) + modal-content
+ * - Slots: #header, #body, #footer; dynamic buttons via cmp-modal-buttons and modalApi
  *
- * REFERENCES: id:sk-483943 (x-template extraction); shared/components/modal.js; shared/components/modal-buttons.js
+ * REFERENCES:
+ * - id:sk-483943 (x-template extraction); shared/components/modal.js; shared/components/modal-buttons.js
  */
 
 (function() {

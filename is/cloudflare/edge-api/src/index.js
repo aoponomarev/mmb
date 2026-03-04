@@ -1,9 +1,16 @@
 /**
  * #JS-Jx5vBJtt
- * @description Main router for Cloudflare Workers API; routes /auth, /api/portfolios, /api/coin-sets, /api/datasets, /api/coingecko, /api/yahoo-finance, /api/stooq, /api/settings, /health.
+ * @description Main router for Cloudflare Workers API; routes requests to auth, portfolios, coin-sets, datasets, proxy, settings, health.
  * @skill id:sk-02d3ea
  *
- * ROUTES: /auth/* (auth.js), /api/portfolios/* (portfolios.js), /api/coin-sets/* (coin-sets.js), /api/datasets/* (datasets.js), /api/coingecko|yahoo-finance|stooq/* (api-proxy.js), /api/settings/* (settings.js), /health.
+ * ROUTES:
+ * - /auth/* → auth.js
+ * - /api/portfolios/* → portfolios.js
+ * - /api/coin-sets/* → coin-sets.js
+ * - /api/datasets/* → datasets.js
+ * - /api/coingecko/*, /api/yahoo-finance/*, /api/stooq/* → api-proxy.js
+ * - /api/settings/* → settings.js
+ * - /health → health check
  */
 
 import { handleAuth } from './auth.js';
