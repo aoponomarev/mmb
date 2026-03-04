@@ -5,10 +5,10 @@
  *
  * PURPOSE: Integrate portfolio form with modal button management.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: core/skills/domain-portfolio
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-c3d639
  *
  * FEATURES:
  * - Form for create/edit portfolio (name, description, assets)
@@ -19,15 +19,15 @@
  * COMPONENT API:
  *
  * Props:
- * - name (String, required) — текущее название портфеля (v-model)
- * - description (String, default: '') — текущее описание портфеля (v-model)
- * - assets (Array, default: []) — текущие активы портфеля (v-model)
- * - initialName (String, required) — исходное название при открытии модального окна
- * - initialDescription (String, default: '') — исходное описание при открытии модального окна
- * - initialAssets (Array, default: []) — исходные активы при открытии модального окна
- * - isEditing (Boolean, default: false) — режим редактирования (true) или создания (false)
- * - onSave (Function, required) — функция сохранения (name, description, assets)
- * - onCancel (Function, required) — функция отмены
+ * - name (String, required) — current portfolio name (v-model)
+ * - description (String, default: '') — current portfolio description (v-model)
+ * - assets (Array, default: []) — current portfolio assets (v-model)
+ * - initialName (String, required) — initial name when modal opened
+ * - initialDescription (String, default: '') — initial description when modal opened
+ * - initialAssets (Array, default: []) — initial assets when modal opened
+ * - isEditing (Boolean, default: false) — edit mode (true) or create (false)
+ * - onSave (Function, required) — save callback (name, description, assets)
+ * - onCancel (Function, required) — cancel callback
  *
  * Inject:
  * - modalApi — API for managing buttons (provided by cmp-modal)
@@ -38,14 +38,14 @@ window.portfolioModalBody = {
     template: `
         <form @submit.prevent="handleSave">
             <div class="mb-3">
-                <label :for="formIdPrefix + '-portfolio-name'" class="form-label">Название портфеля *</label>
+                <label :for="formIdPrefix + '-portfolio-name'" class="form-label">Название portfolioя *</label>
                 <input
                     type="text"
                     class="form-control"
                     :id="formIdPrefix + '-portfolio-name'"
                     v-model="formName"
                     required
-                    placeholder="Введите название портфеля"
+                    placeholder="Введите название portfolioя"
                 />
             </div>
             <div class="mb-3">
@@ -55,11 +55,11 @@ window.portfolioModalBody = {
                     :id="formIdPrefix + '-portfolio-description'"
                     v-model="formDescription"
                     rows="3"
-                    placeholder="Введите описание портфеля (необязательно)"
+                    placeholder="Введите описание portfolioя (необязательно)"
                 ></textarea>
             </div>
             <div class="mb-3">
-                <label class="form-label">Активы портфеля</label>
+                <label class="form-label">Активы portfolioя</label>
                 <div v-if="formAssets && formAssets.length > 0" class="mb-2">
                     <div
                         v-for="(asset, index) in formAssets"
@@ -276,7 +276,7 @@ window.portfolioModalBody = {
                 this.$emit('update:description', this.initialDescription);
                 this.$emit('update:assets', this.initialAssets.map(asset => ({ ...asset }))); // Deep copy
             } else {
-                // Закрываем модальное окно
+                // Close modal
                 this.onCancel();
             }
         },

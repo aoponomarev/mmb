@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-code-anchors
+ * @skill id:sk-8991cd
  * @description Invariant gate: ensures that causality hashes are not removed from one file while left in others, without explicit acknowledgment.
  */
 import fs from "node:fs";

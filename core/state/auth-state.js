@@ -1,40 +1,40 @@
 /**
  * ================================================================================================
- * AUTH STATE - Единая система состояния авторизации
+ * AUTH STATE - Unified authorization state system
  * ================================================================================================
  *
- * PURPOSE: Централизованное управление состоянием авторизации for синхронизации между всеми компонентами.
- * Все экземпляры компонентов авторизации используют единый источник правды.
+ * PURPOSE: Centralized management of authorization state for synchronization across all components.
+ * All auth component instances use SSOT.
  *
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * PRINCIPLES:
- * - SSOT for состояния авторизации
- * - Реактивность через Vue reactive API
- * - Синхронизация через eventBus for оповещения всех подписчиков
- * - Автоматическое обновление всех компонентов при изменении состояния
+ * - SSOT for authorization state
+ * - Reactivity via Vue reactive API
+ * - Synchronization via eventBus for notifying all subscribers
+ * - Automatic update of all components when state changes
  *
  * USAGE:
- * const authState = window.authState.getState(); // Get reactive объект
- * window.authState.setAuthState(true, userData); // Set состояние авторизации
- * window.authState.clearAuthState(); // Очистить состояние авторизации
- * window.authState.setLoading(true); // Set состояние загрузки
+ * const authState = window.authState.getState(); // Get reactive object
+ * window.authState.setAuthState(true, userData); // Set authorization state
+ * window.authState.clearAuthState(); // Clear authorization state
+ * window.authState.setLoading(true); // Set loading state
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
-    // Проверяем доступность Vue
+    // Check Vue availability
     if (!window.Vue) {
         console.error('auth-state.js: Vue not loaded');
         return;
     }
 
     /**
-     * Реактивное состояние авторизации (единый источник правды)
-     * Все компоненты работают с этим объектом напрямую
+     * Reactive auth state (SSOT)
+     * All components work with this object directly
      */
     const authState = window.Vue.reactive({
         isAuthenticated: false,
@@ -44,16 +44,16 @@
     });
 
     /**
-     * Set состояние авторизации
-     * @param {boolean} isAuthenticated - статус авторизации
-     * @param {Object|null} user - данные пользователя (name, email, picture и т.д.)
+     * Set authorization state
+     * @param {boolean} isAuthenticated - authorization status
+     * @param {Object|null} user - user data (name, email, picture, etc.)
      */
     function setAuthState(isAuthenticated, user = null) {
         authState.isAuthenticated = isAuthenticated;
         authState.user = user;
         authState.lastUpdated = Date.now();
 
-        // Эмит события через eventBus (если доступен) for компонентов, которые не используют реактивное состояние напрямую
+        // Emit event via eventBus (if available) for components that don't use reactive state directly
         if (window.eventBus) {
             window.eventBus.emit('auth-state-changed', {
                 isAuthenticated: authState.isAuthenticated,
@@ -69,8 +69,8 @@
     }
 
     /**
-     * Set состояние загрузки
-     * @param {boolean} isLoading - идет ли загрузка
+     * Set loading state
+     * @param {boolean} isLoading - whether loading is in progress
      */
     function setLoading(isLoading) {
         authState.isLoading = isLoading;
@@ -80,7 +80,7 @@
     }
 
     /**
-     * Очистить состояние авторизации
+     * Clear authorization state
      */
     function clearAuthState() {
         authState.isAuthenticated = false;
@@ -99,16 +99,16 @@
     }
 
     /**
-     * Get реактивный объект состояния авторизации
-     * @returns {Object} - реактивный объект { isAuthenticated, isLoading, user, lastUpdated }
+     * Get reactive authorization state object
+     * @returns {Object} - reactive object { isAuthenticated, isLoading, user, lastUpdated }
      */
     function getState() {
         return authState;
     }
 
     /**
-     * Проверить статус авторизации через auth-client и обновить состояние
-     * @returns {Promise<boolean>} - статус авторизации
+     * Check authorization status via auth-client and update state
+     * @returns {Promise<boolean>} - authorization status
      */
     async function checkAuthStatus() {
         if (!window.authClient) {

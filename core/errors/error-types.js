@@ -1,61 +1,61 @@
 /**
  * ================================================================================================
- * ERROR TYPES - Типы ошибок и их классификация
+ * ERROR TYPES - Error types and classification
  * ================================================================================================
  *
- * PURPOSE: Определить типы ошибок for единообразной обработки.
- * Классификация ошибок по категориям и уровням критичности.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: Define error types for uniform handling.
+ * Classification by categories and severity levels.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Чёткая классификация ошибок
- * - Уровни критичности
- * - Пользовательские сообщения for каждого типа
+ * - Clear error classification
+ * - Severity levels
+ * - User messages for each type
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Типы ошибок
+     * Error types
      */
     const ERROR_TYPES = {
-        // API ошибки
+        // API errors
         API_ERROR: 'api_error',
         API_TIMEOUT: 'api_timeout',
         API_RATE_LIMIT: 'api_rate_limit',
         API_NETWORK: 'api_network',
 
-        // Валидация
+        // Validation
         VALIDATION_ERROR: 'validation_error',
         SCHEMA_ERROR: 'schema_error',
 
-        // Вычисления
+        // Computation
         CALCULATION_ERROR: 'calculation_error',
         MATH_ERROR: 'math_error',
 
-        // Хранилище
+        // Storage
         STORAGE_ERROR: 'storage_error',
         STORAGE_QUOTA: 'storage_quota',
 
-        // Общие
+        // General
         UNKNOWN_ERROR: 'unknown_error'
     };
 
     /**
-     * Уровни критичности
+     * Severity levels
      */
     const ERROR_SEVERITY = {
-        LOW: 'low',           // Информационные ошибки
-        MEDIUM: 'medium',     // Предупреждения
-        HIGH: 'high',         // Критические ошибки
-        CRITICAL: 'critical'  // Критические ошибки, требующие внимания
+        LOW: 'low',           // Informational errors
+        MEDIUM: 'medium',     // Warnings
+        HIGH: 'high',         // Critical errors
+        CRITICAL: 'critical'  // Critical errors requiring attention
     };
 
     /**
-     * Пользовательские сообщения for каждого типа ошибки
+     * User messages for each error type
      */
     const ERROR_MESSAGES = {
         [ERROR_TYPES.API_ERROR]: 'Ошибка при загрузке данных с сервера',
@@ -72,9 +72,9 @@
     };
 
     /**
-     * Get уровень критичности for типа ошибки
-     * @param {string} errorType - тип ошибки
-     * @returns {string} - уровень критичности
+     * Get severity level for error type
+     * @param {string} errorType - error type
+     * @returns {string} - severity level
      */
     function getSeverity(errorType) {
         const severityMap = {
@@ -94,9 +94,9 @@
     }
 
     /**
-     * Get пользовательское сообщение for типа ошибки
-     * @param {string} errorType - тип ошибки
-     * @returns {string} - сообщение
+     * Get user message for error type
+     * @param {string} errorType - error type
+     * @returns {string} - message
      */
     function getUserMessage(errorType) {
         return ERROR_MESSAGES[errorType] || ERROR_MESSAGES[ERROR_TYPES.UNKNOWN_ERROR];

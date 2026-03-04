@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * RATE LIMITER - Централизованное управление запросами к API
+ * RATE LIMITER - Centralized API request management
  * ================================================================================================
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * PURPOSE: Prevent API blocking due to rate limit exceeded.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-rate-limiting
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface #for-rate-limiting
  * Adaptive timeouts, request queue, prioritization.
  *
 */
@@ -66,7 +66,7 @@
     }
 
     /**
-     * Get текущий таймаут
+     * Get current timeout
      * @returns {number} - timeout in milliseconds
      */
     function getTimeout() {
@@ -82,7 +82,7 @@
     }
 
     /**
-     * Добавить запрос в очередь
+     * Add request to queue
      * @param {Function} requestFn - request function
      * @param {number} priority - priority (lower = higher priority)
      * @returns {Promise<any>} - request result
@@ -130,8 +130,8 @@
                 // Decrease timeout on success
                 decreaseTimeout();
             } catch (error) {
-                // Skill anchor: адаптивный 429 recovery (increase/decrease timeout цикл).
-                // See core/skills/api-layer
+                // Skill anchor: adaptive 429 recovery (increase/decrease timeout cycle).
+                // See id:sk-bb7c8e
                 // Increase timeout on 429 error
                 if (error.status === 429 || error.type === 'api_rate_limit') {
                     increaseTimeout();

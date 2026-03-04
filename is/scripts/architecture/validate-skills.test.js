@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/arch-testing-ci
+ * @skill id:sk-d6777d
  * Tests for validate-skills.js (path existence in Implementation Status)
  */
 import test from "node:test";

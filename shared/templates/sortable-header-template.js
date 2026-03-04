@@ -27,7 +27,7 @@
  * - Material Symbols for иконок сортировки
  *
  * REFERENCES:
- * - General principles работы с шаблонами: app/skills/ui-architecture
+ * - General principles работы с шаблонами: id:sk-318305
  * - Компонент: shared/components/sortable-header.js
  */
 

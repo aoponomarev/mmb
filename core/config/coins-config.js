@@ -1,20 +1,19 @@
 /**
  * ================================================================================================
- * COINS CONFIG - Конфигурация справочников по монетам
+ * COINS CONFIG - Coin reference configuration
  * ================================================================================================
- * Skill: app/skills/ux-principles
+ * Skill: id:sk-e0b8f3
  *
- * PURPOSE: SSOT for справочных списков, связанных с монетами
- * (стейблкоины и др.). Используется в UI for выборок и фильтров без дублирования
- * хардкода в компонентах.
+ * PURPOSE: SSOT for coin reference lists (stablecoins etc.).
+ * Used in UI for selections and filters without hardcoding in components.
  *
  * PRINCIPLES:
- * - Все справочные списки по монетам are defined here
- * - Возвращаемые структуры иммутабельны for вызывающего кода (копии массивов/Set)
- * - Расширяемость: при добавлении новых списков используем геттеры
+ * - All coin reference lists defined here
+ * - Returned structures immutable for caller (array/Set copies)
+ * - Extensible: use getters when adding new lists
  *
  * REFERENCES:
- * - ЕИП: `app/skills/ux-principles` (раздел "SSOT")
+ * - SSOT: id:sk-e0b8f3 (section "SSOT")
  */
 
 (function() {
@@ -74,10 +73,10 @@
     }
 
     /**
-     * Проверить, является ли монета оберткой (Wrapped) или LST
-     * @param {string} id - ID монеты
-     * @param {string} symbol - Символ монеты (optional)
-     * @param {string} name - Название монеты (optional)
+     * Check if coin is wrapped (Wrapped) or LST
+     * @param {string} id - Coin ID
+     * @param {string} symbol - Coin symbol (optional)
+     * @param {string} name - Coin name (optional)
      * @returns {boolean}
      */
     function isWrappedOrLst(id, symbol = '', name = '') {
@@ -85,17 +84,17 @@
         const lowerSymbol = String(symbol || '').toLowerCase();
         const lowerName = String(name || '').toLowerCase();
 
-        // 1. Проверка по заранее собранным спискам (высокий приоритет)
+        // 1. Check pre-built lists first (high priority)
         if (wrappedCoins.includes(lowerId) || lstCoins.includes(lowerId)) {
             return true;
         }
 
-        // 2. Эвристический поиск по подстроке "wrap"
+        // 2. Heuristic search for "wrap" substring
         if (lowerId.includes('wrapped') || lowerName.includes('wrapped')) {
             return true;
         }
 
-        // Проверка символа
+        // Check symbol
         if (lowerSymbol.startsWith('w') && lowerSymbol.length > 1) {
             return true;
         }
@@ -104,10 +103,10 @@
     }
 
     /**
-     * Get тип монеты (for UI-индикаторов)
-     * @param {string} id - ID монеты
-     * @param {string} symbol - Символ монеты (optional)
-     * @param {string} name - Название монеты (optional)
+     * Get coin type (for UI indicators)
+     * @param {string} id - Coin ID
+     * @param {string} symbol - Coin symbol (optional)
+     * @param {string} name - Coin name (optional)
      * @returns {'stable'|'wrapped'|'lst'|null}
      */
     function getCoinType(id, symbol = '', name = '') {
@@ -126,7 +125,7 @@
             return 'lst';
         }
 
-        // Если не в списках, но похоже на wrapped/LST — считаем wrapped
+        // If not in lists but looks like wrapped/LST — treat as wrapped
         if (isWrappedOrLst(lowerId, symbol, name)) {
             return 'wrapped';
         }
@@ -135,7 +134,7 @@
     }
 
     /**
-     * Иконка типа монеты (ЕИП for UI)
+     * Coin type icon (SSOT for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
      * @returns {string|null}
      */
@@ -147,7 +146,7 @@
     }
 
     /**
-     * Подсказка for типа монеты (ЕИП for UI)
+     * Coin type tooltip (SSOT for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
      * @returns {string|null}
      */

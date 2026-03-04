@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-code-anchors
+ * @skill id:sk-8991cd
  * @description Validates that all @skill references in code point to existing skill files.
  */
 import fs from "node:fs";
@@ -28,6 +28,7 @@ const EXCLUDE_FILES = [
   "is/mcp/skills/server.js",
 ];
 const PLACEHOLDER_PATHS = /^path\/to\//;
+const PLACEHOLDER_IDS = /^id:sk-x+$/i;
 const SKILL_REGEX = /@skill\s+([^\s\n*]+)/g;
 const JSON_MODE = process.argv.includes("--json");
 
@@ -47,6 +48,21 @@ function walkFiles(dir, exts, result = []) {
 
 function resolveSkillPath(skillPath) {
   const normalized = skillPath.replace(/\\/g, "/").trim();
+  // id:xxx — resolve via id-registry (sk-, ais-, readme-, doc-, backlog-, runbook-, cheat-, docidx-, doc-del-log, docs-, bskill-)
+  if (/^id:[a-z0-9-]+$/i.test(normalized)) {
+    const id = normalized.replace(/^id:/i, "");
+    const registryPath = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
+    if (fs.existsSync(registryPath)) {
+      const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+      const all = { ...registry.skills, ...registry.ais, ...registry.markdown };
+      const filePath = all[id];
+      if (filePath) {
+        const full = path.join(ROOT, filePath);
+        if (fs.existsSync(full)) return full;
+      }
+    }
+    return null;
+  }
   const withMd = normalized.endsWith(".md") ? normalized : `${normalized}.md`;
   const fullPath = path.join(ROOT, withMd);
   if (fs.existsSync(fullPath)) return fullPath;
@@ -87,7 +103,7 @@ function main() {
     let m;
     while ((m = SKILL_REGEX.exec(headerLines)) !== null) {
       const skillPath = m[1].trim();
-      if (PLACEHOLDER_PATHS.test(skillPath)) continue;
+      if (PLACEHOLDER_PATHS.test(skillPath) || PLACEHOLDER_IDS.test(skillPath)) continue;
       const resolved = resolveSkillPath(skillPath);
       if (!resolved) {
         errors.push({ file: relPath, skill: skillPath, reason: "File not found" });

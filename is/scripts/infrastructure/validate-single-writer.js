@@ -1,6 +1,6 @@
 /**
- * @skill arch-external-parity
- * @skill arch-foundation
+ * @skill id:sk-73dcca
+ * @skill id:sk-483943
  * @description Blocking contract for shared external datasets.
  * Ensures only one active writer is allowed at a time via DATA_PLANE_ACTIVE_APP.
  * 

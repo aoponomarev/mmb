@@ -16,7 +16,7 @@
  * - All styles via Bootstrap classes
  *
  * REFERENCES:
- * - Компонент: app/components/portfolios-manager.js
+ * - Component: app/components/portfolios-manager.js
  */
 
 (function() {
@@ -26,9 +26,9 @@
         <div class="portfolios-manager-wrapper">
             <!-- Header and create button -->
             <div class="d-flex justify-content-start align-items-center gap-3 mb-3">
-                <h3>Мои портфели</h3>
+                <h3>Мои portfolioи</h3>
                 <cmp-button
-                    label="Создать портфель"
+                    label="Создать portfolioь"
                     icon="fas fa-plus"
                     variant="primary"
                     size="sm"
@@ -55,15 +55,15 @@
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Загрузка...</span>
                 </div>
-                <p class="mt-2 text-muted">Загрузка портфелей...</p>
+                <p class="mt-2 text-muted">Загрузка portfolios...</p>
             </div>
 
             <!-- Empty state -->
             <div v-else-if="!isLoading && portfolios.length === 0" class="text-center py-5 border rounded">
                 <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-                <p class="text-muted">У вас пока нет портфелей</p>
+                <p class="text-muted">У вас пока нет portfolios</p>
                 <cmp-button
-                    label="Создать первый портфель"
+                    label="Создать первый portfolioь"
                     icon="fas fa-plus"
                     variant="primary"
                     @click="openCreateModal"

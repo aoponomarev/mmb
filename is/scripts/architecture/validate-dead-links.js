@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/arch-skills-mcp
+ * @skill id:sk-7d810a
  * @description Finds dead links in skills and docs — references to non-existent files.
  * @see is/contracts/path-contracts.js — SSOT for exclusions and resolve logic.
  */

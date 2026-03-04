@@ -1,27 +1,27 @@
 /**
  * ================================================================================================
- * NORMALIZER - Нормализация данных к единому формату
+ * NORMALIZER - Data normalization to unified format
  * ================================================================================================
  *
- * PURPOSE: Приводить данные из разных источников к единому формату.
- * Нормализация API-ответов, временных рядов, портфелей.
- * Skill: core/skills/domain-portfolio
+ * PURPOSE: Normalize data from different sources to unified format.
+ * Normalization of API responses, time series, portfolios.
+ * Skill: id:sk-c3d639
  *
  * PRINCIPLES:
- * - Единый формат независимо от источника
- * - Сохранение всех данных при нормализации
- * - Обратная совместимость
+ * - Unified format regardless of source
+ * - Preserve all data during normalization
+ * - Backward compatibility
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Нормализовать данные монеты из CoinGecko API
-     * @param {Object} coinData - данные из API
-     * @returns {Object} - нормализованные данные
+     * Normalize coin data from CoinGecko API
+     * @param {Object} coinData - Data from API
+     * @returns {Object} - Normalized data
      */
     function normalizeCoinGeckoCoin(coinData) {
         return {
@@ -38,9 +38,9 @@
     }
 
     /**
-     * Нормализовать массив монет из CoinGecko API
-     * @param {Array} coinsArray - массив данных монет
-     * @returns {Array} - массив нормализованных данных
+     * Normalize coin array from CoinGecko API
+     * @param {Array} coinsArray - Array of coin data
+     * @returns {Array} - Array of normalized data
      */
     function normalizeCoinGeckoCoins(coinsArray) {
         if (!Array.isArray(coinsArray)) {
@@ -50,10 +50,10 @@
     }
 
     /**
-     * Нормализовать точку временного ряда
-     * @param {Object} point - точка данных
-     * @param {string} coinId - ID монеты
-     * @returns {Object} - нормализованная точка
+     * Normalize time series point
+     * @param {Object} point - Data point
+     * @param {string} coinId - Coin ID
+     * @returns {Object} - Normalized point
      */
     function normalizeTimeSeriesPoint(point, coinId) {
         return {
@@ -64,9 +64,9 @@
     }
 
     /**
-     * Нормализовать метрику рынка
-     * @param {Object} metric - данные metrics
-     * @returns {Object} - нормализованная метрика
+     * Normalize market metric
+     * @param {Object} metric - Metric data
+     * @returns {Object} - Normalized metric
      */
     function normalizeMarketMetric(metric) {
         return {

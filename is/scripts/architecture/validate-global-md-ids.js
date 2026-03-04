@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-docs-lifecycle
+ * @skill id:sk-0e193a
  * @description Validates all project markdown files have unique id in frontmatter.
  */
 import fs from "node:fs";

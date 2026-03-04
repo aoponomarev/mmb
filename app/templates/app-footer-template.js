@@ -18,22 +18,22 @@
  *
  * TEMPLATE FEATURES:
  * HTML structure:
- * - Корневой элемент: ⟨footer⟩ с классами fixed-bottom, bg-body, py-2, px-2 px-md-5, font-monospace, text-muted, d-flex, align-items-center, justify-content-between, flex-wrap
+ * - Root element: ⟨footer⟩ with classes fixed-bottom, bg-body, py-2, px-2 px-md-5, font-monospace, text-muted, d-flex, align-items-center, justify-content-between, flex-wrap
  * - MSK time: hidden on mobile (d-none d-md-inline), visible on desktop
  * - Metrics list: market metrics (FGI, VIX, BTC, OI, FR, LSR) as spans with responsive padding (px-1 px-md-2)
  * - Crypto news: one line under metrics, hidden on mobile (d-none d-md-block), overflow-x-hidden, clickable to toggle, tooltip with full text
  * - No intermediate wrappers: all classes on root footer element
  * Layout and CSS classes:
- * - Фиксированное позиционирование: fixed-bottom
+ * - Fixed positioning: fixed-bottom
  * - Background: bg-body (inherits theme from body, switches with theme)
  * - Multi-layer shadow upward with cool steel tones
  * - Minimal styles: only base Bootstrap classes (text-muted, small, font-monospace on footer)
  * - Element distribution: d-flex, justify-content-between, flex-wrap for even span distribution
  *
  * REFERENCES:
- * - General principles работы с шаблонами: app/skills/ui-architecture
- * - Компонент: app/components/app-footer.js
- * - Стили: styles/layout/footer.css
+ * - General template principles: id:sk-318305
+ * - Component: app/components/app-footer.js
+ * - Styles: styles/layout/footer.css
  */
 
 (function() {

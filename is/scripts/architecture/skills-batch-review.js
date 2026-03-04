@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/arch-skills-mcp
+ * @skill id:sk-7d810a
  * @description Orchestrates batch validation: validate-skills, validate-dead-links, validate-causality-exceptions-stale.
  */
 import { execSync } from "node:child_process";

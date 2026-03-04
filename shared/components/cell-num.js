@@ -5,9 +5,9 @@
  *
  * PURPOSE: Форматирование и отображение числовых значений в таблице.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * USAGE:
  * <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price"></cell-num>
@@ -58,7 +58,7 @@
                 type: String,
                 default: '—'
             },
-            // Десятичный разделитель
+            // Десятичный sectionитель
             decimalSeparator: {
                 type: String,
                 default: '.',
@@ -165,7 +165,7 @@
                 return '';
             },
 
-            // Целая часть числа (с разделителями разрядов)
+            // Целая часть числа (с sectionителями разрядов)
             integerPart() {
                 if (this.isEmpty || this.isInfinite) return '';
 
@@ -190,7 +190,7 @@
                 return fracDigits.replace(/0+$/, '').length > 0 || this.effectivePrecision > 0;
             },
 
-            // Десятичный разделитель
+            // Десятичный sectionитель
             decimalSeparatorDisplay() {
                 if (this.isEmpty || this.isInfinite) return '';
                 if (!this.hasFractionPart) return '';
@@ -319,7 +319,7 @@
         },
 
         methods: {
-            // Добавление разделителя разрядов (каждые 3 цифры)
+            // Добавление sectionителя разрядов (каждые 3 цифры)
             addThousandsSeparator(str) {
                 if (!this.thousandsSeparator || this.thousandsSeparator === '') {
                     return str;

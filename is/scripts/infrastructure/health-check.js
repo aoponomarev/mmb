@@ -7,7 +7,7 @@
  *  - Contract plane: .env contracts (SSOT)
  *  - Runtime plane: Preflight execution and core files
  *
- * Skill: is/skills/arch-foundation.md
+ * Skill: id:sk-483943
  * Causality: Control Plane initialization from Donor migration
  *
  * Usage:

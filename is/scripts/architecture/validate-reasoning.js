@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-reasoning-audit
+ * @skill id:sk-d7bf67
  * @description Gate: validates that all skills have Reasoning and confidence scores per process-reasoning-audit.md
  */
 import fs from "node:fs";

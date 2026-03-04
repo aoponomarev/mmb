@@ -5,11 +5,11 @@
  *
  * PURPOSE: Vue component for managing user portfolios via Cloudflare API.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  *
  * COMPONENT API:
  *
@@ -62,7 +62,7 @@ window.portfoliosManager = {
                 const title = window.modalsConfig.getModalTitle('portfolioModal');
                 if (title) return title;
             }
-            return this.isEditing ? 'Редактировать портфель' : 'Создать портфель';
+            return this.isEditing ? 'Редактировать portfolioь' : 'Создать portfolioь';
         },
 
     },
@@ -95,7 +95,7 @@ window.portfoliosManager = {
                 this.portfolios = portfolios || [];
             } catch (error) {
                 console.error('portfolios-manager.loadPortfolios error:', error);
-                this.error = error.message || 'Ошибка при загрузке портфелей';
+                this.error = error.message || 'Ошибка при загрузке portfolios';
             } finally {
                 this.isLoading = false;
             }
@@ -193,7 +193,7 @@ window.portfoliosManager = {
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.deletePortfolio error:', error);
-                this.error = error.message || 'Ошибка при удалении портфеля';
+                this.error = error.message || 'Ошибка при удалении portfolioя';
             } finally {
                 this.isLoading = false;
             }
@@ -251,7 +251,7 @@ window.portfoliosManager = {
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.handleSave error:', error);
-                this.error = error.message || 'Ошибка при сохранении портфеля';
+                this.error = error.message || 'Ошибка при сохранении portfolioя';
                 this.isLoading = false;
             }
         },

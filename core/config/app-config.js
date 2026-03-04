@@ -2,7 +2,7 @@
  * ================================================================================================
  * APP CONFIG - Application configuration
  * ================================================================================================
- * Skill: is/skills/arch-foundation
+ * Skill: id:sk-483943
  *
  * PURPOSE: Centralized application configuration.
  * API endpoints, limits, timeouts, default settings, version, feature flags.
@@ -29,11 +29,11 @@
  * - modelUri format: gpt://{folderId}/{model}/latest
  *
  * REFERENCES:
- * - Critical structures described in is/skills/arch-foundation
+ * - Critical structures described in id:sk-483943
  * - Authorization configuration: core/config/auth-config.js
  * - Cloudflare Workers configuration: core/config/cloudflare-config.js
  * - YandexGPT provider: core/api/ai-providers/yandex-provider.js
- * - Cloudflare integration plan: core/skills/config-contracts
+ * - Cloudflare integration plan: id:sk-02d3ea
  */
 
 (function() {
@@ -236,7 +236,7 @@
      * @param {string} proxyType - proxy type ('cloudflare' | 'yandex' etc.)
      * @returns {string|null} proxy URL or null if not found
      */
-    // @skill-anchor core/skills/external-integrations #for-geo-optimization
+    // @skill-anchor id:sk-7b4ee5 #for-geo-optimization
     function getProxyUrl(providerName, proxyType = null) {
         const providerConfig = CONFIG.defaults[providerName];
         if (!providerConfig) return null;

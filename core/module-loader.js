@@ -1,66 +1,66 @@
 /**
  * ================================================================================================
- * MODULE LOADER - Загрузчик модулей с автоматическим разрешением зависимостей
+ * MODULE LOADER - Module loader with automatic dependency resolution
  * ================================================================================================
  *
- * PURPOSE: Автоматическая загрузка модулей приложения в правильном порядке с учётом зависимостей.
- * Поддержка работы с file:// и http:// протоколами через асинхронную загрузку ⟨script⟩ тегов.
- * Skill: core/skills/state-events
+ * PURPOSE: Auto-load application modules in correct order with dependency resolution.
+ * Support for file:// and http:// protocols via async script tag loading.
+ * Skill: id:sk-a17d41
  *
- * ПРОБЛЕМА:
- * - Ручное управление порядком загрузки через вложенные onload колбэки сложно поддерживать
- * - При добавлении нового модуля нужно manually обновлять цепочку загрузки
- * - Легко допустить ошибку в порядке загрузки
- * - file:// протокол не поддерживает fetch() и XMLHttpRequest из-за CORS
+ * PROBLEM:
+ * - Manual load order via nested onload callbacks is hard to maintain
+ * - Adding new module requires manually updating load chain
+ * - Easy to err in load order
+ * - file:// protocol does not support fetch() and XMLHttpRequest due to CORS
  *
- * РЕШЕНИЕ:
- * - Конфигурация модулей в core/modules-config.js с описанием зависимостей
- * - Автоматическое разрешение зависимостей через топологическую сортировку (алгоритм Kahn)
- * - Обнаружение циклических зависимостей
- * - Асинхронная загрузка через динамическое создание ⟨script⟩ тегов (работает с file:// и http://)
- * - Кэширование loadedных модулей for избежания повторной загрузки
+ * SOLUTION:
+ * - Module config in core/modules-config.js with dependency description
+ * - Automatic dependency resolution via topological sort (Kahn algorithm)
+ * - Cycle detection
+ * - Async load via dynamic script tag creation (works with file:// and http://)
+ * - Cache loaded modules to avoid reload
  *
- * КАК ДОСТИГАЕТСЯ:
- * - Чтение конфигурации из window.modulesConfig
- * - Построение графа зависимостей
- * - Топологическая сортировка for определения правильного порядка
- * - Последовательная загрузка модулей через Promise с учётом зависимостей
- * - Validate presence глобальных переменных после загрузки
- * - Обработка ошибок: критичные модули прерывают загрузку, некритичные пропускаются с предупреждением
+ * HOW:
+ * - Read config from window.modulesConfig
+ * - Build dependency graph
+ * - Topological sort for correct order
+ * - Sequential load via Promise with dependency respect
+ * - Validate global variable presence after load
+ * - Error handling: critical modules abort load, non-critical skipped with warning
  *
- * ОСОБЕННОСТИ:
- * - Поддержка условной загрузки модулей через feature flags (optionalе поле condition)
- * - Кэширование loadedных модулей по src пути
- * - Детальные сообщения об ошибках с указанием проблемных модулей
+ * FEATURES:
+ * - Conditional load via feature flags (optional condition field)
+ * - Cache loaded modules by src path
+ * - Detailed error messages with problematic module names
  *
  * REFERENCES:
- * - General principles модульной системы: core/skills/state-events
- * - Конфигурация модулей: core/modules-config.js
+ * - General principles module system: id:sk-a17d41
+ * - Modules configuration: core/modules-config.js
  */
 
-// @skill-anchor is/skills/process-lib-governance #for-umd-libraries #for-cdn-fallback
+// @skill-anchor id:sk-130fa2 #for-umd-libraries #for-cdn-fallback
 (function() {
     'use strict';
 
     /**
-     * Кэш loadedных модулей (по src пути)
+     * Cache of loaded modules (by src path)
      */
     const loadedModulesCache = new Set();
 
     /**
-     * Загружает скрипт асинхронно через <script> тег (работает с file:// и http://)
-     * @param {string} src - путь к скрипту
-     * @returns {Promise<boolean>} - успех загрузки
+     * Load script async via script tag (works with file:// and http://)
+     * @param {string} src - path to script
+     * @returns {Promise<boolean>} - load success
      */
     function loadScriptAsync(src) {
         return new Promise((resolve, reject) => {
-            // Проверка кэша
+            // Check cache
             if (loadedModulesCache.has(src)) {
                 resolve(true);
                 return;
             }
 
-            // Проверка, not loaded ли уже скрипт в DOM
+            // Check if script already in DOM
             const existingScript = document.querySelector(`script[src="${src}"]`);
             if (existingScript) {
                 loadedModulesCache.add(src);
@@ -70,10 +70,10 @@
 
             const script = document.createElement('script');
             script.src = src;
-            script.async = false; // Important: последовательная загрузка for зависимостей
+            script.async = false; // Important: sequential load for dependencies
 
             script.onload = () => {
-                // Добавляем в кэш после успешной загрузки
+                // Add to cache after successful load
                 loadedModulesCache.add(src);
                 resolve(true);
             };
@@ -88,23 +88,23 @@
 
 
     /**
-     * Загружает модуль асинхронно (работает с file:// и http:// через <script> теги)
-     * @param {Object} module - объект модуля из конфигурации
-     * @returns {Promise<boolean>} - успех загрузки
+     * Load module async (works with file:// and http:// via script tags)
+     * @param {Object} module - module object from config
+     * @returns {Promise<boolean>} - load success
      */
     function loadModule(module) {
-        // Используем асинхронную загрузку через <script> теги for всех протоколов
-        // Это работает и с file://, и с http://
+        // Use async load via script tags for all protocols
+        // Works with both file:// and http://
         return loadScriptAsync(module.src);
     }
 
     /**
-     * Собирает все модули из конфигурации в один массив
-     * Фильтрует модули по условиям загрузки (feature flags)
-     * ВАЖНО: Условия, зависящие от других модулей (например, app-config), проверяются ПОСЛЕ загрузки зависимостей
-     * @param {Object} config - конфигурация модулей
-     * @param {boolean} checkConditions - проверять ли условия загрузки (false - только сборка, true - с проверкой)
-     * @returns {Array} - массив всех модулей (после фильтрации)
+     * Collect all modules from config into array
+     * Filter by load conditions (feature flags)
+     * IMPORTANT: Conditions depending on other modules (e.g. app-config) checked AFTER deps loaded
+     * @param {Object} config - module config
+     * @param {boolean} checkConditions - check load conditions (false = collect only, true = with check)
+     * @returns {Array} - array of all modules (after filtering)
      */
     function collectModules(config, checkConditions = true) {
         const modules = [];
@@ -113,7 +113,7 @@
         for (const category of categories) {
             if (config[category]) {
                 for (const module of config[category]) {
-                    // Проверяем условие загрузки (feature flag) только если указано
+                    // Check load condition (feature flag) only if specified
                     if (checkConditions && module.condition && typeof module.condition === 'function') {
                         try {
                             const conditionResult = module.condition();
@@ -121,7 +121,7 @@
                                 continue;
                             }
                         } catch (error) {
-                            // При ошибке проверки условия загружаем модуль по умолчанию
+                            // On condition check error, load module by default
                         }
                     }
                     modules.push(module);
@@ -133,21 +133,21 @@
     }
 
     /**
-     * Строит граф зависимостей из модулей
-     * @param {Array} modules - массив всех модулей
-     * @returns {Object} - граф зависимостей { moduleId: [depId1, depId2, ...] }
+     * Build dependency graph from modules
+     * @param {Array} modules - array of all modules
+     * @returns {Object} - dependency graph { moduleId: [depId1, depId2, ...] }
      */
     function buildDependencyGraph(modules) {
         const graph = {};
         const moduleMap = {};
 
-        // Создаём карту модулей по ID
+        // Build module map by ID
         for (const module of modules) {
             moduleMap[module.id] = module;
             graph[module.id] = [];
         }
 
-        // Строим граф зависимостей
+        // Build dependency graph
         for (const module of modules) {
             if (module.deps && module.deps.length > 0) {
                 for (const depId of module.deps) {
@@ -163,9 +163,9 @@
     }
 
     /**
-     * Обнаруживает циклические зависимости
-     * @param {Object} graph - граф зависимостей
-     * @returns {Array|null} - массив модулей, образующих цикл, или null если циклов нет
+     * Detect cyclic dependencies
+     * @param {Object} graph - dependency graph
+     * @returns {Array|null} - array of modules forming cycle, or null
      */
     function detectCycles(graph) {
         const visited = new Set();
@@ -209,42 +209,42 @@
     }
 
     /**
-     * Топологическая сортировка модулей (алгоритм Kahn)
-     * @param {Object} graph - граф зависимостей (graph[A] = [B, C] означает, что A зависит от B и C)
-     * @param {Object} moduleMap - карта модулей по ID
-     * @returns {Array} - отсортированный массив модулей
+     * Topological sort of modules (Kahn algorithm)
+     * @param {Object} graph - dependency graph (graph[A] = [B, C] means A depends on B and C)
+     * @param {Object} moduleMap - module map by ID
+     * @returns {Array} - sorted module array
      *
-     * ЛОГИКА:
-     * - Если модуль A зависит от модуля B, то B должен быть loaded до A
-     * - inDegree[A] = количество модулей, от которых зависит A (т.е. длина graph[A])
-     * - Модули с inDegree === 0 загружаются первыми (у них нет зависимостей)
-     * - После загрузки модуля, уменьшаем inDegree for всех модулей, которые от него зависят
+     * LOGIC:
+     * - If A depends on B, B must load before A
+     * - inDegree[A] = count of modules A depends on (length of graph[A])
+     * - Modules with inDegree === 0 load first (no deps)
+     * - After loading module, decrement inDegree for all modules depending on it
      */
     function topologicalSort(graph, moduleMap) {
         const inDegree = {};
         const queue = [];
         const result = [];
 
-        // Инициализация inDegree
-        // inDegree[node] = количество модулей, от которых зависит node (т.е. длина graph[node])
+        // Initialize inDegree
+        // inDegree[node] = count of modules node depends on (length of graph[node])
         for (const node of Object.keys(graph)) {
             inDegree[node] = graph[node].length;
         }
 
-        // Находим все узлы без зависимостей (inDegree === 0)
+        // Find all nodes with no deps (inDegree === 0)
         for (const node of Object.keys(inDegree)) {
             if (inDegree[node] === 0) {
                 queue.push(node);
             }
         }
 
-        // Обрабатываем очередь
+        // Process queue
         while (queue.length > 0) {
             const node = queue.shift();
             result.push(moduleMap[node]);
 
-            // Уменьшаем inDegree for всех модулей, которые зависят от node
-            // Ищем все модули, у которых node в списке зависимостей
+            // Decrement inDegree for all modules depending on node
+            // Find all modules that have node in their deps list
             for (const otherNode of Object.keys(graph)) {
                 if (graph[otherNode].includes(node)) {
                     inDegree[otherNode]--;
@@ -255,7 +255,7 @@
             }
         }
 
-        // Проверка на циклы (если остались узлы с inDegree > 0)
+        // Check for cycles (if nodes with inDegree > 0 remain)
         const remaining = Object.keys(inDegree).filter(node => inDegree[node] > 0);
         if (remaining.length > 0) {
             throw new Error(`module-loader: обнаружены циклические зависимости: ${remaining.join(', ')}`);
@@ -265,8 +265,8 @@
     }
 
     /**
-     * Загружает все модули в правильном порядке
-     * @param {Object} config - конфигурация модулей
+     * Load all modules in correct order
+     * @param {Object} config - module config
      * @returns {Promise<void>}
      */
     async function loadAllModules(config) {
@@ -274,39 +274,39 @@
             throw new Error('module-loader: конфигурация модулей не найдена (window.modulesConfig)');
         }
 
-        // Сначала собираем все модули БЕЗ проверки условий (for построения графа зависимостей)
+        // First collect all modules WITHOUT condition check (for building dependency graph)
         const allModules = collectModules(config, false);
 
         if (allModules.length === 0) {
             throw new Error('module-loader: не найдено модулей for загрузки');
         }
 
-        // Строим граф зависимостей
+        // Build dependency graph
         const { graph, moduleMap } = buildDependencyGraph(allModules);
 
-        // Проверяем на циклические зависимости
+        // Check for cyclic dependencies
         const cycle = detectCycles(graph);
         if (cycle) {
             throw new Error(`module-loader: обнаружена циклическая зависимость: ${cycle.join(' → ')}`);
         }
 
-        // Топологическая сортировка
+        // Topological sort
         const sortedModules = topologicalSort(graph, moduleMap);
 
-        // Загружаем модули последовательно и проверяем условия ПОСЛЕ загрузки зависимостей
+        // Load modules sequentially and check conditions AFTER deps loaded
         const failedModules = [];
         for (let i = 0; i < sortedModules.length; i++) {
             const module = sortedModules[i];
 
-            // Проверяем условие загрузки ПОСЛЕ того, как зависимости уже loadedы
+            // Check load condition AFTER deps are loaded
             if (module.condition && typeof module.condition === 'function') {
                 try {
                     const conditionResult = module.condition();
                     if (!conditionResult) {
-                        continue; // Пропускаем модуль, но не загружаем его
+                        continue; // Skip module, do not load it
                     }
                 } catch (error) {
-                    // При ошибке проверки условия загружаем модуль по умолчанию
+                    // On condition check error, load module by default
                 }
             }
 
@@ -315,19 +315,18 @@
             } catch (error) {
                 failedModules.push({ module, error });
 
-                // Для критичных модулей (app, vue, templates) прерываем загрузку
-                // Для критичных модулей (app, vue, шаблоны) прерываем загрузку
+                // For critical modules (app, vue, templates) abort load
                 const criticalModules = ['vue', 'button-template', 'dropdown-menu-item-template', 'dropdown-template', 'combobox-template'];
                 if (module.category === 'app' || criticalModules.includes(module.id)) {
                     throw new Error(`Критичный модуль ${module.id} not loaded. Приложение не может продолжить работу.`);
                 }
 
-                // Для некритичных модулей продолжаем загрузку
+                // For non-critical modules continue loading
             }
         }
 
-        // Вызываем инициализацию приложения, если она определена
-        // Ждём готовности DOM, если он ещё not loaded
+        // Call app init if defined
+        // Wait for DOM ready if not yet loaded
         function callAppInit() {
             if (typeof window.appInit === 'function') {
                 window.appInit();
@@ -337,17 +336,17 @@
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', callAppInit);
         } else {
-            // DOM уже loaded, вызываем сразу
+            // DOM already loaded, call immediately
             callAppInit();
         }
     }
 
     /**
-     * Публичный API модульного загрузчика
+     * Module loader public API
      */
     window.moduleLoader = {
         /**
-         * Загружает все модули из конфигурации
+         * Load all modules from config
          * @returns {Promise<void>}
          */
         load: function() {
@@ -355,7 +354,7 @@
         },
 
         /**
-         * Проверяет наличие конфигурации
+         * Check if config exists
          * @returns {boolean}
          */
         hasConfig: function() {
@@ -363,15 +362,15 @@
         },
 
         /**
-         * Очищает кэш loadedных модулей
+         * Clear loaded modules cache
          */
         clearCache: function() {
             loadedModulesCache.clear();
         },
 
         /**
-         * Проверяет, loaded ли модуль
-         * @param {string} src - путь к модулю
+         * Check if module is loaded
+         * @param {string} src - path to module
          * @returns {boolean}
          */
         isLoaded: function(src) {

@@ -2,7 +2,7 @@
  * WorkFlow UI V2 Logic
  * Stateless, template-driven single-page dashboard.
  *
- * Skill: is/skills/arch-foundation
+ * Skill: id:sk-483943
  *
  * Architecture:
  *   - API layer: all HTTP calls go through api.call() / api.n8nCall()
@@ -579,7 +579,7 @@ async function loadSources() {
       setText(clone, '.source-status', status === 'Active' ? '' : status);
       tbody.appendChild(clone);
     }
-    setStatus('sources-status', `${FALLBACK_DATA.sources.length} источников • обновлено в ${FALLBACK_STATUS_TIME}`);
+    setStatus('sources-status', `${FALLBACK_DATA.sources.length} sources • обновлено в ${FALLBACK_STATUS_TIME}`);
     setStatusClass('sources-status', null, ['text-danger']);
   } finally {
     V2State.isLoading = false;
@@ -590,7 +590,7 @@ async function loadSources() {
 function updateSourcesStatus() {
   if (!V2State.lastLoadTime) { setStatus('sources-status', ''); return; }
   const timeStr = V2State.lastLoadTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-  setStatus('sources-status', `${V2State.sourcesCount} источников \u2022 обновлено в ${timeStr}`);
+  setStatus('sources-status', `${V2State.sourcesCount} sources \u2022 обновлено в ${timeStr}`);
 }
 
 // ─── Model Failed Modal ───────────────────────────────────────────
@@ -701,7 +701,7 @@ async function checkSourceUpdates() {
   const btnCheck = $('btn-check-updates');
   if (btnCheck) btnCheck.disabled = true;
   showSpinner('sources-spinner');
-  setStatus('sources-status', 'Проверка релизов источников...');
+  setStatus('sources-status', 'Проверка релизов sources...');
   setStatusClass('sources-status', null, ['text-success', 'text-warning', 'text-danger']);
 
   // Auto-clear Skills & Tasks immediately so the user sees a clean slate
@@ -789,7 +789,7 @@ async function checkSourceUpdates() {
       '500': 'Ошибка оркестратора отчётов',
     };
     const key = Object.keys(errorMessages).find(k => error.message.includes(k));
-    setStatus('sources-status', key ? errorMessages[key] : (error.message || 'Неизвестная ошибка'));
+    setStatus('sources-status', key ? errorMessages[key] : (error.message || 'Unknown error'));
     setStatusClass('sources-status', 'text-danger');
     setTimeout(() => { setStatusClass('sources-status', null, ['text-danger']); updateSourcesStatus(); }, 5000);
   } finally {

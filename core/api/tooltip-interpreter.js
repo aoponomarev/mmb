@@ -5,10 +5,10 @@
  *
  * PURPOSE: Generate dynamic part of tooltip from current metric values.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * Static part from tooltipsConfig, dynamic part built here.
- * Skill: app/skills/ux-principles
+ * Skill: id:sk-e0b8f3
  *
  * USAGE:
  * const tooltip = window.tooltipInterpreter.getTooltip('agr', { value: 12.5, lang: 'ru' });

@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/arch-testing-ci
+ * @skill id:sk-d6777d
  * Tests for validate-dead-links.js
  */
 import test from "node:test";

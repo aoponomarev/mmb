@@ -2,12 +2,12 @@
  * ================================================================================================
  * BASE DATA PROVIDER - Base class for coin data providers
  * ================================================================================================
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * PURPOSE: Unified interface for working with various cryptocurrency data sources
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * (CoinGecko, CoinMarketCap, Binance, etc.).
  *
  * USAGE:

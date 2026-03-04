@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-docs-lifecycle
+ * @skill id:sk-0e193a
  * @description Validates all inline id:<doc-id> links in markdown against global id registry.
  */
 import fs from "node:fs";

@@ -2,7 +2,7 @@
  * ================================================================================================
  * CACHE MANAGER - Unified interface for cache operations
  * ================================================================================================
- * @skill core/skills/cache-layer
+ * @skill id:sk-3c832d
  *
  * PURPOSE: Single access point to cache for all components. Abstraction over localStorage and IndexedDB.
  *
@@ -37,7 +37,7 @@
  * await cacheManager.set('coins-list', data, { ttl: 86400000 })
  * await cacheManager.clearOldVersions()
  *
- * REFERENCE: General caching principles: core/skills/cache-layer
+ * REFERENCE: General caching principles: id:sk-3c832d
  */
 
 (function() {
@@ -89,7 +89,7 @@
     function getVersionedKey(key, useVersioning = null) {
         // Auto-detect versioning necessity
         if (useVersioning === null) {
-            // @skill-anchor core/skills/cache-layer #for-key-versioning
+            // @skill-anchor id:sk-3c832d #for-key-versioning
             const versionedKeys = [
                 'icons-cache',        // Coin icons (CoinGecko API structure)
                 'coins-list',         // Coin list (CoinGecko API structure)

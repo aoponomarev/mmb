@@ -23,7 +23,7 @@
  * - Передача всех свойств кнопки (label, variant, disabled, icon, classesAdd, buttonAttributes)
  *
  * REFERENCES:
- * - General principles работы с шаблонами: app/skills/ui-architecture
+ * - General principles работы с шаблонами: id:sk-318305
  * - Компонент: shared/components/modal-buttons.js
  */
 

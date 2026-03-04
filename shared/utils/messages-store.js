@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * MESSAGES STORE - Глобальное хранилище системных сообщений
+ * MESSAGES STORE - Global system messages store
  * ================================================================================================
  *
- * PURPOSE: Единое реактивное хранилище for всех системных сообщений приложения.
- * Работает как с Vue (реактивность), так и без него (через события).
+ * PURPOSE: Single reactive store for all app system messages.
+ * Works with Vue (reactivity) and without (via events).
  *
  * PRINCIPLES:
- * - Реактивное хранилище через Vue.reactive (если доступен)
- * - Fallback на события CustomEvent for не-Vue страниц
+ * - Reactive store via Vue.reactive (if available)
+ * - Fallback to CustomEvent for non-Vue pages
  * - Приоритезация сообщений (danger > warning > info > success)
- * - Интеграция с eventBus for глобальных событий
- * - Поддержка scope for фильтрации сообщений
+ * - Integration with eventBus for global events
+ * - Scope support for message filtering
  *
  * USAGE:
  * window.AppMessages.push({ text: 'Текст', type: 'info', scope: 'global' })
@@ -19,8 +19,8 @@
  * window.AppMessages.clear('global')
  *
  * REFERENCES:
- * - Конфигурация сообщений: core/config/messages-config.js
- * - Событийная система: core/events/event-bus.js
+ * - Messages config: core/config/messages-config.js
+ * - Event system: core/events/event-bus.js
  */
 
 (function() {
@@ -29,18 +29,18 @@
     const hasVueReactive = typeof window.Vue !== 'undefined' && typeof window.Vue.reactive === 'function';
 
     /**
-     * Реактивное состояние хранилища
-     * Если Vue доступен - используем Vue.reactive for автоматического обновления UI
-     * Если нет - используем обычный объект + события
+     * Reactive store state
+     * If Vue available - use Vue.reactive for auto UI update
+     * Otherwise - plain object + events
      */
     const state = hasVueReactive
         ? window.Vue.reactive({ messages: [] })
         : { messages: [] };
 
     /**
-     * Нормализовать тип сообщения к Bootstrap-типам
-     * @param {string} type - тип сообщения
-     * @returns {string} - нормализованный тип (danger, warning, success, info)
+     * Normalize message type to Bootstrap types
+     * @param {string} type - message type
+     * @returns {string} - normalized type (danger, warning, success, info)
      */
     function normalizeType(type) {
         const t = String(type || 'info').toLowerCase();
@@ -51,9 +51,9 @@
     }
 
     /**
-     * Нормализовать scope сообщения
-     * @param {string} scope - scope сообщения
-     * @returns {string} - нормализованный scope
+     * Normalize message scope
+     * @param {string} scope - message scope
+     * @returns {string} - normalized scope
      */
     function normalizeScope(scope) {
         const s = String(scope || 'global').trim();
@@ -61,9 +61,9 @@
     }
 
     /**
-     * Get приоритет по типу сообщения
-     * @param {string} type - тип сообщения
-     * @returns {number} - приоритет (danger=4, warning=3, info=2, success=1)
+     * Get priority by message type
+     * @param {string} type - message type
+     * @returns {number} - priority (danger=4, warning=3, info=2, success=1)
      */
     function getPriorityByType(type) {
         const priorities = {
@@ -76,22 +76,22 @@
     }
 
     /**
-     * Сгенерировать уникальный ID for сообщения
-     * @returns {string} - уникальный ID
+     * Generate unique ID for message
+     * @returns {string} - unique ID
      */
     function makeId() {
         return `msg_${Date.now()}_${Math.random().toString(16).slice(2)}`;
     }
 
     /**
-     * Эмитнуть событие изменения сообщений
-     * Используется for не-Vue страниц
+     * Emit messages change event
+     * Used for non-Vue pages
      */
     function emitChanged() {
         try {
             document.dispatchEvent(new CustomEvent('app-messages:changed'));
         } catch {
-            // Fallback for окружений без CustomEvent
+            // Fallback for envs without CustomEvent
             try {
                 document.dispatchEvent(new Event('app-messages:changed'));
             } catch {
@@ -101,9 +101,9 @@
     }
 
     /**
-     * Эмитнуть событие через eventBus (если доступен)
-     * @param {string} eventName - имя события
-     * @param {Object} data - данные события
+     * Emit event via eventBus (if available)
+     * @param {string} eventName - event name
+     * @param {Object} data - event data
      */
     function emitEvent(eventName, data) {
         if (window.eventBus && typeof window.eventBus.emit === 'function') {
@@ -112,24 +112,24 @@
     }
 
     /**
-     * Сортировать сообщения по приоритету и времени создания
-     * Сортировка: priority DESC, затем createdAt DESC (новые выше)
+     * Sort messages by priority and creation time
+     * Sort: priority DESC, then createdAt DESC (newer first)
      */
     function sortMessages() {
         state.messages.sort((a, b) => {
-            // Сначала по приоритету (выше = важнее)
+            // First by priority (higher = more important)
             if (a.priority !== b.priority) {
                 return b.priority - a.priority;
             }
-            // Затем по времени создания (новые выше)
+            // Then by creation time (newer first)
             return new Date(b.createdAt) - new Date(a.createdAt);
         });
     }
 
     /**
-     * Добавить или обновить сообщение
-     * @param {Object} msg - сообщение { id?, text, type?, scope?, priority?, details?, actions?, sticky? }
-     * @returns {Object} - нормализованное сообщение
+     * Add or update message
+     * @param {Object} msg - message { id?, text, type?, scope?, priority?, details?, actions?, sticky? }
+     * @returns {Object} - normalized message
      */
     function upsert(msg) {
         const id = msg.id || makeId();
@@ -144,29 +144,29 @@
             priority,
             text: msg.text != null ? String(msg.text) : '',
             details: msg.details != null ? String(msg.details) : null,
-            // actions: массив ключей действий ['retry', 'open-settings']
+            // actions: array of action keys ['retry', 'open-settings']
             actions: Array.isArray(msg.actions) ? msg.actions : [],
             createdAt: msg.createdAt || new Date().toISOString(),
             sticky: Boolean(msg.sticky),
-            // key: ключ сообщения из messagesConfig (for последующего перевода)
+            // key: message key from messagesConfig (for subsequent translation)
             key: msg.key || null,
-            // params: параметры for плейсхолдеров (for последующего перевода)
+            // params: params for placeholders (for subsequent translation)
             params: msg.params || null
         };
 
         const idx = state.messages.findIndex(m => m.id === id);
         if (idx >= 0) {
-            // Обновление существующего сообщения
+            // Update existing message
             state.messages.splice(idx, 1, normalized);
         } else {
-            // Добавление нового сообщения
+            // Add new message
             state.messages.push(normalized);
         }
 
-        // Сортировка после добавления/обновления
+        // Sort after add/update
         sortMessages();
 
-        // Эмитим события
+        // Emit events
         emitChanged();
         emitEvent('message-shown', normalized);
 
@@ -174,9 +174,9 @@
     }
 
     /**
-     * Delete сообщение по ID
-     * @param {string} id - ID сообщения
-     * @returns {boolean} - true если сообщение было удалено
+     * Delete message by ID
+     * @param {string} id - message ID
+     * @returns {boolean} - true if message was removed
      */
     function dismiss(id) {
         const idx = state.messages.findIndex(m => m.id === id);
@@ -191,19 +191,19 @@
     }
 
     /**
-     * Очистить все сообщения или сообщения в определённом scope
-     * @param {string} scope - scope for очистки (если не указан - очищаются все)
+     * Clear all messages or messages in given scope
+     * @param {string} scope - scope to clear (if omitted - clear all)
      */
     function clear(scope) {
         const s = scope ? normalizeScope(scope) : null;
         if (!s) {
-            // Очищаем все сообщения
+            // Clear all messages
             state.messages.splice(0, state.messages.length);
             emitChanged();
             emitEvent('messages-cleared', { scope: 'all' });
             return;
         }
-        // Очищаем сообщения в конкретном scope
+        // Clear messages in specific scope
         const remaining = state.messages.filter(m => m.scope !== s);
         state.messages.splice(0, state.messages.length, ...remaining);
         emitChanged();
@@ -211,10 +211,10 @@
     }
 
     /**
-     * Get сообщения по scope
-     * @param {string} scope - scope for фильтрации
-     * @param {boolean} includeUnscoped - включить сообщения без scope
-     * @returns {Array} - массив сообщений
+     * Get messages by scope
+     * @param {string} scope - scope for filtering
+     * @param {boolean} includeUnscoped - include messages without scope
+     * @returns {Array} - messages array
      */
     function getMessages(scope, includeUnscoped = true) {
         const s = normalizeScope(scope);
@@ -228,7 +228,7 @@
     // Export to global scope
     window.AppMessages = {
         state,
-        // push/replace используют один и тот же upsert; различие семантическое
+        // push/replace use same upsert; difference is semantic
         push(msg) {
             return upsert(msg);
         },
@@ -240,7 +240,7 @@
         getMessages
     };
 
-    // Алиас for обратной совместимости с кодом, использующим messagesStore
+    // Alias for backward compat with code using messagesStore
     window.messagesStore = {
         addMessage(msg) {
             return upsert(msg);

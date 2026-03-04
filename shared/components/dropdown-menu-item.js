@@ -4,9 +4,9 @@
 // =========================
 // PURPOSE: Переиспользуемый компонент пункта выпадающего меню с поддержкой:
 //
-// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
-// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
-// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+// @skill-anchor id:sk-add9a6 #for-classes-add-remove
+// @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+// @skill-anchor id:sk-cb75ec #for-utility-availability-check
 // - Левая иконка с tooltip
 // - Заголовок и подзаголовок с переносом текста
 // - Суффикс (badge/icon/indicator/chevron/info) с tooltip
@@ -71,7 +71,7 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/dropdown-menu-item-template.js (ID: dropdown-menu-item-template)
 // - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - See also: `is/skills/arch-foundationarchitecture-dom-markup.md` (принципы модульности, запрет кастомных стилей)
+// - See also: id:sk-483943 (принципы moduleости, запрет кастомных стилей)
 
 window.cmpDropdownMenuItem = {
     template: '#dropdown-menu-item-template',

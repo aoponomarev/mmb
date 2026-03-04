@@ -1,20 +1,20 @@
 /**
  * ================================================================================================
- * POSTGRES CONFIG - Конфигурация API слоя for Yandex Cloud PostgreSQL
+ * POSTGRES CONFIG - API layer configuration for Yandex Cloud PostgreSQL
  * ================================================================================================
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
- * PURPOSE: SSOT for параметров API слоя PostgreSQL.
- * Base URL и endpoints for health/portfolios/snapshots и др.
+ * PURPOSE: SSOT for PostgreSQL API layer parameters.
+ * Base URL and endpoints for health/portfolios/snapshots etc.
  *
  * PRINCIPLES:
- * - Все endpoints are defined here и используются везде
- * - Duplicating is forbidden значения в компонентах или API клиентах
- * - Use getter functions вместо прямого доступа к CONFIG
+ * - All endpoints are defined here and used everywhere
+ * - Duplicating values in components or API clients is forbidden
+ * - Use getter functions instead of direct CONFIG access
  *
  * REFERENCES:
- * - План реконструкции: RECONSTRUCTION_PLAN_260115.md (Этап 3)
- * - Архитектурный план: is/skills/arch-foundation
+ * - Reconstruction plan: RECONSTRUCTION_PLAN_260115.md (Phase 3)
+ * - Architecture plan: id:sk-483943
  */
 
 (function() {
@@ -22,7 +22,7 @@
 
     const CONFIG = {
         api: {
-            // Боевой API Gateway по умолчанию (если локальный кэш пуст/сброшен)
+            // Production API Gateway by default (when local cache is empty/reset)
             baseUrl: 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net',
             endpoints: {
                 health: '/health',
@@ -39,7 +39,7 @@
     }
 
     function getEndpointUrl(endpoint) {
-        // Если эндпоинт уже является полным URL, возвращаем его как есть
+        // If endpoint is already a full URL, return as-is
         if (typeof endpoint === 'string' && (endpoint.startsWith('http://') || endpoint.startsWith('https://'))) {
             return endpoint;
         }
@@ -48,17 +48,17 @@
         if (!baseUrl) {
             return null;
         }
-        // Убираем слэш в конце baseUrl
+        // Remove trailing slash from baseUrl
         if (baseUrl.endsWith('/')) {
             baseUrl = baseUrl.slice(0, -1);
         }
-        // Убираем слэш в начале endpoint
+        // Remove leading slash from endpoint
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
 
         const fullUrl = `${baseUrl}/${cleanEndpoint}`;
 
-        // Защита от дублирования эндпоинта (например, если пользователь ввел URL уже с /health)
-        // Если эндпоинт - health, и URL уже заканчивается на /health, возвращаем baseUrl
+        // Prevent endpoint duplication (e.g. if user entered URL already with /health)
+        // If endpoint is health and URL already ends with /health, return baseUrl
         if (cleanEndpoint === 'health' && baseUrl.endsWith('/health')) {
             return baseUrl;
         }

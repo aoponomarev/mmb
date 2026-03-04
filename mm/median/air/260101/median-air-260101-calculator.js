@@ -1,8 +1,8 @@
 /**
  * ================================================================================================
- * MEDIAN AIR 260101 CALCULATOR - Версия модели "Медиана" (A.I.R.) от 26.01.01
+ * MEDIAN AIR 260101 CALCULATOR - Median model version (A.I.R.) 26.01.01
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  * Doc: docs/A_MATH_MODELS.md
  *
  * PURPOSE: Зафиксировать текущую рабочую модель как версию Median/AIR/260101.
@@ -13,13 +13,13 @@
 (function() {
     'use strict';
 
-    // Зависимость: mm/base-model-calculator.js
+    // Depends: mm/base-model-calculator.js
 
     class MedianAir260101Calculator extends window.BaseModelCalculator {
         constructor() {
             super('Median/AIR/260101', 'Медиана (A.I.R.) 26.01.01');
 
-            // Константы модели
+            // Model constants
             this.CPT_BASE_WEIGHTS = [0.38, 0.32, 0.18, 0.08, 0.03, 0.01];
             this.CGR_BETAS = [1.00, 0.80, 0.40, 0.20, 0.10];
             this.MODEL_PARAMS = this.resolveModelParams(this.id, {
@@ -43,7 +43,7 @@
         }
 
         /**
-         * Основной метод расчета
+         * Main calc method
          */
         calculateMetrics(coins, params = {}) {
             if (!Array.isArray(coins) || coins.length === 0) return { coins: [], marketData: {} };
@@ -52,17 +52,17 @@
             const indicators = params.marketIndicators || {};
             const agrMethod = params.agrMethod || 'mp';
 
-            // 1. Предварительные расчеты
+            // 1. Pre-calc
             const prcWeights = this.calculatePrcWeights(hDays);
             const marketMedians = this.calculateMarketMedians(coins);
             const cmd = this.calculateCMD(marketMedians, prcWeights, hDays);
             const marketFactor = this.calculateMarketFactor(indicators);
 
-            // 2. Поиск BTC for корреляции
+            // 2. Find BTC for correlation
             const btcCoin = coins.find(c => c.ticker?.toLowerCase() === 'btc');
             const btcPvs = btcCoin ? (btcCoin.pvs || [btcCoin.PV1h, btcCoin.PV24h, btcCoin.PV7d, btcCoin.PV14d, btcCoin.PV30d, btcCoin.PV200d]) : null;
 
-            // 3. Первый проход: Базовые metrics
+            // 3. First pass: Base metrics
             const enrichedCoins = coins.map(coin => {
                 const metrics = coin.metrics || {};
                 const pvs = coin.pvs || [coin.PV1h, coin.PV24h, coin.PV7d, coin.PV14d, coin.PV30d, coin.PV200d];
@@ -102,7 +102,7 @@
                 return { ...coin, metrics };
             });
 
-            // 4. Второй проход: Финальный AGR
+            // 4. Second pass: Final AGR
             const dins = enrichedCoins.map(c => Math.abs(c.metrics.din || 0));
             const medianDINValue = this.median(dins) || 0.01;
 
@@ -137,7 +137,7 @@
             };
         }
 
-        // --- Специфичные методы модели Медиана (перенесены из CoinMetricsCalculator) ---
+        // --- Median model specific methods (moved from CoinMetricsCalculator) ---
 
         calculateCPT(pvs, hDays) {
             const g = 1 / (1 + Math.log10(hDays + 1));
@@ -225,23 +225,23 @@
         calculateDirectionalConsistency(pvs, cdValues) {
             if (!pvs || pvs.length === 0) return 0;
 
-            // 1. Консистентность знаков (сколько PV одного направления)
+            // 1. Sign consistency (how many PV same direction)
             const signs = pvs.map(pv => Math.sign(this.safeNumber(pv, 0)));
             const positiveCount = signs.filter(s => s > 0).length;
             const negativeCount = signs.filter(s => s < 0).length;
             const maxSameSign = Math.max(positiveCount, negativeCount);
             const consistencyRatio = maxSameSign / pvs.length;
 
-            // 2. Сила движения (средний модуль PV) - добавляет уникальность значениям
+            // 2. Movement strength (avg PV magnitude) - adds uniqueness
             const avgMagnitude = pvs.reduce((sum, pv) => sum + Math.abs(this.safeNumber(pv, 0)), 0) / pvs.length;
-            const normalizedMagnitude = Math.min(avgMagnitude / 20, 1); // нормализация к 20%
+            const normalizedMagnitude = Math.min(avgMagnitude / 20, 1); // normalize to 20%
 
-            // 3. Монотонность CD (насколько монотонно растет/падает накопленная дельта)
+            // 3. CD monotonicity (how monotonic cumulative delta)
             const cds = cdValues || [];
             const isMonotonic = cds.every((cd, i) => i === 0 || Math.sign(cd) === Math.sign(cds[0]) || cd === 0);
             const monotonicity = isMonotonic ? 1 : 0.5;
 
-            // Комбинированная метрика (40% знаки, 30% амплитуда, 30% монотонность)
+            // Combined metric (40% signs, 30% amplitude, 30% monotonicity)
             const persistence = consistencyRatio * 0.4 + normalizedMagnitude * 0.3 + monotonicity * 0.3;
             return this.clamp(persistence, 0, 1);
         }
@@ -249,20 +249,20 @@
         calculateTrendStrengthIndex(pvs) {
             if (!pvs || pvs.length < 6) return 0.5;
 
-            // 1. Краткосрочный импульс (1h, 24h, 7d)
+            // 1. Short-term impulse (1h, 24h, 7d)
             const shortTermAvg = pvs.slice(0, 3).reduce((a, b) => a + (b || 0), 0) / 3;
 
-            // 2. Долгосрочный тренд (30d, 14d, 200d - по узлам)
+            // 2. Long-term trend (30d, 14d, 200d - by nodes)
             const longTermAvg = pvs.slice(3).reduce((a, b) => a + (b || 0), 0) / 3;
 
-            // 3. Согласованность направлений
+            // 3. Direction alignment
             const shortSign = Math.sign(shortTermAvg);
             const longSign = Math.sign(longTermAvg);
             const alignment = (shortSign === longSign && shortSign !== 0) ? 1 : 0.5;
 
-            // 4. Отношение силы краткосрочного к долгосрочному (уникальность)
+            // 4. Short-to-long strength ratio (uniqueness)
             const ratio = longTermAvg !== 0 ? Math.abs(shortTermAvg) / Math.abs(longTermAvg) : 1;
-            const strengthRatio = Math.min(ratio, 2) / 2; // нормализация к [0, 1]
+            const strengthRatio = Math.min(ratio, 2) / 2; // normalize to [0, 1]
 
             return this.clamp(alignment * 0.6 + strengthRatio * 0.4, 0, 1);
         }
@@ -277,7 +277,7 @@
             const dominantSign = positiveCount >= negativeCount ? 1 : -1;
             const alignmentScore = signs.filter(s => s === dominantSign || s === 0).length / pvs.length;
 
-            // 2. Magnitude Stability (через стандартное отклонение) - вносит высокую уникальность
+            // 2. Magnitude Stability (via std dev) - adds high uniqueness
             const magnitudes = pvs.map(pv => Math.abs(this.safeNumber(pv, 0)));
             const avgMagnitude = magnitudes.reduce((sum, m) => sum + m, 0) / magnitudes.length;
             const stdDev = this.calculateStdDev(magnitudes);
@@ -286,13 +286,13 @@
             // 3. CGR Alignment
             const cgrAlignment = (Math.sign(cgrSlope || 0) === dominantSign) ? 1 : 0.5;
 
-            // 4. Комбинированная устойчивость
+            // 4. Combined stability
             const persistence = alignmentScore * 0.4 + magnitudeStability * 0.3 + cgrAlignment * 0.3;
             return this.clamp(persistence, 0, 1);
         }
 
         /**
-         * MDN (Market Direction Now) - прогноз направления рынка (B.10)
+         * MDN (Market Direction Now) - market direction forecast (B.10)
          */
         calculateMDN(hours, coins, indicators) {
             if (!Array.isArray(coins) || coins.length === 0) return 0;
@@ -343,7 +343,7 @@
         }
 
         /**
-         * Рекомендованный метод AGR (эвристика без влияния на расчет)
+         * Recommended AGR method (heuristic, no impact on calc)
          */
         getRecommendedAgrMethod(params = {}) {
             const indicators = params.marketIndicators || {};
@@ -361,6 +361,6 @@
         }
     }
 
-    // Регистрация в глобальной области
+    // Register in global scope
     window.MedianAir260101Calculator = new MedianAir260101Calculator();
 })();

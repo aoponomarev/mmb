@@ -1,44 +1,44 @@
 /**
  * ================================================================================================
- * DATA PROVIDERS CONFIG - Конфигурация провайдеров данных о монетах
+ * DATA PROVIDERS CONFIG - Configuration of coin data providers
  * ================================================================================================
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
- * PURPOSE: Централизованная конфигурация for всех провайдеров финансовых данных.
- * Аналогично AI провайдерам, но for источников данных о криптовалютах.
+ * PURPOSE: Centralized configuration for all financial data providers.
+ * Similar to AI providers, but for cryptocurrency data sources.
  *
  * PRINCIPLES:
- * - SSOT for всех настроек провайдеров
- * - Поддержка множественных провайдеров (CoinGecko, CoinMarketCap, Binance и т.д.)
- * - Бесшовное переключение между провайдерами
- * - API ключи хранятся в localStorage (как for AI провайдеров)
- * - Провайдер по умолчанию и список доступных провайдеров
+ * - SSOT for all provider settings
+ * - Support multiple providers (CoinGecko, CoinMarketCap, Binance etc.)
+ * - Seamless switching between providers
+ * - API keys stored in localStorage (same as AI providers)
+ * - Default provider and list of available providers
  *
  * PRINCIPLES:
  * {
- *   name: 'coingecko',                    // Внутреннее имя
- *   displayName: 'CoinGecko',             // Отображаемое имя
- *   baseUrl: 'https://api.coingecko.com', // Базовый URL API
- *   requiresApiKey: false,                // Требуется ли API ключ
- *   apiKeyUrl: 'https://...',             // URL for получения ключа
- *   rateLimit: {...},                     // Лимиты запросов
- *   timeout: 30000,                       // Таймаут запросов
- *   endpoints: {...},                     // Специфические эндпоинты
- *   features: [...]                       // Поддерживаемые возможности
+ *   name: 'coingecko',                    // Internal name
+ *   displayName: 'CoinGecko',             // Display name
+ *   baseUrl: 'https://api.coingecko.com', // Base API URL
+ *   requiresApiKey: false,                // API key required
+ *   apiKeyUrl: 'https://...',             // URL to obtain key
+ *   rateLimit: {...},                     // Request limits
+ *   timeout: 30000,                       // Request timeout
+ *   endpoints: {...},                     // Provider-specific endpoints
+ *   features: [...]                       // Supported features
  * }
  *
- * ХРАНЕНИЕ API КЛЮЧЕЙ:
- * - localStorage.getItem('data-provider-keys') - JSON объект с ключами
- * - Формат: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
- * - Управление через DataProviderManager
+ * API KEY STORAGE:
+ * - localStorage.getItem('data-provider-keys') - JSON object with keys
+ * - Format: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
+ * - Managed via DataProviderManager
  *
  * REFERENCES:
- * - Данные от внешних провайдеров версионируются в cache-manager
- * - Ключ: `coins-list-v${version}` (версия меняется при смене структуры данных)
- * - При смене провайдера структура может измениться → нужна новая версия
+ * - External provider data versioned in cache-manager
+ * - Key: `coins-list-v${version}` (version changes on data structure change)
+ * - On provider switch structure may change → new version needed
  *
  * REFERENCES:
- * - AI Providers Config (аналогия): `core/skills/api-layer`
+ * - AI Providers Config (analog): id:sk-bb7c8e
  * - Data Provider Manager: core/api/data-provider-manager.js
  * - Base Data Provider: core/api/data-providers/base-provider.js
  * - Cache Manager: core/cache/cache-manager.js
@@ -48,29 +48,29 @@
     'use strict';
 
     /**
-     * Конфигурация провайдеров данных о монетах
+     * Coin data providers configuration
      */
     const CONFIG = {
-        // Провайдер по умолчанию
+        // Default provider
         defaultProvider: 'coingecko',
 
-        // Версия структуры данных (for кэширования)
-        // Увеличивать при изменении нормализованного формата данных
+        // Data structure version (for caching)
+        // Increment when normalized data format changes
         dataVersion: 1,
 
-        // Доступные провайдеры
+        // Available providers
         providers: {
             coingecko: {
                 name: 'coingecko',
                 displayName: 'CoinGecko',
                 description: 'Популярный агрегатор криптовалютных данных с бесплатным API',
                 baseUrl: 'https://api.coingecko.com/api/v3',
-                requiresApiKey: false, // Бесплатный tier не требует ключа
+                requiresApiKey: false, // Free tier does not require key
                 apiKeyUrl: 'https://www.coingecko.com/en/api/pricing',
                 rateLimit: {
-                    // Реальный лимит публичного API CoinGecko: ~3 req/60s (скользящее окно).
-                    // Протестировано опытным путём: безопасная задержка — 21s между запросами.
-                    // С ключом Demo/Pro лимит значительно выше (500 req/min).
+                    // Real CoinGecko public API limit: ~3 req/60s (sliding window).
+                    // Empirically tested: safe delay — 21s between requests.
+                    // With Demo/Pro key limit is much higher (500 req/min).
                     requestsPerMinute: 2,
                     requestsPerSecond: 0.048
                 },
@@ -82,13 +82,13 @@
                     coin: '/coins/{id}'
                 },
                 features: [
-                    'top-coins',        // Топ монет по капитализации/объему
-                    'search',           // Поиск монет
-                    'price-change',     // Изменение цены за периоды
-                    'market-data',      // Рыночные данные
-                    'icons'             // Иконки монет
+                    'top-coins',        // Top coins by cap/volume
+                    'search',           // Coin search
+                    'price-change',     // Price change over periods
+                    'market-data',      // Market data
+                    'icons'             // Coin icons
                 ],
-                // Параметры for запросов
+                // Request parameters
                 defaultParams: {
                     vs_currency: 'usd',
                     order: 'market_cap_desc',
@@ -121,7 +121,7 @@
                     'instant-load'
                 ]
             }
-            // Будущие провайдеры:
+            // Future providers:
             // coinmarketcap: { ... },
             // binance: { ... },
             // cryptocompare: { ... }
@@ -129,33 +129,33 @@
     };
 
     /**
-     * Get конфигурацию провайдера по имени
-     * @param {string} providerName - имя провайдера
-     * @returns {Object|null} конфигурация провайдера или null
+     * Get provider config by name
+     * @param {string} providerName - provider name
+     * @returns {Object|null} provider config or null
      */
     function getProviderConfig(providerName) {
         return CONFIG.providers[providerName] || null;
     }
 
     /**
-     * Get дефолтного провайдера
-     * @returns {string} имя провайдера по умолчанию
+     * Get default provider
+     * @returns {string} default provider name
      */
     function getDefaultProvider() {
         return CONFIG.defaultProvider;
     }
 
     /**
-     * Get list всех доступных провайдеров
-     * @returns {Array<Object>} массив конфигураций провайдеров
+     * Get list of all available providers
+     * @returns {Array<Object>} array of provider configs
      */
     function getAvailableProviders() {
         return Object.values(CONFIG.providers);
     }
 
     /**
-     * Проверить, требуется ли API ключ for провайдера
-     * @param {string} providerName - имя провайдера
+     * Check if API key required for provider
+     * @param {string} providerName - provider name
      * @returns {boolean}
      */
     function requiresApiKey(providerName) {
@@ -164,8 +164,8 @@
     }
 
     /**
-     * Get URL for получения API ключа
-     * @param {string} providerName - имя провайдера
+     * Get URL to obtain API key
+     * @param {string} providerName - provider name
      * @returns {string|null}
      */
     function getApiKeyUrl(providerName) {
@@ -174,8 +174,8 @@
     }
 
     /**
-     * Get базовый URL провайдера
-     * @param {string} providerName - имя провайдера
+     * Get provider base URL
+     * @param {string} providerName - provider name
      * @returns {string|null}
      */
     function getBaseUrl(providerName) {
@@ -184,9 +184,9 @@
     }
 
     /**
-     * Get таймаут for запросов провайдера
-     * @param {string} providerName - имя провайдера
-     * @returns {number} таймаут в миллисекундах
+     * Get request timeout for provider
+     * @param {string} providerName - provider name
+     * @returns {number} timeout in milliseconds
      */
     function getTimeout(providerName) {
         const config = getProviderConfig(providerName);
@@ -194,9 +194,9 @@
     }
 
     /**
-     * Get лимиты запросов провайдера
-     * @param {string} providerName - имя провайдера
-     * @returns {Object|null} объект с лимитами
+     * Get provider request limits
+     * @param {string} providerName - provider name
+     * @returns {Object|null} limits object
      */
     function getRateLimit(providerName) {
         const config = getProviderConfig(providerName);
@@ -204,9 +204,9 @@
     }
 
     /**
-     * Get эндпоинты провайдера
-     * @param {string} providerName - имя провайдера
-     * @returns {Object|null} объект с эндпоинтами
+     * Get provider endpoints
+     * @param {string} providerName - provider name
+     * @returns {Object|null} endpoints object
      */
     function getEndpoints(providerName) {
         const config = getProviderConfig(providerName);
@@ -214,9 +214,9 @@
     }
 
     /**
-     * Get параметры по умолчанию for запросов
-     * @param {string} providerName - имя провайдера
-     * @returns {Object|null} объект с параметрами
+     * Get default request params
+     * @param {string} providerName - provider name
+     * @returns {Object|null} params object
      */
     function getDefaultParams(providerName) {
         const config = getProviderConfig(providerName);
@@ -224,7 +224,7 @@
     }
 
     /**
-     * Get версию данных (for кэширования)
+     * Get data version (for caching)
      * @returns {number}
      */
     function getDataVersion() {
@@ -232,9 +232,9 @@
     }
 
     /**
-     * Проверить, поддерживает ли провайдер определенную возможность
-     * @param {string} providerName - имя провайдера
-     * @param {string} feature - название возможности
+     * Check if provider supports feature
+     * @param {string} providerName - provider name
+     * @param {string} feature - feature name
      * @returns {boolean}
      */
     function supportsFeature(providerName, feature) {

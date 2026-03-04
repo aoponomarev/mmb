@@ -4,9 +4,9 @@
 // =========================
 // PURPOSE: Переиспользуемый компонент выпадающего списка с поддержкой:
 //
-// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
-// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
-// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+// @skill-anchor id:sk-add9a6 #for-classes-add-remove
+// @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+// @skill-anchor id:sk-cb75ec #for-utility-availability-check
 // - Поиска по элементам
 // - Прокрутки for длинных списков
 // - Полной совместимости with Bootstrap JS API
@@ -100,8 +100,8 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/dropdown-template.js (ID: dropdown-template)
 // - Зависимости: Bootstrap 5, Vue.js
-// - See also: `app/skills/ui-architecture` (раздел "Maximum compatibility strategy with Bootstrap")
-// - See also: `is/skills/arch-foundation` (принципы модульности, запрет кастомных стилей)
+// - See also: `id:sk-318305` (section "Maximum compatibility strategy with Bootstrap")
+// - See also: `id:sk-483943` (принципы moduleости, запрет кастомных стилей)
 
 window.cmpDropdown = {
     template: '#dropdown-template',
@@ -784,7 +784,7 @@ window.cmpDropdown = {
     },
 
     beforeUnmount() {
-        // @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-dispose
+        // @skill-anchor id:sk-eeb23d #for-bootstrap-dispose
         // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
         if (this.dropdownInstance) {
             this.dropdownInstance.dispose();

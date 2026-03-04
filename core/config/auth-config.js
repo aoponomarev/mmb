@@ -2,7 +2,7 @@
  * ================================================================================================
  * AUTH CONFIG - Google OAuth authorization configuration
  * ================================================================================================
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * PURPOSE: SSOT for all Google OAuth parameters. Client ID, redirect URIs, scopes, endpoints.
  *
@@ -13,9 +13,9 @@
  * - Validate configuration presence at initialization
  *
  * REFERENCES:
- * - SSOT principles: app/skills/ux-principles
- * - Integration plan: core/skills/config-contracts
- * - Cloudflare infrastructure: core/skills/config-contracts
+ * - SSOT principles: id:sk-e0b8f3
+ * - Integration plan: id:sk-02d3ea
+ * - Cloudflare infrastructure: id:sk-02d3ea
  */
 
 (function() {

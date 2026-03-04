@@ -25,8 +25,8 @@
             cryptoNewsCacheMaxAgeMs: 24 * DURATIONS_MS.HOUR
         }),
         requestRegistry: Object.freeze({
-            // При 429 не умножаем интервал — просто ждём стандартный minInterval.
-            // Реальный лимит CoinGecko: ~3 req/60s; наш minInterval (2ч) уже достаточно консервативен.
+            // On 429 we do not multiply interval — just wait standard minInterval.
+            // CoinGecko actual limit: ~3 req/60s; our minInterval (2h) is already conservative.
             rateLimitBackoffMultiplierOnError: 1
         }),
         cacheManager: Object.freeze({

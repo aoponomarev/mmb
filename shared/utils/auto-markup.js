@@ -2,7 +2,7 @@
  * ================================================================================================
  * AUTO-MARKUP - Утилита автоматической маркировки элементов DOM
  * ================================================================================================
- * Skill: app/skills/ui-architecture
+ * Skill: id:sk-318305
  *
  * PURPOSE: Автоматическая маркировка всех значимых контейнеров в DOM через CSS классы avto-{hash}
  * for навигации в коде через DevTools и указания агенту места в разметке.
@@ -40,8 +40,8 @@
  * - Отключение: window.autoMarkup.stopObserver()
  *
  * REFERENCES:
- * - General principles маркировки: is/skills/arch-foundationarchitecture-dom-markup.md
- * - Детерминированные хэши компонентов: is/skills/arch-foundation
+ * - General principles маркировки: id:sk-483943
+ * - Детерминированные хэши компонентов: id:sk-483943
  */
 
 window.autoMarkup = {

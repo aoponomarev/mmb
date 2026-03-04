@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Framework-agnostic HTTP handler for Market Snapshot. Handles headers, CORS, method limits, and query extraction.
  */
 

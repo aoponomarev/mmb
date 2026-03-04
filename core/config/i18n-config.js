@@ -1,16 +1,16 @@
 /**
  * ================================================================================================
- * I18N CONFIG - Конфигурация интернационализации
+ * I18N CONFIG - Internationalization configuration
  * ================================================================================================
- * Skill: app/skills/ux-principles
+ * Skill: id:sk-e0b8f3
  *
- * PURPOSE: SSOT for всех настроек интернационализации (i18n).
+ * PURPOSE: SSOT for all internationalization (i18n) settings.
  *
  * PRINCIPLES:
- * - Централизованное определение поддерживаемых языков
- * - Единое место for базового языка приложения
- * - Маппинг кодов языков на человеко-читаемые названия
- * - Константы for использования во всех модулях i18n (tooltips, messages)
+ * - Centralized definition of supported languages
+ * - Single source for application base language
+ * - Mapping of language codes to human-readable names
+ * - Constants for use across all i18n modules (tooltips, messages)
  *
  * USAGE:
  * window.i18nConfig.BASE_LANGUAGE         // 'ru'
@@ -19,32 +19,32 @@
  * window.i18nConfig.isLanguageSupported('fr') // true
  *
  * REFERENCES:
- * - Принципы единого источника правды: app/skills/ux-principles
- * - Конфигурация tooltips: core/config/tooltips-config.js
- * - Конфигурация сообщений: core/config/messages-config.js
+ * - SSOT principles: id:sk-e0b8f3
+ * - Tooltips config: core/config/tooltips-config.js
+ * - Messages config: core/config/messages-config.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Базовый язык приложения (язык исходных текстов)
+     * Base language of the application (source language)
      */
     const BASE_LANGUAGE = 'ru';
 
     /**
-     * Поддерживаемые языки приложения
-     * Порядок важен: базовый язык первым, остальные по популярности
+     * Supported application languages
+     * Order matters: base language first, others by popularity
      */
     const SUPPORTED_LANGUAGES = [
-        'ru', // Русский (базовый)
+        'ru', // Russian (base)
         'en', // English
         'de', // Deutsch
         'zh'  // 中文
     ];
 
     /**
-     * Маппинг кодов языков на человеко-читаемые названия
+     * Mapping of language codes to human-readable names
      */
     const LANGUAGE_LABELS = {
         'ru': 'Русский',
@@ -54,17 +54,17 @@
     };
 
     /**
-     * Get человеко-читаемое название языка
-     * @param {string} languageCode - код языка ('ru', 'en', etc.)
-     * @returns {string} - название языка ('Русский', 'English', etc.)
+     * Get human-readable language name
+     * @param {string} languageCode - language code ('ru', 'en', etc.)
+     * @returns {string} - language display name (e.g. 'Russian', 'English')
      */
     function getLanguageLabel(languageCode) {
         return LANGUAGE_LABELS[languageCode] || languageCode;
     }
 
     /**
-     * Проверить, поддерживается ли язык приложением
-     * @param {string} languageCode - код языка
+     * Check if language is supported by the application
+     * @param {string} languageCode - language code
      * @returns {boolean}
      */
     function isLanguageSupported(languageCode) {
@@ -72,9 +72,9 @@
     }
 
     /**
-     * Нормализовать код языка (если передан неподдерживаемый - вернуть базовый)
-     * @param {string} languageCode - код языка
-     * @returns {string} - нормализованный код языка
+     * Normalize language code (if unsupported passed, return base language)
+     * @param {string} languageCode - language code
+     * @returns {string} - normalized language code
      */
     function normalizeLanguage(languageCode) {
         if (!languageCode || !isLanguageSupported(languageCode)) {
@@ -83,7 +83,7 @@
         return languageCode;
     }
 
-    // Экспортируем в глобальный объект window
+    // Export to global window object
     window.i18nConfig = {
         BASE_LANGUAGE,
         SUPPORTED_LANGUAGES,

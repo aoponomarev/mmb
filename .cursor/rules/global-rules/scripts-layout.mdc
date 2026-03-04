@@ -16,8 +16,8 @@ alwaysApply: false
 When creating or moving scripts, preserve layout governance.
 
 **Reference (read via MCP when applying):**
-- `is/skills/arch-layout-governance.md` — Section "Script Layout"
-- `is/scripts/README.md` — Layout Governance Contract
+- id:sk-c62fb6 — Section "Script Layout"
+- id:readme-c15d55 — Layout Governance Contract
 
 **Summary:**
 1. `is/scripts/` root: only `is/scripts/README.md`, `preflight.js`, one-off migration utilities.

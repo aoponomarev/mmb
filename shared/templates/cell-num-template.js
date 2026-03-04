@@ -20,13 +20,13 @@
  * Структура HTML:
  * - Корневой элемент: ⟨span⟩ с data-value-sign for цветизации через CSS
  * - Условное отображение пустых/бесконечных значений
- * - Раздельное отображение префикса, знака, целой части, разделителя, дробной части, единиц
+ * - Раздельное отображение префикса, знака, целой части, sectionителя, дробной части, единиц
  * Layout и CSS-классы:
  * - Цветизация через data-value-sign атрибут (Bootstrap классы через CSS селекторы)
  * - Поддержка tooltip через title атрибут
  *
  * REFERENCES:
- * - General principles работы с шаблонами: app/skills/ui-architecture
+ * - General principles работы с шаблонами: id:sk-318305
  * - Компонент: shared/components/cell-num.js
  */
 
@@ -50,7 +50,7 @@
             <!-- Целая часть -->
             <span v-if="integerPart" :class="integerClass">{{ integerPart }}</span>
 
-            <!-- Десятичный разделитель -->
+            <!-- Десятичный sectionитель -->
             <span v-if="decimalSeparatorDisplay" :class="separatorClass">{{ decimalSeparatorDisplay }}</span>
 
             <!-- Дробная часть -->

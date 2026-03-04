@@ -5,13 +5,13 @@
  *
  * PURPOSE: Хелперы for работы с D1 (users, portfolios, rebalances).
  * Абстракция над SQL запросами for упрощения работы с базой данных.
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PRINCIPLES:
  * - Все функции возвращают Promise
  * - Обработка ошибок SQL запросов
  * - Транзакции for атомарных операций
- * - Валидация данных перед сохранением
+ * - Validation данных перед сохранением
  *
  * USAGE:
  * import { createUser, getUser, createPortfolio, getPortfolio } from './utils/d1-helpers.js';
@@ -143,18 +143,18 @@ export async function updateUser(db, userId, updates) {
 }
 
 /**
- * Создание портфеля
+ * Создание portfolioя
  * @param {D1Database} db - D1 база данных
  * @param {number} userId - ID пользователя
- * @param {Object} portfolioData - Данные портфеля { name, description, assets }
- * @returns {Promise<Object|null>} Созданный портфель или null
+ * @param {Object} portfolioData - Данные portfolioя { name, description, assets }
+ * @returns {Promise<Object|null>} Созданный portfolioь или null
  */
 export async function createPortfolio(db, userId, portfolioData) {
   try {
     const { name, description = null, assets = [] } = portfolioData;
 
     if (!name) {
-      throw new Error('Название портфеля обязательно');
+      throw new Error('Название portfolioя обязательно');
     }
 
     const result = await db
@@ -173,7 +173,7 @@ export async function createPortfolio(db, userId, portfolioData) {
       .run();
 
     if (!result.success) {
-      throw new Error('Ошибка при создании портфеля');
+      throw new Error('Ошибка при создании portfolioя');
     }
 
     return await getPortfolio(db, result.meta.last_row_id);
@@ -184,9 +184,9 @@ export async function createPortfolio(db, userId, portfolioData) {
 }
 
 /**
- * Получение портфеля по ID
+ * Получение portfolioя по ID
  * @param {D1Database} db - D1 база данных
- * @param {number} portfolioId - ID портфеля
+ * @param {number} portfolioId - ID portfolioя
  * @returns {Promise<Object|null>} Портфель или null
  */
 export async function getPortfolio(db, portfolioId) {
@@ -213,10 +213,10 @@ export async function getPortfolio(db, portfolioId) {
 }
 
 /**
- * Получение списка портфелей пользователя
+ * Получение списка portfolios пользователя
  * @param {D1Database} db - D1 база данных
  * @param {number} userId - ID пользователя
- * @returns {Promise<Array>} Массив портфелей
+ * @returns {Promise<Array>} Массив portfolios
  */
 export async function getUserPortfolios(db, userId) {
   try {
@@ -229,7 +229,7 @@ export async function getUserPortfolios(db, userId) {
       return [];
     }
 
-    // Парсинг JSON полей for каждого портфеля
+    // Парсинг JSON полей for каждого portfolioя
     return result.results.map(portfolio => {
       if (portfolio.assets) {
         portfolio.assets = JSON.parse(portfolio.assets);
@@ -243,12 +243,12 @@ export async function getUserPortfolios(db, userId) {
 }
 
 /**
- * Обновление портфеля
+ * Обновление portfolioя
  * @param {D1Database} db - D1 база данных
- * @param {number} portfolioId - ID портфеля
+ * @param {number} portfolioId - ID portfolioя
  * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @param {Object} updates - Обновляемые поля { name, description, assets }
- * @returns {Promise<Object|null>} Обновлённый портфель или null
+ * @returns {Promise<Object|null>} Обновлённый portfolioь или null
  */
 export async function updatePortfolio(db, portfolioId, userId, updates) {
   try {
@@ -288,7 +288,7 @@ export async function updatePortfolio(db, portfolioId, userId, updates) {
       .run();
 
     if (!result.success) {
-      throw new Error('Ошибка при обновлении портфеля');
+      throw new Error('Ошибка при обновлении portfolioя');
     }
 
     return await getPortfolio(db, portfolioId);
@@ -299,9 +299,9 @@ export async function updatePortfolio(db, portfolioId, userId, updates) {
 }
 
 /**
- * Удаление портфеля
+ * Удаление portfolioя
  * @param {D1Database} db - D1 база данных
- * @param {number} portfolioId - ID портфеля
+ * @param {number} portfolioId - ID portfolioя
  * @param {number} userId - ID пользователя (for проверки прав доступа)
  * @returns {Promise<boolean>} Успех операции
  */

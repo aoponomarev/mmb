@@ -2,16 +2,15 @@
  * ================================================================================================
  * COINGECKO PROVIDER - CoinGecko API data provider
  * ================================================================================================
- * Skill: core/skills/api-layer
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * PURPOSE: Data provider implementation for CoinGecko API.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * Extends BaseDataProvider and implements all required methods.
  *
- * SOURCE: Adapted from do-overs/BOT/core/api/coingecko.js
+ * SOURCE: Adapted from legacy core/api/coingecko (pre-migration)
  * - Preserved all API logic
  * - Added data normalization to unified format
  * - Integrated error message system
@@ -43,7 +42,7 @@
          */
         buildUrl(pathWithQuery) {
             // Skill anchor: on file:// and GitHub Pages ALL requests via proxy, direct access can be blocked by CORS.
-            // See app/skills/file-protocol-cors-guard
+            // See id:sk-7cf3f7
             const needsProxy = this.isFileProtocol();
 
             // If proxy needed — use Cloudflare Worker
@@ -147,7 +146,7 @@
             }
 
             // Skill anchor: stabilizes file:// Top-N runbook (chunks to avoid 429 on heavy requests).
-            // See core/skills/api-layer
+            // See id:sk-bb7c8e
             // On file:// use lighter mode: 25 coins per request
             if (this.isFileProtocol()) {
                 return Math.min(25, count);
@@ -286,7 +285,7 @@
                         const canRetry = retriableHttpStatuses.has(response.status) && attempt < maxAttempts;
 
                         if (canRetry) {
-                            // @skill-anchor core/skills/data-providers-architecture #for-rate-limiting
+                            // @skill-anchor id:sk-224210 #for-rate-limiting
                             const fallbackDelay = retryBaseDelayMs * attempt;
                             const retryDelayMs = response.status === 429
                                 ? this.getRetryDelayMs(response, fallbackDelay)
@@ -592,9 +591,9 @@
 
         /**
          * Get coin data by IDs (with chunk and progress support)
-         * @param {Array<string>} coinIds - Массив ID монет
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * @param {Array<string>} coinIds - Array of coin IDs
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Array of normalized coin data
          */
         async getCoinData(coinIds, options = {}) {
             if (!coinIds || coinIds.length === 0) {
@@ -602,7 +601,7 @@
             }
 
             // Skill anchor: force chunking for large ID sets on file://.
-            // See core/skills/api-layer
+            // See id:sk-bb7c8e
             const totalCount = coinIds.length;
             const isFile = this.isFileProtocol();
             const maxChunkSize = isFile ? 25 : 50;
@@ -799,7 +798,7 @@
         /**
          * Get coin ID by ticker
          * @param {string} symbol - Coin ticker (BTC, ETH, etc.)
-         * @param {Object} options - Дополнительные опции
+         * @param {Object} options - Additional options
          * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {

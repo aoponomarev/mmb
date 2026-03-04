@@ -1,36 +1,36 @@
 /**
  * ================================================================================================
- * CACHE INDEXES - Индексы for IndexedDB
+ * CACHE INDEXES - Indexes for IndexedDB
  * ================================================================================================
  *
- * PURPOSE: Определить индексы IndexedDB for быстрого поиска данных.
- * Skill: core/skills/cache-layer
+ * PURPOSE: Define IndexedDB indexes for fast data lookup.
+ * Skill: id:sk-3c832d
  *
- * КОНФИГУРАЦИЯ ИНДЕКСОВ:
- * - time-series: coinId, timestamp, coinId_timestamp (составной)
- *   Причина: частые запросы "все точки for монеты X" и "точки за период Y", составной индекс ускоряет оба случая
- * - portfolios: userId, createdAt, userId_createdAt (составной)
- *   Причина: фильтрация по пользователю и сортировка по дате создания, составной индекс for комбинированных запросов
- * - strategies: type, isActive, type_isActive (составной)
- *   Причина: фильтрация по типу стратегии и активным/неактивным, составной индекс for комбинированных запросов
+ * INDEX CONFIGURATION:
+ * - time-series: coinId, timestamp, coinId_timestamp (composite)
+ *   Reason: frequent queries "all points for coin X" and "points for period Y", composite index speeds both
+ * - portfolios: userId, createdAt, userId_createdAt (composite)
+ *   Reason: filter by user and sort by creation date, composite index for combined queries
+ * - strategies: type, isActive, type_isActive (composite)
+ *   Reason: filter by strategy type and active/inactive, composite index for combined queries
  * - history: timestamp, type
- *   Причина: фильтрация по типу операции и поиск по дате
+ *   Reason: filter by operation type and search by date
  *
- * КОНФИГУРАЦИЯ ИНДЕКСОВ:
- * - Индексировать поля, используемые в WHERE и ORDER BY запросах
- * - Составные индексы for запросов с несколькими условиями
- * - unique: false (одна запись может иметь одно значение индекса)
+ * INDEX CONFIGURATION:
+ * - Index fields used in WHERE and ORDER BY queries
+ * - Composite indexes for queries with multiple conditions
+ * - unique: false (one record can have one index value)
  *
- * ПРИМЕЧАНИЕ: Реализация индексов будет добавлена при реализации IndexedDB. Пока файл содержит только конфигурацию.
+ * NOTE: Index implementation will be added when IndexedDB is implemented. File contains config only for now.
  *
- * ССЫЛКА: General principles кэширования: core/skills/cache-layer
+ * REFERENCE: General caching principles: id:sk-3c832d
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация индексов for каждой таблицы IndexedDB
+     * Index configuration for each IndexedDB table
      */
     const INDEXES = {
         'time-series': [
@@ -55,9 +55,9 @@
     };
 
     /**
-     * Get индексы for таблицы
-     * @param {string} tableName - имя таблицы
-     * @returns {Array} - массив конфигураций индексов
+     * Get indexes for table
+     * @param {string} tableName - table name
+     * @returns {Array} - array of index configs
      */
     function getIndexes(tableName) {
         return INDEXES[tableName] || [];

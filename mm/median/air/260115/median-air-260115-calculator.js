@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * MEDIAN AIR 260115 CALCULATOR - Версия модели "Медиана" (A.I.R.) от 26.01.15
+ * MEDIAN AIR 260115 CALCULATOR - Median model version (A.I.R.) 26.01.15
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  * Doc: docs/A_MATH_MODELS.md
  *
- * PURPOSE: Новая версия модели Median/AIR с Robust-нормализацией (median+MAD)
- *        и λ-смешиванием краткосрочного/долгосрочного AGR.
+ * PURPOSE: New Median/AIR model with Robust normalization (median+MAD)
+ *        and λ-blending of short/long AGR.
  * AGR_final = (1-λ)*AGR_long + λ*AGR_short
  * AGR_raw   = R*(w_I*I + w_A*A + w_IA*I*A)
  *
- * Отличия от 260101:
- * - normalizationWeight = 1 (robust normalization через median+MAD)
+ * Differences from 260101:
+ * - normalizationWeight = 1 (robust normalization via median+MAD)
  * - Веса: A=0.40, I=0.40, IA=0.20, I_CGR=0.70, I_CPT=0.30
  * - Lambda: min=0.05, max=0.2, fgiBoost/vixBoost=0.05
  */
@@ -57,7 +57,7 @@
         }
 
         /**
-         * Вычислить динамический λ на основе рыночных индикаторов
+         * Compute dynamic λ from market indicators
          */
         calculateLambda(indicators) {
             const lp = this.MODEL_PARAMS.lambda;

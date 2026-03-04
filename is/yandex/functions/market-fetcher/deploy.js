@@ -1,6 +1,6 @@
 /**
- * Деплой coingecko-fetcher в Yandex Cloud Functions через REST API
- * Использует API key сервисного аккаунта for получения IAM токена
+ * Deploy coingecko-fetcher to Yandex Cloud Functions via REST API
+ * Uses service account API key to obtain IAM token
  */
 'use strict';
 
@@ -9,10 +9,10 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// ─── Конфигурация ──────────────────────────────────────────────────────────────
+// ─── Configuration ──────────────────────────────────────────────────────────────
 const FOLDER_ID       = 'b1gv03a122le5a934cqj';
 const SERVICE_ACCOUNT_ID = 'ajeudqscq65r5d5u7ras';
-// @skill-anchor is/skills/process-secrets-hygiene #for-eip
+// @skill-anchor id:sk-b7e114 #for-eip
 const API_KEY_ID      = process.env.YC_API_KEY_ID;
 const API_KEY_SECRET  = process.env.YC_API_KEY_SECRET;
 
@@ -20,12 +20,12 @@ const FUNCTION_NAME   = 'coingecko-fetcher';
 const RUNTIME         = 'nodejs18';
 const ENTRYPOINT      = 'index.handler';
 const MEMORY_MB       = 256;
-const TIMEOUT_SEC     = 600; // 10 минут (5 страниц × 2 × 21s = ~210s + запас)
+const TIMEOUT_SEC     = 600; // 10 min (5 pages × 2 × 21s = ~210s + buffer)
 
 const DB_HOST     = 'rc1b-dgs1vgc130gbme2n.mdb.yandexcloud.net';
 const DB_PORT     = '6432';
 const DB_NAME     = 'app_db';
-// @skill-anchor is/skills/process-secrets-hygiene #for-eip
+// @skill-anchor id:sk-b7e114 #for-eip
 const DB_USER     = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 
@@ -54,17 +54,17 @@ function apiRequest(options, body = null) {
     });
 }
 
-// ─── Get IAM токен через API key ─────────────────────────────────────────
+// ─── Get IAM token via API key ─────────────────────────────────────────
 async function getIamToken() {
-    console.log('Получаем IAM токен...');
-    // Для API key сервисного аккаунта используем endpoint /iam/v1/tokens с apiKey
+    console.log('Getting IAM token...');
+    // For service account API key use endpoint /iam/v1/tokens with apiKey
     const body = JSON.stringify({
         apiKey: {
             id: API_KEY_ID,
             secret: API_KEY_SECRET
         }
     });
-    // Правильный endpoint for service account API key
+    // Correct endpoint for service account API key
     const result = await apiRequest({
         hostname: 'iam.api.cloud.yandex.net',
         path: '/iam/v1/tokens',
@@ -73,24 +73,24 @@ async function getIamToken() {
     }, body);
 
     if (!result.iamToken) throw new Error('No iamToken in response: ' + JSON.stringify(result));
-    console.log('IAM токен получен');
+    console.log('IAM token obtained');
     return result.iamToken;
 }
 
-// ─── Создать ZIP архив функции ─────────────────────────────────────────────────
+// ─── Create function ZIP archive ─────────────────────────────────────────────────
 function createZip() {
     const zipPath = path.join(__dirname, 'function.zip');
-    // Создаём zip из index.js + package.json + node_modules
+    // Create zip from index.js + package.json + node_modules
     execSync(`powershell -Command "Compress-Archive -Force -Path '${__dirname}\\index.js','${__dirname}\\package.json','${__dirname}\\node_modules' -DestinationPath '${zipPath}'"`, { stdio: 'inherit' });
     const zipContent = fs.readFileSync(zipPath);
     const base64 = zipContent.toString('base64');
-    console.log(`ZIP создан: ${zipPath} (${Math.round(zipContent.length / 1024)}KB)`);
+    console.log(`ZIP created: ${zipPath} (${Math.round(zipContent.length / 1024)}KB)`);
     return base64;
 }
 
-// ─── Найти или создать функцию ─────────────────────────────────────────────────
+// ─── Find or create function ─────────────────────────────────────────────────
 async function getOrCreateFunction(token) {
-    console.log('Ищем функцию', FUNCTION_NAME, '...');
+    console.log('Looking for function', FUNCTION_NAME, '...');
     const list = await apiRequest({
         hostname: 'serverless-functions.api.cloud.yandex.net',
         path: `/functions/v1/functions?folderId=${FOLDER_ID}`,
@@ -100,11 +100,11 @@ async function getOrCreateFunction(token) {
 
     const existing = (list.functions || []).find(f => f.name === FUNCTION_NAME);
     if (existing) {
-        console.log('Функция найдена:', existing.id);
+        console.log('Function found:', existing.id);
         return existing.id;
     }
 
-    console.log('Создаём новую функцию...');
+    console.log('Creating new function...');
     const created = await apiRequest({
         hostname: 'serverless-functions.api.cloud.yandex.net',
         path: '/functions/v1/functions',
@@ -112,19 +112,19 @@ async function getOrCreateFunction(token) {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
     }, { folderId: FOLDER_ID, name: FUNCTION_NAME, description: 'CoinGecko top-250 fetcher → PostgreSQL coin_market_cache' });
 
-    // Ждём завершения операции
+    // Wait for operation to complete
     const funcId = await waitOperation(created, token);
-    console.log('Функция создана:', funcId);
+    console.log('Function created:', funcId);
     return funcId;
 }
 
-// ─── Ждать завершения операции ─────────────────────────────────────────────────
+// ─── Wait for operation ─────────────────────────────────────────────────
 async function waitOperation(operation, token) {
     if (operation.done) {
         return operation.response?.id || operation.metadata?.functionId;
     }
     const opId = operation.id;
-    console.log('Ждём операцию', opId, '...');
+    console.log('Waiting for operation', opId, '...');
     for (let i = 0; i < 30; i++) {
         await new Promise(r => setTimeout(r, 3000));
         const op = await apiRequest({
@@ -141,9 +141,9 @@ async function waitOperation(operation, token) {
     throw new Error('Operation timeout');
 }
 
-// ─── Создать версию функции ────────────────────────────────────────────────────
+// ─── Create function version ────────────────────────────────────────────────────
 async function createVersion(token, functionId, zipBase64) {
-    console.log('Создаём версию функции...');
+    console.log('Creating function version...');
     const body = {
         functionId,
         runtime: RUNTIME,
@@ -164,15 +164,15 @@ async function createVersion(token, functionId, zipBase64) {
     }, body);
 
     const versionId = await waitOperation(op, token);
-    console.log('Версия создана:', versionId);
+    console.log('Version created:', versionId);
     return versionId;
 }
 
-// ─── Создать триггер (cron каждые 15 минут) ────────────────────────────────────
+// ─── Create cron trigger (every 15 min) ────────────────────────────────────
 async function createCronTrigger(token, functionId) {
-    console.log('Создаём cron триггер (каждые 15 минут)...');
+    console.log('Creating cron trigger (every 15 min)...');
 
-    // Проверяем существующие триггеры
+    // Check existing triggers
     const list = await apiRequest({
         hostname: 'serverless-triggers.api.cloud.yandex.net',
         path: `/triggers/v1/triggers?folderId=${FOLDER_ID}`,
@@ -183,17 +183,17 @@ async function createCronTrigger(token, functionId) {
     const triggerName = `${FUNCTION_NAME}-cron`;
     const existing = (list.triggers || []).find(t => t.name === triggerName);
     if (existing) {
-        console.log('Триггер уже существует:', existing.id);
+        console.log('Trigger already exists:', existing.id);
         return existing.id;
     }
 
     const body = {
         folderId: FOLDER_ID,
         name: triggerName,
-        description: 'Каждые 15 минут: CoinGecko → PostgreSQL',
+        description: 'Every 15 min: CoinGecko → PostgreSQL',
         rule: {
             timer: {
-                cronExpression: '0/15 * * * ? *', // каждые 15 минут
+                cronExpression: '0/15 * * * ? *', // every 15 min
                 invokeFunction: {
                     functionId,
                     functionTag: '$latest',
@@ -211,13 +211,13 @@ async function createCronTrigger(token, functionId) {
     }, body);
 
     const triggerId = await waitOperation(op, token);
-    console.log('Триггер создан:', triggerId);
+    console.log('Trigger created:', triggerId);
     return triggerId;
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
-    console.log('=== Деплой coingecko-fetcher в Yandex Cloud ===\n');
+    console.log('=== Deploy coingecko-fetcher to Yandex Cloud ===\n');
 
     try {
         const token = await getIamToken();
@@ -226,13 +226,13 @@ async function main() {
         await createVersion(token, functionId, zipBase64);
         await createCronTrigger(token, functionId);
 
-        console.log('\n=== Деплой завершён ===');
+        console.log('\n=== Deploy complete ===');
         console.log('Function ID:', functionId);
-        console.log('Триггер: каждые 15 минут');
-        console.log('Таблица: coin_market_cache в app_db');
+        console.log('Trigger: every 15 min');
+        console.log('Table: coin_market_cache in app_db');
     } catch (err) {
-        console.error('\nОШИБКА ДЕПЛОЯ:', err.message);
-        if (err.body) console.error('Детали:', JSON.stringify(err.body, null, 2));
+        console.error('\nDEPLOY ERROR:', err.message);
+        if (err.body) console.error('Details:', JSON.stringify(err.body, null, 2));
         process.exit(1);
     }
 }

@@ -2,19 +2,19 @@
  * ================================================================================================
  * COINGECKO STABLECOINS LOADER
  * ================================================================================================
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * PURPOSE: Fetch stablecoins list from CoinGecko (official source),
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * save to cache (versioned key stablecoins-list) and pass to
  * coinsConfig (SSOT). Supports non-USD stables by detecting
  * base currency from proximity to 1 for multiple currencies.
  *
  * USES:
- * - window.cacheManager (for кэша, TTL задается в вызове)
- * - window.coinsConfig (for установки актуального списка)
+ * - window.cacheManager (for cache, TTL set in call)
+ * - window.coinsConfig (for setting actual list)
  *
  * API:
  *   await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
@@ -28,7 +28,7 @@
  * - On file:// protocol ALL requests MUST be proxied via Cloudflare Worker
  * - buildUrl() auto-selects proxy (file://) or direct request (HTTP/HTTPS)
  * - FORBIDDEN to block file:// requests with early return
- * - Details: `app/skills/file-protocol-cors-guard`
+ * - Details: `id:sk-7cf3f7`
  *
  * LIMITATIONS:
  * - CoinGecko limits (30-50 req/min). Shared RateLimiter used (SSOT).
@@ -88,7 +88,7 @@
             }
             return window.RateLimiter.getOrCreate('coingecko', reqPerMin, reqPerSec);
         }
-        return window.rateLimiter; // fallback на старый API
+        return window.rateLimiter; // fallback to legacy API
     }
 
     async function fetchStablecoinsForCurrency(vsCurrency, page = 1) {
@@ -97,7 +97,7 @@
 
         let attempts = 0;
         const maxAttempts = 5;
-        const BASE_RETRY_DELAY = 10000; // 10 секунд базовая задержка при 429
+        const BASE_RETRY_DELAY = 10000; // 10 seconds base delay on 429
 
         while (attempts < maxAttempts) {
             attempts++;

@@ -1,40 +1,40 @@
 /**
  * ================================================================================================
- * EVENT BUS - Глобальная шина событий
+ * EVENT BUS - Global event bus
  * ================================================================================================
  *
- * PURPOSE: Обеспечить коммуникацию между компонентами без жёстких зависимостей.
- * Подписка на события, эмит событий, автоматическая отписка.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: Enable component communication without tight coupling.
+ * Subscribe to events, emit events, automatic unsubscribe.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Глобальная шина событий for всех компонентов
- * - Подписка/отписка через простой API
- * - Поддержка одноразовых подписок
+ * - Global event bus for all components
+ * - Subscribe/unsubscribe via simple API
+ * - One-time subscription support
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Хранилище подписок
-     * Формат: { eventName: [{ callback, once, id }, ...] }
+     * Subscription storage
+     * Format: { eventName: [{ callback, once, id }, ...] }
      */
     const subscriptions = new Map();
 
     /**
-     * Счётчик for генерации ID подписок
+     * Counter for subscription ID generation
      */
     let subscriptionIdCounter = 0;
 
     /**
-     * Подписаться на событие
-     * @param {string} eventName - имя события
-     * @param {Function} callback - функция-обработчик
-     * @param {boolean} once - одноразовая подписка
-     * @returns {string} - ID подписки (for отписки)
+     * Subscribe to event
+     * @param {string} eventName - event name
+     * @param {Function} callback - handler function
+     * @param {boolean} once - one-time subscription
+     * @returns {string} - subscription ID (for unsubscribe)
      */
     function on(eventName, callback, once = false) {
         if (typeof callback !== 'function') {
@@ -58,19 +58,19 @@
     }
 
     /**
-     * Подписаться на событие один раз
-     * @param {string} eventName - имя события
-     * @param {Function} callback - функция-обработчик
-     * @returns {string} - ID подписки
+     * Subscribe to event once
+     * @param {string} eventName - event name
+     * @param {Function} callback - handler function
+     * @returns {string} - subscription ID
      */
     function once(eventName, callback) {
         return on(eventName, callback, true);
     }
 
     /**
-     * Отписаться от события
-     * @param {string} eventName - имя события
-     * @param {string|Function} idOrCallback - ID подписки или функция-обработчик
+     * Unsubscribe from event
+     * @param {string} eventName - event name
+     * @param {string|Function} idOrCallback - subscription ID or handler function
      */
     function off(eventName, idOrCallback) {
         if (!subscriptions.has(eventName)) {
@@ -92,9 +92,9 @@
     }
 
     /**
-     * Эмитнуть событие
-     * @param {string} eventName - имя события
-     * @param {any} data - данные события
+     * Emit event
+     * @param {string} eventName - event name
+     * @param {any} data - event data
      */
     function emit(eventName, data) {
         if (!subscriptions.has(eventName)) {
@@ -115,15 +115,15 @@
             }
         }
 
-        // Удаление одноразовых подписок
+        // Remove one-time subscriptions
         for (const id of toRemove) {
             off(eventName, id);
         }
     }
 
     /**
-     * Get количество подписок на событие
-     * @param {string} eventName - имя события
+     * Get subscription count for event
+     * @param {string} eventName - event name
      * @returns {number}
      */
     function listenerCount(eventName) {
@@ -131,7 +131,7 @@
     }
 
     /**
-     * Очистить все подписки
+     * Clear all subscriptions
      */
     function clear() {
         subscriptions.clear();

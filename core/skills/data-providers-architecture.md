@@ -52,7 +52,7 @@ After first load: `coins == activeCoinSetIds == totalCoinsCount`. After merge: a
 
 ### Code Anchor Policy
 
-When this skill is updated, place or refresh inline code anchors in risk branches (retry/fallback/merge), not only in file headers. See `process-code-anchors`.
+When this skill is updated, place or refresh inline code anchors in risk branches (retry/fallback/merge), not only in file headers. See id:sk-8991cd.
 
 ### Rate Limiting & 429 Recovery
 

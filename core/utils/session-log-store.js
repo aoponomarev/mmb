@@ -1,16 +1,16 @@
 /**
  * ================================================================================================
- * SESSION LOG STORE - Хранилище логов сессии
+ * SESSION LOG STORE - Session logs storage
  * ================================================================================================
  *
- * PURPOSE: Централизованное хранение логов сессии for отображения в модальном окне Session Log.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: Centralized session logs storage for display in Session Log modal.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Хранит логи в памяти (не в localStorage)
- * - Автоматически ограничивает количество логов (максимум 1000)
- * - Интегрируется с перехватчиком console.* методов
- * - Интегрируется с logger.js
+ * - Stores logs in memory (not in localStorage)
+ * - Automatically limits log count (max 1000)
+ * - Integrates with console.* method interceptor
+ * - Integrates with logger.js
  *
  * USAGE:
  * window.sessionLogStore.addLog(level, message, source);
@@ -25,17 +25,17 @@
 (function() {
     'use strict';
 
-    const MAX_LOGS = 1000; // Максимальное количество логов в хранилище
+    const MAX_LOGS = 1000; // Max log count in store
     const logs = [];
 
-    // Сохраняем оригинальный console.log до активации перехватчика
+    // Save original console.log before interceptor activation
     const originalConsoleLog = console.log.bind(console);
 
     /**
-     * Добавить лог в хранилище
-     * @param {string} level - Уровень лога (log, warn, error, info, debug)
-     * @param {string} message - Сообщение лога
-     * @param {string} source - Источник лога (имя файла/модуля)
+     * Add log to store
+     * @param {string} level - Log level (log, warn, error, info, debug)
+     * @param {string} message - Log message
+     * @param {string} source - Log source (filename/module name)
      */
     function addLog(level, message, source = null) {
         const logEntry = {
@@ -47,12 +47,12 @@
 
         logs.push(logEntry);
 
-        // Ограничиваем количество логов
+        // Limit log count
         if (logs.length > MAX_LOGS) {
-            logs.shift(); // Удаляем самый старый лог
+            logs.shift(); // Remove oldest log
         }
 
-        // Эмитим событие for обновления UI
+        // Emit event for UI update
         if (window.eventBus) {
             window.eventBus.emit('session-log', logEntry);
         } else {
@@ -60,23 +60,23 @@
     }
 
     /**
-     * Get все логи
-     * @returns {Array} Массив логов
+     * Get all logs
+     * @returns {Array} Array of logs
      */
     function getLogs() {
         return [...logs]; // Возвращаем копию массива
     }
 
     /**
-     * Очистить все логи
+     * Clear all logs
      */
     function clear() {
         logs.length = 0;
     }
 
     /**
-     * Get количество логов
-     * @returns {number} Количество логов
+     * Get log count
+     * @returns {number} Log count
      */
     function getCount() {
         return logs.length;
@@ -90,10 +90,10 @@
         getCount
     };
 
-    // Используем сохраненный оригинальный console.log, чтобы не попасть в перехватчик
+    // Use saved original console.log to avoid interceptor
     try {
         originalConsoleLog('session-log-store.js: initialized');
     } catch (e) {
-        // Игнорируем ошибки
+        // Ignore errors
     }
 })();

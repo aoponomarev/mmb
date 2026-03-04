@@ -1,35 +1,35 @@
 /**
  * ================================================================================================
- * FAVORITES MANAGER - Менеджер избранных монет
+ * FAVORITES MANAGER - User favorites manager
  * ================================================================================================
  *
- * PURPOSE: Централизованное управление избранными монетами пользователя.
- * Skill: app/skills/ux-principles
+ * PURPOSE: Centralized management of user favorite coins.
+ * Skill: id:sk-e0b8f3
  *
  * PRINCIPLES:
- * - ЕИП: Cloudflare D1 (таблица user_coin_sets с type='favorite') - основной источник правды.
- * - Кэширование: localStorage - быстрый локальный кэш for отзывчивости интерфейса.
- * - Хранение: Сохраняем только { id, symbol } for каждой монеты. Остальные данные подтягиваются из кэша CoinGecko.
+ * - SSOT: Cloudflare D1 (user_coin_sets table with type='favorite') - primary SSOT.
+ * - Caching: localStorage - fast local cache for UI responsiveness.
+ * - Storage: Store only { id, symbol } per coin. Other data is fetched from CoinGecko cache.
  *
  * USAGE:
  * window.favoritesManager.getFavorites();
  * window.favoritesManager.toggleFavorite(coin);
  *
  * REFERENCES:
- * - API клиент: core/api/cloudflare/coin-sets-client.js
+ * - API client: core/api/cloudflare/coin-sets-client.js
  */
 
 (function() {
     'use strict';
 
     const STORAGE_KEY = 'favorite_coins';
-    const CACHE_TTL = 1000 * 60 * 60; // 1 час
+    const CACHE_TTL = 1000 * 60 * 60; // 1 hour
     let favorites = [];
     let lastSync = 0;
     let isInitialized = false;
 
     /**
-     * Загрузить из localStorage
+     * Load from localStorage
      */
     function loadFromCache() {
         try {
@@ -45,7 +45,7 @@
     }
 
     /**
-     * Сохранить в localStorage
+     * Save to localStorage
      */
     function saveToCache() {
         try {
@@ -59,14 +59,14 @@
     }
 
     /**
-     * Инициализация менеджера
+     * Manager initialization
      */
     async function init() {
         if (isInitialized) return;
 
         loadFromCache();
 
-        // Если прошло много времени с последней синхронизации, пробуем обновить из D1
+        // If much time passed since last sync, try to update from D1
         if (Date.now() - lastSync > CACHE_TTL) {
             await sync();
         }
@@ -76,7 +76,7 @@
     }
 
     /**
-     * Синхронизация с D1
+     * Sync with D1
      */
     async function sync() {
         if (!window.coinSetsClient || !window.authState || !window.authState.isAuthenticated) {
@@ -86,18 +86,18 @@
         try {
             const sets = await window.coinSetsClient.getCoinSets({ type: 'favorite' });
 
-            // Находим единственный на данный момент набора типа 'favorite'
-            // Если его нет - создаем
+            // Find the single favorite set (for now)
+            // Create if none exists
             let favoriteSet = sets.find(s => s.type === 'favorite');
 
             if (favoriteSet) {
-                // Если данные в D1 отличаются от локальных, обновляем локальные
-                // В данной реализации D1 - мастер
+                // If D1 data differs from local, update local
+                // In this implementation D1 is the master
                 favorites = favoriteSet.coin_ids || [];
                 lastSync = Date.now();
                 saveToCache();
 
-                // Оповещаем UI об обновлении
+                // Notify UI of update
                 if (window.eventBus) {
                     window.eventBus.emit('favorites-updated', favorites);
                 }
@@ -108,46 +108,46 @@
     }
 
     /**
-     * Get list избранных монет
+     * Get list of favorite coins
      */
     function getFavorites() {
         return [...favorites];
     }
 
     /**
-     * Проверить, находится ли монета в избранном
+     * Check if coin is in favorites
      */
     function isFavorite(coinId) {
         return favorites.some(f => f.id === coinId);
     }
 
     /**
-     * Добавить/удалить монету из избранного
+     * Add/remove coin from favorites
      */
     async function toggleFavorite(coin) {
         const index = favorites.findIndex(f => f.id === coin.id);
 
         if (index === -1) {
-            // Добавляем
+            // Add
             favorites.push({ id: coin.id, symbol: coin.symbol });
         } else {
-            // Удаляем
+            // Remove
             favorites.splice(index, 1);
         }
 
         saveToCache();
 
-        // Оповещаем UI немедленно for отзывчивости
+        // Notify UI immediately for responsiveness
         if (window.eventBus) {
             window.eventBus.emit('favorites-updated', favorites);
         }
 
-        // Асинхронно обновляем D1
+        // Update D1 asynchronously
         await updateD1();
     }
 
     /**
-     * Delete монету из избранного
+     * Remove coin from favorites
      */
     async function removeFavorite(coinId) {
         const index = favorites.findIndex(f => f.id === coinId);
@@ -156,18 +156,18 @@
             favorites.splice(index, 1);
             saveToCache();
 
-            // Оповещаем UI немедленно for отзывчивости
+            // Notify UI immediately for responsiveness
             if (window.eventBus) {
                 window.eventBus.emit('favorites-updated', favorites);
             }
 
-            // Асинхронно обновляем D1
+            // Update D1 asynchronously
             await updateD1();
         }
     }
 
     /**
-     * Update данные в D1
+     * Update data in D1
      */
     async function updateD1() {
         if (!window.coinSetsClient || !window.authState || !window.authState.isAuthenticated) {
@@ -179,12 +179,12 @@
             let favoriteSet = sets.find(s => s.type === 'favorite');
 
             if (favoriteSet) {
-                // Обновляем существующий
+                // Update existing
                 await window.coinSetsClient.updateCoinSet(favoriteSet.id, {
                     coin_ids: favorites
                 });
             } else {
-                // Создаем новый
+                // Create new
                 await window.coinSetsClient.createCoinSet({
                     name: 'Favorites',
                     description: 'Избранные монеты',
@@ -211,14 +211,14 @@
         removeFavorite
     };
 
-    // Слушаем изменение состояния авторизации for синхронизации
+    // Listen for auth state changes for sync
     if (window.eventBus) {
         window.eventBus.on('auth-state-changed', (state) => {
             if (state.isAuthenticated) {
                 sync();
             } else {
-                // При логауте очищаем избранное (или оставляем как локальное?)
-                // Пока оставляем локальное, но при логине оно будет перезаписано из D1
+                // On logout clear favorites (or keep as local?)
+                // For now keep local; on login it will be overwritten from D1
             }
         });
     }

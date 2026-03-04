@@ -6,11 +6,11 @@
  * PURPOSE: AI API provider settings (YandexGPT) for modal window.
  * Allows switching between providers and configuring their parameters.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * FEATURES:
  * - Provider switcher via radio buttons (YandexGPT, GitHub, PostgreSQL)
@@ -812,7 +812,7 @@ window.aiApiSettings = {
                 }
             } catch (error) {
                 // Skill anchor: health-check on file:// may give false CORS errors, not a provider bug.
-                // See app/skills/file-protocol-cors-guard
+                // See id:sk-7cf3f7
                 const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
                     this.healthStatus = 'Fail (CORS/Network)';

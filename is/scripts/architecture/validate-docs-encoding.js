@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-language-policy
+ * @skill id:sk-883639
  * @description Global encoding gate: UTF-8 no BOM + mojibake detection in docs markdown.
  */
 import fs from "node:fs";

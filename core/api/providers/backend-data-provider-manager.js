@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Backend-core DataProviderManager.
  *
  * Principles:

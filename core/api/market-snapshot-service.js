@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Market Snapshot Service: orchestrates data and metrics fetching to build a unified snapshot payload.
  * @causality #for-layer-separation
  */

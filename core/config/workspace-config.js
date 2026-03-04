@@ -3,18 +3,18 @@
 
     /**
      * ================================================================================================
-     * WORKSPACE CONFIG - Централизованное хранилище настроек рабочей зоны
+     * WORKSPACE CONFIG - Centralized workspace settings storage
      * ================================================================================================
-     * Skill: core/skills/config-contracts
+     * Skill: id:sk-02d3ea
      *
-     * PURPOSE: SSOT (ЕИП) for настроек рабочей зоны, включая основную таблицу.
-     * Хранит одну структуру workspace и сохраняет её в cacheManager (EI) с fallback на localStorage.
+     * PURPOSE: SSOT for workspace settings, including main table.
+     * Stores single workspace structure and persists to cacheManager (EI) with localStorage fallback.
      *
-     * WORKSPACE CONFIG - Централизованное хранилище настроек рабочей зоны
+     * WORKSPACE CONFIG - Centralized workspace settings storage
      * {
-     *   activeModelId: 'Median/AIR/260101',     // Текущая математическая модель
-     *   activeCoinSetIds: [],          // ID монет активной выборки (пусто = дефолтный список)
-     *   mainTable: {                   // Настройки основной таблицы
+     *   activeModelId: 'Median/AIR/260101',     // Current math model
+     *   activeCoinSetIds: [],          // Active coin set IDs (empty = default list)
+     *   mainTable: {                   // Main table settings
      *     selectedCoinIds: [],
      *     sortBy: null,
      *     sortOrder: null,             // 'asc' | 'desc' | null
@@ -24,9 +24,9 @@
      * }
      *
      * PRINCIPLES:
-     * - ЕИП: all settings workspace читаются/записываются только через workspaceConfig.
-     * - EI: cacheManager с fallback на localStorage. Без версионирования (пользовательские данные).
-     * - Мерж: частичные обновления не затирают остальные поля.
+     * - SSOT: all workspace settings read/write only via workspaceConfig.
+     * - EI: cacheManager with localStorage fallback. No versioning (user data).
+     * - Merge: partial updates do not overwrite other fields.
      */
 
     const CACHE_KEY = 'workspaceConfig';
@@ -71,9 +71,9 @@
             showPriceColumn: true
         },
         metrics: {
-            horizonDays: DEFAULT_MODEL_PARAMS.horizonDays, // Горизонт прогноза по умолчанию (дни)
-            mdnHours: DEFAULT_MODEL_PARAMS.mdnHours,       // Горизонт MDN по умолчанию (часы)
-            activeTabId: 'percent' // Активная вкладка отображения метрик
+            horizonDays: DEFAULT_MODEL_PARAMS.horizonDays, // Default forecast horizon (days)
+            mdnHours: DEFAULT_MODEL_PARAMS.mdnHours,       // Default MDN horizon (hours)
+            activeTabId: 'percent' // Active metrics display tab
         }
     });
 
@@ -148,7 +148,7 @@
             await window.cacheManager.set(CACHE_KEY, merged, { useVersioning: false });
         } catch (error) {
             console.error('workspace-config: ошибка сохранения workspace', error);
-            // Skill anchor: fallback в localStorage защищает активный набор монет от потери при сбое cacheManager/IndexedDB.
+            // Skill anchor: localStorage fallback protects active coin set from loss on cacheManager/IndexedDB failure.
             try {
                 localStorage.setItem(CACHE_KEY, JSON.stringify(merged));
                 if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {

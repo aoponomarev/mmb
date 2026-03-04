@@ -1,23 +1,23 @@
 /**
  * ================================================================================================
- * COIN SETS API - Endpoints for работы с пользовательскими coin sets
+ * COIN SETS API - Endpoints for user coin sets
  * ================================================================================================
  *
- * PURPOSE: API for создания, чтения, обновления и удаления sets монет пользователей.
- * Skill: core/skills/config-contracts
+ * PURPOSE: API for creating, reading, updating and deleting user coin sets.
+ * Skill: id:sk-02d3ea
  *
  * ENDPOINTS:
- * - POST   /api/coin-sets          - Создание набора монет
- * - GET    /api/coin-sets          - Получение списка sets пользователя
- * - GET    /api/coin-sets/:id      - Получение набора по ID
- * - PUT    /api/coin-sets/:id      - Обновление набора
- * - DELETE /api/coin-sets/:id      - Удаление набора
- * - PATCH  /api/coin-sets/:id/toggle - Архивирование/разархивирование
+ * - POST   /api/coin-sets          - Create coin set
+ * - GET    /api/coin-sets          - Get user's list of sets
+ * - GET    /api/coin-sets/:id      - Get set by ID
+ * - PUT    /api/coin-sets/:id      - Update set
+ * - DELETE /api/coin-sets/:id      - Delete set
+ * - PATCH  /api/coin-sets/:id/toggle - Archive/unarchive
  *
- * ТРЕБОВАНИЯ:
- * - Все запросы требуют авторизации (Bearer token)
- * - Пользователь может управлять только своими наборами
- * - coin_ids валидируется как массив строк
+ * REQUIREMENTS:
+ * - All requests require auth (Bearer token)
+ * - User can manage only their own sets
+ * - coin_ids validated as string array
  *
  * USAGE:
  * import { handleCoinSets } from './coin-sets.js';
@@ -36,8 +36,8 @@ import {
 } from './utils/d1-helpers.js';
 
 /**
- * Обработка запросов к /api/coin-sets
- * @param {Request} request - Запрос
+ * Handle requests to /api/coin-sets
+ * @param {Request} request - Request
  * @param {Object} env - Environment variables
  * @returns {Promise<Response>}
  */
@@ -51,16 +51,16 @@ export async function handleCoinSets(request, env) {
   }
 
   try {
-    // Проверка авторизации
+    // Auth check
     const userId = await requireAuth(request, env);
     if (!userId) {
       return jsonResponse({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Роутинг
+    // Routing
     const pathParts = url.pathname.split('/').filter(Boolean);
 
-    // GET /api/coin-sets - список sets пользователя
+    // GET /api/coin-sets - user's list of sets
     if (method === 'GET' && pathParts.length === 2) {
       const activeOnly = url.searchParams.get('active_only') === 'true';
       const coinSets = await getUserCoinSets(env.DB, userId, activeOnly);
@@ -68,7 +68,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ coin_sets: coinSets });
     }
 
-    // GET /api/coin-sets/:id - получение набора по ID
+    // GET /api/coin-sets/:id - get set by ID
     if (method === 'GET' && pathParts.length === 3) {
       const coinSetId = parseInt(pathParts[2], 10);
       if (isNaN(coinSetId)) {
@@ -83,7 +83,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ coin_set: coinSet });
     }
 
-    // POST /api/coin-sets - создание набора
+    // POST /api/coin-sets - create set
     if (method === 'POST' && pathParts.length === 2) {
       const body = await request.json();
       const { name, description, coin_ids, is_active, provider } = body;
@@ -181,7 +181,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ coin_set: coinSet });
     }
 
-    // Неизвестный endpoint
+    // Unknown endpoint
     return jsonResponse({ error: 'Not found' }, { status: 404 });
 
   } catch (error) {

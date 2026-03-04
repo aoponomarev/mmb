@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Orchestrates the fetching of market metrics (FGI, VIX, dominance, Binance indicators).
  */
 import { createDataCacheManager } from "../cache/data-cache-manager.js";

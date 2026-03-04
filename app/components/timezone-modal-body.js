@@ -5,10 +5,10 @@
  *
  * PURPOSE: Integrate timezone-selector and translation language with modal button system.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: app/skills/ux-principles
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-e0b8f3
  *
  * FEATURES:
  * - Uses cmp-timezone-selector for timezone selection
@@ -21,12 +21,12 @@
  * COMPONENT API:
  *
  * Props:
- * - modelValue (String, required) — текущая таймзона (v-model)
- * - initialValue (String, required) — исходная таймзона при открытии модального окна
- * - translationLanguage (String, default: 'ru') — текущий язык перевода (v-model)
- * - initialTranslationLanguage (String, default: 'ru') — исходный язык перевода при открытии модального окна
- * - onSave (Function, required) — функция сохранения (timezone, translationLanguage)
- * - onCancel (Function, required) — функция отмены
+ * - modelValue (String, required) - current timezone (v-model)
+ * - initialValue (String, required) - initial timezone when modal opened
+ * - translationLanguage (String, default: 'ru') - current translation language (v-model)
+ * - initialTranslationLanguage (String, default: 'ru') - initial translation language when modal opened
+ * - onSave (Function, required) - save handler (timezone, translationLanguage)
+ * - onCancel (Function, required) - cancel handler
  *
  * Inject:
  * - modalApi — API for managing buttons (provided by cmp-modal)

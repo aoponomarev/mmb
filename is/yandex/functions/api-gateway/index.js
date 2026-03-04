@@ -2,23 +2,23 @@
  * ================================================================================================
  * app API FUNCTION - Yandex Cloud Functions
  * ================================================================================================
- * Skill: is/skills/arch-external-parity
+ * Skill: id:sk-73dcca
  *
- * PURPOSE: API-слой for PostgreSQL (health + будущие CRUD эндпоинты).
- * ПРИМЕЧАНИЕ ПО БЕЗОПАСНОСТИ:
- * - Секреты не хранятся в репозитории.
- * - Фактические значения переменных окружения хранить в `do-overs/Secrets/`.
+ * PURPOSE: API layer for PostgreSQL (health + future CRUD endpoints).
+ * SECURITY NOTE:
+ * - Secrets not stored in repo.
+ * - Actual env values in secrets dir outside repo (Yandex Console or .env).
  *
- * ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ:
+ * ENV VARS:
  * - DB_HOST
- * - DB_PORT (по умолчанию 6432)
+ * - DB_PORT (default 6432)
  * - DB_NAME
  * - DB_USER
  * - DB_PASSWORD
  *
  * REFERENCES:
- * - API Gateway: cloud/yandex/api-gateway/app-api-gw/openapi.yaml
- * - Интеграция: `app/skills/file-protocol-cors-guard`
+ * - API Gateway: is/yandex/functions/api-gateway/ (OpenAPI spec in Yandex Cloud)
+ * - Integration: id:sk-7cf3f7
  */
 const { Client } = require('pg');
 
@@ -215,7 +215,7 @@ module.exports.handler = async function (event, context) {
                         market.oi, market.fr, market.lsr, market.vix, market.vix_available
                     ]);
 
-                    // Обновляем ссылку в портфеле
+                    // Update portfolio reference
                     await client.query('UPDATE portfolios SET market_snapshot_id = $1 WHERE id = $2', [marketSnapshotId, portfolio_id]);
                 }
 
@@ -254,7 +254,7 @@ module.exports.handler = async function (event, context) {
 
                 // 4. Portfolio Assets (Links)
                 if (Array.isArray(assets) && Array.isArray(metrics)) {
-                    // Очищаем старые связи for этого портфеля перед обновлением
+                    // Clear old links for this portfolio before update
                     await client.query('DELETE FROM portfolio_assets WHERE portfolio_id = $1', [portfolio_id]);
 
                     for (let i = 0; i < assets.length; i++) {
@@ -295,7 +295,7 @@ module.exports.handler = async function (event, context) {
             const includePrev = qp.include_prev === 'true';
             const countOnly = qp.count_only === 'true';
 
-            // Лёгкий запрос только for получения числа монет в БД (без данных)
+            // Light query only for coin count in DB (no data)
             if (countOnly) {
                 const cntRes = await client.query(
                     `SELECT COUNT(DISTINCT coin_id) AS total_count,
@@ -317,7 +317,7 @@ module.exports.handler = async function (event, context) {
                 query = `SELECT * FROM coin_market_cache WHERE coin_id = ANY($1) ORDER BY COALESCE(sort_market_cap, 9999)`;
                 params = [ids];
             } else if (sort === 'volume') {
-                // sort_volume (ранг крона, 1=лучший) приоритетен; если NULL — fallback по total_volume DESC
+                // sort_volume (cron rank, 1=best) has priority; if NULL — fallback by total_volume DESC
                 query = `SELECT * FROM coin_market_cache
                          ORDER BY sort_volume ASC NULLS LAST, total_volume DESC NULLS LAST
                          LIMIT $1`;
@@ -371,8 +371,8 @@ module.exports.handler = async function (event, context) {
             };
         }
 
-        // 6. POST /api/coins/market-cache — upsert монет из браузера (CoinGecko fallback)
-        // Принимает массив монет в нормализованном формате приложения
+        // 6. POST /api/coins/market-cache — upsert coins from browser (CoinGecko fallback)
+        // Accepts array of coins in app-normalized format
         if (path.endsWith('/api/coins/market-cache') && method === 'POST') {
             const body = JSON.parse(event.body || '{}');
             const coins = Array.isArray(body.coins) ? body.coins : [];
@@ -431,8 +431,8 @@ module.exports.handler = async function (event, context) {
                     coin.price_change_percentage_14d || 0,
                     coin.price_change_percentage_30d || 0,
                     coin.price_change_percentage_200d || 0,
-                    coin.market_cap_rank || null,  // sort_market_cap = rank по капитализации
-                    null,                          // sort_volume — неизвестен при ручной загрузке
+                    coin.market_cap_rank || null,  // sort_market_cap = cap rank
+                    null,                          // sort_volume — unknown on manual load
                     now,
                     now
                 ]);

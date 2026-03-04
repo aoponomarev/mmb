@@ -1,5 +1,5 @@
 /**
- * @skill arch-foundation
+ * @skill id:sk-483943
  * @description Delta-fast gate:
  * - validates only staged changes related to secret/cache/infra contracts
  * - runs in milliseconds and fails early before full integrity checks

@@ -2,12 +2,12 @@
  * ================================================================================================
  * MESSAGES TRANSLATOR - System messages translator (v2 - simplified scheme)
  * ================================================================================================
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PURPOSE: Translate system messages via AI providers with caching.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
  * CACHE FORMAT (localStorage):
  * Key: 'tr-{lang}-{versionHash}' (e.g. 'tr-en-aBc12XyZ')
@@ -263,7 +263,7 @@
 
         isInitialized = true;
 
-        // Эмитим событие for инициализации компонентов
+        // Emit event for component initialization
         document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
             detail: { language: currentLanguage }
         }));
@@ -319,7 +319,7 @@
             return;
         }
 
-        // Очищаем и пересоздаём
+        // Clear and recreate
         window.AppMessages.clear();
 
         for (const msg of messages) {

@@ -1,54 +1,54 @@
 /**
  * ================================================================================================
- * MESSAGES MIGRATIONS - Миграции for датасета сообщений
+ * MESSAGES MIGRATIONS - Migrations for messages dataset
  * ================================================================================================
  *
- * PURPOSE: Управление версиями и миграциями датасета сообщений при изменении структуры.
- * Обеспечивает совместимость данных между версиями приложения.
- * Skill: core/skills/config-contracts
+ * PURPOSE: Version and migration management for messages dataset when structure changes.
+ * Ensures data compatibility between application versions.
+ * Skill: id:sk-02d3ea
  *
  * PRINCIPLES:
- * - Миграции применяются только при изменении структуры ключей или формата данных
- * - Изменение текстов сообщений не требует миграции
- * - Каждая миграция имеет уникальную версию (v1, v2, v3...)
- * - Миграции выполняются последовательно от текущей версии до целевой
+ * - Migrations apply only when key structure or data format changes
+ * - Changing message texts does not require migration
+ * - Each migration has unique version (v1, v2, v3...)
+ * - Migrations run sequentially from current to target version
  *
- * КОГДА НУЖНЫ МИГРАЦИИ:
- * - Переименование ключей сообщений (старый ключ → новый ключ)
- * - Изменение структуры данных сообщений (добавление обязательных полей)
- * - Разделение/объединение сообщений
- * - Изменение структуры actions (добавление обязательных параметров)
+ * WHEN MIGRATIONS ARE NEEDED:
+ * - Message key rename (old key → new key)
+ * - Message data structure change (adding required fields)
+ * - Splitting/merging messages
+ * - Action structure change (adding required parameters)
  *
- * КОГДА НЕ НУЖНЫ МИГРАЦИИ:
- * - Изменение текстов сообщений (просто обновить в messages-config.js)
- * - Добавление новых сообщений (обратная совместимость сохранена)
- * - Изменение приоритетов или типов сообщений
+ * WHEN MIGRATIONS ARE NOT NEEDED:
+ * - Changing message texts (just update in messages-config.js)
+ * - Adding new messages (backward compatibility preserved)
+ * - Changing priorities or message types
  *
  * USAGE:
  * const migratedData = await window.messagesMigrations.migrate(cacheData, fromVersion, toVersion);
  *
  * REFERENCES:
- * - Конфигурация сообщений: core/config/messages-config.js
- * - Кэш-менеджер: core/cache/cache-manager.js
- * - Аналог for кэша: core/cache/cache-migrations.js
+ * - Messages config: core/config/messages-config.js
+ * - Cache manager: core/cache/cache-manager.js
+ * - Cache analogue: core/cache/cache-migrations.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Текущая версия структуры датасета сообщений
+     * Current version of messages dataset structure
      */
     const CURRENT_VERSION = 1;
 
     /**
-     * Реестр миграций
-     * Каждая миграция преобразует данные из версии N в версию N+1
+     * Migration registry
+     * Each migration transforms data from version N to N+1
      */
     const MIGRATIONS = {
-        // Пример миграции v1 → v2
+        // Example migration v1 → v2
         // v1_to_v2: function(data) {
-        //     // Переименование ключа: error.api → error.api.error
+        //     // Key rename: error.api → error.api.error
         //     const newData = { ...data };
         //     if (newData['error.api']) {
         //         newData['error.api.error'] = newData['error.api'];
@@ -59,9 +59,9 @@
     };
 
     /**
-     * Get версию датасета из кэша
-     * @param {Object} cacheData - данные из кэша
-     * @returns {number} - версия датасета (по умолчанию 1)
+     * Get dataset version from cache
+     * @param {Object} cacheData - data from cache
+     * @returns {number} - dataset version (default 1)
      */
     function getVersion(cacheData) {
         if (!cacheData || typeof cacheData !== 'object') {
@@ -71,10 +71,10 @@
     }
 
     /**
-     * Set версию датасета
-     * @param {Object} data - данные
-     * @param {number} version - версия
-     * @returns {Object} - данные с версией
+     * Set dataset version
+     * @param {Object} data - data
+     * @param {number} version - version
+     * @returns {Object} - data with version
      */
     function setVersion(data, version) {
         return {
@@ -84,11 +84,11 @@
     }
 
     /**
-     * Выполнить миграцию данных из одной версии в другую
-     * @param {Object} data - данные for миграции
-     * @param {number} fromVersion - исходная версия
-     * @param {number} toVersion - целевая версия
-     * @returns {Promise<Object>} - мигрированные данные
+     * Run migration from one version to another
+     * @param {Object} data - data for migration
+     * @param {number} fromVersion - source version
+     * @param {number} toVersion - target version
+     * @returns {Promise<Object>} - migrated data
      */
     async function migrate(data, fromVersion, toVersion) {
         if (!data || typeof data !== 'object') {
@@ -97,7 +97,7 @@
         }
 
         if (fromVersion === toVersion) {
-            return data; // Миграция не требуется
+            return data; // No migration needed
         }
 
         if (fromVersion > toVersion) {
@@ -108,7 +108,7 @@
         let currentData = { ...data };
         let currentVersion = fromVersion;
 
-        // Последовательное применение миграций
+        // Sequential application of migrations
         while (currentVersion < toVersion) {
             const migrationKey = `v${currentVersion}_to_v${currentVersion + 1}`;
             const migration = MIGRATIONS[migrationKey];
@@ -129,14 +129,14 @@
             }
         }
 
-        // Устанавливаем новую версию
+        // Set new version
         return setVersion(currentData, toVersion);
     }
 
     /**
-     * Мигрировать данные к текущей версии
-     * @param {Object} cacheData - данные из кэша
-     * @returns {Promise<Object>} - мигрированные данные
+     * Migrate data to current version
+     * @param {Object} cacheData - data from cache
+     * @returns {Promise<Object>} - migrated data
      */
     async function migrateToLatest(cacheData) {
         const fromVersion = getVersion(cacheData);
@@ -144,9 +144,9 @@
     }
 
     /**
-     * Проверить, требуется ли миграция
-     * @param {Object} cacheData - данные из кэша
-     * @returns {boolean} - true если требуется миграция
+     * Check if migration is required
+     * @param {Object} cacheData - data from cache
+     * @returns {boolean} - true if migration required
      */
     function needsMigration(cacheData) {
         const version = getVersion(cacheData);
@@ -154,9 +154,9 @@
     }
 
     /**
-     * Очистить метаданные миграции (версия) из данных
-     * @param {Object} data - данные
-     * @returns {Object} - данные без метаданных
+     * Strip migration metadata (version) from data
+     * @param {Object} data - data
+     * @returns {Object} - data without metadata
      */
     function stripMetadata(data) {
         if (!data || typeof data !== 'object') {

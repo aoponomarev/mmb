@@ -5,10 +5,10 @@
  *
  * PURPOSE: Vue component for application footer with market metrics.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: app/skills/ux-principles
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-e0b8f3
  *
  * DATA:
  * - Inherits theme from body (bg-body), switches with application theme
@@ -436,7 +436,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                     : response.substring(translationIndex + '---TRANSLATION---'.length).trim();
             } else {
                 // Fallback: try parsing without markers
-                // Look for separators: "Translation:", "Перевод:", or empty line
+                // Look for separators: "Translation:" (or localized equivalent), or empty line
                 const lines = response.split('\n').map(l => l.trim()).filter(l => l);
 
                 // Try to find split between English text and translation
@@ -503,7 +503,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             return text
                 // Remove prompt example
                 .replace(/^Заголовочное предложение\.\s*Первое предложение с деталями\.\s*Второе предложение с деталями\.\s*/i, '')
-                // Remove "Российский перевод: " or "Russian translation: " prefix
+                // Remove "Russian translation:" or localized equivalent prefix
                 .replace(/^(Российский перевод|Russian translation):\s*/i, '')
                 // Remove leading newlines
                 .replace(/^\s*[\r\n]+/, '')

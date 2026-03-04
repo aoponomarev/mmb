@@ -23,8 +23,8 @@
  * - Unauthenticated state message block
  *
  * REFERENCES:
- * - General principles работы с шаблонами: app/skills/ui-architecture
- * - Компонент: app/components/auth-modal-body.js
+ * - General template principles: id:sk-318305
+ * - Component: app/components/auth-modal-body.js
  */
 
 (function() {

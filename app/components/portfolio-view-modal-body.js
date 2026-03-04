@@ -3,7 +3,7 @@
  * PORTFOLIO VIEW MODAL BODY - Portfolio view component (D.3)
  * ================================================================================================
  *
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  */
 
 (function() {
@@ -231,7 +231,7 @@
                 if (!this.modalApi) return;
 
                 this.modalApi.registerButton('delete', {
-                    label: 'Delete портфель',
+                    label: 'Delete portfolioь',
                     variant: 'outline-danger',
                     icon: 'fas fa-trash-alt',
                     locations: ['footer'],

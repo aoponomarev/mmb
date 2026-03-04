@@ -5,9 +5,9 @@
  *
  * PURPOSE: Shows history of recent CoinGecko data fetch cycles (via cron).
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  * Data source: GET /api/coins/cycles (Yandex app-api).
  */
 
@@ -124,7 +124,7 @@
                     this.rows = this.normalizeRows(data?.cycles);
                 } catch (err) {
                     this.rows = [];
-                    this.error = err?.message || 'Неизвестная ошибка';
+                    this.error = err?.message || 'Unknown error';
                 } finally {
                     this.loading = false;
                     this.updateButtons();

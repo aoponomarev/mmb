@@ -2,12 +2,12 @@
  * ================================================================================================
  * ICON MANAGER - Coin icon manager
  * ================================================================================================
- * Skill: app/skills/ui-architecture
+ * Skill: id:sk-318305
  *
  * PURPOSE: SSOT for coin icon URLs.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * Prioritizes our GitHub CDN over external sources (CoinGecko).
  *
 */

@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * UI STATE - Централизованное состояние UI-флагов
+ * UI STATE - Centralized UI flags state
  * ================================================================================================
  *
- * PURPOSE: SSOT for UI-индикаторов и доступности контролов.
- * Данные расчетов (портфели/metrics) сюда не помещаются.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: SSOT for UI indicators and control availability.
+ * Calculation data (portfolios/metrics) not stored here.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Только UI-флаги и метаданные (например, устаревание кэша)
- * - Реактивность через Vue reactive API
- * - Простой API set/get for обновления состояния
+ * - UI flags and metadata only (e.g. cache staleness)
+ * - Reactivity via Vue reactive API
+ * - Simple set/get API for state updates
  *
- * ССЫЛКА: is/skills/arch-foundation
+ * REFERENCE: id:sk-483943
  */
 
 (function() {

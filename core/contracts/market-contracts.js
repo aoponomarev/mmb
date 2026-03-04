@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Zod-based SSOT for market data inputs and outputs. Replaces manual validation.
  */
 import { z } from 'zod';

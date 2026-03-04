@@ -5,16 +5,16 @@
  *
  * PURPOSE: Component for displaying auth state and managing auth via Google OAuth.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * FEATURES:
  * - Displays current auth state (authenticated/not authenticated)
  * - Displays user info (name, email)
- * - Registers "Авторизоваться" and "Выйти" buttons via modalApi
+ * - Registers "Log in" and "Log out" buttons via modalApi
  * - Uses auth-client for auth and logout
  * - Uses centralized state from auth-state for sync across all instances
  * - Reactively updates state on auth change (all instances sync automatically)
@@ -152,7 +152,7 @@ window.authModalBody = {
                     return;
                 }
 
-                // Устанавливаем состояние загрузки в централизованное хранилище
+                // Set loading state in centralized store
                 window.authState.setLoading(true);
                 this.updateButtons();
                 this._authInProgress = true;
@@ -227,7 +227,7 @@ window.authModalBody = {
                     return;
                 }
 
-                // Устанавливаем состояние загрузки в централизованное хранилище
+                // Set loading state in centralized store
                 window.authState.setLoading(true);
                 this.updateButtons();
 

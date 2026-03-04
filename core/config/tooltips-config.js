@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * TOOLTIPS CONFIG - Конфигурация всплывающих подсказок
+ * TOOLTIPS CONFIG - Tooltip configuration
  * ================================================================================================
- * @skill app/skills/ux-principles
- * @skill-anchor app/skills/ui-architecture #for-tooltip-reactivity
+ * @skill id:sk-e0b8f3
+ * @skill-anchor id:sk-318305 #for-tooltip-reactivity
  */
 
 (function() {
@@ -44,7 +44,7 @@
         'dropdown.notifications.icon': 'Иконка: Уведомления',
         'dropdown.notifications.text': 'Основной текст: Просмотр уведомлений',
         'dropdown.system-settings.icon': 'Иконка: Настройки системы',
-        'dropdown.system-settings.text': 'Основной текст: Конфигурация системы',
+        'dropdown.system-settings.text': 'Основной текст: Configuration системы',
         'dropdown.export.suffix.icon': 'Открыть в новой вкладке',
         'dropdown.export.icon': 'Иконка: Экспорт',
         'dropdown.export.text': 'Основной текст: Экспорт данных',
@@ -71,22 +71,22 @@
         'ui.coinSet.load': 'Загрузить набор монет',
         'ui.coinSet.save': 'Сохранить набор монет',
         'ui.refresh.soft': 'Update интерфейс (кэш актуален)',
-        'ui.refresh.full': 'Update данные монет и метрик рынка',
+        'ui.refresh.full': 'Update данные монет и metrics рынка',
         'ui.coinTable.showPrice': 'Показать Price',
         'ui.coinTable.hidePrice': 'Скрыть Price',
-        'ui.vix.sourcePrefix': 'VIX источник:',
+        'ui.vix.sourcePrefix': 'VIX source:',
         'ui.vix.default': 'VIX Volatility Index',
         'ui.search.alreadyInTable': 'Уже в таблице',
         'ui.modal.missingCoins.title': 'Не найдены монеты',
-        'ui.modal.portfolioForm.title': 'Формирование портфеля',
-        'ui.modal.portfolioView.title': 'Просмотр портфеля',
+        'ui.modal.portfolioForm.title': 'Формирование portfolioя',
+        'ui.modal.portfolioView.title': 'Просмотр portfolioя',
         'ui.combobox.clear': 'Очистить',
         'ui.coinBlock.favorite.remove': 'Убрать',
         'ui.coinBlock.favorite.add': 'Добавить',
         'ui.coinBlock.open': 'Открыть',
         'ui.coinBlock.delete': 'Удалить',
         'ui.coinSet.draft.save': 'Сохранить черновик',
-        'metric.horizonDays.description': 'ГП (Горизонт прогноза)\nВременной горизонт for расчета всех метрик.\nОпределяет, на какой период строится\nпрогноз изменения цены актива.',
+        'metric.horizonDays.description': 'ГП (Горизонт прогноза)\nВременной горизонт for расчета всех metrics.\nОпределяет, на какой период строится\nпрогноз изменения цены актива.',
         'metric.mdnHours.description': 'MDN Hours (Часы)\nГоризонт расчета индикатора\nрыночного направления (MDN).\nКраткосрочный сигнал "здесь и сейчас".',
         'metric.agrMethod.description': 'AGR Method (Метод)\nМетод расчета устойчивости тренда for AGR:\nDCS (направление), TSI (сила), MP (моментум).',
         'metric.columnVisibility.description': 'Видимость колонок\nУправление отображением групп колонок\nв таблице: основные показатели,\nволатильность, устойчивость и т.д.',
@@ -94,7 +94,7 @@
         'metric.columnVisibility.percent.description': '% (Процентные изменения)\nПоказывает процентные изменения цены\nза различные периоды: 1h, 24h, 7d, 14d, 30d, 200d.\nПомогает оценить краткосрочную\nи долгосрочную динамику актива.',
         'metric.columnVisibility.complexDeltas.description': 'Компл. дельты (CD)\nНакопленные взвешенные изменения цены\nпо неделям (CD1w–CD6w) и на горизонте\nпрогноза (CDH). Показывают интегральную\nдинамику актива с учетом временных весов.',
         'metric.columnVisibility.gradients.description': 'Градиенты (CGR)\nВзвешенные градиенты изменения цены\nмежду временными узлами (CGR2–CGR6)\nи их сумма (CGR Σ). Показывают скорость\nи направление движения цены.',
-        'metric.portfolioAccess.description': 'Мои портфели\nБыстрый доступ к созданным портфелям,\nпросмотр их текущей доходности\nи создание новых sets монет.',
+        'metric.portfolioAccess.description': 'Мои portfolioи\nБыстрый доступ к созданным portfolioям,\nпросмотр их текущей доходности\nи создание новых sets монет.',
         'metric.portfolioAccess.lsHeader': 'Счетчик L/S:',
         'metric.portfolioAccess.lsLong': 'Long (AGR ≥ 0)',
         'metric.portfolioAccess.lsShort': 'Short (AGR < 0)',
@@ -481,13 +481,13 @@
     async function init(language) {
         if (!language) language = 'ru';
 
-        // Всегда устанавливаем currentLanguage сначала
+        // Always set currentLanguage first
         currentLanguage = language;
 
         if (language === 'ru' || language === 'en' || language === 'de' || language === 'zh') {
             return;
         }
-        // Фолбэк на английский for неподдерживаемых языков
+        // Fallback to English for unsupported languages
         currentLanguage = 'en';
     }
 

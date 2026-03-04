@@ -5,8 +5,8 @@
  *
  * PURPOSE: Reads coin data from coin_market_cache (PostgreSQL Yandex Cloud),
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *       updated by cron every 15 minutes via coingecko-fetcher.
  *
  * ADVANTAGES over direct CoinGecko:
@@ -42,7 +42,7 @@
          * @param {number} count - Coin count (1-500)
          * @param {string} sortBy - 'market_cap' | 'volume'
          * @param {Object} options - { onProgress, signal }
-         * @returns {Promise<Array>} Нормализованные монеты
+         * @returns {Promise<Array>} Normalized coins
          */
         async getTopCoins(count = 250, sortBy = 'market_cap', options = {}) {
             const url = `${MARKET_CACHE_ENDPOINT}?sort=${encodeURIComponent(sortBy)}&limit=${count}`;

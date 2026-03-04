@@ -5,10 +5,10 @@
  *
  * PURPOSE: Vue component for application header with menu and settings buttons.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: app/skills/ux-principles
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-e0b8f3
  *
  * SLOTS:
  * - Fixed dark theme (data-bs-theme="dark"), not switchable
@@ -266,7 +266,7 @@ window.appHeader = {
             const lang = this.currentLanguage;
             return window.tooltipsConfig.getTooltip('metric.agrRatio.description');
         },
-        // Индивидуальные tooltips for медиан с зависимостью от значений
+        // Per-metric tooltips for medians depending on values
         tooltipMedianCdh() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
             const staticText = window.tooltipsConfig.getTooltip('metric.medianCdh.description');
@@ -283,7 +283,7 @@ window.appHeader = {
             const staticText = window.tooltipsConfig.getTooltip('metric.medianCgr.description');
             const cgrValue = this.medians?.cgr;
             if (cgrValue !== undefined && cgrValue !== null) {
-                // Используем интерпретацию for mdn, так как CGR имеет похожую логику
+                // Use mdn interpretation as CGR has similar logic
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(cgrValue), this.currentLanguage);
                 return interpretation ? `${staticText}\n${interpretation}` : staticText;
             }

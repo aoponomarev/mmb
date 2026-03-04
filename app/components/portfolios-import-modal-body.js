@@ -5,10 +5,10 @@
  *
  * PURPOSE: Selective import of portfolios from JSON with date filter and basic validation.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: core/skills/domain-portfolio
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-c3d639
  *
  * FEATURES:
  * - JSON file selection and structure validation
@@ -91,7 +91,7 @@ window.portfoliosImportModalBody = {
                     </label>
                 </div>
 
-                <div v-else class="small text-muted">Нет портфелей for выбранного фильтра.</div>
+                <div v-else class="small text-muted">Нет portfolios for выбранного фильтра.</div>
             </div>
         </div>
     `,
@@ -242,7 +242,7 @@ window.portfoliosImportModalBody = {
             const selectedSet = new Set(this.selectedIds);
             const filtered = this.portfolios.filter(p => selectedSet.has(p.id));
             if (!filtered.length) {
-                this.errors = ['Не выбраны портфели for импорта.'];
+                this.errors = ['Не выбраны portfolioи for импорта.'];
                 this.updateImportButton();
                 return;
             }
@@ -263,7 +263,7 @@ window.portfoliosImportModalBody = {
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'success',
-                        text: `Импортировано портфелей: ${filtered.length}`,
+                        text: `Импортировано portfolios: ${filtered.length}`,
                         duration: 2500
                     });
                 }

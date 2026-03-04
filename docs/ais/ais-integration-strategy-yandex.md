@@ -20,7 +20,7 @@ related_ais:
 
 - `is/yandex/functions/api-gateway/README.md` используется как техническая сводка для функции API Gateway.
 - Основной контракт чтения и записи данных по монетам зафиксирован в:
-  - `docs/ais/ais-yandex-cloud.md`
+  - id:ais-e41384
   - связанных модулях `core/api/market-snapshot-*` и `core/contracts/market-contracts.js`.
 
 ## Комплект обязательных контрактов и гейтов
@@ -48,6 +48,6 @@ related_ais:
    - соответствует текущей архитектуре,
    - либо заменить новым эквивалентом, либо исключить.
 2. После подтверждения перенести ключевые выводы в:
-   - `core/skills/ai-providers-architecture.md`
-   - `is/skills/arch-mcp-ecosystem.md`
+   - id:sk-d76b68
+   - id:sk-3225b2
    (если требуется в рамках следующих этапов миграции).

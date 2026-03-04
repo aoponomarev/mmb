@@ -70,7 +70,7 @@ The validation runs in `is/scripts/tests/validate-frontend-ui-configs.test.js`. 
 
 `cloudflareConfig.getApiProxyEndpoint(path)` is the **single point of truth** for constructing Cloudflare Worker proxy URLs. All frontend API calls that need CORS bypass or auth headers must go through this method.
 
-This is the key enabler of Zero-Config Portability: the same method returns the correct URL in both `file://` and `https://` runtime modes. See `app/skills/file-protocol-cors-guard.md`.
+This is the key enabler of Zero-Config Portability: the same method returns the correct URL in both `file://` and `https://` runtime modes. See id:sk-7cf3f7.
 
 ### Schema Migrations (`messages-migrations.js`)
 

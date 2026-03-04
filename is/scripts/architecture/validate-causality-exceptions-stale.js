@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/arch-causality
+ * @skill id:sk-3b1519
  * @description Finds stale exceptions in causality-exceptions.jsonl — hashes fully removed from code.
  */
 import fs from "node:fs";

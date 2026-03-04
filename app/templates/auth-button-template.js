@@ -19,7 +19,7 @@
  * - On desktop: icon + "Sign in with Google" text
  *
  * REFERENCES:
- * - Компонент: app/components/auth-button.js
+ * - Component: app/components/auth-button.js
  */
 
 (function() {

@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * DRAFT COIN SET - Утилита for работы с локальным набором "Draft"
+ * DRAFT COIN SET - Utility for working with local "Draft" set
  * ================================================================================================
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
- * PURPOSE: Управление локальным набором монет "Draft", который хранится только в localStorage
- * и позволяет перебрасывать наборы между аккаунтами пользователей на одном устройстве.
+ * PURPOSE: Manage local "Draft" coin set stored only in localStorage,
+ * allows transferring sets between user accounts on one device.
  *
  * PRINCIPLES:
- * - Хранится только в localStorage (не синхронизируется с D1)
- * - Доступен всем пользователям на устройстве
- * - Автоматически загружается при старте приложения
- * - Может быть обновлен из любого аккаунта
+ * - Stored only in localStorage (not synced with D1)
+ * - Accessible to all users on the device
+ * - Automatically loaded at application startup
+ * - Can be updated from any account
  *
  * USAGE:
  * const draftSet = window.draftCoinSet.get();
@@ -28,34 +28,34 @@
     const STORAGE_KEY = 'draft-coin-set';
 
     /**
-     * Извлечь тикеры из данных монет
-     * @param {Array<Object>|null} coinsData - Полные данные монет
-     * @param {Array<string>} coinIds - Массив ID монет (fallback)
-     * @returns {string} Строка с тикерами через запятую (отсортированная по алфавиту)
+     * Extract tickers from coin data
+     * @param {Array<Object>|null} coinsData - Full coin data
+     * @param {Array<string>} coinIds - Array of coin IDs (fallback)
+     * @returns {string} Comma-separated tickers string (sorted alphabetically)
      */
     function extractTickers(coinsData, coinIds = []) {
         if (coinsData && Array.isArray(coinsData) && coinsData.length > 0) {
-            // Извлекаем тикеры из полных данных монет и сортируем по алфавиту
+            // Extract tickers from full coin data and sort alphabetically
             return coinsData
                 .map(coin => coin.symbol || coin.id)
                 .filter(Boolean)
                 .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
                 .join(', ');
         }
-        // Если полных данных нет, но есть coinIds - используем их как fallback (тоже сортируем)
+        // If no full data, use coinIds as fallback (also sorted)
         if (coinIds && coinIds.length > 0) {
             return coinIds
                 .filter(Boolean)
                 .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
                 .join(', ');
         }
-        // Если полных данных нет, возвращаем пустую строку
+        // If no full data, return empty string
         return '';
     }
 
     /**
-     * Get набор "Draft" из localStorage
-     * @returns {Object|null} Набор монет или null
+     * Get "Draft" set from localStorage
+     * @returns {Object|null} Coin set or null
      */
     function getDraftSet() {
         try {
@@ -67,12 +67,12 @@
             const coinIds = parsed.coin_ids || [];
             const coinsData = parsed.coins || null;
 
-            // Извлекаем тикеры: сначала из сохраненных, потом из полных данных монет, потом из coin_ids
+            // Extract tickers: first from saved, then from full coin data, then from coin_ids
             let tickers = parsed.tickers || '';
             if (!tickers || tickers.trim().length === 0) {
                 tickers = extractTickers(coinsData, coinIds);
             } else {
-                // Если тикеры есть, но они не отсортированы - пересортируем их по алфавиту
+                // If tickers exist but unsorted, re-sort alphabetically
                 const tickersArray = tickers
                     .split(',')
                     .map(t => t.trim())
@@ -103,13 +103,13 @@
     }
 
     /**
-     * Сохранить набор "Draft" в localStorage
-     * @param {Array<string>} coinIds - Массив ID монет
-     * @param {Array<Object>|null} coinsData - Полные данные монет (optional)
+     * Save "Draft" set to localStorage
+     * @param {Array<string>} coinIds - Array of coin IDs
+     * @param {Array<Object>|null} coinsData - Full coin data (optional)
      */
     function saveDraftSet(coinIds, coinsData = null) {
         try {
-            // Извлекаем тикеры из данных монет
+            // Extract tickers from coin data
             const tickers = extractTickers(coinsData, coinIds);
 
             const data = {
@@ -126,8 +126,8 @@
     }
 
     /**
-     * Инициализировать набор "Draft" (если еще не существует)
-     * @param {Array<string>} defaultCoinIds - Массив ID монет по умолчанию (optional, по умолчанию пустой массив)
+     * Initialize "Draft" set (if not yet exists)
+     * @param {Array<string>} defaultCoinIds - Default coin IDs (optional, default empty array)
      */
     function initializeDraftSet(defaultCoinIds = []) {
         const existing = getDraftSet();
@@ -138,7 +138,7 @@
     }
 
     /**
-     * Очистить набор "Draft"
+     * Clear "Draft" set
      */
     function clearDraftSet() {
         try {

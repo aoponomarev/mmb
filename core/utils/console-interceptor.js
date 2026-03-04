@@ -1,20 +1,20 @@
 /**
  * ================================================================================================
- * CONSOLE INTERCEPTOR - Перехватчик console.* методов
+ * CONSOLE INTERCEPTOR - Intercepts console.* methods
  * ================================================================================================
  *
- * PURPOSE: Перехватывать все вызовы console.log/warn/error/info/debug и записывать их в sessionLogStore.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: Intercept all console.log/warn/error/info/debug calls and write them to sessionLogStore.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Сохраняет оригинальные методы console.*
- * - Перехватывает вызовы и записывает в sessionLogStore
- * - Вызывает оригинальные методы for сохранения стандартного поведения
- * - Извлекает источник из stack trace (если возможно)
+ * - Saves original console.* methods
+ * - Intercepts calls and writes to sessionLogStore
+ * - Invokes original methods to preserve standard behavior
+ * - Extracts source from stack trace (when possible)
  *
  * USAGE:
- * Автоматически активируется при загрузке модуля.
- * Для деактивации: window.consoleInterceptor.disable()
+ * Automatically activated on module load.
+ * To deactivate: window.consoleInterceptor.disable()
  *
  * REFERENCES:
  * - Session Log Store: core/utils/session-log-store.js
@@ -24,7 +24,7 @@
 (function() {
     'use strict';
 
-    // Сохраняем оригинальные методы console
+    // Save original console methods
     const originalConsole = {
         log: console.log.bind(console),
         warn: console.warn.bind(console),
@@ -33,13 +33,13 @@
         debug: console.debug.bind(console)
     };
 
-    let isEnabled = false; // ИСПРАВЛЕНО: изначально false, активируется через enable()
-    let suppressBrowserConsole = localStorage.getItem('suppressBrowserConsole') === 'true'; // Загружаем состояние из localStorage
+    let isEnabled = false; // Initially false, activated via enable()
+    let suppressBrowserConsole = localStorage.getItem('suppressBrowserConsole') === 'true'; // Load state from localStorage
 
     /**
-     * Извлечь источник из stack trace
-     * @param {Error} error - Объект Error for получения stack trace
-     * @returns {string|null} Имя файла или null
+     * Extract source from stack trace
+     * @param {Error} error - Error object for stack trace extraction
+     * @returns {string|null} Filename or null
      */
     function extractSource(error) {
         if (!error || !error.stack) {
@@ -48,14 +48,14 @@
 
         try {
             const stack = error.stack.split('\n');
-            // Пропускаем первую строку (сам вызов) и ищем реальный источник
+            // Skip first line (the call itself) and find actual source
             for (let i = 1; i < Math.min(stack.length, 5); i++) {
                 const line = stack[i];
-                // Ищем паттерн: "at functionName (filename:line:column)" или "at filename:line:column"
+                // Look for pattern: "at functionName (filename:line:column)" or "at filename:line:column"
                 const match = line.match(/at\s+(?:\S+\s+)?\(?([^:]+):(\d+):(\d+)\)?/);
                 if (match) {
                     const filename = match[1];
-                    // Извлекаем только имя файла без пути
+                    // Extract filename without path
                     const filenameMatch = filename.match(/([^/\\]+)$/);
                     if (filenameMatch) {
                         return filenameMatch[1];
@@ -64,21 +64,21 @@
                 }
             }
         } catch (e) {
-            // Игнорируем ошибки парсинга stack trace
+            // Ignore stack trace parsing errors
         }
 
         return null;
     }
 
     /**
-     * Создать перехватчик for console метода
-     * @param {string} level - Уровень лога
-     * @param {Function} originalMethod - Оригинальный метод console
-     * @returns {Function} Перехватывающая функция
+     * Create interceptor for console method
+     * @param {string} level - Log level
+     * @param {Function} originalMethod - Original console method
+     * @returns {Function} Interceptor function
      */
     function createInterceptor(level, originalMethod) {
         return function(...args) {
-            // Вызываем оригинальный метод только если не отключен вывод в браузерную консоль
+            // Call original method only if browser console output is not disabled
             if (!suppressBrowserConsole || level === 'error' || level === 'warn') {
                 originalMethod.apply(console, args);
             }
@@ -88,7 +88,7 @@
             }
 
             try {
-                // Форматируем сообщение из аргументов
+                // Format message from arguments
                 let message = '';
                 if (args.length === 0) {
                     message = '';
@@ -114,7 +114,7 @@
                     }).join(' ');
                 }
 
-                // Пропускаем логи самого перехватчика и session-log-store, чтобы избежать бесконечного цикла
+                // Skip logs from interceptor and session-log-store to avoid infinite loop
                 if (typeof message === 'string') {
                     if (message.includes('console-interceptor.js') ||
                         message.includes('session-log-store.js') ||
@@ -124,30 +124,30 @@
                     }
                 }
 
-                // Извлекаем источник из stack trace
+                // Extract source from stack trace
                 let source = null;
                 try {
                     const error = new Error();
                     source = extractSource(error);
-                    // Пропускаем логи самого перехватчика
+                    // Skip logs from interceptor itself
                     if (source && (source.includes('console-interceptor') || source.includes('session-log-store'))) {
                         return;
                     }
                 } catch (e) {
-                    // Игнорируем ошибки извлечения источника
+                    // Ignore source extraction errors
                 }
 
-                // Записываем в sessionLogStore
+                // Write to sessionLogStore
                 window.sessionLogStore.addLog(level, message, source);
             } catch (e) {
-                // Игнорируем ошибки записи в sessionLogStore
-                // Не логируем ошибки перехватчика, чтобы избежать бесконечного цикла
+                // Ignore sessionLogStore write errors
+                // Do not log interceptor errors to avoid infinite loop
             }
         };
     }
 
     /**
-     * Включить перехватчик
+     * Enable interceptor
      */
     function enable() {
         if (isEnabled) return;
@@ -162,7 +162,7 @@
     }
 
     /**
-     * Выключить перехватчик
+     * Disable interceptor
      */
     function disable() {
         if (!isEnabled) return;
@@ -176,12 +176,12 @@
         isEnabled = false;
     }
 
-    // Автоматически включаем перехватчик при загрузке
+    // Enable interceptor automatically on load
     enable();
 
     /**
-     * Set режим подавления вывода в браузерную консоль
-     * @param {boolean} suppress - true for отключения вывода в консоль браузера
+     * Set browser console output suppression mode
+     * @param {boolean} suppress - true to disable browser console output
      */
     function setSuppressBrowserConsole(suppress) {
         suppressBrowserConsole = suppress === true;
@@ -197,6 +197,6 @@
         getSuppressBrowserConsole: () => suppressBrowserConsole
     };
 
-    // Используем оригинальный console.log for инициализации, чтобы не попасть в перехватчик
+    // Use original console.log for init to avoid interceptor
     originalConsole.log('console-interceptor.js: initialized');
 })();

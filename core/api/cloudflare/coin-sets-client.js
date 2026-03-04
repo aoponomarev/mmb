@@ -5,10 +5,10 @@
  *
  * PURPOSE: Interact with Cloudflare Workers API for managing coin sets.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * METHODS:
  * - getCoinSets(activeOnly) - Get user coin sets list

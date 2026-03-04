@@ -3,14 +3,14 @@
  * DATASETS ENDPOINTS - API for работы с датасетами (time-series, metrics)
  * ================================================================================================
  *
- * PURPOSE: CRUD операции for временных рядов и метрик.
- * Skill: core/skills/config-contracts
+ * PURPOSE: CRUD операции for временных рядов и metrics.
+ * Skill: id:sk-02d3ea
  *
  * ENDPOINTS:
  * - GET /api/datasets/time-series/:coin/:date — получение временных рядов
  * - POST /api/datasets/time-series — сохранение временных рядов (batch)
- * - GET /api/datasets/metrics/:coin/:date — получение метрик
- * - POST /api/datasets/metrics — сохранение метрик (batch)
+ * - GET /api/datasets/metrics/:coin/:date — получение metrics
+ * - POST /api/datasets/metrics — сохранение metrics (batch)
  *
  * ПРИМЕЧАНИЕ: R2 хранилище отложено, поэтому временно возвращаем заглушки.
  * После добавления R2 будет реализована полная функциональность.
@@ -83,12 +83,12 @@ async function handleSaveTimeSeries(request, env) {
 }
 
 /**
- * Получение метрик
+ * Получение metrics
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables
  * @param {string} coin - ID монеты
  * @param {string} date - Дата
- * @returns {Promise<Response>} JSON response с метриками
+ * @returns {Promise<Response>} JSON response с metricsами
  */
 async function handleGetMetrics(request, env, coin, date) {
   if (request.method !== 'GET') {
@@ -108,7 +108,7 @@ async function handleGetMetrics(request, env, coin, date) {
 }
 
 /**
- * Сохранение метрик
+ * Сохранение metrics
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables
  * @returns {Promise<Response>} JSON response
@@ -132,11 +132,11 @@ async function handleSaveMetrics(request, env) {
  * Главный обработчик datasets endpoints
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables
- * @param {string} path - Path запроса
+ * @param {string} path - Request path
  * @returns {Promise<Response>} HTTP ответ
  */
 export async function handleDatasets(request, env, path) {
-  // Обработка preflight OPTIONS запросов
+  // Handle preflight OPTIONS запросов
   if (request.method === 'OPTIONS') {
     return handleOptions(request);
   }

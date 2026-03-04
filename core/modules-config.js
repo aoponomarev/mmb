@@ -1,51 +1,51 @@
 /**
  * ================================================================================================
- * MODULES CONFIG - Конфигурация модулей for модульной системы загрузки
+ * MODULES CONFIG - Modules configuration for module system loading
  * ================================================================================================
- * Skill: core/skills/state-events
+ * Skill: id:sk-a17d41
  *
- * PURPOSE: Централизованное описание всех модулей приложения с их зависимостями.
- * Используется модульным загрузчиком (core/module-loader.js) for автоматической
- * загрузки модулей в правильном порядке.
+ * PURPOSE: Centralized description of all application modules with their dependencies.
+ * Used by module loader (core/module-loader.js) for automatic
+ * loading of modules in correct order.
  *
  * PRINCIPLES:
- * - Модули группируются по категориям: utilities, core, templates, components, app
- * - Каждый модуль описывает свои зависимости через массив deps
- * - Загрузчик автоматически разрешает зависимости и загружает модули в правильном порядке
- * - Поддержка внешних модулей (type: 'external') и локальных (type: 'local')
+ * - Modules are grouped by categories: utilities, core, templates, components, app
+ * - Each module describes its dependencies via deps array
+ * - Loader automatically resolves dependencies and loads modules in correct order
+ * - Support for external (type: 'external') and local (type: 'local') modules
  *
  * PRINCIPLES:
  * {
- *   id: 'unique-id',           // Уникальный идентификатор модуля
- *   src: 'path/to/module.js',   // Path к модулю
- *   type: 'local' | 'external', // Тип модуля
- *   deps: ['dep-id-1', 'dep-id-2'], // Массив ID зависимостей
- *   category: 'utilities' | 'core' | 'templates' | 'libraries' | 'components' | 'app', // Категория
- *   condition: function() { return true; } // Опциональная функция for условной загрузки (feature flag)
+ *   id: 'unique-id',           // Unique module identifier
+ *   src: 'path/to/module.js',   // Path to module
+ *   type: 'local' | 'external', // Module type
+ *   deps: ['dep-id-1', 'dep-id-2'], // Array of dependency IDs
+ *   category: 'utilities' | 'core' | 'templates' | 'libraries' | 'components' | 'app', // Category
+ *   condition: function() { return true; } // Optional function for conditional loading (feature flag)
  * }
  *
- * ШАБЛОНЫ КОМПОНЕНТОВ (двухуровневая система):
- * - Компоненты с большим HTML используют отдельные *-template.js файлы (категория templates).
- *   Шаблон вставляется в DOM как <script type="text/x-template"> и ссылается через template: '#id'.
- * - Компоненты с компактным HTML хранят шаблон inline в строке template: `...`.
- *   Отдельный файл шаблона for них НЕ нужен.
+ * COMPONENT TEMPLATES (two-level system):
+ * - Components with large HTML use separate *-template.js files (templates category).
+ *   Template is inserted into DOM as <script type="text/x-template"> and referenced via template: '#id'.
+ * - Components with compact HTML store template inline in template: `...` string.
+ *   Separate template file is NOT needed for them.
  *
- * ВАЖНО:
- * - Порядок модулей в массивах не важен - загрузчик сам определит правильный порядок
- * - Зависимости указываются через ID модулей
- * - Циклические зависимости будут обнаружены и вызовут ошибку
+ * IMPORTANT:
+ * - Module order in arrays does not matter - loader determines correct order
+ * - Dependencies are specified via module IDs
+ * - Cyclic dependencies will be detected and cause an error
  *
- * ССЫЛКА: Принципы модульной системы описаны в `is/skills/arch-foundation`
+ * REFERENCE: Module system principles described in `id:sk-483943`
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация всех модулей приложения
+     * All application modules configuration
      */
     window.modulesConfig = {
-        // Утилиты (загружаются первыми, до Vue.js)
+        // Utilities (loaded first, before Vue.js)
         utilities: [
             {
                 id: 'hash-generator',
@@ -103,9 +103,9 @@
                 deps: [],
                 category: 'utilities'
             },
-            // session-log-store и console-interceptor загружаются синхронно в index.html ДО модульной системы
-            // for перехвата всех логов с самого начала загрузки страницы
-            // Поэтому они не включены в модульную систему, чтобы избежать повторной загрузки
+            // session-log-store and console-interceptor load synchronously in index.html BEFORE module system
+            // for intercepting all logs from the very start of page load
+            // Therefore they are not included in module system, to avoid reload
             {
                 id: 'favorites-manager',
                 src: 'core/utils/favorites-manager.js',
@@ -115,9 +115,9 @@
             }
         ],
 
-        // Core модули (бизнес-логика, кэш, валидация)
+        // Core modules (business logic, cache, validation)
         core: [
-            // I18n конфигурация (загружается первой, т.к. using в tooltips и messages)
+            // I18n configuration (loaded first, used in tooltips and messages)
             {
                 id: 'i18n-config',
                 src: 'core/config/i18n-config.js',
@@ -125,7 +125,7 @@
                 deps: [],
                 category: 'core'
             },
-            // Cache модули
+            // Cache modules
             {
                 id: 'storage-layers',
                 src: 'core/cache/storage-layers.js',
@@ -175,7 +175,7 @@
                 deps: ['cache-manager'],
                 category: 'core'
             },
-            // Validation модули
+            // Validation modules
             {
                 id: 'validation-schemas',
                 src: 'core/validation/schemas.js',
@@ -298,7 +298,7 @@
                 deps: ['tooltips-config', 'i18n-config'],
                 category: 'core'
             },
-            // Data Providers (for работы с внешними источниками данных о монетах)
+            // Data Providers (for working with external sources of coin data)
             {
                 id: 'base-data-provider',
                 src: 'core/api/data-providers/base-provider.js',
@@ -405,7 +405,7 @@
                 type: 'local',
                 deps: [],
                 category: 'core'
-                // Условие удалено - config нужен for auth и cloudSync
+                // Condition removed - config needed for auth and cloudSync
             },
             {
                 id: 'postgres-config',
@@ -592,7 +592,7 @@
             }
         ],
 
-        // Шаблоны (загружаются до Vue.js)
+        // Templates (loaded before Vue.js)
         templates: [
             {
                 id: 'sortable-header-template',
@@ -731,7 +731,7 @@
             }
         ],
 
-        // Внешние библиотеки (загружаются после шаблонов, до компонентов)
+        // External libraries (loaded after templates, before components)
         libraries: [
             {
                 id: 'vue',
@@ -742,9 +742,9 @@
             }
         ],
 
-        // Vue компоненты (загружаются после Vue.js)
+        // Vue components (loaded after Vue.js)
         components: [
-            // Утилиты for компонентов
+            // Component utilities
             {
                 id: 'messages-store',
                 src: 'shared/utils/messages-store.js',
@@ -752,7 +752,7 @@
                 deps: ['vue'],
                 category: 'components'
             },
-            // Shared компоненты
+            // Shared components
             {
                 id: 'coin-block',
                 src: 'shared/components/coin-block.js',
@@ -972,8 +972,8 @@
                 src: 'app/components/session-log-modal-body.js',
                 type: 'local',
                 deps: ['vue', 'modal', 'event-bus'],
-                // session-log-store загружается синхронно в index.html ДО модульной системы,
-                // поэтому не указываем его как зависимость (он уже доступен глобально)
+                // session-log-store loads synchronously in index.html BEFORE module system,
+                // so we don't list it as a dependency (it is already globally available)
                 category: 'components'
             },
             {
@@ -992,7 +992,7 @@
             }
         ],
 
-        // Приложение (загружается последним)
+        // Application (loaded last)
         app: [
             {
                 id: 'app-ui-root',

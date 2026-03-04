@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @skill is/skills/arch-testing-ci
+ * @skill id:sk-d6777d
  *
  * Testing matrix runner — executes named gate profiles.
  *

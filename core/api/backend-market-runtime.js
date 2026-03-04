@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Composition root for the backend market subsystem. Assembles all dependencies.
  * @causality #for-composition-root
  */

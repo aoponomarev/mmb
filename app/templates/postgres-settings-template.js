@@ -6,8 +6,8 @@
  * PURPOSE: Template for postgres-settings component.
  *
  * REFERENCES:
- * - Компонент: app/components/postgres-settings.js
- * - Принципы шаблонов: is/skills/arch-foundation
+ * - Component: app/components/postgres-settings.js
+ * - Template principles: id:sk-483943
  */
 
 (function() {

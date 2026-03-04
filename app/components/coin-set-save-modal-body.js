@@ -5,10 +5,10 @@
  *
  * PURPOSE: Form for saving selected coins into a named set.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Skill: app/skills/ux-principles
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * Skill: id:sk-e0b8f3
  *
  * FEATURES:
  * - Form for entering coin set name
@@ -401,7 +401,7 @@ window.coinSetSaveModalBody = {
                 // Update button state
                 this.updateDraftButton();
 
-                // Обновляем Draft набор в модальном окне загрузки (если оно открыто)
+                // Update Draft set in load modal (if open)
                 if (window.eventBus) {
                     window.eventBus.emit('draft-set-updated');
                 }
@@ -410,7 +410,7 @@ window.coinSetSaveModalBody = {
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
-                        text: `Ошибка сохранения в Draft: ${error.message || 'Неизвестная ошибка'}`,
+                        text: `Ошибка сохранения в Draft: ${error.message || 'Unknown error'}`,
                         scope: 'global',
                         duration: 5000
                     });

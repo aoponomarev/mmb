@@ -2,7 +2,7 @@
  * ================================================================================================
  * CACHE CONFIG - Caching configuration
  * ================================================================================================
- * @skill core/skills/cache-layer
+ * @skill id:sk-3c832d
  *
  * PURPOSE: Centralized TTL, schema versions and caching strategy management.
  * SSOT — do not duplicate TTL values in components.
@@ -35,11 +35,11 @@
  * Schema versioning differs from app versioning (prefix v:{hash}:).
  *
  * USAGE:
- * cacheConfig.getTTL('coins-list') // 86400000 (1 день)
+ * cacheConfig.getTTL('coins-list') // 86400000 (1 day)
  * cacheConfig.getStrategy('icons-cache') // 'cache-first'
  * cacheConfig.getVersion('portfolios') // '1.0.0'
  *
- * REFERENCE: Caching principles: core/skills/cache-layer
+ * REFERENCE: Caching principles: id:sk-3c832d
  */
 
 (function() {
@@ -70,18 +70,18 @@
 
     // TTL in milliseconds
     const TTL = {
-        'icons-cache': 60 * 60 * 1000,           // 1 час
-        'coins-list': 24 * DURATIONS.HOUR,       // 1 день
+        'icons-cache': 60 * 60 * 1000,           // 1 hour
+        'coins-list': 24 * DURATIONS.HOUR,       // 1 day
         'top-coins': 60 * 60 * 1000,             // 1 hour (max coin sets cache)
         'top-coins-by-market-cap': TOP_COINS_REFRESH_WINDOW_MS,  // 2h (top 250 by market cap)
         'top-coins-by-volume': TOP_COINS_REFRESH_WINDOW_MS,      // 2h (top 250 by volume)
         'active-coin-set-data': TOP_COINS_REFRESH_WINDOW_MS,     // 2h (full data of active coin set)
-        'market-metrics': 60 * DURATIONS.HOUR,   // 1 час
-        'vix-index': 24 * 60 * 60 * 1000,        // 24 часа (VIX индекс волатильности)
-        'fear-greed-index': 24 * 60 * 60 * 1000,  // 24 часа (Fear & Greed Index)
-        'api-cache': 5 * 60 * 1000,              // 5 минут
-        'time-series': 60 * DURATIONS.HOUR,       // 1 час
-        'history': 24 * DURATIONS.HOUR,           // 1 день
+        'market-metrics': 60 * DURATIONS.HOUR,   // 1 hour
+        'vix-index': 24 * 60 * 60 * 1000,        // 24 hours (VIX volatility index)
+        'fear-greed-index': 24 * 60 * 60 * 1000,  // 24 hours (Fear & Greed Index)
+        'api-cache': 5 * 60 * 1000,              // 5 minutes
+        'time-series': 60 * DURATIONS.HOUR,       // 1 hour
+        'history': 24 * DURATIONS.HOUR,           // 1 day
         'portfolios': null,                       // No TTL (local data)
         'strategies': null,                       // No TTL (local data)
         'settings': null,                         // No TTL
@@ -125,7 +125,7 @@
     };
 
     /**
-     * Get TTL for ключа
+     * Get TTL for key
      * @param {string} key - cache key
      * @returns {number|null} - TTL in ms or null
      */
@@ -134,7 +134,7 @@
     }
 
     /**
-     * Get версию схемы for ключа
+     * Get schema version for key
      * @param {string} key - cache key
      * @returns {string} - version
      */
@@ -143,7 +143,7 @@
     }
 
     /**
-     * Get стратегию кэширования for ключа
+     * Get caching strategy for key
      * @param {string} key - cache key
      * @returns {string} - strategy
      */

@@ -6,9 +6,9 @@
  * PURPOSE: SSOT for отображения одного системного сообщения.
  * Используется компонентом cmp-system-messages for рендеринга каждого сообщения.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * USAGE:
  * <cmp-system-message

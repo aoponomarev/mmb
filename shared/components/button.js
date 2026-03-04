@@ -7,7 +7,7 @@
  * размеров, состояний, адаптивности и детерминированных хэшей экземпляров.
  *
  * Обработка событий:
- * // @skill-anchor is/skills/process-code-documentation #for-template-logic-separation #not-doc-duplication
+ * // @skill-anchor id:sk-f449b3 #for-template-logic-separation #not-doc-duplication
  * Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/button-template.js`
  *
  * API КОМПОНЕНТА:
@@ -203,8 +203,8 @@ window.cmpButton = {
                 baseClasses.push(...extraClasses);
             }
 
-            // @skill-anchor app/skills/component-classes-management #for-classes-add-remove #for-classes-merge-order
-            // @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+            // @skill-anchor id:sk-add9a6 #for-classes-add-remove #for-classes-merge-order
+            // @skill-anchor id:sk-cb75ec #for-utility-availability-check
             // Управление классами через classesAdd и classesRemove
             if (!window.classManager) {
                 console.error('classManager not found in buttonClasses');
@@ -385,7 +385,7 @@ window.cmpButton = {
             });
         },
 
-        // @skill-anchor app/skills/vue-implementation-patterns #for-vue-comment-node-fallback #not-dom-in-computed
+        // @skill-anchor id:sk-cb75ec #for-vue-comment-node-fallback #not-dom-in-computed
         // Get родительский контекст (класс avto-* или ID родителя)
         // Вызывается из computed, поэтому $el can be еще не доступен
         getParentContext() {
@@ -606,7 +606,7 @@ window.cmpButton = {
     },
 
     updated() {
-        // @skill-anchor app/skills/reactive-localization #for-tooltip-reactivity
+        // @skill-anchor id:sk-502074 #for-tooltip-reactivity
         // Обновляем Bootstrap tooltips при изменении title (например, при смене языка)
         if (this._touchTooltips && this._touchTooltips.length > 0) {
             this.$nextTick(() => {

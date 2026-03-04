@@ -3,7 +3,7 @@
  * Skills health trend tracker.
  * Collects health snapshot metrics and appends to logs/skills-health-trend.jsonl.
  *
- * @skill is/skills/arch-foundation
+ * @skill id:sk-483943
  */
 import { appendFileSync, existsSync, readFileSync, mkdirSync } from "node:fs";
 import { execSync } from "node:child_process";

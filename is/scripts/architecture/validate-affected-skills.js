@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-code-anchors
+ * @skill id:sk-8991cd
  * @description Outputs affected skills and causality hashes from staged files (git diff --cached).
  * Does not block preflight; human decides whether to update skills before commit.
  */

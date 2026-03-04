@@ -1,6 +1,6 @@
 /**
- * @skill is/skills/arch-backend-core
- * @skill is/skills/process-env-sync
+ * @skill id:sk-5c0ef8
+ * @skill id:sk-918276
  *
  * Market Snapshot HTTP client — security boundary, request validation, backend error handling.
  */

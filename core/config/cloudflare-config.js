@@ -2,7 +2,7 @@
  * ================================================================================================
  * CLOUDFLARE CONFIG - Cloudflare Workers API configuration
  * ================================================================================================
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PURPOSE: SSOT for all Cloudflare Workers API parameters.
  * Base URL, endpoints for portfolios, datasets, auth.
@@ -26,9 +26,9 @@
  * }
  *
  * REFERENCES:
- * - SSOT principles: `app/skills/ux-principles`
- * - Integration plan: `core/skills/config-contracts`
- * - Cloudflare infrastructure: `core/skills/config-contracts`
+ * - SSOT principles: id:sk-e0b8f3
+ * - Integration plan: id:sk-02d3ea
+ * - Cloudflare infrastructure: id:sk-02d3ea
  */
 
 (function() {

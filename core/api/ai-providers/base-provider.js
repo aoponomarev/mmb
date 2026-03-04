@@ -5,11 +5,11 @@
  *
  * PURPOSE: Base class for all AI providers (YandexGPT, etc.)
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * Provides unified interface for working with different providers.
  *
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * USAGE:
  * Extend this class to create new providers:

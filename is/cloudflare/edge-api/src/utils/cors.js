@@ -4,11 +4,11 @@
  * ================================================================================================
  *
  * PURPOSE: Централизованная обработка CORS заголовков for всех ответов Workers.
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * PRINCIPLES:
  * - Все ответы должны включать CORS заголовки
- * - Поддержка preflight OPTIONS запросов
+ * - Support preflight OPTIONS запросов
  * - Настраиваемые allowed origins (for продакшена можно ограничить)
  *
  * USAGE:
@@ -17,7 +17,7 @@
  * // Добавление заголовков к ответу
  * const response = new Response(data, { headers: addCorsHeaders() });
  *
- * // Обработка preflight запроса
+ * // Handle preflight запроса
  * if (request.method === 'OPTIONS') {
  *   return handleOptions(request);
  * }
@@ -27,10 +27,10 @@
  * CORS заголовки for всех ответов
  */
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // Разрешить любой источник for разработки
+  'Access-Control-Allow-Origin': '*', // Разрешить любой source for разработки
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400', // Кэширование preflight запросов на 24 часа
+  'Access-Control-Max-Age': '86400', // Cache preflight запросов на 24 часа
 };
 
 /**
@@ -67,8 +67,8 @@ export function addCorsHeaders(existingHeaders = null, options = {}) {
 }
 
 /**
- * Обработка preflight OPTIONS запросов
- * @param {Request} request - Входящий запрос
+ * Handle preflight OPTIONS запросов
+ * @param {Request} request - Incoming request
  * @returns {Response} Ответ с CORS заголовками
  */
 export function handleOptions(request) {

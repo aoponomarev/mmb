@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Transport adapter for Market Snapshot. Maps internal domain responses and errors to transport-friendly format.
  * @causality #for-layer-separation
  */

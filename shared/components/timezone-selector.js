@@ -5,13 +5,13 @@
  *
  * PURPOSE: Переиспользуемый компонент выбора таймзоны for устранения дублирования разметки.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * ПРОБЛЕМА: Разметка выбора таймзоны (список опций) дублировалась в нескольких местах
  * (статические примеры модальных окон, реальные модальные окна), что нарушало принцип
- * "единого источника правды" (Single Source of Truth).
+ * "единого sourceа правды" (Single Source of Truth).
  *
  * РЕШЕНИЕ: Вынос разметки выбора таймзоны в отдельный переиспользуемый компонент.
  * Все инстансы модальных окон используют один и тот же компонент, что гарантирует

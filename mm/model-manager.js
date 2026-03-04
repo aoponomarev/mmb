@@ -1,11 +1,11 @@
 /**
  * ================================================================================================
- * MODEL MANAGER - Менеджер математических моделей
+ * MODEL MANAGER - Math models manager
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  * Doc: docs/A_MATH_MODELS.md
  *
- * PURPOSE: Регистрация, переключение и управление активной математической моделью.
+ * PURPOSE: Register, switch and manage active math model.
  */
 
 (function() {
@@ -18,26 +18,26 @@
         }
 
         /**
-         * Регистрация новой модели
-         * @param {BaseModelCalculator} model - Объект модели
+         * Register new model
+         * @param {BaseModelCalculator} model - Model instance
          */
         registerModel(model) {
             if (!model || !model.id) {
-                console.error('ModelManager: некорректная модель for регистрации', model);
+                console.error('ModelManager: invalid model for registration', model);
                 return;
             }
             this.models.set(model.id, model);
-            // Регистрация модели без лишних логов (меньше шума в консоли)
+            // Register model without extra logs (less console noise)
 
-            // Если это первая модель, делаем ее активной
+            // If first model, make it active
             if (!this.activeModelId) {
                 this.activeModelId = model.id;
             }
         }
 
         /**
-         * Установка активной модели
-         * @param {string} modelId - ID модели
+         * Set active model
+         * @param {string} modelId - Model ID
          */
         setActiveModel(modelId) {
             if (this.models.has(modelId)) {
@@ -45,7 +45,7 @@
                 return true;
             }
 
-            // Пытаемся нормализовать через modelsConfig (legacyIds)
+            // Try normalizing via modelsConfig (legacyIds)
             if (window.modelsConfig && typeof window.modelsConfig.getModel === 'function') {
                 const resolved = window.modelsConfig.getModel(modelId);
                 const resolvedId = resolved?.id || null;
@@ -55,12 +55,12 @@
                 }
             }
 
-            console.warn(`ModelManager: модель с ID "${modelId}" не найдена`);
+            console.warn(`ModelManager: model with ID "${modelId}" not found`);
             return false;
         }
 
         /**
-         * Get активную модель
+         * Get active model
          * @returns {BaseModelCalculator}
          */
         getActiveModel() {
@@ -68,7 +68,7 @@
         }
 
         /**
-         * Get ID активной модели
+         * Get active model ID
          * @returns {string|null}
          */
         getActiveModelId() {
@@ -76,7 +76,7 @@
         }
 
         /**
-         * Get все зарегистрированные модели
+         * Get all registered models
          * @returns {Array}
          */
         getAllModels() {
@@ -84,19 +84,19 @@
         }
 
         /**
-         * Основной метод расчета через активную модель
+         * Main calc via active model
          */
         calculateMetrics(coins, params) {
             const model = this.getActiveModel();
             if (!model) {
-                console.error('ModelManager: активная модель not setа');
+                console.error('ModelManager: active model not set');
                 return { coins: [], marketData: {} };
             }
             return model.calculateMetrics(coins, params);
         }
 
         /**
-         * Прокси-методы активной модели
+         * Proxy methods of active model
          */
         calculateMDN(hours, coins, indicators) {
             const model = this.getActiveModel();
@@ -147,7 +147,7 @@
         }
 
         /**
-         * Get рекомендуемый метод AGR for активной модели
+         * Get recommended AGR method for active model
          * @param {Object} params
          * @returns {string|null}
          */
@@ -163,7 +163,7 @@
     // Export to global scope
     window.modelManager = new ModelManager();
 
-    // Автоматическая регистрация существующих моделей (если они уже loadedы)
+    // Auto-register existing models (if already loaded)
     if (window.MedianAir260101Calculator) {
         window.modelManager.registerModel(window.MedianAir260101Calculator);
     }

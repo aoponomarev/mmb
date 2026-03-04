@@ -2,11 +2,11 @@
  * ================================================================================================
  * MAIN ROUTER - Главный роутер for Cloudflare Workers API
  * ================================================================================================
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PURPOSE: Обработка всех входящих запросов и маршрутизация к соответствующим handlers.
  *
- * МАРШРУТЫ:
+ * ROUTES:
  * - /auth/* → OAuth endpoints (auth.js)
  * - /api/portfolios/* → Portfolios API (portfolios.js)
  * - /api/coin-sets/* → Coin Sets API (coin-sets.js)
@@ -17,7 +17,7 @@
  * - /api/settings/* → App Settings (settings.js, KV-backed)
  * - /health → Health check endpoint
  *
- * @param {Request} request - Входящий HTTP request
+ * @param {Request} request - Incoming HTTP request
  * @param {Object} env - Environment variables и bindings (DB, API_CACHE, secrets)
  * @returns {Promise<Response>} HTTP ответ
  */
@@ -35,7 +35,7 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Обработка preflight OPTIONS запросов
+    // Handle preflight OPTIONS запросов
     if (request.method === 'OPTIONS') {
       return handleOptions(request);
     }

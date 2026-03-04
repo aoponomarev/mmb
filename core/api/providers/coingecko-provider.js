@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Minimal CoinGecko provider for market data. 
  * No fallback chains; all external failures are explicit (Fail-Fast).
  */
@@ -102,7 +102,7 @@ export class CoinGeckoProvider {
         
         for (let attempt = 1; attempt <= this.maxAttempts; attempt += 1) {
             try {
-                // @skill-anchor core/skills/api-layer #for-fail-fast
+                // @skill-anchor id:sk-bb7c8e #for-fail-fast
                 const response = await this.fetchFn(url, { signal: AbortSignal.timeout(this.timeoutMs) });
                 
                 if (!response.ok) {

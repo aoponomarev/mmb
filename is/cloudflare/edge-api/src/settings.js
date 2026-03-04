@@ -2,18 +2,18 @@
  * ================================================================================================
  * SETTINGS - Хранение настроек приложения в Cloudflare KV
  * ================================================================================================
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PURPOSE: Замена continue-wrapper снимков (JSON файлы на диске) на облачное хранилище.
  * Настройки хранятся в KV namespace SETTINGS, доступны с любого устройства.
  *
- * МАРШРУТЫ:
+ * ROUTES:
  * - GET  /api/settings        — получить all settings (for импорта в UI)
  * - POST /api/settings        — сохранить all settings (экспорт из UI)
  * - GET  /api/settings/:key   — получить одно поле
  * - PUT  /api/settings/:key   — установить одно поле
  *
- * БЕЗОПАСНОСТЬ:
+ * SECURITY:
  * - Все запросы требуют заголовок Authorization: Bearer <githubToken>
  * - githubToken хранится как Cloudflare Secret (SETTINGS_TOKEN)
  * - При отсутствии SETTINGS_TOKEN эндпоинт недоступен (fail-safe)
@@ -81,7 +81,7 @@ async function readSettings(env, authContext) {
 }
 
 /**
- * Нормализовать и очистить входящий payload настроек.
+ * Normalize и очистить входящий payload настроек.
  * Принимаем только известные поля — защита от записи мусора в KV.
  */
 function normalizeSettings(data) {

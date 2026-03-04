@@ -1,33 +1,33 @@
 /**
  * ================================================================================================
- * MODELS CONFIG - Реестр математических моделей и их дефолтных параметров
+ * MODELS CONFIG - Registry of math models and their default parameters
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  * Doc: docs/A_MATH_MODELS.md
  *
- * PURPOSE: SSOT for метаданных математических моделей и базовых параметров расчета.
+ * PURPOSE: SSOT for math model metadata and base calculation parameters.
  *
  * PRINCIPLES:
- * - Централизация списка моделей и их атрибутов (id, название, описание, калькулятор, признак дефолта)
- * - Централизация дефолтных параметров расчета (horizonDays, mdnHours, agrMethod)
- * - Избежание хардкода параметров в компонентах и сторонах хранения
+ * - Centralized list of models and their attributes (id, name, description, calculator, default flag)
+ * - Centralized default calculation parameters (horizonDays, mdnHours, agrMethod)
+ * - Avoid hardcoding parameters in components and storage layers
  *
  * REFERENCES:
- * - Documentation метрик: core/skills/domain-portfolio
- * - Архитектура моделей: is/skills/arch-foundation (раздел "Математические модели и портфели")
+ * - Metrics documentation: id:sk-c3d639
+ * - Models architecture: id:sk-483943 (section "Math models and portfolios")
  */
 
 (function() {
     'use strict';
 
-    // Реестр математических моделей
+    // Registry of math models
     const MATH_MODELS = Object.freeze({
         'Median/AIR/260101': Object.freeze({
             id: 'Median/AIR/260101',
             name: 'Медиана (A.I.R.) 26.01.01',
             description: 'Каноническая версия: Alignment, Impulse, Risk (фиксированная)',
             calculator: 'MedianAir260101Calculator',
-            // @skill-anchor core/skills/metrics-air-model #for-model-extensibility #for-air-math-contract
+            // @skill-anchor id:sk-22dc19 #for-model-extensibility #for-air-math-contract
             legacyIds: ['mmMedian'],
             meta: Object.freeze({
                 id: 'Median/AIR/260101',
@@ -134,10 +134,10 @@
             }),
             isDefault: false
         })
-        // Будущие модели добавляются здесь
+        // Future models are added here
     });
 
-    // Дефолтные параметры модели
+    // Default model parameters
     const DEFAULT_PARAMS = Object.freeze({
         horizonDays: 2,
         mdnHours: 4,

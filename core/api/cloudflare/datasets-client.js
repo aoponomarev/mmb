@@ -5,10 +5,10 @@
  *
  * PURPOSE: Browser client for time series and metrics via Cloudflare Workers API.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * FEATURES:
  * - Automatic Authorization header with JWT token
@@ -195,7 +195,7 @@
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('metrics', { coin, date });
             if (!url) {
-                throw new Error('Не удалось получить URL for метрик');
+                throw new Error('Не удалось получить URL for metrics');
             }
 
             const response = await fetchWithAuth(url, {
@@ -221,7 +221,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'datasets-client.getMetrics',
-                    userMessage: 'Ошибка при загрузке метрик'
+                    userMessage: 'Ошибка при загрузке metrics'
                 });
             }
             throw error;
@@ -237,12 +237,12 @@
     async function saveMetrics(metricsData) {
         try {
             if (!Array.isArray(metricsData) || metricsData.length === 0) {
-                throw new Error('Массив данных метрик обязателен');
+                throw new Error('Массив данных metrics обязателен');
             }
 
             const url = window.cloudflareConfig.getDatasetsEndpoint('metrics');
             if (!url) {
-                throw new Error('Не удалось получить URL for сохранения метрик');
+                throw new Error('Не удалось получить URL for сохранения metrics');
             }
 
             const response = await fetchWithAuth(url, {
@@ -269,7 +269,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'datasets-client.saveMetrics',
-                    userMessage: 'Ошибка при сохранении метрик'
+                    userMessage: 'Ошибка при сохранении metrics'
                 });
             }
             throw error;

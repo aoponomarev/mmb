@@ -1,37 +1,37 @@
 /**
  * ================================================================================================
- * MENUS CONFIG - Конфигурация выпадающих меню
+ * MENUS CONFIG - Dropdown menus configuration
  * ================================================================================================
- * Skill: app/skills/ux-principles
+ * Skill: id:sk-e0b8f3
  *
- * PURPOSE: SSOT for всех пунктов выпадающих меню в приложении.
- * Используется в index.html, test.html и других местах for единообразия.
+ * PURPOSE: SSOT for all dropdown menu items in the application.
+ * Used in index.html, test.html and other places for consistency.
  *
  * PRINCIPLES:
- * - Все пункты меню are defined here
- * - Порядок пунктов определяется порядком в массивах
- * - Условное отображение через condition (optional)
- * - Заголовки получаются из modalsConfig for модальных окон
- * - Изменение меню в одном месте автоматически синхронизируется везде
+ * - All menu items are defined here
+ * - Item order is determined by array order
+ * - Conditional display via condition (optional)
+ * - Titles are obtained from modalsConfig for modal windows
+ * - Menu changes in one place automatically sync everywhere
  *
  * PRINCIPLES:
  * {
- *   id: 'unique-id',              // Уникальный ID пункта
- *   title: 'Заголовок' | { modalId: 'modalId' }, // Заголовок напрямую или через modalId
- *   handler: 'methodName',         // Название метода в app-ui-root
- *   condition: () => true          // Опциональная функция for условного отображения
+ *   id: 'unique-id',              // Unique item ID
+ *   title: 'Title' | { modalId: 'modalId' }, // Title directly or via modalId
+ *   handler: 'methodName',         // Method name in app-ui-root
+ *   condition: () => true          // Optional function for conditional display
  * }
  *
  * REFERENCES:
- * - Принципы единого источника правды: `app/skills/ux-principles`
- * - Конфигурация модальных окон: core/config/modals-config.js
+ * - SSOT principles: id:sk-e0b8f3
+ * - Modal windows configuration: core/config/modals-config.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Пункты меню настроек (Settings)
+     * Settings menu items (Settings)
      */
     const SETTINGS_MENU_ITEMS = [
         {
@@ -41,7 +41,7 @@
         },
         {
             id: 'export-portfolios-light',
-            title: 'Экспорт портфелей',
+            title: 'Экспорт portfolios',
             handler: 'handleExportPortfoliosLight'
         },
         {
@@ -51,7 +51,7 @@
         },
         {
             id: 'import-portfolios',
-            title: 'Импорт портфелей',
+            title: 'Импорт portfolios',
             handler: 'openPortfoliosImportModal'
         },
         {
@@ -83,8 +83,8 @@
     ];
 
     /**
-     * Пункты основного меню (Menu)
-     * Используется for демонстрационных целей в test.html
+     * Main menu items (Menu)
+     * Used for demo purposes in test.html
      */
     const MAIN_MENU_ITEMS = [
         {
@@ -105,7 +105,7 @@
     ];
 
     /**
-     * Пункты меню математических моделей (2 уровень)
+     * Math models menu items (2nd level)
      */
     const MATH_MODELS_MENU_ITEMS = [
         {
@@ -132,8 +132,8 @@
     ];
 
     /**
-     * Пункты меню сортировки монет (Coin column dropdown)
-     * SSOT for выпадающего меню заголовка колонки "Coin"
+     * Coin sort menu items (Coin column dropdown)
+     * SSOT for Coin column header dropdown menu
      */
     const COIN_SORT_MENU_ITEMS = [
         {
@@ -164,8 +164,8 @@
     ];
 
     /**
-     * Пункты меню действий над списком монет (dropdown в header таблицы)
-     * SSOT for выпадающего меню с действиями над выбранными/видимыми монетами.
+     * Coin action menu items (dropdown in table header)
+     * SSOT for dropdown menu with actions on selected/visible coins
      */
     const COIN_ACTION_MENU_ITEMS = [
         {
@@ -219,9 +219,9 @@
     ];
 
     /**
-     * Get заголовок пункта меню
-     * @param {string|Object} titleConfig - Заголовок напрямую или объект с modalId
-     * @returns {string} - Заголовок пункта меню
+     * Get menu item title
+     * @param {string|Object} titleConfig - Title directly or object with modalId
+     * @returns {string} - Menu item title
      */
     function getMenuItemTitle(titleConfig) {
         if (typeof titleConfig === 'string') {
@@ -234,8 +234,8 @@
     }
 
     /**
-     * Get отфильтрованные пункты меню настроек
-     * @returns {Array} - Массив пунктов меню с примененными условиями
+     * Get filtered settings menu items
+     * @returns {Array} - Array of menu items with conditions applied
      */
     function getSettingsMenuItems() {
         return SETTINGS_MENU_ITEMS.filter(item => {
@@ -252,8 +252,8 @@
     }
 
     /**
-     * Get отфильтрованные пункты основного меню
-     * @returns {Array} - Массив пунктов меню с примененными условиями
+     * Get filtered main menu items
+     * @returns {Array} - Array of menu items with conditions applied
      */
     function getMainMenuItems() {
         return MAIN_MENU_ITEMS.filter(item => {
@@ -270,8 +270,8 @@
     }
 
     /**
-     * Get пункты меню сортировки монет
-     * @returns {Array} - Массив пунктов меню сортировки монет
+     * Get coin sort menu items
+     * @returns {Array} - Array of coin sort menu items
      */
     function getCoinSortMenuItems() {
         return COIN_SORT_MENU_ITEMS.filter(item => {
@@ -288,7 +288,7 @@
     }
 
     /**
-     * Get пункты меню действий над монетами (for dropdown в таблице)
+     * Get coin action menu items (for table dropdown)
      * @returns {Array}
      */
     function getCoinActionMenuItems() {
@@ -306,7 +306,7 @@
     }
 
     /**
-     * Get пункты меню математических моделей
+     * Get math models menu items
      * @returns {Array}
      */
     function getMathModelsMenuItems() {

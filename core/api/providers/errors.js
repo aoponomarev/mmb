@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Standard error models and HTTP status mapping for all providers and services.
  */
 

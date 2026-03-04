@@ -4,11 +4,11 @@
  * ================================================================================================
  *
  * PURPOSE: OAuth flow handling on server: code-to-token exchange, user persistence, JWT issuance.
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * ENDPOINTS:
- * - GET /auth/google — redirect to Google OAuth (не using, done on client)
- * - POST /auth/callback — обмен authorization code на JWT токен, user persistence в D1
+ * - GET /auth/google — redirect to Google OAuth (not used, done on client)
+ * - POST /auth/callback — exchange authorization code for JWT token, user persistence in D1
  * - GET /auth/me — get current user by JWT token
  * - POST /auth/logout — logout (optional, can be done on client)
  *
@@ -26,10 +26,10 @@ import { createUser, getUserByGoogleId, getUser } from './utils/d1-helpers.js';
 
 /**
  * Handle OAuth callback from Google
- * Supports GET (redirect from Google) и POST (call from client)
+ * Supports GET (redirect from Google) and POST (call from client)
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, GOOGLE_CLIENT_SECRET, JWT_SECRET)
- * @returns {Promise<Response>} JSON response с токеном или HTML with redirect
+ * @returns {Promise<Response>} JSON response with token or HTML with redirect
  */
 async function handleCallback(request, env) {
   try {
@@ -47,7 +47,7 @@ async function handleCallback(request, env) {
     let code, redirect_uri;
     let clientUrl = 'http://localhost:8787'; // Default for local development
 
-    // Support GET (redirect from Google) и POST (call from client)
+    // Support GET (redirect from Google) and POST (call from client)
     if (request.method === 'GET') {
       const url = new URL(request.url);
       code = url.searchParams.get('code');
@@ -58,12 +58,12 @@ async function handleCallback(request, env) {
         try {
           const stateObj = JSON.parse(stateParam);
           if (stateObj && stateObj.client_url) {
-            // Use provided URL directly (can be file:// или http://)
+            // Use provided URL directly (can be file:// or http://)
             clientUrl = stateObj.client_url;
             console.log('auth.handleCallback: extracted client_url from state:', clientUrl);
           }
         } catch (e) {
-          // state не JSON, используем default URL
+          // state not JSON, use default URL
           console.log('auth.handleCallback: state parse error, using default URL');
         }
       }
@@ -106,7 +106,7 @@ async function handleCallback(request, env) {
       );
     }
 
-    // Обмен code на access token от Google
+    // Exchange code for access token from Google
     const googleTokenResponse = await exchangeCodeWithGoogle(code, redirect_uri, env.GOOGLE_CLIENT_SECRET);
 
     if (!googleTokenResponse.access_token) {
@@ -116,7 +116,7 @@ async function handleCallback(request, env) {
       );
     }
 
-    // Получение данных пользователя от Google
+    // Get user data from Google
     console.log('auth.handleCallback: получение данных пользователя от Google');
     const userInfo = await getUserInfoFromGoogle(googleTokenResponse.access_token);
     console.log('auth.handleCallback: получен userInfo', {
@@ -126,7 +126,7 @@ async function handleCallback(request, env) {
       keys: userInfo ? Object.keys(userInfo) : []
     });
 
-    // Google API использует 'sub' вместо 'id' for идентификатора пользователя
+    // Google API uses 'sub' instead of 'id' for user identifier
     const googleUserId = userInfo?.sub || userInfo?.id;
 
     if (!userInfo || !googleUserId) {
@@ -137,7 +137,7 @@ async function handleCallback(request, env) {
       );
     }
 
-    // Сохранение или обновление пользователя в D1
+    // Save or update user in D1
     console.log('auth.handleCallback: поиск пользователя в D1', { googleUserId });
     let user = await getUserByGoogleId(env.DB, googleUserId);
 
@@ -167,14 +167,14 @@ async function handleCallback(request, env) {
       );
     }
 
-    // Создание JWT токена
+    // Create JWT token
     console.log('auth.handleCallback: создание JWT токена', {
       userId: user.id,
       email: user.email,
       hasJWTSecret: !!env.JWT_SECRET
     });
     
-    const EXPIRES_IN = 30 * 24 * 3600; // 30 дней
+    const EXPIRES_IN = 30 * 24 * 3600; // 30 days
     
     const jwtToken = await createToken(
       {
@@ -190,7 +190,7 @@ async function handleCallback(request, env) {
       tokenLength: jwtToken?.length
     });
 
-    // Возврат токена и данных пользователя
+    // Return token and user data
     const tokenData = {
       access_token: jwtToken,
       token_type: 'Bearer',
@@ -204,12 +204,12 @@ async function handleCallback(request, env) {
       },
     };
 
-    // Для GET запроса (redirect from Google) возвращаем HTML page с JavaScript
-    // которая сохранит токен и редиректит на клиентское приложение
+    // For GET request (redirect from Google) return HTML page with JavaScript
+    // that will save token and redirect to client app
     if (request.method === 'GET') {
-      // clientUrl уже извлечен из state параметра выше
+      // clientUrl already extracted from state param above
 
-      // HTML страница, которая сохранит токен в localStorage и редиректит на клиент
+      // HTML page that will save token in localStorage and redirect to client
       const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -220,10 +220,10 @@ async function handleCallback(request, env) {
     <h1>Авторизация успешна! Перенаправление...</h1>
     <script>
         try {
-            // Сохраняем токен в localStorage через postMessage (если это popup) или напрямую
+            // Save token in localStorage via postMessage (if popup) or directly
             const tokenData = ${JSON.stringify(tokenData)};
 
-            // Сохраняем токен в localStorage (работает независимо от origin)
+            // Save token in localStorage (works regardless of origin)
             try {
                 localStorage.setItem('auth-token', JSON.stringify(tokenData));
                 localStorage.setItem('auth-user', JSON.stringify(tokenData.user));
@@ -242,10 +242,10 @@ async function handleCallback(request, env) {
                 hasOpener: hasOpener
             });
 
-            // Пытаемся отправить postMessage обратно в исходное окно (если OAuth открыт через window.open)
+            // Try to send postMessage back to opener window (if OAuth opened via window.open)
             if (hasOpener) {
                 try {
-                    // Отправляем сообщение обратно в исходное окно
+                    // Send message back to opener window
                     window.opener.postMessage({
                         type: 'oauth-callback',
                         success: true,
@@ -254,14 +254,14 @@ async function handleCallback(request, env) {
 
                     console.log('postMessage отправлен в исходное окно');
 
-                    // Для http:// закрываем окно автоматически
+                    // For http:// close window automatically
                     if (!isFileProtocol) {
                         setTimeout(() => {
                             window.close();
                         }, 500);
                     }
 
-                    // Для file:// показываем сообщение, что можно закрыть
+                    // For file:// show message that window can be closed
                     if (isFileProtocol) {
                         document.body.innerHTML = \`
                             <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 50px auto; padding: 30px; text-align: center; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -288,15 +288,15 @@ async function handleCallback(request, env) {
                     }
                 } catch (e) {
                     console.error('Ошибка отправки postMessage:', e);
-                    // Fallback к обычной инструкции
+                    // Fallback to standard instruction
                     hasOpener = false;
                 }
             }
 
-            // Если нет opener (обычный редирект), используем старую логику
+            // If no opener (normal redirect), use legacy logic
             if (!hasOpener) {
-                // Для file:// протокола браузер блокирует редирект с https:// на file://
-                // Поэтому показываем инструкцию for ручного возврата
+                // For file:// protocol browser blocks redirect from https:// to file://
+                // So show instruction for manual return
                 if (isFileProtocol) {
                     document.body.innerHTML = \`
                         <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 50px auto; padding: 30px; text-align: center; background: #f9f9f9; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -339,7 +339,7 @@ async function handleCallback(request, env) {
                         </div>
                     \`;
                 } else {
-                    // Для http:// протокола выполняем обычный редирект
+                    // For http:// protocol perform normal redirect
                     console.log('Redirecting to:', targetUrl);
                     window.location.href = targetUrl;
                 }
@@ -352,7 +352,7 @@ async function handleCallback(request, env) {
 </body>
 </html>`;
 
-      // Создаем заголовки с CORS
+      // Create headers with CORS
       const headers = new Headers();
       headers.set('Content-Type', 'text/html; charset=UTF-8');
       const corsHeaders = getCorsHeaders();
@@ -366,7 +366,7 @@ async function handleCallback(request, env) {
       });
     }
 
-    // Для POST запроса возвращаем JSON
+    // For POST request return JSON
     return jsonResponse(tokenData);
   } catch (error) {
     console.error('auth.handleCallback error:', error);
@@ -377,9 +377,9 @@ async function handleCallback(request, env) {
       hasDB: !!env.DB
     });
 
-    // For GET return HTML с ошибкой
+    // For GET return HTML with error
     if (request.method === 'GET') {
-      const errorMessage = error.message || 'Неизвестная ошибка';
+      const errorMessage = error.message || 'Unknown error';
       const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -407,11 +407,11 @@ async function handleCallback(request, env) {
 }
 
 /**
- * Обмен authorization code на access token от Google
+ * Exchange authorization code for access token from Google
  * @param {string} code - Authorization code
  * @param {string} redirectUri - Redirect URI
  * @param {string} clientSecret - Google OAuth Client Secret
- * @returns {Promise<Object>} Токен от Google
+ * @returns {Promise<Object>} Token from Google
  */
 async function exchangeCodeWithGoogle(code, redirectUri, clientSecret) {
   const GOOGLE_CLIENT_ID = '926359695878-hr94rhkq1s30c3nqgkcbfcpr0537kt7i.apps.googleusercontent.com';
@@ -454,9 +454,9 @@ async function exchangeCodeWithGoogle(code, redirectUri, clientSecret) {
 }
 
 /**
- * Получение данных пользователя от Google
- * @param {string} accessToken - Access token от Google
- * @returns {Promise<Object>} Данные пользователя
+ * Get user data from Google
+ * @param {string} accessToken - Access token from Google
+ * @returns {Promise<Object>} User data
  */
 async function getUserInfoFromGoogle(accessToken) {
   const GOOGLE_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
@@ -494,7 +494,7 @@ async function getUserInfoFromGoogle(accessToken) {
  * Get current user by JWT token
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON response с данными пользователя
+ * @returns {Promise<Response>} JSON response with user data
  */
 async function handleMe(request, env) {
   if (request.method !== 'GET') {
@@ -530,19 +530,19 @@ async function handleMe(request, env) {
 }
 
 /**
- * Главный обработчик auth endpoints
+ * Main auth endpoints handler
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables
- * @param {string} path - Path запроса
- * @returns {Promise<Response>} HTTP ответ
+ * @param {string} path - Request path
+ * @returns {Promise<Response>} HTTP response
  */
 export async function handleAuth(request, env, path) {
-  // Обработка preflight OPTIONS запросов
+  // Handle preflight OPTIONS requests
   if (request.method === 'OPTIONS') {
     return handleOptions(request);
   }
 
-  // Маршрутизация по путям
+  // Route by path
   if (path === '/auth/callback') {
     return await handleCallback(request, env);
   } else if (path === '/auth/me') {

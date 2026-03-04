@@ -10,10 +10,10 @@ alwaysApply: false
 
 # Skill Anchor Protocol
 
-**Full reference:** `is/skills/process-code-anchors.md` (read via MCP for complete format and examples).
+**Full reference:** id:sk-8991cd (read via MCP for complete format and examples).
 
 ## Summary
-- **File-level:** `/** @skill path/to/skill */`
-- **Inline:** `// @skill-anchor skill-id #for-hash: reason`
-- Use hashes from `is/skills/causality-registry.md`.
+- **File-level:** `/** @skill id:sk-xxxxxx */`
+- **Inline:** `// @skill-anchor id:sk-xxxxxx #for-hash: reason`
+- Use hashes from id:sk-3b1519.
 - Add anchors for non-trivial architectural choices.

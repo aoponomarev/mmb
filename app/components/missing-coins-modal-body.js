@@ -4,7 +4,7 @@
     /**
      * MISSING COINS MODAL BODY
      * Shows missing coins, allows excluding or replacing by ticker lookup.
-     * Skill: app/skills/ux-principles
+     * Skill: id:sk-e0b8f3
      *
      * Props:
      * - missingCoins: Array<{ id, symbol?, name? }>

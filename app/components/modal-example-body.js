@@ -5,9 +5,9 @@
  *
  * PURPOSE: Demo of modal button management system.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * FEATURES:
  * - Button registration via inject modalApi
@@ -104,7 +104,7 @@ window.modalExampleBody = {
             this.initialData = JSON.parse(JSON.stringify(this.formData));
             console.log('Data saved:', this.formData);
 
-            // Закрываем модальное окно
+            // Close modal
             if (this.$parent.$refs && this.$parent.$refs.exampleModal) {
                 this.$parent.$refs.exampleModal.hide();
             }

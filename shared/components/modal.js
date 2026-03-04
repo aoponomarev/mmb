@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * MODAL COMPONENT - Компонент модального окна
+ * MODAL COMPONENT - Modal component
  * ================================================================================================
  *
  * PURPOSE: Vue-обёртка над Bootstrap Modal с полной проницаемостью for Bootstrap API.
  *
- * @skill-anchor app/skills/ui-architecture
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-318305
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * API КОМПОНЕНТА:
  *
@@ -50,7 +50,7 @@
  *     - Автоматически сбрасывается в обычное состояние при изменении любых полей формы
  *   - Кнопка "Сохранить" НЕ закрывает модальное окно напрямую: закрытие происходит только через крестик, клик вне модального окна или второй клик в состоянии "Сохранено, закрыть?"
  * - Заголовок модального окна: обязательное требование идентичности заголовка модального окна и текста пункта меню/кнопки/ссылки, которая его открывает
- *   - Заголовок определяется в `core/config/modals-config.js` (единый источник правды)
+ *   - Заголовок определяется в `core/config/modals-config.js` (SSOT)
  *   - Компонент поддерживает prop `title` for явной передачи заголовка
  *   - Если prop `title` не передан, заголовок автоматически получается из `modalsConfig` по `modalId`
  *   - Все пункты меню, кнопки и ссылки должны использовать `modalsConfig.getModalTitle(modalId)` for получения заголовка
@@ -256,7 +256,7 @@ window.cmpModal = {
                 ? config.locations
                 : [config.locations || 'footer'];
 
-            // Валидация locations
+            // Validation locations
             const validLocations = ['header', 'footer'];
             const invalidLocations = locations.filter(loc => !validLocations.includes(loc));
             if (invalidLocations.length > 0) {
@@ -417,7 +417,7 @@ window.cmpModal = {
     },
 
     beforeUnmount() {
-        // @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-dispose
+        // @skill-anchor id:sk-eeb23d #for-bootstrap-dispose
         // Уничтожение Bootstrap Modal for предотвращения утечек памяти
         if (this.modalInstance) {
             this.modalInstance.dispose();

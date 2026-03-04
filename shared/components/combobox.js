@@ -4,9 +4,9 @@
 // =========================
 // PURPOSE: Переиспользуемый компонент комбобокса с поддержкой:
 //
-// @skill-anchor app/skills/component-classes-management #for-classes-add-remove
-// @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
-// @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+// @skill-anchor id:sk-add9a6 #for-classes-add-remove
+// @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+// @skill-anchor id:sk-cb75ec #for-utility-availability-check
 // - Автодополнения и фильтрации
 // - Клавиатурной навигации
 // - Выбора значения из списка
@@ -45,7 +45,7 @@
 // - virtualItemHeight (Number, default: 38) — высота элемента for виртуального скроллинга (px)
 // Группировка:
 // - groupBy (String | Function, default: null) — поле for группировки или функция (структура заложена for будущей реализации)
-// Валидация:
+// Validation:
 // - required (Boolean, default: false) — обязательное поле
 // - pattern (String, default: null) — паттерн for валидации (HTML5)
 // - disabled (Boolean, default: false) — отключить компонент
@@ -93,7 +93,7 @@
 // АРХИТЕКТУРА:
 // - Шаблон: shared/templates/combobox-template.js (ID: combobox-template)
 // - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - See also: app/skills/ux-principles
+// - See also: id:sk-e0b8f3
 
 window.cmpCombobox = {
     template: '#combobox-template',
@@ -188,7 +188,7 @@ window.cmpCombobox = {
             default: null // поле for группировки или функция (структура заложена)
         },
 
-        // === Валидация ===
+        // === Validation ===
         required: {
             type: Boolean,
             default: false

@@ -5,8 +5,8 @@
  *
  * PURPOSE: Browser client for portfolio CRUD operations via Cloudflare Workers API.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
  * FEATURES:
  * - Automatic Authorization header with JWT token
@@ -88,7 +88,7 @@
         try {
             const url = window.cloudflareConfig.getPortfoliosEndpoint('list');
             if (!url) {
-                throw new Error('Не удалось получить URL for списка портфелей');
+                throw new Error('Не удалось получить URL for списка portfolios');
             }
 
             const response = await fetchWithAuth(url, {
@@ -107,7 +107,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.getPortfolios',
-                    userMessage: 'Ошибка при загрузке портфелей'
+                    userMessage: 'Ошибка при загрузке portfolios'
                 });
             }
             throw error;
@@ -123,12 +123,12 @@
     async function getPortfolio(portfolioId) {
         try {
             if (!portfolioId) {
-                throw new Error('ID портфеля обязателен');
+                throw new Error('ID portfolioя обязателен');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('get', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for портфеля');
+                throw new Error('Не удалось получить URL for portfolioя');
             }
 
             const response = await fetchWithAuth(url, {
@@ -150,7 +150,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.getPortfolio',
-                    userMessage: 'Ошибка при загрузке портфеля'
+                    userMessage: 'Ошибка при загрузке portfolioя'
                 });
             }
             throw error;
@@ -166,12 +166,12 @@
     async function createPortfolio(portfolioData) {
         try {
             if (!portfolioData || !portfolioData.name) {
-                throw new Error('Название портфеля обязательно');
+                throw new Error('Название portfolioя обязательно');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('create');
             if (!url) {
-                throw new Error('Не удалось получить URL for создания портфеля');
+                throw new Error('Не удалось получить URL for создания portfolioя');
             }
 
             const response = await fetchWithAuth(url, {
@@ -195,7 +195,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.createPortfolio',
-                    userMessage: 'Ошибка при создании портфеля'
+                    userMessage: 'Ошибка при создании portfolioя'
                 });
             }
             throw error;
@@ -212,7 +212,7 @@
     async function updatePortfolio(portfolioId, updates) {
         try {
             if (!portfolioId) {
-                throw new Error('ID портфеля обязателен');
+                throw new Error('ID portfolioя обязателен');
             }
 
             if (!updates || Object.keys(updates).length === 0) {
@@ -221,7 +221,7 @@
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('update', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for обновления портфеля');
+                throw new Error('Не удалось получить URL for обновления portfolioя');
             }
 
             const response = await fetchWithAuth(url, {
@@ -244,7 +244,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.updatePortfolio',
-                    userMessage: 'Ошибка при обновлении портфеля'
+                    userMessage: 'Ошибка при обновлении portfolioя'
                 });
             }
             throw error;
@@ -260,12 +260,12 @@
     async function deletePortfolio(portfolioId) {
         try {
             if (!portfolioId) {
-                throw new Error('ID портфеля обязателен');
+                throw new Error('ID portfolioя обязателен');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('delete', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for удаления портфеля');
+                throw new Error('Не удалось получить URL for удаления portfolioя');
             }
 
             const response = await fetchWithAuth(url, {
@@ -287,7 +287,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.deletePortfolio',
-                    userMessage: 'Ошибка при удалении портфеля'
+                    userMessage: 'Ошибка при удалении portfolioя'
                 });
             }
             throw error;

@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-language-policy
+ * @skill id:sk-883639
  * @description Normalizes project text files to UTF-8 without BOM and LF.
  */
 import fs from "node:fs";

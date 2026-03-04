@@ -5,14 +5,14 @@
  *
  * PURPOSE: Standalone module for market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR).
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  * Exports functions via window.marketMetrics.
  *
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * FEATURES:
- * - VIX: кэширование 24ч + fallback (Yahoo Finance, Stooq, Alpha Vantage)
+ * - VIX: 24h caching + fallback (Yahoo Finance, Stooq, Alpha Vantage)
  * - FGI: alternative.me API
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
@@ -55,14 +55,14 @@
         // Cached 24 hours
         async fetchFGI(options = {}) {
             const force = options.forceRefresh || false;
-            // Проверяем кэш (24 часа)
+            // Check cache (24 hours)
             if (window.cacheManager && !force) {
                 const cached = await window.cacheManager.get('fear-greed-index');
                 if (cached && cached.value !== null) {
                     fgiVal = cached.value;
                     this.updateWindowMetrics();
                     const originalSource = cached.source || 'Alternative.me';
-                    console.log('FGI loaded из кэша:', fgiVal, 'исходный источник:', originalSource);
+                    console.log('FGI loaded из кэша:', fgiVal, 'исходный source:', originalSource);
                     return { success: true, value: fgiVal.toString(), numericValue: fgiVal, source: originalSource };
                 }
             }
@@ -74,7 +74,7 @@
                 fgiVal = this.clamp(parseInt(data?.data?.[0]?.value), 0, 100);
                 this.updateWindowMetrics();
 
-                // Сохраняем в кэш на 24 часа
+                // Save to cache for 24 hours
                 if (window.cacheManager) {
                     await window.cacheManager.set('fear-greed-index', { value: fgiVal, timestamp: Date.now(), source: 'Alternative.me' });
                 }
@@ -93,7 +93,7 @@
         // Cached 24 hours
         async fetchVIX(options = {}) {
             const force = options.forceRefresh || false;
-            // Проверяем кэш (24 часа)
+            // Check cache (24 hours)
             if (window.cacheManager && !force) {
                 const cached = await window.cacheManager.get('vix-index');
                 if (cached && cached.value !== null) {
@@ -107,7 +107,7 @@
                         vixAvailable = true;
                         this.updateWindowMetrics();
                         const originalSource = cached.source;
-                        console.log('VIX loaded из кэша:', vixVal.toFixed(2), 'исходный источник:', originalSource);
+                        console.log('VIX loaded из кэша:', vixVal.toFixed(2), 'исходный source:', originalSource);
 
                         // Show source message (original source, not "cache")
                         if (window.messagesStore) {
@@ -119,7 +119,7 @@
                             });
                             window.messagesStore.addMessage({
                                 type: 'info',
-                                text: `VIX: ${vixVal.toFixed(2)} (из кэша, исходный источник: ${originalSource}, ${date})`,
+                                text: `VIX: ${vixVal.toFixed(2)} (из кэша, исходный source: ${originalSource}, ${date})`,
                                 scope: 'global',
                                 duration: 5000
                             });
@@ -261,7 +261,7 @@
                         return { success: true, value: result.value.toFixed(2), numericValue: result.value, source: result.sourceName };
                     }
                 } catch (error) {
-                    // Пробуем следующий источник
+                    // Try next source
                 }
             }
             vixVal = null;

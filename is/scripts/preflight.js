@@ -1,5 +1,5 @@
 /**
- * @skill arch-foundation
+ * @skill id:sk-483943
  * @description Preflight health-check. Runs synchronously before app start or CI.
  */
 import fs from 'node:fs';

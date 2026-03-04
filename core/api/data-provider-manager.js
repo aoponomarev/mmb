@@ -2,7 +2,7 @@
  * ================================================================================================
  * DATA PROVIDER MANAGER - Manager for switching between data providers
  * ================================================================================================
- * // @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-dual-channel-fallback
+ * // @skill-anchor id:sk-224210 #for-data-provider-interface #for-dual-channel-fallback
  *
  * PURPOSE: Single access point for coin data providers
  * (CoinGecko, CoinMarketCap, Binance, etc.). Manages provider switching
@@ -77,8 +77,8 @@
         }
 
         /**
-         * Инициализация провайдеров
-         * Вызывается после загрузки всех провайдеров
+         * Initialize providers.
+         * Called after all providers are loaded.
          */
         init() {
             if (window.CoinGeckoProvider) {
@@ -121,7 +121,7 @@
 
         /**
          * Set active provider
-         * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
+         * @param {string} providerName - 'coingecko' | 'coinmarketcap' etc.
          * @returns {Promise<void>}
          */
         async setProvider(providerName) {
@@ -201,7 +201,7 @@
                 }
             }
 
-            // 2) CoinGecko secondary (или выбранный провайдер, если не file://)
+            // 2) CoinGecko secondary (or selected provider if not file://)
             let providerName = await this.getCurrentProviderName();
             let provider = this.providers[providerName] || this.providers[this.defaultProvider];
 
@@ -229,8 +229,8 @@
                         if (cached && cached.length > 0) return cached;
                     }
                     // Skill anchor: on empty cache and blocked registry (after 429) — throw error
-                    // вместо немедленного повтора запроса. Это предотвращает бесконечный цикл 429→запись→429.
-                    // UI покажет ошибку, пользователь может подождать и попробовать через кнопку Refresh.
+                    // Instead of immediate retry. Prevents infinite 429→write→429 cycle.
+                    // UI will show error, user can wait and retry via Refresh button.
                     const timeUntilNext = window.requestRegistry.getTimeUntilNext(providerName, 'getTopCoins', { count, sortBy }, minInterval);
                     const waitMinutes = Math.ceil(timeUntilNext / 60000);
                     console.warn(`data-provider-manager: кэш пуст, registry заблокирован ещё ${waitMinutes} мин. Запрос отклонён.`);
@@ -267,7 +267,7 @@
             } catch (error) {
                 if (window.requestRegistry) {
                     // Skill anchor: real HTTP status must be logged, else 429 cycle masked as "generic error".
-                    // See core/skills/api-layer
+                    // See id:sk-bb7c8e
                     const status = Number.isFinite(error.status)
                         ? error.status
                         : (String(error.message || '').toLowerCase().includes('rate limit') ? 429 : 500);
@@ -381,7 +381,7 @@
         }
 
         /**
-         * @skill-anchor core/skills/external-integrations #for-integration-fallbacks
+         * @skill-anchor id:sk-7b4ee5 #for-integration-fallbacks
          * Dual-channel coin data fetch: PostgreSQL primary, CoinGecko fallback.
          * Phase 1: resolve as many IDs as possible from YandexCacheProvider (PG).
          * Phase 2: fetch remaining missing IDs from active provider (CoinGecko).
@@ -524,7 +524,7 @@
         /**
          * Get coin ID by ticker via current provider
          * @param {string} symbol - Coin ticker
-         * @param {Object} options - Дополнительные опции
+         * @param {Object} options - Additional options
          * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {
@@ -556,7 +556,7 @@
 
         /**
          * Get API key for provider from localStorage
-         * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
+         * @param {string} providerName - 'coingecko' | 'coinmarketcap' etc.
          * @returns {Promise<string|null>}
          */
         async getApiKey(providerName) {

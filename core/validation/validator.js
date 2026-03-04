@@ -1,19 +1,19 @@
 /**
  * ================================================================================================
- * VALIDATOR - Валидация данных по схемам
+ * VALIDATOR - Schema-based data validation
  * ================================================================================================
  *
- * PURPOSE: Валидировать данные по схемам из validation-schemas.js.
- * Проверка типов, обязательных полей, диапазонов значений.
+ * PURPOSE: Validate data against schemas from validation-schemas.js.
+ * Type checking, required fields, value ranges.
  *
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  *
  * PRINCIPLES:
- * - Строгая валидация перед использованием данных
- * - Детальные сообщения об ошибках
- * - Поддержка вложенных объектов и массивов
+ * - Strict validation before using data
+ * - Detailed error messages
+ * - Support for nested objects and arrays
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
@@ -25,22 +25,22 @@
     }
 
     /**
-     * Валидировать значение по правилу
-     * @param {any} value - значение
-     * @param {Object} rule - правило валидации
+     * Validate value against rule
+     * @param {any} value - Value
+     * @param {Object} rule - Validation rule
      * @returns {Object} - { valid: boolean, error: string }
      */
     function validateRule(value, rule) {
-        // Проверка обязательности
+        // Check required
         if (rule.required && (value === undefined || value === null)) {
             return { valid: false, error: 'Поле обязательно' };
         }
 
         if (value === undefined || value === null) {
-            return { valid: true }; // Необязательное поле can be null
+            return { valid: true }; // Optional field can be null
         }
 
-        // Проверка типа
+        // Type check
         if (rule.type) {
             const actualType = Array.isArray(value) ? 'array' : typeof value;
             if (actualType !== rule.type) {
@@ -48,7 +48,7 @@
             }
         }
 
-        // Проверка диапазона for чисел
+        // Range check for numbers
         if (rule.type === 'number') {
             if (typeof value !== 'number' || isNaN(value)) {
                 return { valid: false, error: 'Значение должно быть числом' };
@@ -61,7 +61,7 @@
             }
         }
 
-        // Проверка enum
+        // Enum check
         if (rule.enum && !rule.enum.includes(value)) {
             return { valid: false, error: `Значение должно быть одним из: ${rule.enum.join(', ')}` };
         }
@@ -70,10 +70,10 @@
     }
 
     /**
-     * Валидировать данные по схеме
-     * @param {any} data - данные for валидации
-     * @param {string} schemaName - имя схемы
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate data against schema
+     * @param {any} data - Data to validate
+     * @param {string} schemaName - Schema name
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, errors: Array }
      */
     function validate(data, schemaName, options = {}) {
@@ -84,12 +84,12 @@
 
         const errors = [];
 
-        // Валидация объекта
+        // Object validation
         if (typeof data !== 'object' || Array.isArray(data) || data === null) {
             return { valid: false, errors: ['Данные должны быть объектом'] };
         }
 
-        // Валидация каждого поля схемы
+        // Validate each schema field
         for (const [fieldName, rule] of Object.entries(schema)) {
             const value = data[fieldName];
             const result = validateRule(value, rule);
@@ -98,7 +98,7 @@
                 errors.push(`${fieldName}: ${result.error}`);
             }
 
-            // Валидация вложенных объектов (itemSchema for массивов)
+            // Nested object validation (itemSchema for arrays)
             if (rule.itemSchema && Array.isArray(value)) {
                 for (let i = 0; i < value.length; i++) {
                     const itemResult = validate(value[i], rule.itemSchema, { showMessage: false });
@@ -114,8 +114,8 @@
             errors
         };
 
-        // Автоматический показ сообщения при ошибке валидации
-        // Опция showMessage: false отключает автоматический показ
+        // Show message automatically on validation error
+        // Option showMessage: false disables automatic display
         const showMessage = options.showMessage !== false;
         if (!result.valid && showMessage && window.AppMessages && window.messagesConfig) {
             const messageData = window.messagesConfig.getMessage('error.validation.error');
@@ -126,7 +126,7 @@
                 details: errors.join('; '),
                 type: messageData.type || 'warning',
                 priority: messageData.priority || 3,
-                key: 'error.validation.error', // Сохраняем ключ for последующего перевода
+                key: 'error.validation.error', // Keep key for later translation
                 scope: scope,
                 actions: []
             });
@@ -136,10 +136,10 @@
     }
 
     /**
-     * Валидировать массив данных
-     * @param {Array} dataArray - массив данных
-     * @param {string} schemaName - имя схемы
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate data array
+     * @param {Array} dataArray - Data array
+     * @param {string} schemaName - Schema name
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, errors: Array }
      */
     function validateArray(dataArray, schemaName, options = {}) {
@@ -160,7 +160,7 @@
             errors
         };
 
-        // Автоматический показ сообщения при ошибке валидации массива
+        // Show message automatically on array validation error
         const showMessage = options.showMessage !== false;
         if (!result.valid && showMessage && window.AppMessages && window.messagesConfig) {
             const messageData = window.messagesConfig.getMessage('error.validation.error');
@@ -171,7 +171,7 @@
                 details: errors.join('; '),
                 type: messageData.type || 'warning',
                 priority: messageData.priority || 3,
-                key: 'error.validation.error', // Сохраняем ключ for последующего перевода
+                key: 'error.validation.error', // Keep key for later translation
                 scope: scope,
                 actions: []
             });

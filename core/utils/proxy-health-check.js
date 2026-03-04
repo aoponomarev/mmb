@@ -1,31 +1,31 @@
 /**
  * ================================================================================================
- * PROXY HEALTH CHECK - Проверка доступности прокси
+ * PROXY HEALTH CHECK - Proxy availability check
  * ================================================================================================
  *
- * PURPOSE: Проверка доступности прокси перед переключением или использованием.
- * Skill: app/skills/file-protocol-cors-guard
+ * PURPOSE: Check proxy availability before switching or using.
+ * Skill: id:sk-7cf3f7
  *
  * USAGE:
  * const isAvailable = await window.proxyHealthCheck.check(url);
  * const result = await window.proxyHealthCheck.checkWithDetails(url);
  *
  * REFERENCES:
- * - Конфигурация прокси: core/config/app-config.js
+ * - Proxy configuration: core/config/app-config.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Проверка доступности прокси
+     * Proxy availability check
      */
     class ProxyHealthCheck {
         /**
-         * Проверить доступность прокси (простая проверка)
-         * @param {string} proxyUrl - URL прокси
-         * @param {number} timeout - таймаут в миллисекундах (по умолчанию 5000)
-         * @returns {Promise<boolean>} true если прокси доступен
+         * Check proxy availability (simple check)
+         * @param {string} proxyUrl - Proxy URL
+         * @param {number} timeout - Timeout in milliseconds (default 5000)
+         * @returns {Promise<boolean>} true if proxy is available
          */
         async check(proxyUrl, timeout = 5000) {
             try {
@@ -38,9 +38,9 @@
         }
 
         /**
-         * Проверить доступность прокси с деталями
-         * @param {string} proxyUrl - URL прокси
-         * @param {number} timeout - таймаут в миллисекундах (по умолчанию 5000)
+         * Check proxy availability with details
+         * @param {string} proxyUrl - Proxy URL
+         * @param {number} timeout - Timeout in milliseconds (default 5000)
          * @returns {Promise<Object>} {available: boolean, status?: number, error?: string, duration?: number}
          */
         async checkWithDetails(proxyUrl, timeout = 5000) {
@@ -54,11 +54,11 @@
             const startTime = Date.now();
 
             try {
-                // Используем AbortController for таймаута
+                // Use AbortController for timeout
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-                // Отправляем OPTIONS запрос (preflight) for проверки CORS
+                // Send OPTIONS request (preflight) for CORS check
                 const response = await fetch(proxyUrl, {
                     method: 'OPTIONS',
                     signal: controller.signal,
@@ -70,10 +70,10 @@
                 clearTimeout(timeoutId);
                 const duration = Date.now() - startTime;
 
-                // Проверяем статус ответа (200 или 204 for OPTIONS)
+                // Check response status (200 or 204 for OPTIONS)
                 const isOk = response.status === 200 || response.status === 204;
 
-                // Проверяем наличие CORS заголовков
+                // Check presence of CORS headers
                 const corsHeaders = {
                     'Access-Control-Allow-Origin': response.headers.get('access-control-allow-origin'),
                     'Access-Control-Allow-Methods': response.headers.get('access-control-allow-methods')
@@ -111,16 +111,16 @@
 
                 return {
                     available: false,
-                    error: error.message || 'Неизвестная ошибка',
+                    error: error.message || 'Unknown error',
                     duration: duration
                 };
             }
         }
 
         /**
-         * Проверить доступность всех прокси for провайдера
-         * @param {string} providerName - имя провайдера ('yandex')
-         * @returns {Promise<Array<Object>>} Массив результатов проверки [{type, url, available, ...}]
+         * Check availability of all proxies for provider
+         * @param {string} providerName - Provider name ('yandex')
+         * @returns {Promise<Array<Object>>} Array of check results [{type, url, available, ...}]
          */
         async checkAllProxies(providerName) {
             if (!window.appConfig) {
@@ -133,7 +133,7 @@
                 return [];
             }
 
-            // Проверяем все прокси параллельно
+            // Check all proxies in parallel
             const checks = proxies.map(async (proxy) => {
                 const details = await this.checkWithDetails(proxy.url);
                 return {

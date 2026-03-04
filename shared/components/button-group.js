@@ -5,15 +5,15 @@
  *
  * PURPOSE: Vue-обёртка над Bootstrap .btn-group с поддержкой:
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  * - Трёх типов кнопок: button (через cmp-button), checkbox, radio (нативный HTML)
  * - Наследования стилей (variant, size) от группы к кнопкам
  * - Адаптивного схлопывания в dropdown при брейкпоинте
  * - 100% совместимости with Bootstrap JS API
  *
- * Конфигурация кнопок:
+ * Configuration кнопок:
  * - Двойной рендер: группа кнопок (>= breakpoint) и dropdown (< breakpoint)
  * - CSS-переключение через Bootstrap utilities (d-none, d-md-inline-flex)
  * - Маппинг buttons[] в DropdownMenuItem при схлопывании
@@ -37,7 +37,7 @@
  * - dropdownLabel (String, default: 'Действия') — текст кнопки dropdown при схлопывании
  * - dropdownIcon (String) — иконка кнопки dropdown (Font Awesome класс)
  * - dropdownVariant (String) — вариант кнопки dropdown. Если не указан, наследует от variant группы
- * Конфигурация кнопок:
+ * Configuration кнопок:
  * - buttons (Array, required) — массив конфигураций кнопок. Каждый элемент — объект ButtonConfig:
  *   ButtonConfig:
  *   - type (String, required) — тип кнопки: 'button', 'checkbox' или 'radio'
@@ -180,7 +180,7 @@ window.cmpButtonGroup = {
             default: null
         },
 
-        // === Конфигурация кнопок ===
+        // === Configuration кнопок ===
         buttons: {
             type: Array,
             required: true,

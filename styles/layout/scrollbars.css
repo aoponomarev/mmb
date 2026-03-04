@@ -13,7 +13,7 @@
  * - Применяется глобально ко всем элементам (кроме html/body для вертикального скроллбара)
  *
  * ССЫЛКИ:
- * - Аналог из BOT: do-overs/BOT/ui/styles/layout.css
+ * - Scrollbar styling: styles/layout/scrollbars.css (this file)
  */
 
 /* Глобально: скрываем горизонтальную полосу прокрутки на уровне страницы */

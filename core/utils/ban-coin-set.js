@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * BAN COIN SET - Утилита for работы с локальным набором "Ban"
+ * BAN COIN SET - Utility for working with local "Ban" set
  * ================================================================================================
  *
- * PURPOSE: Управление служебным набором исключенных монет "Ban" в localStorage.
- * Используется как технический список тикеров/монет for быстрых исключений.
+ * PURPOSE: Manage service set of excluded coins "Ban" in localStorage.
+ * Used as technical list of tickers/coins for quick exclusions.
  */
 
 (function() {

@@ -37,7 +37,7 @@
  * - button-{index} — переопределение конкретной кнопки по индексу (параметры слота: { button, index })
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - General principles работы с шаблонами: id:sk-483943 (section "Вынос x-template шаблонов")
  * - Компонент: shared/components/button-group.js
  */
 

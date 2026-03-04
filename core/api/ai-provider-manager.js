@@ -6,10 +6,10 @@
  * PURPOSE: Single access point for AI provider (YandexGPT).
  * Manages provider switching and provides unified interface.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: core/skills/api-layer
+ * Skill: id:sk-bb7c8e
  *
  * FEATURES:
  * - Default provider: YandexGPT
@@ -28,7 +28,7 @@
  *
 */
 
-// @skill-anchor core/skills/ai-providers-architecture #for-ai-provider-abstraction #for-ai-manager-switching
+// @skill-anchor id:sk-d76b68 #for-ai-provider-abstraction #for-ai-manager-switching
 (function() {
     'use strict';
 
@@ -98,7 +98,7 @@
                     await window.cacheManager.set('ai-provider', this.defaultProvider);
                 }
             } catch (e) {
-                // Игнорируем ошибки at initialization
+                // Ignore errors at initialization
             }
         }
 
@@ -176,7 +176,7 @@
                 const apiKey = await window.cacheManager.get(keyName);
                 if (apiKey) return apiKey;
             } catch (error) {
-                console.warn(`ai-provider-manager: ошибка чтения ключа ${providerName} из cacheManager`, error);
+                console.warn(`ai-provider-manager: read error ключа ${providerName} из cacheManager`, error);
             }
 
             // Skill anchor: fallback to Cloudflare KV — keys survive cache reset.
@@ -312,7 +312,7 @@
 
     // Initialize after all providers loaded
     // Call init() immediately as providers should already be loaded
-    // (они загружаются раньше через модульную систему)
+    // (they load earlier via module system)
     if (window.YandexProvider) {
         window.aiProviderManager.init();
     } else {

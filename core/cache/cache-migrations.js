@@ -5,7 +5,7 @@
  *
  * PURPOSE: Ensure compatibility when user data structure in cache changes.
  * Automatic migrations apply when reading data from old version.
- * Skill: core/skills/cache-layer
+ * Skill: id:sk-3c832d
  *
  * PRINCIPLES:
  * - Each cache entry contains version field (data schema version)
@@ -28,7 +28,7 @@
  * 1. Update VERSIONS.portfolios = '1.1.0'
  * 2. Add migration: MIGRATIONS.portfolios['1.1.0'] = (data) => { return data; }
  *
- * REFERENCE: General caching principles: core/skills/cache-layer
+ * REFERENCE: General caching principles: id:sk-3c832d
  */
 
 (function() {

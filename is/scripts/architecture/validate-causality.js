@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-code-anchors
+ * @skill id:sk-8991cd
  * @description Validates that all @causality and @skill-anchor hashes in code exist in causality-registry.md
  */
 import fs from "node:fs";

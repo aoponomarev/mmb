@@ -5,9 +5,9 @@
  *
  * PURPOSE: List of saved coin sets for loading with multi-select support.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * FEATURES:
  * - Displays list of user's saved coin sets
@@ -1159,7 +1159,7 @@ window.coinSetLoadModalBody = {
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
-                        text: `Ошибка загрузки: ${error.message || 'Неизвестная ошибка'}`,
+                        text: `Ошибка загрузки: ${error.message || 'Unknown error'}`,
                         scope: 'global',
                         duration: 5000
                     });
@@ -1561,16 +1561,16 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Отправить чанк монет из CoinGecko в PostgreSQL (fire-and-forget)
-         * Вызывается при каждом chunk-success от CoinGecko
-         * @param {Array} coins - нормализованные монеты (формат приложения)
+         * Send coin chunk from CoinGecko to PostgreSQL (fire-and-forget)
+         * Called on each chunk-success from CoinGecko
+         * @param {Array} coins - normalized coins (application format)
          */
         pushChunkToDb(coins) {
             if (!Array.isArray(coins) || coins.length === 0) return;
             const base = window.cloudflareConfig
                 ? (window.cloudflareConfig.getAuthBaseUrl?.() || window.cloudflareConfig.getWorkersBaseUrl?.())
                 : null;
-            // Используем Yandex API Gateway напрямую (не через Cloudflare)
+            // Use Yandex API Gateway directly (not via Cloudflare)
             const API_GATEWAY = 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net';
             const url = `${API_GATEWAY}/api/coins/market-cache`;
 
@@ -1582,43 +1582,43 @@ window.coinSetLoadModalBody = {
             .then(r => r.json())
             .then(data => {
                 if (data.upserted > 0) {
-                    // Сигнализируем корневому компоненту обновить счётчик БД
+                    // Signal root component to refresh DB counter
                     if (window.eventBus) {
                         window.eventBus.emit('db-coins-upserted', { count: data.upserted });
                     }
                 }
             })
             .catch(err => {
-                console.warn('coin-set-load-modal-body: ошибка записи чанка в БД:', err.message);
+                console.warn('coin-set-load-modal-body: write error чанка в БД:', err.message);
             });
         },
 
         /**
-         * Обработка добавления выбранных sets монет к текущему списку
+         * Handle adding selected coin sets to current list
          */
         async handleAdd() {
             await this.loadSelectedSets({ merge: true });
         },
 
         /**
-         * Обработка замены текущего списка монет выбранными наборами
+         * Handle replacing current coin list with selected sets
          */
         async handleReplace() {
             await this.loadSelectedSets({ merge: false });
         },
 
         /**
-         * Загрузка выбранных sets монет с опцией мерджа
-         * @param {Object} options - опции загрузки
-         * @param {boolean} options.merge - если true, монеты добавляются к текущим, если false - заменяют
+         * Load selected coin sets with merge option
+         * @param {Object} options - load options
+         * @param {boolean} options.merge - if true, coins added to current; if false, replace
          */
         async loadSelectedSets(options = {}) {
             const { merge = false } = options;
 
             this.loadingSet = true;
-            this.updateButtonsState(); // Обновляем состояние кнопок (disabled во время загрузки)
+            this.updateButtonsState(); // Update button state (disabled during load)
 
-            // Сбрасываем прогресс перед началом загрузки любого набора
+            // Reset progress before loading any set
             this.resetDefaultSetProgress();
 
             try {
@@ -1628,51 +1628,51 @@ window.coinSetLoadModalBody = {
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
-                        text: `Ошибка загрузки: ${error.message || 'Неизвестная ошибка'}`,
+                        text: `Ошибка загрузки: ${error.message || 'Unknown error'}`,
                         scope: 'global',
                         duration: 5000
                     });
                 }
             } finally {
                 this.loadingSet = false;
-                this.updateButtonsState(); // Восстанавливаем состояние кнопок
+                this.updateButtonsState(); // Restore button state
             }
         },
 
         /**
-         * Внутренний метод for выполнения загрузки
-         * @param {boolean} merge - если true, монеты добавляются к текущим
+         * Internal method to perform load
+         * @param {boolean} merge - if true, coins added to current
          */
         async _performLoad(merge) {
             const selectedSets = [];
 
-            // Проверяем, выбран ли дефолтный набор
+            // Check if default set selected
             const hasDefault = this.selectedSetIds.includes('default');
 
-            // Проверяем, выбран ли Draft набор чекбоксом
+            // Check if Draft set selected via checkbox
             const hasDraft = this.selectedSetIds.includes('draft');
 
-            // Если нет выбранных sets, ничего не делаем
+            // If no selected sets, do nothing
             if (this.selectedSetIds.length === 0) {
                 this.resetDefaultSetProgress();
                 return;
             }
 
-            // Если дефолтный набор не выбран — сбрасываем его прогресс
+            // If default set not selected, reset its progress
             if (!hasDefault) {
                 this.resetDefaultSetProgress();
             }
 
-            // Обработка дефолтного набора
+            // Handle default set
             if (hasDefault) {
-                // Загружаем данные for дефолтного набора из кэша максимальных sets
-                // ВАЖНО: Перед открытием набора ВСЕГДА обновляем кэш for актуальности
+                // Load default set data from max sets cache
+                // IMPORTANT: Always refresh cache before opening set for freshness
                 try {
                     if (!window.cacheManager || !window.dataProviderManager) {
                         throw new Error('cacheManager или dataProviderManager not loadedы');
                     }
 
-                    // Определяем ключ кэша в зависимости от критерия сортировки
+                    // Determine cache key by sort criterion
                     const cacheKey = this.defaultSortBy === 'market_cap'
                         ? 'top-coins-by-market-cap'
                         : 'top-coins-by-volume';
@@ -1680,8 +1680,8 @@ window.coinSetLoadModalBody = {
                     const cachedBeforeRefresh = await window.cacheManager.get(cacheKey);
                     let coinsFullSet = null;
 
-                    // Skill anchor: визуальный прогресс обязателен for chunked загрузки Top-N на file://.
-                    // See core/skills/api-layer
+                    // Skill anchor: visual progress required for chunked Top-N load on file://.
+                    // See id:sk-bb7c8e
                     this.isCancelling = false;
                     this.loadAbortController = new AbortController();
                     this.updateDefaultSetProgress({
@@ -1693,8 +1693,8 @@ window.coinSetLoadModalBody = {
 
                     try {
                         console.log(`coin-set-load-modal-body: обновляем кэш ${cacheKey} через chunked загрузку...`);
-                        // Skill anchor: принудительный chunking + progress callback защищает UX и снижает риск 429 циклов.
-                        // See core/skills/api-layer
+                        // Skill anchor: forced chunking + progress callback protects UX and reduces 429 risk.
+                        // See id:sk-bb7c8e
                         coinsFullSet = await window.dataProviderManager.getTopCoins(250, this.defaultSortBy, {
                             preferYandexFirst: true,
                             allowCoinGeckoFallback: true,
@@ -1765,13 +1765,13 @@ window.coinSetLoadModalBody = {
                         }
                     }
 
-                    // Берем нужное количество монет из полного набора
+                    // Take required count of coins from full set
                     const coins = coinsFullSet.slice(0, this.defaultCount);
 
                     console.log(`coin-set-load-modal-body: loadedо ${coins.length} монет из кэша ${cacheKey} (всего в кэше: ${coinsFullSet.length})`);
 
-                    // Создаем виртуальный набор из актуальных данных
-                    // ВАЖНО: передаем не только coin_ids, но и полные данные монет
+                    // Create virtual set from current data
+                    // IMPORTANT: pass not only coin_ids but full coin data
                     selectedSets.push({
                         id: 'default',
                         name: `Актуальные рейтинги рынка (${coins.length} монет, ${this.defaultSortBy === 'market_cap' ? 'по капитализации' : 'по объему'})`,
@@ -1789,38 +1789,38 @@ window.coinSetLoadModalBody = {
                     if (window.messagesStore) {
                         window.messagesStore.addMessage({
                             type: 'danger',
-                            text: `Ошибка загрузки дефолтного набора: ${error.message || 'Неизвестная ошибка'}`,
+                            text: `Ошибка загрузки дефолтного набора: ${error.message || 'Unknown error'}`,
                             scope: 'global',
                             duration: 5000
                         });
                     }
-                    // НЕ прерываем выполнение - продолжаем обработку других sets (если они выбраны)
+                    // Do not abort - continue processing other sets (if selected)
                 }
             }
 
-            // Обработка локального набора "Draft" (если выбран чекбоксом)
+            // Handle local "Draft" set (when checkbox selected)
             if (hasDraft) {
                 try {
                     if (!window.cacheManager || !window.dataProviderManager) {
                         throw new Error('cacheManager или dataProviderManager not loadedы');
                     }
 
-                    // ВАЖНО: Перед загрузкой Draft набора всегда обновляем его из localStorage
-                    // Это гарантирует, что мы используем актуальные данные, а не устаревшие из this.draftSet
+                    // IMPORTANT: Before loading Draft set always refresh from localStorage
+                    // Ensures we use fresh data, not stale from this.draftSet
                     this.loadDraftSet();
 
-                    // Используем Draft набор из localStorage (если есть) или загружаем по тикерам из поля ввода
+                    // Use Draft set from localStorage (if exists) or load by tickers from input
                     const draftCoinIds = this.draftSet && this.draftSet.coin_ids ? this.draftSet.coin_ids : [];
                     const draftCoinsData = this.draftSet && this.draftSet.coins ? this.draftSet.coins : null;
 
                     if (draftCoinIds.length === 0 && draftCoinsData && draftCoinsData.length === 0) {
-                        // Если Draft набор пуст, но есть тикеры в поле ввода - пытаемся загрузить
+                        // If Draft set empty but tickers in input - try to load
                         if (this.draftTickersInput && this.draftTickersInput.trim().length > 0) {
-                            // Загружаем по тикерам из поля ввода
+                            // Load by tickers from input
                             await this.loadDraftFromTickers();
-                            // После загрузки обновляем draftSet
+                            // After load update draftSet
                             this.loadDraftSet();
-                            // Используем обновленные данные
+                            // Use updated data
                             const updatedDraftSet = window.draftCoinSet ? window.draftCoinSet.get() : null;
                             if (updatedDraftSet && updatedDraftSet.coin_ids && updatedDraftSet.coin_ids.length > 0) {
                                 selectedSets.push({
@@ -1834,13 +1834,13 @@ window.coinSetLoadModalBody = {
                                     is_local: true
                                 });
                             }
-                            // НЕ logoutим - продолжаем обработку других sets
+                            // Do not abort - continue processing other sets
                         } else {
                             console.warn('coin-set-load-modal-body: Draft набор пуст и нет тикеров for загрузки');
-                            // НЕ logoutим - продолжаем обработку других sets
+                            // Do not abort - continue processing other sets
                         }
                     } else if (draftCoinIds.length > 0 || (draftCoinsData && draftCoinsData.length > 0)) {
-                        // Если набор содержит полные данные монет - используем их
+                        // If set contains full coin data - use it
                         if (draftCoinsData && Array.isArray(draftCoinsData) && draftCoinsData.length > 0) {
                                 selectedSets.push({
                                     id: 'draft',
@@ -1853,7 +1853,7 @@ window.coinSetLoadModalBody = {
                                     is_local: true
                                 });
                         } else {
-                            // Загружаем полные данные из кэша или API
+                            // Load full data from cache or API
                             const cacheKeyMarketCap = 'top-coins-by-market-cap';
                             const cacheKeyVolume = 'top-coins-by-volume';
 
@@ -1880,7 +1880,7 @@ window.coinSetLoadModalBody = {
                                 coinsVolume.forEach(coin => coinsMap.set(coin.id, coin));
                             }
 
-                            // Находим монеты из Draft набора
+                            // Find coins from Draft set
                             const loadedCoins = [];
                             const missingIds = [];
                             draftCoinIds.forEach(coinId => {
@@ -1893,7 +1893,7 @@ window.coinSetLoadModalBody = {
                             });
 
                             if (loadedCoins.length > 0) {
-                                // Обновляем тикеры в Draft наборе при загрузке полных данных
+                                // Update tickers in Draft set when loading full data
                                 const tickers = loadedCoins.map(coin => coin.symbol || coin.id).filter(Boolean).join(', ');
                                 if (window.draftCoinSet) {
                                     window.draftCoinSet.save(draftCoinIds, loadedCoins);
@@ -1923,7 +1923,7 @@ window.coinSetLoadModalBody = {
                     if (window.messagesStore) {
                         window.messagesStore.addMessage({
                             type: 'warning',
-                            text: `Ошибка загрузки Draft набора: ${error.message || 'Неизвестная ошибка'}`,
+                            text: `Ошибка загрузки Draft набора: ${error.message || 'Unknown error'}`,
                             scope: 'global',
                             duration: 5000
                         });
@@ -1931,7 +1931,7 @@ window.coinSetLoadModalBody = {
                 }
             }
 
-            // Обработка автоsets (стейблкоины, обертки, LST)
+            // Handle auto-sets (stablecoins, wrappers, LST)
             const autoSetIds = this.selectedSetIds.filter(id => typeof id === 'string' && id.startsWith('auto-'));
             if (autoSetIds.length > 0) {
                 const autoSetsToLoad = this.autoSets.filter(set => autoSetIds.includes(set.id));
@@ -1939,7 +1939,7 @@ window.coinSetLoadModalBody = {
                 console.log(`coin-set-load-modal-body: добавлено ${autoSetsToLoad.length} автоsets for объединения`);
             }
 
-            // Добавляем сохраненные наборы (исключаем 'default', 'draft' и автонаборы из selectedSetIds)
+            // Add saved sets (exclude 'default', 'draft' and auto-sets from selectedSetIds)
             const savedSetIds = this.selectedSetIds.filter(id => id !== 'default' && id !== 'draft' && !(typeof id === 'string' && id.startsWith('auto-')));
             if (savedSetIds.length > 0) {
                 const savedSets = this.coinSets.filter(set => savedSetIds.includes(set.id));
@@ -1963,26 +1963,26 @@ window.coinSetLoadModalBody = {
         },
 
         /**
-         * Обработка удаления выбранных sets
+         * Handle deletion of selected sets
          */
         async handleDelete() {
             if (this.selectedSetIds.length === 0) {
                 return;
             }
 
-            // Исключаем дефолтный набор, Draft и автонаборы из удаления (они неудаляемые)
+            // Exclude default, Draft and auto-sets from deletion (non-deletable)
             const idsToDelete = this.selectedSetIds.filter(id => id !== 'default' && id !== 'draft' && !id.startsWith('auto-'));
 
             if (idsToDelete.length === 0) {
-                // Если выбран только дефолтный набор, Draft или автонаборы - ничего не удаляем
+                // If only default, Draft or auto-sets selected - do not delete
                 return;
             }
 
             if (this.onDelete) {
                 await this.onDelete(idsToDelete);
-                // Обновляем список после удаления (ВАЖНО: используем forceAuth=true, так как пользователь уже авторизован)
+                // Update list after deletion (IMPORTANT: use forceAuth=true as user already authorized)
                 await this.loadCoinSets(true);
-                // Очищаем выбор
+                // Clear selection
                 this.selectedSetIds = [];
                 this.updateButtonsState();
             }

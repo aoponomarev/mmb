@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Binance metrics provider (Funding Rate, Long/Short Ratio, Open Interest).
  * Uses a strict Fail-Fast approach: no hidden retry chains here, handled at higher levels.
  */

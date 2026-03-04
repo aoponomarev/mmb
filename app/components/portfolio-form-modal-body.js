@@ -3,7 +3,7 @@
  * PORTFOLIO FORM MODAL BODY - Portfolio form component (D.2)
  * ================================================================================================
  *
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  */
 
 (function() {
@@ -14,7 +14,7 @@
             <div class="portfolio-form-modal">
                 <!-- Main portfolio parameters -->
                 <div class="mb-3">
-                    <label class="form-label small text-muted mb-1">Название портфеля *</label>
+                    <label class="form-label small text-muted mb-1">Название portfolioя *</label>
                     <div class="d-flex align-items-center gap-2">
                         <input
                             type="text"
@@ -117,7 +117,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Delete из портфеля
+                                                                Delete из portfolioя
                                                             </button>
                                                         </li>
                                                         <li>
@@ -212,7 +212,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Delete из портфеля
+                                                                Delete из portfolioя
                                                             </button>
                                                         </li>
                                                         <li>
@@ -454,7 +454,7 @@
                 });
 
                 this.modalApi.registerButton('save', {
-                    label: this.initialData ? 'Сохранить изменения' : 'Создать портфель',
+                    label: this.initialData ? 'Сохранить изменения' : 'Создать portfolioь',
                     variant: 'primary',
                     locations: ['footer'],
                     disabled: true,

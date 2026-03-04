@@ -1,32 +1,32 @@
 /**
  * ================================================================================================
- * LOADING STATE - Единая система состояний загрузки
+ * LOADING STATE - Unified loading states system
  * ================================================================================================
  *
- * PURPOSE: Управление состояниями загрузки (loading, error, success) for всех компонентов.
- * Синхронизация состояний, индикаторы прогресса, отмена запросов.
- * Skill: is/skills/arch-foundation
+ * PURPOSE: Manage loading states (loading, error, success) for all components.
+ * State synchronization, progress indicators, request cancellation.
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Единый интерфейс for всех состояний загрузки
- * - Отслеживание множественных загрузок
- * - Автоматическое управление состоянием
+ * - Unified interface for all loading states
+ * - Tracking of multiple loads
+ * - Automatic state management
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Активные загрузки по ключам
+     * Active loads by key
      */
     const activeLoadings = new Map();
 
     /**
-     * Set состояние загрузки
-     * @param {string} key - ключ загрузки
-     * @param {Object} state - состояние { loading: boolean, error: Error|null, data: any }
+     * Set loading state
+     * @param {string} key - loading key
+     * @param {Object} state - state { loading: boolean, error: Error|null, data: any }
      */
     function setLoadingState(key, state) {
         activeLoadings.set(key, {
@@ -36,24 +36,24 @@
             timestamp: Date.now()
         });
 
-        // Эмит события через eventBus (если доступен)
+        // Emit event via eventBus (if available)
         if (window.eventBus) {
             window.eventBus.emit('loading-state-changed', { key, state: activeLoadings.get(key) });
         }
     }
 
     /**
-     * Get состояние загрузки
-     * @param {string} key - ключ загрузки
-     * @returns {Object|null} - состояние или null
+     * Get loading state
+     * @param {string} key - loading key
+     * @returns {Object|null} - state or null
      */
     function getLoadingState(key) {
         return activeLoadings.get(key) || null;
     }
 
     /**
-     * Проверить, идёт ли загрузка
-     * @param {string} key - ключ загрузки
+     * Check if loading is in progress
+     * @param {string} key - loading key
      * @returns {boolean}
      */
     function isLoading(key) {
@@ -62,7 +62,7 @@
     }
 
     /**
-     * Проверить, есть ли активные загрузки
+     * Check if there are active loads
      * @returns {boolean}
      */
     function hasActiveLoadings() {
@@ -75,8 +75,8 @@
     }
 
     /**
-     * Get все активные загрузки
-     * @returns {Array} - массив ключей активных загрузок
+     * Get all active loads
+     * @returns {Array} - array of active load keys
      */
     function getActiveLoadings() {
         const active = [];
@@ -89,8 +89,8 @@
     }
 
     /**
-     * Очистить состояние загрузки
-     * @param {string} key - ключ загрузки
+     * Clear loading state
+     * @param {string} key - loading key
      */
     function clearLoadingState(key) {
         activeLoadings.delete(key);
@@ -100,7 +100,7 @@
     }
 
     /**
-     * Очистить все состояния загрузки
+     * Clear all loading states
      */
     function clearAllLoadingStates() {
         activeLoadings.clear();

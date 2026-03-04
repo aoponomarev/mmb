@@ -6,10 +6,10 @@
  * PURPOSE: Client-side OAuth flow implementation: initiating authorization,
  * callback handling, code-to-token exchange, token management.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
  * FEATURES:
  * - Initiate Google OAuth with state generation for CSRF protection
@@ -152,8 +152,8 @@
 
             // Note: authWindow.closed check removed due to COOP (Cross-Origin-Opener-Policy)
             // Browser blocks access to window.closed for cross-origin windows and logs error to console
-            // @skill-anchor is/skills/arch-cloudflare-infrastructure #for-oauth-postmessage
-            // Авторизация работает через postMessage
+            // @skill-anchor id:sk-5cd3c9 #for-oauth-postmessage
+            // Authorization works via postMessage
         } catch (error) {
             console.error('auth-client.initiateGoogleAuth:', error);
             if (window.errorHandler) {
@@ -270,7 +270,7 @@
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ error: { message: 'Неизвестная ошибка' } }));
+                const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
                 throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
             }
 

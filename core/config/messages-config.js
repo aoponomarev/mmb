@@ -5,7 +5,7 @@
  *
  * PURPOSE: SSOT for all system messages in the application.
  * Source texts in Russian (base language).
- * Skill: core/skills/config-contracts
+ * Skill: id:sk-02d3ea
  *
  * PRINCIPLES:
  * - Short keys: e.net, e.rate, w.proxy, i.switch, s.ok
@@ -26,11 +26,11 @@
  * window.messagesConfig.get('e.rate', { time: '5 minutes' })
  *
  * REFERENCES:
- * - Single source of truth principles: app/skills/ux-principles
+ * - Single source of truth principles: id:sk-e0b8f3
  * - Translation module: core/api/messages-translator.js
  */
 
-// @skill-anchor core/skills/messages-architecture #for-short-message-keys #for-short-message-types
+// @skill-anchor id:sk-f2bc48 #for-short-message-keys #for-short-message-types
 (function() {
     'use strict';
 
@@ -111,7 +111,7 @@
 
         // === Validation (v.*) ===
         'v.wsum': {
-            t: 'Сумма весов портфеля должна быть равна 1',
+            t: 'Сумма весов portfolioя должна быть равна 1',
             type: 'w'
         },
         'v.wrange': {
@@ -188,15 +188,15 @@
 
         // === Portfolios (p.*) ===
         'p.load': {
-            t: 'Ошибка при загрузке портфелей',
+            t: 'Ошибка при загрузке portfolios',
             type: 'd'
         },
         'p.save': {
-            t: 'Ошибка при сохранении портфеля',
+            t: 'Ошибка при сохранении portfolioя',
             type: 'd'
         },
         'p.del': {
-            t: 'Ошибка при удалении портфеля',
+            t: 'Ошибка при удалении portfolioя',
             type: 'd'
         },
 

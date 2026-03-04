@@ -3,7 +3,7 @@
  * ICON MANAGER MODAL BODY - Icon management component in modal
  * ================================================================================================
  *
- * Skill: app/skills/ui-architecture
+ * Skill: id:sk-318305
  */
 
 (function() {

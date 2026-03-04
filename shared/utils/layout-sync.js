@@ -2,7 +2,7 @@
  * ================================================================================================
  * LAYOUT SYNC - Утилита синхронизации высоты header и footer с padding body
  * ================================================================================================
- * Skill: app/skills/ui-architecture
+ * Skill: id:sk-318305
  *
  * PURPOSE: Автоматическая синхронизация padding-top и padding-bottom body с высотой
  * фиксированных header и footer for предотвращения перекрытия контента.
@@ -33,7 +33,7 @@
  * - Перезапуск: window.layoutSync.start()
  *
  * REFERENCES:
- * - General principles утилит: is/skills/arch-foundation
+ * - General principles утилит: id:sk-483943
  */
 
 (function() {

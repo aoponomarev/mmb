@@ -1,25 +1,25 @@
 /**
  * ================================================================================================
- * API CONFIG - Конфигурация for rate limiter
+ * API CONFIG - Configuration for rate limiter
  * ================================================================================================
  *
- * PURPOSE: Конфигурация параметров rate limiting for разных API.
- * Используется rate-limiter.js for managing запросами.
- * Skill: core/skills/api-layer
+ * PURPOSE: Rate limiting parameters configuration for various APIs.
+ * Used by rate-limiter.js for request management.
+ * Skill: id:sk-bb7c8e
  *
  * PRINCIPLES:
- * - Параметры адаптивных таймаутов
- * - Приоритеты запросов
- * - Настройки for каждого API
+ * - Adaptive timeout parameters
+ * - Request priorities
+ * - Per-API settings
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация rate limiting for разных API
+     * Rate limiting configuration for various APIs
      */
     const API_CONFIG = {
         coingecko: {
@@ -37,28 +37,28 @@
     };
 
     /**
-     * Приоритеты запросов (меньше = выше приоритет)
+     * Request priorities (lower = higher priority)
      */
     const REQUEST_PRIORITIES = {
-        CRITICAL: 1,    // Критичные запросы (пользовательские действия)
-        HIGH: 3,        // Важные запросы (обновление данных)
-        NORMAL: 5,      // Обычные запросы (фоновые обновления)
-        LOW: 7          // Низкий приоритет (кэширование, предзагрузка)
+        CRITICAL: 1,    // Critical requests (user actions)
+        HIGH: 3,        // Important requests (data refresh)
+        NORMAL: 5,      // Normal requests (background updates)
+        LOW: 7          // Low priority (caching, preload)
     };
 
     /**
-     * Get конфигурацию for API
-     * @param {string} apiName - имя API
-     * @returns {Object} - конфигурация
+     * Get config for API
+     * @param {string} apiName - API name
+     * @returns {Object} - config
      */
     function getApiConfig(apiName) {
         return API_CONFIG[apiName] || API_CONFIG.coingecko;
     }
 
     /**
-     * Get приоритет запроса
-     * @param {string} requestType - тип запроса
-     * @returns {number} - приоритет
+     * Get request priority
+     * @param {string} requestType - request type
+     * @returns {number} - priority
      */
     function getPriority(requestType) {
         return REQUEST_PRIORITIES[requestType] || REQUEST_PRIORITIES.NORMAL;

@@ -26,8 +26,8 @@
  * - Compact minimal interface
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
- * - Компонент: app/components/ai-api-settings.js
+ * - General template principles: id:sk-483943 (section "x-template extraction")
+ * - Component: app/components/ai-api-settings.js
  */
 
 (function() {
@@ -36,7 +36,7 @@
     const TEMPLATE = `<div class="modal-body-fixed-size">
     <!-- Duplicate toggle in modal header -->
     <Teleport to="#aiApiModal-header-extra" v-if="isMounted">
-        <div class="btn-group btn-group-sm modal-header-tabs-group" role="group" aria-label="Выбор источника API ключа (заголовок)">
+        <div class="btn-group btn-group-sm modal-header-tabs-group" role="group" aria-label="Выбор sourceа API ключа (заголовок)">
             <input
                 type="radio"
                 class="btn-check"

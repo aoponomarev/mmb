@@ -1,83 +1,83 @@
 /**
  * ================================================================================================
- * API PROXY - Универсальный прокси for внешних API с KV кэшированием
+ * API PROXY - Universal proxy for external APIs with KV caching
  * ================================================================================================
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-7cf3f7
  *
- * PURPOSE: Проксирование запросов к внешним API for CORS bypass при работе на file://
+ * PURPOSE: Proxy requests to external APIs for CORS bypass when working on file://
  *
- * ПОДДЕРЖИВАЕМЫЕ API:
+ * SUPPORTED APIs:
  * - CoinGecko (https://api.coingecko.com/api/v3)
  * - Yahoo Finance (https://query1.finance.yahoo.com/v8/finance/chart)
  * - Stooq (https://stooq.com/q/d/l/)
  *
- * МАРШРУТЫ:
+ * ROUTES:
  * - /api/coingecko/* → CoinGecko API
  * - /api/yahoo-finance/* → Yahoo Finance API
  * - /api/stooq/* → Stooq API
  *
- * КЭШИРОВАНИЕ:
- * - Cloudflare KV for популярных запросов
- * - TTL зависит от типа данных (монеты: 5 мин, metrics: 1 час)
+ * CACHING:
+ * - Cloudflare KV for popular requests
+ * - TTL depends on data type (coins: 5 min, metrics: 1 hour)
  * - Cache-Control headers for edge cache
  *
- * БЕЗОПАСНОСТЬ:
- * - Whitelist доменов (только разрешенные API)
- * - Rate limiting (optional, через env.RATE_LIMIT)
- * - Валидация путей (только разрешенные endpoints)
+ * SECURITY:
+ * - Domain whitelist (only allowed APIs)
+ * - Rate limiting (optional, via env.RATE_LIMIT)
+ * - Path validation (only allowed endpoints)
  *
- * @param {Request} request - Входящий HTTP request
+ * @param {Request} request - Incoming HTTP request
  * @param {Object} env - Environment variables (API_CACHE KV binding)
- * @param {string} apiType - Тип API ('coingecko', 'yahoo-finance', 'stooq')
- * @returns {Promise<Response>} HTTP ответ с CORS headers
+ * @param {string} apiType - API type ('coingecko', 'yahoo-finance', 'stooq')
+ * @returns {Promise<Response>} HTTP response with CORS headers
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';
 
-// Конфигурация поддерживаемых API
+// Supported APIs configuration
 const API_CONFIGS = {
   coingecko: {
     baseUrl: 'https://api.coingecko.com/api/v3',
-    defaultTTL: 300, // 5 минут
+    defaultTTL: 300, // 5 minutes
     cacheTTL: {
-      '/coins/markets': 300,        // 5 минут (топ монет)
-      '/coins/list': 86400,          // 24 часа (список всех монет)
-      '/simple/price': 60,           // 1 минута (текущие цены)
-      '/global': 3600,               // 1 час (глобальные metrics)
+      '/coins/markets': 300,        // 5 min (top coins)
+      '/coins/list': 86400,          // 24 hours (all coins list)
+      '/simple/price': 60,           // 1 min (current prices)
+      '/global': 3600,               // 1 hour (global metrics)
     }
   },
   'yahoo-finance': {
     baseUrl: 'https://query1.finance.yahoo.com',
-    defaultTTL: 3600, // 1 час
+    defaultTTL: 3600, // 1 hour
     cacheTTL: {
-      '/v8/finance/chart': 3600,    // 1 час (исторические данные)
+      '/v8/finance/chart': 3600,    // 1 hour (historical data)
     }
   },
   stooq: {
     baseUrl: 'https://stooq.com',
-    defaultTTL: 3600, // 1 час
+    defaultTTL: 3600, // 1 hour
     cacheTTL: {
-      '/q/d/l/': 3600,              // 1 час (исторические данные)
+      '/q/d/l/': 3600,              // 1 hour (historical data)
     }
   }
 };
 
 /**
- * Get TTL for кэширования на основе пути запроса
- * @param {string} apiType - Тип API
- * @param {string} path - Path запроса
- * @returns {number} TTL в секундах
+ * Get TTL for caching based on request path
+ * @param {string} apiType - API type
+ * @param {string} path - Request path
+ * @returns {number} TTL in seconds
  */
 function getCacheTTL(apiType, path) {
   const config = API_CONFIGS[apiType];
-  if (!config) return 300; // Дефолт 5 минут
+  if (!config) return 300; // Default 5 minutes
 
-  // Проверяем точное совпадение пути
+  // Check exact path match
   if (config.cacheTTL[path]) {
     return config.cacheTTL[path];
   }
 
-  // Проверяем частичное совпадение (for путей с параметрами)
+  // Check partial match (for paths with params)
   for (const [pattern, ttl] of Object.entries(config.cacheTTL)) {
     if (path.startsWith(pattern)) {
       return ttl;
@@ -88,13 +88,13 @@ function getCacheTTL(apiType, path) {
 }
 
 /**
- * Генерация ключа кэша for KV
+ * Cache key generation for KV
  * Cloudflare KV key limit = 512 bytes. For long URLs (e.g. 50-coin /coins/markets),
  * we hash the query string portion to stay within limits.
- * @param {string} apiType - Тип API
- * @param {string} path - Path запроса
- * @param {string} queryString - Query параметры
- * @returns {Promise<string>} Ключ кэша
+ * @param {string} apiType - API type
+ * @param {string} path - Request path
+ * @param {string} queryString - Query params
+ * @returns {Promise<string>} Cache key
  */
 async function generateCacheKey(apiType, path, queryString) {
   const prefix = `api-cache:${apiType}:${path}`;
@@ -114,12 +114,12 @@ async function generateCacheKey(apiType, path, queryString) {
 }
 
 /**
- * Проверка валидности пути (защита от инъекций)
- * @param {string} path - Path запроса
- * @returns {boolean} true если путь валиден
+ * Path validity check (injection protection)
+ * @param {string} path - Request path
+ * @returns {boolean} true if path valid
  */
 function isValidPath(path) {
-  // Запрещаем: ../, ..\, абсолютные пути, протоколы
+  // Forbid: ../, ..\, absolute paths, protocols
   const dangerousPatterns = [
     /\.\./,           // Parent directory
     /^[a-z]+:/i,      // Protocol (http:, file:, etc)
@@ -131,49 +131,49 @@ function isValidPath(path) {
 }
 
 /**
- * Обработка прокси запроса for CoinGecko
- * @param {Request} request - Входящий запрос
+ * Proxy request handling for CoinGecko
+ * @param {Request} request - Incoming request
  * @param {Object} env - Environment variables
- * @param {string} path - Path после /api/coingecko
- * @returns {Promise<Response>} Ответ от CoinGecko или из кэша
+ * @param {string} path - Path after /api/coingecko
+ * @returns {Promise<Response>} Response from CoinGecko or from cache
  */
 export async function handleCoinGeckoProxy(request, env, path) {
   return handleApiProxy(request, env, 'coingecko', path);
 }
 
 /**
- * Обработка прокси запроса for Yahoo Finance
- * @param {Request} request - Входящий запрос
+ * Proxy request handling for Yahoo Finance
+ * @param {Request} request - Incoming request
  * @param {Object} env - Environment variables
- * @param {string} path - Path после /api/yahoo-finance
- * @returns {Promise<Response>} Ответ от Yahoo Finance или из кэша
+ * @param {string} path - Path after /api/yahoo-finance
+ * @returns {Promise<Response>} Response from Yahoo Finance or from cache
  */
 export async function handleYahooFinanceProxy(request, env, path) {
   return handleApiProxy(request, env, 'yahoo-finance', path);
 }
 
 /**
- * Обработка прокси запроса for Stooq
- * @param {Request} request - Входящий запрос
+ * Proxy request handling for Stooq
+ * @param {Request} request - Incoming request
  * @param {Object} env - Environment variables
- * @param {string} path - Path после /api/stooq
- * @returns {Promise<Response>} Ответ от Stooq или из кэша
+ * @param {string} path - Path after /api/stooq
+ * @returns {Promise<Response>} Response from Stooq or from cache
  */
 export async function handleStooqProxy(request, env, path) {
   return handleApiProxy(request, env, 'stooq', path);
 }
 
 /**
- * Универсальный обработчик прокси запросов
- * @param {Request} request - Входящий запрос
+ * Universal proxy request handler
+ * @param {Request} request - Incoming request
  * @param {Object} env - Environment variables
- * @param {string} apiType - Тип API
- * @param {string} path - Path запроса
- * @returns {Promise<Response>} Ответ от API или из кэша
+ * @param {string} apiType - API type
+ * @param {string} path - Request path
+ * @returns {Promise<Response>} Response from API or from cache
  */
 async function handleApiProxy(request, env, apiType, path) {
   try {
-    // Валидация типа API
+    // API type validation
     const config = API_CONFIGS[apiType];
     if (!config) {
       return jsonResponse(
@@ -182,7 +182,7 @@ async function handleApiProxy(request, env, apiType, path) {
       );
     }
 
-    // Валидация пути
+    // Path validation
     if (!isValidPath(path)) {
       return jsonResponse(
         { error: 'Invalid Path', message: 'Path contains invalid characters' },
@@ -190,15 +190,15 @@ async function handleApiProxy(request, env, apiType, path) {
       );
     }
 
-    // Извлекаем query параметры
+    // Extract query params
     const url = new URL(request.url);
-    const queryString = url.search.substring(1); // Убираем '?'
+    const queryString = url.search.substring(1); // Remove '?'
 
-    // Генерируем ключ кэша (async — may hash long query strings)
+    // Generate cache key (async — may hash long query strings)
     const cacheKey = await generateCacheKey(apiType, path, queryString);
     const cacheTTL = getCacheTTL(apiType, path);
 
-    // Проверяем KV кэш (если доступен)
+    // Check KV cache (if available)
     if (env.API_CACHE) {
       const cached = await env.API_CACHE.get(cacheKey, { type: 'json' });
       if (cached) {
@@ -212,24 +212,24 @@ async function handleApiProxy(request, env, apiType, path) {
       console.log(`[API Proxy] Cache MISS: ${cacheKey}`);
     }
 
-    // Формируем URL for внешнего API
+    // Build URL for external API
     const targetUrl = queryString
       ? `${config.baseUrl}${path}?${queryString}`
       : `${config.baseUrl}${path}`;
 
     console.log(`[API Proxy] Fetching: ${targetUrl}`);
 
-    // Делаем запрос к внешнему API
+    // Make request to external API
     const apiResponse = await fetch(targetUrl, {
       method: request.method,
       headers: {
         'User-Agent': 'app-Dataset-Integration/1.0',
         'Accept': 'application/json',
       },
-      signal: AbortSignal.timeout(30000), // 30 секунд таймаут
+      signal: AbortSignal.timeout(30000), // 30 second timeout
     });
 
-    // Проверяем статус ответа
+    // Check response status
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
       console.error(`[API Proxy] Error: ${apiResponse.status} - ${errorText}`);
@@ -243,24 +243,24 @@ async function handleApiProxy(request, env, apiType, path) {
       );
     }
 
-    // Парсим ответ
+    // Parse response
     const data = await apiResponse.json();
 
-    // Сохраняем в KV кэш (если доступен)
+    // Save to KV cache (if available)
     if (env.API_CACHE) {
       const cacheEntry = {
         data,
         timestamp: Date.now(),
         ttl: cacheTTL
       };
-      // KV TTL в секундах, expirationTtl задает время жизни ключа
+      // KV TTL in seconds, expirationTtl sets key lifetime
       await env.API_CACHE.put(cacheKey, JSON.stringify(cacheEntry), {
         expirationTtl: cacheTTL
       });
       console.log(`[API Proxy] Cached: ${cacheKey} (TTL: ${cacheTTL}s)`);
     }
 
-    // Возвращаем ответ с CORS headers и Cache-Control
+    // Return response with CORS headers and Cache-Control
     const headers = new Headers();
     headers.set('X-Cache', 'MISS');
     headers.set('X-Cache-Key', cacheKey);
@@ -280,13 +280,13 @@ async function handleApiProxy(request, env, apiType, path) {
 }
 
 /**
- * Универсальный прокси for любых URL (в основном for изображений)
- * @param {Request} request - Входящий запрос
+ * Universal proxy for any URL (mainly for images)
+ * @param {Request} request - Incoming request
  * @param {Object} env - Environment variables
- * @returns {Promise<Response>} Ответ от целевого URL
+ * @returns {Promise<Response>} Response from target URL
  */
-// Whitelist доменов for generic proxy (иконки монет и публичные CDN).
-// Только эти хосты могут быть проксированы — защита от open proxy abuse.
+// Domain whitelist for generic proxy (coin icons and public CDNs).
+// Only these hosts can be proxied — protection from open proxy abuse.
 const GENERIC_PROXY_ALLOWED_HOSTS = new Set([
   'assets.coingecko.com',
   'coin-images.coingecko.com',
@@ -311,13 +311,13 @@ export async function handleGenericProxy(request, env) {
 
     const targetUrl = new URL(targetUrlStr);
 
-    // Разрешаем только http/https
+    // Allow only http/https
     if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') {
       return jsonResponse({ error: 'Unsupported protocol' }, { status: 400 });
     }
 
-    // Skill anchor: whitelist доменов защищает от open proxy abuse.
-    // Добавлять новые домены только после ревью.
+    // Skill anchor: domain whitelist protects from open proxy abuse.
+    // Add new domains only after review.
     const hostname = targetUrl.hostname.toLowerCase();
     const allowed = [...GENERIC_PROXY_ALLOWED_HOSTS].some(
       h => hostname === h || hostname.endsWith(`.${h}`)
@@ -347,9 +347,9 @@ export async function handleGenericProxy(request, env) {
       );
     }
 
-    // Создаем новый ответ, чтобы скопировать заголовки (Content-Type)
+    // Create new response to copy headers (Content-Type)
     const headers = new Headers(apiResponse.headers);
-    // Добавляем CORS headers
+    // Add CORS headers
     headers.set('Access-Control-Allow-Origin', '*');
     headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
     headers.set('Access-Control-Allow-Headers', '*');

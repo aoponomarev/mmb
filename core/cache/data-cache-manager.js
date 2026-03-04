@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Native file cache for backend data flow.
  * - TTL-based freshness
  * - no secret storage

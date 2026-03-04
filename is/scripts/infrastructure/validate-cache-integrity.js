@@ -1,5 +1,5 @@
 /**
- * @skill arch-foundation
+ * @skill id:sk-483943
  * @description Validates cache integrity and secret resilience
  */
 import { spawnSync } from "node:child_process";

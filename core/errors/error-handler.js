@@ -1,27 +1,27 @@
 /**
  * ================================================================================================
- * ERROR HANDLER - Единая система обработки ошибок
+ * ERROR HANDLER - Unified error handling system
  * ================================================================================================
  *
- * PURPOSE: Централизованная обработка всех ошибок приложения.
- * Классификация, логирование, пользовательские сообщения, повторные попытки.
+ * PURPOSE: Centralized handling of all application errors.
+ * Classification, logging, user messages, retries.
  *
- * Skill: is/skills/arch-foundation
+ * Skill: id:sk-483943
  *
  * PRINCIPLES:
- * - Все ошибки проходят через единый обработчик
- * - Автоматическая классификация ошибок
- * - Логирование через logger
- * - Пользовательские сообщения
- * - Автоматические повторные попытки for сетевых ошибок
+ * - All errors go through single handler
+ * - Automatic error classification
+ * - Logging via logger
+ * - User messages
+ * - Automatic retries for network errors
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
-    // Зависимости (загружаются до этого скрипта)
+    // Dependencies (loaded before this script)
     // - core/errors/error-types.js (window.errorTypes)
     // - core/logging/logger.js (window.logger)
 
@@ -31,14 +31,14 @@
     }
 
     /**
-     * Классифицировать ошибку по типу
-     * @param {Error|Object} error - ошибка
-     * @returns {string} - тип ошибки
+     * Classify error by type
+     * @param {Error|Object} error - error
+     * @returns {string} - error type
      */
-    // Skill anchor: классификация HTTP ошибок (429 vs 500 vs network) критична for retry-политик.
-    // See core/skills/api-layer
+    // Skill anchor: HTTP error classification (429 vs 500 vs network) critical for retry policies.
+    // See id:sk-bb7c8e
     function classifyError(error) {
-        // HTTP ошибки
+        // HTTP errors
         if (error.status === 429) {
             return window.errorTypes.ERROR_TYPES.API_RATE_LIMIT;
         }
@@ -52,7 +52,7 @@
             return window.errorTypes.ERROR_TYPES.API_NETWORK;
         }
 
-        // Валидация
+        // Validation
         if (error.type === 'validation' || error.name === 'ValidationError') {
             return window.errorTypes.ERROR_TYPES.VALIDATION_ERROR;
         }
@@ -60,7 +60,7 @@
             return window.errorTypes.ERROR_TYPES.SCHEMA_ERROR;
         }
 
-        // Вычисления
+        // Computation
         if (error.type === 'calculation' || error.name === 'CalculationError') {
             return window.errorTypes.ERROR_TYPES.CALCULATION_ERROR;
         }
@@ -68,7 +68,7 @@
             return window.errorTypes.ERROR_TYPES.MATH_ERROR;
         }
 
-        // Хранилище
+        // Storage
         if (error.name === 'QuotaExceededError') {
             return window.errorTypes.ERROR_TYPES.STORAGE_QUOTA;
         }
@@ -80,9 +80,9 @@
     }
 
     /**
-     * Get ключ сообщения из messagesConfig по типу ошибки
-     * @param {string} errorType - тип ошибки из errorTypes.ERROR_TYPES
-     * @returns {string} - ключ сообщения for messagesConfig
+     * Get message key from messagesConfig by error type
+     * @param {string} errorType - error type from errorTypes.ERROR_TYPES
+     * @returns {string} - message key for messagesConfig
      */
     function getMessageKey(errorType) {
         const keyMap = {
@@ -102,10 +102,10 @@
     }
 
     /**
-     * Обработать ошибку
-     * @param {Error|Object} error - ошибка
-     * @param {Object} context - контекст (компонент, действие, showMessage)
-     * @returns {Object} - обработанная ошибка { type, severity, message, userMessage, context }
+     * Handle error
+     * @param {Error|Object} error - error
+     * @param {Object} context - context (component, action, showMessage)
+     * @returns {Object} - processed error { type, severity, message, userMessage, context }
      */
     function handleError(error, context = {}) {
         const errorType = classifyError(error);
@@ -126,7 +126,7 @@
             timestamp: Date.now()
         };
 
-        // Логирование через logger (если доступен)
+        // Log via logger (if available)
         if (window.logger) {
             const logLevel = severity === 'critical' || severity === 'high' ? 'error' : 'warn';
             window.logger[logLevel](processedError.message, processedError.context);
@@ -134,19 +134,19 @@
             console.error('Error:', processedError);
         }
 
-        // Эмит события через eventBus (если доступен)
+        // Emit event via eventBus (if available)
         if (window.eventBus) {
             window.eventBus.emit('error-occurred', processedError);
         }
 
-        // Автоматический показ сообщения пользователю через AppMessages
-        // Опция showMessage: false отключает автоматический показ
+        // Automatic user message display via AppMessages
+        // Option showMessage: false disables automatic display
         const showMessage = context.showMessage !== false;
         if (showMessage && window.AppMessages && window.messagesConfig) {
             const messageKey = getMessageKey(errorType);
             const messageData = window.messagesConfig.getMessage(messageKey);
 
-            // Определяем scope из context или используем 'global'
+            // Derive scope from context or use 'global'
             const scope = context.scope || 'global';
 
             window.AppMessages.push({
@@ -154,7 +154,7 @@
                 details: context.details || null,
                 type: messageData.type || 'danger',
                 priority: messageData.priority || 4,
-                key: messageKey, // Сохраняем ключ for последующего перевода
+                key: messageKey, // Store key for later translation
                 scope: scope,
                 actions: context.actions || []
             });
@@ -164,10 +164,10 @@
     }
 
     /**
-     * Выполнить операцию с автоматическими повторными попытками
-     * @param {Function} operation - асинхронная операция
-     * @param {Object} options - опции { maxRetries, retryDelay, retryableErrors }
-     * @returns {Promise<any>} - результат операции
+     * Run operation with automatic retries
+     * @param {Function} operation - async operation
+     * @param {Object} options - options { maxRetries, retryDelay, retryableErrors }
+     * @returns {Promise<any>} - operation result
      */
     async function withRetry(operation, options = {}) {
         const {
@@ -188,9 +188,9 @@
                 lastError = error;
                 const processedError = handleError(error, { action: 'retry', attempt });
 
-                // Проверка, можно ли повторить
+                // Check if retry is allowed
                 if (attempt < maxRetries && retryableErrors.includes(processedError.type)) {
-                    const delay = retryDelay * Math.pow(2, attempt); // Экспоненциальная задержка
+                    const delay = retryDelay * Math.pow(2, attempt); // Exponential backoff
                     await new Promise(resolve => setTimeout(resolve, delay));
                     continue;
                 }

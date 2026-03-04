@@ -1,5 +1,5 @@
 /**
- * @skill core/skills/api-layer
+ * @skill id:sk-bb7c8e
  * @description Backend request registry for provider calls. Stores minimal per-resource call metadata and enforces rate limiting / interval checks.
  */
 

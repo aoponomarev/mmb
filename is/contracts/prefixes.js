@@ -1,7 +1,7 @@
 /**
  * @skill process-skill-governance
  * @description SSOT: Global prefix registry for skills and modules. Single source of truth.
- * @see is/skills/process-skill-governance.md
+ * @see id:sk-d763e7
  *
  * AGENT OBLIGATION: When creating or naming a skill file with a prefix, the AI agent MUST:
  * 1. Check this registry for an existing prefix that fits the skill's domain.

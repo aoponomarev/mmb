@@ -2,17 +2,17 @@
  * ================================================================================================
  * COINGECKO FETCHER - Yandex Cloud Function (cron trigger)
  * ================================================================================================
- * Каждый цикл загружает топ-250 монет по капитализации и объёму из CoinGecko,
- * записывает их в coin_market_cache_history с уникальным cycle_id,
- * обновляет основную таблицу coin_market_cache (latest view),
- * и ротирует историю, оставляя только 2 последних цикла.
+ * Each cycle loads top-250 coins by cap and volume from CoinGecko,
+ * writes to coin_market_cache_history with unique cycle_id,
+ * updates main table coin_market_cache (latest view),
+ * and rotates history, keeping only 2 latest cycles.
  *
- * ДНЕВНОЕ ОКНО: работает только с 06:00 до 24:00 по Москве (Europe/Moscow).
- * Ночные вызовы получают 200 OK + status: SKIPPED.
+ * DAY WINDOW: runs only 06:00–24:00 Moscow (Europe/Moscow).
+ * Night calls get 200 OK + status: SKIPPED.
  *
- * ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ:
+ * ENV VARS:
  * - DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
- * - COINGECKO_API_KEY (optional, Demo/Pro ключ for снятия rate limit)
+ * - COINGECKO_API_KEY (optional, Demo/Pro key to lift rate limit)
  */
 
 'use strict';
@@ -20,7 +20,7 @@
 const https = require('https');
 const { Client } = require('pg');
 
-// ─── Конфигурация ──────────────────────────────────────────────────────────────
+// ─── Configuration ──────────────────────────────────────────────────────────────
 
 const DB_CONFIG = {
     host:     process.env.DB_HOST     || 'rc1b-dgs1vgc130gbme2n.mdb.yandexcloud.net',

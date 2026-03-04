@@ -1,5 +1,5 @@
 /**
- * @skill arch-layout-governance
+ * @skill id:sk-c62fb6
  * Validates mandatory README files and structure sync (listed subdirs match filesystem).
  * Run: npm run readmes:check
  */

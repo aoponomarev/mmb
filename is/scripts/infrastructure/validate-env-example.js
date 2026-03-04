@@ -1,6 +1,6 @@
 /**
- * @skill is/skills/process-env-sync
- * @skill is/skills/process-secrets-hygiene
+ * @skill id:sk-918276
+ * @skill id:sk-b7e114
  *
  * Validates .env and .env.example are in sync (EIP — Every Item Present).
  * Fails if any key in .env is missing from .env.example, or vice versa.

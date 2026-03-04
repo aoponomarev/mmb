@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * PURPOSE: Distribute cache keys across storages (localStorage/IndexedDB) by size and access frequency.
- * @skill core/skills/cache-layer
+ * @skill id:sk-3c832d
  *
  * HOT (localStorage, ≤5MB) — synchronous access, fast:
  * - settings, theme, timezone, favorites, ui-state, active-tab — settings and UI state
@@ -41,7 +41,7 @@
  * 3. Estimate data type (simple objects → localStorage, arrays/structures → IndexedDB)
  * 4. Add key to LAYERS.{layer}.keys array
  *
- * REFERENCE: General caching principles: core/skills/cache-layer
+ * REFERENCE: General caching principles: id:sk-3c832d
  */
 
 (function() {

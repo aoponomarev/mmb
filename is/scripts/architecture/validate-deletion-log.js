@@ -1,5 +1,5 @@
 /**
- * @skill process-docs-lifecycle
+ * @skill id:sk-0e193a
  * @description Validates docs/deletion-log.md: table format, deleted files must not exist.
  */
 import fs from "node:fs";

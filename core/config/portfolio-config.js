@@ -1,20 +1,20 @@
 /**
  * ================================================================================================
- * PORTFOLIO CONFIG - Конфигурация и структура данных портфеля
+ * PORTFOLIO CONFIG - Configuration and structure of portfolio data
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  *
- * PURPOSE: SSOT for структуры данных портфеля и его параметров.
+ * PURPOSE: SSOT for portfolio data structure and parameters.
  *
  * PRINCIPLES:
- * - Поддержка смешанных портфелей (монеты от разных моделей).
- * - Сохранение контекста формирования (metrics рынка, состояние моделей).
- * - Совместимость с планом миграции (Блок D.1).
+ * - Support mixed portfolios (coins from different models).
+ * - Preserve formation context (market metrics, model state).
+ * - Compatible with migration plan (Block D.1).
  *
  * REFERENCES:
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md
- * - Documentation метрик: `core/skills/domain-portfolio`
- * - Архитектура портфелей: `is/skills/arch-foundation` (раздел "Портфельная система")
+ * - Metrics documentation: id:sk-c3d639
+ * - Portfolio architecture: id:sk-483943 (section "Portfolio system")
  * - Hardening: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A1`)
  *
  * NOTE: This module acts as compatibility facade over `core/domain/portfolio-engine.js`.
@@ -25,11 +25,11 @@
     'use strict';
 
     /**
-     * Создает пустую структуру монеты for портфеля
-     * @param {Object} coin - Исходные данные монеты с метриками
-     * @param {string} modelId - ID модели, делегировавшей монету
-     * @param {number} weight - Доля в портфеле (0-100)
-     * @returns {Object} Структура монеты в портфеле
+     * Creates empty coin structure for portfolio
+     * @param {Object} coin - Source coin data with metrics
+     * @param {string} modelId - ID of model that delegated the coin
+     * @param {number} weight - Share in portfolio (0-100)
+     * @returns {Object} Coin structure in portfolio
      */
     function createPortfolioCoin(coin, modelId, weight = 0) {
         const model = window.modelsConfig ? window.modelsConfig.getModel(modelId) : null;
@@ -41,17 +41,17 @@
             ticker: (coin.symbol || coin.ticker || '').toUpperCase(),
             name: coin.name || '',
 
-            // Снапшот цен и PV на момент добавления
+            // Price and PV snapshot at add time
             currentPrice: coin.current_price || coin.price || 0,
             pvs: coin.pvs || [coin.PV1h, coin.PV24h, coin.PV7d, coin.PV14d, coin.PV30d, coin.PV200d],
 
-            // Метрики
+            // Metrics
             metrics: { ...(coin.metrics || {}) },
 
-            // Портфельные атрибуты
+            // Portfolio attributes
             portfolioPercent: weight,
 
-            // Связь с моделью (D.1)
+            // Link to model (D.1)
             delegatedBy: {
                 modelId: modelId,
                 modelName,
@@ -62,7 +62,7 @@
     }
 
     /**
-     * Создает структуру нового портфеля (D.1)
+     * Creates new portfolio structure (D.1)
      */
     function createPortfolio(id, name, coins = [], marketMetrics = {}, marketAnalysis = {}, settings = {}, modelMix = {}) {
         const defaultParams = window.modelsConfig?.getDefaultParams?.() || {};
@@ -166,7 +166,7 @@
     }
 
     /**
-     * Генерирует ID по шаблону YYMMDD-hhmm
+     * Generates ID by template YYMMDD-hhmm
      */
     function generatePortfolioId(date = new Date()) {
         const year = date.getFullYear().toString().slice(-2);
@@ -325,7 +325,7 @@
         generateSnapshotId,
 
         /**
-         * Получает list portfolios из локального хранилища (D.5)
+         * Gets portfolio list from local storage (D.5)
          */
         getLocalPortfolios() {
             try {
@@ -334,13 +334,13 @@
                 if (!Array.isArray(parsed)) return [];
                 return parsed.map(normalizePortfolio);
             } catch (e) {
-                console.error('portfolio-config: ошибка чтения из localStorage', e);
+                console.error('portfolio-config: localStorage read error', e);
                 return [];
             }
         },
 
         /**
-         * Сохраняет list portfolios в локальное хранилище (D.5)
+         * Save portfolios list to local storage (D.5)
          */
         saveLocalPortfolios(portfolios) {
             try {
@@ -350,13 +350,13 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
                 return true;
             } catch (e) {
-                console.error('portfolio-config: ошибка записи в localStorage', e);
+                console.error('portfolio-config: localStorage write error', e);
                 return false;
             }
         },
         /**
-         * Экспорт портфелей в JSON (этап 4)
-         * @param {string} mode - 'light' (только портфели) | 'full' (портфели + снимки)
+         * Export portfolios to JSON (stage 4)
+         * @param {string} mode - 'light' (portfolios only) | 'full' (portfolios + snapshots)
          */
         exportPortfolios(mode = 'light') {
             const portfolios = this.getLocalPortfolios();
@@ -368,12 +368,12 @@
                 portfolios
             };
 
-            // В режиме 'light' убираем тяжелые снимки из портфелей, если они там есть
+            // In 'light' mode remove heavy snapshots from portfolios if present
             if (mode === 'light') {
                 exportData.portfolios = portfolios.map(p => {
                     const cloned = { ...p };
                     if (cloned.snapshots) {
-                        // Оставляем только ID снимков for ссылок, но удаляем сами массивы данных
+                        // Keep only snapshot IDs for references, remove data arrays
                         cloned.snapshots = {
                             snapshotId: cloned.snapshots.snapshotId,
                             market: { snapshotId: cloned.snapshots.market?.snapshotId },
@@ -388,7 +388,7 @@
             return exportData;
         },
         /**
-         * Импорт портфелей из JSON (этап 4)
+         * Import portfolios from JSON (stage 4)
          * @param {Object} payload
          * @param {Object} options
          */
@@ -409,15 +409,15 @@
         },
 
         /**
-         * Распределяет доли (проценты) между монетами в портфеле (D.2)
-         * @param {Array} coins - Массив монет (объектов с metrics.agr)
+         * Distributes shares (percent) among coins in portfolio (D.2)
+         * @param {Array} coins - Array of coins (objects with metrics.agr)
          * @param {string} mode - 'equal' | 'agr'
-         * @param {number} totalPercent - Общий целевой процент (обычно 100)
+         * @param {number} totalPercent - Total target percent (usually 100)
          */
         calculateWeights(coins, mode = 'equal', totalPercent = 100) {
             if (!Array.isArray(coins) || coins.length === 0) return;
 
-            // Backward-compatible facade: строим канонический draft и возвращаем результат в legacy поле portfolioPercent.
+            // Backward-compatible facade: build canonical draft and return result in legacy portfolioPercent field.
             if (window.portfolioEngine && typeof window.portfolioEngine.allocateWeights === 'function') {
                 const assets = coins.map((coin, index) => ({
                     coinId: coin.coinId || coin.id || `${coin.symbol || 'coin'}-${index}`,
@@ -468,18 +468,18 @@
         },
 
         /**
-         * Автоматически отбирает топ-5 Long и топ-5 Short по AGR (D.2)
-         * @param {Array} allCoins - Полный список монет с метриками
-         * @returns {Array} Список отобранных монет
+         * Auto-selects top-5 Long and top-5 Short by AGR (D.2)
+         * @param {Array} allCoins - Full list of coins with metrics
+         * @returns {Array} Selected coins list
          */
         autoSelectCoins(allCoins) {
             if (!Array.isArray(allCoins) || allCoins.length === 0) return [];
 
             // Skill anchor: exclude stablecoins and wrappers from default auto-selection
-            // See core/skills/domain-portfolio
+            // See id:sk-c3d639
             const candidates = allCoins.filter(coin => {
                 if (!window.coinsConfig) return true;
-                // Исключаем стейблкоины, обертки и LST из дефолтного набора
+                // Exclude stablecoins, wrappers and LST from default set
                 const type = window.coinsConfig.getCoinType(coin.id || coin.coinId, coin.symbol || coin.ticker, coin.name);
                 return !type;
             });
@@ -502,7 +502,7 @@
         },
 
         /**
-         * Валидирует канонический draft портфеля.
+         * Validate canonical draft portfolio.
          * @param {Object} draft
          * @returns {{ok: boolean, issues: Array}}
          */
@@ -514,7 +514,7 @@
         },
 
         /**
-         * Преобразование в payload Cloudflare.
+         * Convert to Cloudflare payload.
          * @param {Object} draft
          * @returns {Object}
          */
@@ -526,7 +526,7 @@
         },
 
         /**
-         * Преобразование в payload PostgreSQL.
+         * Convert to PostgreSQL payload.
          * @param {Object} draft
          * @param {Object} context
          * @returns {{portfolio: Object, snapshotsBatch: Object}}
@@ -539,9 +539,9 @@
         },
 
         /**
-         * Вычисляет статистику вклада моделей в портфель (D.2)
-         * @param {Array} portfolioCoins - Монеты уже в структуре портфеля
-         * @returns {Object} Объект со статистикой по modelId
+         * Computes model contribution stats for portfolio (D.2)
+         * @param {Array} portfolioCoins - Coins already in portfolio structure
+         * @returns {Object} Object with stats per modelId
          */
         calculateModelMix(portfolioCoins) {
             const mix = {};

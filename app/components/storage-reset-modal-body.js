@@ -5,11 +5,11 @@
  *
  * PURPOSE: Selective cache deletion by category.
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: core/skills/cache-layer
+ * Skill: id:sk-3c832d
  *
  * FEATURES:
  * - Checkboxes for cache category selection
@@ -270,7 +270,7 @@ window.storageResetModalBody = {
                                                 }
                                             }
                                         } else {
-                                            // Неверсионированные ключи
+                                            // Non-versioned keys
                                             if (key.startsWith('tooltips-') || key.startsWith('app-messages-translations-')) {
                                                 keysToDelete.push(key);
                                             }

@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-docs-lifecycle
+ * @skill id:sk-0e193a
  * @description Adds deterministic id frontmatter to markdown files missing id.
  */
 import fs from "node:fs";

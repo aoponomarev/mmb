@@ -4,11 +4,11 @@
  * ================================================================================================
  *
  * PURPOSE: Переиспользуемый компонент for отображения информации о монете.
- * Адаптирован из do-overs/BOT/ui/components/cell-coin.js с удалением привязки к CoinGecko.
+ * Наследник cell-coin: shared/components/coin-block.js (coin display, dropdown, favorites).
  *
- * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
- * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
- * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
  * USAGE:
  * <coin-block
@@ -182,7 +182,7 @@
             },
 
             /**
-             * Тип монеты for UI-индикаторов (ЕИП)
+             * Тип монеты for UI-индикаторов (SSOT)
              */
             coinType() {
                 if (!window.coinsConfig || !window.coinsConfig.getCoinType) return null;

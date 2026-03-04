@@ -1,16 +1,16 @@
 /**
  * ================================================================================================
- * BASE MODEL CALCULATOR - Базовый класс for математических моделей
+ * BASE MODEL CALCULATOR - Base class for math models
  * ================================================================================================
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  *
- * PURPOSE: Предоставить абстрактный интерфейс for всех математических моделей в приложении.
- * Каждая модель (Медиана, Моментум и т.д.) должна наследоваться от этого класса.
+ * PURPOSE: Provide abstract interface for all math models in app.
+ * Each model (Median, Momentum, etc.) must extend this class.
  *
  * PRINCIPLES:
- * - Модульность: Каждая модель - независимый объект.
- * - Единый интерфейс: app-ui-root работает с моделями через общие методы.
- * - Инкапсуляция: Логика расчета скрыта внутри модели.
+ * - Modularity: Each model is independent.
+ * - Unified interface: app-ui-root works with models via common methods.
+ * - Encapsulation: Calc logic hidden inside model.
  */
 
 (function() {
@@ -18,20 +18,20 @@
 
     class BaseModelCalculator {
         /**
-         * @param {string} id - Уникальный идентификатор модели (напр. 'Median/AIR/260101')
-         * @param {string} name - Отображаемое название модели
+         * @param {string} id - Unique model id (e.g. 'Median/AIR/260101')
+         * @param {string} name - Display name
          */
         constructor(id, name) {
             this.id = id;
             this.name = name;
 
-            // Временные узлы в днях for PV от CoinGecko: [1h, 24h, 7d, 14d, 30d, 200d]
+            // Time frames in days for PV from CoinGecko: [1h, 24h, 7d, 14d, 30d, 200d]
             this.TIME_FRAMES_DAYS = [1/24, 1, 7, 14, 30, 200];
             this.EPSILON = 0.2;
         }
 
         /**
-         * Get параметры модели из modelsConfig с fallback
+         * Get model params from modelsConfig with fallback
          */
         resolveModelParams(modelId, fallback) {
             const safeFallback = fallback && typeof fallback === 'object' ? fallback : {};
@@ -50,10 +50,10 @@
         }
 
         /**
-         * Основной метод расчета метрик for списка монет
+         * Main metrics calc for coin list
          */
         calculateMetrics(coins, params) {
-            throw new Error(`Метод calculateMetrics не реализован в модели "${this.name}"`);
+            throw new Error(`calculateMetrics not implemented in model "${this.name}"`);
         }
 
         // --- Общие математические утилиты ---
@@ -103,7 +103,7 @@
         }
 
         /**
-         * Интерполяция значения на заданный горизонт
+         * Interpolate value to given horizon
          */
         interpolateValue(values, hDays) {
             let i1 = 0;
@@ -124,7 +124,7 @@
         }
 
         /**
-         * Сегментированные медианы (B.12)
+         * Segmented medians (B.12)
          */
         calculateSegmentedMedians(items, getValue) {
             const values = items

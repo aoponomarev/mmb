@@ -1,46 +1,46 @@
 /**
  * ================================================================================================
- * DROPDOWN TEMPLATE - Шаблон компонента выпадающего меню
+ * DROPDOWN TEMPLATE - Dropdown menu component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for Vue-обёртки над Bootstrap dropdown (cmp-dropdown) с поддержкой поиска и прокрутки.
+ * PURPOSE: Template for Vue wrapper over Bootstrap dropdown (cmp-dropdown) with search and scroll.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
+ * PROBLEM: Template must be in DOM before Vue.js init for component to work.
  *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="dropdown-template".
+ * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
+ * on file load as <script type="text/x-template"> element with id="dropdown-template".
  *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="dropdown-template"
- * - Компонент использует шаблон через template: '#dropdown-template'
+ * HOW:
+ * - Template defined as string in TEMPLATE constant
+ * - On file load <script type="text/x-template"> element is created
+ * - Element appended to document.body with id="dropdown-template"
+ * - Component uses template via template: '#dropdown-template'
  *
- * ОСОБЕННОСТИ ШАБЛОНА:
+ * TEMPLATE FEATURES:
  * Структура HTML:
- * - Корневой элемент: ⟨div class="dropdown"⟩ с ref="dropdownContainer"
- * - Кнопка триггера: компонент ⟨cmp-button⟩ или кастомная кнопка через слот #button
- * - Выпадающее меню: ⟨ul class="dropdown-menu"⟩ с условным классом 'show' при открытии
- * Layout и CSS-классы:
- * - Использование компонента cmp-button for кнопки триггера (через ⟨cmp-button⟩) for единообразия
- * - Прокручиваемая область: ⟨div class="dropdown-menu-scrollable"⟩ с overflow-y: auto и настраиваемой max-height
- * - Использование только Bootstrap классов for стилизации
- * Условный рендеринг:
- * - Кастомная кнопка через слот #button (v-if="!$slots.button" for стандартной кнопки)
- * - Поисковое поле с условным рендерингом (v-if="searchable")
- * - Прокручиваемая область for длинных списков (v-if="scrollable")
- * - Пустое состояние при поиске с проверкой filteredItems && filteredItems.length
- * Слоты:
- * - #button — кастомная кнопка триггера (с ограниченной областью видимости: isOpen, toggle)
- * - #items — элементы списка (с ограниченной областью видимости: filteredItems, searchQuery, handleItemSelect)
+ * - Root: ⟨div class="dropdown"⟩ with ref="dropdownContainer"
+ * - Trigger button: ⟨cmp-button⟩ or custom via slot #button
+ * - Dropdown menu: ⟨ul class="dropdown-menu"⟩ with conditional 'show' when open
+ * Layout and CSS:
+ * - cmp-button for trigger (via ⟨cmp-button⟩) for consistency
+ * - Scrollable area: ⟨div class="dropdown-menu-scrollable"⟩ with overflow-y: auto and max-height
+ * - Bootstrap classes only for styling
+ * Conditional rendering:
+ * - Custom button via slot #button (v-if="!$slots.button" for default)
+ * - Search field (v-if="searchable")
+ * - Scrollable area for long lists (v-if="scrollable")
+ * - Empty state on search (filteredItems && filteredItems.length)
+ * Slots:
+ * - #button — custom trigger button (scope: isOpen, toggle)
+ * - #items — list items (scope: filteredItems, searchQuery, handleItemSelect)
  * Responsiveness:
- * - Responsiveness кнопки триггера реализована через CSS классы компонента .dropdown-responsive и .btn-responsive с вложенными селекторами
+ * - Trigger button responsiveness via .dropdown-responsive and .btn-responsive
  * - С иконкой на мобильных: если задан buttonIcon, на мобильных отображается только иконка, на десктопе — только текст buttonText
  * - С укороченным текстом на мобильных: если buttonIcon не задан, но задан buttonTextShort, на мобильных отображается укороченный текст, на десктопе — полный buttonText
  * - Без адаптивности: если не заданы ни buttonIcon, ни buttonTextShort, всегда отображается полный buttonText
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - General template principles: id:sk-483943 (section "x-template extraction")
  * - Компонент: shared/components/dropdown.js
  */
 
@@ -48,7 +48,7 @@
     'use strict';
 
     const TEMPLATE = `<div :class="dropdownClasses" :title="tooltip" ref="dropdownContainer">
-    <!-- Кнопка триггера через cmp-button -->
+    <!-- Trigger button via cmp-button -->
     <cmp-button
         v-if="!$slots.button"
         ref="dropdownButton"
@@ -63,10 +63,10 @@
         :tooltip="tooltip">
     </cmp-button>
 
-    <!-- Кастомная кнопка через слот -->
+    <!-- Custom button via slot -->
     <slot name="button" :isOpen="isOpen" :toggle="handleToggle"></slot>
 
-    <!-- Выпадающее меню -->
+    <!-- Dropdown menu -->
     <ul
         :class="[
             menuClassesComputed,
@@ -76,7 +76,7 @@
         :data-bs-boundary="menuWidthMode === 'auto' ? 'viewport' : null"
         ref="menuElement"
         style="cursor: pointer;">
-        <!-- Поисковое поле -->
+        <!-- Search field -->
         <li v-if="searchable" class="px-3 py-2 border-bottom">
             <input
                 type="text"
@@ -88,7 +88,7 @@
                 ref="searchInput">
         </li>
 
-        <!-- Прокручиваемая область for длинных списков -->
+        <!-- Scrollable area for long lists -->
         <template v-if="scrollable">
             <div
                 class="dropdown-menu-scrollable"
@@ -102,7 +102,7 @@
             <slot name="items" :filteredItems="filteredItems" :searchQuery="searchQuery" :handleItemSelect="handleItemSelect"></slot>
         </template>
 
-        <!-- Пустое состояние при поиске -->
+        <!-- Empty state on search -->
         <li v-if="searchable && filteredItems && filteredItems.length === 0 && searchQuery" class="px-3 py-2 text-muted text-center">
             {{ emptySearchText }}
         </li>
@@ -110,7 +110,7 @@
 </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -120,7 +120,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

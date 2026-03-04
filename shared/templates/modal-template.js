@@ -1,42 +1,42 @@
 /**
  * ================================================================================================
- * MODAL TEMPLATE - Шаблон компонента модального окна
+ * MODAL TEMPLATE - Modal window component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for Vue-обёртки над Bootstrap Modal (cmp-modal).
+ * PURPOSE: Template for Vue wrapper over Bootstrap Modal (cmp-modal).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
+ * PROBLEM: Template must be in DOM before Vue.js init for component to work.
  *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="modal-template".
+ * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
+ * on file load as <script type="text/x-template"> element with id="modal-template".
  *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="modal-template"
- * - Компонент использует шаблон через template: '#modal-template'
+ * HOW:
+ * - Template defined as string in TEMPLATE constant
+ * - On file load <script type="text/x-template"> element is created
+ * - Element appended to document.body with id="modal-template"
+ * - Component uses template via template: '#modal-template'
  *
- * ОСОБЕННОСТИ ШАБЛОНА:
+ * TEMPLATE FEATURES:
  * Структура HTML:
- * - Корневой элемент: ⟨div class="modal fade"⟩ с ref="modalElement" и условным классом 'show'
- * - Контейнер диалога: ⟨div class="modal-dialog"⟩ с условными классами размера и центрирования
- * - Контент: ⟨div class="modal-content"⟩
- * Layout и CSS-классы:
- * - Использование только Bootstrap классов for стилизации
- * - Поддержка размеров через Bootstrap классы (modal-sm, modal-lg, modal-xl)
- * - Центрирование через класс modal-dialog-centered
- * Слоты:
- * - #header — заголовок модального окна
- * - #body — тело модального окна
- * - #footer — футер модального окна
+ * - Root: ⟨div class="modal fade"⟩ with ref="modalElement" and conditional 'show'
+ * - Dialog container: ⟨div class="modal-dialog"⟩ with size and center classes
+ * - Content: ⟨div class="modal-content"⟩
+ * Layout and CSS:
+ * - Bootstrap classes only for styling
+ * - Size via Bootstrap classes (modal-sm, modal-lg, modal-xl)
+ * - Center via modal-dialog-centered
+ * Slots:
+ * - #header — modal header
+ * - #body — modal body
+ * - #footer — modal footer
  *
- * ОСОБЕННОСТИ:
- * - Поддержка динамических кнопок через cmp-modal-buttons
- * - Кнопки отображаются автоматически, если зарегистрированы через modalApi
- * - Слоты и динамические кнопки могут использоваться одновременно
+ * FEATURES:
+ * - Dynamic buttons via cmp-modal-buttons
+ * - Buttons auto-shown when registered via modalApi
+ * - Slots and dynamic buttons can be used together
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - General template principles: id:sk-483943 (section "x-template extraction")
  * - Компонент: shared/components/modal.js
  * - Компонент кнопок: shared/components/modal-buttons.js
  */

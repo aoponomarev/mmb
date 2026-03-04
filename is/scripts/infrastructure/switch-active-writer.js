@@ -1,6 +1,6 @@
 /**
- * @skill is/skills/arch-external-parity
- * @skill is/skills/arch-foundation
+ * @skill id:sk-73dcca
+ * @skill id:sk-483943
  *
  * Switches DATA_PLANE_ACTIVE_APP between TARGET and LEGACY in .env,
  * validates the change with single-writer guard, and writes an audit log.

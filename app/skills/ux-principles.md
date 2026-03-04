@@ -77,4 +77,4 @@ UI config files (`modals-config.js`, `tooltips-config.js`) are validated against
 
 A typo in a config key — missing required field, wrong type — must cause a **test failure** (fail-fast), not a silent runtime defect on the client.
 
-See `app/skills/ui-architecture.md` for the full RRG and no-build architecture contracts.
+See id:sk-318305 for the full RRG and no-build architecture contracts.

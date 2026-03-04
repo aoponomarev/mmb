@@ -1,28 +1,28 @@
 /**
  * ================================================================================================
- * MATH VALIDATION - Валидация математических вычислений
+ * MATH VALIDATION - Mathematical computation validation
  * ================================================================================================
  *
- * PURPOSE: Проверка корректности финансовых расчётов и математических операций.
- * Валидация диапазонов, проверка на NaN/Infinity, валидация портфелей.
+ * PURPOSE: Check correctness of financial calculations and math operations.
+ * Range validation, NaN/Infinity checks, portfolio validation.
  *
- * Skill: core/skills/domain-portfolio
+ * Skill: id:sk-c3d639
  *
  * PRINCIPLES:
- * - Строгая проверка перед использованием результатов расчётов
- * - Валидация портфелей (сумма весов = 1)
- * - Проверка корреляций (-1 до 1)
- * - Проверка метрик на NaN/Infinity
+ * - Strict checks before using calculation results
+ * - Portfolio validation (weights sum = 1)
+ * - Correlation checks (-1 to 1)
+ * - Metric checks for NaN/Infinity
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Проверить, является ли число валидным (не NaN, не Infinity)
-     * @param {number} value - значение
+     * Check if number is valid (not NaN, not Infinity)
+     * @param {number} value - Value
      * @returns {boolean}
      */
     function isValidNumber(value) {
@@ -30,10 +30,10 @@
     }
 
     /**
-     * Валидировать вес портфеля (сумма весов должна быть равна 1)
-     * @param {Array} assets - массив активов с весами [{ coinId, weight }, ...]
-     * @param {number} tolerance - допустимое отклонение (по умолчанию 0.001)
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate portfolio weights (sum must equal 1)
+     * @param {Array} assets - Array of assets with weights [{ coinId, weight }, ...]
+     * @param {number} tolerance - Allowed deviation (default 0.001)
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, error: string, sum: number }
      */
     function validatePortfolioWeights(assets, tolerance = 0.001, options = {}) {
@@ -56,7 +56,7 @@
                 errorDetails = `Получен вес ${asset.weight}`;
                 const result = { valid: false, error: `Вес актива должен быть от 0 до 1, получен ${asset.weight}`, sum: 0 };
 
-                // Автоматический показ сообщения
+                // Show message automatically
                 const showMessage = options.showMessage !== false;
                 if (showMessage && window.AppMessages && window.messagesConfig) {
                     const messageData = window.messagesConfig.getMessage(errorKey);
@@ -66,7 +66,7 @@
                         details: errorDetails,
                         type: messageData.type || 'warning',
                         priority: messageData.priority || 3,
-                        key: errorKey, // Сохраняем ключ for последующего перевода
+                        key: errorKey, // Keep key for later translation
                         scope: scope,
                         actions: []
                     });
@@ -83,7 +83,7 @@
             errorDetails = `Получена сумма ${sum.toFixed(4)}`;
             const result = { valid: false, error: `Сумма весов должна быть равна 1, получена ${sum.toFixed(4)}`, sum };
 
-            // Автоматический показ сообщения
+            // Show message automatically
             const showMessage = options.showMessage !== false;
             if (showMessage && window.AppMessages && window.messagesConfig) {
                 const messageData = window.messagesConfig.getMessage(errorKey);
@@ -105,9 +105,9 @@
     }
 
     /**
-     * Валидировать корреляцию (должна быть от -1 до 1)
-     * @param {number} correlation - значение корреляции
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate correlation (must be from -1 to 1)
+     * @param {number} correlation - Correlation value
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, error: string }
      */
     function validateCorrelation(correlation, options = {}) {
@@ -117,7 +117,7 @@
         if (correlation < -1 || correlation > 1) {
             const result = { valid: false, error: `Корреляция должна быть от -1 до 1, получена ${correlation}` };
 
-            // Автоматический показ сообщения
+            // Show message automatically
             const showMessage = options.showMessage !== false;
             if (showMessage && window.AppMessages && window.messagesConfig) {
                 const messageData = window.messagesConfig.getMessage('validation.correlation.range');
@@ -138,13 +138,13 @@
     }
 
     /**
-     * Валидировать метрику (не должна быть NaN или Infinity)
-     * @param {number} metric - значение metrics
-     * @param {string} metricName - имя metrics (for сообщения об ошибке)
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate metric (must not be NaN or Infinity)
+     * @param {number} metric - Metric value
+     * @param {string} metricName - Metric name (for error message)
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, error: string }
      */
-    function validateMetric(metric, metricName = 'метрика', options = {}) {
+    function validateMetric(metric, metricName = 'metric', options = {}) {
         if (!isValidNumber(metric)) {
             let errorMsg = `${metricName} должна быть числом`;
             if (isNaN(metric)) {
@@ -155,7 +155,7 @@
 
             const result = { valid: false, error: errorMsg };
 
-            // Автоматический показ сообщения
+            // Show message automatically
             const showMessage = options.showMessage !== false;
             if (showMessage && window.AppMessages && window.messagesConfig) {
                 const messageData = window.messagesConfig.getMessage('validation.metric.nan');
@@ -176,16 +176,16 @@
     }
 
     /**
-     * Валидировать временной ряд (монотонность времени, отсутствие пропусков)
-     * @param {Array} timeSeries - массив точек [{ timestamp, value }, ...]
-     * @param {Object} options - опции { showMessage: boolean, scope: string }
+     * Validate time series (time monotonicity, no gaps)
+     * @param {Array} timeSeries - Array of points [{ timestamp, value }, ...]
+     * @param {Object} options - Options { showMessage: boolean, scope: string }
      * @returns {Object} - { valid: boolean, error: string }
      */
     function validateTimeSeries(timeSeries, options = {}) {
         if (!Array.isArray(timeSeries) || timeSeries.length === 0) {
             const result = { valid: false, error: 'Временной ряд должен быть непустым массивом' };
 
-            // Автоматический показ сообщения
+            // Show message automatically
             const showMessage = options.showMessage !== false;
             if (showMessage && window.AppMessages && window.messagesConfig) {
                 const messageData = window.messagesConfig.getMessage('validation.timeseries.empty');
@@ -215,7 +215,7 @@
             if (prevTimestamp !== null && point.timestamp < prevTimestamp) {
                 const result = { valid: false, error: `Точка [${i}] имеет timestamp меньше предыдущей (нарушена монотонность)` };
 
-                // Автоматический показ сообщения
+                // Show message automatically
                 const showMessage = options.showMessage !== false;
                 if (showMessage && window.AppMessages && window.messagesConfig) {
                     const messageData = window.messagesConfig.getMessage('validation.timeseries.monotonic');

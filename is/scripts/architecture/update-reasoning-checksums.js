@@ -1,5 +1,5 @@
 /**
- * @skill is/skills/process-reasoning-audit
+ * @skill id:sk-d7bf67
  * @description Utility to auto-update reasoning_checksum and reasoning_audited_at in all skills
  */
 import fs from "node:fs";

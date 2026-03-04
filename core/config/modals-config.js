@@ -1,32 +1,32 @@
 /**
  * ================================================================================================
- * MODALS CONFIG - Конфигурация модальных окон
+ * MODALS CONFIG - Modal windows configuration
  * ================================================================================================
- * Skill: app/skills/ux-principles
+ * Skill: id:sk-e0b8f3
  *
- * PURPOSE: SSOT for заголовков, иконок и метаданных модальных окон.
+ * PURPOSE: SSOT for modal window titles, icons and metadata.
  *
  * PRINCIPLES:
- * - Заголовок модального окна определяется здесь и using везде
- * - Пункты меню, кнопки и ссылки получают заголовок из этой конфигурации
- * - Изменение заголовка в одном месте автоматически синхронизируется везде
- * - Обязательное требование: заголовок модального окна должен совпадать с текстом пункта меню/кнопки
+ * - Modal title is defined here and used everywhere
+ * - Menu items, buttons and links get title from this config
+ * - Title change in one place automatically syncs everywhere
+ * - Required: modal title must match menu item/button text
  *
  * PRINCIPLES:
  * {
  *   modalId: {
- *     title: 'Заголовок модального окна',
- *     icon: 'fas fa-icon-class', // Опционально
- *     description: 'Описание', // Опционально
- *     bodyComponent: 'component-name', // Имя Vue-компонента for body (optional)
- *     centered: true, // Центрирование по вертикали (optional, default: false)
- *     condition: () => true // Функция for условного отображения (optional)
+ *     title: 'Modal window title',
+ *     icon: 'fas fa-icon-class', // Optional
+ *     description: 'Description', // Optional
+ *     bodyComponent: 'component-name', // Vue component name for body (optional)
+ *     centered: true, // Vertical centering (optional, default: false)
+ *     condition: () => true // Function for conditional display (optional)
  *   }
  * }
  *
  * REFERENCES:
- * - Принципы единого источника правды: `app/skills/ux-principles`
- * - Компонент модального окна: shared/components/modal.js
+ * - SSOT principles: id:sk-e0b8f3
+ * - Modal component: shared/components/modal.js
  */
 
 (function() {
@@ -39,7 +39,7 @@
             description: 'Настройка таймзоны и языка перевода новостей',
             bodyComponent: 'timezone-modal-body',
             centered: true,
-            autoRegister: false // Требует props (v-model, on-save, on-cancel)
+            autoRegister: false // Requires props (v-model, on-save, on-cancel)
         },
         'aiApiModal': {
             title: 'API-ключи',
@@ -47,30 +47,30 @@
             description: 'Настройки API-ключей (GitHub, Yandex, PostgreSQL)',
             bodyComponent: 'ai-api-settings',
             centered: true,
-            autoRegister: true // Не требует props
+            autoRegister: true // Does not require props
         },
         'portfolioModal': {
             title: 'Портфель',
             icon: 'fas fa-briefcase',
-            description: 'Создание или редактирование портфеля',
+            description: 'Создание или редактирование portfolioя',
             bodyComponent: 'portfolio-modal-body',
             centered: true,
-            autoRegister: false, // Требует props
+            autoRegister: false, // Requires props
             condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
         },
         'portfolioFormModal': {
-            title: 'Формирование портфеля',
-            description: 'Автоматическое формирование портфеля на основе математической модели',
+            title: 'Формирование portfolioя',
+            description: 'Автоматическое формирование portfolioя на основе математической модели',
             bodyComponent: 'portfolio-form-modal-body',
             centered: true,
-            autoRegister: false // Требует props (allCoins, onSave)
+            autoRegister: false // Requires props (allCoins, onSave)
         },
         'portfolioViewModal': {
-            title: 'Просмотр портфеля',
-            description: 'Детальный просмотр состава портфеля и метрик',
+            title: 'Просмотр portfolioя',
+            description: 'Детальный просмотр состава portfolioя и metrics',
             bodyComponent: 'portfolio-view-modal-body',
             centered: true,
-            autoRegister: false // Требует props (portfolio, onDelete)
+            autoRegister: false // Requires props (portfolio, onDelete)
         },
         'authModal': {
             title: 'Авторизация',
@@ -78,7 +78,7 @@
             description: 'Авторизация через Google OAuth',
             bodyComponent: 'auth-modal-body',
             centered: true,
-            autoRegister: false, // Требует props (on-login-success, on-logout-success)
+            autoRegister: false, // Requires props (on-login-success, on-logout-success)
             condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
         },
         'storageResetModal': {
@@ -87,12 +87,12 @@
             description: 'Выборочное удаление данных из кэша',
             bodyComponent: 'storage-reset-modal-body',
             centered: true,
-            autoRegister: true // Не требует props
+            autoRegister: true // Does not require props
         },
         'portfoliosImportModal': {
-            title: 'Импорт портфелей',
+            title: 'Импорт portfolios',
             icon: 'fas fa-file-import',
-            description: 'Выборочный импорт портфелей из JSON',
+            description: 'Выборочный импорт portfolios из JSON',
             bodyComponent: 'portfolios-import-modal-body',
             centered: true,
             autoRegister: true
@@ -103,7 +103,7 @@
             description: 'Создание нового набора монет из выбранных',
             bodyComponent: 'coin-set-save-modal-body',
             centered: true,
-            autoRegister: false // Требует props (selectedCoinIds, onSave, onCancel)
+            autoRegister: false // Requires props (selectedCoinIds, onSave, onCancel)
         },
         'coinSetLoadModal': {
             title: 'Загрузить набор монет',
@@ -111,7 +111,7 @@
             description: 'Выбор сохраненного набора монет for загрузки',
             bodyComponent: 'coin-set-load-modal-body',
             centered: true,
-            autoRegister: false // Требует props (onLoad, onCancel)
+            autoRegister: false // Requires props (onLoad, onCancel)
         },
         'iconManagerModal': {
             title: 'Управление иконкой',
@@ -119,7 +119,7 @@
             description: 'Замена иконки монеты на качественную версию в GitHub CDN',
             bodyComponent: 'icon-manager-modal-body',
             centered: true,
-            autoRegister: false // Требует props (coinData)
+            autoRegister: false // Requires props (coinData)
         },
         'sessionLogModal': {
             title: 'Session Log',
@@ -127,7 +127,7 @@
             description: 'Логи сессии for отладки',
             bodyComponent: 'session-log-modal-body',
             centered: true,
-            autoRegister: true // Не требует props
+            autoRegister: true // Does not require props
         },
         'coingeckoCronHistoryModal': {
             title: 'История забора CoinGecko',
@@ -140,18 +140,18 @@
     };
 
     /**
-     * Get конфигурацию модального окна
-     * @param {string} modalId - ID модального окна
-     * @returns {Object|null} - Конфигурация или null
+     * Get modal window configuration
+     * @param {string} modalId - Modal window ID
+     * @returns {Object|null} - Config or null
      */
     function getModalConfig(modalId) {
         return MODALS_CONFIG[modalId] || null;
     }
 
     /**
-     * Get заголовок модального окна
-     * @param {string} modalId - ID модального окна
-     * @returns {string|null} - Заголовок или null
+     * Get modal window title
+     * @param {string} modalId - Modal window ID
+     * @returns {string|null} - Title or null
      */
     function getModalTitle(modalId) {
         const config = getModalConfig(modalId);
@@ -159,9 +159,9 @@
     }
 
     /**
-     * Get иконку модального окна
-     * @param {string} modalId - ID модального окна
-     * @returns {string|null} - Иконка или null
+     * Get modal window icon
+     * @param {string} modalId - Modal window ID
+     * @returns {string|null} - Icon or null
      */
     function getModalIcon(modalId) {
         const config = getModalConfig(modalId);
@@ -169,23 +169,23 @@
     }
 
     /**
-     * Get list модальных окон for автоматической регистрации (с применением условий)
-     * Возвращает только модальные окна с autoRegister: true
-     * @returns {Array} - Массив конфигураций модальных окон
+     * Get list of modals for automatic registration (with conditions applied)
+     * Returns only modals with autoRegister: true
+     * @returns {Array} - Array of modal configurations
      */
     function getRegisteredModals() {
         const modals = [];
         for (const [modalId, config] of Object.entries(MODALS_CONFIG)) {
-            // Пропускаем модальные окна без autoRegister или с autoRegister: false
+            // Skip modals without autoRegister or with autoRegister: false
             if (!config.autoRegister) {
                 continue;
             }
 
-            // Проверяем условие отображения
+            // Check display condition
             if (config.condition && typeof config.condition === 'function') {
                 try {
                     if (!config.condition()) {
-                        continue; // Пропускаем модальное окно, если условие не выполнено
+                        continue; // Skip modal if condition not met
                     }
                 } catch (error) {
                     console.error(`modals-config: ошибка в condition for модального окна "${modalId}":`, error);

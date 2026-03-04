@@ -27,7 +27,7 @@
  * - Курсор pointer for индикации кликабельности
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
+ * - General principles работы с шаблонами: id:sk-483943 (section "Вынос x-template шаблонов")
  * - Компонент: shared/components/coin-block.js
  */
 
@@ -67,7 +67,7 @@
                         :class="['coin-block__symbol', cssClasses.symbol, textOverflowClasses]"
                         class="text-uppercase fw-semibold">{{ symbol || coinId }}</span>
 
-                    <!-- Индикаторы типов монет (ЕИП) -->
+                    <!-- Индикаторы типов монет (SSOT) -->
                     <span
                         v-if="coinTypeIcon"
                         class="ms-1"

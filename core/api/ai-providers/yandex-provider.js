@@ -5,28 +5,28 @@
  *
  * PURPOSE: Provider implementation for YandexGPT via Yandex Cloud API.
  *
- * @skill-anchor core/skills/api-layer #for-layer-separation
- * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
+ * @skill-anchor id:sk-bb7c8e #for-layer-separation
+ * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: core/skills/api-layer
- * Skill: app/skills/file-protocol-cors-guard
+ * Skill: id:sk-bb7c8e
+ * Skill: id:sk-7cf3f7
  *
  * FEATURES:
  * - Endpoint: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
- * - Прокси URL: https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1 (Yandex Cloud Functions)
+ * - Proxy URL: https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1 (Yandex Cloud Functions)
  * - Folder ID: b1gv03a122le5a934cqj
- * - Формат modelUri: gpt://{folderId}/{model}/latest (например: gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest)
- * - Формат запроса к API: { modelUri, messages: [{role: 'user'|'assistant', text: string}], completionOptions: {temperature: 0.6, maxTokens: 2000} }
- * - Формат запроса к прокси: { apiKey, modelUri, messages, completionOptions } (API ключ передается в теле запроса)
- * - Формат ответа: { result: { alternatives: [{ message: { text: string } }] } } или { error: { message: string, httpCode: number } }
- * - Формат сообщений: YandexGPT использует {role: 'user'|'assistant', text: string}, а не {role, content}
- * - Дефолтные completionOptions: temperature: 0.6, maxTokens: 2000
- * - API ключ: получается из Yandex Cloud IAM (показывается только один раз при создании)
+ * - modelUri format: gpt://{folderId}/{model}/latest (e.g. gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest)
+ * - Request format to API: { modelUri, messages: [{role: 'user'|'assistant', text: string}], completionOptions: {temperature: 0.6, maxTokens: 2000} }
+ * - Request format to proxy: { apiKey, modelUri, messages, completionOptions } (API key passed in request body)
+ * - Response format: { result: { alternatives: [{ message: { text: string } }] } } or { error: { message: string, httpCode: number } }
+ * - Message format: YandexGPT uses {role: 'user'|'assistant', text: string}, not {role, content}
+ * - Default completionOptions: temperature: 0.6, maxTokens: 2000
+ * - API key: obtained from Yandex Cloud IAM (shown only once on creation)
  *
  * CORS:
- * - Yandex API блокирует CORS-запросы из браузера, поэтому обязателен прокси
- * - Прокси обрабатывает OPTIONS preflight запросы (возвращает статус 204)
- * - Прокси добавляет CORS заголовки: Access-Control-Allow-Origin: *, Access-Control-Allow-Methods: POST, OPTIONS
+ * - Yandex API blocks CORS requests from browser, so proxy is required
+ * - Proxy handles OPTIONS preflight requests (returns status 204)
+ * - Proxy adds CORS headers: Access-Control-Allow-Origin: *, Access-Control-Allow-Methods: POST, OPTIONS
  *
  * USAGE:
  * const provider = new YandexProvider();
@@ -100,7 +100,7 @@
             }
 
             // Convert messages to YandexGPT format
-            // YandexGPT использует {role: 'user'|'assistant', text: string}
+            // YandexGPT uses {role: 'user'|'assistant', text: string}
             const yandexMessages = messages.map(msg => ({
                 role: msg.role === 'assistant' ? 'assistant' : 'user',
                 text: msg.content || msg.text || ''
@@ -113,13 +113,13 @@
             let modelUri = selectedModel;
 
             // Build request body per Yandex API docs
-            // Используем completionOptions for temperature и maxTokens
+            // Use completionOptions for temperature and maxTokens
             const requestBody = {
                 modelUri: modelUri,
                 messages: yandexMessages
             };
 
-            // Добавляем completionOptions, если указаны temperature или maxTokens
+            // Add completionOptions if temperature or maxTokens specified
             if (options.temperature !== undefined || options.maxTokens) {
                 requestBody.completionOptions = {};
                 if (options.temperature !== undefined) {
@@ -144,8 +144,8 @@
                 // In file:// mode this direct endpoint can be blocked by CORS, so
                 // we gracefully fall back to Foundation model to avoid empty UI blocks.
                 if (isAssistant) {
-                    // Skill anchor: на file:// прямой вызов Assistant API заблокирован CORS, обязателен fallback через proxy.
-                    // See app/skills/file-protocol-cors-guard
+                    // Skill anchor: on file:// direct Assistant API call is blocked by CORS, fallback via proxy required.
+                    // See id:sk-7cf3f7
                     if (window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                         modelUri = `gpt://${this.defaultFolderId}/yandexgpt/latest`;
                         requestBody.modelUri = modelUri;
@@ -166,7 +166,7 @@
                         });
 
                         if (!response.ok) {
-                            const errorData = await response.json().catch(() => ({ error: { message: 'Неизвестная ошибка' } }));
+                            const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
                             throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
                         }
 
@@ -196,7 +196,7 @@
                 // If proxy specified, use it (for CORS bypass)
                 if (this.proxyUrl) {
                     // Via proxy: pass API key and body in proxy request body
-                    // Формируем тело запроса в том же формате, что и for прямого запроса
+                    // Build request body in same format as for direct request
                     const proxyRequestBody = {
                         apiKey: apiKey,
                         modelUri: modelUri,
@@ -209,14 +209,14 @@
                         if (options.temperature !== undefined) {
                             proxyRequestBody.completionOptions.temperature = options.temperature;
                         } else {
-                            proxyRequestBody.completionOptions.temperature = 0.6; // Дефолтное значение
+                            proxyRequestBody.completionOptions.temperature = 0.6; // Default value
                         }
                         if (options.maxTokens) {
                             proxyRequestBody.completionOptions.maxTokens = typeof options.maxTokens === 'string'
                                 ? parseInt(options.maxTokens, 10)
                                 : options.maxTokens;
                         } else {
-                            proxyRequestBody.completionOptions.maxTokens = 2000; // Дефолтное значение
+                            proxyRequestBody.completionOptions.maxTokens = 2000; // Default value
                         }
                     } else {
                         // If options not specified, use defaults
@@ -242,7 +242,7 @@
                         } catch (e) {
                             errorText = '';
                         }
-                        let errorData = { error: { message: 'Неизвестная ошибка' } };
+                        let errorData = { error: { message: 'Unknown error' } };
                         try {
                             if (errorText) {
                                 errorData = JSON.parse(errorText);
@@ -264,7 +264,7 @@
 
                     // Check for error in Yandex API response
                     if (data.error) {
-                        const errorMessage = data.error.message || 'Неизвестная ошибка от Yandex API';
+                        const errorMessage = data.error.message || 'Unknown error от Yandex API';
                         const httpCode = data.error.httpCode || '';
                         throw new Error(`Yandex API ошибка (HTTP ${httpCode}): ${errorMessage}`);
                     }
@@ -292,7 +292,7 @@
 
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({
-                            error: { message: 'Неизвестная ошибка' }
+                            error: { message: 'Unknown error' }
                         }));
                         throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
                     }
@@ -300,7 +300,7 @@
                     const data = await response.json();
 
                     // Parse YandexGPT response
-                    // Формат: { result: { alternatives: [{ message: { text: string } }] } }
+                    // Format: { result: { alternatives: [{ message: { text: string } }] } }
                     if (data.result && data.result.alternatives && data.result.alternatives.length > 0) {
                         const answer = data.result.alternatives[0].message.text;
                         if (!answer || answer.trim().length === 0) {
@@ -325,7 +325,7 @@
                     throw error;
                 }
                 // Otherwise wrap in generic error
-                throw new Error(`Ошибка при запросе к YandexGPT: ${error.message || 'Неизвестная ошибка'}`);
+                throw new Error(`Ошибка при запросе к YandexGPT: ${error.message || 'Unknown error'}`);
             }
         }
 

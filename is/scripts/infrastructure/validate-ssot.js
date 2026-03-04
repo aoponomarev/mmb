@@ -1,6 +1,6 @@
 /**
- * @skill is/skills/arch-foundation
- * @skill is/skills/process-env-sync
+ * @skill id:sk-483943
+ * @skill id:sk-918276
  *
  * SSOT policy validator for the Target App:
  * - Validates that all env vars used in paths.js are declared in .env.example

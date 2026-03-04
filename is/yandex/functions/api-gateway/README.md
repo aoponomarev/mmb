@@ -11,8 +11,8 @@ last_updated: "2026-03-04"
 - Подготовка для CRUD эндпоинтов (портфели/снимки).
 
 Секреты:
-- Хранить фактические значения в `do-overs/Secrets/yandex-postgres.env`.
-- В репозитории хранится только шаблон: `cloud/yandex/functions/app-api/env.stub`.
+- Фактические значения — в secrets dir вне репозитория (Yandex Console → Function env vars или локальный .env).
+- Шаблон контракта: `.env.example` (DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD).
 
 Параметры функции (рекомендуемые):
 - Runtime: Node.js 22
@@ -27,5 +27,5 @@ last_updated: "2026-03-04"
 - `DB_PASSWORD`
 
 Связанные файлы:
-- API Gateway: `cloud/yandex/api-gateway/app-api-gw/openapi.yaml`
-- Документация интеграций: `docs/ais/ais-integration-strategy-yandex.md`
+- API Gateway: `is/yandex/functions/api-gateway/` (OpenAPI spec в Yandex Cloud Console)
+- Документация интеграций: id:ais-f6b9e2

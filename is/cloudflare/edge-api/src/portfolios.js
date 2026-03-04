@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * PORTFOLIOS ENDPOINTS - API for работы с портфелями
+ * PORTFOLIOS ENDPOINTS - API for работы с portfolioями
  * ================================================================================================
  *
- * PURPOSE: CRUD операции for портфелей пользователя.
- * Skill: core/skills/config-contracts
+ * PURPOSE: CRUD операции for portfolios пользователя.
+ * Skill: id:sk-02d3ea
  *
  * ENDPOINTS:
  * - GET /api/portfolios — list portfolios пользователя (из D1)
@@ -32,10 +32,10 @@ import {
 } from './utils/d1-helpers.js';
 
 /**
- * Получение списка портфелей пользователя
+ * Получение списка portfolios пользователя
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON response со списком портфелей
+ * @returns {Promise<Response>} JSON response со списком portfolios
  */
 async function handleList(request, env) {
   if (request.method !== 'GET') {
@@ -58,11 +58,11 @@ async function handleList(request, env) {
 }
 
 /**
- * Получение портфеля по ID
+ * Получение portfolioя по ID
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @param {string} portfolioId - ID портфеля
- * @returns {Promise<Response>} JSON response с портфелем
+ * @param {string} portfolioId - ID portfolioя
+ * @returns {Promise<Response>} JSON response с portfolioем
  */
 async function handleGet(request, env, portfolioId) {
   if (request.method !== 'GET') {
@@ -101,10 +101,10 @@ async function handleGet(request, env, portfolioId) {
 }
 
 /**
- * Создание портфеля
+ * Создание portfolioя
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @returns {Promise<Response>} JSON response с созданным портфелем
+ * @returns {Promise<Response>} JSON response с созданным portfolioем
  */
 async function handleCreate(request, env) {
   if (request.method !== 'POST') {
@@ -157,11 +157,11 @@ async function handleCreate(request, env) {
 }
 
 /**
- * Обновление портфеля
+ * Обновление portfolioя
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @param {string} portfolioId - ID портфеля
- * @returns {Promise<Response>} JSON response с обновлённым портфелем
+ * @param {string} portfolioId - ID portfolioя
+ * @returns {Promise<Response>} JSON response с обновлённым portfolioем
  */
 async function handleUpdate(request, env, portfolioId) {
   if (request.method !== 'PUT') {
@@ -207,10 +207,10 @@ async function handleUpdate(request, env, portfolioId) {
 }
 
 /**
- * Удаление портфеля
+ * Удаление portfolioя
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables (DB, JWT_SECRET)
- * @param {string} portfolioId - ID портфеля
+ * @param {string} portfolioId - ID portfolioя
  * @returns {Promise<Response>} JSON response
  */
 async function handleDelete(request, env, portfolioId) {
@@ -245,11 +245,11 @@ async function handleDelete(request, env, portfolioId) {
  * Главный обработчик portfolios endpoints
  * @param {Request} request - HTTP request
  * @param {Object} env - Environment variables
- * @param {string} path - Path запроса
+ * @param {string} path - Request path
  * @returns {Promise<Response>} HTTP ответ
  */
 export async function handlePortfolios(request, env, path) {
-  // Обработка preflight OPTIONS запросов
+  // Handle preflight OPTIONS запросов
   if (request.method === 'OPTIONS') {
     return handleOptions(request);
   }
@@ -260,7 +260,7 @@ export async function handlePortfolios(request, env, path) {
 
   // Маршрутизация по методам и путям
   if (portfolioId) {
-    // Операции с конкретным портфелем
+    // Операции с конкретным portfolioем
     if (request.method === 'GET') {
       return await handleGet(request, env, portfolioId);
     } else if (request.method === 'PUT') {
@@ -269,7 +269,7 @@ export async function handlePortfolios(request, env, path) {
       return await handleDelete(request, env, portfolioId);
     }
   } else {
-    // Операции со списком портфелей
+    // Операции со списком portfolios
     if (request.method === 'GET') {
       return await handleList(request, env);
     } else if (request.method === 'POST') {

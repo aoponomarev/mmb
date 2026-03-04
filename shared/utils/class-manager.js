@@ -16,7 +16,7 @@
  * - Применяется к разным элементам внутри компонента (root, button, menu, suffix и т.д.)
  *
  * REFERENCES:
- * - Documentation компонентов: app/skills/ui-architecture
+ * - Documentation компонентов: id:sk-318305
  */
 
 /**

@@ -4,7 +4,7 @@
  * ================================================================================================
  *
  * PURPOSE: Automatic cleanup of stale data to prevent storage overflow.
- * Skill: core/skills/cache-layer
+ * Skill: id:sk-3c832d
  *
  * CLEANUP POLICIES:
  * - time-series: maxAge 90 days, compression true
@@ -20,7 +20,7 @@
  * On storage quota reached cleanup runs: cold → warm → hot
  * Reason: cold has largest data (time series), hot has critical settings
  *
- * REFERENCE: Caching principles: core/skills/cache-layer
+ * REFERENCE: Caching principles: id:sk-3c832d
  */
 
 (function() {
@@ -31,12 +31,12 @@
      */
     const CLEANUP_POLICIES = {
         'time-series': {
-            maxAge: 90 * 24 * 60 * 60 * 1000, // 90 дней
+            maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
             keepInterval: 60 * 60 * 1000,     // 1 point per hour for old data
             compression: true
         },
         'history': {
-            maxAge: 365 * 24 * 60 * 60 * 1000, // 1 год
+            maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
             compression: true
         },
         'portfolios': {
@@ -48,7 +48,7 @@
             compression: false
         },
         'api-cache': {
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             compression: false
         }
     };

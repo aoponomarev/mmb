@@ -1,26 +1,26 @@
 /**
  * ================================================================================================
- * LOGGER - Структурированное логирование
+ * LOGGER - Structured logging
  * ================================================================================================
  *
- * PURPOSE: Единообразное логирование с уровнями и контекстом.
- * Упрощение отладки и мониторинга приложения.
- * Skill: core/skills/api-layer
+ * PURPOSE: Uniform logging with levels and context.
+ * Simplifies debugging and application monitoring.
+ * Skill: id:sk-bb7c8e
  *
  * PRINCIPLES:
- * - Уровни логирования (debug, info, warn, error)
- * - Контекст (компонент, действие)
- * - Единый формат логов
- * - Возможность отправки на сервер (если понадобится)
+ * - Log levels (debug, info, warn, error)
+ * - Context (component, action)
+ * - Unified log format
+ * - Optional server submission (if needed)
  *
- * ССЫЛКА: Критически важные структуры описаны в is/skills/arch-foundation
+ * REFERENCE: Critical structures described in id:sk-483943
  */
 
 (function() {
     'use strict';
 
     /**
-     * Уровни логирования
+     * Log levels
      */
     const LOG_LEVELS = {
         DEBUG: 0,
@@ -30,23 +30,23 @@
     };
 
     /**
-     * Текущий уровень логирования (по умолчанию INFO в production, DEBUG в development)
+     * Current log level (default INFO in production, DEBUG in development)
      */
     let currentLogLevel = LOG_LEVELS.INFO;
 
     /**
-     * Определить уровень логирования по окружению
+     * Set log level by environment
      */
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:' || window.location.hostname.includes('github.io')) {
         currentLogLevel = LOG_LEVELS.DEBUG;
     }
 
     /**
-     * Форматировать лог
-     * @param {string} level - уровень
-     * @param {string} message - сообщение
-     * @param {Object} context - контекст
-     * @returns {string} - отформатированное сообщение
+     * Format log entry
+     * @param {string} level - level
+     * @param {string} message - message
+     * @param {Object} context - context
+     * @returns {string} - formatted message
      */
     function formatLog(level, message, context = {}) {
         const timestamp = new Date().toISOString();
@@ -57,28 +57,28 @@
     }
 
     /**
-     * Логировать сообщение
-     * @param {string} level - уровень
-     * @param {string} message - сообщение
-     * @param {Object} context - контекст (showMessage: false отключает автопоказ)
+     * Log message
+     * @param {string} level - level
+     * @param {string} message - message
+     * @param {Object} context - context (showMessage: false disables auto-display)
      */
     function log(level, message, context = {}) {
         const levelNum = LOG_LEVELS[level.toUpperCase()] || LOG_LEVELS.INFO;
 
         if (levelNum < currentLogLevel) {
-            return; // Не логируем, если уровень ниже текущего
+            return; // Skip if level below current
         }
 
         const formatted = formatLog(level, message, context);
 
-        // Записываем в sessionLogStore (если доступен) for отображения в Session Log модальном окне
+        // Write to sessionLogStore (if available) for display in Session Log modal
         if (window.sessionLogStore && typeof window.sessionLogStore.addLog === 'function') {
             try {
-                // Извлекаем источник из context, если есть
+                // Extract source from context if present
                 const source = context.component || context.source || 'logger.js';
                 window.sessionLogStore.addLog(level, formatted, source);
             } catch (e) {
-                // Игнорируем ошибки записи в sessionLogStore
+                // Ignore sessionLogStore write errors
             }
         }
 
@@ -97,20 +97,20 @@
                 break;
         }
 
-        // Эмит события через eventBus (если доступен)
+        // Emit event via eventBus (if available)
         if (window.eventBus && levelNum >= LOG_LEVELS.WARN) {
             window.eventBus.emit('log', { level, message, context, timestamp: Date.now() });
         }
 
-        // Автоматический показ сообщения пользователю for warn/error
-        // Опция showMessage: false отключает автоматический показ
+        // Auto-display message to user for warn/error
+        // Option showMessage: false disables auto-display
         const showMessage = context.showMessage !== false;
         if (showMessage && levelNum >= LOG_LEVELS.WARN && window.AppMessages) {
             const messageType = levelNum === LOG_LEVELS.ERROR ? 'danger' : 'warning';
             const priority = levelNum === LOG_LEVELS.ERROR ? 4 : 3;
             const scope = context.scope || 'global';
 
-            // Если в context есть messageKey - используем messagesConfig for получения переводимого сообщения
+            // If context has messageKey, use messagesConfig for translatable message
             let messageText = message;
             let messageDetails = context.details || null;
             let messageKey = context.messageKey || null;
@@ -132,15 +132,15 @@
                 priority: priority,
                 scope: scope,
                 actions: context.actions || [],
-                key: messageKey, // Сохраняем ключ for последующего перевода
-                params: context.messageParams || null // Сохраняем параметры for последующего перевода
+                key: messageKey, // Store key for later translation
+                params: context.messageParams || null // Store params for later translation
             });
         }
     }
 
     /**
-     * Set уровень логирования
-     * @param {string} level - уровень (debug, info, warn, error)
+     * Set log level
+     * @param {string} level - level (debug, info, warn, error)
      */
     function setLogLevel(level) {
         const levelNum = LOG_LEVELS[level.toUpperCase()];
@@ -149,7 +149,7 @@
         }
     }
 
-    // Методы for каждого уровня
+    // Methods for each level
     const logger = {
         debug: (message, context) => log('debug', message, context),
         info: (message, context) => log('info', message, context),

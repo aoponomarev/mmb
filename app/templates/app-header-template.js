@@ -11,31 +11,31 @@
  * on load as <script type="text/x-template"> with id="app-header-template".
  *
  * HOW:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="app-header-template"
- * - Компонент использует шаблон через template: '#app-header-template'
+ * - Template defined as string in TEMPLATE constant
+ * - On load, <script type="text/x-template"> element is auto-created
+ * - Element added to document.body with id="app-header-template"
+ * - Component uses template via template: '#app-header-template'
  *
  * TEMPLATE FEATURES:
- * Структура HTML:
- * - Корневой элемент: ⟨header⟩ с классами fixed-top, bg-dark, bg-opacity-90, clearfix, data-bs-theme="dark"
- * - Кнопка меню (гамбургер) слева через cmp-dropdown
- * - Кнопка настроек (шестеренка) справа через cmp-dropdown
- * Layout и CSS-классы:
- * - Фиксированное позиционирование: fixed-top
- * - Темная тема: bg-dark bg-opacity-90, data-bs-theme="dark" (фиксированная, не переключается)
- * - Многослойная тень направленная вниз с белым inset for осветления фона
- * - Кнопки используют link variant с text-white text-decoration-none for белого цвета без подчеркивания
- * - Меню настроек выровнено по правому краю через text-end
- * Слоты:
- * - #menu-items — элементы меню (гамбургер) слева
- * - #portfolio-items — пункты меню портфелей (между созданием и списком)
- * - #settings-items — элементы меню настроек справа
+ * HTML structure:
+ * - Root element: ⟨header⟩ with classes fixed-top, bg-dark, bg-opacity-90, clearfix, data-bs-theme="dark"
+ * - Menu button (hamburger) left via cmp-dropdown
+ * - Settings button (gear) right via cmp-dropdown
+ * Layout and CSS classes:
+ * - Fixed positioning: fixed-top
+ * - Dark theme: bg-dark bg-opacity-90, data-bs-theme="dark" (fixed, not switchable)
+ * - Multi-layer shadow downward with white inset for background lightening
+ * - Buttons use link variant with text-white text-decoration-none for white color without underline
+ * - Settings menu aligned to right via text-end
+ * Slots:
+ * - #menu-items — menu items (hamburger) left
+ * - #portfolio-items — portfolio menu items (between create and list)
+ * - #settings-items — settings menu items right
  *
  * REFERENCES:
- * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
- * - Компонент: app/components/app-header.js
- * - Стили: styles/layout/header.css
+ * - General template principles: id:sk-483943 (section "x-template extraction")
+ * - Component: app/components/app-header.js
+ * - Styles: styles/layout/header.css
  */
 
 (function() {
@@ -205,7 +205,7 @@
                     <template v-if="userPortfolios && userPortfolios.length > 0">
                         <div class="dropdown-divider border-secondary opacity-25"></div>
                         <h6 class="dropdown-header d-flex justify-content-between align-items-center py-2 px-3">
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Мои портфели</span>
+                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Мои portfolioи</span>
                             <span class="badge bg-secondary ms-2" style="font-size: 0.6rem;">{{ userPortfolios.length }}</span>
                         </h6>
                         <li v-for="p in userPortfolios" :key="p.id">
