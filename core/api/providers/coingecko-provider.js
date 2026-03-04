@@ -1,7 +1,7 @@
 /**
+ * #JS-DvQtSDsD
+ * @description Minimal CoinGecko provider for market data; no fallback chains, fail-fast.
  * @skill id:sk-bb7c8e
- * @description Minimal CoinGecko provider for market data. 
- * No fallback chains; all external failures are explicit (Fail-Fast).
  */
 
 import { createRequestRegistry } from './backend-request-registry.js';

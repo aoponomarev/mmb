@@ -1,6 +1,7 @@
 /**
- * MODAL BUTTONS TEMPLATE - Template for cmp-modal-buttons. Injected as <script type="text/x-template"> id="modal-buttons-template".
- * v-for over processedButtons; each button via cmp-button with full config. Ref: id:sk-318305, shared/components/modal-buttons.js
+ * #JS-xriQKxoX
+ * @description Template for cmp-modal-buttons (script type=text/x-template id=modal-buttons-template); v-for processedButtons, cmp-button.
+ * @see id:sk-318305
  */
 
 (function() {

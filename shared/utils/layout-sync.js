@@ -1,6 +1,8 @@
 /**
- * LAYOUT SYNC - Sync header/footer height with body padding to avoid content overlap. Skill: id:sk-318305
- * ResizeObserver + MutationObserver; CSS vars --header-height, --footer-height. Usage: auto on load; layoutSync.update(); stop(); start(). Ref: id:sk-483943
+ * #JS-pw26xFm7
+ * @description Sync header/footer height with body padding; ResizeObserver + MutationObserver; CSS vars --header-height, --footer-height.
+ * @skill id:sk-318305
+ * @see id:sk-483943
  */
 
 (function() {

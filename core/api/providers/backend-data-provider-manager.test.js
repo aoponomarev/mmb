@@ -1,3 +1,7 @@
+/**
+ * #JS-Rn3ePYMx
+ * @description Tests for BackendDataProviderManager: createDataProviderManager, contract validation.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createDataProviderManager } from './backend-data-provider-manager.js';

@@ -1,25 +1,9 @@
 /**
- * ================================================================================================
- * MAIN ROUTER - Main router for Cloudflare Workers API
- * ================================================================================================
- * Skill: id:sk-02d3ea
+ * #JS-Jx5vBJtt
+ * @description Main router for Cloudflare Workers API; routes /auth, /api/portfolios, /api/coin-sets, /api/datasets, /api/coingecko, /api/yahoo-finance, /api/stooq, /api/settings, /health.
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: Handle all incoming requests and route to appropriate handlers.
- *
- * ROUTES:
- * - /auth/* → OAuth endpoints (auth.js)
- * - /api/portfolios/* → Portfolios API (portfolios.js)
- * - /api/coin-sets/* → Coin Sets API (coin-sets.js)
- * - /api/datasets/* → Datasets API (datasets.js)
- * - /api/coingecko/* → CoinGecko API Proxy (api-proxy.js)
- * - /api/yahoo-finance/* → Yahoo Finance API Proxy (api-proxy.js)
- * - /api/stooq/* → Stooq API Proxy (api-proxy.js)
- * - /api/settings/* → App Settings (settings.js, KV-backed)
- * - /health → Health check endpoint
- *
- * @param {Request} request - Incoming HTTP request
- * @param {Object} env - Environment variables and bindings (DB, API_CACHE, secrets)
- * @returns {Promise<Response>} HTTP response
+ * ROUTES: /auth/* (auth.js), /api/portfolios/* (portfolios.js), /api/coin-sets/* (coin-sets.js), /api/datasets/* (datasets.js), /api/coingecko|yahoo-finance|stooq/* (api-proxy.js), /api/settings/* (settings.js), /health.
  */
 
 import { handleAuth } from './auth.js';

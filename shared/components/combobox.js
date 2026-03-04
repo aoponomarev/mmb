@@ -1,28 +1,11 @@
-// =========================
-// COMBOBOX COMPONENT
-// Vue wrapper over Bootstrap input-group + dropdown with autocomplete
-// =========================
-// PURPOSE: Reusable combobox with:
-//
-// @skill-anchor id:sk-add9a6 #for-classes-add-remove
-// @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
-// @skill-anchor id:sk-cb75ec #for-utility-availability-check
-// - Autocomplete and filtering
-// - Keyboard navigation
-// - Select from list
-// - Free text input
-// - Item grouping
-// - Validation
-// - Full Bootstrap JS API compatibility
-// - Toggle to plain text input mode
-// - Structure for: match highlight, virtual scroll, multi-select
-//
-// COMPONENT API:
-//
-// Props:
-// Basic: modelValue (v-model), items (array of strings or {label, value, id}), placeholder
-// Mode: mode ('combobox' | 'input'), multiple (boolean)
-// Behavior: allowCustom, strict, autocomplete, clearable (clear button via CSS ::before)
+/**
+ * #JS-hf3mDcdq
+ * @description Vue combobox: input-group + dropdown, autocomplete, keyboard nav, select/free text, grouping, validation; skill-anchors for classes/events/utility.
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ *
+ * Props: modelValue, items, placeholder, mode, multiple, allowCustom, strict, autocomplete, clearable
 // Filter: filterFunction (items, query) => filteredItems, debounce (ms), highlightMatches, itemLabel, itemValue
 // Scroll: scrollable, maxHeight, virtualScrolling, virtualItemHeight (px)
 // Group: groupBy (field or function)
@@ -55,7 +38,7 @@ window.cmpCombobox = {
         },
         placeholder: {
             type: String,
-            default: 'Выберите или введите...'
+            default: 'Select or type...'
         },
 
         // === Mode ===
@@ -213,7 +196,7 @@ window.cmpCombobox = {
         },
         emptySearchText: {
             type: String,
-            default: 'Ничего не найдено'
+            default: 'Nothing found'
         },
         tooltip: {
             type: String,
@@ -398,7 +381,7 @@ window.cmpCombobox = {
         },
 
         clearTitle() {
-            return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.combobox.clear') : 'Очистить';
+            return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.combobox.clear') : 'Clear';
         }
     },
 
@@ -626,7 +609,7 @@ window.cmpCombobox = {
             } else {
                 // Single select
                 this.$emit('update:modelValue', value);
-                this.searchQuery = ''; // Clear search после выбора
+                this.searchQuery = ''; // Clear search after selection
                 this.hide();
             }
 

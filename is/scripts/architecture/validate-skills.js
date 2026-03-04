@@ -1,3 +1,7 @@
+/**
+ * #JS-Mt2rdqJ4
+ * @description Validates skill files: prefix, structure, implementation status; --json output, stale check.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import {

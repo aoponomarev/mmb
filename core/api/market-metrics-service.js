@@ -1,6 +1,7 @@
 /**
+ * #JS-Xa3QAdTk
+ * @description Orchestrates fetching of market metrics (FGI, VIX, dominance, Binance indicators).
  * @skill id:sk-bb7c8e
- * @description Orchestrates the fetching of market metrics (FGI, VIX, dominance, Binance indicators).
  */
 import { createDataCacheManager } from "../cache/data-cache-manager.js";
 import { BACKEND_ERROR_CODES, BackendCoreError } from "./providers/errors.js";

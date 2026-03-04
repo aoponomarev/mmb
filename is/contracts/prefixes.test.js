@@ -1,3 +1,7 @@
+/**
+ * #JS-QU2cvzLe
+ * @description Tests for prefixes contract: isValidSkillPrefix, shouldValidateSkillPrefix, SKILL_*.
+ */
 import test from "node:test";
 import assert from "node:assert/strict";
 import {

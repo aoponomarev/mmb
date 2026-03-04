@@ -1,7 +1,7 @@
 /**
+ * #JS-RRC5aRN1
+ * @description Binance metrics provider (Funding Rate, Long/Short Ratio, Open Interest); fail-fast.
  * @skill id:sk-bb7c8e
- * @description Binance metrics provider (Funding Rate, Long/Short Ratio, Open Interest).
- * Uses a strict Fail-Fast approach: no hidden retry chains here, handled at higher levels.
  */
 import { BACKEND_ERROR_CODES, BackendCoreError } from "./errors.js";
 

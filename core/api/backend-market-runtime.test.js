@@ -1,3 +1,7 @@
+/**
+ * #JS-ZDKogZA8
+ * @description Tests for createBackendMarketRuntime: mock fetch, snapshot assembly.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createBackendMarketRuntime } from './backend-market-runtime.js';

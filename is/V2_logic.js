@@ -1,8 +1,7 @@
 /**
- * WorkFlow UI V2 Logic
- * Stateless, template-driven single-page dashboard.
- *
- * Skill: id:sk-483943
+ * #JS-ry3942o9
+ * @description WorkFlow UI V2: stateless, template-driven single-page dashboard; API layer, load* per tab, initActionHandlers.
+ * @skill id:sk-483943
  *
  * Architecture:
  *   - API layer: all HTTP calls go through api.call() / api.n8nCall()

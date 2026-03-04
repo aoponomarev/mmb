@@ -1,6 +1,7 @@
 /**
+ * #JS-P149SzKB
+ * @description Zod-based SSOT for market data inputs and outputs; replaces manual validation.
  * @skill id:sk-bb7c8e
- * @description Zod-based SSOT for market data inputs and outputs. Replaces manual validation.
  */
 import { z } from 'zod';
 import { BACKEND_ERROR_CODES, BackendCoreError } from '../api/providers/errors.js';

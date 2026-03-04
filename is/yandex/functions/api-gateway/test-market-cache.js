@@ -1,6 +1,6 @@
 /**
- * Local test for /api/coins/market-cache endpoint
- * Simulates direct function call (no HTTP)
+ * #JS-Tx3gkDQ8
+ * @description Local test for /api/coins/market-cache endpoint; simulates direct function call (no HTTP).
  */
 process.env.DB_HOST = 'rc1b-dgs1vgc130gbme2n.mdb.yandexcloud.net';
 process.env.DB_PORT = '6432';

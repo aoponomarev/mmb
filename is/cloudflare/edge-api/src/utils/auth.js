@@ -1,24 +1,7 @@
 /**
- * ================================================================================================
- * AUTH UTILITIES - Utilities for JWT token verification and auth
- * ================================================================================================
- *
- * PURPOSE: Verify JWT tokens on protected endpoints, extract user data.
- * Skill: id:sk-7cf3f7
- *
- * PRINCIPLES:
- * - Verify JWT token signature via JWT_SECRET
- * - Extract user_id from token
- * - Middleware for protected endpoints
- *
- * USAGE:
- * import { verifyToken, getUserIdFromToken, requireAuth } from './utils/auth.js';
- *
- * // Verify token
- * const userId = await requireAuth(request, env);
- * if (!userId) {
- *   return jsonResponse({ error: 'Unauthorized' }, { status: 401 });
- * }
+ * #JS-ceKiAcb8
+ * @description JWT verification and auth; verifyToken, requireAuth; JWT_SECRET; middleware for protected endpoints.
+ * @skill id:sk-7cf3f7
  */
 
 /**

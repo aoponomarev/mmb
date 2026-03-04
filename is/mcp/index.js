@@ -1,3 +1,7 @@
+/**
+ * #JS-3M2cDJyX
+ * @description MCP server: MM B Causality — tools (preflight, create-skill, query-telemetry, harvester, cloudflare, distill-plan), resources.
+ */
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { 

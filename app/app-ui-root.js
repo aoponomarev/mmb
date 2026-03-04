@@ -1,36 +1,9 @@
 /**
- * Application root component
+ * #JS-yx22mAv8
+ * @description Vue app root: init, module loader, theme/version/markup; components from core/module-loader.js.
+ * @skill id:sk-483943
  *
- * PURPOSE: Vue app initialization and root component setup
- * Skill: id:sk-483943
- *
- * PROBLEM: Vue init logic bloated index.html
- *
- * SOLUTION: Extract all init logic into separate module
- * - Components loaded via module system (core/module-loader.js)
- * - Vue app initialization after all modules loaded
- * - Root component setup with data and methods
- *
- * HOW:
- * - Module system loads all components in correct order
- * - After all modules loaded, Vue app created via createApp()
- * - Components registered in app via components
- * - App mounted on #app element
- *
- * APP INIT:
- * - Set theme on body (data-bs-theme)
- * - Set version CSS class on body (app-version-{hash})
- * - Clear old version cache (clearOldVersions)
- * - Initialize automatic element markup (autoMarkup)
- *
- * BENEFITS:
- * - index.html stays compact
- * - Init logic isolated
- * - Easy to add new components
- * - Centralized application data management
- * - Automatic dependency resolution via module system
- *
- * REF: Module system in core/module-loader.js and core/modules-config.js
+ * APP INIT: data-bs-theme, app-version-{hash}, clearOldVersions, autoMarkup.
  */
 
 (function() {

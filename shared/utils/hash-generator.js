@@ -1,7 +1,8 @@
-// Skill: id:sk-318305
-// HASH GENERATOR - Stable Base58 hash from string for component instance and style markup.
-// PURPOSE: Deterministic hashes for instance/style identification. Same input -> same hash; Base58 (no 0,O,I,l); configurable length; avto- prefix. Usage: instanceHash, styleHash.
-
+/**
+ * #JS-9m2N115w
+ * @description Stable Base58 hash from string for component instance and style markup; deterministic, avto- prefix.
+ * @skill id:sk-318305
+ */
 window.hashGenerator = {
   // Base58 alphabet (no 0, O, I, l to avoid confusion)
   base58: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',

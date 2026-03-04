@@ -1,3 +1,7 @@
+/**
+ * #JS-fW36ebbg
+ * @description Fallback monitor: in-memory event log (normalizePayload, pushEvent), MAX_EVENTS cap.
+ */
 (function() {
     'use strict';
 

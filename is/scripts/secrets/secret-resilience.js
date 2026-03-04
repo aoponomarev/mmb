@@ -1,3 +1,7 @@
+/**
+ * #JS-KurwaKrf
+ * @description Secret resilience: archive/restore .env keys, validate against env schema.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

@@ -1,6 +1,6 @@
 /**
- * Local test: loads 1 page (50 coins) by market_cap and saves to DB
- * Uses DB_PASSWORD from env or hardcoded for test
+ * #JS-ByvMZBvj
+ * @description Local test: loads one page (50 coins) by market_cap and saves to DB; uses DB_PASSWORD from env.
  */
 process.env.DB_PASSWORD = process.env.DB_PASSWORD || '********';
 

@@ -1,3 +1,7 @@
+/**
+ * #JS-Yn27TZUx
+ * @description Tests: frontend RRG (rules references) check; walk skills/docs, validate references.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

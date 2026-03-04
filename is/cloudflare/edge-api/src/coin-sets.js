@@ -1,27 +1,9 @@
 /**
- * ================================================================================================
- * COIN SETS API - Endpoints for user coin sets
- * ================================================================================================
+ * #JS-j1384efB
+ * @description Coin sets API: CRUD + toggle; auth required; handleCoinSets(request, env).
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: API for creating, reading, updating and deleting user coin sets.
- * Skill: id:sk-02d3ea
- *
- * ENDPOINTS:
- * - POST   /api/coin-sets          - Create coin set
- * - GET    /api/coin-sets          - Get user's list of sets
- * - GET    /api/coin-sets/:id      - Get set by ID
- * - PUT    /api/coin-sets/:id      - Update set
- * - DELETE /api/coin-sets/:id      - Delete set
- * - PATCH  /api/coin-sets/:id/toggle - Archive/unarchive
- *
- * REQUIREMENTS:
- * - All requests require auth (Bearer token)
- * - User can manage only their own sets
- * - coin_ids validated as string array
- *
- * USAGE:
- * import { handleCoinSets } from './coin-sets.js';
- * const response = await handleCoinSets(request, env);
+ * ENDPOINTS: POST/GET /api/coin-sets, GET/PUT/DELETE /api/coin-sets/:id, PATCH :id/toggle.
  */
 
 import { requireAuth } from './utils/auth.js';

@@ -1,7 +1,7 @@
 /**
- * BUTTON GROUP TEMPLATE - Template for cmp-button-group (Vue wrapper over Bootstrap .btn-group).
- * Injected as <script type="text/x-template"> with id="button-group-template" so it is in DOM before Vue.
- * Structure: dual render — btn-group (>= breakpoint) and cmp-dropdown (< breakpoint). Visibility via Bootstrap d-* classes. Slots: default, button-{index}. Ref: id:sk-483943, shared/components/button-group.js
+ * #JS-m22wt9hC
+ * @description Template for cmp-button-group; id="button-group-template"; dual render btn-group/cmp-dropdown, d-* visibility; slots default, button-{index}.
+ * @see id:sk-483943
  */
 
 (function() {

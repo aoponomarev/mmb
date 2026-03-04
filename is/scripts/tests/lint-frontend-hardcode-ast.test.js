@@ -1,3 +1,7 @@
+/**
+ * #JS-uZ2Hc9qj
+ * @description AST-based test: lint frontend for forbidden properties (e.g. innerText, textContent).
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

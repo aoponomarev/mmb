@@ -1,8 +1,7 @@
 /**
- * Target App Skills MCP Server
- * Adapted from Donor App
+ * #JS-by3WhrY9
+ * @description Target app Skills MCP server: lists skills, reads markdown, gray-matter; adapted from donor app.
  */
-
 import fs from "fs/promises";
 import * as fsSync from "fs";
 import path from "path";

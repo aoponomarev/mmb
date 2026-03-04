@@ -1,3 +1,7 @@
+/**
+ * #JS-Tm1x5Thp
+ * @description MCP tool distill_plan: reads plan from docs/done/, returns instructions to create AIS and Skills.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -1,3 +1,7 @@
+/**
+ * #JS-iH2gWJeT
+ * @description SSOT policies: TTL and interval contracts for topCoins, marketMetrics; DURATIONS_MS.
+ */
 (function() {
     'use strict';
 

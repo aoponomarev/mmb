@@ -1,5 +1,6 @@
 /**
- * Column Visibility Mixin - CSS-driven column toggling without DOM re-render.
+ * #JS-Vn377WRx
+ * @description Column visibility mixin: CSS-driven column toggling without DOM re-render.
  * @skill-anchor id:sk-318305
  */
 window.columnVisibilityMixin = {

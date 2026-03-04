@@ -1,3 +1,7 @@
+/**
+ * #JS-aW2fugWg
+ * @description E2E tests for backend providers: DataProviderManager, RequestRegistry, CoinGecko, error handling.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createDataProviderManager } from './backend-data-provider-manager.js';

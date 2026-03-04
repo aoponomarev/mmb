@@ -1,18 +1,6 @@
 /**
- * ================================================================================================
- * COINGECKO FETCHER - Yandex Cloud Function (cron trigger)
- * ================================================================================================
- * Each cycle loads top-250 coins by cap and volume from CoinGecko,
- * writes to coin_market_cache_history with unique cycle_id,
- * updates main table coin_market_cache (latest view),
- * and rotates history, keeping only 2 latest cycles.
- *
- * DAY WINDOW: runs only 06:00–24:00 Moscow (Europe/Moscow).
- * Night calls get 200 OK + status: SKIPPED.
- *
- * ENV VARS:
- * - DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
- * - COINGECKO_API_KEY (optional, Demo/Pro key to lift rate limit)
+ * #JS-3w3f6pz7
+ * @description Yandex Cloud Function (cron): CoinGecko top-250 → coin_market_cache_history + coin_market_cache; rotate 2 cycles; 06:00–24:00 MSK.
  */
 
 'use strict';

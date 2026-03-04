@@ -1,6 +1,7 @@
 /**
+ * #JS-ba38kHXk
+ * @description Framework-agnostic HTTP handler for Market Snapshot; headers, CORS, method limits, query extraction.
  * @skill id:sk-bb7c8e
- * @description Framework-agnostic HTTP handler for Market Snapshot. Handles headers, CORS, method limits, and query extraction.
  */
 
 function normalizeQueryFromUrl(url) {

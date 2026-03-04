@@ -1,3 +1,7 @@
+/**
+ * #JS-2w2TdTy7
+ * @description MCP tool: harvest_causalities — scans codebase for raw // @causality comments, adds to backlog.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

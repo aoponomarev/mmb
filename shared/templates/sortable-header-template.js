@@ -1,6 +1,7 @@
 /**
- * SORTABLE-HEADER TEMPLATE - Template for table column sortable header. Injected as <script type="text/x-template"> id="sortable-header-template".
- * Structure: div (cursor pointer, click), label span, sort icon (Material Symbols). Ref: id:sk-318305, shared/components/sortable-header.js
+ * #JS-KsDLBKp2
+ * @description Template for sortable table column header; id="sortable-header-template"; div/label/sort icon.
+ * @see id:sk-318305
  */
 
 (function() {

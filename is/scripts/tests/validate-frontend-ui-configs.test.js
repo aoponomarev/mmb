@@ -1,3 +1,7 @@
+/**
+ * #JS-vK2EcYrV
+ * @description Tests validation of frontend UI configs against frontendUiConfigSchema.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

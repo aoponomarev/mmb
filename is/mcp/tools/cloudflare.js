@@ -1,3 +1,7 @@
+/**
+ * #JS-DJ3saX9U
+ * @description MCP tools: cf_d1_query (read-only), cf_kv_get; SELECT-only for D1.
+ */
 import { exec } from 'node:child_process';
 import util from 'node:util';
 

@@ -1,8 +1,8 @@
 /**
+ * #JS-3oL8h3k9
+ * @description Market snapshot client: security boundary, request validation, backend error handling.
  * @skill id:sk-5c0ef8
  * @skill id:sk-918276
- *
- * Market Snapshot HTTP client — security boundary, request validation, backend error handling.
  */
 import { parseMarketQuery } from "../contracts/market-contracts.js";
 import { BACKEND_ERROR_CODES, BackendCoreError } from "./providers/errors.js";

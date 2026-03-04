@@ -1,3 +1,7 @@
+/**
+ * #JS-Nz32oDKA
+ * @description Modal body: missing coins list; exclude or replace by ticker; Skill id:sk-e0b8f3.
+ */
 (function() {
     'use strict';
 

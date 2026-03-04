@@ -1,10 +1,8 @@
-// =========================
-// DROPDOWN MENU ITEM COMPONENT
-// Universal dropdown item with icon, title, subtitle, suffix
-// =========================
-// PURPOSE: Reusable menu item with left icon + tooltip, title/subtitle, suffix (badge/icon/indicator/chevron/info), active/disabled, zone clicks (click, click-icon, click-text, click-suffix), instanceHash, .dropdown-menu-item-responsive.
-// API: props title (required), icon, subtitle, suffix, tooltipIcon/Text/Suffix, tooltip*Bootstrap, active, disabled, iconOpacity, subtitleOpacity, classesAdd, classesRemove. Emits: click, click-icon, click-text, click-suffix. Layout: see shared/templates/dropdown-menu-item-template.js. Bootstrap dropdown-item; native or Bootstrap tooltips; @mouseup for close. ARCHITECTURE: Template dropdown-menu-item-template.js. Deps: Bootstrap 5, Font Awesome 6, Vue. See id:sk-483943.
-
+/**
+ * #JS-Tm2EL8Pw
+ * @description Universal dropdown menu item: icon, title, subtitle, suffix; zone clicks; template dropdown-menu-item-template.js.
+ * @see id:sk-483943
+ */
 window.cmpDropdownMenuItem = {
     template: '#dropdown-menu-item-template',
 

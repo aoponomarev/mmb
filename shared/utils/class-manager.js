@@ -1,6 +1,7 @@
 /**
- * CLASS MANAGER - Utility for managing CSS classes in components (add/remove, strings or arrays, no duplicates).
- * Usage: in computed for classesAdd/classesRemove. Ref: id:sk-318305
+ * #JS-492QR3zK
+ * @description Utility for managing CSS classes (add/remove, strings or arrays, no duplicates); use in computed for classesAdd/classesRemove.
+ * @see id:sk-318305
  */
 
 /**

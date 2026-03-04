@@ -1,3 +1,7 @@
+/**
+ * #JS-PE4184KQ
+ * @description MCP tool run_preflight: runs full preflight (causality, skills); run after modifying skills or code.
+ */
 import { exec } from 'node:child_process';
 import util from 'node:util';
 import path from 'node:path';

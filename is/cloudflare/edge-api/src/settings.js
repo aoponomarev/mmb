@@ -1,30 +1,9 @@
 /**
- * ================================================================================================
- * SETTINGS - App settings storage in Cloudflare KV
- * ================================================================================================
- * Skill: id:sk-02d3ea
+ * #JS-2fGHr2c5
+ * @description App settings in Cloudflare KV (SETTINGS); GET/POST /api/settings, GET/PUT /api/settings/:key; Bearer SETTINGS_TOKEN.
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: Replace continue-wrapper snapshots (JSON files on disk) with cloud storage.
- * Settings stored in KV namespace SETTINGS, accessible from any device.
- *
- * ROUTES:
- * - GET  /api/settings        — get all settings (for import into UI)
- * - POST /api/settings        — save all settings (export from UI)
- * - GET  /api/settings/:key   — get single field
- * - PUT  /api/settings/:key   — set single field
- *
- * SECURITY:
- * - All requests require Authorization: Bearer <githubToken> header
- * - githubToken stored as Cloudflare Secret (SETTINGS_TOKEN)
- * - Without SETTINGS_TOKEN endpoint is unavailable (fail-safe)
- *
- * FIELDS:
- * - provider, yandexApiKey, yandexFolderId, yandexModel
- * - perplexityApiKey, perplexityModel
- * - githubToken, apiBaseUrl, syncEnabled
- *
- * @param {Request} request
- * @param {Object} env - env.SETTINGS (KV), env.SETTINGS_TOKEN (Secret)
+ * FIELDS: provider, yandexApiKey, yandexFolderId, yandexModel, perplexityApiKey, perplexityModel, githubToken, apiBaseUrl, syncEnabled.
  */
 
 import { jsonResponse } from './utils/cors.js';

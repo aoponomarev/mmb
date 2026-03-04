@@ -1,3 +1,7 @@
+/**
+ * #JS-25iDr22X
+ * @description Creates new skill file from template; npm run skills:create "Title" [--type=...].
+ */
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";

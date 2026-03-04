@@ -1,35 +1,9 @@
 /**
- * ================================================================================================
- * API PROXY - Universal proxy for external APIs with KV caching
- * ================================================================================================
- * Skill: id:sk-7cf3f7
+ * #JS-9Mg559JV
+ * @description Universal proxy for CoinGecko, Yahoo Finance, Stooq; CORS bypass; KV caching (TTL by type); domain whitelist, rate limit, path validation.
+ * @skill id:sk-7cf3f7
  *
- * PURPOSE: Proxy requests to external APIs for CORS bypass when working on file://
- *
- * SUPPORTED APIs:
- * - CoinGecko (https://api.coingecko.com/api/v3)
- * - Yahoo Finance (https://query1.finance.yahoo.com/v8/finance/chart)
- * - Stooq (https://stooq.com/q/d/l/)
- *
- * ROUTES:
- * - /api/coingecko/* → CoinGecko API
- * - /api/yahoo-finance/* → Yahoo Finance API
- * - /api/stooq/* → Stooq API
- *
- * CACHING:
- * - Cloudflare KV for popular requests
- * - TTL depends on data type (coins: 5 min, metrics: 1 hour)
- * - Cache-Control headers for edge cache
- *
- * SECURITY:
- * - Domain whitelist (only allowed APIs)
- * - Rate limiting (optional, via env.RATE_LIMIT)
- * - Path validation (only allowed endpoints)
- *
- * @param {Request} request - Incoming HTTP request
- * @param {Object} env - Environment variables (API_CACHE KV binding)
- * @param {string} apiType - API type ('coingecko', 'yahoo-finance', 'stooq')
- * @returns {Promise<Response>} HTTP response with CORS headers
+ * ROUTES: /api/coingecko/*, /api/yahoo-finance/*, /api/stooq/*. CACHING: KV, Cache-Control. SECURITY: whitelist, env.RATE_LIMIT.
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

@@ -1,3 +1,7 @@
+/**
+ * #JS-zYkqJzVZ
+ * @description Tests for naming-rules (fileNameSchema, moduleNameSchema, relativePathSchema).
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fileNameSchema, moduleNameSchema, relativePathSchema } from './naming-rules.js';

@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-bb7c8e
+ * #JS-4K2gU4Fq
  * @description Market Snapshot Service: orchestrates data and metrics fetching to build a unified snapshot payload.
+ * @skill id:sk-bb7c8e
  * @causality #for-layer-separation
  */
 

@@ -1,6 +1,7 @@
 /**
+ * #JS-Lw3YqzH7
+ * @description Orchestrates backend data fetching via providerManager and caches via dataCacheManager.
  * @skill id:sk-bb7c8e
- * @description Orchestrates the backend data fetching using providerManager and caches the results via dataCacheManager.
  */
 import { createDataCacheManager } from "../cache/data-cache-manager.js";
 

@@ -1,3 +1,7 @@
+/**
+ * #JS-mYo7imVc
+ * @description Generates skills index from is/core/app skills dirs for docs or tooling.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

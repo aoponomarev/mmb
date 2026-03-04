@@ -1,6 +1,7 @@
 /**
- * BUTTON TEMPLATE - Template for cmp-button (icon, text, suffix). Injected as <script type="text/x-template"> id="button-template".
- * Structure: button root, inner span (d-flex), icon/label/suffix. Conditional: loading spinner, icon, label/labelShort, suffixArray. Responsive via .btn-responsive. Zone click events via @click.stop. Ref: id:sk-318305, shared/components/button.js
+ * #JS-Gv3d5gD6
+ * @description Template for cmp-button (icon, text, suffix); id="button-template"; structure button/span, loading/icon/label/suffix, .btn-responsive.
+ * @see id:sk-318305
  */
 
 (function() {

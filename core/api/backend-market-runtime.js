@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-bb7c8e
+ * #JS-1n3NPbwx
  * @description Composition root for the backend market subsystem. Assembles all dependencies.
+ * @skill id:sk-bb7c8e
  * @causality #for-composition-root
  */
 

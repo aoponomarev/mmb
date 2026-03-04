@@ -1,3 +1,7 @@
+/**
+ * #JS-SR3QqzNb
+ * @description Tests for market-contracts: parseMarketQuery, buildSnapshotPayload.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseMarketQuery, buildSnapshotPayload } from './market-contracts.js';

@@ -1,3 +1,7 @@
+/**
+ * #JS-HU3hEyDe
+ * @description MCP resources: skill://, causality graph, causality backlog; reads markdown and injects context.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

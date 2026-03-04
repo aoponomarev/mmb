@@ -1,3 +1,7 @@
+/**
+ * #JS-ms2nrzi3
+ * @description MCP tool: read-only SQL query against local SQLite telemetry/causality DB; SELECT-only.
+ */
 import { db } from '../db.js';
 
 export const queryTelemetryToolDef = {

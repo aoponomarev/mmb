@@ -1,3 +1,7 @@
+/**
+ * #JS-V931HiRK
+ * @description Migrates plan files from donor docs dir to target docs/plans (filter by plan filename pattern).
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

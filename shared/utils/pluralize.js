@@ -1,3 +1,7 @@
+/**
+ * #JS-mczTXmZo
+ * @description Plural form helper for Slavic-style numerals (1/2/5 forms); pluralize(n, [form1, form2, form5]).
+ */
 // Plural form helper for Slavic-style numerals (1/2/5 forms). Usage: pluralize(n, [form1, form2, form5])
 window.pluralize = function(number, forms) {
   if (!Array.isArray(forms) || forms.length < 3) {

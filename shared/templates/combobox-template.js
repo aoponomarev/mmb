@@ -1,6 +1,7 @@
 /**
- * COMBOBOX TEMPLATE - Template for cmp-combobox (input-group + dropdown, autocomplete, keyboard nav). Injected as <script type="text/x-template"> id="combobox-template".
- * Modes: 'input' (plain field) and 'combobox' (with dropdown). Clear button; scroll/virtual; slots #items, #item. Ref: id:sk-318305, shared/components/combobox.js
+ * #JS-yZ2EWUuj
+ * @description Template for cmp-combobox (script type=text/x-template id=combobox-template); input/combobox modes, dropdown, keyboard nav.
+ * @see id:sk-318305
  */
 
 (function() {

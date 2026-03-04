@@ -1,5 +1,6 @@
 /**
- * @deprecated Use is/contracts/prefixes.js (SSOT). Re-exports for backward compatibility.
+ * #JS-NN1yTNJp
+ * @description Deprecated: re-exports from is/contracts/prefixes.js (SSOT) for backward compatibility.
  */
 export {
     SKILL_ALLOWED as IS_SKILLS_MANDATORY,

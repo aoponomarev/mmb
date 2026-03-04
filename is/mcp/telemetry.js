@@ -1,3 +1,7 @@
+/**
+ * #JS-CA4Gi28L
+ * @description Logs events into SQLite telemetry DB; recordFragility for failed checks.
+ */
 import { db } from './db.js';
 
 /**

@@ -1,6 +1,7 @@
 /**
- * CELL-NUM TEMPLATE - Template for formatted table numeric cell. Injected as <script type="text/x-template"> id="cell-num-template".
- * Structure: span root with data-value-sign; empty/infinite display; prefix, sign, integer, separator, fraction, unit. Color via data-value-sign; tooltip via title. Ref: id:sk-318305, shared/components/cell-num.js
+ * #JS-W8ATyW4y
+ * @description Template for formatted table numeric cell; id="cell-num-template"; span with data-value-sign, prefix/sign/integer/fraction/unit.
+ * @see id:sk-318305
  */
 
 (function() {

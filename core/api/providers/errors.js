@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-bb7c8e
+ * #JS-ETumeEQi
  * @description Standard error models and HTTP status mapping for all providers and services.
+ * @skill id:sk-bb7c8e
  */
 
 export const BACKEND_ERROR_CODES = Object.freeze({

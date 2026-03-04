@@ -1,3 +1,7 @@
+/**
+ * #JS-QZKA5QW8
+ * @description Tests for MarketMetricsService: createMarketMetricsService, partial failure, invalid input.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createDataCacheManager } from '../cache/data-cache-manager.js';

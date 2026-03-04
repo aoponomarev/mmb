@@ -1,3 +1,7 @@
+/**
+ * #JS-YD283xUP
+ * @description SQLite DB for MCP telemetry (events, fragility_stats); WAL journal mode; schema init.
+ */
 import Database from 'better-sqlite3';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

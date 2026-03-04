@@ -1,3 +1,7 @@
+/**
+ * #JS-YF9TtYBx
+ * @description Runtime smoke tests: createBackendMarketRuntime, createMarketSnapshotNodeServer, HTTP integration.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createBackendMarketRuntime } from './backend-market-runtime.js';

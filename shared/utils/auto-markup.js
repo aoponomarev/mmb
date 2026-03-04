@@ -1,6 +1,8 @@
 /**
- * AUTO-MARKUP - Auto-markup of DOM elements with avto-{hash} for DevTools/navigation. Skill: id:sk-318305
- * MutationObserver + deterministic Base58 hash from element path. Mark: main, section, header, footer, .container, .card*, data-markup. Skip: inside Vue, .row/.col-*, data-no-markup, elements with ID, script/style. Usage: auto on load; window.autoMarkup.markupContainer(el); stopObserver(). Ref: id:sk-483943
+ * #JS-1oAiR1jy
+ * @description Auto-markup of DOM with avto-{hash} for DevTools; MutationObserver, Base58; mark main/section/header/footer/.container/.card*; skip Vue, .row/.col-*, data-no-markup.
+ * @skill id:sk-318305
+ * @see id:sk-483943
  */
 
 window.autoMarkup = {

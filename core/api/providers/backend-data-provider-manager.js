@@ -1,11 +1,7 @@
 /**
+ * #JS-NE2miEJQ
+ * @description Backend-core DataProviderManager; fail-fast, explicit provider and API key contract from env resolver.
  * @skill id:sk-bb7c8e
- * @description Backend-core DataProviderManager.
- *
- * Principles:
- * - fail-fast only (no hidden fallback chains during migration)
- * - explicit provider contract
- * - explicit API key contract, sourced from env resolver
  */
 import { BACKEND_ERROR_CODES, BackendCoreError } from "./errors.js";
 

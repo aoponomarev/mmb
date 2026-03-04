@@ -1,6 +1,7 @@
 /**
- * COIN-BLOCK TEMPLATE - Template for coin block (icon + symbol). Injected as <script type="text/x-template"> id="coin-block-template".
- * Structure: coin-block d-flex; img icon; symbol span. Bootstrap layout; tooltip via title; cursor pointer. Ref: id:sk-483943, shared/components/coin-block.js
+ * #JS-dy3PC2a9
+ * @description Template for coin block (icon + symbol); id="coin-block-template"; d-flex, img, symbol span.
+ * @see id:sk-483943
  */
 
 (function() {

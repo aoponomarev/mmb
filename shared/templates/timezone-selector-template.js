@@ -1,6 +1,7 @@
 /**
- * TIMEZONE SELECTOR TEMPLATE - Template for cmp-timezone-selector. Injected as <script type="text/x-template"> id="timezone-selector-template".
- * Structure: select.form-select with v-model; option list. Ref: id:sk-318305, shared/components/timezone-selector.js
+ * #JS-ca2bWcWq
+ * @description Template for cmp-timezone-selector; id="timezone-selector-template"; select.form-select, option list.
+ * @see id:sk-318305
  */
 
 (function() {

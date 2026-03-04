@@ -1,6 +1,7 @@
 /**
- * DROPDOWN-MENU-ITEM TEMPLATE - Template for cmp-dropdown-menu-item (icon, text, subtitle, suffix). Injected as <script type="text/x-template"> id="dropdown-menu-item-template".
- * Structure: li.dropdown-item; d-flex container; icon, text area, suffix. Zone clicks via @mouseup.stop; close on mouse release. Ref: id:sk-483943, shared/components/dropdown-menu-item.js
+ * #JS-Lac4SLXR
+ * @description Template for cmp-dropdown-menu-item (icon, text, subtitle, suffix); id="dropdown-menu-item-template".
+ * @see id:sk-483943
  */
 
 (function() {

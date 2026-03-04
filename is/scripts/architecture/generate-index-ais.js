@@ -1,3 +1,7 @@
+/**
+ * #JS-bH2XmFXT
+ * @description Generates docs/index-ais.md from AIS markdown frontmatter (id, status, related_*).
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

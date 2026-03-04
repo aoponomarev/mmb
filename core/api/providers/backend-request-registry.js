@@ -1,6 +1,7 @@
 /**
+ * #JS-So4E17Ny
+ * @description Backend request registry for provider calls; per-resource metadata, rate limiting, interval checks.
  * @skill id:sk-bb7c8e
- * @description Backend request registry for provider calls. Stores minimal per-resource call metadata and enforces rate limiting / interval checks.
  */
 
 function stableKey(value) {

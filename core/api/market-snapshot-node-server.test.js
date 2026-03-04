@@ -1,3 +1,7 @@
+/**
+ * #JS-PN49VrKY
+ * @description Tests for market-snapshot-node-server: createBackendMarketRuntime, createMarketSnapshotNodeServer.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createBackendMarketRuntime } from './backend-market-runtime.js';

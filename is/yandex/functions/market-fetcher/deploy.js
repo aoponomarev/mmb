@@ -1,6 +1,6 @@
 /**
- * Deploy coingecko-fetcher to Yandex Cloud Functions via REST API
- * Uses service account API key to obtain IAM token
+ * #JS-rr4CFxo2
+ * @description Deploy coingecko-fetcher to Yandex Cloud Functions via REST API; service account IAM token.
  */
 'use strict';
 

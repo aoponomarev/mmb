@@ -1,8 +1,8 @@
 /**
+ * #JS-wZTcVwWG
+ * @description Market Snapshot Node.js HTTP server; fail-fast on external contract violations.
  * @skill id:sk-5c0ef8
  * @skill id:sk-918276
- *
- * Market Snapshot Node.js HTTP server — fail-fast on external contract violations.
  */
 import http from "http";
 

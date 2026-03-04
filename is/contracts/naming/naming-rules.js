@@ -1,6 +1,7 @@
 /**
- * @skill arch-foundation
+ * #JS-kXgRFkUV
  * @description Gatekeeper for file and module naming contracts (kebab-case, anti-calque).
+ * @skill arch-foundation
  */
 import { z } from 'zod';
 import { MODULE_PREFIXES } from '../prefixes.js';

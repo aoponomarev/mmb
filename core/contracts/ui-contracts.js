@@ -1,3 +1,7 @@
+/**
+ * #JS-4KeCe4GT
+ * @description Zod schemas for UI: tooltips, modals, frontend config.
+ */
 import { z } from 'zod';
 
 export const tooltipSchema = z.record(z.string().min(1), z.string().min(1));

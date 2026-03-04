@@ -1,24 +1,7 @@
 /**
- * ================================================================================================
- * PORTFOLIOS ENDPOINTS - API for portfolios
- * ================================================================================================
- *
- * PURPOSE: CRUD operations for user portfolios.
- * Skill: id:sk-02d3ea
- *
- * ENDPOINTS:
- * - GET /api/portfolios — list user portfolios (from D1)
- * - GET /api/portfolios/:id — get portfolio by ID (from D1)
- * - POST /api/portfolios — create portfolio (save to D1)
- * - PUT /api/portfolios/:id — update portfolio
- * - DELETE /api/portfolios/:id — delete portfolio
- *
- * USAGE:
- * import { handlePortfolios } from './portfolios.js';
- *
- * if (path.startsWith('/api/portfolios')) {
- *   return await handlePortfolios(request, env, path);
- * }
+ * #JS-WP2ioNSZ
+ * @description Portfolios API: CRUD from D1; GET/POST/PUT/DELETE /api/portfolios; handlePortfolios(request, env, path).
+ * @skill id:sk-02d3ea
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

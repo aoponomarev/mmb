@@ -1,3 +1,7 @@
+/**
+ * #JS-oeSwbobF
+ * @description MCP tool: create a new standardized causality skill file (title, type: arch/process/app/core/shared).
+ */
 import { exec } from 'node:child_process';
 import util from 'node:util';
 import path from 'node:path';

@@ -1,3 +1,7 @@
+/**
+ * #JS-bt3rJ4Y4
+ * @description Tests for Market Snapshot HTTP handler E2E: createMarketSnapshotHttpHandler, transport, contracts.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createMarketSnapshotHttpHandler } from './market-snapshot-http.js';

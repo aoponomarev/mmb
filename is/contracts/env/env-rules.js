@@ -1,6 +1,7 @@
 /**
- * @skill arch-foundation
+ * #JS-JJ8jnJEw
  * @description Gatekeeper for environment variables (SSOT for secrets and config).
+ * @skill arch-foundation
  */
 import { z } from 'zod';
 

@@ -1,23 +1,7 @@
 /**
- * ================================================================================================
- * D1 HELPERS - Utilities for D1 database
- * ================================================================================================
- *
- * PURPOSE: Helpers for working with D1 (users, portfolios, rebalances).
- * Abstraction over SQL queries to simplify database access.
- * Skill: id:sk-02d3ea
- *
- * PRINCIPLES:
- * - All functions return Promise
- * - SQL query error handling
- * - Transactions for atomic operations
- * - Data validation before save
- *
- * USAGE:
- * import { createUser, getUser, createPortfolio, getPortfolio } from './utils/d1-helpers.js';
- *
- * const user = await createUser(env.DB, { google_id: '...', email: '...' });
- * const portfolio = await createPortfolio(env.DB, user_id, portfolioData);
+ * #JS-GHghtGEV
+ * @description D1 helpers: users, portfolios, rebalances; Promise-based; transactions, validation.
+ * @skill id:sk-02d3ea
  */
 
 /**

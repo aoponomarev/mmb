@@ -1,9 +1,7 @@
 /**
+ * #JS-594A3G1K
+ * @description Native file cache for backend data flow; TTL-based freshness, no secret storage, deterministic key hashing.
  * @skill id:sk-bb7c8e
- * @description Native file cache for backend data flow.
- * - TTL-based freshness
- * - no secret storage
- * - deterministic key hashing
  */
 import fs from "fs";
 import path from "path";

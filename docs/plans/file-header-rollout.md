@@ -54,13 +54,14 @@ related_ais:
 ## Фаза 5: Постепенное покрытие файлов
 
 - [x] Единый вид шапок (AIS): без баннеров `====`, без дублирования Skill при наличии @skill; списки PRINCIPLES/USAGE/REFERENCES сохранять.
-- [ ] Определить порядок обхода по дереву (например: is/scripts → is/contracts → core → shared → app → mm).
-- [ ] Запускать assign-file-ids по реестру; вставка file id + @description вручную/пакетами с опорой на code-file-registry.json.
-- [ ] Для файлов без шапки: вставка шаблона из file-header-template.js с подставленным file id и минимальным @description.
-- [ ] После каждого подмножества: npm run file-headers:check и npm run preflight.
-- [ ] Обновлять code-file-registry при каждом добавлении/переименовании файла (assign-file-ids при изменении дерева).
+- [x] Определить порядок обхода по дереву (is → core → shared → app → mm; внутри is: cloudflare, yandex).
+- [x] Замена шапок с баннерами на единый формат (file id + @description, без дублирования, списки по необходимости).
+- [x] Файлы с баннерами обработаны: core, shared, app, mm, is (edge-api, yandex functions).
+- [x] Для файлов без шапки: добавлены file id и @description во все целевые .js (256 файлов в core, app, shared, mm, is).
+- [x] После батчей: file-headers:check и preflight.
+- [ ] Обновлять code-file-registry при добавлении/переименовании (assign-file-ids при изменении дерева).
 
-**Прогресс:** Шаблон: расширяемый список секций в file-header-template.js. Восстановлена аутентичность в menus-config, cache-config, storage-layers, modules-config, cache-migrations, data-providers-config. **core** — полностью (баннеров нет). **shared** — полностью: utils (messages-store), components (button, button-group, modal, coin-block, system-messages, system-message, modal-buttons, timezone-selector, sortable-header, cell-num), templates (modal-template, dropdown-template); баннеров нет. **app** — полностью: components (app-header, app-footer, auth-button, portfolios-manager, session-log-modal-body, auth-modal-body, portfolio-modal-body, timezone-modal-body, storage-reset-modal-body, portfolio-view, portfolio-form, portfolios-import, modal-example, coingecko-cron-history, ai-api-settings, icon-manager-modal-body, postgres-settings, coin-set-load, coin-set-save), templates (app-header, app-footer, auth-button, auth-modal-body, postgres-settings, portfolios-manager, ai-api-settings, icon-manager-modal-body); баннеров нет. **mm** — полностью: model-manager, base-model-calculator, median-air-260101-calculator, median-air-260115-calculator; баннеров нет. Дальше: is (скрипты/контракты уже частично; остальные по плану).
+**Прогресс:** Все 256 целевых .js/.ts (core, app, shared, mm, is) имеют шапку нового формата: #JS-xxx + @description. Баннеры убраны; файлы без шапки дополнены (generate-skills-index, pluralize, query-telemetry, run-migration, create-skill, layout-sync, deploy, V2_logic, тесты, modal-buttons-template, combobox-template, naming-rules.test, market-snapshot-node-server и др.). Preflight проходит.
 
 ## Критерии завершения
 

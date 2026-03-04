@@ -1,23 +1,9 @@
 /**
- * ================================================================================================
- * AUTH ENDPOINTS - OAuth endpoints for auth via Google
- * ================================================================================================
+ * #JS-oi2C6djt
+ * @description OAuth endpoints: code-to-token, user in D1, JWT; /auth/callback, /auth/me, /auth/logout.
+ * @skill id:sk-7cf3f7
  *
- * PURPOSE: OAuth flow handling on server: code-to-token exchange, user persistence, JWT issuance.
- * Skill: id:sk-7cf3f7
- *
- * ENDPOINTS:
- * - GET /auth/google — redirect to Google OAuth (not used, done on client)
- * - POST /auth/callback — exchange authorization code for JWT token, user persistence in D1
- * - GET /auth/me — get current user by JWT token
- * - POST /auth/logout — logout (optional, can be done on client)
- *
- * USAGE:
- * import { handleAuth } from './auth.js';
- *
- * if (path.startsWith('/auth/')) {
- *   return await handleAuth(request, env, path);
- * }
+ * ENDPOINTS: POST /auth/callback (code→JWT, D1), GET /auth/me, POST /auth/logout. Usage: handleAuth(request, env, path).
  */
 
 import { jsonResponse, handleOptions, getCorsHeaders } from './utils/cors.js';

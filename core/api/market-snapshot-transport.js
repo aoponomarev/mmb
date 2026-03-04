@@ -1,6 +1,7 @@
 /**
+ * #JS-ikUJ4ihH
+ * @description Transport adapter for Market Snapshot; maps domain responses and errors to transport format.
  * @skill id:sk-bb7c8e
- * @description Transport adapter for Market Snapshot. Maps internal domain responses and errors to transport-friendly format.
  * @causality #for-layer-separation
  */
 import { BACKEND_ERROR_CODES, toBackendCoreError, toBackendHttpStatus } from "./providers/errors.js";

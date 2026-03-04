@@ -1,26 +1,7 @@
 /**
- * ================================================================================================
- * CORS UTILITIES - Utilities for CORS header handling
- * ================================================================================================
- *
- * PURPOSE: Centralized CORS header handling for all Workers responses.
- * Skill: id:sk-7cf3f7
- *
- * PRINCIPLES:
- * - All responses must include CORS headers
- * - Support preflight OPTIONS requests
- * - Configurable allowed origins (can restrict in production)
- *
- * USAGE:
- * import { addCorsHeaders, handleOptions } from './utils/cors.js';
- *
- * // Add headers to response
- * const response = new Response(data, { headers: addCorsHeaders() });
- *
- * // Handle preflight request
- * if (request.method === 'OPTIONS') {
- *   return handleOptions(request);
- * }
+ * #JS-Mw21ipJ7
+ * @description CORS headers for Workers; preflight OPTIONS; addCorsHeaders, handleOptions.
+ * @skill id:sk-7cf3f7
  */
 
 /**

@@ -1,26 +1,9 @@
 /**
- * ================================================================================================
- * DATASETS ENDPOINTS - API for datasets (time-series, metrics)
- * ================================================================================================
+ * #JS-d3cQ6czR
+ * @description Datasets API: time-series and metrics CRUD; R2 deferred (stubs); handleDatasets(request, env, path).
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: CRUD operations for time series and metrics.
- * Skill: id:sk-02d3ea
- *
- * ENDPOINTS:
- * - GET /api/datasets/time-series/:coin/:date — get time series
- * - POST /api/datasets/time-series — save time series (batch)
- * - GET /api/datasets/metrics/:coin/:date — get metrics
- * - POST /api/datasets/metrics — save metrics (batch)
- *
- * NOTE: R2 storage is deferred, so stubs are returned for now.
- * Full functionality will be implemented after R2 is added.
- *
- * USAGE:
- * import { handleDatasets } from './datasets.js';
- *
- * if (path.startsWith('/api/datasets')) {
- *   return await handleDatasets(request, env, path);
- * }
+ * ENDPOINTS: GET/POST /api/datasets/time-series, GET/POST /api/datasets/metrics.
  */
 
 import { jsonResponse, handleOptions } from './utils/cors.js';

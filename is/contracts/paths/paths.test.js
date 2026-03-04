@@ -1,3 +1,7 @@
+/**
+ * #JS-EM3iWwAX
+ * @description Tests for paths contract: getAbsolutePath, PATHS, PROJECT_ROOT validation.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';

@@ -1,24 +1,10 @@
 /**
- * ================================================================================================
- * app API FUNCTION - Yandex Cloud Functions
- * ================================================================================================
- * Skill: id:sk-73dcca
+ * #JS-HS3kQFDc
+ * @description Yandex Cloud Function: API layer for PostgreSQL (health + CRUD); secrets outside repo.
+ * @skill id:sk-73dcca
+ * @see id:sk-7cf3f7
  *
- * PURPOSE: API layer for PostgreSQL (health + future CRUD endpoints).
- * SECURITY NOTE:
- * - Secrets not stored in repo.
- * - Actual env values in secrets dir outside repo (Yandex Console or .env).
- *
- * ENV VARS:
- * - DB_HOST
- * - DB_PORT (default 6432)
- * - DB_NAME
- * - DB_USER
- * - DB_PASSWORD
- *
- * REFERENCES:
- * - API Gateway: is/yandex/functions/api-gateway/ (OpenAPI spec in Yandex Cloud)
- * - Integration: id:sk-7cf3f7
+ * ENV VARS: DB_HOST, DB_PORT (6432), DB_NAME, DB_USER, DB_PASSWORD.
  */
 const { Client } = require('pg');
 

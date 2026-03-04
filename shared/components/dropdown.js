@@ -1,24 +1,12 @@
-// =========================
-// DROPDOWN COMPONENT
-// Vue wrapper over Bootstrap dropdown with search and scroll
-// =========================
-// PURPOSE: Reusable dropdown with:
-//
-// @skill-anchor id:sk-add9a6 #for-classes-add-remove
-// @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
-// @skill-anchor id:sk-cb75ec #for-utility-availability-check
-// - Item search, scroll for long lists, full Bootstrap JS API, custom trigger via slot
-// - Trigger responsiveness (.dropdown-responsive), instanceHash, cmp-button for trigger
-// - Select mode with selected item on button (replaces <select>)
-//
-// API. Props - Trigger: buttonText, buttonTextShort, buttonIcon, buttonVariant, buttonSize, dropdownId
-// Search: searchable, searchPlaceholder, emptySearchText, searchFunction. Scroll: scrollable, maxHeight.
-// Items: items (for built-in filter). Select: selectMode, selectedItem, itemLabel, itemValue, itemIcon, itemLabelShort, buttonDisplay.
-// Extra: classesAdd, classesRemove, menuClasses, menuStyle, menuOffset (Popper offset: number [0,y] or [x,y] px, null = Bootstrap default).
-// Emits: show, hide, search, item-select, update:selectedItem, select. Slots: button, items. Ref: show(), hide(), toggle(), getBootstrapInstance().
-// Layout: see shared/templates/dropdown-template.js. Trigger via cmp-button on $refs.dropdownButton.$el. Search: built-in or searchFunction; autofocus; clear on close. Select: selectedItem, itemLabel/Value/Icon/LabelShort, buttonDisplay, auto-close, emit select.
-// ARCHITECTURE: Template shared/templates/dropdown-template.js. Deps: Bootstrap 5, Vue. See id:sk-318305, id:sk-483943.
-
+/**
+ * #JS-Y3asmXzP
+ * @description Vue wrapper over Bootstrap dropdown: search, scroll, select mode; template dropdown-template.js; skill-anchors for classes/add/remove, event proxying, utility check.
+ * @skill-anchor id:sk-add9a6 #for-classes-add-remove
+ * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
+ * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * @see id:sk-318305
+ * @see id:sk-483943
+ */
 window.cmpDropdown = {
     template: '#dropdown-template',
     components: {

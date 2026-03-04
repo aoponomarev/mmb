@@ -1,3 +1,7 @@
+/**
+ * #JS-s54B2voF
+ * @description Tests for CoinGeckoProvider (coingecko-provider.js).
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createCoinGeckoProvider } from './coingecko-provider.js';

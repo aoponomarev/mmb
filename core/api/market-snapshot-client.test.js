@@ -1,3 +1,7 @@
+/**
+ * #JS-D32ccb9D
+ * @description Tests for MarketSnapshotApiClient (market-snapshot-client.js).
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MarketSnapshotApiClient, MarketSnapshotClientError } from './market-snapshot-client.js';

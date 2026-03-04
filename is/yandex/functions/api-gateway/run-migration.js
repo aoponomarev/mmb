@@ -1,3 +1,7 @@
+/**
+ * #JS-mz4FPLiA
+ * @description Runs a SQL migration file against Yandex Cloud PostgreSQL (api-gateway DB).
+ */
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');

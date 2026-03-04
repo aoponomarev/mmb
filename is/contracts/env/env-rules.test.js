@@ -1,3 +1,7 @@
+/**
+ * #JS-gugGqgrV
+ * @description Tests for env-rules: validateEnv, envSchema.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { validateEnv } from './env-rules.js';

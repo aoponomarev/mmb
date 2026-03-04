@@ -1,3 +1,7 @@
+/**
+ * #JS-V92JziRK
+ * @description Tests for MarketSnapshotService: partial failure, invalid input handling.
+ */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createDataProviderManager } from './providers/backend-data-provider-manager.js';
