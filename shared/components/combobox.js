@@ -22,6 +22,7 @@
 //
 // ARCHITECTURE:
 // Template: shared/templates/combobox-template.js. Deps: Bootstrap 5, Font Awesome 6, Vue. See also: id:sk-e0b8f3
+ */
 
 window.cmpCombobox = {
     template: '#combobox-template',
