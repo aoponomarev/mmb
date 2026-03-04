@@ -1,6 +1,6 @@
 /**
  * ================================================================================================
- * ICON MANAGER MODAL BODY - Компонент управления иконками в модальном окне
+ * ICON MANAGER MODAL BODY - Icon management component in modal
  * ================================================================================================
  *
  * Skill: app/skills/ui-architecture
@@ -9,7 +9,7 @@
 (function() {
     'use strict';
 
-    console.log('icon-manager-modal-body.js: загрузка компонента...');
+    console.log('icon-manager-modal-body.js: loading component...');
 
     window.cmpIconManagerModalBody = {
         template: '#icon-manager-modal-body-template',
@@ -17,7 +17,7 @@
         inject: ['modalApi'],
 
         props: {
-            // Данные монеты: { id, symbol, name, image, fallbackImage }
+            // Coin data: { id, symbol, name, image, fallbackImage }
             coinData: {
                 type: Object,
                 required: true
@@ -38,7 +38,7 @@
         },
 
         computed: {
-            // Формируем имя файла for сохранения
+            // Build filename for saving
             targetFilename() {
                 const alias = window.iconManager?.CONFIG?.aliasMap[this.coinData.id];
                 return (alias || this.coinData.id) + '.png';
@@ -46,7 +46,7 @@
         },
 
         watch: {
-            // Обновляем состояние кнопок при изменении готовности изображения
+            // Update button state when image readiness changes
             imageBlob(newVal) {
                 this.updateModalButtons();
             },
@@ -62,10 +62,10 @@
             this.filename = this.targetFilename;
             this.registerModalButtons();
 
-            // По умолчанию подгружаем текущую иконку в предпросмотр
+            // By default load current icon into preview
             if (this.coinData.fallbackImage) {
                 this.loadFromUrl(this.coinData.fallbackImage, true).then(() => {
-                    // После загрузки CG иконки в канвас, кнопка "Опубликовать" должна стать активной
+                    // After loading CG icon to canvas, Publish button should become active
                     this.updateModalButtons();
                 });
             }
@@ -80,25 +80,25 @@
 
         methods: {
             /**
-             * Регистрация кнопок в футере модального окна
+             * Register buttons in modal footer
              */
             registerModalButtons() {
                 if (!this.modalApi) return;
 
                 const hasImage = !!this.imageBlob;
 
-                // Кнопка "Скачать"
+                // Download button
                 this.modalApi.registerButton('download', {
                     label: 'Скачать',
                     icon: 'fas fa-download',
                     variant: 'outline-secondary',
                     locations: ['footer'],
-                    classesAdd: { root: 'me-auto' }, // Слева
+                    classesAdd: { root: 'me-auto' }, // Left
                     disabled: !hasImage,
                     onClick: () => this.downloadIcon()
                 });
 
-                // Кнопка "Опубликовать"
+                // Publish button
                 this.modalApi.registerButton('publish', {
                     label: 'Опубликовать в libs',
                     icon: 'fas fa-cloud-upload-alt',
@@ -110,17 +110,17 @@
             },
 
             /**
-             * Обработка публикации (с подтверждением если перезаписываем)
+             * Handle publish (with confirmation if overwriting)
              */
             async handlePublish() {
                 if (!this.imageBlob || !this.githubToken) return;
 
-                // Проверяем, отличается ли новая иконка от актуальной (визуально не можем, но можем по факту наличия)
+                // Check if new icon differs from current (cannot compare visually, but can by presence)
                 await this.uploadToGithub();
             },
 
             /**
-             * Обновление состояния кнопок
+             * Update button state
              */
             updateModalButtons() {
                 if (!this.modalApi) return;
@@ -137,7 +137,7 @@
             },
 
             /**
-             * Сохранить GitHub Token
+             * Save GitHub Token
              */
             saveToken() {
                 if (this.tokenInput) {
@@ -156,9 +156,9 @@
             },
 
             /**
-             * Загрузить изображение по URL (через прокси for CORS bypass)
-             * @param {string} url - Опциональный URL (если не указан, берется из externalUrl)
-             * @param {boolean} skipInputUpdate - Не обновлять поле ввода
+             * Load image by URL (via proxy for CORS bypass)
+             * @param {string} url - Optional URL (if not set, taken from externalUrl)
+             * @param {boolean} skipInputUpdate - Do not update input field
              */
             async loadFromUrl(url = null, skipInputUpdate = false) {
                 const targetUrl = url || this.externalUrl;
@@ -179,7 +179,7 @@
                 } catch (error) {
                     console.error('icon-manager: ошибка загрузки URL:', error);
 
-                    // Не показываем ошибку при автоматической загрузке текущей иконки
+                    // Do not show error on automatic load of current icon
                     if (!skipInputUpdate && window.messagesStore) {
                         window.messagesStore.addMessage({
                             type: 'danger',
@@ -191,7 +191,7 @@
             },
 
             /**
-             * Обработка Drag & Drop
+             * Handle Drag & Drop
              */
             handleFileDrop(event) {
                 this.isDragging = false;
@@ -202,7 +202,7 @@
             },
 
             /**
-             * Выбор файла через input
+             * File selection via input
              */
             handleFileSelect(event) {
                 const files = event.target.files;
@@ -212,7 +212,7 @@
             },
 
             /**
-             * Обработка изображения через Canvas (ресайз до 128x128)
+             * Process image via Canvas (resize to 128x128)
              */
             processImage(fileOrBlob) {
                 const img = new Image();
@@ -221,7 +221,7 @@
                 img.onload = () => {
                     const canvas = this.$refs.iconCanvas;
                     if (!canvas) {
-                        // Если канвас еще не отрисован Vue, подождем
+                        // If canvas not yet rendered by Vue, wait
                         this.previewUrl = url;
                         this.$nextTick(() => this.drawOnCanvas(img));
                         return;
@@ -238,24 +238,24 @@
                 const canvas = this.$refs.iconCanvas;
                 const ctx = canvas.getContext('2d');
 
-                // Очистка
+                // Clear
                 ctx.clearRect(0, 0, 128, 128);
 
-                // Вычисляем пропорции for вписывания (contain)
+                // Calculate scale for contain fit
                 const scale = Math.min(128 / img.width, 128 / img.height);
                 const x = (128 - img.width * scale) / 2;
                 const y = (128 - img.height * scale) / 2;
 
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-                // Сохраняем результат как Blob
+                // Save result as Blob
                 canvas.toBlob((blob) => {
                     this.imageBlob = blob;
                 }, 'image/png');
             },
 
             /**
-             * Загрузка в GitHub через API
+             * Upload to GitHub via API
              */
             async uploadToGithub() {
                 if (!this.imageBlob || !this.githubToken) return;
@@ -263,7 +263,7 @@
                 this.isUploading = true;
 
                 try {
-                    // Конвертируем Blob в Base64 for GitHub API
+                    // Convert Blob to Base64 for GitHub API
                     const reader = new FileReader();
                     const base64Promise = new Promise((resolve) => {
                         reader.onloadend = () => resolve(reader.result.split(',')[1]);
@@ -271,11 +271,11 @@
                     });
 
                     const content = await base64Promise;
-                    const repo = 'aoponomarev/libs'; // Ваш репозиторий с ассетами
+                    const repo = 'aoponomarev/libs'; // Asset repository
                     const path = `assets/coins/${this.targetFilename}`;
                     const url = `https://api.github.com/repos/${repo}/contents/${path}`;
 
-                    // 1. Сначала пытаемся получить SHA файла, если он уже существует
+                    // 1. First try to get file SHA if it already exists
                     let sha = null;
                     try {
                         const checkRes = await fetch(url, {
@@ -287,7 +287,7 @@
                         }
                     } catch (e) {}
 
-                    // 2. Отправляем файл
+                    // 2. Upload file
                     const res = await fetch(url, {
                         method: 'PUT',
                         headers: {
@@ -330,7 +330,7 @@
             },
 
             /**
-             * Скачать файл локально (fallback вариант)
+             * Download file locally (fallback)
              */
             downloadIcon() {
                 if (!this.imageBlob) return;
@@ -344,5 +344,5 @@
         }
     };
 
-    console.log('icon-manager-modal-body.js: loaded');
+    console.log('icon-manager-modal-body.js: loaded.');
 })();

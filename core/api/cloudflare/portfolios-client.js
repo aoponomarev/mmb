@@ -1,24 +1,24 @@
 /**
  * ================================================================================================
- * PORTFOLIOS CLIENT - API клиент for работы с портфелями через Cloudflare Workers
+ * PORTFOLIOS CLIENT - API client for portfolios via Cloudflare Workers
  * ================================================================================================
  *
- * PURPOSE: Браузерный клиент for CRUD операций с портфелями через Cloudflare Workers API.
+ * PURPOSE: Browser client for portfolio CRUD operations via Cloudflare Workers API.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
- * ОСОБЕННОСТИ:
- * - Автоматическое добавление Authorization заголовка с JWT токеном
- * - Обработка ошибок сети и авторизации
- * - Возврат структурированных данных портфелей
+ * FEATURES:
+ * - Automatic Authorization header with JWT token
+ * - Network and auth error handling
+ * - Structured portfolio data return
  *
 */
 
 (function() {
     'use strict';
 
-    // Зависимости (загружаются до этого скрипта)
+    // Dependencies (loaded before this script)
     // - core/config/cloudflare-config.js (window.cloudflareConfig)
     // - core/api/cloudflare/auth-client.js (window.authClient)
 
@@ -33,8 +33,8 @@
     }
 
     /**
-     * Get заголовки for авторизованного запроса
-     * @returns {Promise<Object>} Объект с заголовками или null при ошибке авторизации
+     * Get headers for authenticated request
+     * @returns {Promise<Object>} Headers object or null on auth error
      */
     async function getAuthHeaders() {
         const tokenData = await window.authClient.getAccessToken();
@@ -49,10 +49,10 @@
     }
 
     /**
-     * Выполнить авторизованный fetch запрос
-     * @param {string} url - URL запроса
-     * @param {Object} options - Опции fetch (method, body и т.д.)
-     * @returns {Promise<Response>} HTTP ответ
+     * Execute authenticated fetch request
+     * @param {string} url - Request URL
+     * @param {Object} options - Fetch options (method, body, etc.)
+     * @returns {Promise<Response>} HTTP response
      */
     async function fetchWithAuth(url, options = {}) {
         const headers = await getAuthHeaders();
@@ -68,7 +68,7 @@
             },
         });
 
-        // Проверка на ошибку авторизации
+        // Check for auth error
         if (response.status === 401) {
             if (window.authClient && typeof window.authClient.logout === 'function') {
                 await window.authClient.logout();
@@ -80,9 +80,9 @@
     }
 
     /**
-     * Get list portfolios пользователя
-     * @returns {Promise<Array>} Массив портфелей
-     * @throws {Error} При ошибке сети или авторизации
+     * Get user portfolios list
+     * @returns {Promise<Array>} Portfolios array
+     * @throws {Error} On network or auth error
      */
     async function getPortfolios() {
         try {
@@ -115,10 +115,10 @@
     }
 
     /**
-     * Get портфель по ID
-     * @param {string|number} portfolioId - ID портфеля
-     * @returns {Promise<Object>} Портфель
-     * @throws {Error} При ошибке сети, авторизации или если портфель не найден
+     * Get portfolio by ID
+     * @param {string|number} portfolioId - Portfolio ID
+     * @returns {Promise<Object>} Portfolio
+     * @throws {Error} On network, auth error, or portfolio not found
      */
     async function getPortfolio(portfolioId) {
         try {
@@ -158,10 +158,10 @@
     }
 
     /**
-     * Create new портфель
-     * @param {Object} portfolioData - Данные портфеля { name, description, assets }
-     * @returns {Promise<Object>} Созданный портфель
-     * @throws {Error} При ошибке сети, авторизации или валидации
+     * Create new portfolio
+     * @param {Object} portfolioData - Portfolio data { name, description, assets }
+     * @returns {Promise<Object>} Created portfolio
+     * @throws {Error} On network, auth, or validation error
      */
     async function createPortfolio(portfolioData) {
         try {
@@ -203,11 +203,11 @@
     }
 
     /**
-     * Update портфель
-     * @param {string|number} portfolioId - ID портфеля
-     * @param {Object} updates - Обновляемые поля { name, description, assets }
-     * @returns {Promise<Object>} Обновлённый портфель
-     * @throws {Error} При ошибке сети, авторизации или если портфель не найден
+     * Update portfolio
+     * @param {string|number} portfolioId - Portfolio ID
+     * @param {Object} updates - Fields to update { name, description, assets }
+     * @returns {Promise<Object>} Updated portfolio
+     * @throws {Error} On network, auth error, or portfolio not found
      */
     async function updatePortfolio(portfolioId, updates) {
         try {
@@ -252,10 +252,10 @@
     }
 
     /**
-     * Delete портфель
-     * @param {string|number} portfolioId - ID портфеля
-     * @returns {Promise<boolean>} Успех операции
-     * @throws {Error} При ошибке сети, авторизации или если портфель не найден
+     * Delete portfolio
+     * @param {string|number} portfolioId - Portfolio ID
+     * @returns {Promise<boolean>} Operation success
+     * @throws {Error} On network, auth error, or portfolio not found
      */
     async function deletePortfolio(portfolioId) {
         try {
@@ -294,7 +294,7 @@
         }
     }
 
-    // Экспорт функций через window for использования в других модулях
+    // Export functions via window for use in other modules
     window.portfoliosClient = {
         getPortfolios,
         getPortfolio,

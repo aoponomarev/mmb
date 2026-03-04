@@ -1,29 +1,29 @@
 /**
  * ================================================================================================
- * DATASETS CLIENT - API клиент for работы с датасетами через Cloudflare Workers
+ * DATASETS CLIENT - API client for datasets via Cloudflare Workers
  * ================================================================================================
  *
- * PURPOSE: Браузерный клиент for работы с временными рядами и метриками через Cloudflare Workers API.
+ * PURPOSE: Browser client for time series and metrics via Cloudflare Workers API.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
  * Skill: core/skills/config-contracts
  *
- * ОСОБЕННОСТИ:
- * - Автоматическое добавление Authorization заголовка с JWT токеном
- * - Обработка ошибок сети и авторизации
- * - Поддержка batch операций for сохранения данных
+ * FEATURES:
+ * - Automatic Authorization header with JWT token
+ * - Network and auth error handling
+ * - Batch operation support for data persistence
  *
- * ПРИМЕЧАНИЕ: R2 хранилище отложено, поэтому endpoints возвращают заглушки.
- * После активации R2 будет реализована полная функциональность.
+ * NOTE: R2 storage is deferred, endpoints return stubs.
+ * Full functionality will be implemented after R2 activation.
  *
 */
 
 (function() {
     'use strict';
 
-    // Зависимости (загружаются до этого скрипта)
+    // Dependencies (loaded before this script)
     // - core/config/cloudflare-config.js (window.cloudflareConfig)
     // - core/api/cloudflare/auth-client.js (window.authClient)
 
@@ -38,8 +38,8 @@
     }
 
     /**
-     * Get заголовки for авторизованного запроса
-     * @returns {Promise<Object>} Объект с заголовками или null при ошибке авторизации
+     * Get headers for authenticated request
+     * @returns {Promise<Object>} Headers object or null on auth error
      */
     async function getAuthHeaders() {
         const tokenData = await window.authClient.getAccessToken();
@@ -54,10 +54,10 @@
     }
 
     /**
-     * Выполнить авторизованный fetch запрос
-     * @param {string} url - URL запроса
-     * @param {Object} options - Опции fetch (method, body и т.д.)
-     * @returns {Promise<Response>} HTTP ответ
+     * Execute authenticated fetch request
+     * @param {string} url - Request URL
+     * @param {Object} options - Fetch options (method, body, etc.)
+     * @returns {Promise<Response>} HTTP response
      */
     async function fetchWithAuth(url, options = {}) {
         const headers = await getAuthHeaders();
@@ -73,7 +73,7 @@
             },
         });
 
-        // Проверка на ошибку авторизации
+        // Check for auth error
         if (response.status === 401) {
             if (window.authClient && typeof window.authClient.logout === 'function') {
                 await window.authClient.logout();
@@ -85,11 +85,11 @@
     }
 
     /**
-     * Get time series for монеты и даты
-     * @param {string} coin - ID монеты
-     * @param {string} date - Дата (формат: YYYY-MM-DD)
-     * @returns {Promise<Array>} Массив точек временного ряда
-     * @throws {Error} При ошибке сети или авторизации
+     * Get time series for coin and date
+     * @param {string} coin - Coin ID
+     * @param {string} date - Date (format: YYYY-MM-DD)
+     * @returns {Promise<Array>} Time series points array
+     * @throws {Error} On network or auth error
      */
     async function getTimeSeries(coin, date) {
         try {
@@ -113,7 +113,7 @@
 
             const data = await response.json();
 
-            // Проверка на заглушку (R2 не доступен)
+            // Check for stub (R2 not available)
             if (data.message && data.message.includes('R2 storage is not available')) {
                 console.warn('datasets-client.getTimeSeries: R2 хранилище не доступно');
                 return [];
@@ -133,10 +133,10 @@
     }
 
     /**
-     * Сохранить time series (batch)
-     * @param {Array} timeSeriesData - Массив данных временных рядов
-     * @returns {Promise<boolean>} Успех операции
-     * @throws {Error} При ошибке сети или авторизации
+     * Save time series (batch)
+     * @param {Array} timeSeriesData - Time series data array
+     * @returns {Promise<boolean>} Operation success
+     * @throws {Error} On network or auth error
      */
     async function saveTimeSeries(timeSeriesData) {
         try {
@@ -161,7 +161,7 @@
 
             const data = await response.json();
 
-            // Проверка на заглушку (R2 не доступен)
+            // Check for stub (R2 not available)
             if (data.message && data.message.includes('R2 storage is not available')) {
                 console.warn('datasets-client.saveTimeSeries: R2 хранилище не доступно');
                 return false;
@@ -181,11 +181,11 @@
     }
 
     /**
-     * Get metrics for монеты и даты
-     * @param {string} coin - ID монеты
-     * @param {string} date - Дата (формат: YYYY-MM-DD)
-     * @returns {Promise<Object>} Объект с метриками
-     * @throws {Error} При ошибке сети или авторизации
+     * Get metrics for coin and date
+     * @param {string} coin - Coin ID
+     * @param {string} date - Date (format: YYYY-MM-DD)
+     * @returns {Promise<Object>} Metrics object
+     * @throws {Error} On network or auth error
      */
     async function getMetrics(coin, date) {
         try {
@@ -209,7 +209,7 @@
 
             const data = await response.json();
 
-            // Проверка на заглушку (R2 не доступен)
+            // Check for stub (R2 not available)
             if (data.message && data.message.includes('R2 storage is not available')) {
                 console.warn('datasets-client.getMetrics: R2 хранилище не доступно');
                 return {};
@@ -229,10 +229,10 @@
     }
 
     /**
-     * Сохранить metrics (batch)
-     * @param {Array} metricsData - Массив данных метрик
-     * @returns {Promise<boolean>} Успех операции
-     * @throws {Error} При ошибке сети или авторизации
+     * Save metrics (batch)
+     * @param {Array} metricsData - Metrics data array
+     * @returns {Promise<boolean>} Operation success
+     * @throws {Error} On network or auth error
      */
     async function saveMetrics(metricsData) {
         try {
@@ -257,7 +257,7 @@
 
             const data = await response.json();
 
-            // Проверка на заглушку (R2 не доступен)
+            // Check for stub (R2 not available)
             if (data.message && data.message.includes('R2 storage is not available')) {
                 console.warn('datasets-client.saveMetrics: R2 хранилище не доступно');
                 return false;
@@ -276,7 +276,7 @@
         }
     }
 
-    // Экспорт функций через window for использования в других модулях
+    // Export functions via window for use in other modules
     window.datasetsClient = {
         getTimeSeries,
         saveTimeSeries,

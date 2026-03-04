@@ -1,56 +1,56 @@
 /**
  * ================================================================================================
- * APP CONFIG - Конфигурация приложения
+ * APP CONFIG - Application configuration
  * ================================================================================================
  * Skill: is/skills/arch-foundation
  *
- * PURPOSE: Централизованная конфигурация приложения.
- * API endpoints, лимиты, таймауты, настройки по умолчанию, версия, feature flags.
+ * PURPOSE: Centralized application configuration.
+ * API endpoints, limits, timeouts, default settings, version, feature flags.
  *
  * PRINCIPLES:
- * - Все настройки в одном месте
- * - Версионирование конфигурации
- * - Feature flags for включения/выключения функций
- * - SSOT for всех дефолтных значений (запрещено дублировать в компонентах)
+ * - All settings in one place
+ * - Configuration versioning
+ * - Feature flags for enabling/disabling features
+ * - SSOT for all default values (no duplication in components)
  *
- * ИСТОРИЯ ИЗМЕНЕНИЙ:
- * - Добавлены дефолтные значения (вынесены из app-footer.js):
+ * CHANGE HISTORY:
+ * - Added default values (extracted from app-footer.js):
  *   - defaults.timezone: 'Europe/Moscow'
  *   - defaults.translationLanguage: 'ru'
- *   - defaults.marketUpdates.times: [9, 12, 18] — времена обновления метрик (МСК)
- *   - defaults.marketUpdates.timezone: 'Europe/Moscow' — таймзона for расчета времени обновления
- *   - defaults.timezoneAbbreviations: объект с маппингом таймзон на аббревиатуры (MCK, LON, NYC и т.д.)
- *   - getTimezoneAbbr(timezone): функция for получения аббревиатуры таймзоны из конфигурации
+ *   - defaults.marketUpdates.times: [9, 12, 18] — metric update times (MSK)
+ *   - defaults.marketUpdates.timezone: 'Europe/Moscow' — timezone for update time calculation
+ *   - defaults.timezoneAbbreviations: object mapping timezones to abbreviations (MSK, LON, NYC, etc.)
+ *   - getTimezoneAbbr(timezone): function to get timezone abbreviation from config
  *
- * КОНФИГУРАЦИЯ YANDEXGPT:
+ * YANDEXGPT CONFIGURATION:
  * - defaults.yandex.folderId: 'b1gv03a122le5a934cqj' — Folder ID for Yandex Cloud
- * - defaults.yandex.proxyType: 'yandex' — тип прокси по умолчанию
- * - defaults.yandex.proxies: объект с доступными прокси (единый источник правды)
- * - Формат modelUri: gpt://{folderId}/{model}/latest
+ * - defaults.yandex.proxyType: 'yandex' — default proxy type
+ * - defaults.yandex.proxies: object with available proxies (single source of truth)
+ * - modelUri format: gpt://{folderId}/{model}/latest
  *
  * REFERENCES:
- * - Критически важные структуры описаны в is/skills/arch-foundation
+ * - Critical structures described in is/skills/arch-foundation
  * - Authorization configuration: core/config/auth-config.js
  * - Cloudflare Workers configuration: core/config/cloudflare-config.js
- * - YandexGPT провайдер: core/api/ai-providers/yandex-provider.js
- * - План интеграции Cloudflare: core/skills/config-contracts
+ * - YandexGPT provider: core/api/ai-providers/yandex-provider.js
+ * - Cloudflare integration plan: core/skills/config-contracts
  */
 
 (function() {
     'use strict';
 
     /**
-     * Конфигурация приложения
+     * Application configuration
      */
     const CONFIG = {
-        // Версия приложения
+        // Application version
         version: '1.0.0',
 
         // API endpoints
         api: {
             coingecko: {
                 baseUrl: 'https://api.coingecko.com/api/v3',
-                timeout: 30000, // 30 секунд
+                timeout: 30000, // 30 seconds
                 rateLimit: {
                     requestsPerMinute: 50,
                     requestsPerSecond: 10
@@ -62,56 +62,56 @@
             }
         },
 
-        // Лимиты и таймауты
+        // Limits and timeouts
         limits: {
             maxPortfolioAssets: 100,
             maxTimeSeriesPoints: 10000,
             maxHistoryDays: 365
         },
 
-        // Настройки по умолчанию
+        // Default settings
         defaults: {
             theme: 'light',
             currency: 'usd',
-            updateInterval: 60000, // 1 минута
-            timezone: 'Europe/Moscow', // Таймзона по умолчанию
-            translationLanguage: 'ru', // Язык перевода новостей по умолчанию
+            updateInterval: 60000, // 1 minute
+            timezone: 'Europe/Moscow', // Default timezone
+            translationLanguage: 'ru', // Default news translation language
             cacheTTL: {
-                icons: 3600000,      // 1 час
-                coinsList: 86400000, // 1 день
-                metrics: 3600000     // 1 час
+                icons: 3600000,      // 1 hour
+                coinsList: 86400000, // 1 day
+                metrics: 3600000     // 1 hour
             },
-            // AI провайдер по умолчанию
+            // Default AI provider
             aiProvider: 'yandex',
             yandex: {
                 // Folder ID for Yandex Cloud (b1gv03a122le5a934cqj)
-                // Используется for формирования modelUri: gpt://{folderId}/{model}/latest
+                // Used for forming modelUri: gpt://{folderId}/{model}/latest
                 folderId: 'b1gv03a122le5a934cqj',
-                // Модель YandexGPT по умолчанию
+                // Default YandexGPT model
                 model: 'gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest',
                 models: [
                     { value: 'gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest', label: 'YandexGPT Lite' },
                     { value: 'gpt://b1gv03a122le5a934cqj/yandexgpt/latest', label: 'YandexGPT' },
                     { value: 'assistant:fvtj79pcagqihmvsaivl', label: 'Assistant' }
                 ],
-                // Прокси for YandexGPT (Yandex Cloud Functions)
-                // ОБЯЗАТЕЛЕН for работы из браузера (обход CORS)
-                // Функция: yandexgpt-proxy (ID: d4erd8d1pttbufsl26s1)
-                // Должна быть публичной и обрабатывать OPTIONS preflight
-                proxyType: 'yandex', // Тип прокси по умолчанию
-                // Доступные прокси for YandexGPT (единый источник правды)
+                // Proxy for YandexGPT (Yandex Cloud Functions)
+                // REQUIRED for browser usage (CORS bypass)
+                // Function: yandexgpt-proxy (ID: d4erd8d1pttbufsl26s1)
+                // Must be public and handle OPTIONS preflight
+                proxyType: 'yandex', // Default proxy type
+                // Available proxies for YandexGPT (single source of truth)
                 proxies: {
                     yandex: {
                         url: 'https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1',
                         label: 'Yandex Cloud Functions',
                         description: 'Единая платформа с YandexGPT'
                     }
-                    // Можно добавить другие прокси (например, Cloudflare Workers)
+                    // Other proxies can be added (e.g. Cloudflare Workers)
                 }
             },
             marketUpdates: {
-                times: [9, 12, 18], // Часы обновления метрик (МСК)
-                timezone: 'Europe/Moscow' // Таймзона for расчета времени обновления
+                times: [9, 12, 18], // Metric update hours (MSK)
+                timezone: 'Europe/Moscow' // Timezone for update time calculation
             },
             timezoneAbbreviations: {
                 'Europe/Moscow': 'MCK',
@@ -128,21 +128,21 @@
 
         // Feature flags
         features: {
-            timeSeries: false,      // Временные ряды (пока не реализовано)
-            portfolios: true,       // Портфели (реализовано через Cloudflare API)
-            strategies: false,      // Стратегии (пока не реализовано)
-            correlations: false,    // Корреляции (пока не реализовано)
-            offlineMode: false,     // Офлайн-режим (пока не реализовано)
-            auth: true,             // Google OAuth авторизация (Cloudflare Workers) - активировано
-            cloudSync: true,        // Синхронизация данных с Cloudflare (D1/R2) - активировано
-            postgresSync: false     // Синхронизация с Yandex Cloud PostgreSQL (отключена, модуль удален)
+            timeSeries: false,      // Time series (not yet implemented)
+            portfolios: true,       // Portfolios (implemented via Cloudflare API)
+            strategies: false,      // Strategies (not yet implemented)
+            correlations: false,    // Correlations (not yet implemented)
+            offlineMode: false,     // Offline mode (not yet implemented)
+            auth: true,             // Google OAuth auth (Cloudflare Workers) - enabled
+            cloudSync: true,        // Data sync with Cloudflare (D1/R2) - enabled
+            postgresSync: false     // Yandex Cloud PostgreSQL sync (disabled, module removed)
         }
     };
 
     /**
-     * Get значение конфигурации по пути
-     * @param {string} path - путь через точку (например, 'api.coingecko.baseUrl')
-     * @param {any} defaultValue - значение по умолчанию
+     * Get config value by path
+     * @param {string} path - dot-separated path (e.g. 'api.coingecko.baseUrl')
+     * @param {any} defaultValue - default value
      * @returns {any}
      */
     function get(path, defaultValue = undefined) {
@@ -161,49 +161,49 @@
     }
 
     /**
-     * Get аббревиатуру таймзоны
-     * @param {string} timezone - таймзона (например, 'Europe/Moscow')
-     * @returns {string} - аббревиатура (например, 'MCK') или автоматически сгенерированная
+     * Get timezone abbreviation
+     * @param {string} timezone - timezone (e.g. 'Europe/Moscow')
+     * @returns {string} - abbreviation (e.g. 'MCK') or auto-generated
      */
     function getTimezoneAbbr(timezone) {
         const abbreviations = CONFIG.defaults.timezoneAbbreviations || {};
         if (abbreviations[timezone]) {
             return abbreviations[timezone];
         }
-        // Fallback: генерируем аббревиатуру из последней части таймзоны
+        // Fallback: generate abbreviation from last part of timezone
         return timezone.split('/').pop().substring(0, 3).toUpperCase();
     }
 
     /**
-     * Get хэш версии приложения
-     * Используется for:
-     * - CSS-класса на body (app-version-{hash})
-     * - Версионирования ключей кэша (for инвалидации при смене версии)
-     * - Отладки (видно версию приложения в DOM)
-     * @returns {string} - Base58 хэш версии (8 символов) или 'unknown'
+     * Get application version hash
+     * Used for:
+     * - CSS class on body (app-version-{hash})
+     * - Cache key versioning (for invalidation on version change)
+     * - Debugging (app version visible in DOM)
+     * @returns {string} - Base58 version hash (8 chars) or 'unknown'
      */
     function getVersionHash() {
         if (!window.hashGenerator) {
             console.warn('app-config.getVersionHash: hashGenerator not loaded, using fallback');
             return 'unknown';
         }
-        // Генерируем детерминированный хэш из версии приложения
-        // Один и тот же номер версии всегда дает один и тот же хэш
+        // Generate deterministic hash from app version
+        // Same version number always yields same hash
         return window.hashGenerator.generateHash(CONFIG.version, 8);
     }
 
     /**
-     * Get полное имя CSS-класса версии for body
-     * @returns {string} - класс вида 'app-version-{hash}'
+     * Get full CSS class name for version on body
+     * @returns {string} - class like 'app-version-{hash}'
      */
     function getVersionClass() {
         return `app-version-${getVersionHash()}`;
     }
 
     /**
-     * Set значение конфигурации (только for runtime изменений)
-     * @param {string} path - путь через точку
-     * @param {any} value - значение
+     * Set config value (for runtime changes only)
+     * @param {string} path - dot-separated path
+     * @param {any} value - value
      */
     function set(path, value) {
         const parts = path.split('.');
@@ -221,8 +221,8 @@
     }
 
     /**
-     * Проверить, включён ли feature
-     * @param {string} featureName - имя feature
+     * Check if feature is enabled
+     * @param {string} featureName - feature name
      * @returns {boolean}
      */
     function isFeatureEnabled(featureName) {
@@ -230,23 +230,23 @@
     }
 
     /**
-     * Get URL прокси for AI провайдера
-     * SSOT for прокси URL
-     * @param {string} providerName - имя провайдера ('yandex')
-     * @param {string} proxyType - тип прокси ('cloudflare' | 'yandex' и т.д.)
-     * @returns {string|null} URL прокси или null, если не найден
+     * Get proxy URL for AI provider
+     * SSOT for proxy URL
+     * @param {string} providerName - provider name ('yandex')
+     * @param {string} proxyType - proxy type ('cloudflare' | 'yandex' etc.)
+     * @returns {string|null} proxy URL or null if not found
      */
     // @skill-anchor core/skills/external-integrations #for-geo-optimization
     function getProxyUrl(providerName, proxyType = null) {
         const providerConfig = CONFIG.defaults[providerName];
         if (!providerConfig) return null;
 
-        // Если proxyType не указан, используем дефолтный
+        // If proxyType not specified, use default
         if (!proxyType) {
             proxyType = providerConfig.proxyType;
         }
 
-        // Получаем URL из списка прокси
+        // Get URL from proxy list
         if (providerConfig.proxies && providerConfig.proxies[proxyType]) {
             return providerConfig.proxies[proxyType].url || null;
         }
@@ -255,9 +255,9 @@
     }
 
     /**
-     * Get list доступных прокси for AI провайдера
-     * @param {string} providerName - имя провайдера ('yandex')
-     * @returns {Array<Object>} Массив объектов прокси с полями {type, url, label, description}
+     * Get list of available proxies for AI provider
+     * @param {string} providerName - provider name ('yandex')
+     * @returns {Array<Object>} Array of proxy objects with {type, url, label, description}
      */
     function getAvailableProxies(providerName) {
         const providerConfig = CONFIG.defaults[providerName];

@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * YANDEX AI PROVIDER - Провайдер for YandexGPT API
+ * YANDEX AI PROVIDER - Provider for YandexGPT API
  * ================================================================================================
  *
- * PURPOSE: Реализация провайдера for работы с YandexGPT через Yandex Cloud API.
+ * PURPOSE: Provider implementation for YandexGPT via Yandex Cloud API.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
@@ -11,7 +11,7 @@
  * Skill: core/skills/api-layer
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ОСОБЕННОСТИ:
+ * FEATURES:
  * - Endpoint: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
  * - Прокси URL: https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1 (Yandex Cloud Functions)
  * - Folder ID: b1gv03a122le5a934cqj
@@ -43,31 +43,31 @@
     }
 
     /**
-     * Провайдер for YandexGPT API
+     * Provider for YandexGPT API
      */
     class YandexProvider extends window.BaseAIProvider {
         constructor() {
             super();
             this.endpoint = 'https://llm.api.cloud.yandex.net/foundationModels/v1/completion';
             this.defaultFolderId = 'b1gv03a122le5a934cqj';
-            // Инициализация прокси (ленивая - при первом использовании)
-            // Для обратной совместимости используем синхронную загрузку из конфигурации
+            // Proxy initialization (lazy - on first use)
+            // For backward compatibility use sync load from config
             this.proxyUrl = null;
             this._proxyInitialized = false;
         }
 
         /**
-         * Инициализация прокси (асинхронная загрузка из кэша)
-         * Вызывается при первом использовании
+         * Initialize proxy (async load from cache)
+         * Called on first use
          */
         async initProxy() {
             if (this._proxyInitialized) return;
 
             try {
-                // Пытаемся получить тип прокси из настроек пользователя
+                // Try to get proxy type from user settings
                 let proxyType = await window.cacheManager.get('yandex-proxy-type');
 
-                // Если не найден в кэше, используем дефолтный из конфигурации
+                // If not in cache, use default from config
                 if (!proxyType && window.appConfig) {
                     proxyType = window.appConfig.get('defaults.yandex.proxyType', 'yandex');
                 }
@@ -75,20 +75,20 @@
                 this.proxyUrl = window.appConfig.getProxyUrl('yandex', proxyType);
                 this._proxyInitialized = true;
             } catch (error) {
-                console.warn('yandex-provider: ошибка инициализации прокси:', error);
+                console.warn('yandex-provider: proxy init error:', error);
                 this.proxyUrl = window.appConfig?.getProxyUrl?.('yandex') || null;
                 this._proxyInitialized = true;
             }
         }
 
         /**
-         * Отправить запрос к YandexGPT API
-         * @param {string} apiKey - API ключ Yandex Cloud
-         * @param {string} model - Model URI (например: gpt://folderId/yandexgpt-lite/latest)
-         * @param {Array<Object>} messages - Массив сообщений {role: 'user'|'assistant', content: string}
-         * @param {Object} options - Дополнительные опции {temperature: number, maxTokens: number}
-         * @returns {Promise<string>} Текст ответа
-         * @throws {Error} При ошибке запроса
+         * Send request to YandexGPT API
+         * @param {string} apiKey - Yandex Cloud API key
+         * @param {string} model - Model URI (e.g. gpt://folderId/yandexgpt-lite/latest)
+         * @param {Array<Object>} messages - Message array {role: 'user'|'assistant', content: string}
+         * @param {Object} options - Additional options {temperature: number, maxTokens: number}
+         * @returns {Promise<string>} Response text
+         * @throws {Error} On request error
          */
         async sendRequest(apiKey, model, messages, options = {}) {
             if (!this.validateApiKey(apiKey)) {
@@ -99,20 +99,20 @@
                 throw new Error('Необходимы messages for запроса к YandexGPT');
             }
 
-            // Преобразуем messages в формат YandexGPT
+            // Convert messages to YandexGPT format
             // YandexGPT использует {role: 'user'|'assistant', text: string}
             const yandexMessages = messages.map(msg => ({
                 role: msg.role === 'assistant' ? 'assistant' : 'user',
                 text: msg.content || msg.text || ''
             }));
 
-            // Формируем modelUri / assistant ID (если не передан, используем дефолтный)
+            // Build modelUri / assistant ID (if not provided, use default)
             const selectedModel = model || this.getDefaultModel();
             const isAssistant = selectedModel.startsWith('assistant:');
             const assistantId = isAssistant ? selectedModel.replace(/^assistant:/, '').trim() : '';
             let modelUri = selectedModel;
 
-            // Формируем тело запроса согласно документации Yandex API
+            // Build request body per Yandex API docs
             // Используем completionOptions for temperature и maxTokens
             const requestBody = {
                 modelUri: modelUri,
@@ -125,19 +125,19 @@
                 if (options.temperature !== undefined) {
                     requestBody.completionOptions.temperature = options.temperature;
                 } else {
-                    requestBody.completionOptions.temperature = 0.6; // Дефолтное значение
+                    requestBody.completionOptions.temperature = 0.6; // Default
                 }
                 if (options.maxTokens) {
                     requestBody.completionOptions.maxTokens = typeof options.maxTokens === 'string'
                         ? parseInt(options.maxTokens, 10)
                         : options.maxTokens;
                 } else {
-                    requestBody.completionOptions.maxTokens = 2000; // Дефолтное значение
+                    requestBody.completionOptions.maxTokens = 2000; // Default
                 }
             }
 
             try {
-                // Инициализируем прокси при первом использовании
+                // Initialize proxy on first use
                 await this.initProxy();
 
                 // Assistant API currently uses separate endpoint and request shape.
@@ -193,9 +193,9 @@
                     }
                 }
 
-                // Если указан прокси, используем его (for CORS bypass)
+                // If proxy specified, use it (for CORS bypass)
                 if (this.proxyUrl) {
-                    // Через прокси: передаем API ключ и тело запроса в теле запроса к прокси
+                    // Via proxy: pass API key and body in proxy request body
                     // Формируем тело запроса в том же формате, что и for прямого запроса
                     const proxyRequestBody = {
                         apiKey: apiKey,
@@ -203,7 +203,7 @@
                         messages: yandexMessages
                     };
 
-                    // Добавляем completionOptions, если указаны temperature или maxTokens
+                    // Add completionOptions if temperature or maxTokens specified
                     if (options.temperature !== undefined || options.maxTokens) {
                         proxyRequestBody.completionOptions = {};
                         if (options.temperature !== undefined) {
@@ -219,7 +219,7 @@
                             proxyRequestBody.completionOptions.maxTokens = 2000; // Дефолтное значение
                         }
                     } else {
-                        // Если опции не указаны, используем дефолтные значения
+                        // If options not specified, use defaults
                         proxyRequestBody.completionOptions = {
                             temperature: 0.6,
                             maxTokens: 2000
@@ -248,7 +248,7 @@
                                 errorData = JSON.parse(errorText);
                             }
                         } catch (parseError) {
-                            // Если failed to распарсить, используем дефолтное сообщение
+                            // If parse failed, use default message
                         }
                         throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
                     }
@@ -262,14 +262,14 @@
                         throw new Error(`Ошибка парсинга ответа от прокси: ${parseError.message}`);
                     }
 
-                    // Проверяем наличие ошибки в ответе от Yandex API
+                    // Check for error in Yandex API response
                     if (data.error) {
                         const errorMessage = data.error.message || 'Неизвестная ошибка от Yandex API';
                         const httpCode = data.error.httpCode || '';
                         throw new Error(`Yandex API ошибка (HTTP ${httpCode}): ${errorMessage}`);
                     }
 
-                    // Парсим ответ YandexGPT
+                    // Parse YandexGPT response
                     if (data.result && data.result.alternatives && data.result.alternatives.length > 0) {
                         const answer = data.result.alternatives[0].message.text;
                         if (!answer || answer.trim().length === 0) {
@@ -280,7 +280,7 @@
                         throw new Error('Пустой ответ от API');
                     }
                 } else {
-                    // Прямой запрос к Yandex API (работает только с серверной частью)
+                    // Direct request to Yandex API (works only with server-side)
                     const response = await fetch(this.endpoint, {
                         method: 'POST',
                         headers: {
@@ -299,7 +299,7 @@
 
                     const data = await response.json();
 
-                    // Парсим ответ YandexGPT
+                    // Parse YandexGPT response
                     // Формат: { result: { alternatives: [{ message: { text: string } }] } }
                     if (data.result && data.result.alternatives && data.result.alternatives.length > 0) {
                         const answer = data.result.alternatives[0].message.text;
@@ -312,7 +312,7 @@
                     }
                 }
             } catch (error) {
-                // Проверяем, является ли это CORS ошибкой
+                // Check if this is CORS error
                 const isCorsError = error.message === 'Failed to fetch' ||
                                    error.name === 'TypeError' && error.message?.includes('fetch');
 
@@ -320,17 +320,17 @@
                     throw new Error('CORS ошибка: Yandex API блокирует запросы из браузера. Для работы API необходим прокси-сервер или серверная часть. Текущий origin: ' + (window.location.origin || 'unknown'));
                 }
 
-                // Если это уже наша ошибка - пробрасываем её дальше
+                // If already our error - rethrow
                 if (error instanceof Error && error.message) {
                     throw error;
                 }
-                // Иначе оборачиваем в общую ошибку
+                // Otherwise wrap in generic error
                 throw new Error(`Ошибка при запросе к YandexGPT: ${error.message || 'Неизвестная ошибка'}`);
             }
         }
 
         /**
-         * Get модель по умолчанию
+         * Get default model
          * @returns {string} Model URI
          */
         getDefaultModel() {
@@ -338,7 +338,7 @@
         }
 
         /**
-         * Get list доступных моделей
+         * Get list of available models
          * @returns {Array<Object>} [{ value: string, label: string }]
          */
         getAvailableModels() {
@@ -359,7 +359,7 @@
         }
 
         /**
-         * Get имя провайдера
+         * Get provider name
          * @returns {string}
          */
         getName() {
@@ -367,7 +367,7 @@
         }
 
         /**
-         * Get отображаемое имя провайдера
+         * Get provider display name
          * @returns {string}
          */
         getDisplayName() {
@@ -375,7 +375,7 @@
         }
     }
 
-    // Экспорт класса
+    // Export class
     window.YandexProvider = YandexProvider;
 
     console.log('yandex-provider.js: initialized');

@@ -1,28 +1,28 @@
 /**
  * ================================================================================================
- * BASE DATA PROVIDER - Базовый класс for провайдеров данных о монетах
+ * BASE DATA PROVIDER - Base class for coin data providers
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Единый интерфейс for работы с различными источниками данных о криптовалютах
+ * PURPOSE: Unified interface for working with various cryptocurrency data sources
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * (CoinGecko, CoinMarketCap, Binance и т.д.).
+ * (CoinGecko, CoinMarketCap, Binance, etc.).
  *
  * USAGE:
  * class MyProvider extends BaseDataProvider {
  *   async getTopCoins(count, sortBy) { ... }
- *   // ... остальные методы
+ *   // ... other methods
  * }
  *
-*/
+ */
 
 (function() {
     'use strict';
 
     /**
-     * Базовый класс for провайдеров данных о монетах
+     * Base class for coin data providers
      */
     class BaseDataProvider {
         constructor() {
@@ -32,98 +32,98 @@
         }
 
         /**
-         * Get топ N монет по капитализации или объему
-         * @param {number} count - Количество монет (1-250)
-         * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
-         * @param {Object} options - Дополнительные опции (apiKey, timeout и т.д.)
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * Get top N coins by market cap or volume
+         * @param {number} count - Number of coins (1-250)
+         * @param {string} sortBy - Sort by: 'market_cap' | 'volume'
+         * @param {Object} options - Additional options (apiKey, timeout, etc.)
+         * @returns {Promise<Array>} Array of normalized coin data
          */
         async getTopCoins(count, sortBy = 'market_cap', options = {}) {
             throw new Error('getTopCoins() must be implemented in derived class');
         }
 
         /**
-         * Поиск монет по названию или тикеру
-         * @param {string} query - Поисковый запрос
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив найденных монет (до 10)
+         * Search coins by name or ticker
+         * @param {string} query - Search query
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Array of found coins (up to 10)
          */
         async searchCoins(query, options = {}) {
             throw new Error('searchCoins() must be implemented in derived class');
         }
 
         /**
-         * Get данные монет по их ID
-         * @param {Array<string>} coinIds - Массив ID монет
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * Get coin data by IDs
+         * @param {Array<string>} coinIds - Array of coin IDs
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Array of normalized coin data
          */
         async getCoinData(coinIds, options = {}) {
             throw new Error('getCoinData() must be implemented in derived class');
         }
 
         /**
-         * Get ID монеты по тикеру
-         * @param {string} symbol - Тикер монеты (BTC, ETH и т.д.)
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<string|null>} ID монеты или null
+         * Get coin ID by ticker symbol
+         * @param {string} symbol - Coin ticker (BTC, ETH, etc.)
+         * @param {Object} options - Additional options
+         * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {
             throw new Error('getCoinIdBySymbol() must be implemented in derived class');
         }
 
         /**
-         * Get внутреннее имя провайдера
-         * @returns {string} Имя провайдера ('coingecko', 'coinmarketcap' и т.д.)
+         * Get provider internal name
+         * @returns {string} Provider name ('coingecko', 'coinmarketcap', etc.)
          */
         getName() {
             throw new Error('getName() must be implemented in derived class');
         }
 
         /**
-         * Get отображаемое имя провайдера
-         * @returns {string} Отображаемое имя ('CoinGecko', 'CoinMarketCap' и т.д.)
+         * Get provider display name
+         * @returns {string} Display name ('CoinGecko', 'CoinMarketCap', etc.)
          */
         getDisplayName() {
             throw new Error('getDisplayName() must be implemented in derived class');
         }
 
         /**
-         * Валидация API ключа (если требуется for провайдера)
-         * @param {string} apiKey - API ключ
-         * @returns {boolean} true если ключ валиден
+         * Validate API key (if required for provider)
+         * @param {string} apiKey - API key
+         * @returns {boolean} true if key is valid
          */
         validateApiKey(apiKey) {
-            // Базовая реализация: проверка на пустоту
-            // Дочерние классы могут переопределить for более строгой валидации
+            // Base implementation: check for non-empty
+            // Derived classes may override for stricter validation
             return typeof apiKey === 'string' && apiKey.length > 0;
         }
 
         /**
-         * Проверка, требуется ли API ключ for провайдера
-         * @returns {boolean} true если API ключ обязателен
+         * Check if API key is required for provider
+         * @returns {boolean} true if API key is mandatory
          */
         requiresApiKey() {
-            // По умолчанию API ключ не требуется
-            // Дочерние классы переопределяют при необходимости
+            // By default API key is not required
+            // Derived classes override when needed
             return false;
         }
 
         /**
-         * Нормализация данных монеты к единому формату
-         * Базовая реализация - возвращает данные как есть
-         * Дочерние классы должны переопределить for приведения к единому формату
-         * @param {Object} coinData - Данные монеты от провайдера
-         * @returns {Object} Нормализованные данные
+         * Normalize coin data to unified format
+         * Base implementation returns data as-is
+         * Derived classes must override for format normalization
+         * @param {Object} coinData - Coin data from provider
+         * @returns {Object} Normalized data
          */
         normalizeCoinData(coinData) {
             return coinData;
         }
 
         /**
-         * Обработка ошибок HTTP requestов
+         * Handle HTTP request errors
          * @param {Response} response - HTTP response
-         * @param {string} context - Контекст for сообщения об ошибке
+         * @param {string} context - Context for error message
          * @throws {Error}
          */
         handleHttpError(response, context = 'HTTP request') {
@@ -146,14 +146,14 @@
         }
 
         /**
-         * Логирование ошибок через системные сообщения
-         * @param {string} message - Сообщение об ошибке
-         * @param {string} details - Детали ошибки
+         * Log errors via system messages
+         * @param {string} message - Error message
+         * @param {string} details - Error details
          */
         logError(message, details = null) {
             console.error(`[${this.getName()}] ${message}`, details);
 
-            // Отправляем сообщение через систему сообщений если доступна
+            // Send message via system messages if available
             if (window.AppMessages && window.AppMessages.replace) {
                 window.AppMessages.replace(`data-provider-${this.getName()}-error`, {
                     scope: 'data-provider',
@@ -165,9 +165,9 @@
         }
 
         /**
-         * Логирование предупреждений
-         * @param {string} message - Сообщение
-         * @param {string} details - Детали
+         * Log warnings
+         * @param {string} message - Message
+         * @param {string} details - Details
          */
         logWarning(message, details = null) {
             console.warn(`[${this.getName()}] ${message}`, details);
@@ -183,7 +183,7 @@
         }
     }
 
-    // Экспорт через window for использования в других модулях
+    // Export via window for use in other modules
     window.BaseDataProvider = BaseDataProvider;
 
     console.log('✅ BaseDataProvider loaded');

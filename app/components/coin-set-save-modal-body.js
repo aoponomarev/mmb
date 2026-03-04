@@ -1,31 +1,31 @@
 /**
  * ================================================================================================
- * COIN SET SAVE MODAL BODY COMPONENT - Компонент body модального окна сохранения набора монет
+ * COIN SET SAVE MODAL BODY COMPONENT - Coin set save modal body component
  * ================================================================================================
  *
- * PURPOSE: Форма for сохранения выбранных монет в набор с названием.
+ * PURPOSE: Form for saving selected coins into a named set.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
- * ОСОБЕННОСТИ:
- * - Форма for ввода названия набора монет
- * - Регистрирует кнопки "Отмена" и "Сохранить" через modalApi
- * - Реактивно обновляет состояние кнопок при изменении данных формы
- * - Управляет логикой отмены (восстановление исходных значений)
- * - Поддерживает состояние "Сохранено, закрыть?" for кнопки "Сохранить"
+ * FEATURES:
+ * - Form for entering coin set name
+ * - Registers "Cancel" and "Save" buttons via modalApi
+ * - Reactively updates button state on form data change
+ * - Manages cancel logic (restore initial values)
+ * - Supports "Saved, close?" state for "Save" button
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Props:
- * - selectedCoinIds (Array, required) — массив ID выбранных монет
- * - onSave (Function, required) — функция сохранения (name, description, coinIds)
- * - onCancel (Function, required) — функция отмены
+ * - selectedCoinIds (Array, required) — array of selected coin IDs
+ * - onSave (Function, required) — save callback (name, description, coinIds)
+ * - onCancel (Function, required) — cancel callback
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -101,14 +101,14 @@ window.coinSetSaveModalBody = {
             initialDescription: '',
             isSaved: false,
             formIdPrefix: `coin-set-save-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            // Используем централизованное состояние из auth-state (единый источник правды)
+            // Use centralized state from auth-state (SSOT)
             authState: window.authState ? window.authState.getState() : null
         };
     },
 
     computed: {
         /**
-         * Проверка авторизации пользователя (реактивное свойство)
+         * Check user auth (reactive property)
          */
         isAuthenticated() {
             return this.authState ? this.authState.isAuthenticated === true : false;
@@ -117,7 +117,7 @@ window.coinSetSaveModalBody = {
 
     watch: {
         /**
-         * Отслеживание изменения авторизации for обновления состояния кнопок
+         * Watch auth changes to update button state
          */
         isAuthenticated() {
             this.$nextTick(() => {
@@ -127,34 +127,34 @@ window.coinSetSaveModalBody = {
     },
 
     mounted() {
-        // Сохраняем исходные значения
+        // Store initial values
         this.initialName = this.formName;
         this.initialDescription = this.formDescription;
 
-        // Регистрируем кнопки
+        // Register buttons
         this.registerButtons();
 
-        // Проверяем валидность формы
+        // Validate form
         this.updateSaveButton();
         this.updateDraftButton();
 
-        // Отслеживаем изменения выбранных монет for обновления кнопки Draft
+        // Watch selected coins changes to update Draft button
         this.$watch('selectedCoinIds', () => {
             this.updateDraftButton();
         }, { deep: true });
 
-        // Подписываемся на события авторизации
+        // Subscribe to auth events
         if (window.eventBus) {
             this.authStateUnsubscribe = window.eventBus.on('auth-state-changed', (eventData) => {
-                console.log('coin-set-save-modal-body: получено событие auth-state-changed, isAuthenticated:', eventData?.isAuthenticated);
-                // Обновляем состояние кнопок при изменении авторизации
+                console.log('coin-set-save-modal-body: auth-state-changed event, isAuthenticated:', eventData?.isAuthenticated);
+                // Update button state on auth change
                 this.updateSaveButton();
             });
         }
     },
 
     beforeUnmount() {
-        // Отписываемся от событий
+        // Unsubscribe from events
         if (this.authStateUnsubscribe && window.eventBus) {
             window.eventBus.off('auth-state-changed', this.authStateUnsubscribe);
         }
@@ -162,12 +162,12 @@ window.coinSetSaveModalBody = {
 
     methods: {
         /**
-         * Регистрация кнопок модального окна
+         * Register modal buttons
          */
         registerButtons() {
             if (!this.modalApi) return;
 
-            // Кнопка "Отмена" (слева в footer)
+            // "Cancel" button (left in footer)
             this.modalApi.registerButton('cancel', {
                 label: 'Отмена',
                 variant: 'secondary',
@@ -176,7 +176,7 @@ window.coinSetSaveModalBody = {
                 onClick: () => this.handleCancel()
             });
 
-            // Кнопка "Сохранить в Draft" (локально, без авторизации)
+            // "Save to Draft" button (local, no auth)
             this.modalApi.registerButton('saveToDraft', {
                 label: 'Сохранить в Draft',
                 variant: 'info',
@@ -185,7 +185,7 @@ window.coinSetSaveModalBody = {
                 onClick: () => this.handleSaveToDraft()
             });
 
-            // Кнопка "Сохранить" или "Авторизоваться" (переключается в зависимости от авторизации)
+            // "Save" or "Authorize" button (toggles by auth)
             this.modalApi.registerButton('save', {
                 label: 'Сохранить',
                 variant: 'primary',
@@ -194,19 +194,19 @@ window.coinSetSaveModalBody = {
                 onClick: () => this.handleSave()
             });
 
-            // Кнопка "Авторизоваться" (показывается когда пользователь not authenticated)
+            // "Authorize" button (shown when user not authenticated)
             this.modalApi.registerButton('auth', {
                 label: 'Авторизоваться',
                 variant: 'primary',
                 locations: ['footer'],
                 disabled: false,
-                visible: false, // По умолчанию скрыта
+                visible: false, // Hidden by default
                 onClick: () => this.handleOpenAuth()
             });
         },
 
         /**
-         * Обработка изменений формы
+         * Handle form changes
          */
         handleFormChange() {
             if (this.isSaved) {
@@ -219,7 +219,7 @@ window.coinSetSaveModalBody = {
         },
 
         /**
-         * Обновление состояния кнопки "Сохранить в Draft"
+         * Update "Save to Draft" button state
          */
         updateDraftButton() {
             if (!this.modalApi) return;
@@ -234,17 +234,17 @@ window.coinSetSaveModalBody = {
                 return;
             }
 
-            // Получаем текущий Draft набор из localStorage
+            // Get current Draft set from localStorage
             const draftSet = window.draftCoinSet ? window.draftCoinSet.get() : null;
             const existingCoinIds = draftSet && draftSet.coin_ids ? new Set(draftSet.coin_ids) : new Set();
 
-            // Проверяем, какие выбранные монеты уже есть в Draft
-            // Используем this.coins (из props) for получения полных данных монет (ЕИП)
+            // Check which selected coins already exist in Draft
+            // Use this.coins (from props) for full coin data (SSOT)
             const newCoinIds = this.selectedCoinIds.filter(id => !existingCoinIds.has(id));
             const allExist = newCoinIds.length === 0;
 
             if (allExist) {
-                // Все монеты уже есть в Draft
+                // All coins already in Draft
                 this.modalApi.updateButton('saveToDraft', {
                     label: 'Есть в Draft',
                     variant: 'secondary',
@@ -252,7 +252,7 @@ window.coinSetSaveModalBody = {
                     visible: true
                 });
             } else {
-                // Есть новые монеты for добавления
+                // New coins to add
                 this.modalApi.updateButton('saveToDraft', {
                     label: `+ ${newCoinIds.length} to Draft`,
                     variant: 'info',
@@ -263,7 +263,7 @@ window.coinSetSaveModalBody = {
         },
 
         /**
-         * Обновление состояния кнопки "Сохранить" или "Авторизоваться"
+         * Update "Save" or "Authorize" button state
          */
         updateSaveButton() {
             if (!this.modalApi) return;
@@ -272,7 +272,7 @@ window.coinSetSaveModalBody = {
             const isValid = this.formName.trim().length > 0 && this.selectedCoinIds.length > 0;
 
             if (this.isAuthenticated) {
-                // Пользователь авторизован - показываем кнопку "Сохранить"
+                // User authenticated - show "Save" button
                 if (this.isSaved) {
                     this.modalApi.updateButton('save', {
                         label: 'Сохранено, закрыть?',
@@ -295,7 +295,7 @@ window.coinSetSaveModalBody = {
                     });
                 }
             } else {
-                // Пользователь НЕ авторизован - показываем кнопку "Авторизоваться"
+                // User not authenticated - show "Authorize" button
                 this.modalApi.updateButton('save', {
                     visible: false
                 });
@@ -309,8 +309,8 @@ window.coinSetSaveModalBody = {
         },
 
         /**
-         * Обработка сохранения в Draft (локально, без авторизации)
-         * Добавляет выбранные монеты к существующему Draft набору
+         * Handle save to Draft (local, no auth)
+         * Adds selected coins to existing Draft set
          */
         async handleSaveToDraft() {
             if (this.selectedCoinIds.length === 0) {
@@ -326,7 +326,7 @@ window.coinSetSaveModalBody = {
             }
 
             try {
-                // Получаем текущий Draft набор из localStorage
+                // Get current Draft set from localStorage
                 const draftSet = window.draftCoinSet ? window.draftCoinSet.get() : null;
                 const existingCoinIds = draftSet && draftSet.coin_ids ? new Set(draftSet.coin_ids) : new Set();
                 const existingCoinsMap = new Map();
@@ -337,11 +337,11 @@ window.coinSetSaveModalBody = {
                     });
                 }
 
-            // Находим новые монеты (которые еще не в Draft)
+            // Find new coins (not yet in Draft)
                 const newCoinIds = this.selectedCoinIds.filter(id => !existingCoinIds.has(id));
 
                 if (newCoinIds.length === 0) {
-                    // Все монеты уже есть в Draft
+                    // All coins already in Draft
                     if (window.messagesStore) {
                         window.messagesStore.addMessage({
                             type: 'info',
@@ -353,21 +353,21 @@ window.coinSetSaveModalBody = {
                     return;
                 }
 
-            // Получаем полные данные новых монет из props (ЕИП: единый источник правды)
+            // Get full coin data from props (SSOT)
             const fullCoinsData = this.coins ?
                 this.coins.filter(coin => newCoinIds.includes(coin.id)) :
                 [];
 
-            // Объединяем существующие и новые монеты
+                // Merge existing and new coins
                 const allCoinIds = Array.from(new Set([...Array.from(existingCoinIds), ...newCoinIds]));
                 const allCoinsData = [];
 
-                // Добавляем существующие монеты
+                // Add existing coins
                 existingCoinsMap.forEach(coin => {
                     allCoinsData.push(coin);
                 });
 
-                // Добавляем новые монеты
+                // Add new coins
                 fullCoinsData.forEach(coin => {
                     if (!existingCoinsMap.has(coin.id)) {
                         allCoinsData.push(coin);
@@ -380,7 +380,7 @@ window.coinSetSaveModalBody = {
                         coins: allCoinsData
                     });
                 } else if (window.draftCoinSet) {
-                    // Fallback: прямое сохранение через утилиту
+                    // Fallback: direct save via utility
                     window.draftCoinSet.save(allCoinIds, allCoinsData);
 
                     if (window.messagesStore) {
@@ -392,13 +392,13 @@ window.coinSetSaveModalBody = {
                         });
                     }
 
-                    // Обновляем Draft набор в модальном окне загрузки (если оно открыто)
+                    // Update Draft set in load modal (if open)
                     if (window.eventBus) {
                         window.eventBus.emit('draft-set-updated');
                     }
                 }
 
-                // Обновляем состояние кнопки
+                // Update button state
                 this.updateDraftButton();
 
                 // Обновляем Draft набор в модальном окне загрузки (если оно открыто)
@@ -406,7 +406,7 @@ window.coinSetSaveModalBody = {
                     window.eventBus.emit('draft-set-updated');
                 }
             } catch (error) {
-                console.error('coin-set-save-modal-body: ошибка сохранения в Draft:', error);
+                console.error('coin-set-save-modal-body: error saving to Draft:', error);
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
@@ -419,11 +419,11 @@ window.coinSetSaveModalBody = {
         },
 
         /**
-         * Обработка сохранения
+         * Handle save
          */
         async handleSave() {
             if (this.isSaved) {
-                // Второй клик после сохранения - закрываем модальное окно через callback
+                // Second click after save - close modal via callback
                 this.onCancel();
                 return;
             }
@@ -433,8 +433,8 @@ window.coinSetSaveModalBody = {
             }
 
             try {
-                // Получаем полные данные монет из родительского компонента
-                // Это нужно for того, чтобы при загрузке набора сразу были доступны полные данные
+                // Get full coin data from parent component
+                // Needed so full data is available when set is loaded
                 const fullCoinsData = this.$parent.coins ?
                     this.$parent.coins.filter(coin => this.selectedCoinIds.includes(coin.id)) :
                     [];
@@ -443,61 +443,61 @@ window.coinSetSaveModalBody = {
                     name: this.formName.trim(),
                     description: this.formDescription.trim() || null,
                     coin_ids: this.selectedCoinIds,
-                    coins: fullCoinsData // Передаем полные данные монет
+                    coins: fullCoinsData // Pass full coin data
                 });
 
                 this.isSaved = true;
                 this.updateSaveButton();
             } catch (error) {
-                console.error('coin-set-save-modal-body: ошибка сохранения:', error);
-                // TODO: Показать сообщение об ошибке через систему сообщений
-                throw error; // Пробрасываем ошибку, чтобы родительский компонент мог обработать
+                console.error('coin-set-save-modal-body: save error:', error);
+                // TODO: Show error via message system
+                throw error; // Re-throw for parent to handle
             }
         },
 
         /**
-         * Инициировать авторизацию через Google OAuth
-         * Использует тот же подход, что и auth-modal-body и coin-set-load-modal-body (принцип ЕИП)
+         * Initiate Google OAuth authorization
+         * Same approach as auth-modal-body and coin-set-load-modal-body (SSOT)
          */
         async handleOpenAuth() {
             try {
                 if (!window.authClient || !window.authState) {
-                    console.error('coin-set-save-modal-body: authClient или authState not loaded');
+                    console.error('coin-set-save-modal-body: authClient or authState not loaded');
                     return;
                 }
 
-                // Устанавливаем состояние загрузки в централизованное хранилище
+                // Set loading state in centralized store
                 window.authState.setLoading(true);
 
-                // Инициируем авторизацию через Google OAuth (ЕИП: используем тот же метод, что и auth-modal-body)
+                // Initiate Google OAuth (SSOT: same method as auth-modal-body)
                 window.authClient.initiateGoogleAuth();
 
-                // Обработка postMessage от popup окна OAuth callback (ЕИП: используем тот же подход, что и auth-modal-body)
+                // Handle postMessage from OAuth callback popup (SSOT: same as auth-modal-body)
                 const handleOAuthMessage = async (event) => {
                     if (event.data && event.data.type === 'oauth-callback' && event.data.success) {
                         try {
                             const tokenData = event.data.token;
 
                             if (tokenData && tokenData.access_token) {
-                                // Сохраняем токен через auth-client
+                                // Save token via auth-client
                                 if (window.authClient && window.authClient.saveToken) {
                                     await window.authClient.saveToken(tokenData);
                                 }
 
-                                // Обновляем централизованное состояние авторизации (синхронизирует все экземпляры)
-                                // Проверяем статус авторизации через auth-state
+                                // Update centralized auth state (syncs all instances)
+                                // Check auth status via auth-state
                                 if (window.authState && typeof window.authState.checkAuthStatus === 'function') {
                                     await window.authState.checkAuthStatus();
                                 }
 
-                                // Удаляем обработчик после успешной авторизации
+                                // Remove handler after successful auth
                                 window.removeEventListener('message', handleOAuthMessage);
                             }
                         } catch (error) {
                             console.error('coin-set-save-modal-body.handleOAuthMessage error:', error);
                         } finally {
                             window.authState.setLoading(false);
-                            // Обновляем состояние кнопок после авторизации
+                            // Update button state after auth
                             this.updateSaveButton();
                         }
                     }
@@ -505,12 +505,12 @@ window.coinSetSaveModalBody = {
 
                 window.addEventListener('message', handleOAuthMessage);
 
-                // Таймаут for удаления обработчика (на случай если окно закрыто без авторизации)
+                // Timeout to remove handler (if popup closed without auth)
                 setTimeout(() => {
                     window.removeEventListener('message', handleOAuthMessage);
                     window.authState.setLoading(false);
                     this.updateSaveButton();
-                }, 5 * 60 * 1000); // 5 минут
+                }, 5 * 60 * 1000); // 5 minutes
 
             } catch (error) {
                 console.error('coin-set-save-modal-body.handleOpenAuth error:', error);
@@ -528,17 +528,17 @@ window.coinSetSaveModalBody = {
         },
 
         /**
-         * Обработка отмены
+         * Handle cancel
          */
         handleCancel() {
             if (this.formName !== this.initialName || this.formDescription !== this.initialDescription) {
-                // Восстанавливаем исходные значения
+                // Restore initial values
                 this.formName = this.initialName;
                 this.formDescription = this.initialDescription;
                 this.isSaved = false;
                 this.updateSaveButton();
             } else {
-                // Закрываем модальное окно через callback
+                // Close modal via callback
                 this.onCancel();
             }
         }

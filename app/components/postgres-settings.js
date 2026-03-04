@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * POSTGRES SETTINGS COMPONENT - Настройки PostgreSQL API слоя
+ * POSTGRES SETTINGS COMPONENT - PostgreSQL API layer settings
  * ================================================================================================
  *
- * PURPOSE: Управление базовыми настройками будущего API слоя PostgreSQL.
+ * PURPOSE: Manage basic settings for PostgreSQL API layer.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Без выполнения запросов к БД и без создания таблиц.
+ * No DB queries or table creation.
  *
  * Skill: core/skills/api-layer
  *
@@ -42,7 +42,7 @@ window.postgresSettings = {
         },
         isValid() {
             if (this.syncEnabled) {
-                // Если включена синхронизация, URL не должен быть пустым и должен быть похож на URL
+                // If sync enabled, URL must not be empty and must look like URL
                 const trimmed = this.apiBaseUrl.trim();
                 return trimmed.length > 0 && (trimmed.startsWith('http://') || trimmed.startsWith('https://'));
             }
@@ -61,7 +61,7 @@ window.postgresSettings = {
 
     watch: {
         apiBaseUrl() {
-            this.healthStatus = null; // Сбрасываем статус при изменении URL
+            this.healthStatus = null; // Reset status on URL change
             this.$nextTick(() => {
                 this.onFieldChange();
             });
@@ -167,7 +167,7 @@ window.postgresSettings = {
                     await window.postgresClient.checkHealth();
                     this.healthStatus = 'OK';
                 } else {
-                    // Fallback если клиент еще not loaded
+                    // Fallback if client not yet loaded
                     const response = await fetch(this.healthEndpoint, {
                         method: 'GET',
                         mode: 'cors',
@@ -181,7 +181,7 @@ window.postgresSettings = {
                     }
                 }
             } catch (error) {
-                // Если ошибка содержит "Failed to fetch" и мы на протоколе file://, скорее всего это CORS
+                // If error contains "Failed to fetch" and we're on file://, likely CORS
                 const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
                     this.healthStatus = 'Fail (CORS/Network)';
@@ -189,7 +189,7 @@ window.postgresSettings = {
                     this.healthStatus = error.message.includes('API Error') ? error.message : 'Fail (Network)';
                 }
 
-                // Логируем только если это не обычный сетевой сбой при проверке
+                // Log only if not a normal network failure during check
                 if (!error.message.includes('Failed to fetch')) {
                     console.error('postgres-settings: health check failed', error);
                 }

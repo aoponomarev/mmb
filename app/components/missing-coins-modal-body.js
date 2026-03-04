@@ -3,7 +3,7 @@
 
     /**
      * MISSING COINS MODAL BODY
-     * Показывает отсутствующие монеты, позволяет исключить или заменить на найденные по тикеру.
+     * Shows missing coins, allows excluding or replacing by ticker lookup.
      * Skill: app/skills/ux-principles
      *
      * Props:
@@ -164,7 +164,7 @@
             async handleAltTickerInput(row) {
                 const value = (row.altTicker || '').trim().toLowerCase();
                 row.altTicker = value;
-                row.exclude = false; // поле ввода блокирует чекбокс
+                row.exclude = false; // input blocks checkbox when filled
                 row.error = null;
                 row.searchResults = [];
                 row.selectedResultId = null;

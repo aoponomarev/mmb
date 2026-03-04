@@ -4,18 +4,18 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Загружать централизованные метаданные монет (стейблкоины, обертки, LST)
+ * PURPOSE: Load centralized coin metadata (stablecoins, wrapped, LST)
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * из внешнего JSON-файла на GitHub CDN.
+ * from external JSON file on GitHub CDN.
  *
- * ФАЙЛ: libs/assets/data/coins.json
+ * FILE: libs/assets/data/coins.json
  *
- * АРХИТЕКТУРА:
- * - Подгружает данные при старте или по требованию
- * - Кэширует через cacheManager (TTL: 24ч)
- * - Наполняет window.coinsConfig (ЕИП)
+ * ARCHITECTURE:
+ * - Loads data on startup or on demand
+ * - Caches via cacheManager (TTL: 24h)
+ * - Populates window.coinsConfig (SSOT)
  */
 
 (function() {
@@ -29,7 +29,7 @@
     };
 
     /**
-     * Построить URL for загрузки (с учетом кэш-бастинга через версию приложения)
+     * Build load URL (with cache-busting via app version)
      */
     function buildUrl() {
         const salt = window.appConfig ? window.appConfig.getVersionHash() : Date.now();
@@ -37,7 +37,7 @@
     }
 
     /**
-     * Загрузить метаданные
+     * Load metadata
      */
     async function load({ forceRefresh = false, ttl = CONFIG.defaultTtl } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
@@ -45,7 +45,7 @@
             return null;
         }
 
-        // 1. Попытка загрузки из кэша
+        // 1. Try load from cache
         if (!forceRefresh) {
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data && cached.expiresAt && cached.expiresAt > Date.now()) {
@@ -55,13 +55,13 @@
             }
         }
 
-        // 2. Загрузка из сети
+        // 2. Load from network
         try {
             const url = buildUrl();
             const response = await fetch(url);
 
             if (!response.ok) {
-                // Если файл не найден (404), это не ошибка, а допустимое состояние (используем эвристику)
+                // If file not found (404), not an error but valid state (use heuristics)
                 if (response.status === 404) {
                     console.info(`coinsMetadataLoader: файл ${CONFIG.filename} не найден на сервере. Используется встроенная эвристика.`);
                     return null;
@@ -71,7 +71,7 @@
 
             const data = await response.json();
 
-            // Сохраняем в кэш
+            // Save to cache
             const payload = {
                 data: data,
                 expiresAt: Date.now() + ttl,
@@ -79,7 +79,7 @@
             };
             await window.cacheManager.set(CONFIG.cacheKey, payload, { useVersioning: true, ttl });
 
-            // Применяем данные
+            // Apply data
             applyMetadata(data);
             console.log('coinsMetadataLoader: метаданные успешно loadedы из сети');
 
@@ -87,7 +87,7 @@
         } catch (error) {
             console.error('coinsMetadataLoader: ошибка загрузки метаданных:', error);
 
-            // Fallback на старый кэш если есть
+            // Fallback to stale cache if exists
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data) {
                 applyMetadata(cached.data);
@@ -100,14 +100,14 @@
     }
 
     /**
-     * Передать данные в coinsConfig
+     * Pass data to coinsConfig
      */
     function applyMetadata(data) {
         if (!data || !window.coinsConfig) return;
 
         // data structure: { stable: [...], wrapped: [...], lst: [...] }
         if (data.stable) {
-            // Форматируем for setStablecoins (он ожидает объекты с id)
+            // Format for setStablecoins (expects objects with id)
             const stableList = data.stable.map(id => ({ id: id, symbol: '', name: '' }));
             window.coinsConfig.setStablecoins(stableList);
         }

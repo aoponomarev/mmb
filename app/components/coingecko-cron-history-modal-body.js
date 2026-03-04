@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * COINGECKO CRON HISTORY MODAL BODY - История циклов обновления данных монет
+ * COINGECKO CRON HISTORY MODAL BODY - History of coin data update cycles
  * ================================================================================================
  *
- * PURPOSE: Показывает историю последних циклов забора данных из CoinGecko (через cron).
+ * PURPOSE: Shows history of recent CoinGecko data fetch cycles (via cron).
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
- * Источник данных: GET /api/coins/cycles (Yandex app-api).
+ * Data source: GET /api/coins/cycles (Yandex app-api).
  */
 
 (function() {

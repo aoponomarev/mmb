@@ -1,56 +1,56 @@
 /**
- * Корневой компонент приложения
+ * Application root component
  *
- * PURPOSE: Инициализация Vue приложения и настройка корневого компонента
+ * PURPOSE: Vue app initialization and root component setup
  * Skill: is/skills/arch-foundation
  *
- * ПРОБЛЕМА: Логика инициализации Vue раздувала index.html
+ * PROBLEM: Vue init logic bloated index.html
  *
- * РЕШЕНИЕ: Вынос всей логики инициализации в отдельный модуль
+ * SOLUTION: Extract all init logic into separate module
  * - Компоненты загружаются через модульную систему (core/module-loader.js)
  * - Инициализация Vue приложения после загрузки всех модулей
  * - Настройка корневого компонента с данными и методами
  *
- * КАК ДОСТИГАЕТСЯ:
+ * HOW:
  * - Модульная система загружает все компоненты в правильном порядке
  * - После загрузки всех модулей создаётся Vue app через createApp()
  * - Компоненты регистрируются в app через components
  * - App монтируется на #app элемент
  *
- * ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ:
+ * APP INIT:
  * - Установка темы на body (data-bs-theme)
  * - Установка CSS-класса версии на body (app-version-{hash})
  * - Очистка кэша старых версий (clearOldVersions)
  * - Инициализация автоматической маркировки элементов (autoMarkup)
  *
- * ПРЕИМУЩЕСТВА:
+ * BENEFITS:
  * - index.html остаётся компактным
  * - Логика инициализации изолирована
  * - Легко добавлять новые компоненты
  * - Централизованное управление данными приложения
  * - Автоматическое разрешение зависимостей через модульную систему
  *
- * ССЫЛКА: Модульная система описана в core/module-loader.js и core/modules-config.js
+ * REF: Module system in core/module-loader.js and core/modules-config.js
  */
 
 (function() {
     'use strict';
 
     /**
-     * Инициализирует Vue приложение
-     * Вызывается после загрузки всех модулей через модульную систему
+     * Initialize Vue app
+     * Called after all modules loaded via module system
      */
     function initVueApp() {
-        // Проверяем наличие Vue и компонентов
+        // Check Vue and components presence
         if (typeof Vue === 'undefined') {
             console.error('app-ui-root: Vue.js not loaded');
             return;
         }
 
-        // Базовые компоненты (всегда должны быть loadedы)
+        // Base components (must always be loaded)
         if (!window.cmpDropdownMenuItem || !window.cmpButton || !window.cmpDropdown || !window.cmpCombobox || !window.cmpButtonGroup || !window.appHeader || !window.appFooter || !window.cmpModal || !window.cmpModalButtons || !window.cmpTimezoneSelector || !window.modalExampleBody || !window.aiApiSettings || !window.timezoneModalBody || !window.cmpSystemMessage || !window.cmpSystemMessages) {
-            console.error('app-ui-root: не все базовые компоненты loadedы');
-            console.log('Загруженные компоненты:', {
+            console.error('app-ui-root: not all base components loaded');
+            console.log('Loaded components:', {
                 cmpDropdownMenuItem: !!window.cmpDropdownMenuItem,
                 cmpButton: !!window.cmpButton,
                 cmpDropdown: !!window.cmpDropdown,
@@ -70,14 +70,14 @@
             return;
         }
 
-        // Проверка feature flags for условной загрузки компонентов
+        // Check feature flags for conditional component loading
         const authEnabled = window.appConfig && window.appConfig.isFeatureEnabled('auth');
         const portfoliosEnabled = window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync');
 
-        // auth-button больше не using в header, авторизация через модальное окно.
+        // auth-button no longer used in header, auth via modal.
 
         if (portfoliosEnabled && !window.portfoliosManager) {
-            console.warn('app-ui-root: portfolios-manager not loaded, хотя feature flags portfolios и cloudSync включены');
+            console.warn('app-ui-root: portfolios-manager not loaded, though portfolios and cloudSync flags enabled');
         }
 
         const { createApp } = Vue;
@@ -103,7 +103,7 @@
                 'storage-reset-modal-body': window.storageResetModalBody,
                 'portfolios-import-modal-body': window.portfoliosImportModalBody,
                 ...(window.sessionLogModalBody ? { 'session-log-modal-body': window.sessionLogModalBody } : {}),
-                // Условная регистрация компонентов авторизации и портфелей
+                // Conditional registration of auth and portfolio components
                 ...(window.authModalBody ? { 'auth-modal-body': window.authModalBody } : {}),
                 ...(window.portfolioModalBody ? { 'portfolio-modal-body': window.portfolioModalBody } : {}),
                 ...(window.portfoliosManager ? { 'portfolios-manager': window.portfoliosManager } : {}),
@@ -115,16 +115,16 @@
                 ...(window.coingeckoCronHistoryModalBody ? { 'coingecko-cron-history-modal-body': window.coingeckoCronHistoryModalBody } : {}),
                 'app-header': window.appHeader,
                 'app-footer': window.appFooter,
-                // Компоненты системных сообщений
+                // System message components
                 'cmp-system-message': window.cmpSystemMessage,
                 'cmp-system-messages': window.cmpSystemMessages
             },
             data() {
-                // Проверка feature flags
+                // Check feature flags
                 const authEnabled = window.appConfig && window.appConfig.isFeatureEnabled('auth');
                 const portfoliosEnabled = window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync');
 
-                // Синхронная инициализация темы (читаем напрямую из localStorage for избежания мерцания)
+                // Sync theme init (read directly from localStorage to avoid flicker)
                 let initialTheme = 'light';
                 try {
                     const savedTheme = localStorage.getItem('theme');
@@ -132,23 +132,23 @@
                         initialTheme = savedTheme;
                     }
                 } catch (e) {
-                    // Игнорируем ошибки
+                    // Ignore errors
                 }
 
-                // Применяем тему сразу at initialization
+                // Apply theme immediately at init
                 if (initialTheme === 'dark') {
                     document.body.setAttribute('data-bs-theme', 'dark');
                 } else {
                     document.body.removeAttribute('data-bs-theme');
                 }
 
-                // Синхронная инициализация языка перевода (читаем напрямую из localStorage)
-                // ВАЖНО: используем тот же источник, что и в mounted(), чтобы избежать рассинхронизации
+                // Sync translation language init (read directly from localStorage)
+                // IMPORTANT: use same source as mounted() to avoid desync
                 let initialLanguage = 'ru';
                 try {
-                    // Пробуем сначала cacheManager (если доступен синхронно), потом localStorage
+                    // Try cacheManager first (if sync available), then localStorage
                     if (window.cacheManager && typeof window.cacheManager.get === 'function') {
-                        // cacheManager асинхронный, поэтому for синхронной инициализации используем localStorage
+                        // cacheManager is async, so use localStorage for sync init
                         const savedLanguage = localStorage.getItem('translation-language');
                         if (savedLanguage && typeof savedLanguage === 'string') {
                             initialLanguage = savedLanguage;
@@ -160,7 +160,7 @@
                         }
                     }
                 } catch (e) {
-                    // Игнорируем ошибки
+                    // Ignore errors
                 }
 
                 const defaultModelId = (window.modelsConfig && typeof window.modelsConfig.getDefaultModelId === 'function')
@@ -175,31 +175,31 @@
                     };
                 const defaultMetrics = defaultWorkspace.metrics || {};
                 let defaultActiveTabId = defaultMetrics.activeTabId || 'percent';
-                // Миграция старых вкладок в новую вкладку "Результат"
+                // Migrate old tabs to new "Result" tab
                 if (['max', 'min', 'balance-delta'].includes(defaultActiveTabId)) {
                     defaultActiveTabId = 'result';
                 }
                 const defaultActiveCoinSetIds = Array.isArray(defaultWorkspace.activeCoinSetIds) ? defaultWorkspace.activeCoinSetIds : [];
 
                 return {
-                    // Feature flags for условного отображения компонентов
+                    // Feature flags for conditional component display
                     isAuthEnabled: authEnabled,
                     isPortfoliosEnabled: portfoliosEnabled,
-                    // Централизованное состояние авторизации (единый источник правды)
+                    // Centralized auth state (SSOT)
                     authState: window.authState ? window.authState.getState() : null,
-                    // Конфигурация модальных окон (for доступа в шаблоне)
+                    // Modal config (for template access)
                     modalsConfig: window.modalsConfig || null,
-                    // Состояние формирования портфеля
+                    // Portfolio form state
                     currentViewingPortfolio: null,
                     portfolioFormKey: 0,
                     userPortfolios: [],
-                    // Конфигурация tooltips (for доступа в шаблоне)
+                    // Tooltip config (for template access)
                     tooltipsConfig: window.tooltipsConfig || null,
-                    // Текущая тема приложения
+                    // Current app theme
                     currentTheme: initialTheme,
-                    // Управление уровнем основного меню (0 - главное, 1 - матем. модели)
+                    // Main menu level (0 - main, 1 - math models)
                     menuLevel: 0,
-                    // Реактивные tooltips (обновляются при смене языка)
+                    // Reactive tooltips (update on language change)
                     tooltips: {
                         'button.save.icon': '',
                         'button.save.text': '',
@@ -217,7 +217,7 @@
                         'button.help.text': '',
                         'button.help.suffix.info': ''
                     },
-                    // Данные for dropdown
+                    // Dropdown data
                     dropdownItems: [
                         { id: 1, name: 'Элемент 1', description: 'Описание элемента 1', icon: 'fas fa-home', labelShort: 'Эл. 1' },
                         { id: 2, name: 'Элемент 2', description: 'Описание элемента 2', icon: 'fas fa-user', labelShort: 'Эл. 2' },
@@ -225,20 +225,20 @@
                         { id: 4, name: 'Элемент 4', description: 'Описание элемента 4', icon: 'fas fa-file', labelShort: 'Эл. 4' },
                         { id: 5, name: 'Элемент 5', description: 'Описание элемента 5', icon: 'fas fa-folder', labelShort: 'Эл. 5' }
                     ],
-                    // Данные for режима select (отдельные переменные for каждого dropdown)
-                    selectedDropdownItem1: null, // Только иконка
-                    selectedDropdownItem2: null, // Иконка + полный текст
-                    selectedDropdownItem3: null, // Иконка + укороченный текст
-                    selectedDropdownItem4: null, // Только полный текст
-                    selectedDropdownItem5: null, // Только value
-                    selectedDropdownItem6: null, // Все вместе
+                    // Select mode data (separate vars per dropdown)
+                    selectedDropdownItem1: null, // Icon only
+                    selectedDropdownItem2: null, // Icon + full text
+                    selectedDropdownItem3: null, // Icon + short text
+                    selectedDropdownItem4: null, // Full text only
+                    selectedDropdownItem5: null, // Value only
+                    selectedDropdownItem6: null, // All together
                     longList: Array.from({ length: 50 }, (_, i) => ({
                         id: i + 1,
                         name: `Элемент ${i + 1}`,
                         description: `Описание элемента ${i + 1}`
                     })),
                     isMenuExpanded: false,
-                    // Данные for combobox
+                    // Combobox data
                     comboboxValue1: '',
                     comboboxValue2: '',
                     comboboxValue3: '',
@@ -261,48 +261,48 @@
                         label: `Город ${i + 1}`,
                         value: `city-${i + 1}`
                     })),
-                    // Таймзона
+                    // Timezone
                     selectedTimezone: 'Europe/Moscow',
-                    initialTimezone: 'Europe/Moscow', // Исходное значение таймзоны при открытии модального окна
+                    initialTimezone: 'Europe/Moscow', // Initial timezone when modal opens
                     selectedTranslationLanguage: 'ru',
-                    initialTranslationLanguage: 'ru', // Исходное значение языка перевода при открытии модального окна
-                    // Тестирование Yandex API
+                    initialTranslationLanguage: 'ru', // Initial translation language when modal opens
+                    // Yandex API testing
                     yandexTestQuery: '',
                     yandexTestInputQuery: '',
                     yandexTestResponse: '',
                     yandexTestLoading: false,
-                    yandexTestError: '', // Используем пустую строку вместо null for лучшей реактивности Vue
-                    // Тестирование Google-Cloudflare интеграции
+                    yandexTestError: '', // Empty string instead of null for better Vue reactivity
+                    // Google-Cloudflare integration testing
                     testStep1Result: null,
                     testStep2Result: null,
                     testStep3Result: null,
                     testStep4Result: null,
                     testStep5Result: null,
                     testStep6Result: null,
-                    // Тестирование системы сообщений
+                    // Message system testing
                     testMessagesStep1Result: null,
                     testMessagesStep2Result: null,
                     testMessagesStep3Result: null,
                     testMessagesStep4Result: null,
                     testMessagesStep5Result: null,
-                    // DEBUG: Тестирование Data Provider
+                    // DEBUG: Data Provider testing
                     testLoading: false,
                     testError: null,
                     testResults: [],
-                    // DEBUG: Тестирование Coin Sets
+                    // DEBUG: Coin Sets testing
                     testCoinSets: [],
-                    // Таблица монет (index.html)
+                    // Coin table (index.html)
                     coins: [],
                     coinsLoading: false,
                     coinsError: null,
                     headerActionHover: null, // Hover state for header action buttons (load/save, refresh, favorites)
-                    coinsCacheCheckTimer: null, // Таймер проверки устаревания кэша топ-монет
-                    selectedCoinIds: [], // Выбранные монеты (заглушка)
-                    favoriteCoinIds: [], // ID монет в избранном (for реактивности)
-                    favoriteCoinsMeta: [], // Полные данные избранных монет из favoritesManager (id, symbol)
-                    favoriteActionHoverId: null, // ID монеты, по которой наведена иконка действия в списке избранного
-                    coinsDataCache: new Map(), // Кэш данных монет (id -> coin data) for сохранения иконок после удаления из таблицы
-                    horizonDays: Number.isFinite(Number(defaultMetrics.horizonDays)) && Number(defaultMetrics.horizonDays) > 0 ? Number(defaultMetrics.horizonDays) : 2, // Горизонт прогноза (дни) for расчета метрик
+                    coinsCacheCheckTimer: null, // Timer for top-coins cache expiry check
+                    selectedCoinIds: [], // Selected coins (stub)
+                    favoriteCoinIds: [], // Favorite coin IDs (for reactivity)
+                    favoriteCoinsMeta: [], // Full favorite coin data from favoritesManager (id, symbol)
+                    favoriteActionHoverId: null, // Coin ID hovered in favorites list action icon
+                    coinsDataCache: new Map(), // Coin data cache (id -> coin data) to preserve icons after table removal
+                    horizonDays: Number.isFinite(Number(defaultMetrics.horizonDays)) && Number(defaultMetrics.horizonDays) > 0 ? Number(defaultMetrics.horizonDays) : 2, // Forecast horizon (days) for metrics
                     mdnHours: Number.isFinite(Number(defaultMetrics.mdnHours)) && Number(defaultMetrics.mdnHours) > 0 ? Number(defaultMetrics.mdnHours) : 4, // Горизонт MDN (часы)
                     mdnValue: null, // Текущий MDN (Market Direction Now) for выбранного горизонта
                     agrMethod: defaultMetrics.agrMethod || 'mp', // Способ расчета AGR (dcs, tsi, mp)

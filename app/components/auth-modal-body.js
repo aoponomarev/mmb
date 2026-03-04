@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * AUTH MODAL BODY COMPONENT - Компонент body модального окна авторизации
+ * AUTH MODAL BODY COMPONENT - Authentication modal body component
  * ================================================================================================
  *
- * PURPOSE: Компонент for отображения состояния авторизации и управления авторизацией через Google OAuth.
+ * PURPOSE: Component for displaying auth state and managing auth via Google OAuth.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
@@ -11,22 +11,22 @@
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ОСОБЕННОСТИ:
- * - Отображение текущего состояния авторизации (авторизован/not authenticated)
- * - Отображение информации о пользователе (имя, email)
- * - Регистрирует кнопки "Авторизоваться" и "Выйти" через modalApi
- * - Использует auth-client for авторизации и logoutа
- * - Использует централизованное состояние из auth-state for синхронизации между всеми экземплярами
- * - Реактивно обновляет состояние при изменении авторизации (все экземпляры синхронизируются автоматически)
+ * FEATURES:
+ * - Displays current auth state (authenticated/not authenticated)
+ * - Displays user info (name, email)
+ * - Registers "Авторизоваться" and "Выйти" buttons via modalApi
+ * - Uses auth-client for auth and logout
+ * - Uses centralized state from auth-state for sync across all instances
+ * - Reactively updates state on auth change (all instances sync automatically)
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Props:
- * - onLoginSuccess (Function, optional) — функция, вызываемая после успешного входа
- * - onLogoutSuccess (Function, optional) — функция, вызываемая после успешного logoutа
+ * - onLoginSuccess (Function, optional) — called after successful login
+ * - onLogoutSuccess (Function, optional) — called after successful logout
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -48,7 +48,7 @@ window.authModalBody = {
 
     data() {
         return {
-            // Используем централизованное состояние из auth-state (единый источник правды)
+            // Use centralized state from auth-state (SSOT)
             authState: window.authState ? window.authState.getState() : null
         };
     },
@@ -58,7 +58,7 @@ window.authModalBody = {
             return window.uiState ? window.uiState.getState() : null;
         },
         /**
-         * Отображаемое имя пользователя
+         * Display name for user
          * @returns {string}
          */
         userDisplayName() {
@@ -67,7 +67,7 @@ window.authModalBody = {
         },
 
         /**
-         * Локальные алиасы for удобства (прямой доступ к свойствам authState)
+         * Local aliases for convenience (direct access to authState properties)
          */
         isAuthenticated() {
             return this.authState ? this.authState.isAuthenticated : false;
@@ -81,11 +81,11 @@ window.authModalBody = {
     },
 
     watch: {
-        // Отслеживаем изменения в централизованном состоянии и обновляем кнопки
+        // Watch centralized state changes and update buttons
         'authState.isAuthenticated'(newVal, oldVal) {
             this.updateButtons();
         },
-        // Отслеживаем изменения isLoading for обновления disabled состояния кнопок
+        // Watch isLoading for updating button disabled state
         'uiState.auth.isLoading'(newVal, oldVal) {
             this.updateButtons();
         }
@@ -93,8 +93,8 @@ window.authModalBody = {
 
     methods: {
         /**
-         * Проверка состояния авторизации через централизованное хранилище
-         * Обновляет состояние for всех экземпляров компонента автоматически
+         * Check auth status via centralized store
+         * Updates state for all component instances automatically
          */
         async checkAuthStatus() {
             if (!window.authState) {
@@ -102,27 +102,27 @@ window.authModalBody = {
                 return;
             }
 
-            // Централизованная проверка через auth-state (обновит состояние for всех экземпляров)
+            // Centralized check via auth-state (updates state for all instances)
             await window.authState.checkAuthStatus();
         },
 
         /**
-         * Обновление состояния кнопок в зависимости от авторизации
+         * Update button state based on auth status
          */
         updateButtons() {
             if (!this.modalApi) return;
 
-            // Проверяем существование кнопок перед обновлением
+            // Check button existence before update
             const hasLoginButton = this.modalApi.getButton('login') !== undefined;
             const hasLogoutButton = this.modalApi.getButton('logout') !== undefined;
 
-            // Если кнопки не зарегистрированы (модальное окно не смонтировано), logoutим
+            // If buttons not registered (modal not mounted), return
             if (!hasLoginButton || !hasLogoutButton) {
                 return;
             }
 
             if (this.isAuthenticated) {
-                // Показываем только кнопку "Выйти"
+                // Show only logout button
                 this.modalApi.updateButton('login', {
                     visible: false
                 });
@@ -131,7 +131,7 @@ window.authModalBody = {
                     disabled: this.isLoading
                 });
             } else {
-                // Показываем только кнопку "Авторизоваться"
+                // Show only login button
                 this.modalApi.updateButton('login', {
                     visible: true,
                     disabled: this.isLoading
@@ -143,7 +143,7 @@ window.authModalBody = {
         },
 
         /**
-         * Обработка авторизации
+         * Handle authentication
          */
         async handleLogin() {
             try {
@@ -157,30 +157,30 @@ window.authModalBody = {
                 this.updateButtons();
                 this._authInProgress = true;
 
-                // Инициируем авторизацию через Google OAuth
+                // Initiate auth via Google OAuth
                 window.authClient.initiateGoogleAuth();
 
-                // Обработка postMessage от popup окна OAuth callback
+                // Handle postMessage from OAuth callback popup
                 const handleOAuthMessage = async (event) => {
                     if (event.data && event.data.type === 'oauth-callback' && event.data.success) {
                         try {
                             const tokenData = event.data.token;
 
                             if (tokenData && tokenData.access_token) {
-                                // Сохраняем токен через auth-client
+                                // Save token via auth-client
                                 if (window.authClient && window.authClient.saveToken) {
                                     await window.authClient.saveToken(tokenData);
                                 }
 
-                                // Обновляем централизованное состояние авторизации (синхронизирует все экземпляры)
+                                // Update centralized auth state (syncs all instances)
                                 await this.checkAuthStatus();
 
-                                // Вызываем callback если передан
+                                // Call callback if provided
                                 if (this.onLoginSuccess) {
                                     this.onLoginSuccess(tokenData);
                                 }
 
-                                // Удаляем обработчик после успешной авторизации
+                                // Remove handler after successful auth
                                 window.removeEventListener('message', handleOAuthMessage);
                                 this._authInProgress = false;
                             }
@@ -196,7 +196,7 @@ window.authModalBody = {
                 this._oauthMessageHandler = handleOAuthMessage;
                 window.addEventListener('message', handleOAuthMessage);
 
-                // Таймаут for удаления обработчика (на случай если окно закрыто без авторизации)
+                // Timeout for handler removal (if window closed without auth)
                 setTimeout(() => {
                     window.removeEventListener('message', handleOAuthMessage);
                     this._authInProgress = false;
@@ -218,7 +218,7 @@ window.authModalBody = {
         },
 
         /**
-         * Обработка logoutа
+         * Handle logout
          */
         async handleLogout() {
             try {
@@ -233,19 +233,19 @@ window.authModalBody = {
 
                 await window.authClient.logout();
 
-                // Очищаем централизованное состояние (синхронизирует все экземпляры)
+                // Clear centralized state (syncs all instances)
                 window.authState.clearAuthState();
 
-                // Вызываем callback если передан
+                // Call callback if provided
                 if (this.onLogoutSuccess) {
                     this.onLogoutSuccess();
                 }
 
-                // Обновляем кнопки
+                // Update buttons
                 this.updateButtons();
             } catch (error) {
                 console.error('auth-modal-body.handleLogout error:', error);
-                // Даже при ошибке обновляем состояние
+                // Update state even on error
                 window.authState.clearAuthState();
                 this.updateButtons();
                 if (this.onLogoutSuccess) {
@@ -259,9 +259,9 @@ window.authModalBody = {
     },
 
     async mounted() {
-        // Регистрируем кнопки ПЕРЕД проверкой авторизации
+        // Register buttons BEFORE auth check
         if (this.modalApi) {
-            // Кнопка "Авторизоваться" в footer
+            // Login button in footer
             this.modalApi.registerButton('login', {
                 locations: ['footer'],
                 label: 'Авторизоваться',
@@ -271,7 +271,7 @@ window.authModalBody = {
                 onClick: () => this.handleLogin()
             });
 
-            // Кнопка "Выйти" в footer (слева, как "Отмена")
+            // Logout button in footer (left, like Cancel)
             this.modalApi.registerButton('logout', {
                 locations: ['footer'],
                 label: 'Выйти',
@@ -283,7 +283,7 @@ window.authModalBody = {
             });
         }
 
-        // Проверяем состояние авторизации после регистрации кнопок
+        // Check auth status after button registration
         await this.checkAuthStatus();
 
         const modalElement = this.$el.closest('.modal');
@@ -303,7 +303,7 @@ window.authModalBody = {
     },
 
     beforeUnmount() {
-        // Удаляем кнопки при размонтировании
+        // Remove buttons on unmount
         if (this.modalApi) {
             this.modalApi.removeButton('login');
             this.modalApi.removeButton('logout');

@@ -1,22 +1,22 @@
 /**
  * ================================================================================================
- * APP HEADER TEMPLATE - Шаблон компонента хедера приложения
+ * APP HEADER TEMPLATE - App header component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента хедера приложения (app-header) с кнопками меню и настроек.
+ * PURPOSE: Template for app header (app-header) with menu and settings buttons.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
+ * PROBLEM: Template must be in DOM before Vue.js init for component to work.
  *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="app-header-template".
+ * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
+ * on load as <script type="text/x-template"> with id="app-header-template".
  *
- * КАК ДОСТИГАЕТСЯ:
+ * HOW:
  * - Шаблон определён как строка в константе TEMPLATE
  * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
  * - Элемент добавляется в document.body с id="app-header-template"
  * - Компонент использует шаблон через template: '#app-header-template'
  *
- * ОСОБЕННОСТИ ШАБЛОНА:
+ * TEMPLATE FEATURES:
  * Структура HTML:
  * - Корневой элемент: ⟨header⟩ с классами fixed-top, bg-dark, bg-opacity-90, clearfix, data-bs-theme="dark"
  * - Кнопка меню (гамбургер) слева через cmp-dropdown
@@ -43,7 +43,7 @@
 
     const TEMPLATE = `<header class="fixed-top bg-dark bg-opacity-90 app-header" data-bs-theme="dark">
     <div class="d-flex align-items-center justify-content-between px-0 px-lg-2">
-            <!-- Кнопка меню (гамбургер) - слева -->
+            <!-- Menu button (hamburger) - left -->
             <cmp-dropdown
                 button-text=""
                 button-icon="fas fa-bars"
@@ -55,9 +55,9 @@
                 </template>
             </cmp-dropdown>
 
-        <!-- Центральный блок: 5 контролов без дополнительных оберток -->
+        <!-- Center block: 5 controls without extra wrappers -->
         <div class="flex-grow-1 d-flex align-items-center justify-content-around justify-content-lg-between gap-2 flex-wrap flex-lg-nowrap">
-            <!-- Горизонт прогноза (числовое поле, без выпадающего списка) -->
+            <!-- Forecast horizon (number field, no dropdown) -->
             <cmp-combobox
                 mode="input"
                 input-id="horizon-select"
@@ -81,7 +81,7 @@
                 @update:model-value="handleHorizonChange"
             ></cmp-combobox>
 
-            <!-- Радиокнопки mdnHours (D.2: с индикацией значений MDN и умной раскраской) -->
+            <!-- mdnHours radio buttons (D.2: MDN value indication and smart coloring) -->
             <cmp-button-group
                 :buttons="[
                     {
@@ -135,7 +135,7 @@
                 @button-toggle="data => handleMdnHoursChange(data?.button?.hours ?? data?.button?.label)"
             ></cmp-button-group>
 
-            <!-- Выбор метода AGR -->
+            <!-- AGR method selection -->
             <div class="d-flex align-items-center gap-2">
                 <span class="text-white-50 small d-none d-lg-inline" :title="tooltipAgrLabel">AGR:</span>
                 <cmp-button-group
@@ -159,7 +159,7 @@
             ></cmp-button-group>
         </div>
 
-            <!-- Группа радиокнопок вкладок -->
+            <!-- Tab radio button group -->
             <cmp-button-group
                 v-if="displayTabs && displayTabs.length > 0"
                 :buttons="displayTabs.map(t => ({ ...t, class: t.active ? '' : 'border-secondary', tooltip: getTabTooltip(t.id) }))"
@@ -176,7 +176,7 @@
                 @button-toggle="handleTabToggle"
             ></cmp-button-group>
 
-            <!-- Доступ к портфелям и create portfolio -->
+            <!-- Portfolio access and create portfolio -->
             <cmp-dropdown
                 :button-text="(portfolio.longCount || 0) + '/' + (portfolio.shortCount || 0)"
                 :button-text-short="(portfolio.longCount || 0) + '/' + (portfolio.shortCount || 0)"
@@ -190,7 +190,7 @@
                 :tooltip="tooltipPortfolio"
             >
                 <template #items>
-                    <!-- Пункт формирования нового портфеля -->
+                    <!-- New portfolio form item -->
                     <li>
                         <a class="dropdown-item d-flex align-items-center py-2 px-3"
                            href="#" @click.prevent="$emit('create-portfolio')">
@@ -199,7 +199,7 @@
                         </a>
                     </li>
 
-                    <!-- Пункты действий с портфелями (слот) -->
+                    <!-- Portfolio action items (slot) -->
                     <slot name="portfolio-items"></slot>
 
                     <template v-if="userPortfolios && userPortfolios.length > 0">
@@ -225,7 +225,7 @@
             </cmp-dropdown>
         </div>
 
-        <!-- Кнопка настроек (шестеренка/id-card) -->
+        <!-- Settings button (gear/id-card) -->
             <cmp-dropdown
                 button-text=""
                 :button-icon="settingsIcon"
@@ -238,9 +238,9 @@
             </cmp-dropdown>
     </div>
 
-    <!-- Вторая строка: Info-box (Long/Short, Медианы) -->
+    <!-- Second row: Info-box (Long/Short, Medians) -->
     <div class="header-info-row d-flex align-items-center px-0 px-lg-2 flex-wrap justify-content-center justify-content-lg-start">
-        <!-- Секция 1: Long/Short -->
+        <!-- Section 1: Long/Short -->
         <div class="flex-grow-1 d-flex align-items-center justify-content-center py-1" :title="tooltipLongShort">
             <span class="text-muted pe-2 d-none d-lg-inline">Long/Short:</span>
             <div class="d-flex gap-3">
@@ -259,7 +259,7 @@
             </div>
         </div>
 
-        <!-- Секция 2: Медианы -->
+        <!-- Section 2: Medians -->
         <div class="flex-grow-1 d-flex align-items-center justify-content-center py-1">
             <span class="text-muted pe-2">Медианы:</span>
             <div class="d-flex gap-3">
@@ -278,7 +278,7 @@
 </header>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -288,7 +288,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

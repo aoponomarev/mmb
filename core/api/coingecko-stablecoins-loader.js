@@ -4,51 +4,51 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Получать список стейблкоинов из CoinGecko (официальный источник),
+ * PURPOSE: Fetch stablecoins list from CoinGecko (official source),
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * сохранять в кэш (версионированный ключ stablecoins-list) и пробрасывать
- * в coinsConfig (единый источник правды). Поддерживает не-USD стейблы путем
- * определения базовой валюты по близости к 1 for нескольких валют.
+ * save to cache (versioned key stablecoins-list) and pass to
+ * coinsConfig (SSOT). Supports non-USD stables by detecting
+ * base currency from proximity to 1 for multiple currencies.
  *
- * ИСПОЛЬЗУЕТ:
+ * USES:
  * - window.cacheManager (for кэша, TTL задается в вызове)
  * - window.coinsConfig (for установки актуального списка)
  *
  * API:
  *   await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
  *
- * Источник:
+ * Source:
  * - CoinGecko markets: /coins/markets?vs_currency={currency}&category=stablecoins&per_page=250&page=N
- *   Для определения базовой валюты берем vs_currency из набора ['usd','eur','gbp'] и
- *   выбираем ту, где цена ближе всего к 1 (допуск ±8%).
+ *   For base currency detection use vs_currency from ['usd','eur','gbp'] and
+ *   pick the one where price is closest to 1 (tolerance ±8%).
  *
- * Источник:
- * - На file:// протоколе ВСЕ запросы ОБЯЗАТЕЛЬНО проксируются через Cloudflare Worker
- * - buildUrl() автоматически выбирает proxy (file://) или прямой запрос (HTTP/HTTPS)
- * - ЗАПРЕЩЕНО блокировать запросы на file:// с early return
+ * FILE PROTOCOL:
+ * - On file:// protocol ALL requests MUST be proxied via Cloudflare Worker
+ * - buildUrl() auto-selects proxy (file://) or direct request (HTTP/HTTPS)
+ * - FORBIDDEN to block file:// requests with early return
  * - Details: `app/skills/file-protocol-cors-guard`
  *
- * Ограничения:
- * - CoinGecko лимиты (30-50 req/min). Используется общий RateLimiter (ЕИП).
- * - Нет UI-алертов по требованию; только консоль.
+ * LIMITATIONS:
+ * - CoinGecko limits (30-50 req/min). Shared RateLimiter used (SSOT).
+ * - No UI alerts on demand; console only.
  */
 
 (function() {
     'use strict';
 
     const MAX_PER_PAGE = 250;
-    // Минимизируем количество запросов, чтобы не ловить 429 и CORS без Access-Control-Allow-Origin.
-    // Берем только USD (CoinGecko категория stablecoins включает мультивалютные стейблы),
-    // одна страница до 250 записей.
+    // Minimize requests to avoid 429 and CORS without Access-Control-Allow-Origin.
+    // USD only (CoinGecko stablecoins category includes multi-currency stables),
+    // one page up to 250 records.
     const BASE_CURRENCIES = ['usd'];
-    const PEG_TOLERANCE = 0.08; // 8% допуск for определения базовой валюты
+    const PEG_TOLERANCE = 0.08; // 8% tolerance for base currency detection
     const CACHE_KEY = 'stablecoins-list';
 
     /**
-     * Построить URL с учетом прокси (for file://)
-     * На file:// using Cloudflare Worker proxy for CORS bypass
+     * Build URL with proxy consideration (for file://)
+     * On file:// using Cloudflare Worker proxy for CORS bypass
      */
     function buildUrl(path) {
         const isFile = window.location && (window.location.protocol === 'file:' || 
@@ -56,27 +56,27 @@
                        window.location.hostname === 'localhost' || 
                        window.location.hostname === '127.0.0.1');
 
-        // Если file:// — используем Cloudflare Worker proxy
+        // If file:// — use Cloudflare Worker proxy
         if (isFile && window.cloudflareConfig) {
-            // Разделяем путь и query параметры
+            // Split path and query params
             const [apiPath, query] = path.split('?');
             const params = query ? Object.fromEntries(new URLSearchParams(query)) : {};
 
             return window.cloudflareConfig.getApiProxyEndpoint('coingecko', apiPath, params);
         }
 
-        // Иначе — прямой запрос к CoinGecko
+        // Otherwise — direct request to CoinGecko
         const base = 'https://api.coingecko.com/api/v3';
         return `${base}${path}`;
     }
 
     /**
-     * Get общий rate limiter for CoinGecko
+     * Get shared rate limiter for CoinGecko
      */
     function getRateLimiter() {
         if (window.RateLimiter) {
-            // Используем те же лимиты, что и в CoinGeckoProvider (ЕИП)
-            // Но здесь мы берем конфигурацию из dataProvidersConfig, если она есть
+            // Use same limits as CoinGeckoProvider (SSOT)
+            // Here we take config from dataProvidersConfig if available
             let reqPerMin = 2;
             let reqPerSec = 0.048;
             if (window.dataProvidersConfig) {
@@ -102,7 +102,7 @@
         while (attempts < maxAttempts) {
             attempts++;
 
-            // Ожидаем rate limiter
+            // Wait for rate limiter
             if (limiter && typeof limiter.waitForToken === 'function') {
                 await limiter.waitForToken();
             } else if (limiter && typeof limiter.waitBeforeRequest === 'function') {
@@ -118,7 +118,7 @@
                             limiter.increaseTimeout();
                         }
                         if (attempts < maxAttempts) {
-                            // Экспоненциальная задержка: 10s, 20s, 40s, 80s
+                            // Exponential backoff: 10s, 20s, 40s, 80s
                             const delay = BASE_RETRY_DELAY * Math.pow(2, attempts - 1);
                             console.warn(`coingecko-stablecoins-loader: HTTP 429, попытка ${attempts} из ${maxAttempts}, ожидание ${Math.round(delay/1000)}s...`);
                             await new Promise(r => setTimeout(r, delay));
@@ -181,7 +181,7 @@
             console.warn('coingeckoStablecoinsLoader: cacheManager или coinsConfig not loadedы');
             return [];
         }
-        // Жесткий лимит 24 часа: блокируем запросы, если недавно уже был успешный
+        // Hard 24h limit: block requests if successful one was recent
         if (!forceRefresh && window.requestRegistry) {
             const minInterval = 24 * 60 * 60 * 1000;
             const allowed = window.requestRegistry.isAllowed('coingecko', 'stablecoins', { vs: BASE_CURRENCIES }, minInterval);
@@ -195,7 +195,7 @@
                 return [];
             }
         }
-        // Кэш
+        // Cache
         if (!forceRefresh) {
             const cached = await window.cacheManager.get(CACHE_KEY, { useVersioning: true });
             if (cached && Array.isArray(cached.items) && cached.expiresAt && cached.expiresAt > Date.now()) {
@@ -206,7 +206,7 @@
         }
 
         try {
-            // Сбор минимальный: только USD, первая страница
+            // Minimal fetch: USD only, first page
             const byId = new Map();
             for (const vsCurrency of BASE_CURRENCIES) {
                 const chunk = await fetchStablecoinsForCurrency(vsCurrency, 1);
@@ -226,7 +226,7 @@
                 }
             }
 
-            // Сохраняем в кэш с TTL
+            // Save to cache with TTL
             const payload = {
                 items: normalized,
                 expiresAt: Date.now() + ttl
@@ -245,7 +245,7 @@
                 const status = error.message && error.message.includes('429') ? 429 : 500;
                 window.requestRegistry.recordCall('coingecko', 'stablecoins', { vs: BASE_CURRENCIES }, status, false);
             }
-            // Если есть кэш без учета TTL — используем как fallback
+            // If cache exists regardless of TTL — use as fallback
             const cached = await window.cacheManager.get(CACHE_KEY, { useVersioning: true });
             if (cached && Array.isArray(cached.items)) {
                 window.coinsConfig.setStablecoins(cached.items);

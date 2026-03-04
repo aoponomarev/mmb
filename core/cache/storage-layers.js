@@ -1,47 +1,47 @@
 /**
  * ================================================================================================
- * STORAGE LAYERS - Разделение данных по слоям хранения
+ * STORAGE LAYERS - Data partitioning by storage layers
  * ================================================================================================
  *
- * PURPOSE: Распределение ключей кэша по хранилищам (localStorage/IndexedDB) в зависимости от объема и частоты доступа.
+ * PURPOSE: Distribute cache keys across storages (localStorage/IndexedDB) by size and access frequency.
  * @skill core/skills/cache-layer
  *
- * HOT (localStorage, ≤5MB) — синхронный доступ, быстрый:
- * - settings, theme, timezone, favorites, ui-state, active-tab — настройки и UI-состояние
- *   Причина: маленький объем (<10KB), частый доступ при каждом рендере/действии, синхронность важна
- * - icons-cache — объект {coinId: url}
- *   Причина: объем ~100-500KB, доступ при каждом отображении монеты, синхронность критична for рендеринга
+ * HOT (localStorage, ≤5MB) — synchronous access, fast:
+ * - settings, theme, timezone, favorites, ui-state, active-tab — settings and UI state
+ *   Reason: small size (<10KB), frequent access on every render/action, sync is important
+ * - icons-cache — object {coinId: url}
+ *   Reason: size ~100-500KB, access on every coin display, sync critical for rendering
  *
- * WARM (IndexedDB, ≤50MB) — асинхронный доступ, средний объем:
- * - coins-list — список всех монет из CoinGecko API
- *   Причина: объем 1-5MB (JSON), частый доступ for поиска/фильтрации, структурированные данные
- * - market-metrics — metrics рынка
- *   Причина: объем 100KB-2MB, частый доступ, обновляется регулярно
- * - api-cache — кэш API-ответов
- *   Причина: объем зависит от количества запросов, частый доступ, структурированные данные
+ * WARM (IndexedDB, ≤50MB) — async access, medium size:
+ * - coins-list — list of all coins from CoinGecko API
+ *   Reason: size 1-5MB (JSON), frequent access for search/filter, structured data
+ * - market-metrics — market metrics
+ *   Reason: size 100KB-2MB, frequent access, updated regularly
+ * - api-cache — API response cache
+ *   Reason: size depends on request count, frequent access, structured data
  *
- * COLD (IndexedDB, ≤500MB) — асинхронный доступ, большие объемы:
- * - time-series — time series цен
- *   Причина: объем 10-100MB+ (тысячи точек), редкий доступ (по требованию), нужны индексы for поиска
- * - history — история операций
- *   Причина: объем растет со временем, редкий доступ, нужны индексы
- * - portfolios, strategies — портфели и стратегии
- *   Причина: объем зависит от пользователя (can be большим), редкий доступ, структурированные данные
- * - correlations — корреляции между активами
- *   Причина: объем can be большим (матрицы), редкий доступ, вычисляемые данные
+ * COLD (IndexedDB, ≤500MB) — async access, large volumes:
+ * - time-series — price time series
+ *   Reason: size 10-100MB+ (thousands of points), rare access (on demand), indexes needed for search
+ * - history — operation history
+ *   Reason: size grows over time, rare access, indexes needed
+ * - portfolios, strategies — portfolios and strategies
+ *   Reason: size depends on user (can be large), rare access, structured data
+ * - correlations — correlations between assets
+ *   Reason: size can be large (matrices), rare access, computed data
  *
- * ДОБАВЛЕНИЕ НОВОГО КЛЮЧА:
- * - localStorage: синхронный доступ, лимит ~5MB, простые структуры
- * - IndexedDB: асинхронный доступ, большие объемы, структурированные данные, индексы
- * - Лимиты: защита от переполнения, приоритетная очистка (cold → warm → hot)
+ * ADDING A NEW KEY:
+ * - localStorage: sync access, ~5MB limit, simple structures
+ * - IndexedDB: async access, large volumes, structured data, indexes
+ * - Limits: overflow protection, priority cleanup (cold → warm → hot)
  *
- * ДОБАВЛЕНИЕ НОВОГО КЛЮЧА:
- * 1. Оценить объем (<100KB → hot, 100KB-10MB → warm, >10MB → cold)
- * 2. Оценить частоту доступа (при каждом рендере → hot/warm, по требованию → cold)
- * 3. Оценить тип данных (простые объекты → localStorage, массивы/структуры → IndexedDB)
- * 4. Добавить ключ в массив LAYERS.{layer}.keys
+ * ADDING A NEW KEY:
+ * 1. Estimate size (<100KB → hot, 100KB-10MB → warm, >10MB → cold)
+ * 2. Estimate access frequency (every render → hot/warm, on demand → cold)
+ * 3. Estimate data type (simple objects → localStorage, arrays/structures → IndexedDB)
+ * 4. Add key to LAYERS.{layer}.keys array
  *
- * ССЫЛКА: General principles кэширования: core/skills/cache-layer
+ * REFERENCE: General caching principles: core/skills/cache-layer
  */
 
 (function() {
@@ -57,7 +57,7 @@
                 'ui-state',
                 'active-tab',
                 'theme',
-                'icons-cache' // Иконки монет (объект {coinId: url})
+                'icons-cache' // Coin icons (object {coinId: url})
             ]
         },
         warm: {
@@ -66,7 +66,7 @@
             keys: [
                 'coins-list',
                 'market-metrics',
-                'api-cache' // Кэш API-ответов
+                'api-cache' // API response cache
             ]
         },
         cold: {
@@ -83,9 +83,9 @@
     };
 
     /**
-     * Get конфигурацию слоя for ключа
-     * @param {string} key - ключ кэша
-     * @returns {Object|null} - конфигурация слоя или null
+     * Get layer config for key
+     * @param {string} key - cache key
+     * @returns {Object|null} - layer config or null
      */
     function getLayerForKey(key) {
         for (const [layerName, config] of Object.entries(LAYERS)) {
@@ -93,14 +93,14 @@
                 return { layer: layerName, ...config };
             }
         }
-        // По умолчанию hot for неизвестных ключей
+        // Default hot for unknown keys
         return { layer: 'hot', ...LAYERS.hot };
     }
 
     /**
-     * Get объект хранилища for слоя
-     * @param {string} layer - 'hot', 'warm' или 'cold'
-     * @returns {Object|null} - объект хранилища с методами get/set/has/delete/clear
+     * Get storage object for layer
+     * @param {string} layer - 'hot', 'warm' or 'cold'
+     * @returns {Object|null} - storage object with get/set/has/delete/clear methods
      */
     function getStorage(layer) {
         const config = LAYERS[layer];
@@ -115,15 +115,15 @@
                         const item = localStorage.getItem(key);
                         if (!item) return null;
 
-                        // Пытаемся распарсить как JSON
+                        // Try to parse as JSON
                         try {
                             const parsed = JSON.parse(item);
-                            // Если это объект с полями data/version/timestamp - это новый формат cacheManager
-                            // Если это строка или примитив - это старое значение, нужно обернуть
+                            // If object has data/version/timestamp - new cacheManager format
+                            // If string or primitive - old value, need to wrap
                             if (parsed && typeof parsed === 'object' && (parsed.data !== undefined || parsed.version !== undefined)) {
                                 return parsed;
                             }
-                            // Старое значение (строка или примитив) - оборачиваем в новый формат
+                            // Old value (string or primitive) - wrap in new format
                             return {
                                 data: parsed,
                                 version: '1.0.0',
@@ -131,7 +131,7 @@
                                 expiresAt: null
                             };
                         } catch (parseError) {
-                            // Если не JSON - это старая строка, оборачиваем
+                            // If not JSON - old string, wrap it
                             return {
                                 data: item,
                                 version: '1.0.0',
@@ -149,7 +149,7 @@
                         localStorage.setItem(key, JSON.stringify(value));
                         return true;
                     } catch (error) {
-                        // Переполнение localStorage
+                        // localStorage overflow
                         console.error(`localStorage.set(${key}):`, error);
                         return false;
                     }
@@ -162,14 +162,14 @@
                     return true;
                 },
                 clear: async () => {
-                    // Очистить только ключи этого слоя
+                    // Clear only keys of this layer
                     for (const key of config.keys) {
                         localStorage.removeItem(key);
                     }
                     return true;
                 },
                 keys: async () => {
-                    // Get все ключи из localStorage
+                    // Get all keys from localStorage
                     const allKeys = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
@@ -181,11 +181,11 @@
                 }
             };
         } else if (config.type === 'indexedDB') {
-            // IndexedDB будет реализован позже
-            // Пока возвращаем заглушку
+            // IndexedDB will be implemented later
+            // For now return stub
             return {
                 get: async (key) => {
-                    console.warn(`IndexedDB for ${layer} ещё не реализован, используем localStorage`);
+                    console.warn(`IndexedDB for ${layer} not yet implemented, using localStorage`);
                     try {
                         const item = localStorage.getItem(`idb_${layer}_${key}`);
                         return item ? JSON.parse(item) : null;
@@ -194,7 +194,7 @@
                     }
                 },
                 set: async (key, value) => {
-                    console.warn(`IndexedDB for ${layer} ещё не реализован, используем localStorage`);
+                    console.warn(`IndexedDB for ${layer} not yet implemented, using localStorage`);
                     try {
                         localStorage.setItem(`idb_${layer}_${key}`, JSON.stringify(value));
                         return true;
@@ -216,13 +216,13 @@
                     return true;
                 },
                 keys: async () => {
-                    // Get все ключи for этого слоя из localStorage (fallback for IndexedDB)
+                    // Get all keys for this layer from localStorage (fallback for IndexedDB)
                     const prefix = `idb_${layer}_`;
                     const allKeys = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
                         if (key && key.startsWith(prefix)) {
-                            // Убираем префикс
+                            // Remove prefix
                             allKeys.push(key.substring(prefix.length));
                         }
                     }

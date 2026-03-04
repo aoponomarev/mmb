@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * STORAGE RESET MODAL BODY COMPONENT - Компонент body модального окна сброса кэша
+ * STORAGE RESET MODAL BODY COMPONENT - Cache reset modal body
  * ================================================================================================
  *
- * PURPOSE: Выборочное удаление данных из кэша по категориям.
+ * PURPOSE: Selective cache deletion by category.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
@@ -11,26 +11,26 @@
  *
  * Skill: core/skills/cache-layer
  *
- * ОСОБЕННОСТИ:
- * - Чекбоксы for выбора категорий кэша
- * - Автоматический выбор всех категорий при выборе "Полностью"
- * - Регистрация кнопки "Сбросить выбранное" через modalApi
- * - Удаление данных через cacheManager.delete()
+ * FEATURES:
+ * - Checkboxes for cache category selection
+ * - Auto-select all categories when "Full" chosen
+ * - Register "Reset selected" button via modalApi
+ * - Delete data via cacheManager.delete()
  *
- * КАТЕГОРИИ:
- * - Настройки API: yandex-api-key, ai-provider, yandex-folder-id, yandex-model, yandex-proxy-type
- * - Настройки интерфейса: theme, timezone, favorites, ui-state, active-tab, translation-language
- * - Портфели: portfolios, strategies
- * - Рыночные данные: market-metrics, coins-list, top-coins, top-coins-by-market-cap, top-coins-by-volume, stablecoins-list, vix-index, fear-greed-index, time-series, correlations
- * - История операций: history
- * - Кэш и ресурсы: api-cache, icons-cache, crypto-news-state
- * - Переводы: tooltips-*, app-messages-translations-*
- * - Полностью: все категории КРОМЕ API-ключей (требуют явного выбора) + settings
+ * CATEGORIES:
+ * - API settings: yandex-api-key, ai-provider, yandex-folder-id, yandex-model, yandex-proxy-type
+ * - UI settings: theme, timezone, favorites, ui-state, active-tab, translation-language
+ * - Portfolios: portfolios, strategies
+ * - Market data: market-metrics, coins-list, top-coins, top-coins-by-market-cap, top-coins-by-volume, stablecoins-list, vix-index, fear-greed-index, time-series, correlations
+ * - Operation history: history
+ * - Cache and resources: api-cache, icons-cache, crypto-news-state
+ * - Translations: tooltips-*, app-messages-translations-*
+ * - Full: all categories EXCEPT API keys (require explicit selection) + settings
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -138,8 +138,8 @@ window.storageResetModalBody = {
     watch: {
         'selectedCategories.all'(newVal) {
             if (newVal) {
-                // При выборе "Полностью" выбираем все категории КРОМЕ API-ключей —
-                // они требуют явного ручного подтверждения, чтобы не слетали случайно.
+                // When "Full" selected, select all categories EXCEPT API keys —
+                // they require explicit manual confirmation to avoid accidental loss.
                 this.selectedCategories.uiSettings = true;
                 this.selectedCategories.portfolios = true;
                 this.selectedCategories.marketData = true;
@@ -151,7 +151,7 @@ window.storageResetModalBody = {
         selectedCategories: {
             deep: true,
             handler(newVal) {
-                // При снятии любого чекбокса (кроме apiSettings) снимаем "Полностью"
+                // When any checkbox (except apiSettings) unchecked, uncheck "Full"
                 if (newVal.all && (!newVal.uiSettings || !newVal.portfolios ||
                     !newVal.marketData || !newVal.history || !newVal.cacheResources || !newVal.translations)) {
                     this.selectedCategories.all = false;
@@ -189,7 +189,7 @@ window.storageResetModalBody = {
                     'postgres-sync-enabled'
                 ]);
 
-                // Настройки API (критичные ключи и пути защищены от удаления)
+                // API settings (critical keys and paths protected from deletion)
                 if (this.selectedCategories.apiSettings || this.selectedCategories.all) {
                     keysToDelete.push(
                         'yandex-api-key',
@@ -200,7 +200,7 @@ window.storageResetModalBody = {
                     );
                 }
 
-                // Настройки интерфейса
+                // UI settings
                 if (this.selectedCategories.uiSettings || this.selectedCategories.all) {
                     keysToDelete.push(
                         'theme',
@@ -212,12 +212,12 @@ window.storageResetModalBody = {
                     );
                 }
 
-                // Портфели
+                // Portfolios
                 if (this.selectedCategories.portfolios || this.selectedCategories.all) {
                     keysToDelete.push('portfolios', 'strategies');
                 }
 
-                // Рыночные данные
+                // Market data
                 if (this.selectedCategories.marketData || this.selectedCategories.all) {
                     keysToDelete.push(
                         'market-metrics',
@@ -235,12 +235,12 @@ window.storageResetModalBody = {
                     );
                 }
 
-                // История операций
+                // Operation history
                 if (this.selectedCategories.history || this.selectedCategories.all) {
                     keysToDelete.push('history');
                 }
 
-                // Кэш и ресурсы
+                // Cache and resources
                 if (this.selectedCategories.cacheResources || this.selectedCategories.all) {
                     keysToDelete.push(
                         'api-cache',
@@ -249,18 +249,18 @@ window.storageResetModalBody = {
                     );
                 }
 
-                // Переводы
+                // Translations
                 if (this.selectedCategories.translations || this.selectedCategories.all) {
-                    // Удаляем все ключи переводов (tooltips-* и app-messages-translations-*)
+                    // Delete all translation keys (tooltips-* and app-messages-translations-*)
                     if (window.storageLayers) {
-                        // Получаем все ключи из всех слоев
+                        // Get all keys from all layers
                         for (const layerName of ['hot', 'warm', 'cold']) {
                             try {
                                 const storage = window.storageLayers.getStorage(layerName);
                                 if (storage) {
                                     const allKeys = await storage.keys();
                                     for (const key of allKeys) {
-                                        // Проверяем версионированные ключи
+                                        // Check versioned keys
                                         if (key.startsWith('v:')) {
                                             const parts = key.split(':');
                                             if (parts.length >= 3) {
@@ -284,13 +284,13 @@ window.storageResetModalBody = {
                     }
                 }
 
-                // Полностью - добавляем settings
+                // Full - add settings
                 if (this.selectedCategories.all) {
                     keysToDelete.push('settings');
                 }
 
-                // При сбросе рыночных данных или полном сбросе — очищаем журнал запросов,
-                // чтобы снять блокировку rate limit (12-часовая блокировка после 429).
+                // On market data or full reset — clear request journal
+                // to lift rate limit block (12-hour block after 429).
                 if ((this.selectedCategories.marketData || this.selectedCategories.all) && window.requestRegistry) {
                     window.requestRegistry.clear();
                 }
@@ -320,7 +320,7 @@ window.storageResetModalBody = {
                             }
                         }
                     } catch (error) {
-                        console.error(`Ошибка удаления ключа ${key}:`, error);
+                        console.error(`Error deleting key ${key}:`, error);
                     }
                 }
 
@@ -329,11 +329,11 @@ window.storageResetModalBody = {
                 }
                 alert(`Удалено ${deletedCount} из ${uniqueKeys.length} ключей кэша.`);
 
-                // Ключи вне cacheManager, которые тоже должны переживать reset
-                // (localStorage-токен и backup с ключами)
-                // Ничего не удаляем намеренно.
+                // Keys outside cacheManager that should survive reset
+                // (localStorage token and key backup)
+                // Intentionally delete nothing.
 
-                // Закрываем модальное окно
+                // Close modal
                 const modalElement = this.$el.closest('.modal');
                 if (modalElement && window.bootstrap && window.bootstrap.Modal) {
                     const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
@@ -345,7 +345,7 @@ window.storageResetModalBody = {
                     }
                 }
             } catch (error) {
-                console.error('Ошибка при сбросе кэша:', error);
+                console.error('Cache reset error:', error);
                 alert('Произошла ошибка при удалении данных из кэша.');
             } finally {
                 this.isResetting = false;
@@ -355,7 +355,7 @@ window.storageResetModalBody = {
     },
 
     mounted() {
-        // Регистрируем кнопку "Сбросить выбранное" в footer
+        // Register "Reset selected" button in footer
         if (this.modalApi) {
             this.modalApi.registerButton('reset', {
                 locations: ['footer'],
@@ -368,7 +368,7 @@ window.storageResetModalBody = {
     },
 
     beforeUnmount() {
-        // Удаляем кнопку при размонтировании
+        // Remove button on unmount
         if (this.modalApi) {
             this.modalApi.removeButton('reset');
         }

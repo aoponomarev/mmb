@@ -1,29 +1,29 @@
 /**
  * ================================================================================================
- * AI API SETTINGS TEMPLATE - Шаблон компонента настроек AI API провайдеров
+ * AI API SETTINGS TEMPLATE - AI API provider settings component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента настроек AI API провайдеров (ai-api-settings).
- * Провайдеры: GitHub, YandexGPT, PostgreSQL.
+ * PURPOSE: Template for AI API provider settings (ai-api-settings).
+ * Providers: GitHub, YandexGPT, PostgreSQL.
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
+ * PROBLEM: Template must be in DOM before Vue.js init for component to work.
  *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="ai-api-settings-template".
+ * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
+ * on load as <script type="text/x-template"> with id="ai-api-settings-template".
  *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="ai-api-settings-template"
- * - Компонент использует шаблон через template: '#ai-api-settings-template'
+ * HOW:
+ * - Template defined as string in TEMPLATE constant
+ * - On load, <script type="text/x-template"> element is auto-created
+ * - Element added to document.body with id="ai-api-settings-template"
+ * - Component uses template via template: '#ai-api-settings-template'
  *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Radio buttons for выбора провайдера (GitHub, YandexGPT, PostgreSQL)
- * - Условное отображение полей настроек в зависимости от выбранного провайдера
- * - Поля ввода API ключей (password/text с переключателем видимости)
- * - Выбор моделей через select
- * - Компактный и аскетичный интерфейс
+ * TEMPLATE FEATURES:
+ * HTML structure:
+ * - Radio buttons for provider selection (GitHub, YandexGPT, PostgreSQL)
+ * - Conditional settings fields based on selected provider
+ * - API key input fields (password/text with visibility toggle)
+ * - Model selection via select
+ * - Compact minimal interface
  *
  * REFERENCES:
  * - General principles работы с шаблонами: `is/skills/arch-foundationarchitecture-dom-markup.md` (раздел "Вынос x-template шаблонов")
@@ -34,7 +34,7 @@
     'use strict';
 
     const TEMPLATE = `<div class="modal-body-fixed-size">
-    <!-- Дубликат переключателя в заголовок модального окна -->
+    <!-- Duplicate toggle in modal header -->
     <Teleport to="#aiApiModal-header-extra" v-if="isMounted">
         <div class="btn-group btn-group-sm modal-header-tabs-group" role="group" aria-label="Выбор источника API ключа (заголовок)">
             <input
@@ -73,7 +73,7 @@
         </div>
     </Teleport>
 
-    <!-- Кнопки экспорта/импорта в футере модального окна -->
+    <!-- Export/import buttons in modal footer -->
     <Teleport to="#aiApiModal-footer-extra" v-if="isMounted">
         <button
             type="button"
@@ -114,7 +114,7 @@
         </div>
     </Teleport>
 
-    <!-- Настройки YandexGPT -->
+    <!-- YandexGPT settings -->
     <div v-if="activeTab === 'yandex'">
         <div class="mb-3">
             <label :for="formIdPrefix + '-yandex-api-key'" class="form-label">API ключ Yandex</label>
@@ -159,7 +159,7 @@
         </div>
     </div>
 
-    <!-- Настройки PostgreSQL -->
+    <!-- PostgreSQL settings -->
     <div v-if="activeTab === 'postgres'">
         <div class="mb-3">
             <div class="form-check form-switch">
@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <!-- Настройки GitHub -->
+    <!-- GitHub settings -->
     <div v-if="activeTab === 'github'">
         <div class="mb-3">
             <label :for="formIdPrefix + '-github-token'" class="form-label">GitHub token</label>
@@ -237,7 +237,7 @@
     </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -247,7 +247,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

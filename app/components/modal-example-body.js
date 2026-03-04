@@ -1,18 +1,18 @@
 /**
  * ================================================================================================
- * MODAL EXAMPLE BODY COMPONENT - Компонент-пример for демонстрации системы управления кнопками
+ * MODAL EXAMPLE BODY COMPONENT - Example component for modal button system demo
  * ================================================================================================
  *
- * PURPOSE: Демонстрация использования системы управления кнопками модального окна.
+ * PURPOSE: Demo of modal button management system.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  *
- * ОСОБЕННОСТИ:
- * - Регистрация кнопок через inject modalApi
- * - Реактивное обновление состояния кнопок при изменении данных формы
- * - Демонстрация кнопок в header и footer одновременно
+ * FEATURES:
+ * - Button registration via inject modalApi
+ * - Reactive button state updates on form data change
+ * - Buttons in header and footer simultaneously
  *
 */
 
@@ -60,7 +60,7 @@ window.modalExampleBody = {
     },
 
     computed: {
-        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Unique prefix for form element IDs (avoid duplicates on modal reopen)
         formIdPrefix() {
             return `modal-example-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -68,7 +68,7 @@ window.modalExampleBody = {
             return JSON.stringify(this.formData) !== JSON.stringify(this.initialData);
         },
         isValid() {
-            // Форма всегда валидна (нет обязательных полей)
+            // Form always valid (no required fields)
             return true;
         }
     },
@@ -77,7 +77,7 @@ window.modalExampleBody = {
         formData: {
             deep: true,
             handler() {
-                // Реактивно обновляем состояние кнопок при изменении формы
+                // Reactively update button state on form change
                 if (this.modalApi) {
                     this.modalApi.updateButton('save', {
                         disabled: !this.hasChanges || !this.isValid
@@ -90,19 +90,19 @@ window.modalExampleBody = {
     methods: {
         handleCancel() {
             if (this.hasChanges) {
-                // Восстанавливаем исходные значения
+                // Restore initial values
                 this.formData = JSON.parse(JSON.stringify(this.initialData));
             } else {
-                // Закрываем модальное окно
+                // Close modal
                 if (this.$parent.$refs && this.$parent.$refs.exampleModal) {
                     this.$parent.$refs.exampleModal.hide();
                 }
             }
         },
         handleSave() {
-            // Сохраняем данные
+            // Save data
             this.initialData = JSON.parse(JSON.stringify(this.formData));
-            console.log('Данные сохранены:', this.formData);
+            console.log('Data saved:', this.formData);
 
             // Закрываем модальное окно
             if (this.$parent.$refs && this.$parent.$refs.exampleModal) {
@@ -110,25 +110,25 @@ window.modalExampleBody = {
             }
         },
         handleExport() {
-            console.log('Экспорт данных:', this.formData);
+            console.log('Export data:', this.formData);
         }
     },
 
     mounted() {
-        // Регистрируем кнопки при монтировании
+        // Register buttons on mount
         if (this.modalApi) {
-            // Кнопка "Сохранить" в header и footer
+            // "Save" button in header and footer
             this.modalApi.registerButton('save', {
                 locations: ['header', 'footer'],
                 label: 'Сохранить',
                 variant: 'primary',
-                icon: 'fas fa-save', // Иконка for header версии
-                tooltipIcon: 'Сохранить', // Подсказка for иконочной кнопки в header
+                icon: 'fas fa-save', // Icon for header version
+                tooltipIcon: 'Сохранить', // Tooltip for icon button in header
                 disabled: !this.hasChanges || !this.isValid,
                 onClick: () => this.handleSave()
             });
 
-            // Кнопка "Отмена" только в footer
+            // "Cancel" button in footer only
             this.modalApi.registerButton('cancel', {
                 locations: ['footer'],
                 label: 'Отмена',
@@ -137,20 +137,20 @@ window.modalExampleBody = {
                 onClick: () => this.handleCancel()
             });
 
-            // Кнопка "Экспорт" только в header
+            // "Export" button in header only
             this.modalApi.registerButton('export', {
                 locations: ['header'],
                 label: 'Экспорт',
                 variant: 'outline-primary',
                 icon: 'fas fa-download',
-                tooltipIcon: 'Экспорт данных', // Подсказка for иконочной кнопки
+                tooltipIcon: 'Экспорт данных', // Tooltip for icon button
                 onClick: () => this.handleExport()
             });
         }
     },
 
     beforeUnmount() {
-        // Удаляем кнопки при размонтировании
+        // Remove buttons on unmount
         if (this.modalApi) {
             this.modalApi.removeButton('save');
             this.modalApi.removeButton('cancel');

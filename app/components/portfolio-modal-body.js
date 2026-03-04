@@ -1,23 +1,22 @@
 /**
  * ================================================================================================
- * PORTFOLIO MODAL BODY COMPONENT - Компонент body модального окна создания/редактирования портфеля
+ * PORTFOLIO MODAL BODY COMPONENT - Modal body for portfolio create/edit
  * ================================================================================================
  *
- * PURPOSE: Интеграция формы портфеля с системой управления кнопками модального окна.
+ * PURPOSE: Integrate portfolio form with modal button management.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: core/skills/domain-portfolio
  *
- * ОСОБЕННОСТИ:
- * - Форма for создания/редактирования портфеля (название, описание, активы)
- * - Поддерживает состояние "Сохранено, закрыть?" for кнопки "Сохранить"
- * - Реактивно обновляет состояние кнопок при изменении данных формы
- * - Управляет логикой отмены (восстановление исходных значений)
- * - Поддерживает состояние "Сохранено, закрыть?" for кнопки "Сохранить"
+ * FEATURES:
+ * - Form for create/edit portfolio (name, description, assets)
+ * - Supports "Saved, close?" state for Save button
+ * - Reactive button state updates on form data change
+ * - Cancel logic (restore initial values)
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Props:
  * - name (String, required) — текущее название портфеля (v-model)
@@ -31,7 +30,7 @@
  * - onCancel (Function, required) — функция отмены
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -153,8 +152,8 @@ window.portfolioModalBody = {
         return {
             formName: this.name,
             formDescription: this.description,
-            formAssets: this.assets.map(asset => ({ ...asset })), // Глубокое копирование
-            isSaved: false // Состояние успешного сохранения
+            formAssets: this.assets.map(asset => ({ ...asset })), // Deep copy
+            isSaved: false // Successful save state
         };
     },
 
@@ -171,31 +170,31 @@ window.portfolioModalBody = {
         },
         assets: {
             handler(newVal) {
-                // Проверяем, что это действительно новое значение
+                // Ensure it's actually a new value
                 if (JSON.stringify(this.formAssets) !== JSON.stringify(newVal)) {
-                    this.formAssets = newVal.map(asset => ({ ...asset })); // Глубокое копирование
+                    this.formAssets = newVal.map(asset => ({ ...asset })); // Deep copy
                 }
             },
             deep: true,
             immediate: false
         },
         initialName(newVal) {
-            // При изменении initialName сбрасываем форму, если она не была сохранена
+            // On initialName change reset form if not saved
             if (!this.isSaved) {
                 this.formName = newVal;
             }
         },
         initialDescription(newVal) {
-            // При изменении initialDescription сбрасываем форму, если она не была сохранена
+            // On initialDescription change reset form if not saved
             if (!this.isSaved) {
                 this.formDescription = newVal;
             }
         },
         initialAssets: {
             handler(newVal) {
-                // При изменении initialAssets сбрасываем форму, если она не была сохранена
+                // On initialAssets change reset form if not saved
                 if (!this.isSaved) {
-                    this.formAssets = newVal.map(asset => ({ ...asset })); // Глубокое копирование
+                    this.formAssets = newVal.map(asset => ({ ...asset })); // Deep copy
                 }
             },
             deep: true,
@@ -203,7 +202,7 @@ window.portfolioModalBody = {
         },
         formName() {
             this.$emit('update:name', this.formName);
-            // Сбрасываем состояние сохранения при изменении полей
+            // Reset save state on field change
             if (this.isSaved) {
                 this.isSaved = false;
             }
@@ -211,7 +210,7 @@ window.portfolioModalBody = {
         },
         formDescription() {
             this.$emit('update:description', this.formDescription);
-            // Сбрасываем состояние сохранения при изменении полей
+            // Reset save state on field change
             if (this.isSaved) {
                 this.isSaved = false;
             }
@@ -219,8 +218,8 @@ window.portfolioModalBody = {
         },
         formAssets: {
             handler() {
-                this.$emit('update:assets', this.formAssets.map(asset => ({ ...asset }))); // Глубокое копирование
-                // Сбрасываем состояние сохранения при изменении полей
+                this.$emit('update:assets', this.formAssets.map(asset => ({ ...asset }))); // Deep copy
+                // Reset save state on field change
                 if (this.isSaved) {
                     this.isSaved = false;
                 }
@@ -231,7 +230,7 @@ window.portfolioModalBody = {
     },
 
     computed: {
-        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Unique prefix for form element IDs (avoid duplicates on modal reopen)
         formIdPrefix() {
             return `portfolio-modal-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -250,14 +249,14 @@ window.portfolioModalBody = {
             if (!this.modalApi) return;
 
             if (this.isSaved) {
-                // Состояние "Сохранено, закрыть?"
+                // "Saved, close?" state
                 this.modalApi.updateButton('save', {
                     label: 'Сохранено, закрыть?',
                     variant: 'success',
                     disabled: false
                 });
             } else {
-                // Обычное состояние "Сохранить"/"Создать"
+                // Normal "Save"/"Create" state
                 const label = this.isEditing ? 'Сохранить' : 'Создать';
                 this.modalApi.updateButton('save', {
                     label: label,
@@ -269,13 +268,13 @@ window.portfolioModalBody = {
 
         handleCancel() {
             if (this.hasChanges) {
-                // Восстанавливаем исходные значения
+                // Restore initial values
                 this.formName = this.initialName;
                 this.formDescription = this.initialDescription;
-                this.formAssets = this.initialAssets.map(asset => ({ ...asset })); // Глубокое копирование
+                this.formAssets = this.initialAssets.map(asset => ({ ...asset })); // Deep copy
                 this.$emit('update:name', this.initialName);
                 this.$emit('update:description', this.initialDescription);
-                this.$emit('update:assets', this.initialAssets.map(asset => ({ ...asset }))); // Глубокое копирование
+                this.$emit('update:assets', this.initialAssets.map(asset => ({ ...asset }))); // Deep copy
             } else {
                 // Закрываем модальное окно
                 this.onCancel();
@@ -283,14 +282,14 @@ window.portfolioModalBody = {
         },
 
         handleSave() {
-            // Если уже сохранено - закрываем модальное окно
+            // If already saved - close modal
             if (this.isSaved) {
-                // Закрываем модальное окно через Bootstrap API
+                // Close modal via Bootstrap API
                 const modalElement = this.$el.closest('.modal');
                 if (modalElement && window.bootstrap && window.bootstrap.Modal) {
                     const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
                     if (modalInstance) {
-                        // Убираем фокус перед закрытием
+                        // Remove focus before close
                         if (document.activeElement && document.activeElement.blur) {
                             document.activeElement.blur();
                         }
@@ -304,10 +303,10 @@ window.portfolioModalBody = {
                 return;
             }
 
-            // Сохраняем данные
+            // Save data
             this.onSave(this.formName.trim(), this.formDescription.trim(), this.formAssets);
 
-            // Переводим кнопку в состояние "Сохранено, закрыть?"
+            // Switch button to "Saved, close?" state
             this.isSaved = true;
             this.updateSaveButton();
         },
@@ -325,14 +324,14 @@ window.portfolioModalBody = {
     },
 
     mounted() {
-        // Инициализируем форму из props
+        // Init form from props
         this.formName = this.name || this.initialName || '';
         this.formDescription = this.description || this.initialDescription || '';
         this.formAssets = (this.assets || this.initialAssets || []).map(asset => ({ ...asset }));
 
-        // Регистрируем кнопки при монтировании
+        // Register buttons on mount
         if (this.modalApi) {
-            // Кнопка "Отмена" только в footer
+            // "Cancel" button in footer only
             this.modalApi.registerButton('cancel', {
                 locations: ['footer'],
                 label: 'Отмена',
@@ -341,7 +340,7 @@ window.portfolioModalBody = {
                 onClick: () => this.handleCancel()
             });
 
-            // Кнопка "Сохранить"/"Создать" только в footer
+            // "Save"/"Create" button in footer only
             const saveLabel = this.isEditing ? 'Сохранить' : 'Создать';
             this.modalApi.registerButton('save', {
                 locations: ['footer'],
@@ -352,14 +351,14 @@ window.portfolioModalBody = {
             });
         }
 
-        // Обновляем состояние кнопок после инициализации
+        // Update button state after init
         this.$nextTick(() => {
             this.updateSaveButton();
         });
     },
 
     beforeUnmount() {
-        // Удаляем кнопки при размонтировании
+        // Remove buttons on unmount
         if (this.modalApi) {
             this.modalApi.removeButton('cancel');
             this.modalApi.removeButton('save');

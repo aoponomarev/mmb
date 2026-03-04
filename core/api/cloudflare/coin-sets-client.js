@@ -132,9 +132,9 @@
         }
 
         /**
-         * Get набор монет по ID
-         * @param {number} id - ID набора
-         * @returns {Promise<Object>} Набор монет
+         * Get coin set by ID
+         * @param {number} id - Set ID
+         * @returns {Promise<Object>} Coin set
          */
         async getCoinSet(id) {
             try {
@@ -163,9 +163,9 @@
         }
 
         /**
-         * Create new набор монет
-         * @param {Object} coinSetData - Данные набора { name, description, coin_ids, is_active, provider, type }
-         * @returns {Promise<Object>} Созданный набор
+         * Create new coin set
+         * @param {Object} coinSetData - Set data { name, description, coin_ids, is_active, provider, type }
+         * @returns {Promise<Object>} Created set
          */
         async createCoinSet(coinSetData) {
             try {
@@ -195,10 +195,10 @@
         }
 
         /**
-         * Update набор монет
-         * @param {number} id - ID набора
-         * @param {Object} updates - Обновляемые поля
-         * @returns {Promise<Object>} Обновлённый набор
+         * Update coin set
+         * @param {number} id - Set ID
+         * @param {Object} updates - Fields to update
+         * @returns {Promise<Object>} Updated set
          */
         async updateCoinSet(id, updates) {
             try {
@@ -228,9 +228,9 @@
         }
 
         /**
-         * Delete набор монет
-         * @param {number} id - ID набора
-         * @returns {Promise<boolean>} Успех операции
+         * Delete coin set
+         * @param {number} id - Set ID
+         * @returns {Promise<boolean>} Operation success
          */
         async deleteCoinSet(id) {
             try {
@@ -258,10 +258,10 @@
         }
 
         /**
-         * Archive/unarchive набор монет
-         * @param {number} id - ID набора
+         * Archive/unarchive coin set
+         * @param {number} id - Set ID
          * @param {boolean} isActive - true = unarchive, false = archive
-         * @returns {Promise<Object>} Обновлённый набор
+         * @returns {Promise<Object>} Updated set
          */
         async toggleCoinSet(id, isActive) {
             try {
@@ -291,7 +291,7 @@
         }
     }
 
-    // Экспорт
+    // Export
     window.coinSetsClient = new CoinSetsClient();
     console.log('✅ coin-sets-client loaded');
 })();

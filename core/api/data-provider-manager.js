@@ -1,30 +1,30 @@
 /**
  * ================================================================================================
- * DATA PROVIDER MANAGER - Менеджер for переключения между провайдерами данных
+ * DATA PROVIDER MANAGER - Manager for switching between data providers
  * ================================================================================================
  * // @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-dual-channel-fallback
  *
- * PURPOSE: Единая точка доступа for работы с разными провайдерами данных о монетах
- * (CoinGecko, CoinMarketCap, Binance и т.д.). Управляет переключением между провайдерами
- * и предоставляет единый интерфейс.
+ * PURPOSE: Single access point for coin data providers
+ * (CoinGecko, CoinMarketCap, Binance, etc.). Manages provider switching
+ * and provides unified interface.
  *
- * ОСОБЕННОСТИ:
- * - Дефолтный провайдер: CoinGecko
- * - Хранение текущего провайдера в cacheManager ('data-provider')
- * - Хранение API ключей отдельно for каждого провайдера в localStorage
- * - API ключи хранятся в JSON объекте: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
+ * FEATURES:
+ * - Default provider: CoinGecko
+ * - Current provider stored in cacheManager ('data-provider')
+ * - API keys stored separately per provider in localStorage
+ * - API keys in JSON: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
  *
  * USAGE:
- * // Get топ 10 монет через текущий провайдер
+ * // Get top 10 coins via current provider
  * const coins = await window.dataProviderManager.getTopCoins(10);
  *
- * // Переключить провайдера
+ * // Switch provider
  * await window.dataProviderManager.setProvider('coingecko');
  *
- * // Get текущий провайдер
+ * // Get current provider
  * const provider = await window.dataProviderManager.getCurrentProvider();
  *
- * // Set API ключ for провайдера
+ * // Set API key for provider
  * await window.dataProviderManager.setApiKey('coingecko', 'my-api-key');
  *
 */
@@ -33,13 +33,13 @@
     'use strict';
 
     /**
-     * Менеджер провайдеров данных о монетах
+     * Coin data providers manager
      */
     class DataProviderManager {
         constructor() {
             this.providers = {};
-            this.defaultProvider = 'coingecko'; // CoinGecko по умолчанию
-            this.apiKeysStorageKey = 'data-provider-keys'; // Ключ for localStorage
+            this.defaultProvider = 'coingecko'; // CoinGecko by default
+            this.apiKeysStorageKey = 'data-provider-keys'; // Key for localStorage
         }
 
         isFileProtocol() {
@@ -87,14 +87,14 @@
             if (window.YandexCacheProvider) {
                 this.providers['yandex-cache'] = new window.YandexCacheProvider();
             }
-            // Будущие провайдеры:
+            // Future providers:
             // if (window.CoinMarketCapProvider) {
             //     this.providers['coinmarketcap'] = new window.CoinMarketCapProvider();
             // }
         }
 
         /**
-         * Get текущий активный провайдер
+         * Get current active provider
          * @returns {Promise<BaseDataProvider>}
          */
         async getCurrentProvider() {
@@ -103,7 +103,7 @@
         }
 
         /**
-         * Get имя текущего провайдера
+         * Get current provider name
          * @returns {Promise<string>}
          */
         async getCurrentProviderName() {
@@ -120,7 +120,7 @@
         }
 
         /**
-         * Set активный провайдер
+         * Set active provider
          * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
          * @returns {Promise<void>}
          */
@@ -134,17 +134,17 @@
         }
 
         /**
-         * Get топ N монет через текущий провайдер
-         * @param {number} count - Количество монет (1-250)
-         * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * Get top N coins via current provider
+         * @param {number} count - Coin count (1-250)
+         * @param {string} sortBy - Sort: 'market_cap' | 'volume'
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Normalized coin data array
          */
         async getTopCoins(count = 100, sortBy = 'market_cap', options = {}) {
             const preferYandexFirst = options.preferYandexFirst !== false;
             const allowCoinGeckoFallback = typeof options.allowCoinGeckoFallback === 'boolean'
                 ? options.allowCoinGeckoFallback
-                : !this.isFileProtocol(); // На file:// по умолчанию не дергаем CoinGecko на старте
+                : !this.isFileProtocol(); // On file:// do not hit CoinGecko on startup by default
             const emitProgress = (payload) => {
                 if (!options || typeof options.onProgress !== 'function') return;
                 try {
@@ -214,21 +214,21 @@
                 throw new Error('Нет доступного провайдера данных for getTopCoins');
             }
 
-            // ПРОВЕРКА ЖУРНАЛА (Request Registry)
+            // REQUEST REGISTRY CHECK
             if (window.requestRegistry) {
-                // Минимальный интервал из ssot (2 часа), fallback 2 часа
+                // Min interval from ssot (2h), fallback 2h
                 const minInterval = window.ssot && typeof window.ssot.getTopCoinsRequestIntervalMs === 'function'
                     ? window.ssot.getTopCoinsRequestIntervalMs()
                     : 2 * 60 * 60 * 1000;
                 if (!window.requestRegistry.isAllowed(providerName, 'getTopCoins', { count, sortBy }, minInterval)) {
                     console.log(`data-provider-manager: запрос ${providerName}:getTopCoins заблокирован журналом (слишком часто)`);
-                    // Пробуем вернуть кэш
+                    // Try return cache
                     if (window.cacheManager) {
                         const cacheKey = sortBy === 'volume' ? 'top-coins-by-volume' : 'top-coins-by-market-cap';
                         const cached = await window.cacheManager.get(cacheKey);
                         if (cached && cached.length > 0) return cached;
                     }
-                    // Skill anchor: при пустом кэше и заблокированном registry (после 429) — бросаем ошибку
+                    // Skill anchor: on empty cache and blocked registry (after 429) — throw error
                     // вместо немедленного повтора запроса. Это предотвращает бесконечный цикл 429→запись→429.
                     // UI покажет ошибку, пользователь может подождать и попробовать через кнопку Refresh.
                     const timeUntilNext = window.requestRegistry.getTimeUntilNext(providerName, 'getTopCoins', { count, sortBy }, minInterval);
@@ -238,7 +238,7 @@
                 }
             }
 
-            // Получаем API ключ если требуется
+            // Get API key if required
             const apiKey = await this.getApiKey(providerName);
             if (provider.requiresApiKey() && !apiKey) {
                 const error = `API ключ for ${provider.getDisplayName()} not configured`;
@@ -246,7 +246,7 @@
                 throw new Error(error);
             }
 
-            // Добавляем API ключ в опции если есть
+            // Add API key to options if present
             if (apiKey) {
                 options.apiKey = apiKey;
             }
@@ -266,7 +266,7 @@
                 return filtered;
             } catch (error) {
                 if (window.requestRegistry) {
-                    // Skill anchor: в журнал должен попадать реальный HTTP статус, иначе 429 цикл маскируется как "generic error".
+                    // Skill anchor: real HTTP status must be logged, else 429 cycle masked as "generic error".
                     // See core/skills/api-layer
                     const status = Number.isFinite(error.status)
                         ? error.status
@@ -278,10 +278,10 @@
         }
 
         /**
-         * Поиск монет через текущий провайдер
-         * @param {string} query - Поисковый запрос
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив найденных монет
+         * Search coins via current provider
+         * @param {string} query - Search query
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Found coins array
          */
         async searchCoins(query, options = {}) {
             const limit = this.normalizeLimit(options.limit, 10);
@@ -342,10 +342,10 @@
         }
 
         /**
-         * Get данные монет по ID через текущий провайдер
-         * @param {Array<string>} coinIds - Массив ID монет
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * Get coin data by ID via current provider
+         * @param {Array<string>} coinIds - Array of coin IDs
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Normalized coin data array
          */
         async getCoinData(coinIds, options = {}) {
             const useDualChannel = options.useDualChannel !== false &&
@@ -384,7 +384,7 @@
          * @skill-anchor core/skills/external-integrations #for-integration-fallbacks
          * Dual-channel coin data fetch: PostgreSQL primary, CoinGecko fallback.
          * Phase 1: resolve as many IDs as possible from YandexCacheProvider (PG).
-         * Phase 2: fetch remaining missing IDs from the active provider (CoinGecko).
+         * Phase 2: fetch remaining missing IDs from active provider (CoinGecko).
          * @param {string[]} coinIds
          * @param {Object} options - { onProgress, signal, chunkDelayMs, forceChunking }
          *   onProgress receives events with `source: 'postgres' | 'coingecko'`
@@ -522,10 +522,10 @@
         }
 
         /**
-         * Get ID монеты по тикеру через текущий провайдер
-         * @param {string} symbol - Тикер монеты
+         * Get coin ID by ticker via current provider
+         * @param {string} symbol - Coin ticker
          * @param {Object} options - Дополнительные опции
-         * @returns {Promise<string|null>} ID монеты или null
+         * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {
             const preferYandexFirst = options.preferYandexFirst !== false;
@@ -538,7 +538,7 @@
                         return fromPg;
                     }
                 } catch (_) {
-                    // no-op: fallback ниже
+                    // no-op: fallback below
                 }
             }
 
@@ -555,7 +555,7 @@
         }
 
         /**
-         * Get API ключ for провайдера из localStorage
+         * Get API key for provider from localStorage
          * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
          * @returns {Promise<string|null>}
          */
@@ -573,9 +573,9 @@
         }
 
         /**
-         * Set API ключ for провайдера в localStorage
-         * @param {string} providerName - 'coingecko' | 'coinmarketcap' и т.д.
-         * @param {string} apiKey - API ключ
+         * Set API key for provider in localStorage
+         * @param {string} providerName - 'coingecko' | 'coinmarketcap' etc.
+         * @param {string} apiKey - API key
          * @returns {Promise<void>}
          */
         async setApiKey(providerName, apiKey) {
@@ -586,7 +586,7 @@
                 if (apiKey) {
                     keys[providerName] = apiKey;
                 } else {
-                    // Удаляем ключ если пустой
+                    // Remove key if empty
                     delete keys[providerName];
                 }
 
@@ -598,7 +598,7 @@
         }
 
         /**
-         * Get list всех доступных провайдеров
+         * Get list of all available providers
          * @returns {Array<Object>} [{ value: string, label: string, provider: BaseDataProvider }]
          */
         getAvailableProviders() {
@@ -610,7 +610,7 @@
         }
 
         /**
-         * Get провайдер по имени
+         * Get provider by name
          * @param {string} providerName
          * @returns {BaseDataProvider|null}
          */
@@ -619,7 +619,7 @@
         }
 
         /**
-         * Проверить, требуется ли API ключ for текущего провайдера
+         * Check if API key required for current provider
          * @returns {Promise<boolean>}
          */
         async currentProviderRequiresApiKey() {
@@ -628,7 +628,7 @@
         }
 
         /**
-         * Get URL for получения API ключа for текущего провайдера
+         * Get URL for API key of current provider
          * @returns {Promise<string|null>}
          */
         async getApiKeyUrl() {
@@ -637,15 +637,15 @@
         }
     }
 
-    // Создаем и экспортируем экземпляр менеджера
+    // Create and export manager instance
     window.dataProviderManager = new DataProviderManager();
 
-    // Инициализируем после загрузки всех провайдеров
+    // Initialize after all providers loaded
     if (window.CoinGeckoProvider) {
         window.dataProviderManager.init();
         console.log('✅ dataProviderManager initialized with providers:', Object.keys(window.dataProviderManager.providers));
     } else {
-        // Если провайдеры еще not loadedы, ждем их
+        // If providers not yet loaded, wait for them
         const checkProviders = setInterval(() => {
             if (window.CoinGeckoProvider) {
                 window.dataProviderManager.init();
@@ -653,7 +653,7 @@
                 clearInterval(checkProviders);
             }
         }, 50);
-        // Таймаут на случай, если провайдеры не загрузятся
+        // Timeout if providers never load
         setTimeout(() => {
             clearInterval(checkProviders);
             console.warn('⚠️ dataProviderManager: timeout waiting for providers');

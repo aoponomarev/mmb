@@ -1,23 +1,23 @@
 /**
  * ================================================================================================
- * MESSAGES TRANSLATOR - Переводчик системных сообщений (v2 - упрощённая схема)
+ * MESSAGES TRANSLATOR - System messages translator (v2 - simplified scheme)
  * ================================================================================================
  * Skill: core/skills/config-contracts
  *
- * PURPOSE: Перевод системных сообщений через AI провайдеры с кэшированием.
+ * PURPOSE: Translate system messages via AI providers with caching.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
- * ФОРМАТ КЭША (localStorage):
- * Ключ: 'tr-{lang}-{versionHash}' (например: 'tr-en-aBc12XyZ')
- * Значение: { "e.net": ["Network error", "Check connection"], ... }
+ * CACHE FORMAT (localStorage):
+ * Key: 'tr-{lang}-{versionHash}' (e.g. 'tr-en-aBc12XyZ')
+ * Value: { "e.net": ["Network error", "Check connection"], ... }
  *
  * USAGE:
- * - При обновлении приложения создается новый ключ кэша с новым versionHash
- * - Старый кэш автоматически становится неактуальным
- * - Гарантирует соответствие переводов структуре сообщений в новой версии
- * - Исключает ошибки при изменении ключей сообщений между версиями
+ * - On app update new cache key created with new versionHash
+ * - Old cache becomes stale automatically
+ * - Ensures translations match message structure in new version
+ * - Prevents errors when message keys change between versions
  *
  * USAGE:
  * await messagesTranslator.init('en');
@@ -29,34 +29,34 @@
 (function() {
     'use strict';
 
-    // Текущий язык
+    // Current language
     let currentLanguage = 'ru';
 
-    // Кэш переводов в памяти: { key: [text, details] }
+    // Translation cache in memory: { key: [text, details] }
     let translationsCache = null;
 
-    // Флаг инициализации
+    // Init flag
     let isInitialized = false;
 
     /**
-     * Get ключ кэша for языка с версионированием
-     * @param {string} lang - код языка
-     * @returns {string} - ключ localStorage с версией приложения
+     * Get cache key for language with versioning
+     * @param {string} lang - language code
+     * @returns {string} - localStorage key with app version
      */
     function getCacheKey(lang) {
-        // Версионирование кэша переводов for привязки к версии приложения
-        // При обновлении приложения (изменении ключей сообщений) создается новый кэш
+        // Translation cache versioning tied to app version
+        // On app update (message key changes) new cache created
         const versionHash = window.appConfig?.getVersionHash() || 'v1';
         return `tr-${lang}-${versionHash}`;
     }
 
     /**
-     * Загрузить кэш переводов из localStorage
-     * @param {string} lang - код языка
-     * @returns {Object|null} - кэш переводов или null
+     * Load translation cache from localStorage
+     * @param {string} lang - language code
+     * @returns {Object|null} - translation cache or null
      */
     function loadCache(lang) {
-        if (lang === 'ru') return null; // Русский — базовый язык
+        if (lang === 'ru') return null; // Russian is base language
 
         try {
             const key = getCacheKey(lang);
@@ -71,9 +71,9 @@
     }
 
     /**
-     * Сохранить кэш переводов в localStorage
-     * @param {string} lang - код языка
-     * @param {Object} cache - кэш переводов
+     * Save translation cache to localStorage
+     * @param {string} lang - language code
+     * @param {Object} cache - translation cache
      */
     function saveCache(lang, cache) {
         if (lang === 'ru') return;
@@ -87,9 +87,9 @@
     }
 
     /**
-     * Сформировать промпт for AI
-     * @param {string} targetLang - целевой язык
-     * @returns {string} - промпт
+     * Build prompt for AI
+     * @param {string} targetLang - target language
+     * @returns {string} - prompt
      */
     function buildPrompt(targetLang) {
         if (!window.messagesConfig) {
@@ -118,8 +118,8 @@
     }
 
     /**
-     * Парсить ответ AI
-     * @param {string} response - ответ от AI
+     * Parse AI response
+     * @param {string} response - response from AI
      * @returns {Object} - { key: [text, details] }
      */
     function parseResponse(response) {
@@ -130,7 +130,7 @@
         const lines = response.split('\n').filter(line => line.trim());
 
         for (const line of lines) {
-            // Пропускаем строки без разделителя
+            // Skip lines without separator
             if (!line.includes('|')) continue;
 
             const parts = line.split('|');
@@ -140,7 +140,7 @@
             const text = parts[1].trim();
             const details = parts.length > 2 ? parts[2].trim() : null;
 
-            // Проверяем, что ключ существует в конфиге
+            // Verify key exists in config
             if (window.messagesConfig?.MESSAGES[key]) {
                 result[key] = details ? [text, details] : [text, null];
             }
@@ -150,9 +150,9 @@
     }
 
     /**
-     * Выполнить перевод всех сообщений через AI
-     * @param {string} lang - целевой язык
-     * @returns {Promise<Object>} - кэш переводов
+     * Translate all messages via AI
+     * @param {string} lang - target language
+     * @returns {Promise<Object>} - translation cache
      */
     async function translateAll(lang) {
         if (lang === 'ru') return null;
@@ -183,7 +183,7 @@
                 return null;
             }
 
-            // Сохраняем в localStorage
+            // Save to localStorage
             if (translatedCount > 0) {
                 saveCache(lang, cache);
             }
@@ -196,32 +196,32 @@
     }
 
     /**
-     * Перевести одно сообщение
-     * @param {string} key - ключ сообщения
-     * @param {Object} params - параметры for плейсхолдеров
+     * Translate single message
+     * @param {string} key - message key
+     * @param {Object} params - params for placeholders
      * @returns {Object} - { text, details }
      */
     function translate(key, params = {}) {
-        // Нормализуем params: если null/undefined, используем пустой объект
+        // Normalize params: if null/undefined use empty object
         const safeParams = (params && typeof params === 'object') ? params : {};
 
-        // Нормализуем ключ
+        // Normalize key
         const normalizedKey = window.messagesConfig?.normalizeKey(key) || key;
 
-        // Для русского — возвращаем оригинал
+        // For Russian — return original
         if (currentLanguage === 'ru' || !translationsCache) {
             const msg = window.messagesConfig?.get(normalizedKey, safeParams);
             return msg ? { text: msg.text, details: msg.details } : { text: key, details: null };
         }
 
-        // Ищем в кэше
+        // Look in cache
         const cached = translationsCache[normalizedKey];
 
         if (cached) {
             let text = cached[0];
             let details = cached[1];
 
-            // Заменяем плейсхолдеры
+            // Replace placeholders
             if (safeParams && typeof safeParams === 'object' && Object.keys(safeParams).length > 0) {
                 for (const [k, v] of Object.entries(safeParams)) {
                     const regex = new RegExp(`\\{${k}\\}`, 'g');
@@ -235,14 +235,14 @@
             return { text, details };
         }
 
-        // Fallback на оригинал
+        // Fallback to original
         const msg = window.messagesConfig?.get(normalizedKey, safeParams);
         return msg ? { text: msg.text, details: msg.details } : { text: key, details: null };
     }
 
     /**
-     * Инициализировать переводчик
-     * @param {string} lang - язык
+     * Initialize translator
+     * @param {string} lang - language
      * @returns {Promise<void>}
      */
     async function init(lang) {
@@ -251,14 +251,14 @@
         if (currentLanguage === 'ru') {
             translationsCache = null;
             isInitialized = true;
-            // Эмитим событие for инициализации компонентов
+            // Emit event for component init
             document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
                 detail: { language: currentLanguage }
             }));
             return;
         }
 
-        // Загружаем кэш
+        // Load cache
         translationsCache = loadCache(currentLanguage);
 
         isInitialized = true;
@@ -270,8 +270,8 @@
     }
 
     /**
-     * Сменить язык и обновить все отображаемые сообщения
-     * @param {string} lang - новый язык
+     * Change language and update all displayed messages
+     * @param {string} lang - new language
      * @returns {Promise<void>}
      */
     async function updateLanguage(lang) {
@@ -287,25 +287,25 @@
             return;
         }
 
-        // Загружаем или создаём кэш
+        // Load or create cache
         translationsCache = loadCache(lang);
 
         if (!translationsCache) {
-            // Переводим через AI
+            // Translate via AI
             translationsCache = await translateAll(lang);
         }
 
-        // Обновляем отображаемые сообщения
+        // Update displayed messages
         await updateDisplayedMessages();
 
-        // Эмитим событие for принудительного пересчета computed в компонентах
+        // Emit event for forced computed recalc in components
         document.dispatchEvent(new CustomEvent('messages-translator:language-changed', {
             detail: { language: lang }
         }));
     }
 
     /**
-     * Update все отображаемые сообщения
+     * Update all displayed messages
      * @returns {Promise<void>}
      */
     async function updateDisplayedMessages() {
@@ -324,15 +324,15 @@
 
         for (const msg of messages) {
             if (!msg.key) {
-                // Сообщение без ключа — оставляем как есть
+                // Message without key — leave as-is
                 window.AppMessages.push(msg);
                 continue;
             }
 
-            // Получаем перевод
+            // Get translation
             const translated = translate(msg.key, msg.params);
 
-            // Пересоздаём сообщение с сохранением всех свойств
+            // Recreate message preserving all props
             window.AppMessages.push({
                 ...msg,
                 text: translated.text,
@@ -343,27 +343,27 @@
     }
 
     /**
-     * Принудительно перевести все сообщения (сбросить кэш)
-     * @param {string} lang - язык
+     * Force translate all messages (reset cache)
+     * @param {string} lang - language
      * @returns {Promise<void>}
      */
     async function forceTranslate(lang) {
         if (lang === 'ru') return;
 
-        // Удаляем кэш
+        // Remove cache
         try {
             localStorage.removeItem(getCacheKey(lang));
         } catch (e) {}
 
-        // Переводим заново
+        // Translate again
         translationsCache = await translateAll(lang);
 
-        // Обновляем UI
+        // Update UI
         await updateDisplayedMessages();
     }
 
     /**
-     * Get текущий язык
+     * Get current language
      * @returns {string}
      */
     function getCurrentLanguage() {
@@ -371,7 +371,7 @@
     }
 
     /**
-     * Проверить, initialized ли переводчик
+     * Check if translator is initialized
      * @returns {boolean}
      */
     function isReady() {
@@ -379,8 +379,8 @@
     }
 
     /**
-     * Очистить кэш for языка
-     * @param {string} lang - язык (если не указан — текущий)
+     * Clear cache for language
+     * @param {string} lang - language (if omitted — current)
      */
     function clearCache(lang) {
         const targetLang = lang || currentLanguage;

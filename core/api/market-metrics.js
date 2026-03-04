@@ -1,17 +1,17 @@
 /**
  * ================================================================================================
- * MARKET METRICS API - Утилита for получения метрик рынка
+ * MARKET METRICS API - Utility for market metrics
  * ================================================================================================
  *
- * PURPOSE: Независимый модуль for получения метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR).
+ * PURPOSE: Standalone module for market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR).
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * Экспортирует функции через window.marketMetrics.
+ * Exports functions via window.marketMetrics.
  *
  * Skill: app/skills/file-protocol-cors-guard
  *
- * ОСОБЕННОСТИ:
+ * FEATURES:
  * - VIX: кэширование 24ч + fallback (Yahoo Finance, Stooq, Alpha Vantage)
  * - FGI: alternative.me API
  * - BTC Dominance: CoinGecko API
@@ -22,25 +22,25 @@
 (function() {
     'use strict';
 
-    // Глобальные переменные for хранения числовых значений метрик (совместимость с математическими моделями)
+    // Global vars for metric values (math model compatibility)
     let fgiVal = 0, vixVal = null, btcDomVal = 0, oiVal = 0, frVal = 0, lsrVal = 0;
     let vixAvailable = false;
 
     window.marketMetrics = {
-        // Утилита for ограничения значения в диапазоне
+        // Utility to clamp value in range
         clamp(value, min, max) {
             if (value === null || value === undefined || isNaN(value)) return min;
             return Math.max(min, Math.min(max, parseFloat(value)));
         },
 
-        // Утилита for безопасного преобразования в число
+        // Utility for safe number conversion
         safeNumber(value, defaultValue = 0) {
             if (value === null || value === undefined || value === '') return defaultValue;
             const num = parseFloat(value);
             return isNaN(num) ? defaultValue : num;
         },
 
-        // Обновление глобальных переменных в window (совместимость с математическими моделями)
+        // Update window globals (math model compatibility)
         updateWindowMetrics() {
             window.fgiVal = fgiVal;
             window.vixVal = vixVal;
@@ -51,8 +51,8 @@
             window.vixAvailable = vixAvailable;
         },
 
-        // Получение FGI (Fear & Greed Index)
-        // С кэшированием на 24 часа
+        // Fetch FGI (Fear & Greed Index)
+        // Cached 24 hours
         async fetchFGI(options = {}) {
             const force = options.forceRefresh || false;
             // Проверяем кэш (24 часа)
@@ -67,7 +67,7 @@
                 }
             }
 
-            // Загружаем из API
+            // Fetch from API
             try {
                 const response = await fetch('https://api.alternative.me/fng/?limit=1');
                 const data = await response.json();
@@ -89,18 +89,18 @@
             }
         },
 
-        // Получение VIX из нескольких источников (fallback стратегия)
-        // С кэшированием на 24 часа
+        // Fetch VIX from multiple sources (fallback strategy)
+        // Cached 24 hours
         async fetchVIX(options = {}) {
             const force = options.forceRefresh || false;
             // Проверяем кэш (24 часа)
             if (window.cacheManager && !force) {
                 const cached = await window.cacheManager.get('vix-index');
                 if (cached && cached.value !== null) {
-                    // Если в кэше нет источника, загружаем заново из API
+                    // If cache has no source, reload from API
                     if (!cached.source) {
-                        console.log('VIX: в кэше отсутствует источник, загружаем заново из API...');
-                        // Удаляем кэш без источника и продолжаем загрузку из API
+                        console.log('VIX: cache missing source, reloading from API...');
+                        // Remove cache without source and continue API load
                         await window.cacheManager.delete('vix-index');
                     } else {
                         vixVal = cached.value;
@@ -109,7 +109,7 @@
                         const originalSource = cached.source;
                         console.log('VIX loaded из кэша:', vixVal.toFixed(2), 'исходный источник:', originalSource);
 
-                        // Показываем сообщение об источнике (исходный источник, не "cache")
+                        // Show source message (original source, not "cache")
                         if (window.messagesStore) {
                             const date = new Date(cached.timestamp).toLocaleString('ru-RU', {
                                 day: '2-digit',
@@ -130,14 +130,14 @@
                 }
             }
 
-            // Определяем, нужен ли прокси (file://, GitHub Pages, или localhost)
+            // Determine if proxy needed (file://, GitHub Pages, or localhost)
             const isFileProtocol = window.location.protocol === 'file:' || 
                                    window.location.hostname.includes('github.io') || 
                                    window.location.hostname === 'localhost' || 
                                    window.location.hostname === '127.0.0.1';
 
             const sources = [
-                // Yahoo Finance через Cloudflare Worker proxy (for file://)
+                // Yahoo Finance via Cloudflare Worker proxy (for file://)
                 async () => {
                     if (isFileProtocol && window.cloudflareConfig) {
                         try {
@@ -158,9 +158,9 @@
                     }
                     return null;
                 },
-                // Yahoo Finance (прямой запрос for HTTP/HTTPS)
+                // Yahoo Finance (direct request for HTTP/HTTPS)
                 async () => {
-                    if (isFileProtocol) return null; // только for HTTP/HTTPS
+                    if (isFileProtocol) return null; // only for HTTP/HTTPS
                     try {
                         const url = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?interval=1d&range=1d';
                         const resp = await fetch(url);
@@ -174,7 +174,7 @@
                     }
                     return null;
                 },
-                // Stooq через Cloudflare Worker proxy (for file://)
+                // Stooq via Cloudflare Worker proxy (for file://)
                 async () => {
                     if (isFileProtocol && window.cloudflareConfig) {
                         try {
@@ -197,7 +197,7 @@
                     }
                     return null;
                 },
-                // Stooq (прямой запрос for HTTP/HTTPS)
+                // Stooq (direct request for HTTP/HTTPS)
                 async () => {
                     if (isFileProtocol) return null;
                     try {
@@ -214,7 +214,7 @@
                     }
                     return null;
                 },
-                // Alpha Vantage (прямой запрос for HTTP/HTTPS, требует API ключ)
+                // Alpha Vantage (direct request for HTTP/HTTPS, requires API key)
                 async () => {
                     if (isFileProtocol) return null;
                     try {
@@ -241,14 +241,14 @@
                         vixAvailable = true;
                         this.updateWindowMetrics();
 
-                        // Сохраняем в кэш на 24 часа
+                        // Save to cache 24h
                         if (window.cacheManager) {
                             await window.cacheManager.set('vix-index', { value: result.value, timestamp: Date.now(), source: result.sourceName });
                         }
 
                         console.log('VIX успешно получен:', result.value.toFixed(2), 'из', result.sourceName);
 
-                        // Показываем сообщение об источнике
+                        // Show source message
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
@@ -270,7 +270,7 @@
             return { success: false, value: null, numericValue: null };
         },
 
-        // Получение BTC Dominance
+        // Fetch BTC Dominance
         async fetchBTCDominance(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -294,11 +294,11 @@
                                window.location.hostname === '127.0.0.1');
                 let url;
 
-                // Если file:// — используем Cloudflare Worker proxy
+                // If file:// — use Cloudflare Worker proxy
                 if (isFile && window.cloudflareConfig) {
                     url = window.cloudflareConfig.getApiProxyEndpoint('coingecko', '/global');
                 } else {
-                    // Прямой запрос к CoinGecko for HTTP/HTTPS
+                    // Direct request to CoinGecko for HTTP/HTTPS
                     url = 'https://api.coingecko.com/api/v3/global';
                 }
 
@@ -307,7 +307,7 @@
                 btcDomVal = this.clamp(parseFloat(data?.data?.market_cap_percentage?.btc), 0, 100);
                 this.updateWindowMetrics();
 
-                // Сохраняем в журнал и кэш
+                // Save to registry and cache
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall('coingecko', 'global', {}, 200, true);
                 }
@@ -327,7 +327,7 @@
             }
         },
 
-        // Получение Open Interest
+        // Fetch Open Interest
         async fetchOpenInterest(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -373,7 +373,7 @@
             }
         },
 
-        // Получение Funding Rate
+        // Fetch Funding Rate
         async fetchFundingRate(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -417,7 +417,7 @@
             }
         },
 
-        // Получение Long/Short Ratio
+        // Fetch Long/Short Ratio
         async fetchLongShortRatio(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -459,15 +459,14 @@
             }
         },
 
-        // Загрузка всех метрик одновременно
+        // Load all metrics at once
         async fetchAll(options = {}) {
             const force = options.forceRefresh || false;
 
-            // Если принудительно, очищаем журнал for этих метрик
+            // If force, clear registry for these metrics
             if (force && window.requestRegistry) {
-                // Мы не можем просто удалить из журнала, но можем сделать так,
-                // чтобы fetch функции игнорировали проверку.
-                // Но проще просто передать force дальше.
+            // Cannot simply remove from registry, but fetch functions
+            // can ignore check. Simpler to just pass force through.
             }
 
             const [fgi, vix, btcDom, oi, fr, lsr] = await Promise.all([
@@ -479,14 +478,14 @@
                 this.fetchLongShortRatio({ forceRefresh: force })
             ]);
 
-            // Обновляем window после всех загрузок
+            // Update window after all loads
             this.updateWindowMetrics();
 
             return {
                 fgi: fgi.success ? fgi.value : '—',
-                fgiSource: fgi.source || null, // Источник данных FGI (for tooltip в футере)
+                fgiSource: fgi.source || null, // FGI data source (for footer tooltip)
                 vix: vix.success ? vix.value : '—',
-                vixSource: vix.source || null, // Источник данных VIX (for tooltip в футере)
+                vixSource: vix.source || null, // VIX data source (for footer tooltip)
                 btcDom: btcDom.success ? btcDom.value : '—',
                 oi: oi.success ? oi.value : '—',
                 fr: fr.success ? fr.value : '—',
@@ -495,7 +494,7 @@
         }
     };
 
-    // Инициализируем window при загрузке модуля
+    // Initialize window on module load
     window.marketMetrics.updateWindowMetrics();
 
     console.log('market-metrics.js: initialized');

@@ -1,14 +1,14 @@
 /**
  * ================================================================================================
- * POSTGRES CLIENT - Клиент for взаимодействия с API слоем PostgreSQL
+ * POSTGRES CLIENT - Client for PostgreSQL API layer
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Базовый клиент for CRUD операций с данными в Yandex Cloud PostgreSQL.
+ * PURPOSE: Base client for CRUD operations with Yandex Cloud PostgreSQL data.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * Реализует паттерн "Data Provider" for горячих данных (портфели, настройки).
+ * Implements "Data Provider" pattern for hot data (portfolios, settings).
  *
 */
 
@@ -16,14 +16,14 @@
     'use strict';
 
     /**
-     * Выполняет fetch запрос к API с обработкой ошибок
+     * Execute fetch request to API with error handling
      */
     async function request(endpoint, options = {}) {
         let url;
         if (window.postgresConfig?.getEndpointUrl) {
             url = window.postgresConfig.getEndpointUrl(endpoint);
         } else {
-            // Резервный механизм, если конфиг not loaded или не содержит функции
+            // Fallback if config not loaded or missing function
             const isAbsolute = typeof endpoint === 'string' && (endpoint.startsWith('http://') || endpoint.startsWith('https://'));
             url = isAbsolute ? endpoint : `${window.postgresConfig?.getApiBaseUrl() || ''}${endpoint}`;
         }
@@ -32,7 +32,7 @@
         const hasBody = options.body !== undefined && options.body !== null;
         const headers = { ...(options.headers || {}) };
 
-        // Для GET без тела не задаем Content-Type, чтобы не триггерить CORS preflight
+        // For GET without body do not set Content-Type to avoid CORS preflight
         if (hasBody && !headers['Content-Type']) {
             headers['Content-Type'] = 'application/json';
         }
@@ -53,8 +53,8 @@
             }
             return await response.json();
         } catch (error) {
-            // Не логируем сетевые ошибки for health check в консоль как ошибки (Error),
-            // чтобы не пугать пользователя при тестировании CORS.
+            // Do not log network errors for health check to console as Error,
+            // to avoid alarming user during CORS testing.
             if (endpoint !== '/health') {
                 console.error(`postgres-client: request failed (${endpoint})`, error);
             }
@@ -63,14 +63,14 @@
     }
 
     /**
-     * Проверка здоровья API
+     * API health check
      */
     async function checkHealth() {
         return request('/health');
     }
 
     /**
-     * Синхронизация профиля пользователя
+     * Sync user profile
      */
     async function syncUser(user) {
         if (!user || !user.id || !user.email) return null;
@@ -87,7 +87,7 @@
     }
 
     /**
-     * Get все портфели пользователя
+     * Get all user portfolios
      */
     async function getPortfolios(userId) {
         if (!userId) return [];
@@ -96,7 +96,7 @@
     }
 
     /**
-     * Создать или обновить портфель
+     * Create or update portfolio
      */
     async function savePortfolio(portfolio, userId) {
         if (!userId || !portfolio) return null;
@@ -114,7 +114,7 @@
     }
 
     /**
-     * Сохранить снимок (snapshot)
+     * Save snapshot
      */
     async function saveSnapshot(snapshot) {
         return request(window.postgresConfig?.getSnapshotsEndpoint() || '/api/snapshots', {
@@ -124,7 +124,7 @@
     }
 
     /**
-     * Сохранить пакет снимков (market + assets + metrics)
+     * Save snapshot batch (market + assets + metrics)
      */
     async function saveSnapshotsBatch(batch) {
         return request('/api/snapshots/batch', {

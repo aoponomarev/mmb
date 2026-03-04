@@ -1,6 +1,6 @@
 /**
  * ================================================================================================
- * PORTFOLIO FORM MODAL BODY - Компонент формирования портфеля (D.2)
+ * PORTFOLIO FORM MODAL BODY - Portfolio form component (D.2)
  * ================================================================================================
  *
  * Skill: core/skills/domain-portfolio
@@ -12,7 +12,7 @@
     window.portfolioFormModalBody = {
         template: `
             <div class="portfolio-form-modal">
-                <!-- Основные параметры портфеля -->
+                <!-- Main portfolio parameters -->
                 <div class="mb-3">
                     <label class="form-label small text-muted mb-1">Название портфеля *</label>
                     <div class="d-flex align-items-center gap-2">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <!-- Настройки формирования -->
+                <!-- Build settings -->
                 <div class="mb-3">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <div class="d-flex align-items-center gap-2">
@@ -61,9 +61,9 @@
                     </div>
                 </div>
 
-                <!-- Список монет (Long/Short) -->
+                <!-- Coin list (Long/Short) -->
                 <div class="row g-3 mb-2">
-                    <!-- Long сегмент -->
+                    <!-- Long segment -->
                     <div class="col-md-6">
                         <div class="border border-success border-opacity-25 rounded h-100 overflow-hidden d-flex flex-column">
                             <div class="bg-success bg-opacity-10 py-1 px-2 border-bottom d-flex justify-content-between align-items-center">
@@ -158,7 +158,7 @@
                         </div>
                     </div>
 
-                    <!-- Short сегмент -->
+                    <!-- Short segment -->
                     <div class="col-md-6">
                         <div class="border border-danger border-opacity-25 rounded h-100 overflow-hidden d-flex flex-column">
                             <div class="bg-danger bg-opacity-10 py-1 px-2 border-bottom d-flex justify-content-between align-items-center">
@@ -254,7 +254,7 @@
                     </div>
                 </div>
 
-                <!-- Итоговая статистика (скрыта по требованию, оставлена for валидации) -->
+                <!-- Summary stats (hidden per request, kept for validation) -->
                 <div v-if="Math.abs(totalPercent - 100) > 0.01" class="p-1 small text-center">
                     <span class="text-warning fw-bold">Warning: распределено {{ totalPercent }}% (требуется 100%)</span>
                 </div>
@@ -275,7 +275,7 @@
                 required: true,
                 default: () => []
             },
-            // ID монет, предварительно выбранных в таблице (чекбоксы)
+            // IDs of coins pre-selected in table (checkboxes)
             preselectedCoinIds: {
                 type: Array,
                 required: false,
@@ -285,7 +285,7 @@
                 type: Function,
                 required: true
             },
-            // Начальные данные for редактирования (D.4)
+            // Initial data for edit mode (D.4)
             initialData: {
                 type: Object,
                 required: false,
@@ -304,7 +304,7 @@
                     : 'equal',
                 selectedCoins: this.initialData ? JSON.parse(JSON.stringify(this.initialData.coins)) : [],
                 isSaved: false,
-                isNameManuallyEdited: !!this.initialData, // Если редактируем существующий, считаем что имя уже задано
+                isNameManuallyEdited: !!this.initialData, // When editing existing, assume name already set
                 creationTimestamp: new Date(),
                 customLongPercent: 0,
                 customShortPercent: 0
@@ -325,9 +325,9 @@
                 deep: true,
                 handler() {
                     this.updateDefaultName();
-                    // ВАЖНО: В режиме custom НЕ обновляем customLongPercent/customShortPercent здесь.
-                    // Общий вес сегмента в Custom режиме является жестким ограничением, 
-                    // которое меняется только manually через поле ввода сегмента.
+                    // IMPORTANT: In custom mode do NOT update customLongPercent/customShortPercent here.
+                    // Segment total weight in Custom mode is a hard constraint
+                    // that changes only manually via segment input.
                     if (this.balanceMode !== 'custom') {
                         this.customLongPercent = this.segmentTotalPercent(true);
                         this.customShortPercent = this.segmentTotalPercent(false);
@@ -335,8 +335,7 @@
                 }
             },
             portfolioName(newVal, oldVal) {
-                // Если новое значение не совпадает с тем, что мы бы сгенерировали автоматически,
-                // значит пользователь его отредактировал manually
+                // If new value differs from auto-generated, user edited it manually
                 const autoName = this.generateDefaultName();
                 if (newVal !== autoName && oldVal === autoName) {
                     this.isNameManuallyEdited = true;
@@ -348,9 +347,9 @@
             this.registerButtons();
             this.normalizeSelectedCoinsForDomain();
 
-            // Если режим редактирования (D.4) — монеты уже loadedы из initialData
-            // Если есть предвыбранные монеты из таблицы — используем их
-            // Иначе — авто-отбор топ 5+5
+            // If edit mode (D.4) — coins already loaded from initialData
+            // If pre-selected coins from table — use them
+            // Else — auto-select top 5+5
             if (!this.initialData) {
                 if (this.preselectedCoinIds && this.preselectedCoinIds.length > 0) {
                     this.initFromPreselected();
@@ -362,7 +361,7 @@
                 this.applyWeights();
             }
 
-            // Инициализируем кастомные веса
+            // Initialize custom weights
             this.customLongPercent = this.segmentTotalPercent(true);
             this.customShortPercent = this.segmentTotalPercent(false);
 
@@ -374,7 +373,7 @@
 
         methods: {
             /**
-             * Обработка смены режима распределения
+             * Handle weight mode change
              */
             handleBalanceModeChange() {
                 if (this.balanceMode === 'custom') {
@@ -388,7 +387,7 @@
             },
 
             /**
-             * Обработка ввода веса сегмента
+             * Handle segment weight input
              */
             handleSegmentWeightInput(isLong) {
                 if (this.balanceMode !== 'custom') {
@@ -407,8 +406,8 @@
             },
 
             /**
-             * Проверка, является ли монета последней разблокированной в своем сегменте
-             * (в режиме Custom такая монета становится балансиром и readonly)
+             * Check if coin is last unlocked in its segment
+             * (In Custom mode such coin becomes balancer and readonly)
              */
             isLastUnlockedInSegment(coin) {
                 if (this.balanceMode !== 'custom') return false;
@@ -418,17 +417,17 @@
                     isLong ? (c.metrics?.agr || 0) >= 0 : (c.metrics?.agr || 0) < 0
                 );
                 
-                // Если в сегменте всего одна монета - она всегда readonly балансир
+                // If segment has only one coin - it's always readonly balancer
                 if (segmentCoins.length <= 1) return true;
                 
                 const unlocked = segmentCoins.filter(c => !c.isLocked && !c.isDisabledInRebalance);
                 
-                // Если эта монета не залочена и она единственная такая в сегменте
+                // If this coin is unlocked and is the only one in segment
                 return !coin.isLocked && !coin.isDisabledInRebalance && unlocked.length === 1;
             },
 
             /**
-             * Сбросить вес монеты к дефолтному (снимает lock)
+             * Reset coin weight to default (removes lock)
              */
             resetCoinWeight(coin) {
                 coin.isLocked = false;
@@ -436,7 +435,7 @@
             },
 
             /**
-             * Рассчитать суммарный процент сегмента
+             * Calculate segment total percent
              */
             segmentTotalPercent(isLong) {
                 const coins = this.selectedCoins.filter(c => isLong ? (c.metrics?.agr || 0) >= 0 : (c.metrics?.agr || 0) < 0);
@@ -525,18 +524,18 @@
             },
 
             /**
-             * Инициализация из предвыбранных в таблице монет
+             * Init from pre-selected table coins
              */
             initFromPreselected() {
                 const activeModelId = this.$root?.activeModelId
                     || window.modelsConfig?.getDefaultModelId?.()
                     || 'Median/AIR/260101';
-                // Находим полные данные монет по ID
+                // Find full coin data by ID
                 const preselected = this.allCoins.filter(c =>
                     this.preselectedCoinIds.includes(c.id) || this.preselectedCoinIds.includes(c.coinId)
                 );
 
-                // Преобразуем в структуру PortfolioCoin
+                // Convert to PortfolioCoin structure
                 this.selectedCoins = preselected.map(coin => {
                     return window.portfolioConfig.createPortfolioCoin(coin, activeModelId);
                 });
@@ -549,7 +548,7 @@
             },
 
             /**
-             * Авто-отбор топ-5 Long и топ-5 Short по AGR
+             * Auto-select top 5 Long and top 5 Short by AGR
              */
             handleAutoSelect() {
                 const activeModelId = this.$root?.activeModelId
@@ -557,7 +556,7 @@
                     || 'Median/AIR/260101';
                 const topCoins = window.portfolioConfig.autoSelectCoins(this.allCoins);
 
-                // Подготавливаем монеты for портфеля (структура PortfolioCoin)
+                // Prepare coins for portfolio (PortfolioCoin structure)
                 this.selectedCoins = topCoins.map(coin =>
                     window.portfolioConfig.createPortfolioCoin(coin, activeModelId)
                 );
@@ -570,8 +569,8 @@
             },
 
             /**
-             * Генерирует дефолтное название портфеля на основе выбранных монет
-             * Формат: "L:BTC-ETH...|S:SOL-ADA...|DD.MM.YY|hh:mm"
+             * Generate default portfolio name from selected coins
+             * Format: "L:BTC-ETH...|S:SOL-ADA...|DD.MM.YY|hh:mm"
              */
             generateDefaultName() {
                 const longs = this.selectedCoins.filter(c => (c.metrics?.agr || 0) >= 0).map(c => c.ticker).join('-');
@@ -588,7 +587,7 @@
             },
 
             /**
-             * Обновляет название портфеля, если оно не было отредактировано manually
+             * Update portfolio name if not manually edited
              */
             updateDefaultName() {
                 if (!this.isNameManuallyEdited) {
@@ -599,14 +598,14 @@
             applyWeights() {
                 if (window.portfolioEngine?.allocateWeights) {
                     if (this.balanceMode === 'custom') {
-                        // Кастомный режим: распределяем внутри каждого сегмента отдельно
+                        // Custom mode: distribute within each segment separately
                         const longs = this.selectedCoins.filter(c => (c.metrics?.agr || 0) >= 0);
                         const shorts = this.selectedCoins.filter(c => (c.metrics?.agr || 0) < 0);
 
                         const allocateSegment = (assets, targetTotal) => {
                             if (assets.length === 0) return [];
                             
-                            // Создаем временный драфт for сегмента
+                            // Create temp draft for segment
                             const draft = {
                                 assets: assets.map(a => ({ 
                                     ...a, 
@@ -614,15 +613,15 @@
                                     ticker: (a.ticker || a.symbol || '').toUpperCase(),
                                     side: (a.metrics?.agr || a.agr || 0) >= 0 ? 'long' : 'short',
                                     agr: Number(a.agr ?? a.metrics?.agr ?? 0) || 0,
-                                    // Передаем текущий вес, чтобы allocateWeights знал, что перераспределять
+                                    // Pass current weight so allocateWeights knows what to redistribute
                                     weight: a.portfolioPercent 
                                 })),
                                 constraints: { totalWeight: targetTotal, minWeight: 1 },
                                 mode: this.weightMode
                             };
 
-                            // Используем движок for распределения targetTotal внутри сегмента
-                            // Он учтет заблокированные (isLocked) веса и распределит остаток
+                            // Use engine to distribute targetTotal within segment
+                            // It accounts for locked (isLocked) weights and distributes remainder
                             const allocated = window.portfolioEngine.allocateWeights(draft, draft.mode);
                             return allocated.assets;
                         };
@@ -644,7 +643,7 @@
                             };
                         });
                     } else {
-                        // Стандартные режимы Equal/AGR
+                        // Standard Equal/AGR modes
                         const draft = this.buildDraftFromSelected();
                         const allocated = window.portfolioEngine.allocateWeights(draft, draft.mode);
                         const byId = new Map((allocated.assets || []).map(asset => [asset.coinId, asset]));
@@ -750,7 +749,7 @@
 
                     const modelMix = window.portfolioConfig.calculateModelMix(this.selectedCoins);
 
-                    // Создаем объект портфеля (D.4: сохраняем ID если редактируем)
+                    // Create portfolio object (D.4: keep ID when editing)
                     const portfolioId = this.initialData ? this.initialData.id : window.portfolioConfig.generatePortfolioId();
 
                     const portfolio = window.portfolioConfig.createPortfolio(
@@ -763,8 +762,8 @@
                             modelId: this.$root.activeModelId,
                             horizonDays: this.$root.horizonDays,
                             mdnHours: this.$root.mdnHours,
-                            agrMethod: this.$root.agrMethod, // Берем из корня
-                            mode: this.weightMode, // В схеме поле называется 'mode'
+                            agrMethod: this.$root.agrMethod, // From root
+                            mode: this.weightMode, // Schema field is 'mode'
                             balanceMode: this.balanceMode
                         },
                         modelMix
@@ -775,10 +774,10 @@
                     this.isSaved = true;
                     this.updateSaveButton();
 
-                    // Закрываем через секунду
+                    // Close after one second
                     setTimeout(() => this.modalApi.hide(), 1000);
                 } catch (error) {
-                    console.error('portfolio-form-modal: ошибка сохранения:', error);
+                    console.error('portfolio-form-modal: save error:', error);
                 }
             }
         }

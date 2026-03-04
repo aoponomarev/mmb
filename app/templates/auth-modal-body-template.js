@@ -1,26 +1,26 @@
 /**
  * ================================================================================================
- * AUTH MODAL BODY TEMPLATE - Шаблон компонента body модального окна авторизации
+ * AUTH MODAL BODY TEMPLATE - Auth modal body component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента body модального окна авторизации (auth-modal-body).
+ * PURPOSE: Template for auth modal body (auth-modal-body).
  *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
+ * PROBLEM: Template must be in DOM before Vue.js init for component to work.
  *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="auth-modal-body-template".
+ * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
+ * on load as <script type="text/x-template"> with id="auth-modal-body-template".
  *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="auth-modal-body-template"
- * - Компонент использует шаблон через template: '#auth-modal-body-template'
+ * HOW:
+ * - Template defined as string in TEMPLATE constant
+ * - On load, <script type="text/x-template"> element is auto-created
+ * - Element added to document.body with id="auth-modal-body-template"
+ * - Component uses template via template: '#auth-modal-body-template'
  *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Контейнер с состоянием загрузки (spinner)
- * - Блок с информацией о пользователе (если авторизован)
- * - Блок с сообщением о неавторизованном состоянии
+ * TEMPLATE FEATURES:
+ * HTML structure:
+ * - Container with loading state (spinner)
+ * - User info block (if authenticated)
+ * - Unauthenticated state message block
  *
  * REFERENCES:
  * - General principles работы с шаблонами: app/skills/ui-architecture
@@ -48,7 +48,7 @@
 </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -58,7 +58,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

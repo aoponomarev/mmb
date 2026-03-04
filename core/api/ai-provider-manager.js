@@ -1,29 +1,29 @@
 /**
  * ================================================================================================
- * AI PROVIDER MANAGER - Менеджер for переключения между AI провайдерами
+ * AI PROVIDER MANAGER - Manager for switching between AI providers
  * ================================================================================================
  *
- * PURPOSE: Единая точка доступа for работы с AI провайдером (YandexGPT).
- * Управляет переключением между провайдерами и предоставляет единый интерфейс.
+ * PURPOSE: Single access point for AI provider (YandexGPT).
+ * Manages provider switching and provides unified interface.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
  * Skill: core/skills/api-layer
  *
- * ОСОБЕННОСТИ:
- * - Дефолтный провайдер: YandexGPT
- * - Хранение текущего провайдера в cacheManager ('ai-provider')
- * - Хранение API ключей отдельно for каждого провайдера
+ * FEATURES:
+ * - Default provider: YandexGPT
+ * - Current provider stored in cacheManager ('ai-provider')
+ * - API keys stored separately per provider
  *
  * USAGE:
- * // Отправить запрос через текущий провайдер
+ * // Send request via current provider
  * const response = await window.aiProviderManager.sendRequest(messages);
  *
- * // Переключить провайдера
+ * // Switch provider
  * await window.aiProviderManager.setProvider('yandex');
  *
- * // Get текущий провайдер
+ * // Get current provider
  * const provider = await window.aiProviderManager.getCurrentProvider();
  *
 */
@@ -33,16 +33,16 @@
     'use strict';
 
     /**
-     * Менеджер AI провайдеров
+     * AI providers manager
      */
     class AIProviderManager {
         constructor() {
             this.providers = {};
-            this.defaultProvider = 'yandex'; // Яндекс по умолчанию
-            // Флаг: KV-запрос уже был выполнен в этой сессии (успешно или нет).
-            // Предотвращает повторные HTTP-запросы при каждом вызове getApiKey.
+            this.defaultProvider = 'yandex'; // Yandex by default
+            // Flag: KV request already executed this session (success or not).
+            // Prevents repeated HTTP requests on each getApiKey call.
             this._kvFetchAttempted = false;
-            this._kvFetchPromise = null; // дедупликация параллельных вызовов
+            this._kvFetchPromise = null; // deduplicate parallel calls
         }
 
         async resolveSettingsToken() {
@@ -75,20 +75,20 @@
         }
 
         /**
-         * Инициализация провайдеров
-         * Вызывается после загрузки всех провайдеров
+         * Initialize providers
+         * Called after all providers are loaded
          */
         init() {
             if (window.YandexProvider) {
                 this.providers['yandex'] = new window.YandexProvider();
             }
 
-            // Проверяем валидность текущего провайдера в кэше
+            // Validate current provider in cache
             this.validateCurrentProvider();
         }
 
         /**
-         * Проверить валидность текущего провайдера и сбросить на дефолтный если нужно
+         * Validate current provider and reset to default if needed
          */
         async validateCurrentProvider() {
             try {
@@ -103,7 +103,7 @@
         }
 
         /**
-         * Get текущий активный провайдер
+         * Get current active provider
          * @returns {Promise<BaseAIProvider>}
          */
         async getCurrentProvider() {
@@ -112,7 +112,7 @@
         }
 
         /**
-         * Get имя текущего провайдера
+         * Get current provider name
          * @returns {Promise<string>}
          */
         async getCurrentProviderName() {
@@ -126,7 +126,7 @@
         }
 
         /**
-         * Set активный провайдер
+         * Set active provider
          * @param {string} providerName - 'yandex'
          * @returns {Promise<void>}
          */
@@ -138,17 +138,17 @@
         }
 
         /**
-         * Отправить запрос через текущий провайдер
-         * @param {Array<Object>} messages - Массив сообщений {role: 'user'|'assistant', content: string}
-         * @param {Object} options - Дополнительные опции (temperature, maxTokens и т.д.)
-         * @returns {Promise<string>} Текст ответа
-         * @throws {Error} При ошибке запроса или отсутствии настроек
+         * Send request via current provider
+         * @param {Array<Object>} messages - Messages array {role: 'user'|'assistant', content: string}
+         * @param {Object} options - Additional options (temperature, maxTokens, etc.)
+         * @returns {Promise<string>} Response text
+         * @throws {Error} On request error or missing config
          */
         async sendRequest(messages, options = {}) {
             const provider = await this.getCurrentProvider();
             const providerName = await this.getCurrentProviderName();
 
-            // Получаем API ключ и модель for текущего провайдера
+            // Get API key and model for current provider
             const apiKey = await this.getApiKey(providerName);
             const model = await this.getModel(providerName);
 
@@ -162,7 +162,7 @@
         }
 
         /**
-         * Get API ключ for провайдера
+         * Get API key for provider
          * @param {string} providerName - 'yandex'
          * @returns {Promise<string|null>}
          */
@@ -179,18 +179,18 @@
                 console.warn(`ai-provider-manager: ошибка чтения ключа ${providerName} из cacheManager`, error);
             }
 
-            // Skill anchor: fallback на Cloudflare KV — ключи не теряются при сбросе кэша.
-            // Запрос делается только ОДИН РАЗ за сессию (флаг _kvFetchAttempted).
-            // Параллельные вызовы дедуплицируются через _kvFetchPromise.
+            // Skill anchor: fallback to Cloudflare KV — keys survive cache reset.
+            // Request made only ONCE per session (flag _kvFetchAttempted).
+            // Parallel calls deduplicated via _kvFetchPromise.
             if (this._kvFetchAttempted) {
-                // KV уже опрашивался — повторно читаем только из cacheManager
+                // KV already polled — read only from cacheManager
                 try {
                     return await window.cacheManager.get(keyName) || null;
                 } catch (_) { return null; }
             }
 
             if (this._kvFetchPromise) {
-                // Параллельный вызов уже выполняется — ждём его результата
+                // Parallel call in progress — wait for its result
                 await this._kvFetchPromise;
                 try {
                     return await window.cacheManager.get(keyName) || null;
@@ -215,7 +215,7 @@
                     const d = json.data;
                     if (!d) return;
 
-                    // Сохраняем всё что пришло из KV в cacheManager, чтобы не ходить снова
+                    // Save all from KV to cacheManager to avoid repeat fetch
                     const saves = [];
                     if (d.yandexApiKey)   saves.push(window.cacheManager.set('yandex-api-key', d.yandexApiKey));
                     if (d.yandexFolderId) saves.push(window.cacheManager.set('yandex-folder-id', d.yandexFolderId));
@@ -224,7 +224,7 @@
                     if (d.apiBaseUrl)     saves.push(window.cacheManager.set('postgres-api-base-url', d.apiBaseUrl));
                     await Promise.all(saves);
                     console.log('ai-provider-manager: настройки восстановлены из Cloudflare KV');
-                    // Уведомляем подписчиков (например, app-footer) что ключ готов
+                    // Notify subscribers (e.g. app-footer) that key is ready
                     window.dispatchEvent(new CustomEvent('ai-api-key-ready', { detail: { provider: providerName } }));
                     if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
                         window.fallbackMonitor.notify({
@@ -255,7 +255,7 @@
         }
 
         /**
-         * Get модель for провайдера
+         * Get model for provider
          * @param {string} providerName - 'yandex'
          * @returns {Promise<string>}
          */
@@ -276,7 +276,7 @@
         }
 
         /**
-         * Get list доступных моделей for провайдера
+         * Get list of available models for provider
          * @param {string} providerName - 'yandex'
          * @returns {Array<Object>} [{ value: string, label: string }]
          */
@@ -286,7 +286,7 @@
         }
 
         /**
-         * Get list всех доступных провайдеров
+         * Get list of all available providers
          * @returns {Array<Object>} [{ value: string, label: string, provider: BaseAIProvider }]
          */
         getAvailableProviders() {
@@ -298,7 +298,7 @@
         }
 
         /**
-         * Get провайдер по имени
+         * Get provider by name
          * @param {string} providerName
          * @returns {BaseAIProvider|null}
          */
@@ -307,11 +307,11 @@
         }
     }
 
-    // Создаем и экспортируем экземпляр менеджера
+    // Create and export manager instance
     window.aiProviderManager = new AIProviderManager();
 
-    // Инициализируем после загрузки всех провайдеров
-    // Вызываем init() сразу, так как провайдеры уже должны быть loadedы
+    // Initialize after all providers loaded
+    // Call init() immediately as providers should already be loaded
     // (они загружаются раньше через модульную систему)
     if (window.YandexProvider) {
         window.aiProviderManager.init();

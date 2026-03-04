@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * PORTFOLIOS MANAGER COMPONENT - Компонент управления портфелями
+ * PORTFOLIOS MANAGER COMPONENT - Portfolio management component
  * ================================================================================================
  *
- * PURPOSE: Vue-компонент for managing портфелями пользователя через Cloudflare API.
+ * PURPOSE: Vue component for managing user portfolios via Cloudflare API.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
@@ -11,14 +11,14 @@
  *
  * Skill: core/skills/domain-portfolio
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
- * Props: нет
+ * Props: none
  *
  * Events:
- * - portfolio-created — эмитируется после создания портфеля
- * - portfolio-updated — эмитируется после обновления портфеля
- * - portfolio-deleted — эмитируется после удаления портфеля
+ * - portfolio-created — emitted after portfolio creation
+ * - portfolio-updated — emitted after portfolio update
+ * - portfolio-deleted — emitted after portfolio deletion
  *
 */
 
@@ -54,7 +54,7 @@ window.portfoliosManager = {
 
     computed: {
         /**
-         * Заголовок модального окна
+         * Modal title
          * @returns {string}
          */
         modalTitle() {
@@ -68,7 +68,7 @@ window.portfoliosManager = {
     },
 
     async mounted() {
-        // Проверка авторизации перед загрузкой
+        // Check auth before load
         if (window.authClient) {
             const authenticated = await window.authClient.isAuthenticated();
             if (authenticated) {
@@ -79,7 +79,7 @@ window.portfoliosManager = {
 
     methods: {
         /**
-         * Загрузка списка портфелей
+         * Load portfolio list
          */
         async loadPortfolios() {
             try {
@@ -102,7 +102,7 @@ window.portfoliosManager = {
         },
 
         /**
-         * Открытие модального окна for создания портфеля
+         * Open modal for portfolio creation
          */
         openCreateModal() {
             this.isEditing = false;
@@ -126,13 +126,13 @@ window.portfoliosManager = {
         },
 
         /**
-         * Открытие модального окна for редактирования портфеля
-         * @param {Object} portfolio - Портфель for редактирования
+         * Open modal for portfolio edit
+         * @param {Object} portfolio - Portfolio to edit
          */
         openEditModal(portfolio) {
             this.isEditing = true;
             this.editingPortfolioId = portfolio.id;
-            // Глубокое копирование assets for предотвращения мутаций оригинальных данных
+            // Deep copy assets to prevent mutating original data
             const assetsCopy = portfolio.assets && Array.isArray(portfolio.assets)
                 ? portfolio.assets.map(asset => ({ ...asset }))
                 : [];
@@ -141,7 +141,7 @@ window.portfoliosManager = {
                 description: portfolio.description || '',
                 assets: assetsCopy,
             };
-            // Сохраняем исходные данные for восстановления при отмене
+            // Store initial data for restore on cancel
             this.initialFormData = {
                 name: portfolio.name || '',
                 description: portfolio.description || '',
@@ -156,25 +156,25 @@ window.portfoliosManager = {
         },
 
         /**
-         * Открытие портфеля (пока заглушка)
-         * @param {string|number} portfolioId - ID портфеля
+         * Open portfolio (stub for now)
+         * @param {string|number} portfolioId - Portfolio ID
          */
         openPortfolio(portfolioId) {
             console.log('portfolios-manager.openPortfolio:', portfolioId);
-            // TODO: Реализовать открытие портфеля (будет на Этапе 8)
+            // TODO: Implement portfolio open (Stage 8)
         },
 
         /**
-         * Подтверждение удаления портфеля
-         * @param {Object} portfolio - Портфель for удаления
+         * Confirm portfolio deletion
+         * @param {Object} portfolio - Portfolio to delete
          */
         confirmDelete(portfolio) {
             this.deletePortfolio(portfolio.id);
         },
 
         /**
-         * Удаление портфеля
-         * @param {string|number} portfolioId - ID портфеля
+         * Delete portfolio
+         * @param {string|number} portfolioId - Portfolio ID
          */
         async deletePortfolio(portfolioId) {
             try {
@@ -189,7 +189,7 @@ window.portfoliosManager = {
                 this.successMessage = 'Портфель успешно удалён';
                 this.$emit('portfolio-deleted', portfolioId);
 
-                // Перезагружаем list portfolios
+                // Reload portfolio list
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.deletePortfolio error:', error);
@@ -200,11 +200,11 @@ window.portfoliosManager = {
         },
 
         /**
-         * Сохранение портфеля (создание или обновление)
-         * Вызывается из portfolio-modal-body через onSave
-         * @param {string} name - Название портфеля
-         * @param {string} description - Описание портфеля
-         * @param {Array} assets - Активы портфеля
+         * Save portfolio (create or update)
+         * Called from portfolio-modal-body via onSave
+         * @param {string} name - Portfolio name
+         * @param {string} description - Portfolio description
+         * @param {Array} assets - Portfolio assets
          */
         async handleSave(name, description, assets) {
             try {
@@ -235,7 +235,7 @@ window.portfoliosManager = {
                     this.$emit('portfolio-created', savedPortfolio);
                 }
 
-                // Обновляем formData с сохраненными данными
+                // Update formData with saved data
                 this.formData = {
                     name: savedPortfolio.name || '',
                     description: savedPortfolio.description || '',
@@ -247,7 +247,7 @@ window.portfoliosManager = {
                     assets: (savedPortfolio.assets || []).map(asset => ({ ...asset })),
                 };
 
-                // Перезагружаем list portfolios
+                // Reload portfolio list
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.handleSave error:', error);
@@ -257,26 +257,26 @@ window.portfoliosManager = {
         },
 
         /**
-         * Отмена редактирования
-         * Вызывается из portfolio-modal-body через onCancel
+         * Cancel editing
+         * Called from portfolio-modal-body via onCancel
          */
         handleCancel() {
-            // Восстанавливаем исходные данные
+            // Restore initial data
             this.formData = {
                 name: this.initialFormData.name,
                 description: this.initialFormData.description,
                 assets: this.initialFormData.assets.map(asset => ({ ...asset })),
             };
 
-            // Закрываем модальное окно
+            // Close modal
             if (this.$refs.portfolioModal) {
                 this.$refs.portfolioModal.hide();
             }
         },
 
         /**
-         * Форматирование даты for отображения
-         * @param {string} dateString - Дата в формате ISO
+         * Format date for display
+         * @param {string} dateString - Date in ISO format
          * @returns {string}
          */
         formatDate(dateString) {

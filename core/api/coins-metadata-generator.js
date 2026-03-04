@@ -4,16 +4,16 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Автоматическая генерация и обновление файла coins.json на GitHub.
+ * PURPOSE: Automatic generation and update of coins.json file on GitHub.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
  *
- * ФУНКЦИИ:
- * 1. Сбор списка стейблкоинов через coingecko-stablecoins-loader
- * 2. Определение Wrapped и LST монет через эвристику и API
- * 3. Формирование финальной структуры JSON
- * 4. Загрузка в GitHub через API (используя app_github_token)
+ * FUNCTIONS:
+ * 1. Collect stablecoins list via coingecko-stablecoins-loader
+ * 2. Detect Wrapped and LST coins via heuristics and API
+ * 3. Build final JSON structure
+ * 4. Upload to GitHub via API (using app_github_token)
  */
 
 (function() {
@@ -26,7 +26,7 @@
     };
 
     /**
-     * Запустить процесс генерации и обновления
+     * Run generation and update process
      */
     async function generateAndUpload() {
         console.log('🚀 CoinsMetadataGenerator: запуск генерации...');
@@ -42,14 +42,14 @@
         }
 
         try {
-            // 1. Собираем стейблкоины
+            // 1. Collect stablecoins
             console.log('📡 Сбор стейблкоинов...');
             let stableList = [];
             if (window.coingeckoStablecoinsLoader) {
                 stableList = await window.coingeckoStablecoinsLoader.load({ forceRefresh: true });
             }
 
-            // 2. Собираем топ-250 монет for поиска wrapped/lst (эвристика)
+            // 2. Fetch top-250 coins for wrapped/lst detection (heuristics)
             console.log('📡 Поиск Wrapped и LST монет...');
             const topCoins = await fetchTopCoins();
             const wrappedIds = [];
@@ -60,20 +60,20 @@
                 const name = (coin.name || '').toLowerCase();
                 const symbol = (coin.symbol || '').toLowerCase();
 
-                // Исключаем стейблкоины из поиска оберток
+                // Exclude stablecoins from wrapped search
                 if (stableList.some(s => s.id === id)) return;
 
-                // Эвристика for Wrapped
+                // Heuristic for Wrapped
                 if (id.includes('wrapped-') || name.includes('wrapped ') || (symbol.startsWith('w') && symbol.length > 2 && id !== 'waves')) {
                     wrappedIds.push(id);
                 }
-                // Эвристика for LST (Liquid Staking Tokens)
+                // Heuristic for LST (Liquid Staking Tokens)
                 else if (id.includes('staked-') || name.includes('staked ') || name.includes('liquid staking') || id.endsWith('-steth')) {
                     lstIds.push(id);
                 }
             });
 
-            // 3. Формируем финальный объект
+            // 3. Build final object
             const result = {
                 stable: stableList.map(s => s.id),
                 wrapped: Array.from(new Set(wrappedIds)).sort(),
@@ -83,7 +83,7 @@
 
             console.log(`✅ Сформировано: ${result.stable.length} стейблов, ${result.wrapped.length} оберток, ${result.lst.length} LST`);
 
-            // 4. Загружаем в GitHub
+            // 4. Upload to GitHub
             await uploadToGithub(result, token);
 
         } catch (error) {
@@ -95,7 +95,7 @@
     }
 
     /**
-     * Загрузка списка топ-250 монет for анализа
+     * Fetch top-250 coins list for analysis
      */
     async function fetchTopCoins() {
         const url = window.cloudflareConfig?.getApiProxyEndpoint('coingecko', '/coins/markets', {
@@ -113,7 +113,7 @@
     }
 
     /**
-     * Загрузка в GitHub API
+     * Upload to GitHub API
      */
     async function uploadToGithub(data, token) {
         const url = `https://api.github.com/repos/${CONFIG.repo}/contents/${CONFIG.path}`;
@@ -121,7 +121,7 @@
 
         console.log(`📤 Загрузка в GitHub: ${CONFIG.repo}/${CONFIG.path}...`);
 
-        // 1. Получаем SHA текущего файла
+        // 1. Get current file SHA
         let sha = null;
         try {
             const checkRes = await fetch(url, {
@@ -133,7 +133,7 @@
             }
         } catch (e) {}
 
-        // 2. PUT запрос
+        // 2. PUT request
         const res = await fetch(url, {
             method: 'PUT',
             headers: {

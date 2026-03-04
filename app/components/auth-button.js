@@ -1,22 +1,22 @@
 /**
  * ================================================================================================
- * AUTH BUTTON COMPONENT - Компонент кнопки авторизации и профиля пользователя
+ * AUTH BUTTON COMPONENT - Authentication button and user profile component
  * ================================================================================================
  *
- * PURPOSE: Vue-компонент for отображения кнопки входа через Google или профиля пользователя.
+ * PURPOSE: Vue component for displaying Google sign-in button or user profile.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/file-protocol-cors-guard
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
- * Props: нет
+ * Props: none
  *
  * Events:
- * - login-success — эмитируется после успешного входа
- * - logout-success — эмитируется после успешного logoutа
+ * - login-success — emitted after successful login
+ * - logout-success — emitted after successful logout
  *
 */
 
@@ -40,7 +40,7 @@ window.authButton = {
             return window.uiState ? window.uiState.getState() : null;
         },
         /**
-         * Отображаемое имя пользователя
+         * Display name for user
          * @returns {string}
          */
         userDisplayName() {
@@ -60,24 +60,24 @@ window.authButton = {
     },
 
     async mounted() {
-        // Проверка состояния авторизации при монтировании
+        // Check auth status on mount
         await this.checkAuthStatus();
 
-        // Обработка callback от Google OAuth (если есть code в URL)
+        // Handle callback from Google OAuth (if code in URL)
         await this.handleAuthCallback();
 
-        // Обработка postMessage от popup окна OAuth callback
+        // Handle postMessage from OAuth callback popup
         window.addEventListener('message', this.handleOAuthMessage);
     },
 
     beforeUnmount() {
-        // Удаляем обработчик postMessage при размонтировании компонента
+        // Remove postMessage handler on unmount
         window.removeEventListener('message', this.handleOAuthMessage);
     },
 
     methods: {
         /**
-         * Проверка состояния авторизации
+         * Check authentication status
          */
         async checkAuthStatus() {
             try {
@@ -89,9 +89,9 @@ window.authButton = {
                 const authenticated = await window.authClient.isAuthenticated();
 
                 if (authenticated) {
-                    // Получаем данные пользователя
+                    // Get user data
                     const user = await window.authClient.getCurrentUser();
-                    // Единое состояние хранится в authState; локальные computed читают оттуда.
+                    // Unified state stored in authState; local computed reads from there.
                     window.authState.setAuthState(user !== null, user);
                 } else {
                     window.authState.clearAuthState();
@@ -103,7 +103,7 @@ window.authButton = {
         },
 
         /**
-         * Обработка callback от Google OAuth
+         * Handle callback from Google OAuth
          */
         async handleAuthCallback() {
             try {
@@ -111,13 +111,13 @@ window.authButton = {
                     return;
                 }
 
-                // Проверяем наличие code в URL
+                // Check for code in URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const code = urlParams.get('code');
                 const state = urlParams.get('state');
 
                 if (code && state) {
-                    // Обрабатываем callback
+                    // Handle callback
                     if (window.authState) {
                         window.authState.setLoading(true);
                     }
@@ -145,25 +145,25 @@ window.authButton = {
         },
 
         /**
-         * Обработка postMessage от popup окна OAuth callback
+         * Handle postMessage from OAuth callback popup
          */
         async handleOAuthMessage(event) {
-            // Проверяем, что сообщение от нашего Worker callback
-            // Принимаем сообщения с любым origin, так как при file:// точный origin неизвестен
+            // Verify message is from our Worker callback
+            // Accept messages from any origin, as file:// has unknown origin
             if (event.data && event.data.type === 'oauth-callback' && event.data.success) {
                 try {
                     const tokenData = event.data.token;
 
                     if (tokenData && tokenData.access_token) {
-                        // Сохраняем токен через auth-client
+                        // Save token via auth-client
                         if (window.authClient && window.authClient.saveToken) {
                             await window.authClient.saveToken(tokenData);
                         }
 
-                        // Обновляем состояние авторизации
+                        // Update auth state
                         await this.checkAuthStatus();
 
-                        // Эмитируем событие успешного входа
+                        // Emit successful login event
                         this.$emit('login-success', tokenData);
                     }
                 } catch (error) {
@@ -183,7 +183,7 @@ window.authButton = {
         },
 
         /**
-         * Обработка клика на кнопку входа
+         * Handle login button click
          */
         async handleLogin() {
             try {
@@ -211,7 +211,7 @@ window.authButton = {
         },
 
         /**
-         * Обработка logoutа
+         * Handle logout
          */
         async handleLogout() {
             try {
@@ -228,7 +228,7 @@ window.authButton = {
                 this.$emit('logout-success');
             } catch (error) {
                 console.error('auth-button.handleLogout error:', error);
-                // Даже при ошибке обновляем состояние
+                // Update state even on error
                 window.authState.clearAuthState();
                 this.$emit('logout-success');
             } finally {

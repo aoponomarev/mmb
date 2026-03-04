@@ -1,6 +1,6 @@
 /**
  * ================================================================================================
- * ICON MANAGER TEMPLATE - Шаблон модального окна управления иконками
+ * ICON MANAGER TEMPLATE - Icon manager modal template
  * ================================================================================================
  */
 
@@ -8,7 +8,7 @@
     'use strict';
 
     const TEMPLATE = `<div class="icon-manager-modal">
-        <!-- Блок токена (если not configured) -->
+        <!-- Token block (if not configured) -->
         <div v-if="!githubToken" class="alert alert-warning mb-4">
             <h6 class="alert-heading"><i class="fas fa-key me-2"></i>GitHub Token not configured</h6>
             <p class="small mb-2">Для загрузки иконок в репозиторий <code>libs</code> необходимо указать Personal Access Token.</p>
@@ -19,7 +19,7 @@
         </div>
 
         <div v-if="githubToken" class="container-fluid p-0">
-            <!-- Первая строка: Внешний URL (на всю ширину) -->
+            <!-- First row: External URL (full width) -->
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="p-3 border rounded bg-body-tertiary">
@@ -35,12 +35,12 @@
                 </div>
             </div>
 
-            <!-- Вторая строка: Изображения и Загрузка -->
+            <!-- Second row: Images and Upload -->
             <div class="row g-4">
-                <!-- Левая колонка: Сравнение иконок (без фона и рамок) -->
+                <!-- Left column: Icon comparison (no background/borders) -->
                 <div class="col-md-6">
                     <div class="h-100 d-flex flex-column justify-content-center px-2">
-                        <!-- Актуальная -->
+                        <!-- Current -->
                         <div class="row align-items-center mb-3">
                             <div class="col-5 text-end">
                                 <span class="text-muted x-small uppercase fw-bold">Актуальная</span>
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Новая -->
+                        <!-- New -->
                         <div class="row align-items-center">
                             <div class="col-5 text-end">
                                 <span class="text-primary x-small uppercase fw-bold">Новая</span>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                <!-- Правая колонка: Drag & Drop (с фоном и рамкой) -->
+                <!-- Right column: Drag & Drop (with background and border) -->
                 <div class="col-md-6">
                     <div
                         class="p-3 border rounded bg-body-tertiary h-100 d-flex flex-column align-items-center justify-content-center text-center cursor-pointer icon-drop-zone"
@@ -90,7 +90,7 @@
         </div>
     </div>`;
 
-    // Добавляем в DOM
+    // Add to DOM
     function insertTemplate() {
         if (document.getElementById('icon-manager-modal-body-template')) return;
         const scriptElement = document.createElement('script');
@@ -106,5 +106,5 @@
         insertTemplate();
     }
 
-    console.log('icon-manager-modal-body-template.js: шаблон loaded');
+    console.log('icon-manager-modal-body-template.js: template loaded');
 })();

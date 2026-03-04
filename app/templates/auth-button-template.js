@@ -1,22 +1,22 @@
 /**
  * ================================================================================================
- * AUTH BUTTON TEMPLATE - Шаблон компонента кнопки авторизации
+ * AUTH BUTTON TEMPLATE - Auth button component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента auth-button с условным отображением кнопки входа или профиля пользователя.
+ * PURPOSE: Template for auth-button with conditional login button or user profile.
  *
- * АДАПТИВНОСТЬ:
- * - Если not authenticated: кнопка "Войти через Google" с иконкой
- * - Если авторизован: dropdown с профилем пользователя (аватар, имя, email) и кнопкой logoutа
+ * ADAPTIVE:
+ * - If not authenticated: "Sign in with Google" button with icon
+ * - If authenticated: dropdown with user profile (avatar, name, email) and logout button
  *
- * BOOTSTRAP КЛАССЫ:
- * - Используется cmp-dropdown for меню профиля
- * - Используется cmp-button for кнопки входа
- * - Все стили через Bootstrap классы
+ * BOOTSTRAP CLASSES:
+ * - cmp-dropdown for profile menu
+ * - cmp-button for login button
+ * - All styles via Bootstrap classes
  *
- * АДАПТИВНОСТЬ:
- * - На мобильных: только иконка Google
- * - На десктопе: иконка + текст "Войти через Google"
+ * RESPONSIVE:
+ * - On mobile: Google icon only
+ * - On desktop: icon + "Sign in with Google" text
  *
  * REFERENCES:
  * - Компонент: app/components/auth-button.js
@@ -27,7 +27,7 @@
 
     const template = `
         <div class="auth-button-wrapper">
-            <!-- Кнопка входа (если not authenticated) -->
+            <!-- Login button (if not authenticated) -->
             <cmp-button
                 v-if="!isAuthenticated"
                 :label="'Войти через Google'"
@@ -40,7 +40,7 @@
                 button-id="auth-login-button"
             />
 
-            <!-- Dropdown с профилем (если авторизован) -->
+            <!-- Profile dropdown (if authenticated) -->
             <cmp-dropdown
                 v-else
                 :button-attributes="{
@@ -80,7 +80,7 @@
     `;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -90,7 +90,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

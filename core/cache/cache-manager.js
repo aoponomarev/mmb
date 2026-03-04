@@ -1,49 +1,49 @@
 /**
  * ================================================================================================
- * CACHE MANAGER - Единый интерфейс for работы с кэшем
+ * CACHE MANAGER - Unified interface for cache operations
  * ================================================================================================
  * @skill core/skills/cache-layer
  *
- * PURPOSE: Единая точка доступа к кэшу for всех компонентов. Абстракция над localStorage и IndexedDB.
+ * PURPOSE: Single access point to cache for all components. Abstraction over localStorage and IndexedDB.
  *
- * НЕ версионируются:
- * Ключи версионируются префиксом v:{hash}:{key} for автоматической инвалидации при обновлении.
+ * NOT versioned:
+ * Keys are versioned with prefix v:{hash}:{key} for automatic invalidation on update.
  *
- * Алгоритм getVersionedKey():
- * - Автоматически версионирует ключи из массива versionedKeys (данные из внешних API)
- * - Пользовательские данные не версионируются (settings, portfolios, strategies)
- * - Версия генерируется из CONFIG.version через appConfig.getVersionHash()
+ * getVersionedKey() algorithm:
+ * - Automatically version keys from versionedKeys array (data from external APIs)
+ * - User data not versioned (settings, portfolios, strategies)
+ * - Version generated from CONFIG.version via appConfig.getVersionHash()
  *
- * Версионируемые ключи (автоматически):
+ * Versioned keys (automatic):
  * - icons-cache, coins-list, api-cache, market-metrics, crypto-news-state
- * Причина: структура данных зависит от внешних API, изменения формата вызовут ошибки парсинга.
+ * Reason: data structure depends on external APIs, format changes cause parse errors.
  *
- * НЕ версионируются:
- * - settings, portfolios, strategies, time-series, history — пользовательские данные
- * - theme, timezone, favorites, ui-state — настройки и состояние UI
- * - yandex-api-key, ai-provider — настройки провайдеров
- * Причина: должны сохраняться между обновлениями, используют миграции схем при необходимости.
+ * NOT versioned:
+ * - settings, portfolios, strategies, time-series, history — user data
+ * - theme, timezone, favorites, ui-state — settings and UI state
+ * - yandex-api-key, ai-provider — provider settings
+ * Reason: must persist across updates, use schema migrations when needed.
  *
- * МЕТОДЫ:
- * - get(key, options) — получить значение из кэша с проверкой TTL и миграциями
- * - set(key, value, options) — сохранить значение с автоматическим определением слоя
- * - has(key, options) — проверить наличие ключа в кэше
- * - delete(key, options) — удалить ключ из кэша
- * - clearOldVersions() — удалить ключи всех версий кроме текущей
- * - getVersionedKey(key, useVersioning) — получить версионированный ключ (for внутреннего использования)
+ * METHODS:
+ * - get(key, options) — get value from cache with TTL check and migrations
+ * - set(key, value, options) — save value with automatic layer detection
+ * - has(key, options) — check if key exists in cache
+ * - delete(key, options) — remove key from cache
+ * - clearOldVersions() — remove keys of all versions except current
+ * - getVersionedKey(key, useVersioning) — get versioned key (for internal use)
  *
- * ПРИМЕРЫ:
+ * EXAMPLES:
  * await cacheManager.get('coins-list')
  * await cacheManager.set('coins-list', data, { ttl: 86400000 })
  * await cacheManager.clearOldVersions()
  *
- * ССЫЛКА: General principles кэширования: core/skills/cache-layer
+ * REFERENCE: General caching principles: core/skills/cache-layer
  */
 
 (function() {
     'use strict';
 
-    // Зависимости (загружаются до этого скрипта)
+    // Dependencies (loaded before this script)
     // - core/cache/storage-layers.js (window.storageLayers)
     // - core/cache/cache-config.js (window.cacheConfig)
     // - core/cache/cache-migrations.js (window.cacheMigrations)
@@ -59,8 +59,8 @@
     }
 
     /**
-     * Get хэш версии приложения for версионирования кэша
-     * @returns {string} - хэш версии или 'default'
+     * Get app version hash for cache versioning
+     * @returns {string} - version hash or 'default'
      */
     function getAppVersionHash() {
         if (window.appConfig && typeof window.appConfig.getVersionHash === 'function') {
@@ -70,9 +70,9 @@
     }
 
     /**
-     * Определяет слой хранения for ключа
-     * @param {string} key - ключ кэша
-     * @returns {string} - 'hot', 'warm' или 'cold'
+     * Determine storage layer for key
+     * @param {string} key - cache key
+     * @returns {string} - 'hot', 'warm' or 'cold'
      */
     function getStorageLayer(key) {
         const layerConfig = window.storageLayers.getLayerForKey(key);
@@ -80,23 +80,23 @@
     }
 
     /**
-     * Get версионированный ключ кэша
-     * Добавляет префикс версии for ключей, которые должны инвалидироваться при смене версии
-     * @param {string} key - исходный ключ
-     * @param {boolean} useVersioning - использовать ли версионирование (по умолчанию auto-detected)
-     * @returns {string} - версионированный ключ вида 'v:{hash}:{key}' или исходный ключ
+     * Get versioned cache key
+     * Adds version prefix for keys that should invalidate on version change
+     * @param {string} key - source key
+     * @param {boolean} useVersioning - whether to use versioning (default auto-detected)
+     * @returns {string} - versioned key like 'v:{hash}:{key}' or source key
      */
     function getVersionedKey(key, useVersioning = null) {
-        // Автоматическое определение необходимости версионирования
+        // Auto-detect versioning necessity
         if (useVersioning === null) {
             // @skill-anchor core/skills/cache-layer #for-key-versioning
             const versionedKeys = [
-                'icons-cache',        // Иконки монет (структура CoinGecko API)
-                'coins-list',         // Список монет (структура CoinGecko API)
-                'api-cache',          // Кэш API-ответов (структура внешних API)
-                'market-metrics',     // Метрики рынка (структура внешних API)
-                'crypto-news-state',  // Состояние новостей (структура зависит от промпта AI провайдера)
-                'stablecoins-list'    // Список стейблкоинов (структура CoinGecko API)
+                'icons-cache',        // Coin icons (CoinGecko API structure)
+                'coins-list',         // Coin list (CoinGecko API structure)
+                'api-cache',          // API response cache (external API structure)
+                'market-metrics',     // Market metrics (external API structure)
+                'crypto-news-state',  // News state (structure depends on AI provider prompt)
+                'stablecoins-list'    // Stablecoins list (CoinGecko API structure)
             ];
             useVersioning = versionedKeys.includes(key);
         }
@@ -110,10 +110,10 @@
     }
 
     /**
-     * Get значение из кэша
-     * @param {string} key - ключ
-     * @param {Object} options - опции (strategy, ttl, useVersioning)
-     * @returns {Promise<any>} - значение или null
+     * Get value from cache
+     * @param {string} key - key
+     * @param {Object} options - options (strategy, ttl, useVersioning)
+     * @returns {Promise<any>} - value or null
      */
     async function get(key, options = {}) {
         try {
@@ -131,13 +131,13 @@
                 return null;
             }
 
-            // Проверка TTL
+            // TTL check
             if (cached.expiresAt && cached.expiresAt < Date.now()) {
                 await storage.delete(versionedKey);
                 return null;
             }
 
-            // Миграция данных при необходимости
+            // Migrate data if needed
             if (cached.version && window.cacheMigrations) {
                 const migrated = await window.cacheMigrations.migrate(key, cached);
                 if (migrated !== cached) {
@@ -153,11 +153,11 @@
     }
 
     /**
-     * Сохранить значение в кэш
-     * @param {string} key - ключ
-     * @param {any} value - значение
-     * @param {Object} options - опции (ttl, version, useVersioning)
-     * @returns {Promise<boolean>} - успех операции
+     * Save value to cache
+     * @param {string} key - key
+     * @param {any} value - value
+     * @param {Object} options - options (ttl, version, useVersioning)
+     * @returns {Promise<boolean>} - success
      */
     async function set(key, value, options = {}) {
         try {
@@ -188,9 +188,9 @@
     }
 
     /**
-     * Проверить наличие ключа в кэше
-     * @param {string} key - ключ
-     * @param {Object} options - опции (useVersioning)
+     * Check if key exists in cache
+     * @param {string} key - key
+     * @param {Object} options - options (useVersioning)
      * @returns {Promise<boolean>}
      */
     async function has(key, options = {}) {
@@ -211,9 +211,9 @@
     }
 
     /**
-     * Delete значение из кэша
-     * @param {string} key - ключ
-     * @param {Object} options - опции (useVersioning)
+     * Delete value from cache
+     * @param {string} key - key
+     * @param {Object} options - options (useVersioning)
      * @returns {Promise<boolean>}
      */
     async function deleteKey(key, options = {}) {
@@ -235,8 +235,8 @@
     }
 
     /**
-     * Очистить весь кэш или слой
-     * @param {string} layer - слой ('hot', 'warm', 'cold') или null for всех
+     * Clear entire cache or layer
+     * @param {string} layer - layer ('hot', 'warm', 'cold') or null for all
      * @returns {Promise<boolean>}
      */
     async function clear(layer = null) {
@@ -247,7 +247,7 @@
                     await storage.clear();
                 }
             } else {
-                // Очистить все слои
+                // Clear all layers
                 for (const layerName of ['hot', 'warm', 'cold']) {
                     const storage = window.storageLayers.getStorage(layerName);
                     if (storage) {
@@ -264,25 +264,25 @@
 
     // Export to global scope
     /**
-     * Очистить кэш старых версий приложения
-     * Удаляет все ключи с префиксом версии, кроме текущей
-     * @returns {Promise<number>} - количество удаленных ключей
+     * Clear cache of old app versions
+     * Removes all keys with version prefix except current
+     * @returns {Promise<number>} - count of removed keys
      */
     async function clearOldVersions() {
         try {
             const currentVersionHash = getAppVersionHash();
             let deletedCount = 0;
 
-            // Проходим по всем слоям хранения
+            // Iterate over all storage layers
             const layers = ['hot', 'warm', 'cold'];
             for (const layerName of layers) {
                 const storage = window.storageLayers.getStorage(layerName);
                 if (!storage) continue;
 
-                // Получаем все ключи из слоя
+                // Get all keys from layer
                 const allKeys = await storage.keys();
 
-                // Фильтруем ключи с версионным префиксом
+                // Filter keys with version prefix
                 for (const key of allKeys) {
                     if (key.startsWith('v:') && !key.startsWith(`v:${currentVersionHash}:`)) {
                         await storage.delete(key);
@@ -291,7 +291,7 @@
                 }
             }
 
-            console.log(`cache-manager: очищено ${deletedCount} ключей старых версий`);
+            console.log(`cache-manager: cleared ${deletedCount} old version keys`);
             return deletedCount;
         } catch (error) {
             console.error('cache-manager.clearOldVersions:', error);

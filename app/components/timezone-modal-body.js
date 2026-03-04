@@ -1,24 +1,24 @@
 /**
  * ================================================================================================
- * TIMEZONE MODAL BODY COMPONENT - Компонент body модального окна выбора таймзоны и языка перевода
+ * TIMEZONE MODAL BODY COMPONENT - Timezone and translation language selection modal
  * ================================================================================================
  *
- * PURPOSE: Интеграция timezone-selector и выбора языка перевода с системой управления кнопками модального окна.
+ * PURPOSE: Integrate timezone-selector and translation language with modal button system.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
- * ОСОБЕННОСТИ:
- * - Использует cmp-timezone-selector for выбора таймзоны
- * - Предоставляет выбор языка перевода новостей (10 языков)
- * - Регистрирует кнопки "Отмена" и "Сохранить" через modalApi
- * - Реактивно обновляет состояние кнопок при изменении таймзоны или языка перевода
- * - Управляет логикой отмены (восстановление исходных значений)
- * - Поддерживает состояние "Сохранено, закрыть?" for кнопки "Сохранить"
+ * FEATURES:
+ * - Uses cmp-timezone-selector for timezone selection
+ * - Translation language selection for news (10 languages)
+ * - Registers "Cancel" and "Save" buttons via modalApi
+ * - Reactive button state on timezone or language change
+ * - Cancel logic (restore initial values)
+ * - Supports "Saved, close?" state for Save button
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Props:
  * - modelValue (String, required) — текущая таймзона (v-model)
@@ -29,7 +29,7 @@
  * - onCancel (Function, required) — функция отмены
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -100,7 +100,7 @@ window.timezoneModalBody = {
         return {
             selectedTimezone: this.modelValue,
             selectedTranslationLanguage: this.translationLanguage,
-            isSaved: false // Состояние успешного сохранения
+            isSaved: false // Successful save state
         };
     },
 
@@ -113,7 +113,7 @@ window.timezoneModalBody = {
         },
         selectedTimezone(newVal) {
             this.$emit('update:modelValue', newVal);
-            // Сбрасываем состояние сохранения при изменении полей
+            // Reset save state on field change
             if (this.isSaved) {
                 this.isSaved = false;
             }
@@ -121,7 +121,7 @@ window.timezoneModalBody = {
         },
         selectedTranslationLanguage(newVal) {
             this.$emit('update:translationLanguage', newVal);
-            // Сбрасываем состояние сохранения при изменении полей
+            // Reset save state on field change
             if (this.isSaved) {
                 this.isSaved = false;
             }
@@ -130,7 +130,7 @@ window.timezoneModalBody = {
     },
 
     computed: {
-        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Unique prefix for form element IDs (avoid duplicates on modal reopen)
         formIdPrefix() {
             return `timezone-modal-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -153,14 +153,14 @@ window.timezoneModalBody = {
             if (!this.modalApi) return;
 
             if (this.isSaved) {
-                // Состояние "Сохранено, закрыть?"
+                // "Saved, close?" state
                 this.modalApi.updateButton('save', {
                     label: 'Сохранено, закрыть?',
                     variant: 'success',
                     disabled: false
                 });
             } else {
-                // Обычное состояние "Сохранить"
+                // Normal "Save" state
                 const hasChanges = this.selectedTimezone !== this.initialValue ||
                                  this.selectedTranslationLanguage !== this.initialTranslationLanguage;
                 this.modalApi.updateButton('save', {
@@ -173,25 +173,25 @@ window.timezoneModalBody = {
 
         handleCancel() {
             if (this.hasChanges) {
-                // Восстанавливаем исходные значения
+                // Restore initial values
                 this.selectedTimezone = this.initialValue;
                 this.selectedTranslationLanguage = this.initialTranslationLanguage;
                 this.$emit('update:modelValue', this.initialValue);
                 this.$emit('update:translationLanguage', this.initialTranslationLanguage);
             } else {
-                // Закрываем модальное окно
+                // Close modal
                 this.onCancel();
             }
         },
         handleSave() {
-            // Если уже сохранено - закрываем модальное окно через родительский компонент
+            // If already saved - close modal via parent
             if (this.isSaved) {
-                // Закрываем модальное окно через Bootstrap API
+                // Close modal via Bootstrap API
                 const modalElement = this.$el.closest('.modal');
                 if (modalElement && window.bootstrap && window.bootstrap.Modal) {
                     const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
                     if (modalInstance) {
-                        // Убираем фокус перед закрытием
+                        // Remove focus before close
                         if (document.activeElement && document.activeElement.blur) {
                             document.activeElement.blur();
                         }
@@ -201,19 +201,19 @@ window.timezoneModalBody = {
                 return;
             }
 
-            // Сохраняем данные
+            // Save data
             this.onSave(this.selectedTimezone, this.selectedTranslationLanguage);
 
-            // Переводим кнопку в состояние "Сохранено, закрыть?"
+            // Switch button to "Saved, close?" state
             this.isSaved = true;
             this.updateSaveButton();
         }
     },
 
     mounted() {
-        // Регистрируем кнопки при монтировании
+        // Register buttons on mount
         if (this.modalApi) {
-            // Кнопка "Отмена" только в footer
+            // "Cancel" button in footer only
             this.modalApi.registerButton('cancel', {
                 locations: ['footer'],
                 label: 'Отмена',
@@ -222,7 +222,7 @@ window.timezoneModalBody = {
                 onClick: () => this.handleCancel()
             });
 
-            // Кнопка "Сохранить" только в footer
+            // "Save" button in footer only
             this.modalApi.registerButton('save', {
                 locations: ['footer'],
                 label: 'Сохранить',
@@ -234,7 +234,7 @@ window.timezoneModalBody = {
     },
 
     beforeUnmount() {
-        // Удаляем кнопки при размонтировании
+        // Remove buttons on unmount
         if (this.modalApi) {
             this.modalApi.removeButton('cancel');
             this.modalApi.removeButton('save');

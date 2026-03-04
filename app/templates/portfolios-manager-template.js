@@ -1,19 +1,19 @@
 /**
  * ================================================================================================
- * PORTFOLIOS MANAGER TEMPLATE - Шаблон компонента управления портфелями
+ * PORTFOLIOS MANAGER TEMPLATE - Portfolio management component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента portfolios-manager со списком портфелей и модальным окном for создания/редактирования.
+ * PURPOSE: Template for portfolios-manager with portfolio list and create/edit modal.
  *
  * REFERENCES:
- * - Список портфелей (карточки или таблица)
- * - Кнопка "Создать портфель"
- * - Модальное окно for создания/редактирования портфеля
+ * - Portfolio list (cards or table)
+ * - "Create portfolio" button
+ * - Modal for portfolio create/edit
  *
- * BOOTSTRAP КЛАССЫ:
- * - Используется cmp-modal for модального окна
- * - Используется cmp-button for кнопок действий
- * - Все стили через Bootstrap классы
+ * BOOTSTRAP CLASSES:
+ * - cmp-modal for modal
+ * - cmp-button for action buttons
+ * - All styles via Bootstrap classes
  *
  * REFERENCES:
  * - Компонент: app/components/portfolios-manager.js
@@ -24,7 +24,7 @@
 
     const template = `
         <div class="portfolios-manager-wrapper">
-            <!-- Заголовок и кнопка создания -->
+            <!-- Header and create button -->
             <div class="d-flex justify-content-start align-items-center gap-3 mb-3">
                 <h3>Мои портфели</h3>
                 <cmp-button
@@ -38,19 +38,19 @@
                 />
             </div>
 
-            <!-- Сообщение об ошибке -->
+            <!-- Error message -->
             <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ error }}
                 <button type="button" class="btn-close" @click="error = null" aria-label="Close"></button>
             </div>
 
-            <!-- Сообщение об успехе -->
+            <!-- Success message -->
             <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ successMessage }}
                 <button type="button" class="btn-close" @click="successMessage = null" aria-label="Close"></button>
             </div>
 
-            <!-- Состояние загрузки -->
+            <!-- Loading state -->
             <div v-if="isLoading && portfolios.length === 0" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Загрузка...</span>
@@ -58,7 +58,7 @@
                 <p class="mt-2 text-muted">Загрузка портфелей...</p>
             </div>
 
-            <!-- Пустое состояние -->
+            <!-- Empty state -->
             <div v-else-if="!isLoading && portfolios.length === 0" class="text-center py-5 border rounded">
                 <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
                 <p class="text-muted">У вас пока нет портфелей</p>
@@ -71,7 +71,7 @@
                 />
             </div>
 
-            <!-- Список портфелей -->
+            <!-- Portfolio list -->
             <div v-else class="row g-3">
                 <div v-for="portfolio in portfolios" :key="portfolio.id" class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100">
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <!-- Модальное окно создания/редактирования портфеля -->
+            <!-- Portfolio create/edit modal -->
             <cmp-modal
                 :modal-id="'portfolioModal'"
                 size="lg"
@@ -151,7 +151,7 @@
     `;
 
     /**
-     * Вставляет шаблон в DOM
+     * Insert template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -161,7 +161,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Insert template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * POSTGRES SETTINGS TEMPLATE - Шаблон компонента настроек PostgreSQL API
+ * POSTGRES SETTINGS TEMPLATE - PostgreSQL API settings component template
  * ================================================================================================
  *
- * PURPOSE: Шаблон for компонента postgres-settings.
+ * PURPOSE: Template for postgres-settings component.
  *
  * REFERENCES:
  * - Компонент: app/components/postgres-settings.js

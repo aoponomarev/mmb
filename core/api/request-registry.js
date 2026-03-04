@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * REQUEST REGISTRY - Журнал обращений к внешним API
+ * REQUEST REGISTRY - Log of external API calls
  * ================================================================================================
- * PURPOSE: Отслеживание времени последних запросов к эндпоинтам for соблюдения rate limits.
- * Хранит состояние в localStorage, выживает после перезагрузки страницы.
+ * PURPOSE: Track last request times to endpoints for rate limit compliance.
+ * State stored in localStorage, survives page reload.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
@@ -20,7 +20,7 @@
     };
 
     /**
-     * Загрузить журнал из памяти
+     * Load registry from storage
      */
     function load() {
         try {
@@ -35,18 +35,18 @@
     }
 
     /**
-     * Сохранить журнал в память
+     * Save registry to storage
      */
     function save() {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(registry));
         } catch (e) {
-            // Игнорируем ошибки переполнения
+            // Ignore overflow errors
         }
     }
 
     /**
-     * Создать уникальный ключ for ресурса
+     * Create unique key for resource
      */
     function getResourceKey(provider, endpoint, params = {}) {
         const paramsHash = btoa(JSON.stringify(params)).substring(0, 16);
@@ -54,11 +54,11 @@
     }
 
     /**
-     * Проверить, можно ли делать запрос сейчас
+     * Check if request allowed now
      * @param {string} provider
      * @param {string} endpoint
      * @param {Object} params
-     * @param {number} minInterval - минимальный интервал в мс
+     * @param {number} minInterval - min interval in ms
      * @returns {boolean}
      */
     function isAllowed(provider, endpoint, params, minInterval = 60000) {
@@ -78,8 +78,8 @@
             ? window.ssot.getRequestRegistryBackoffMultiplier()
             : 1;
         const lastErrorStatus = Number(record.lastErrorStatus);
-        // При 429 применяем backoffMultiplier (по умолчанию 1 — не умножаем).
-        // consecutiveFailureMultiplier убран: повторные 429 не должны экспоненциально увеличивать блокировку.
+        // On 429 apply backoffMultiplier (default 1 — no multiply).
+        // consecutiveFailureMultiplier removed: repeated 429 should not exponentially increase block.
         const errorMultiplier = Number.isFinite(lastErrorStatus) && lastErrorStatus === 429
             ? Math.max(backoffMultiplier, 1)
             : 1;
@@ -90,7 +90,7 @@
     }
 
     /**
-     * Записать результат запроса
+     * Record request result
      */
     function recordCall(provider, endpoint, params, status, isSuccess = true) {
         const key = getResourceKey(provider, endpoint, params);
@@ -115,7 +115,7 @@
     }
 
     /**
-     * Get время до следующего разрешенного запроса
+     * Get time until next allowed request
      */
     function getTimeUntilNext(provider, endpoint, params, minInterval) {
         const key = getResourceKey(provider, endpoint, params);
@@ -142,7 +142,7 @@
     }
 
     /**
-     * Сбросить весь журнал запросов (using при ручном сбросе кэша)
+     * Clear entire request registry (on manual cache reset)
      */
     function clear() {
         registry.calls = {};

@@ -1,26 +1,26 @@
 /**
  * ================================================================================================
- * PORTFOLIOS IMPORT MODAL BODY - Компонент выборочного импорта портфелей
+ * PORTFOLIOS IMPORT MODAL BODY - Selective portfolio import component
  * ================================================================================================
  *
- * PURPOSE: Выборочный импорт портфелей из JSON с фильтрацией по дате и базовой валидацией.
+ * PURPOSE: Selective import of portfolios from JSON with date filter and basic validation.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: core/skills/domain-portfolio
  *
- * ОСОБЕННОСТИ:
- * - Выбор файла JSON и первичная проверка структуры
- * - Фильтрация портфелей по диапазону дат
- * - Выбор режима импорта: merge | replace
- * - Выбор конкретных портфелей через чекбоксы
- * - Импорт через portfolioConfig и синхронизация UI через eventBus
+ * FEATURES:
+ * - JSON file selection and structure validation
+ * - Portfolio filter by date range
+ * - Import mode: merge | replace
+ * - Select specific portfolios via checkboxes
+ * - Import via portfolioConfig and UI sync via eventBus
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 

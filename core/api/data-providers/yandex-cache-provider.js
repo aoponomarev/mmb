@@ -1,24 +1,24 @@
 /**
  * ================================================================================================
- * YANDEX CACHE PROVIDER - Провайдер данных из PostgreSQL (Yandex Cloud)
+ * YANDEX CACHE PROVIDER - Data provider from PostgreSQL (Yandex Cloud)
  * ================================================================================================
  *
- * PURPOSE: Читает данные монет из coin_market_cache (PostgreSQL Yandex Cloud),
+ * PURPOSE: Reads coin data from coin_market_cache (PostgreSQL Yandex Cloud),
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- *       которая обновляется кроном каждые 15 минут через coingecko-fetcher.
+ *       updated by cron every 15 minutes via coingecko-fetcher.
  *
- * ПРЕИМУЩЕСТВА перед прямым CoinGecko:
- * - Нет rate limit (данные уже в БД)
- * - Мгновенная загрузка (нет задержек между чанками)
- * - Данные не старше 15 минут
- * - Работает без интернет-соединения к CoinGecko
+ * ADVANTAGES over direct CoinGecko:
+ * - No rate limit (data already in DB)
+ * - Instant load (no delays between chunks)
+ * - Data no older than 15 minutes
+ * - Works without internet connection to CoinGecko
  *
- * ЭНДПОИНТ: GET /api/coins/market-cache через app-api (Yandex Cloud Function)
+ * ENDPOINT: GET /api/coins/market-cache via app-api (Yandex Cloud Function)
  * API Gateway: d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net
  *
- * ФОРМАТ ОТВЕТА:
+ * RESPONSE FORMAT:
  * { coins: [...], count: 250, fetched_at: "2026-02-27T..." }
  *
 */
@@ -30,7 +30,7 @@
     const MARKET_CACHE_ENDPOINT = `${API_GATEWAY_BASE}/api/coins/market-cache`;
 
     /**
-     * Провайдер данных из Yandex Cloud PostgreSQL (coin_market_cache)
+     * Data provider from Yandex Cloud PostgreSQL (coin_market_cache)
      */
     class YandexCacheProvider extends window.BaseDataProvider {
 
@@ -38,8 +38,8 @@
         getDisplayName() { return 'Yandex Cloud Cache (PostgreSQL)'; }
 
         /**
-         * Get топ N монет из кэша БД
-         * @param {number} count - Количество монет (1-500)
+         * Get top N coins from DB cache
+         * @param {number} count - Coin count (1-500)
          * @param {string} sortBy - 'market_cap' | 'volume'
          * @param {Object} options - { onProgress, signal }
          * @returns {Promise<Array>} Нормализованные монеты
@@ -56,15 +56,15 @@
         }
 
         /**
-         * Get данные монет по ID из кэша БД
-         * @param {string[]} coinIds - Массив ID монет
+         * Get coin data by ID from DB cache
+         * @param {string[]} coinIds - Array of coin IDs
          * @param {Object} options - { onProgress, signal }
-         * @returns {Promise<Array>} Нормализованные монеты
+         * @returns {Promise<Array>} Normalized coins
          */
         async getCoinData(coinIds, options = {}) {
             if (!Array.isArray(coinIds) || coinIds.length === 0) return [];
 
-            // Запрашиваем чанками по 100 ID (URL limit)
+            // Request in chunks of 100 IDs (URL limit)
             const CHUNK = 100;
             const allCoins = [];
 
@@ -90,10 +90,10 @@
         }
 
         /**
-         * Поиск монет по имени/тикеру (ищет в кэше)
+         * Search coins by name/ticker (searches in cache)
          */
         async searchCoins(query) {
-            // Загружаем все монеты из кэша и фильтруем локально
+            // Load all coins from cache and filter locally
             const data = await this._fetchFromCache(`${MARKET_CACHE_ENDPOINT}?limit=500`);
             const q = query.toLowerCase();
             return (data.coins || [])
@@ -102,7 +102,7 @@
         }
 
         /**
-         * Get ID монеты по тикеру
+         * Get coin ID by ticker
          */
         async getCoinIdBySymbol(symbol) {
             const data = await this._fetchFromCache(`${MARKET_CACHE_ENDPOINT}?limit=500`);
@@ -112,8 +112,8 @@
         }
 
         /**
-         * Проверить доступность кэша и получить реальное число монет в БД
-         * Использует count_only=true — лёгкий запрос без выгрузки данных
+         * Check cache availability and get actual coin count in DB
+         * Uses count_only=true — lightweight request without data fetch
          * @returns {Promise<{available: boolean, fetchedAt: Date|null, ageMinutes: number, count: number|null}>}
          */
         async checkCacheStatus() {
@@ -141,7 +141,7 @@
         }
 
         /**
-         * Нормализует строку из coin_market_cache к стандартному формату приложения
+         * Normalize row from coin_market_cache to app standard format
          */
         _normalizeRow(row) {
             const pv1h   = parseFloat(row.pv_1h)   || 0;
@@ -166,7 +166,7 @@
                 price_change_percentage_14d:  pv14d,
                 price_change_percentage_30d:  pv30d,
                 price_change_percentage_200d: pv200d,
-                // Поля for математической модели (калькуляторы используют pvs / PV*)
+                // Fields for math model (calculators use pvs / PV*)
                 pvs,
                 PV1h:   pv1h,
                 PV24h:  pv24h,
@@ -174,7 +174,7 @@
                 PV14d:  pv14d,
                 PV30d:  pv30d,
                 PV200d: pv200d,
-                ticker: row.symbol,  // калькулятор ищет btcCoin по coin.ticker
+                ticker: row.symbol,  // calculator looks up btcCoin by coin.ticker
                 _cachedAt: row.fetched_at ? new Date(row.fetched_at).getTime() : Date.now(),
                 _updatedAt: row.updated_at ? new Date(row.updated_at).getTime() : null,
                 _source:   'yandex-cache'

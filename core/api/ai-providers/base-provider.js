@@ -1,44 +1,44 @@
 /**
  * ================================================================================================
- * BASE AI PROVIDER - Базовый интерфейс for AI провайдеров
+ * BASE AI PROVIDER - Base interface for AI providers
  * ================================================================================================
  *
- * PURPOSE: Базовый класс for всех AI провайдеров (YandexGPT и т.д.)
+ * PURPOSE: Base class for all AI providers (YandexGPT, etc.)
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * Обеспечивает единый интерфейс for работы с разными провайдерами.
+ * Provides unified interface for working with different providers.
  *
  * Skill: core/skills/api-layer
  *
  * USAGE:
- * Наследуйте этот класс for создания новых провайдеров:
+ * Extend this class to create new providers:
  * class MyProvider extends BaseAIProvider { ... }
  *
-*/
+ */
 
 (function() {
     'use strict';
 
     /**
-     * Базовый класс for AI провайдеров
+     * Base class for AI providers
      */
     class BaseAIProvider {
         /**
-         * Отправить запрос к AI API
-         * @param {string} apiKey - API ключ
-         * @param {string} model - Модель
-         * @param {Array<Object>} messages - Массив сообщений в формате {role: 'user'|'assistant', content: string}
-         * @param {Object} options - Дополнительные опции (temperature, maxTokens и т.д.)
-         * @returns {Promise<string>} Текст ответа
-         * @throws {Error} При ошибке запроса
+         * Send request to AI API
+         * @param {string} apiKey - API key
+         * @param {string} model - Model
+         * @param {Array<Object>} messages - Array of messages in format {role: 'user'|'assistant', content: string}
+         * @param {Object} options - Additional options (temperature, maxTokens, etc.)
+         * @returns {Promise<string>} Response text
+         * @throws {Error} On request error
          */
         async sendRequest(apiKey, model, messages, options = {}) {
             throw new Error('sendRequest must be implemented by subclass');
         }
 
         /**
-         * Get модель по умолчанию
+         * Get default model
          * @returns {string}
          */
         getDefaultModel() {
@@ -46,7 +46,7 @@
         }
 
         /**
-         * Get list доступных моделей
+         * Get list of available models
          * @returns {Array<Object>} [{ value: string, label: string }]
          */
         getAvailableModels() {
@@ -54,7 +54,7 @@
         }
 
         /**
-         * Валидация API ключа (базовая проверка формата)
+         * Validate API key (basic format check)
          * @param {string} apiKey
          * @returns {boolean}
          */
@@ -63,7 +63,7 @@
         }
 
         /**
-         * Get имя провайдера
+         * Get provider name
          * @returns {string} 'yandex' | etc.
          */
         getName() {
@@ -71,7 +71,7 @@
         }
 
         /**
-         * Get отображаемое имя провайдера
+         * Get provider display name
          * @returns {string}
          */
         getDisplayName() {
@@ -79,7 +79,7 @@
         }
     }
 
-    // Экспорт класса
+    // Export class
     window.BaseAIProvider = BaseAIProvider;
 
     console.log('base-provider.js: initialized');

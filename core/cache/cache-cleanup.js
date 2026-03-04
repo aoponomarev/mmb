@@ -1,38 +1,38 @@
 /**
  * ================================================================================================
- * CACHE CLEANUP - Политики очистки кэша
+ * CACHE CLEANUP - Cache cleanup policies
  * ================================================================================================
  *
- * PURPOSE: Автоматическая очистка старых данных for предотвращения переполнения хранилища.
+ * PURPOSE: Automatic cleanup of stale data to prevent storage overflow.
  * Skill: core/skills/cache-layer
  *
- * ПОЛИТИКИ ОЧИСТКИ:
- * - time-series: maxAge 90 дней, compression true
- *   Причина: time series старше 3 месяцев редко используются, сжатие до 1 точки/час экономит место
- * - history: maxAge 1 год, compression true
- *   Причина: история старше года редко нужна, архивация сохраняет данные, но уменьшает объем
- * - portfolios, strategies: maxAge null (без ограничения)
- *   Причина: пользовательские данные, должны храниться всегда
- * - api-cache: maxAge 7 дней
- *   Причина: старые API-ответы неактуальны, 7 дней достаточен for fallback при сбоях
+ * CLEANUP POLICIES:
+ * - time-series: maxAge 90 days, compression true
+ *   Reason: time series older than 3 months rarely used, compress to 1 point/hour saves space
+ * - history: maxAge 1 year, compression true
+ *   Reason: history older than year rarely needed, archiving preserves data but reduces volume
+ * - portfolios, strategies: maxAge null (no limit)
+ *   Reason: user data, must persist
+ * - api-cache: maxAge 7 days
+ *   Reason: old API responses stale, 7 days sufficient for fallback on failures
  *
- * ПОЛИТИКИ ОЧИСТКИ:
- * При достижении квот хранилища очистка выполняется в порядке: cold → warm → hot
- * Причина: cold содержит самые большие данные (time series), hot содержит критичные настройки
+ * CLEANUP ORDER:
+ * On storage quota reached cleanup runs: cold → warm → hot
+ * Reason: cold has largest data (time series), hot has critical settings
  *
- * ССЫЛКА: General principles кэширования: core/skills/cache-layer
+ * REFERENCE: Caching principles: core/skills/cache-layer
  */
 
 (function() {
     'use strict';
 
     /**
-     * Политики очистки for каждого типа данных
+     * Cleanup policies per data type
      */
     const CLEANUP_POLICIES = {
         'time-series': {
             maxAge: 90 * 24 * 60 * 60 * 1000, // 90 дней
-            keepInterval: 60 * 60 * 1000,     // 1 точка в час for старых данных
+            keepInterval: 60 * 60 * 1000,     // 1 point per hour for old data
             compression: true
         },
         'history': {
@@ -40,11 +40,11 @@
             compression: true
         },
         'portfolios': {
-            maxAge: null, // Без ограничения (локальные данные пользователя)
+            maxAge: null, // No limit (user local data)
             compression: false
         },
         'strategies': {
-            maxAge: null, // Без ограничения
+            maxAge: null, // No limit
             compression: false
         },
         'api-cache': {
@@ -54,25 +54,25 @@
     };
 
     /**
-     * Очистить старые данные по политике
-     * @param {string} key - ключ кэша
-     * @returns {Promise<number>} - количество удалённых записей
+     * Clean stale data by policy
+     * @param {string} key - cache key
+     * @returns {Promise<number>} - removed records count
      */
     async function cleanup(key) {
         const policy = CLEANUP_POLICIES[key];
         if (!policy || !policy.maxAge) {
-            return 0; // Нет политики очистки
+            return 0; // No cleanup policy
         }
 
-        // Реализация будет добавлена при реализации IndexedDB
-        // Пока возвращаем заглушку
-        console.log(`cache-cleanup.cleanup(${key}): политика очистки определена, реализация IndexedDB требуется`);
+        // Implementation to be added with IndexedDB
+        // For now return stub
+        console.log(`cache-cleanup.cleanup(${key}): cleanup policy defined, IndexedDB implementation required`);
         return 0;
     }
 
     /**
-     * Очистить все данные по всем политикам
-     * @returns {Promise<Object>} - статистика очистки { key: count }
+     * Clean all data by all policies
+     * @returns {Promise<Object>} - cleanup stats { key: count }
      */
     async function cleanupAll() {
         const stats = {};
@@ -83,13 +83,13 @@
     }
 
     /**
-     * Проверить квоты хранилища и очистить при необходимости
-     * @returns {Promise<boolean>} - успех операции
+     * Check storage quotas and clean if needed
+     * @returns {Promise<boolean>} - operation success
      */
     async function checkQuotas() {
-        // Реализация будет добавлена при реализации IndexedDB
-        // Проверка размера хранилища и очистка при переполнении
-        console.log('cache-cleanup.checkQuotas(): проверка квот, реализация IndexedDB требуется');
+        // Implementation to be added with IndexedDB
+        // Check storage size and clean on overflow
+        console.log('cache-cleanup.checkQuotas(): quota check, IndexedDB implementation required');
         return true;
     }
 

@@ -4,32 +4,32 @@
  * ================================================================================================
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Предотвратить блокировку API из-за превышения лимитов запросов.
+ * PURPOSE: Prevent API blocking due to rate limit exceeded.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface #for-rate-limiting
- * Адаптивные таймауты, очередь запросов, приоритизация.
+ * Adaptive timeouts, request queue, prioritization.
  *
 */
 
 (function() {
     'use strict';
 
-    // Зависимости
+    // Dependencies
     // - core/config/api-config.js (window.apiConfig)
 
     /**
-     * Адаптивный таймаут for запросов
+     * Adaptive timeout for requests
      */
     const adaptiveTimeout = {
-        base: 300,        // 300ms базовое значение
-        max: 10000,       // 10 секунд максимум
-        current: 300,    // Текущее значение
+        base: 300,        // 300ms base value
+        max: 10000,       // 10 seconds max
+        current: 300,    // Current value
         lastErrorTime: null
     };
 
     /**
-     * Очередь запросов
+     * Request queue
      */
     const requestQueue = {
         queue: [],
@@ -37,7 +37,7 @@
     };
 
     /**
-     * Увеличить таймаут (при получении 429 ошибки)
+     * Increase timeout (on 429 error)
      */
     function increaseTimeout() {
         adaptiveTimeout.current = Math.min(adaptiveTimeout.current * 2, adaptiveTimeout.max);
@@ -46,10 +46,10 @@
     }
 
     /**
-     * Уменьшить таймаут (при успешных запросах)
+     * Decrease timeout (on successful requests)
      */
     function decreaseTimeout() {
-        // Уменьшаем только если прошло более 5 секунд без ошибок
+        // Decrease only if more than 5 seconds without errors
         if (adaptiveTimeout.lastErrorTime && Date.now() - adaptiveTimeout.lastErrorTime > 5000) {
             adaptiveTimeout.current = Math.max(adaptiveTimeout.current * 0.8, adaptiveTimeout.base);
             console.log(`rate-limiter: таймаут уменьшен до ${adaptiveTimeout.current}ms`);
@@ -57,7 +57,7 @@
     }
 
     /**
-     * Сбросить таймаут к базовому значению
+     * Reset timeout to base value
      */
     function resetTimeout() {
         adaptiveTimeout.current = adaptiveTimeout.base;
@@ -67,14 +67,14 @@
 
     /**
      * Get текущий таймаут
-     * @returns {number} - таймаут в миллисекундах
+     * @returns {number} - timeout in milliseconds
      */
     function getTimeout() {
         return adaptiveTimeout.current;
     }
 
     /**
-     * Выполнить задержку перед следующим запросом
+     * Wait before next request
      * @returns {Promise}
      */
     async function waitBeforeRequest() {
@@ -83,9 +83,9 @@
 
     /**
      * Добавить запрос в очередь
-     * @param {Function} requestFn - функция запроса
-     * @param {number} priority - приоритет (меньше = выше приоритет)
-     * @returns {Promise<any>} - результат запроса
+     * @param {Function} requestFn - request function
+     * @param {number} priority - priority (lower = higher priority)
+     * @returns {Promise<any>} - request result
      */
     async function queueRequest(requestFn, priority = 5) {
         return new Promise((resolve, reject) => {
@@ -96,10 +96,10 @@
                 reject
             });
 
-            // Сортировка по приоритету
+            // Sort by priority
             requestQueue.queue.sort((a, b) => a.priority - b.priority);
 
-            // Запуск обработки очереди, если не запущена
+            // Start queue processing if not running
             if (!requestQueue.processing) {
                 processQueue();
             }
@@ -107,7 +107,7 @@
     }
 
     /**
-     * Обработать очередь запросов
+     * Process request queue
      */
     async function processQueue() {
         if (requestQueue.processing || requestQueue.queue.length === 0) {
@@ -120,19 +120,19 @@
             const request = requestQueue.queue.shift();
 
             try {
-                // Задержка перед запросом
+                // Delay before request
                 await waitBeforeRequest();
 
-                // Выполнение запроса
+                // Execute request
                 const result = await request.fn();
                 request.resolve(result);
 
-                // Уменьшение таймаута при успехе
+                // Decrease timeout on success
                 decreaseTimeout();
             } catch (error) {
                 // Skill anchor: адаптивный 429 recovery (increase/decrease timeout цикл).
                 // See core/skills/api-layer
-                // Увеличение таймаута при 429 ошибке
+                // Increase timeout on 429 error
                 if (error.status === 429 || error.type === 'api_rate_limit') {
                     increaseTimeout();
                 }
@@ -144,7 +144,7 @@
         requestQueue.processing = false;
     }
 
-    // Export to global scope (старый API for обратной совместимости)
+    // Export to global scope (legacy API for backward compatibility)
     window.rateLimiter = {
         increaseTimeout,
         decreaseTimeout,
@@ -155,22 +155,22 @@
     };
 
     /**
-     * Класс RateLimiter for использования в новой архитектуре провайдеров
-     * Обертка над существующим функциональным API
+     * RateLimiter class for new provider architecture
+     * Wrapper over existing functional API
      */
     class RateLimiter {
-        // Хранилище общих экземпляров for разных сервисов (ЕИП)
+        // Shared instance store for different services (SSOT)
         static instances = new Map();
 
         /**
-         * Get или создать именованный экземпляр RateLimiter (ЕИП)
-         * @param {string} key - уникальный ключ (напр. 'coingecko')
+         * Get or create named RateLimiter instance (SSOT)
+         * @param {string} key - unique key (e.g. 'coingecko')
          * @param {number} requestsPerMinute
          * @param {number} requestsPerSecond
          */
         static getOrCreate(key, requestsPerMinute = 50, requestsPerSecond = 10) {
             if (!RateLimiter.instances.has(key)) {
-                console.log(`rate-limiter: создан новый именованный экземпляр for "${key}"`);
+                console.log(`rate-limiter: created new named instance for "${key}"`);
                 RateLimiter.instances.set(key, new RateLimiter(requestsPerMinute, requestsPerSecond));
             }
             return RateLimiter.instances.get(key);
@@ -184,11 +184,11 @@
         }
 
         /**
-         * Ожидание доступности токена for запроса
+         * Wait for token availability for request
          * @returns {Promise<void>}
          */
         async waitForToken() {
-            // Обновляем токены на основе прошедшего времени
+            // Refresh tokens based on elapsed time
             const now = Date.now();
             const elapsed = now - this.lastRefill;
             const tokensToAdd = (elapsed / 1000) * this.requestsPerSecond;
@@ -196,44 +196,44 @@
             this.tokens = Math.min(this.requestsPerSecond, this.tokens + tokensToAdd);
             this.lastRefill = now;
 
-            // Если токенов нет, ждем
+            // If no tokens, wait
             if (this.tokens < 1) {
                 const waitTime = ((1 - this.tokens) / this.requestsPerSecond) * 1000;
                 await new Promise(resolve => setTimeout(resolve, waitTime));
                 this.tokens = 1;
             }
 
-            // Используем один токен
+            // Consume one token
             this.tokens -= 1;
 
-            // Дополнительная задержка из адаптивного таймаута
+            // Additional delay from adaptive timeout
             await waitBeforeRequest();
         }
 
         /**
-         * Прокси-метод for функционального API (совместимость)
+         * Proxy method for functional API (compatibility)
          */
         async waitBeforeRequest() {
             await this.waitForToken();
         }
 
         /**
-         * Увеличить задержку (при rate limiting)
+         * Increase delay (on rate limiting)
          */
         increaseTimeout() {
             increaseTimeout();
         }
 
         /**
-         * Уменьшить задержку (при успешном запросе)
+         * Decrease delay (on successful request)
          */
         decreaseTimeout() {
             decreaseTimeout();
         }
     }
 
-    // Экспорт класса for новой архитектуры
+    // Export class for new architecture
     window.RateLimiter = RateLimiter;
 
-    console.log('✅ rate-limiter.js: initialized (функциональный API + класс RateLimiter + ЕИП менеджер)');
+    console.log('✅ rate-limiter.js: initialized (функциональный API + класс RateLimiter + SSOT менеджер)');
 })();

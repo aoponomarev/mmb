@@ -1,54 +1,54 @@
 /**
  * ================================================================================================
- * APP FOOTER COMPONENT - Компонент футера приложения
+ * APP FOOTER COMPONENT - Application footer component
  * ================================================================================================
  *
- * PURPOSE: Vue-компонент футера приложения с метриками рынка.
+ * PURPOSE: Vue component for application footer with market metrics.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: app/skills/ux-principles
  *
- * ДАННЫЕ:
- * - Наследует тему от body (bg-body), переключается вместе с темой приложения
- * - Фиксированное позиционирование внизу страницы
- * - Отображение метрик рынка (FGI, VIX, BTC Dominance, OI, FR, LSR)
- * - Отображение времени в выбранной таймзоне (кликабельно for выбора таймзоны)
- * - Обновление метрик 3 раза в день (09:00, 12:00, 18:00 МСК)
- * - Отображение главной новости крипты через AI провайдер (YandexGPT, кликабельно for переключения)
+ * DATA:
+ * - Inherits theme from body (bg-body), switches with application theme
+ * - Fixed positioning at bottom of page
+ * - Displays market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR)
+ * - Displays time in selected timezone (clickable for timezone selection)
+ * - Updates metrics 3 times per day (09:00, 12:00, 18:00 MSK)
+ * - Displays main crypto news via AI provider (YandexGPT, clickable for switching)
  *
- * ДАННЫЕ:
- * - Метрики рынка: fgi, vix, btcDom, oi, fr, lsr (строковые значения)
- * - Числовые значения: fgiValue, vixValue, btcDomValue, oiValue, frValue, lsrValue
- * - Таймзона: timezone (по умолчанию 'Europe/Moscow')
- * - Время: timeDisplay (формат "ABBR:hh.mm", где ABBR — аббревиатура таймзоны)
- * - Новости крипты: currentNewsIndex (0-4), currentNews (текст), currentNewsTranslated (перевод)
+ * DATA:
+ * - Market metrics: fgi, vix, btcDom, oi, fr, lsr (string values)
+ * - Numeric values: fgiValue, vixValue, btcDomValue, oiValue, frValue, lsrValue
+ * - Timezone: timezone (default 'Europe/Moscow')
+ * - Time: timeDisplay (format "ABBR:hh.mm", where ABBR is timezone abbreviation)
+ * - Crypto news: currentNewsIndex (0-4), currentNews (text), currentNewsTranslated (translation)
  *
- * МЕТОДЫ:
- * - fetchMarketIndices() — загрузка всех метрик через window.marketMetrics
- * - getTime() — получение текущего времени в выбранной таймзоне
- * - getTimezoneAbbr() — получение аббревиатуры таймзоны
- * - updateTime() — обновление отображаемого времени
- * - loadTimezone() — загрузка таймзоны из кэша
- * - saveTimezone(timezone) — сохранение таймзоны в кэш
- * - openTimezoneModal() — открытие модального окна выбора таймзоны (эмитит событие)
- * - getNextUpdateTime() — расчет следующего времени обновления (09:00, 12:00, 18:00 МСК)
- * - scheduleNextUpdate() — планирование следующего обновления
- * - formatOIMobile() — форматирование OI for мобильной версии (компактный формат с буквенным обозначением миллиарда, например "8.4B")
- * - formatValueMobile() — форматирование значения for мобильной версии (округление до десятых долей, кроме FR)
- * - fetchSingleCryptoNews(index) — запрос одной новости крипты через AI провайдер (с переводом, по индексу 0-4)
- * - parseSingleNews(response) — парсинг одной новости с переводом по явным маркерам (---NEWS---, ---TRANSLATION---, ---END---)
- * - cleanMarkdown(text) — очистка текста от markdown-разметки и артефактов (цифры-сноски после точек)
- * - cleanTranslation(text) — очистка перевода от артефактов (примеры из промпта, префиксы)
- * - saveCurrentNewsState() — сохранение индекса текущей новости в кэш
- * - loadNewsState() — загрузка индекса последней новости из кэша
- * - switchToNextNews() — переключение на следующую (менее значимую) новость (асинхронно, загружает по требованию)
- * - loadTranslationLanguage() — загрузка языка перевода из кэша
- * - updateTranslationLanguage(language) — обновление языка перевода и перезагрузка новости с новым переводом
+ * METHODS:
+ * - fetchMarketIndices() — load all metrics via window.marketMetrics
+ * - getTime() — get current time in selected timezone
+ * - getTimezoneAbbr() — get timezone abbreviation
+ * - updateTime() — update displayed time
+ * - loadTimezone() — load timezone from cache
+ * - saveTimezone(timezone) — save timezone to cache
+ * - openTimezoneModal() — open timezone selection modal (emits event)
+ * - getNextUpdateTime() — calculate next update time (09:00, 12:00, 18:00 MSK)
+ * - scheduleNextUpdate() — schedule next update
+ * - formatOIMobile() — format OI for mobile (compact format with billion suffix, e.g. "8.4B")
+ * - formatValueMobile() — format value for mobile (round to tenths, except FR)
+ * - fetchSingleCryptoNews(index) — fetch single crypto news via AI provider (with translation, index 0-4)
+ * - parseSingleNews(response) — parse single news with translation by explicit markers (---NEWS---, ---TRANSLATION---, ---END---)
+ * - cleanMarkdown(text) — strip markdown and artifacts (footnote numbers after dots)
+ * - cleanTranslation(text) — strip translation artifacts (prompt examples, prefixes)
+ * - saveCurrentNewsState() — save current news index to cache
+ * - loadNewsState() — load last news index from cache
+ * - switchToNextNews() — switch to next (less significant) news (async, loads on demand)
+ * - loadTranslationLanguage() — load translation language from cache
+ * - updateTranslationLanguage(language) — update translation language and reload news with new translation
  *
- * СОБЫТИЯ:
- * - open-timezone-modal — эмитируется при клике на время в футере for открытия модального окна выбора таймзоны
+ * EVENTS:
+ * - open-timezone-modal — emitted on footer time click to open timezone selection modal
  *
 */
 
@@ -58,7 +58,7 @@ window.appFooter = {
     data() {
         return {
             uiState: window.uiState ? window.uiState.getState() : null,
-            // Строковые значения метрик
+            // String values for metrics
             fgi: '—',
             vix: '—',
             btcDom: '—',
@@ -66,7 +66,7 @@ window.appFooter = {
             fr: '—',
             lsr: '—',
 
-            // Числовые значения for расчетов
+            // Numeric values for calculations
             fgiValue: null,
             vixValue: null,
             btcDomValue: null,
@@ -74,22 +74,22 @@ window.appFooter = {
             frValue: null,
             lsrValue: null,
 
-            // Источники данных for tooltip
+            // Data sources for tooltip
             fgiSource: null,
             vixSource: null,
 
-            // Время
+            // Time
             timezone: window.appConfig?.get('defaults.timezone', 'Europe/Moscow'),
             timeDisplay: 'MCK:--.--',
 
-            // Таймеры
+            // Timers
             updateTimer: null,
             timeUpdateTimer: null,
 
-            // Новости крипты
-            currentNewsIndex: 0, // Индекс текущей новости (0-4)
-            currentNews: '', // Текущая отображаемая новость
-            currentNewsTranslated: '', // Перевод текущей новости for tooltip
+            // Crypto news
+            currentNewsIndex: 0, // Index of current news (0-4)
+            currentNews: '', // Currently displayed news
+            currentNewsTranslated: '', // Translation of current news for tooltip
             translationLanguage: window.appConfig?.get('defaults.translationLanguage', 'ru'),
             fallbackCount: 0,
             fallbackLast: null,
@@ -99,7 +99,7 @@ window.appFooter = {
     },
 
     methods: {
-        // Загрузка метрик рынка
+        // Load market metrics
         async fetchMarketIndices(options = {}) {
             if (!window.marketMetrics) {
                 console.error('marketMetrics module not loaded');
@@ -109,7 +109,7 @@ window.appFooter = {
             try {
                 const metrics = await window.marketMetrics.fetchAll(options);
 
-                // Сохраняем строковые значения
+                // Store string values
                 this.fgi = metrics.fgi;
                 this.vix = metrics.vix;
                 this.btcDom = metrics.btcDom;
@@ -117,11 +117,11 @@ window.appFooter = {
                 this.fr = metrics.fr;
                 this.lsr = metrics.lsr;
 
-                // Сохраняем источники for tooltip
+                // Store sources for tooltip
                 this.fgiSource = metrics.fgiSource || null;
                 this.vixSource = metrics.vixSource || null;
 
-                // Парсим числовые значения
+                // Parse numeric values
                 this.fgiValue = metrics.fgi !== '—' ? parseFloat(metrics.fgi) : null;
                 this.vixValue = metrics.vix !== '—' ? parseFloat(metrics.vix) : null;
                 if (metrics.btcDom !== '—') {
@@ -145,7 +145,7 @@ window.appFooter = {
             }
         },
 
-        // Получение текущего времени в выбранной таймзоне
+        // Get current time in selected timezone
         getTime() {
             try {
                 const now = new Date();
@@ -159,11 +159,11 @@ window.appFooter = {
                 const hours = parts.find(p => p.type === 'hour').value;
                 const minutes = parts.find(p => p.type === 'minute').value;
 
-                // Получаем аббревиатуру таймзоны
+                // Get timezone abbreviation
                 const tzAbbr = this.getTimezoneAbbr();
                 return `${tzAbbr}:${hours}.${minutes}`;
             } catch (error) {
-                // Fallback на системное время
+                // Fallback to system time
                 const now = new Date();
                 const hours = String(now.getHours()).padStart(2, '0');
                 const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -171,7 +171,7 @@ window.appFooter = {
             }
         },
 
-        // Получение аббревиатуры таймзоны
+        // Get timezone abbreviation
         getTimezoneAbbr() {
             const baseAbbr = window.appConfig?.getTimezoneAbbr
                 ? window.appConfig.getTimezoneAbbr(this.timezone)
@@ -184,12 +184,12 @@ window.appFooter = {
             return baseAbbr;
         },
 
-        // Обновление времени
+        // Update time
         updateTime() {
             this.timeDisplay = this.getTime();
         },
 
-        // Загрузка таймзоны из кэша
+        // Load timezone from cache
         async loadTimezone() {
             try {
                 const savedTimezone = await window.cacheManager.get('timezone');
@@ -201,16 +201,16 @@ window.appFooter = {
             }
         },
 
-        // Обновление таймзоны (вызывается извне после сохранения в кэш)
+        // Update timezone (called externally after saving to cache)
         async saveTimezone(timezone) {
             this.timezone = timezone;
             this.updateTime();
         },
 
-        // Обновление языка перевода (вызывается извне после сохранения в кэш)
+        // Update translation language (called externally after saving to cache)
         updateTranslationLanguage(language) {
             this.translationLanguage = language;
-            // Если есть текущая новость, перезагружаем её с новым языком
+            // If current news exists, reload it with new language
             if (this.currentNews) {
                 this.fetchSingleCryptoNews(this.currentNewsIndex).then(newsItem => {
                     if (newsItem) {
@@ -221,7 +221,7 @@ window.appFooter = {
             }
         },
 
-        // Загрузка языка перевода из кэша
+        // Load translation language from cache
         async loadTranslationLanguage() {
             try {
                 const savedLanguage = await window.cacheManager.get('translation-language');
@@ -233,18 +233,18 @@ window.appFooter = {
             }
         },
 
-        // Открытие модального окна выбора таймзоны
+        // Open timezone selection modal
         openTimezoneModal() {
             this.$emit('open-timezone-modal');
         },
 
-        // Расчет следующего времени обновления (09:00, 12:00, 18:00 МСК)
+        // Calculate next update time (09:00, 12:00, 18:00 MSK)
         getNextUpdateTime() {
             const updateHours = window.appConfig?.get('defaults.marketUpdates.times', [9, 12, 18]);
             const now = new Date();
 
             try {
-                // Получаем текущее время в МСК через Intl.DateTimeFormat
+                // Get current time in MSK via Intl.DateTimeFormat
                 const defaultTimezone = window.appConfig?.get('defaults.timezone', 'Europe/Moscow');
                 const mskFormatter = new Intl.DateTimeFormat('en-US', {
                     timeZone: defaultTimezone,
@@ -262,27 +262,27 @@ window.appFooter = {
                 const mskHour = parseInt(mskParts.find(p => p.type === 'hour').value);
                 const mskMinute = parseInt(mskParts.find(p => p.type === 'minute').value);
 
-                // Находим следующее время обновления в МСК
+                // Find next update time in MSK
                 let nextHour = updateHours.find(h => h > mskHour);
                 let nextDay = mskDay;
                 if (!nextHour) {
-                    // Если уже прошло 18:00, следующий обновление завтра в 09:00
+                    // If past 18:00, next update is tomorrow at 09:00
                     nextHour = 9;
                     nextDay = mskDay + 1;
                 }
 
-                // Вычисляем разницу в миллисекундах между текущим временем МСК и следующим обновлением
-                const currentMSKTime = mskHour * 60 + mskMinute; // Текущее время в минутах от начала дня
-                const nextMSKTime = nextHour * 60; // Следующее время обновления в минутах
+                // Calculate millisecond difference between current MSK time and next update
+                const currentMSKTime = mskHour * 60 + mskMinute; // Current time in minutes from day start
+                const nextMSKTime = nextHour * 60; // Next update time in minutes
                 const minutesDiff = (nextDay - mskDay) * 24 * 60 + (nextMSKTime - currentMSKTime);
-                const delay = minutesDiff * 60 * 1000; // Конвертируем в миллисекунды
+                const delay = minutesDiff * 60 * 1000; // Convert to milliseconds
 
                 const maxDelay = window.ssot && typeof window.ssot.getFooterMarketUpdateDelayMaxMs === 'function'
                     ? window.ssot.getFooterMarketUpdateDelayMaxMs()
                     : (window.cacheConfig?.getTTL('market-update-delay-max') || 24 * 60 * 60 * 1000);
-                return delay > 0 ? delay : delay + maxDelay; // Если отрицательно, добавляем сутки
+                return delay > 0 ? delay : delay + maxDelay; // If negative, add 24 hours
             } catch (error) {
-                // Fallback: обновление через 3 часа
+                // Fallback: update in 3 hours
                 const fallbackTTL = window.ssot && typeof window.ssot.getFooterMarketUpdateFallbackMs === 'function'
                     ? window.ssot.getFooterMarketUpdateFallbackMs()
                     : (window.cacheConfig?.getTTL('market-update-fallback') || 3 * 60 * 60 * 1000);
@@ -297,7 +297,7 @@ window.appFooter = {
             }
         },
 
-        // Планирование следующего обновления
+        // Schedule next update
         scheduleNextUpdate() {
             if (this.updateTimer) {
                 clearTimeout(this.updateTimer);
@@ -306,21 +306,21 @@ window.appFooter = {
             const delay = this.getNextUpdateTime();
             this.updateTimer = setTimeout(() => {
                 this.fetchMarketIndices();
-                this.scheduleNextUpdate(); // Планируем следующее
+                this.scheduleNextUpdate(); // Schedule next
             }, delay);
         },
 
-        // Форматирование OI for мобильной версии (компактный формат с буквенным обозначением миллиарда)
+        // Format OI for mobile (compact format with billion suffix)
         formatOIMobile() {
             if (this.oiValue === null || this.oi === '—') {
                 return '—';
             }
-            // Конвертируем в миллиарды
+            // Convert to billions
             const billions = this.oiValue / 1000000000;
             return '$' + billions.toFixed(1) + 'B';
         },
 
-        // Форматирование значения for мобильной версии (округление до десятых, кроме FR)
+        // Format value for mobile (round to tenths, except FR)
         formatValueMobile(value, originalValue) {
             if (value === null || originalValue === '—') {
                 return '—';
@@ -329,14 +329,14 @@ window.appFooter = {
         },
 
 
-        // Запрос одной новости крипты через AI провайдер (с переводом)
+        // Fetch single crypto news via AI provider (with translation)
         async fetchSingleCryptoNews(index, preResolvedApiKey = null) {
             if (!window.aiProviderManager) {
                 return null;
             }
 
-            // Если ключ уже разрешён вызывающим кодом — не проверяем повторно.
-            // Иначе проверяем сами (вызов из ротатора новостей, не из startNewsLoad).
+            // If key already resolved by caller — do not re-check.
+            // Otherwise check ourselves (call from news rotator, not from startNewsLoad).
             if (!preResolvedApiKey) {
                 try {
                     const provider = await window.aiProviderManager.getCurrentProvider();
@@ -345,8 +345,8 @@ window.appFooter = {
                     if (!apiKey) {
                         if (!this.aiKeyMissingNotified) {
                             console.warn(
-                                `app-footer: API ключ for ${providerName} не найден. ` +
-                                'Проверьте AI API настройки или доступ к /api/settings.'
+                                `app-footer: API key for ${providerName} not found. ` +
+                                'Check AI API settings or access to /api/settings.'
                             );
                         }
                         this.aiKeyMissingNotified = true;
@@ -354,7 +354,7 @@ window.appFooter = {
                     }
                     this.aiKeyMissingNotified = false;
                 } catch (error) {
-                    console.error('app-footer: ошибка проверки API ключа:', error);
+                    console.error('app-footer: API key check error:', error);
                     return null;
                 }
             }
@@ -362,7 +362,7 @@ window.appFooter = {
             try {
                 const priority = ['most important', 'second most important', 'third most important', 'fourth most important', 'fifth most important'];
 
-                // Получаем название языка for промпта
+                // Get language name for prompt
                 const languageNames = {
                     'ru': 'Russian',
                     'en': 'English',
@@ -390,19 +390,19 @@ CRITICAL: Format the response EXACTLY as follows (do not modify the markers):
 
 IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END--- in your response.`;
 
-                // Отправляем запрос через текущий провайдер
+                // Send request via current provider
                 const response = await window.aiProviderManager.sendRequest(
                     [{ role: 'user', content: prompt }]
                 );
 
-                // Проверяем на ошибки/ограничения
+                // Check for errors/limitations
                 if (response && (response.toLowerCase().includes('cannot provide') || response.toLowerCase().includes('limited') || response.toLowerCase().includes('error'))) {
                     const providerName = await window.aiProviderManager.getCurrentProviderName();
                     console.warn(`${providerName} API returned error/limitation message for index`, index);
                     return null;
                 }
 
-                // Парсим ответ
+                // Parse response
                 const newsItem = this.parseSingleNews(response);
                 return newsItem;
             } catch (error) {
@@ -411,11 +411,11 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             }
         },
 
-        // Парсинг одной новости с переводом по явным маркерам
+        // Parse single news with translation by explicit markers
         parseSingleNews(response) {
             if (!response) return null;
 
-            // Ищем маркеры
+            // Find markers
             const newsIndex = response.indexOf('---NEWS---');
             const translationIndex = response.indexOf('---TRANSLATION---');
             const endIndex = response.indexOf('---END---');
@@ -423,23 +423,23 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             let newsText = null;
             let translationText = null;
 
-            // Попытка парсинга с маркерами
+            // Try parsing with markers
             if (newsIndex !== -1 && translationIndex !== -1) {
-                // Извлекаем английскую новость
+                // Extract English news
                 newsText = response
                     .substring(newsIndex + '---NEWS---'.length, translationIndex)
                     .trim();
 
-                // Извлекаем перевод
+                // Extract translation
                 translationText = endIndex !== -1
                     ? response.substring(translationIndex + '---TRANSLATION---'.length, endIndex).trim()
                     : response.substring(translationIndex + '---TRANSLATION---'.length).trim();
             } else {
-                // Fallback: пытаемся распарсить без маркеров
-                // Ищем разделители: "Translation:", "Перевод:", или пустую строку
+                // Fallback: try parsing without markers
+                // Look for separators: "Translation:", "Перевод:", or empty line
                 const lines = response.split('\n').map(l => l.trim()).filter(l => l);
 
-                // Пытаемся найти разделение между английским текстом и переводом
+                // Try to find split between English text and translation
                 let splitIndex = -1;
                 for (let i = 0; i < lines.length; i++) {
                     const lowerLine = lines[i].toLowerCase();
@@ -452,22 +452,21 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                 }
 
                 if (splitIndex > 0) {
-                    // Разделяем на новость и перевод
+                    // Split into news and translation
                     newsText = lines.slice(0, splitIndex).join(' ').trim();
                     translationText = lines.slice(splitIndex + 1).join(' ').trim();
-                    // Убираем префикс "Translation:" если он есть
+                    // Remove "Translation:" prefix if present
                     translationText = translationText.replace(/^(translation|перевод|русский):\s*/i, '').trim();
                 } else {
-                    // Если разделения нет, пытаемся взять первые 2-3 предложения как новость
-                    // и остальное как перевод
+                    // If no split, try first 2-3 sentences as news and rest as translation
                     const sentences = response.split(/[.!?]+/).filter(s => s.trim());
                     if (sentences.length >= 4) {
-                        // Первые 2-3 предложения - новость
+                        // First 2-3 sentences — news
                         newsText = sentences.slice(0, 3).join('. ').trim() + '.';
-                        // Остальное - перевод
+                        // Rest — translation
                         translationText = sentences.slice(3).join('. ').trim() + '.';
                     } else {
-                        // Последняя попытка: разделяем пополам
+                        // Last attempt: split in half
                         const midPoint = Math.floor(response.length / 2);
                         const spaceIndex = response.indexOf(' ', midPoint);
                         if (spaceIndex > 0) {
@@ -478,7 +477,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                 }
             }
 
-            // Убираем артефакты из перевода
+            // Strip artifacts from translation
             if (translationText) {
                 translationText = this.cleanTranslation(translationText);
             }
@@ -498,37 +497,37 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             };
         },
 
-        // Очистка артефактов из перевода
+        // Strip artifacts from translation
         cleanTranslation(text) {
             if (!text) return '';
             return text
-                // Убираем пример из промпта
+                // Remove prompt example
                 .replace(/^Заголовочное предложение\.\s*Первое предложение с деталями\.\s*Второе предложение с деталями\.\s*/i, '')
-                // Убираем префикс "Российский перевод: " или "Russian translation: "
+                // Remove "Российский перевод: " or "Russian translation: " prefix
                 .replace(/^(Российский перевод|Russian translation):\s*/i, '')
-                // Убираем перевод строки в начале
+                // Remove leading newlines
                 .replace(/^\s*[\r\n]+/, '')
                 .trim();
         },
 
-        // Очистка микроразметки из новости
+        // Strip markdown from news
         cleanMarkdown(text) {
             if (!text) return '';
             return text
-                .replace(/\*\*/g, '') // Убираем двойные звездочки (жирный текст)
-                .replace(/\*/g, '') // Убираем одинарные звездочки
-                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Убираем markdown ссылки [текст](url) -> текст
-                .replace(/\[([^\]]+)\]/g, '$1') // Убираем квадратные скобки [текст] -> текст
-                .replace(/\([^\)]+\)/g, '') // Убираем скобки с содержимым (текст)
-                .replace(/#{1,6}\s+/g, '') // Убираем заголовки markdown
-                .replace(/`([^`]+)`/g, '$1') // Убираем код в обратных кавычках
-                .replace(/~~([^~]+)~~/g, '$1') // Убираем зачеркнутый текст
-                .replace(/\.(\d+)/g, '.') // Убираем цифры-сноски после точек (например, ".1" -> ".")
-                .replace(/\.\s*[\d\[\]]+(?=\s|$)/g, '.') // Убираем сноски после точек с пробелом (например, ". 1" или ". [1]" -> ".")
+                .replace(/\*\*/g, '') // Remove double asterisks (bold)
+                .replace(/\*/g, '') // Remove single asterisks
+                .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove markdown links [text](url) -> text
+                .replace(/\[([^\]]+)\]/g, '$1') // Remove square brackets [text] -> text
+                .replace(/\([^\)]+\)/g, '') // Remove parentheses with content
+                .replace(/#{1,6}\s+/g, '') // Remove markdown headers
+                .replace(/`([^`]+)`/g, '$1') // Remove backtick code
+                .replace(/~~([^~]+)~~/g, '$1') // Remove strikethrough
+                .replace(/\.(\d+)/g, '.') // Remove footnote numbers after dots (e.g. ".1" -> ".")
+                .replace(/\.\s*[\d\[\]]+(?=\s|$)/g, '.') // Remove footnotes after dots with space
                 .trim();
         },
 
-        // Сохранение состояния текущей новости в кэш (только индекс и timestamp)
+        // Save current news state to cache (index and timestamp only)
         async saveCurrentNewsState() {
             try {
                 const dataToSave = {
@@ -541,14 +540,14 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             }
         },
 
-        // Загрузка состояния новостей из кэша
+        // Load news state from cache
         async loadNewsState() {
             try {
                 let savedData = null;
 
                 savedData = await window.cacheManager.get('crypto-news-state');
 
-                // Проверяем, что состояние не старше 24 часов
+                // Ensure state is not older than 24 hours
                 if (savedData && typeof savedData.index === 'number') {
                     const age = Date.now() - (savedData.timestamp || 0);
                     const maxAge = window.ssot && typeof window.ssot.getFooterCryptoNewsCacheMaxAgeMs === 'function'
@@ -565,12 +564,12 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             return null;
         },
 
-        // Переключение на следующую (менее значимую) новость
+        // Switch to next (less significant) news
         async switchToNextNews() {
-            // Переключаемся на следующую новость циклично (0-4)
+            // Switch to next news cyclically (0-4)
             const nextIndex = (this.currentNewsIndex + 1) % 5;
 
-            // Загружаем новую новость
+            // Load new news
             const newsItem = await this.fetchSingleCryptoNews(nextIndex);
 
             if (newsItem) {
@@ -579,7 +578,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                 this.currentNewsTranslated = newsItem.translation;
                 await this.saveCurrentNewsState();
             } else {
-                // Если failed to загрузить, показываем сообщение
+                // If failed to load, show message
                 console.warn('Failed to load next news item');
             }
         },
@@ -602,24 +601,24 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             this.fallbackSubId = window.eventBus.on('fallback:used', () => this.syncFallbackState());
         }
 
-        // Загрузка таймзоны из кэша
+        // Load timezone from cache
         await this.loadTimezone();
 
-        // Загрузка языка перевода из кэша
+        // Load translation language from cache
         await this.loadTranslationLanguage();
 
-        // Инициализация времени
+        // Initialize time
         this.updateTime();
-        // Обновляем время каждую минуту
+        // Update time every minute
         this.timeUpdateTimer = setInterval(() => {
             this.updateTime();
         }, 60 * 1000);
 
-        // Загрузка метрик при разблокировке приложения
-        // Если window.appUnlocked не определен, считаем приложение разблокированным
+        // Load metrics when app unlocks
+        // If window.appUnlocked undefined, consider app unlocked
         const isUnlocked = window.appUnlocked !== undefined ? window.appUnlocked : true;
 
-        // Загрузить новость с уже известным ключом (без повторных KV-запросов).
+        // Load news with already known key (no repeated KV requests).
         const startNewsLoad = async (apiKey) => {
             const savedIndex = await this.loadNewsState();
             const startIndex = savedIndex !== null ? savedIndex : 0;
@@ -632,9 +631,9 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
             }
         };
 
-        // Единственная точка входа for получения ключа и загрузки новостей.
-        // Алгоритм: getApiKey ждёт KV если нужно → получаем ключ → грузим.
-        // Никаких таймеров, никаких гонок: getApiKey сам является await-точкой.
+        // Single entry point for getting key and loading news.
+        // Algorithm: getApiKey waits for KV if needed → get key → load.
+        // No timers, no races: getApiKey itself is the await point.
         const waitForApiKeyThenLoadNews = async () => {
             try {
                 if (!window.aiProviderManager) return;
@@ -642,7 +641,7 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                 const providerName = provider?.getName?.();
                 if (!providerName) return;
 
-                // getApiKey: сначала кэш, затем KV (один раз за сессию, await до конца)
+                // getApiKey: first cache, then KV (once per session, await until done)
                 const apiKey = await window.aiProviderManager.getApiKey(providerName);
 
                 if (apiKey) {
@@ -650,12 +649,12 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
                     await startNewsLoad(apiKey);
                 } else {
                     if (!this.aiKeyMissingNotified) {
-                        console.warn('app-footer: AI API ключ не найден, загрузка новостей пропущена.');
+                        console.warn('app-footer: AI API key not found, news loading skipped.');
                         this.aiKeyMissingNotified = true;
                     }
                 }
             } catch (err) {
-                console.error('app-footer: ошибка при ожидании API ключа:', err);
+                console.error('app-footer: error waiting for API key:', err);
             }
         };
 
@@ -685,12 +684,12 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
         }
     },
     computed: {
-        // Централизованный язык for tooltip
+        // Centralized language for tooltip
         currentLanguage() {
             return this.uiState?.tooltips?.currentLanguage || 'ru';
         },
 
-        // Реактивные tooltip for метрик футера
+        // Reactive tooltips for footer metrics
         tooltipFgi() {
             if (!window.tooltipInterpreter) return '';
             const base = window.tooltipInterpreter.getTooltip('fgi', {

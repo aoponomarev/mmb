@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * AI API SETTINGS COMPONENT - Компонент настроек AI API провайдеров
+ * AI API SETTINGS COMPONENT - AI API provider settings
  * ================================================================================================
  *
- * PURPOSE: Компонент настроек AI API провайдеров (YandexGPT) for модального окна.
- * Позволяет переключаться между провайдерами и настраивать их параметры.
+ * PURPOSE: AI API provider settings (YandexGPT) for modal window.
+ * Allows switching between providers and configuring their parameters.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
@@ -12,52 +12,52 @@
  *
  * Skill: core/skills/api-layer
  *
- * ОСОБЕННОСТИ:
- * - Переключатель провайдеров через radio buttons (YandexGPT, GitHub, PostgreSQL)
- * - Условное отображение полей настроек в зависимости от выбранного провайдера
- * - Компактный и аскетичный интерфейс
- * - Использует систему управления кнопками модального окна
- * - Сохранение через cache-manager
- * - Валидация API ключей
- * - Поддержка состояния "Сохранено, закрыть?" for кнопки "Сохранить"
- * - Переключатель видимости API ключа (глазик)
+ * FEATURES:
+ * - Provider switcher via radio buttons (YandexGPT, GitHub, PostgreSQL)
+ * - Conditional display of settings fields based on selected provider
+ * - Compact minimal interface
+ * - Uses modal button management system
+ * - Persistence via cache-manager
+ * - API key validation
+ * - "Saved, close?" state for Save button
+ * - API key visibility toggle (eye icon)
  *
- * YANDEXGPT НАСТРОЙКИ:
- * - yandexApiKey: API ключ Yandex Cloud (получается из IAM, показывается только один раз при создании)
+ * YANDEXGPT SETTINGS:
+ * - yandexApiKey: Yandex Cloud API key (from IAM, shown only once on creation)
  * - yandexFolderId: Folder ID for Yandex Cloud (b1gv03a122le5a934cqj)
  * - yandexModel: Model URI (gpt://{folderId}/{model}/latest)
- * - Модели: YandexGPT Lite, YandexGPT
+ * - Models: YandexGPT Lite, YandexGPT
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Data:
- * - provider (String) — текущий провайдер ('yandex')
- * - yandexApiKey (String) — API ключ Yandex
- * - yandexModel (String) — модель YandexGPT
- * - initialProvider (String) — исходный провайдер при открытии модального окна
- * - initialYandexApiKey (String) — исходный API ключ Yandex
- * - initialYandexModel (String) — исходная модель Yandex
- * - showYandexApiKey (Boolean) — видимость API ключа Yandex
- * - isSaved (Boolean) — состояние успешного сохранения
- * - yandexModels (Array) — список доступных моделей YandexGPT
+ * - provider (String) — current provider ('yandex')
+ * - yandexApiKey (String) — Yandex API key
+ * - yandexModel (String) — YandexGPT model
+ * - initialProvider (String) — initial provider when modal opened
+ * - initialYandexApiKey (String) — initial Yandex API key
+ * - initialYandexModel (String) — initial Yandex model
+ * - showYandexApiKey (Boolean) — Yandex API key visibility
+ * - isSaved (Boolean) — successful save state
+ * - yandexModels (Array) — list of available YandexGPT models
  *
  * Computed:
- * - hasChanges (Boolean) — есть ли изменения в полях
- * - isValid (Boolean) — валидность формы (API ключ текущего провайдера не пустой)
+ * - hasChanges (Boolean) — whether fields have changes
+ * - isValid (Boolean) — form validity (current provider API key non-empty)
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
- * Методы:
- * - loadSettings() — загрузка настроек из кэша
- * - saveSettings() — сохранение настроек в кэш
- * - handleCancel() — обработка отмены (восстановление исходных значений или закрытие)
- * - closeModal() — закрытие модального окна с удалением фокуса
- * - updateSaveButton() — обновление состояния кнопки "Сохранить" (обычное/сохранено)
- * - toggleYandexApiKeyVisibility() — переключение видимости API ключа Yandex
- * - toggleGithubTokenVisibility() — переключение видимости GitHub token
+ * Methods:
+ * - loadSettings() — load settings from cache
+ * - saveSettings() — save settings to cache
+ * - handleCancel() — handle cancel (restore initial values or close)
+ * - closeModal() — close modal and remove focus
+ * - updateSaveButton() — update Save button state (normal/saved)
+ * - toggleYandexApiKeyVisibility() — toggle Yandex API key visibility
+ * - toggleGithubTokenVisibility() — toggle GitHub token visibility
  *
-*/
+ */
 
 window.aiApiSettings = {
     template: '#ai-api-settings-template',
@@ -105,7 +105,7 @@ window.aiApiSettings = {
     },
 
     computed: {
-        // Уникальный префикс for ID элементов формы (избегаем дублирования при повторном открытии модального окна)
+        // Unique prefix for form element IDs (avoid duplication when reopening modal)
         formIdPrefix() {
             return `ai-api-settings-${this._uid || Math.random().toString(36).substr(2, 9)}`;
         },
@@ -144,12 +144,12 @@ window.aiApiSettings = {
 
     watch: {
         activeTab(newValue) {
-            // Переключение вкладок не должно сбрасывать состояние "Сохранено".
-            // Синхронизируем выбранный provider с активной вкладкой без маркировки dirty-state.
+            // Tab switching must not reset "Saved" state.
+            // Sync selected provider with active tab without marking dirty-state.
             this.provider = newValue;
         },
         provider(newValue) {
-            // Если provider меняется программно (загрузка из кэша/импорт), синхронизируем вкладку.
+            // If provider changes programmatically (load from cache/import), sync tab.
             if (newValue && this.activeTab !== newValue) {
                 this.activeTab = newValue;
             }
@@ -188,17 +188,17 @@ window.aiApiSettings = {
     },
 
         async mounted() {
-            // Регистрируем кнопки при монтировании через $nextTick for гарантии доступности modalApi
+            // Register buttons on mount via $nextTick to ensure modalApi availability
             this.$nextTick(() => {
                 if (this.modalApi) {
-                    // Кнопка "Сохранить" только в footer
+                    // Save button only in footer
                     this.modalApi.registerButton('save', {
                         locations: ['footer'],
                         label: 'Сохранить',
                         variant: 'primary',
                         disabled: !this.hasChanges || !this.isValid,
                         onClick: () => {
-                            // Если уже сохранено - закрываем окно (кнопка "Сохранено, закрыть?")
+                            // If already saved - close window (button shows "Saved, close?")
                             if (this.isSaved) {
                                 this.handleCancel();
                             } else {
@@ -208,7 +208,7 @@ window.aiApiSettings = {
                     });
                 }
             });
-            // Загружаем настройки после регистрации кнопок
+            // Load settings after button registration
             await this.loadSettings();
             await this.refreshSnapshots();
             this.$nextTick(() => {
@@ -216,7 +216,7 @@ window.aiApiSettings = {
                     this.isMounted = true;
                 }, 100);
             });
-            // Обновляем кнопку после загрузки настроек
+            // Update button after loading settings
             this.$nextTick(() => {
                 this.updateSaveButton();
             });
@@ -224,7 +224,7 @@ window.aiApiSettings = {
 
     methods: {
         /**
-         * Обработчик изменения полей
+         * Field change handler
          */
         onFieldChange() {
             if (this.isSaved) {
@@ -238,7 +238,7 @@ window.aiApiSettings = {
         },
 
         /**
-         * Загрузка настроек из кэша
+         * Load settings from cache
          */
         async loadSettings() {
             try {
@@ -289,15 +289,15 @@ window.aiApiSettings = {
                     this.initialGithubToken = savedGithubToken;
                 }
 
-                // Skill anchor: если ключи не нашлись в локальном кэше — восстанавливаем из Cloudflare KV.
-                // Сценарий: сброс кэша, первый запуск на новом устройстве.
+                // Skill anchor: if keys not found in local cache — restore from Cloudflare KV.
+                // Scenario: cache reset, first run on new device.
                 const missingYandexKey = !this.yandexApiKey;
                 if (missingYandexKey) {
                     await this._restoreFromCloudflareKV();
                 }
 
-                // Локальный резервный план: восстанавливаем ПО КАЖДОМУ отсутствующему полю отдельно.
-                // Important: наличие apiBaseUrl не должно блокировать восстановление yandex/github токенов.
+                // Local fallback: restore each missing field separately.
+                // Important: apiBaseUrl presence must not block yandex/github token restoration.
                 const backup = this.loadPersistentSettingsBackup();
                 if (backup) {
                     if ((!this.provider || !this.provider.trim()) && typeof backup.provider === 'string' && backup.provider) this.provider = backup.provider;
@@ -327,18 +327,18 @@ window.aiApiSettings = {
                     window.uiState.setPostgresSyncEnabled(this.syncEnabled);
                 }
             } catch (error) {
-                console.error('ai-api-settings: ошибка загрузки настроек:', error);
+                console.error('ai-api-settings: load settings error:', error);
             }
         },
 
         /**
-         * Восстановить настройки из Cloudflare KV в локальный cacheManager.
-         * Вызывается автоматически при отсутствии ключей в локальном кэше.
+         * Restore settings from Cloudflare KV to local cacheManager.
+         * Called automatically when keys are missing in local cache.
          */
         async _restoreFromCloudflareKV() {
             const token = await this.resolveSettingsToken();
             if (!token) {
-                this.warnMissingSettingsToken('автовосстановление из KV');
+                this.warnMissingSettingsToken('auto-restore from KV');
                 return;
             }
             try {
@@ -348,14 +348,14 @@ window.aiApiSettings = {
                     signal: AbortSignal.timeout(5000)
                 });
                 if (!resp.ok) {
-                    console.warn('ai-api-settings: KV вернул', resp.status, '— автовосстановление пропущено');
+                    console.warn('ai-api-settings: KV returned', resp.status, '— auto-restore skipped');
                     return;
                 }
                 const json = await resp.json();
                 const d = json.data;
                 if (!d || typeof d !== 'object') return;
 
-                // Применяем поля из KV только если они отсутствуют локально
+                // Apply fields from KV only if missing locally
                 if (d.provider && !this.provider) {
                     this.provider = d.provider;
                     this.initialProvider = d.provider;
@@ -386,7 +386,7 @@ window.aiApiSettings = {
                     this.initialSyncEnabled = d.syncEnabled;
                 }
 
-                // Сохраняем восстановленные ключи в локальный cacheManager for следующего старта
+                // Save restored keys to local cacheManager for next startup
                 const saves = [];
                 if (d.provider)        saves.push(window.cacheManager.set('ai-provider', d.provider));
                 if (d.yandexApiKey)    saves.push(window.cacheManager.set('yandex-api-key', d.yandexApiKey));
@@ -404,9 +404,9 @@ window.aiApiSettings = {
                     apiBaseUrl: d.apiBaseUrl || this.apiBaseUrl,
                     syncEnabled: typeof d.syncEnabled === 'boolean' ? d.syncEnabled : this.syncEnabled
                 });
-                console.log('ai-api-settings: ✅ настройки восстановлены из Cloudflare KV');
+                console.log('ai-api-settings: ✅ settings restored from Cloudflare KV');
             } catch (err) {
-                console.warn('ai-api-settings: ошибка автовосстановления из KV:', err.message);
+                console.warn('ai-api-settings: KV auto-restore error:', err.message);
             }
         },
 
@@ -484,10 +484,10 @@ window.aiApiSettings = {
         },
 
         /**
-         * Get заголовок авторизации for Cloudflare /api/settings.
-         * Приоритет:
+         * Get auth header for Cloudflare /api/settings.
+         * Priority:
          * 1) service token (githubToken / app_github_token)
-         * 2) OAuth JWT текущего пользователя
+         * 2) OAuth JWT of current user
          */
         async getSettingsAuthHeader() {
             const token = await this.resolveSettingsToken();
@@ -495,7 +495,7 @@ window.aiApiSettings = {
         },
 
         async resolveSettingsToken() {
-            // OAuth JWT приоритетнее: он соответствует текущей пользовательской сессии.
+            // OAuth JWT has priority: it matches current user session.
             try {
                 if (window.authClient && typeof window.authClient.getAccessToken === 'function') {
                     const authTokenData = await window.authClient.getAccessToken();
@@ -537,8 +537,8 @@ window.aiApiSettings = {
             this.settingsTokenWarningShown = true;
             const suffix = context ? ` (${context})` : '';
             console.warn(
-                `ai-api-settings: нет токена for Cloudflare KV${suffix}. ` +
-                'Нужен либо service token (githubToken), либо OAuth JWT после авторизации.'
+                `ai-api-settings: no token for Cloudflare KV${suffix}. ` +
+                'Either service token (githubToken) or OAuth JWT after auth required.'
             );
         },
 
@@ -553,19 +553,19 @@ window.aiApiSettings = {
         },
 
         /**
-         * Update список снимков: Cloudflare KV.
-         * В KV хранится один актуальный снимок — показываем его как "облако".
+         * Update snapshot list: Cloudflare KV.
+         * KV stores one current snapshot — show it as "cloud".
          */
         async refreshSnapshots() {
             this.isSnapshotsLoading = true;
-            // Skill anchor: isSnapshotsLoading сбрасывается в общем finally — обязательно for всех путей logoutа.
+            // Skill anchor: isSnapshotsLoading reset in common finally — required for all logout paths.
             try {
                 const snapshotFiles = [];
                 try {
                     const cfUrl = this.getSettingsUrl();
                     const token = await this.resolveSettingsToken();
                     if (!token) {
-                        this.warnMissingSettingsToken('обновление snapshot списка');
+                        this.warnMissingSettingsToken('snapshot list refresh');
                         this.snapshotFiles = snapshotFiles;
                         return;
                     }
@@ -581,10 +581,10 @@ window.aiApiSettings = {
                             snapshotFiles.push('☁ Cloudflare KV (актуальный)');
                         }
                     } else {
-                        console.warn('ai-api-settings: Cloudflare KV вернул', cfResp.status);
+                        console.warn('ai-api-settings: Cloudflare KV returned', cfResp.status);
                     }
                 } catch (cfError) {
-                    console.warn('ai-api-settings: Cloudflare KV недоступен:', cfError.message);
+                    console.warn('ai-api-settings: Cloudflare KV unavailable:', cfError.message);
                 }
 
                 this.snapshotFiles = snapshotFiles;
@@ -594,7 +594,7 @@ window.aiApiSettings = {
         },
 
         /**
-         * Экспорт настроек: сохранить в Cloudflare KV + скачать JSON на диск.
+         * Export settings: save to Cloudflare KV + download JSON to disk.
          */
         async exportSnapshot() {
             if (this.isExporting) return;
@@ -602,7 +602,7 @@ window.aiApiSettings = {
             try {
                 const payload = this.buildSnapshotPayload();
 
-                // Основной: Cloudflare KV
+                // Primary: Cloudflare KV
                 try {
                     const cfUrl = this.getSettingsUrl();
                     const token = await this.resolveSettingsToken();
@@ -616,27 +616,27 @@ window.aiApiSettings = {
                         signal: AbortSignal.timeout(8000)
                     });
                     if (cfResp.ok) {
-                        console.log('ai-api-settings: настройки сохранены в Cloudflare KV');
+                        console.log('ai-api-settings: settings saved to Cloudflare KV');
                     } else {
                         const err = await cfResp.text();
                         console.warn('ai-api-settings: Cloudflare KV export error:', cfResp.status, err);
                     }
                 } catch (cfError) {
-                    console.warn('ai-api-settings: Cloudflare KV недоступен при экспорте:', cfError.message);
+                    console.warn('ai-api-settings: Cloudflare KV unavailable on export:', cfError.message);
                 }
 
-                // Страховка: скачать JSON в папку Downloads.
+                // Fallback: download JSON to Downloads folder.
                 this.saveSnapshotToUserDisk(payload);
                 await this.refreshSnapshots();
             } catch (error) {
-                console.error('ai-api-settings: ошибка экспорта снимка:', error);
+                console.error('ai-api-settings: snapshot export error:', error);
             } finally {
                 this.isExporting = false;
             }
         },
 
         /**
-         * Импорт настроек: из Cloudflare KV.
+         * Import settings: from Cloudflare KV.
          */
         async importSnapshot(filename) {
             if (!filename) return;
@@ -658,7 +658,7 @@ window.aiApiSettings = {
                 }
                 await this.applyImportedPayload(payload);
             } catch (error) {
-                console.error('ai-api-settings: ошибка импорта снимка:', error);
+                console.error('ai-api-settings: snapshot import error:', error);
             }
         },
 
@@ -705,14 +705,14 @@ window.aiApiSettings = {
                     }
                     await this.applyImportedPayload(payload);
                 } catch (error) {
-                    console.error('ai-api-settings: ошибка импорта с диска:', error);
+                    console.error('ai-api-settings: disk import error:', error);
                 }
             });
             input.click();
         },
 
         /**
-         * Сохранение настроек в кэш
+         * Save settings to cache
          */
         async saveSettings() {
             try {
@@ -723,12 +723,12 @@ window.aiApiSettings = {
 
                 await window.cacheManager.set('ai-provider', this.provider);
 
-                // Сохраняем настройки Yandex
+                // Save Yandex settings
                 await window.cacheManager.set('yandex-api-key', nextYandexApiKey);
                 await window.cacheManager.set('yandex-folder-id', this.yandexFolderId);
                 await window.cacheManager.set('yandex-model', this.yandexModel);
 
-                // Обновляем менеджер провайдеров
+                // Update provider manager
                 if (window.aiProviderManager && this.provider === 'yandex') {
                     await window.aiProviderManager.setProvider(this.provider);
                 }
@@ -745,7 +745,7 @@ window.aiApiSettings = {
                     window.uiState.setPostgresSyncEnabled(this.syncEnabled);
                 }
 
-                // Обновляем исходные значения
+                // Update initial values
                 this.initialProvider = this.provider;
                 this.yandexApiKey = nextYandexApiKey;
                 this.githubToken = nextGithubToken;
@@ -757,25 +757,25 @@ window.aiApiSettings = {
                 this.initialSyncEnabled = this.syncEnabled;
                 this.savePersistentSettingsBackup(this.buildSnapshotPayload());
 
-                // Устанавливаем состояние "Сохранено"
+                // Set "Saved" state
                 this.isSaved = true;
                 this.updateSaveButton();
 
-                console.log('ai-api-settings: настройки сохранены');
+                console.log('ai-api-settings: settings saved');
             } catch (error) {
-                console.error('ai-api-settings: ошибка сохранения настроек:', error);
+                console.error('ai-api-settings: save settings error:', error);
             }
         },
 
         /**
-         * Обработка отмены
+         * Cancel handler
          */
         handleCancel() {
             if (this.isSaved) {
-                // Если уже сохранено - закрываем модальное окно
+                // If already saved - close modal
                 this.closeModal();
             } else {
-                // Восстанавливаем исходные значения
+                // Restore initial values
                 this.provider = this.initialProvider;
                 this.yandexApiKey = this.initialYandexApiKey;
                 this.yandexFolderId = this.initialYandexFolderId;
@@ -811,7 +811,7 @@ window.aiApiSettings = {
                     }
                 }
             } catch (error) {
-                // Skill anchor: health-check на file:// может давать ложные CORS ошибки, это не баг провайдера.
+                // Skill anchor: health-check on file:// may give false CORS errors, not a provider bug.
                 // See app/skills/file-protocol-cors-guard
                 const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 if (error.message === 'Failed to fetch' && isLocal) {
@@ -825,7 +825,7 @@ window.aiApiSettings = {
         },
 
         /**
-         * Закрытие модального окна с удалением фокуса
+         * Close modal and remove focus
          */
         closeModal() {
             if (this.modalApi && this.modalApi.hide) {
@@ -834,20 +834,20 @@ window.aiApiSettings = {
         },
 
         /**
-         * Обновление состояния кнопки "Сохранить"
+         * Update Save button state
          */
         updateSaveButton() {
             if (!this.modalApi) return;
 
             if (this.isSaved) {
-                // Состояние "Сохранено, закрыть?"
+                // "Saved, close?" state
                 this.modalApi.updateButton('save', {
                     label: 'Сохранено, закрыть?',
                     variant: 'success',
                     disabled: false
                 });
             } else {
-                // Обычное состояние
+                // Normal state
                 this.modalApi.updateButton('save', {
                     label: 'Сохранить',
                     variant: 'primary',
@@ -857,14 +857,14 @@ window.aiApiSettings = {
         },
 
         /**
-         * Переключение видимости API ключа Yandex
+         * Toggle Yandex API key visibility
          */
         toggleYandexApiKeyVisibility() {
             this.showYandexApiKey = !this.showYandexApiKey;
         },
 
         /**
-         * Переключение видимости GitHub token
+         * Toggle GitHub token visibility
          */
         toggleGithubTokenVisibility() {
             this.showGithubToken = !this.showGithubToken;

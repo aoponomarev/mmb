@@ -1,27 +1,27 @@
 /**
  * ================================================================================================
- * SESSION LOG MODAL BODY COMPONENT - Компонент body модального окна Session Log
+ * SESSION LOG MODAL BODY COMPONENT - Session Log modal body
  * ================================================================================================
  *
- * PURPOSE: Отображение логов сессии в модальном окне for отладки.
+ * PURPOSE: Display session logs in modal for debugging.
  *
  * @skill-anchor app/skills/component-classes-management #for-classes-add-remove
  * @skill-anchor app/skills/bootstrap-vue-integration #for-bootstrap-event-proxying
  * @skill-anchor app/skills/vue-implementation-patterns #for-utility-availability-check
  * Skill: is/skills/arch-foundation
  *
- * ОСОБЕННОСТИ:
- * - Автоматический сбор всех console.log/warn/error/info
- * - Интеграция с logger.js
- * - Фильтрация по уровням (log/warn/error/info)
- * - Кнопка "Очистить лог" (слева внизу)
- * - Кнопка "Копировать в буфер" (справа внизу)
- * - Автопрокрутка к новым сообщениям
+ * FEATURES:
+ * - Auto-collect all console.log/warn/error/info
+ * - Integration with logger.js
+ * - Filter by level (log/warn/error/info)
+ * - "Clear log" button (bottom left)
+ * - "Copy to clipboard" button (bottom right)
+ * - Auto-scroll to new messages
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
  * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * - modalApi — API for managing buttons (provided by cmp-modal)
  *
 */
 
@@ -98,15 +98,15 @@ window.sessionLogModalBody = {
     },
 
         mounted() {
-        // Загружаем логи из глобального хранилища
+        // Load logs from global store
         if (window.sessionLogStore) {
             this.sessionLogs = window.sessionLogStore.getLogs();
 
-            // Подписываемся на новые логи
+            // Subscribe to new logs
             if (window.eventBus) {
                 this.logSubscription = window.eventBus.on('session-log', (logData) => {
                     this.sessionLogs.push(logData);
-                    // Ограничиваем количество логов в компоненте (for производительности)
+                    // Limit logs in component (for performance)
                     if (this.sessionLogs.length > 1000) {
                         this.sessionLogs.shift();
                     }
@@ -119,22 +119,22 @@ window.sessionLogModalBody = {
         } else {
         }
 
-        // Загружаем состояние переключателя подавления браузерной консоли
+        // Load browser console suppress toggle state
         if (window.consoleInterceptor) {
             this.suppressBrowserConsole = window.consoleInterceptor.getSuppressBrowserConsole();
         }
 
-        // Регистрируем кнопки
+        // Register buttons
         this.registerButtons();
 
-        // Прокручиваем к концу при монтировании
+        // Scroll to end on mount
         this.$nextTick(() => {
             this.scrollToBottom();
         });
     },
 
     beforeUnmount() {
-        // Отписываемся от событий
+        // Unsubscribe from events
         if (this.logSubscription && window.eventBus) {
             window.eventBus.off('session-log', this.logSubscription);
         }
@@ -144,7 +144,7 @@ window.sessionLogModalBody = {
         registerButtons() {
             if (!this.modalApi) return;
 
-            // Кнопка "Очистить лог" (слева внизу)
+            // "Clear log" button (bottom left)
             this.modalApi.registerButton('clear', {
                 label: 'Очистить лог',
                 variant: 'secondary',
@@ -154,7 +154,7 @@ window.sessionLogModalBody = {
                 onClick: () => this.handleClear()
             });
 
-            // Кнопка "Копировать в буфер" (справа внизу)
+            // "Copy to clipboard" button (bottom right)
             this.modalApi.registerButton('copy', {
                 label: 'Копировать в буфер',
                 variant: 'primary',
@@ -188,11 +188,11 @@ window.sessionLogModalBody = {
                     return `[${time}] [${log.level.toUpperCase()}] ${source}${log.message}`;
                 }).join('\n');
 
-                // Fallback for старых браузеров
+                // Fallback for older browsers
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(logText);
                 } else {
-                    // Fallback: создаем временный textarea
+                    // Fallback: create temp textarea
                     const textarea = document.createElement('textarea');
                     textarea.value = logText;
                     textarea.style.position = 'fixed';
@@ -212,7 +212,7 @@ window.sessionLogModalBody = {
                     });
                 }
             } catch (error) {
-                console.error('session-log-modal-body: ошибка копирования в буфер:', error);
+                console.error('session-log-modal-body: copy to clipboard error:', error);
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'danger',
@@ -225,7 +225,7 @@ window.sessionLogModalBody = {
         },
 
         updateFilter() {
-            // Обновление фильтра происходит автоматически через computed
+            // Filter update happens automatically via computed
             this.$nextTick(() => {
                 this.scrollToBottom();
             });

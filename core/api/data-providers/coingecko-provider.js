@@ -1,21 +1,21 @@
 /**
  * ================================================================================================
- * COINGECKO PROVIDER - Провайдер данных CoinGecko API
+ * COINGECKO PROVIDER - CoinGecko API data provider
  * ================================================================================================
  * Skill: core/skills/api-layer
  * Skill: core/skills/api-layer
  *
- * PURPOSE: Реализация провайдера данных for CoinGecko API.
+ * PURPOSE: Data provider implementation for CoinGecko API.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * Наследует BaseDataProvider и реализует все обязательные методы.
+ * Extends BaseDataProvider and implements all required methods.
  *
- * ИСТОЧНИК: Адаптирован из do-overs/BOT/core/api/coingecko.js
- * - Сохранена вся логика работы с API
- * - Добавлена нормализация данных к единому формату
- * - Интегрирована система сообщений for ошибок
- * - Использованы конфигурация и rate limiting из новой архитектуры
+ * SOURCE: Adapted from do-overs/BOT/core/api/coingecko.js
+ * - Preserved all API logic
+ * - Added data normalization to unified format
+ * - Integrated error message system
+ * - Uses config and rate limiting from new architecture
  *
 */
 
@@ -23,49 +23,49 @@
     'use strict';
 
     /**
-     * CoinGecko Provider - реализация провайдера for CoinGecko API
+     * CoinGecko Provider - implementation for CoinGecko API
      */
     class CoinGeckoProvider extends window.BaseDataProvider {
         constructor() {
             super();
 
-            // Получаем конфигурацию из data-providers-config
+            // Get config from data-providers-config
             this.config = window.dataProvidersConfig.getProviderConfig('coingecko');
 
-            // Rate limiter for managing частотой запросов
+            // Rate limiter for managing request frequency
             this.rateLimiter = null;
             this.initRateLimiter();
         }
 
         /**
-         * Построить URL с учетом прокси (for file://)
-         * На file:// using Cloudflare Worker proxy for CORS bypass
+         * Build URL with proxy consideration (for file://)
+         * On file:// using Cloudflare Worker proxy for CORS bypass
          */
         buildUrl(pathWithQuery) {
-            // Skill anchor: на file:// и GitHub Pages ВСЕ запросы через proxy, прямой доступ can be заблокирован CORS.
+            // Skill anchor: on file:// and GitHub Pages ALL requests via proxy, direct access can be blocked by CORS.
             // See app/skills/file-protocol-cors-guard
             const needsProxy = this.isFileProtocol();
 
-            // Если нужен прокси — используем Cloudflare Worker
+            // If proxy needed — use Cloudflare Worker
             if (needsProxy && window.cloudflareConfig) {
-                // Разделяем путь и query параметры
+                // Split path and query params
                 const [path, query] = pathWithQuery.split('?');
                 const params = query ? Object.fromEntries(new URLSearchParams(query)) : {};
 
                 return window.cloudflareConfig.getApiProxyEndpoint('coingecko', path, params);
             }
 
-            // Иначе — прямой запрос к CoinGecko
+            // Otherwise — direct request to CoinGecko
             return `${this.config.baseUrl}${pathWithQuery}`;
         }
 
         /**
-         * Инициализация rate limiter
+         * Initialize rate limiter
          */
         initRateLimiter() {
             if (window.RateLimiter) {
                 const rateLimit = this.config.rateLimit;
-                // Используем общий именованный экземпляр for CoinGecko (ЕИП)
+                // Use shared named instance for CoinGecko (SSOT)
                 this.rateLimiter = window.RateLimiter.getOrCreate(
                     'coingecko',
                     rateLimit.requestsPerMinute,
@@ -77,28 +77,28 @@
         }
 
         /**
-         * Get внутреннее имя провайдера
+         * Get internal provider name
          */
         getName() {
             return 'coingecko';
         }
 
         /**
-         * Get отображаемое имя провайдера
+         * Get display name of provider
          */
         getDisplayName() {
             return 'CoinGecko';
         }
 
         /**
-         * Проверка, требуется ли API ключ
+         * Check if API key is required
          */
         requiresApiKey() {
             return this.config.requiresApiKey;
         }
 
         /**
-         * Проверка, требуется ли прокси (file://, GitHub Pages, или localhost)
+         * Check if proxy is required (file://, GitHub Pages, or localhost)
          * @returns {boolean}
          */
         isFileProtocol() {
@@ -111,7 +111,7 @@
         }
 
         /**
-         * Пауза между запросами
+         * Pause between requests
          * @param {number} ms
          */
         async sleep(ms) {
@@ -119,7 +119,7 @@
         }
 
         /**
-         * Безопасная отправка событий прогресса загрузки
+         * Safely emit load progress events
          * @param {Object} options
          * @param {Object} payload
          */
@@ -135,7 +135,7 @@
         }
 
         /**
-         * Размер чанка for загрузки топа монет
+         * Chunk size for top coins load
          * @param {number} count
          * @param {Object} options
          * @returns {number}
@@ -146,9 +146,9 @@
                 return Math.max(1, Math.min(250, Math.floor(requestedChunkSize)));
             }
 
-            // Skill anchor: стабилизирует file:// Top-N runbook (чанки, чтобы не ловить 429 на тяжелых запросах).
+            // Skill anchor: stabilizes file:// Top-N runbook (chunks to avoid 429 on heavy requests).
             // See core/skills/api-layer
-            // На file:// используем более "легкий" режим по 25 монет на запрос
+            // On file:// use lighter mode: 25 coins per request
             if (this.isFileProtocol()) {
                 return Math.min(25, count);
             }
@@ -157,7 +157,7 @@
         }
 
         /**
-         * Нужно ли включать чанковую загрузку топа
+         * Whether to enable chunked top load
          * @param {number} count
          * @param {Object} options
          * @returns {boolean}
@@ -171,12 +171,12 @@
             }
 
             const chunkSize = this.getTopCoinsChunkSize(count, options);
-            // На file:// предпочитаем чанки уже с 51 монеты
+            // On file:// prefer chunks from 51 coins
             return this.isFileProtocol() && count > chunkSize;
         }
 
         /**
-         * Построить query параметры for /coins/markets
+         * Build query params for /coins/markets
          * @param {number} perPage
          * @param {number} page
          * @param {string} order
@@ -198,7 +198,7 @@
                 price_change_percentage: priceChangePercentage
             });
 
-            // Параметр поддерживается CoinGecko /coins/markets, но включаем только по запросу
+            // Param supported by CoinGecko /coins/markets, enable only on request
             if (options.includeRehypothecated === true) {
                 params.set('include_rehypothecated', 'true');
             }
@@ -207,7 +207,7 @@
         }
 
         /**
-         * Get задержку ретрая из Retry-After или fallback
+         * Get retry delay from Retry-After or fallback
          * @param {Response} response
          * @param {number} fallbackMs
          * @returns {number}
@@ -218,13 +218,13 @@
                 return fallbackMs;
             }
 
-            // Вариант 1: Retry-After в секундах
+            // Option 1: Retry-After in seconds
             const retryAfterSeconds = Number(retryAfterRaw);
             if (Number.isFinite(retryAfterSeconds) && retryAfterSeconds >= 0) {
                 return Math.max(1000, retryAfterSeconds * 1000);
             }
 
-            // Вариант 2: Retry-After как HTTP-date
+            // Option 2: Retry-After as HTTP-date
             const retryAfterDate = Date.parse(retryAfterRaw);
             if (!Number.isNaN(retryAfterDate)) {
                 return Math.max(1000, retryAfterDate - Date.now());
@@ -234,7 +234,7 @@
         }
 
         /**
-         * Нормализация массива монет к единому формату
+         * Normalize coins array to unified format
          * @param {Array} coins
          * @returns {Array}
          */
@@ -243,7 +243,7 @@
         }
 
         /**
-         * Запрос одной страницы /coins/markets с ретраями
+         * Fetch single /coins/markets page with retries
          * @param {Object} params
          * @param {number} params.perPage
          * @param {number} params.page
@@ -356,7 +356,7 @@
         }
 
         /**
-         * Загрузить топ монет чанками с прогрессом
+         * Load top coins in chunks with progress
          * @param {number} count
          * @param {string} order
          * @param {Object} options
@@ -450,18 +450,18 @@
         }
 
         /**
-         * Get топ N монет
-         * @param {number} count - Количество монет (1-250)
-         * @param {string} sortBy - Сортировка: 'market_cap' | 'volume'
-         * @param {Object} options - Дополнительные опции (apiKey, timeout)
-         * @returns {Promise<Array>} Массив нормализованных данных монет
+         * Get top N coins
+         * @param {number} count - Coin count (1-250)
+         * @param {string} sortBy - Sort: 'market_cap' | 'volume'
+         * @param {Object} options - Additional options (apiKey, timeout)
+         * @returns {Promise<Array>} Normalized coin data array
          */
         async getTopCoins(count = 100, sortBy = 'market_cap', options = {}) {
             if (!count || count <= 0 || count > 250) {
                 throw new Error('Count must be between 1 and 250');
             }
 
-            // Определяем порядок сортировки
+            // Determine sort order
             const order = sortBy === 'volume' ? 'volume_desc' : 'market_cap_desc';
 
             try {
@@ -503,21 +503,21 @@
         }
 
         /**
-         * Поиск монет по названию или тикеру
-         * @param {string} query - Поисковый запрос
-         * @param {Object} options - Дополнительные опции
-         * @returns {Promise<Array>} Массив найденных монет (до 10)
+         * Search coins by name or ticker
+         * @param {string} query - Search query
+         * @param {Object} options - Additional options
+         * @returns {Promise<Array>} Found coins array (up to 10)
          */
         async searchCoins(query, options = {}) {
             if (!query || query.length < 2) {
                 return [];
             }
 
-            // Используем buildUrl for поддержки proxy на file://
+            // Use buildUrl for proxy support on file://
             const url = this.buildUrl(`/search?query=${encodeURIComponent(query)}`);
 
             try {
-                // Ждем rate limiter
+                // Wait for rate limiter
                 if (this.rateLimiter) {
                     await this.rateLimiter.waitForToken();
                 }
@@ -533,7 +533,7 @@
                     this.handleHttpError(response, 'searchCoins');
                 }
 
-                // Уменьшаем таймаут при успешном запросе
+                // Decrease timeout on successful request
                 if (this.rateLimiter) {
                     this.rateLimiter.decreaseTimeout();
                 }
@@ -541,27 +541,27 @@
                 const data = await response.json();
                 let coins = data.coins || [];
 
-                // Сортируем результаты: полные совпадения с тикером вверху
+                // Sort results: exact ticker matches first
                 const queryLower = query.toLowerCase();
                 coins.sort((a, b) => {
                     const aSymbol = a.symbol ? a.symbol.toLowerCase() : '';
                     const bSymbol = b.symbol ? b.symbol.toLowerCase() : '';
 
-                    // Полное совпадение тикера - в начало
+                    // Exact ticker match - to top
                     const aExactMatch = aSymbol === queryLower ? 1 : 0;
                     const bExactMatch = bSymbol === queryLower ? 1 : 0;
                     if (aExactMatch !== bExactMatch) {
                         return bExactMatch - aExactMatch;
                     }
 
-                    // Тикер начинается с запроса - выше
+                    // Ticker starts with query - higher
                     const aStartsWith = aSymbol.startsWith(queryLower) ? 1 : 0;
                     const bStartsWith = bSymbol.startsWith(queryLower) ? 1 : 0;
                     if (aStartsWith !== bStartsWith) {
                         return bStartsWith - aStartsWith;
                     }
 
-                    // Остальные сортируем детерминированно без скрытой зависимости от rank.
+                    // Rest sorted deterministically without hidden rank dependency.
                     const aName = a.name ? a.name.toLowerCase() : '';
                     const bName = b.name ? b.name.toLowerCase() : '';
                     if (aName !== bName) {
@@ -574,12 +574,12 @@
 
                 const results = coins.slice(0, 10);
 
-                // Нормализуем данные поиска: маппируем thumb/large на image for единообразия
+                // Normalize search data: map thumb/large to image for consistency
                 const normalizedResults = results.map(coin => ({
                     ...coin,
-                    image: coin.thumb || coin.large || '', // Используем thumb (маленькая иконка) или large если thumb нет
-                    current_price: null, // Поиск не возвращает цену
-                    price_change_percentage_24h: null // Поиск не возвращает изменение цены
+                    image: coin.thumb || coin.large || '', // Use thumb (small icon) or large if thumb missing
+                    current_price: null, // Search does not return price
+                    price_change_percentage_24h: null // Search does not return price change
                 }));
 
                 return normalizedResults;
@@ -591,7 +591,7 @@
         }
 
         /**
-         * Get данные монет по их ID (с поддержкой чанков и прогресса)
+         * Get coin data by IDs (with chunk and progress support)
          * @param {Array<string>} coinIds - Массив ID монет
          * @param {Object} options - Дополнительные опции
          * @returns {Promise<Array>} Массив нормализованных данных монет
@@ -601,19 +601,19 @@
                 return [];
             }
 
-            // Skill anchor: принудительный чанкинг for больших sets ID на file://.
+            // Skill anchor: force chunking for large ID sets on file://.
             // See core/skills/api-layer
             const totalCount = coinIds.length;
             const isFile = this.isFileProtocol();
             const maxChunkSize = isFile ? 25 : 50;
 
-            // Если монет больше порога, разбиваем на равные чанки
+            // If coins exceed threshold, split into equal chunks
             if (totalCount > maxChunkSize || options.forceChunking) {
                 const chunksTotal = Math.ceil(totalCount / maxChunkSize);
-                // Вычисляем размер чанка так, чтобы они были максимально равными (эстетика)
+                // Compute chunk size for maximum uniformity
                 const chunkSize = Math.ceil(totalCount / chunksTotal);
-                // Реальный лимит CoinGecko: ~3 req/60s. Безопасная задержка — 21s.
-                // На file:// используем 21s, на HTTP (с ключом) можно меньше.
+                // CoinGecko limit: ~3 req/60s. Safe delay — 21s.
+                // On file:// use 21s, on HTTP (with key) can be less.
                 const chunkDelayMs = Number.isFinite(options.chunkDelayMs)
                     ? Math.max(0, Math.floor(options.chunkDelayMs))
                     : (isFile ? 21000 : 5000);
@@ -644,7 +644,7 @@
                         page: chunkNumber
                     });
 
-                    // Используем внутренний метод for запроса одной страницы ID
+                    // Use internal method for single ID page request
                     const rawChunk = await this.fetchCoinDataPage(currentChunkIds, options, chunkNumber, chunksTotal, totalCount);
                     
                     const normalizedChunk = this.normalizeTopCoinsList(rawChunk);
@@ -694,12 +694,12 @@
                 return allCoins;
             }
 
-            // Если чанкинг не нужен, выполняем один запрос через fetchCoinDataPage
+            // If chunking not needed, single request via fetchCoinDataPage
             return await this.fetchCoinDataPage(coinIds, options, 1, 1, totalCount);
         }
 
         /**
-         * Внутренний метод for загрузки страницы ID с ретраями
+         * Internal method for loading ID page with retries
          * @private
          */
         async fetchCoinDataPage(coinIds, options, chunkIndex, chunksTotal, total) {
@@ -797,23 +797,23 @@
         }
 
         /**
-         * Get ID монеты по тикеру
-         * @param {string} symbol - Тикер монеты (BTC, ETH и т.д.)
+         * Get coin ID by ticker
+         * @param {string} symbol - Coin ticker (BTC, ETH, etc.)
          * @param {Object} options - Дополнительные опции
-         * @returns {Promise<string|null>} ID монеты или null
+         * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {
             if (!symbol) return null;
 
             try {
-                // Используем поиск for получения ID
+                // Use search to get ID
                 const results = await this.searchCoins(symbol, options);
 
                 if (results.length === 0) {
                     return null;
                 }
 
-                // Ищем точное совпадение по тикеру (case-insensitive)
+                // Find exact ticker match (case-insensitive)
                 const symbolUpper = symbol.toUpperCase();
                 const exactMatch = results.find(coin =>
                     coin.symbol && coin.symbol.toUpperCase() === symbolUpper
@@ -823,7 +823,7 @@
                     return exactMatch.id;
                 }
 
-                // Если точного совпадения нет, возвращаем первый результат (самый популярный)
+                // If no exact match, return first result (most popular)
                 return results[0].id || null;
 
             } catch (error) {
@@ -833,20 +833,20 @@
         }
 
         /**
-         * Нормализация данных монеты к единому формату
-         * Добавляет поля pvs и отдельные PV* for совместимости с математической моделью
-         * @param {Object} coinData - Данные монеты от CoinGecko API
-         * @returns {Object} Нормализованные данные
+         * Normalize coin data to unified format
+         * Adds pvs and individual PV* fields for math model compatibility
+         * @param {Object} coinData - Coin data from CoinGecko API
+         * @returns {Object} Normalized data
          */
         normalizeCoinData(coinData) {
-            // Безопасное извлечение значений с fallback на 0
+            // Safe value extraction with fallback to 0
             const safeValue = (value) => {
                 const num = parseFloat(value);
                 return Number.isFinite(num) ? num : 0;
             };
 
-            // Создаем массив pvs (Price Variations) - for математической модели
-            // Источник: старое приложение, old_app_not_write/parsing.js
+            // Create pvs array (Price Variations) - for math model
+            // Source: legacy app, old_app_not_write/parsing.js
             const pvs = [
                 safeValue(coinData.price_change_percentage_1h_in_currency ?? coinData.price_change_percentage_1h),   // pvs[0] - PV1h
                 safeValue(coinData.price_change_percentage_24h_in_currency ?? coinData.price_change_percentage_24h),  // pvs[1] - PV24h
@@ -856,9 +856,9 @@
                 safeValue(coinData.price_change_percentage_200d_in_currency ?? coinData.price_change_percentage_200d)  // pvs[5] - PV200d
             ];
 
-            // Нормализованный формат (единый for всех провайдеров)
+            // Normalized format (unified for all providers)
             return {
-                // Базовые поля
+                // Base fields
                 id: coinData.id,
                 symbol: coinData.symbol,
                 name: coinData.name,
@@ -868,7 +868,7 @@
                 market_cap_rank: coinData.market_cap_rank_with_rehypothecated || coinData.market_cap_rank || null,
                 total_volume: safeValue(coinData.total_volume),
 
-                // Изменения цены (нормализованные названия без _in_currency)
+                // Price changes (normalized names without _in_currency)
                 price_change_percentage_1h: pvs[0],
                 price_change_percentage_24h: pvs[1],
                 price_change_percentage_7d: pvs[2],
@@ -876,7 +876,7 @@
                 price_change_percentage_30d: pvs[4],
                 price_change_percentage_200d: pvs[5],
 
-                // Для совместимости с математической моделью (старое приложение)
+                // For math model compatibility (legacy app)
                 pvs: pvs,
                 PV1h: pvs[0],
                 PV24h: pvs[1],
@@ -889,7 +889,7 @@
         }
     }
 
-    // Экспорт через window
+    // Export via window
     window.CoinGeckoProvider = CoinGeckoProvider;
 
     console.log('✅ CoinGeckoProvider loaded');

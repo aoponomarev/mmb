@@ -1,33 +1,33 @@
 /**
  * ================================================================================================
- * MESSAGES CONFIG - Конфигурация системных сообщений (v2 - упрощённая схема)
+ * MESSAGES CONFIG - System messages configuration (v2 - simplified schema)
  * ================================================================================================
  *
- * PURPOSE: SSOT for всех системных сообщений в приложении.
- * Исходные тексты на русском языке (базовый язык).
+ * PURPOSE: SSOT for all system messages in the application.
+ * Source texts in Russian (base language).
  * Skill: core/skills/config-contracts
  *
  * PRINCIPLES:
- * - Короткие ключи: e.net, e.rate, w.proxy, i.switch, s.ok
- * - Короткие типы: d (danger), w (warning), i (info), s (success)
- * - Минимальная структура: { t: text, d: details, type, p: priority }
- * - Переводы через messages-translator.js с упрощённым форматом
+ * - Short keys: e.net, e.rate, w.proxy, i.switch, s.ok
+ * - Short types: d (danger), w (warning), i (info), s (success)
+ * - Minimal structure: { t: text, d: details, type, p: priority }
+ * - Translations via messages-translator.js with simplified format
  *
- * Исходные тексты на русском языке (базовый язык).
- * - e.* - ошибки (errors)
- * - w.* - предупреждения (warnings)
- * - i.* - информация (info)
- * - s.* - успех (success)
- * - v.* - валидация (validation)
- * - a.* - авторизация (auth)
+ * Source texts in Russian (base language).
+ * - e.* - errors
+ * - w.* - warnings
+ * - i.* - info
+ * - s.* - success
+ * - v.* - validation
+ * - a.* - auth
  *
  * USAGE:
  * window.messagesConfig.get('e.net')
- * window.messagesConfig.get('e.rate', { time: '5 минут' })
+ * window.messagesConfig.get('e.rate', { time: '5 minutes' })
  *
  * REFERENCES:
- * - Принципы единого источника правды: app/skills/ux-principles
- * - Модуль перевода: core/api/messages-translator.js
+ * - Single source of truth principles: app/skills/ux-principles
+ * - Translation module: core/api/messages-translator.js
  */
 
 // @skill-anchor core/skills/messages-architecture #for-short-message-keys #for-short-message-types
@@ -35,7 +35,7 @@
     'use strict';
 
     /**
-     * Маппинг коротких типов в Bootstrap классы
+     * Mapping of short types to Bootstrap classes
      */
     const TYPE_MAP = {
         'd': 'danger',
@@ -45,7 +45,7 @@
     };
 
     /**
-     * Маппинг типов в приоритеты
+     * Mapping of types to priorities
      */
     const PRIORITY_MAP = {
         'd': 4,
@@ -55,11 +55,11 @@
     };
 
     /**
-     * Исходные тексты сообщений на русском языке (базовый язык)
-     * Структура: ключ -> { t: text, d?: details, type: 'd'|'w'|'i'|'s' }
+     * Source message texts in Russian (base language)
+     * Structure: key -> { t: text, d?: details, type: 'd'|'w'|'i'|'s' }
      */
     const MESSAGES = {
-        // === Ошибки (e.*) ===
+        // === Errors (e.*) ===
         'e.net': {
             t: 'Ошибка сети',
             d: 'Проверьте подключение к интернету',
@@ -109,7 +109,7 @@
             type: 'd'
         },
 
-        // === Валидация (v.*) ===
+        // === Validation (v.*) ===
         'v.wsum': {
             t: 'Сумма весов портфеля должна быть равна 1',
             type: 'w'
@@ -139,7 +139,7 @@
             type: 'w'
         },
 
-        // === Health/Состояние (h.*) ===
+        // === Health/Status (h.*) ===
         'h.proxy.down': {
             t: 'Прокси недоступен',
             d: 'Используется резервный',
@@ -155,7 +155,7 @@
             type: 'd'
         },
 
-        // === Интеграции (i.*) ===
+        // === Integrations (i.*) ===
         'i.switch': {
             t: 'Переключение провайдера',
             d: 'Переключено на {provider} из-за недоступности {previous}',
@@ -166,7 +166,7 @@
             type: 'i'
         },
 
-        // === Мониторинг (m.*) ===
+        // === Monitoring (m.*) ===
         'm.slow': {
             t: 'Медленный ответ от {service} ({time}ms)',
             type: 'w'
@@ -176,7 +176,7 @@
             type: 'w'
         },
 
-        // === Авторизация (a.*) ===
+        // === Auth (a.*) ===
         'a.login': {
             t: 'Ошибка при инициации авторизации',
             type: 'd'
@@ -186,7 +186,7 @@
             type: 'd'
         },
 
-        // === Портфели (p.*) ===
+        // === Portfolios (p.*) ===
         'p.load': {
             t: 'Ошибка при загрузке портфелей',
             type: 'd'
@@ -220,7 +220,7 @@
     };
 
     /**
-     * Маппинг старых ключей на новые (for обратной совместимости)
+     * Mapping of legacy keys to new keys (for backward compatibility)
      */
     const LEGACY_KEY_MAP = {
         'error.api.network': 'e.net',
@@ -259,7 +259,7 @@
     };
 
     /**
-     * Реестр действий for кнопок в сообщениях
+     * Registry of actions for message buttons
      */
     const ACTIONS = {
         'retry': {
@@ -295,13 +295,13 @@
     };
 
     /**
-     * Нормализовать ключ (поддержка legacy ключей)
-     * @param {string} key - ключ сообщения
-     * @returns {string} - нормализованный короткий ключ
+     * Normalize key (legacy key support)
+     * @param {string} key - message key
+     * @returns {string} - normalized short key
      */
     function normalizeKey(key) {
         if (!key) return null;
-        // Если это legacy ключ — маппим на новый
+        // If legacy key — map to new
         if (LEGACY_KEY_MAP[key]) {
             return LEGACY_KEY_MAP[key];
         }
@@ -309,10 +309,10 @@
     }
 
     /**
-     * Заменить плейсхолдеры в тексте
-     * @param {string} text - текст с плейсхолдерами {name}
-     * @param {Object} params - параметры for замены
-     * @returns {string} - текст с заменёнными плейсхолдерами
+     * Replace placeholders in text
+     * @param {string} text - text with placeholders {name}
+     * @param {Object} params - parameters for replacement
+     * @returns {string} - text with replaced placeholders
      */
     function replacePlaceholders(text, params = {}) {
         if (!text || !params) return text;
@@ -324,34 +324,34 @@
     }
 
     /**
-     * Get полный тип из короткого
-     * @param {string} shortType - короткий тип (d, w, i, s)
-     * @returns {string} - полный тип (danger, warning, info, success)
+     * Get full type from short type
+     * @param {string} shortType - short type (d, w, i, s)
+     * @returns {string} - full type (danger, warning, info, success)
      */
     function getFullType(shortType) {
         return TYPE_MAP[shortType] || 'info';
     }
 
     /**
-     * Get приоритет из короткого типа
-     * @param {string} shortType - короткий тип (d, w, i, s)
-     * @returns {number} - приоритет (1-4)
+     * Get priority from short type
+     * @param {string} shortType - short type (d, w, i, s)
+     * @returns {number} - priority (1-4)
      */
     function getPriority(shortType) {
         return PRIORITY_MAP[shortType] || 2;
     }
 
     /**
-     * Get сообщение по ключу
-     * @param {string} key - ключ сообщения (новый или legacy)
-     * @param {Object} params - параметры for замены плейсхолдеров
+     * Get message by key
+     * @param {string} key - message key (new or legacy)
+     * @param {Object} params - parameters for placeholder replacement
      * @returns {Object} - { text, details?, type, priority, key }
      */
     function get(key, params = {}) {
         const normalizedKey = normalizeKey(key);
 
         if (!normalizedKey || !MESSAGES[normalizedKey]) {
-            console.warn(`messages-config.get: ключ "${key}" не найден`);
+            console.warn(`messages-config.get: key "${key}" not found`);
             return {
                 text: key || '',
                 details: null,
@@ -375,17 +375,17 @@
     }
 
     /**
-     * Get сообщение по ключу (alias for обратной совместимости)
-     * @deprecated Используйте get() вместо getMessage()
+     * Get message by key (alias for backward compatibility)
+     * @deprecated Use get() instead of getMessage()
      */
     function getMessage(key, params = {}) {
         return get(key, params);
     }
 
     /**
-     * Get действие по ключу
-     * @param {string} key - ключ действия
-     * @returns {Object|null} - { label, kind, handler } или null
+     * Get action by key
+     * @param {string} key - action key
+     * @returns {Object|null} - { label, kind, handler } or null
      */
     function getAction(key) {
         if (!key || !ACTIONS[key]) {
@@ -395,8 +395,8 @@
     }
 
     /**
-     * Зарегистрировать или обновить действие
-     * @param {string} key - ключ действия
+     * Register or update action
+     * @param {string} key - action key
      * @param {Object} action - { label, kind, handler }
      */
     function registerAction(key, action) {
@@ -409,15 +409,15 @@
     }
 
     /**
-     * Get все ключи сообщений
-     * @returns {string[]} - массив ключей
+     * Get all message keys
+     * @returns {string[]} - array of keys
      */
     function getAllKeys() {
         return Object.keys(MESSAGES);
     }
 
     /**
-     * Get все сообщения for перевода
+     * Get all messages for translation
      * @returns {Object} - { key: { t, d } }
      */
     function getAllForTranslation() {
@@ -432,8 +432,8 @@
     }
 
     /**
-     * Инициализировать сообщения (заглушка for обратной совместимости)
-     * @param {string} language - язык (игнорируется)
+     * Initialize messages (stub for backward compatibility)
+     * @param {string} language - language (ignored)
      * @returns {Promise<void>}
      */
     async function init(language) {
@@ -442,7 +442,7 @@
 
     // Export to global scope
     window.messagesConfig = {
-        // Новый API
+        // New API
         get,
         getAllKeys,
         getAllForTranslation,
@@ -450,13 +450,13 @@
         getPriority,
         normalizeKey,
 
-        // Legacy API (обратная совместимость)
+        // Legacy API (backward compatibility)
         getMessage,
         getAction,
         registerAction,
         init,
 
-        // Константы
+        // Constants
         MESSAGES,
         ACTIONS,
         TYPE_MAP,

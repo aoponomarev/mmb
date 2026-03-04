@@ -1,13 +1,13 @@
 /**
  * ================================================================================================
- * TOOLTIP INTERPRETER - Интерпретация значений метрик for динамических подсказок
+ * TOOLTIP INTERPRETER - Metric value interpretation for dynamic tooltips
  * ================================================================================================
  *
- * PURPOSE: Генерация динамической части tooltip на основе текущих значений метрик.
+ * PURPOSE: Generate dynamic part of tooltip from current metric values.
  *
  * @skill-anchor core/skills/api-layer #for-layer-separation
  * @skill-anchor core/skills/data-providers-architecture #for-data-provider-interface
- * Статическая часть берется из tooltipsConfig, динамическая — строится здесь.
+ * Static part from tooltipsConfig, dynamic part built here.
  * Skill: app/skills/ux-principles
  *
  * USAGE:
@@ -19,12 +19,12 @@
     'use strict';
 
     /**
-     * Пороговые значения for интерпретации метрик
-     * Структура: { метрика: { уровни: [значения], интерпретации: { ru: [...], en: [...] } } }
+     * Threshold values for metric interpretation
+     * Structure: { metric: { levels: [values], interpretations: { ru: [...], en: [...] } } }
      */
     const THRESHOLDS = {
         agr: {
-            levels: [-10, -5, 0, 5, 10], // критические пороги AGR
+            levels: [-10, -5, 0, 5, 10], // critical AGR thresholds
             interpretations: {
                 ru: [
                     '⚠ Экстремально медвежий сигнал.\nShort-позиции предпочтительны.',
@@ -187,11 +187,11 @@
     };
 
     /**
-     * Get интерпретацию значения metrics
-     * @param {string} key - ключ metrics ('agr', 'mdn', 'fgi', etc.)
-     * @param {number} value - текущее значение metrics
-     * @param {string} lang - язык ('ru', 'en')
-     * @returns {string} - интерпретация
+     * Get metric value interpretation
+     * @param {string} key - metric key ('agr', 'mdn', 'fgi', etc.)
+     * @param {number} value - current metric value
+     * @param {string} lang - language ('ru', 'en')
+     * @returns {string} - interpretation
      */
     function getInterpretation(key, value, lang = 'ru') {
         const threshold = THRESHOLDS[key];
@@ -200,7 +200,7 @@
         const levels = threshold.levels;
         const interpretations = threshold.interpretations[lang] || threshold.interpretations['ru'];
 
-        // Определяем индекс интерпретации на основе значения
+        // Determine interpretation index from value
         let index = 0;
         for (let i = 0; i < levels.length; i++) {
             if (value >= levels[i]) {
@@ -212,17 +212,17 @@
     }
 
     /**
-     * Get полную подсказку (статическая + динамическая части)
-     * @param {string} key - ключ metrics ('agr', 'mdn', 'fgi', etc.)
-     * @param {Object} options - опции { value, lang, skipStatic }
-     * @returns {string} - финальная подсказка
+     * Get full tooltip (static + dynamic parts)
+     * @param {string} key - metric key ('agr', 'mdn', 'fgi', etc.)
+     * @param {Object} options - options { value, lang, skipStatic }
+     * @returns {string} - final tooltip
      */
     function getTooltip(key, options = {}) {
         const { value, lang = 'ru', skipStatic = false } = options;
 
         let tooltip = '';
 
-        // Статическая часть (из tooltipsConfig)
+        // Static part (from tooltipsConfig)
         if (!skipStatic && window.tooltipsConfig) {
             const staticKey = `metric.${key}.description`;
             const staticText = window.tooltipsConfig.getTooltip(staticKey);
@@ -231,7 +231,7 @@
             }
         }
 
-        // Динамическая часть (интерпретация текущего значения)
+        // Dynamic part (interpretation of current value)
         if (value !== undefined && value !== null) {
             const interpretation = getInterpretation(key, value, lang);
             if (interpretation) {
@@ -243,8 +243,8 @@
     }
 
     /**
-     * Get list всех доступных метрик с порогами
-     * @returns {Array<string>} - массив ключей метрик
+     * Get list of all available metrics with thresholds
+     * @returns {Array<string>} - metric keys array
      */
     function getAvailableMetrics() {
         return Object.keys(THRESHOLDS);

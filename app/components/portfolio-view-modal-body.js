@@ -1,6 +1,6 @@
 /**
  * ================================================================================================
- * PORTFOLIO VIEW MODAL BODY - Компонент просмотра портфеля (D.3)
+ * PORTFOLIO VIEW MODAL BODY - Portfolio view component (D.3)
  * ================================================================================================
  *
  * Skill: core/skills/domain-portfolio
@@ -12,7 +12,7 @@
     window.portfolioViewModalBody = {
         template: `
             <div class="portfolio-view-modal">
-                <!-- Шапка с мета-данными -->
+                <!-- Header with metadata -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-8">
                         <h4 class="mb-1">{{ portfolio?.name }}</h4>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <!-- Контекст рынка на момент создания -->
+                <!-- Market context at creation -->
                 <div class="mb-4">
                     <div class="py-2">
                         <div class="d-flex flex-wrap gap-4 align-items-center">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <!-- Таблицы Long/Short -->
+                <!-- Long/Short tables -->
                 <div class="row g-3 mb-4">
                     <!-- Long -->
                     <div class="col-md-6">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                <!-- Вклад моделей (Model Mix) -->
+                <!-- Model Mix tab -->
                 <div class="mb-2" v-if="Object.keys(portfolio?.modelMix || {}).length > 0">
                     <h6 class="small text-muted text-uppercase fw-bold mb-2">Вклад моделей</h6>
                     <div class="d-flex flex-wrap gap-2">
