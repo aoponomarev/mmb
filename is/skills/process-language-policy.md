@@ -28,6 +28,7 @@ id: sk-883639
 - This includes titles, section text, comments, checklists, and operational instructions.
 - Legacy non-English content is allowed only as quoted historical context when strictly needed for migration fidelity, including legacy abbreviations and their original Russian expansions.
 - Russian is permitted in ALL documentation files across different folders (not just `docs/plans/`). However, all code, code comments, variable names, commit messages, and skills (`skills/**`) MUST remain strictly in English.
+- Any file containing Cyrillic text MUST be saved in UTF-8. Encoding regressions (mojibake like `����`) are treated as documentation corruption and must be fixed before closing the task.
 
 ## Contracts
 

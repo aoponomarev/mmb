@@ -2,7 +2,7 @@
 
 > **Категория**: Мастер-план (Индексатор)
 > **Дата**: 2026-03-02
-> **Источники**: `a/skills/mbb/skills/`, `a/skills/all/skills/`, `a/mbb/skills/`
+> **Источники**: `skills-legacy-mbb`, `skills-legacy-all`, `skills-legacy-project`
 > **Целевая архитектура**: `is/skills/`, `core/skills/`, `app/skills/` (см. `process-skill-governance.md`)
 
 **ИИ-агент:** При обнаружении недостатка в протоколах (разделы 4–9) — дополнить документ (см. раздел 10). Согласование не требуется.

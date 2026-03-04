@@ -14,7 +14,7 @@ id: sk-0e193a
 
 ## Reasoning
 
-- **#for-docs-pipeline** A codebase clutters quickly if plans, policies, and specifications are dumped in one folder. A strict pipeline (`plans` -> `done` -> `ais`) ensures agents and developers know exactly where to find active tasks versus established architecture.
+- **#for-docs-pipeline** A codebase clutters quickly if plans, policies, and specifications are dumped in one folder. A strict pipeline (`docs/plans` -> `docs/done` -> `docs/ais`) ensures agents and developers know exactly where to find active tasks versus established architecture.
 - **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
 - **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.

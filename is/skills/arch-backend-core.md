@@ -58,7 +58,7 @@ id: sk-5c0ef8
 
 **Trigger**: better-sqlite3 release; Node version update; package-lock changes affecting native resolution.
 
-**Execution**: (1) Keep better-sqlite3 on known-good baseline; (2) `node scripts/sqlite-health-snapshot.js`; (3) run smoke command; (4) confirm no native load failures; (5) if Node major changed, ABI re-check mandatory.
+**Execution**: (1) Keep better-sqlite3 on known-good baseline; (2) `node is/scripts/infrastructure/health-check.js`; (3) run smoke command; (4) confirm no native load failures; (5) if Node major changed, ABI re-check mandatory.
 
 **What matters**: Node ABI compatibility; reproducibility with lockfile and runtime image; zero native load errors.
 

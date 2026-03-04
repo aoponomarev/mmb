@@ -42,7 +42,7 @@ id: sk-c62fb6
    - `styles/`: CSS files (wrappers, layout, custom).
    - `scripts/`: Project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation).
    - `mm/`: Math models (domain-specific calculators). Legacy structure.
-2. **Script Layout**: `is/scripts/` root must contain only `README.md`, top-level entrypoints (`preflight.js`), and one-off migration utilities (e.g. `migrate-plans.js`). All other scripts go into subfolders under is/scripts/ (architecture/, infrastructure/, secrets/, tests/). См. is/scripts/README.md.
+2. **Script Layout**: `is/scripts/` root must contain only `README.md`, top-level entrypoints (`preflight.js`), and one-off migration utilities (e.g. `migrate-plans.js`). All other scripts go into subfolders under `is/scripts/` (`architecture/`, `infrastructure/`, `secrets/`, `tests/`). Это legacy-маркировка маршрутизации модулей, трассируется в `docs/ais/ais-architecture-foundation.md#LIR-008.A1`.. `#LIR-008.A4`.
 3. **Skill Layout**: Skills are distributed per `process-skill-governance.md`:
    - `is/skills/`: Infrastructure and process knowledge (`arch-*.md`, `process-*.md`).
    - `core/skills/`: Backend and shared domain knowledge (e.g. `api-layer.md`, `cache-layer.md`, `config-contracts.md`).
@@ -58,11 +58,11 @@ id: sk-c62fb6
 
 **Context**: Managing libs repository and dependency updates. Trigger: new lib needed or version update.
 
-**Automation**: Check if file in libs/<name>/<version>/; if missing, download UMD from CDN; update lib-loader; notify user to commit. **Constraints**: Explicit commit (automation prepares, user commits); UMD only for browser loading.
+**Automation**: Check if file in `libs/<name>/<version>/`; if missing, download UMD from CDN; update `core/module-loader.js` sources and `core/modules-config.js` wiring; notify user to commit. **Constraints**: Explicit commit (automation prepares, user commits); UMD only for browser loading.
 
 ### Libs Directory Structure & Load Priority
 
-**Context**: Layout of vendor libs repository. Structure: vue, chartjs, assets (иконки монет и т.п.) — каждая библиотека в libs/<name>/<version>/. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage: `await window.libLoader.load('vue', '3.4.0')`.
+**Context**: Layout of vendor libs repository. Structure: `libs/<name>/<version>/`; coin/icon assets path is currently not deployed in Target App and must be treated as a deferred infra contract. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage is governed by loader contracts in `core/module-loader.js`.
 
 ## Contracts
 

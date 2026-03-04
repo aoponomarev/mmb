@@ -136,7 +136,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 - Use staged-only checks to reduce noise and speed up cycles.
 - Commit messages follow `.gitmessage` in lightweight mode (`Why` required, `FINS` optional).
 
-**Reliability gates**: (1) Submodule drift — validate `skills-core` pointer before commit/push; (2) Secrets — scan staged diff for tokens/keys before commit; (3) Targeted runtime — if MCP files changed run MCP self-test when available. *(When Docker/control-plane exist: `docker compose config`, `node control-plane/scripts/self-test.js`.)*
+**Reliability gates**: (1) Submodule drift - validate `skills-core` pointer before commit/push; (2) Secrets - scan staged diff for tokens/keys before commit; (3) Targeted runtime - if MCP files changed run MCP self-test when available. *(When control-plane exists: `docker compose config`, `docs/ais/ais-control-plane-llmops.md#LIR-006.A3`.)*
 
 **Stash hygiene**: Use stash only for short-lived context switching; add meaningful message; keep compact catalog; drop stale entries after successful integration.
 
@@ -167,7 +167,7 @@ If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be
 
 **Extraction targets**: Titles/Icons → `core/config/modals-config.js`; API Endpoints → `core/config/app-config.js`; Cache Rules → `core/cache/cache-config.js`; UI Text → `core/config/tooltips-config.js`.
 
-**Decision matrix**: Repeated HTML → shared/component (концептуально); Repeated Options → core/config; Repeated Logic → shared/utility (см. arch-foundation).
+**Decision matrix**: Repeated HTML → shared/components (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A4`); Repeated Options → core/config; Repeated Logic → shared/utils (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A5`).
 
 ### 18. Core Tech Stack (Execution Environment)
 

@@ -38,13 +38,13 @@ id: sk-d7a2cc
 
 **Context**: Safe MCP control plane for orchestrating n8n workflows from agent tools. Agent side stateless and provider-agnostic; strict execution safety.
 
-**Scope**: Control plane (концептуально: control-plane/); dedicated MCP server (stdio); proxies to n8n API, logs every action.
+**Scope**: Control plane legacy concept (tracked in `LIR-006.A1`); dedicated MCP server (stdio); proxies to n8n API, logs every action.
 
 **Mandatory tools**: `check_system_health`, `list_active_workflows`, `execute_workflow`, `get_workflow_logs`.
 
 **Safety gates**: Default dry-run; runtime writes disabled unless `CONTROL_PLANE_ALLOW_MUTATIONS=true`; destructive ops require `confirmToken`; invalid gate returns `blocked`, not raw errors.
 
-**Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events to logs/control-plane.log (см. arch-control-plane); never log secrets.
+**Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events are tracked via `docs/ais/ais-control-plane-llmops.md#LIR-006.A2` (legacy control-plane event-log marker).
 
 ## Implementation Status in Target App
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).

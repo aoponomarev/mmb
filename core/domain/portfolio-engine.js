@@ -3,8 +3,8 @@
  * PORTFOLIO ENGINE - Pure domain logic for portfolio draft/rebalance
  * ================================================================================================
  * Skill: core/skills/domain-portfolio
- * Skill: a/skills/all/recipe-portfolio-engine-mvp-hardening.md
- * Skill: a/skills/app/recipe-portfolio-engine-mvp-hardening.md
+ * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A2`)
+ * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A3`)
  * Doc: docs/A_PORTFOLIO_SYSTEM.md
  *
  * Purpose:

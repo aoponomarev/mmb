@@ -14,6 +14,8 @@ related_ais:
 
 # AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
 
+<!-- @causality #for-integration-legacy-remediation #for-atomic-remediation #for-docs-ids-gate -->
+
 <!-- Спецификации (AIS) пишутся на русском языке и служат макро-документацией. Микро-правила вынесены в английские скиллы. Скрыто в preview. -->
 
 ## Концепция (High-Level Concept)
@@ -35,3 +37,11 @@ related_ais:
 - `core/api/cloudflare/*` — клиенты для взаимодействия с Cloudflare Workers.
 - `core/api/ai-provider-manager.js` — роутер AI-моделей.
 - `is/yandex/` — код серверлесс-функций Яндекса.
+
+## Лог перепривязки путей (Path Rewrite Log)
+
+| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
+|------------|--------------|------|--------|---------------------------|
+| `integrations-cloudflare-core` (legacy donor) | `LIR-002.A1` | Legacy описание вне target структуры | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |
+| `integrations-cloudflare-plan` (legacy donor) | `LIR-002.A2` | Legacy плановой секции нет в текущей структуре | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |
+| `integrations-cloudflare-testing` (legacy donor) | `LIR-002.A3` | Legacy тестовый plan неактуален для активного контура | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |

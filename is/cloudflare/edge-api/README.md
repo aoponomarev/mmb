@@ -3,7 +3,7 @@
 ## Структура проекта
 
 ```
-cloud/cloudflare/workers/
+is/cloudflare/edge-api/
 ├── src/
 │   ├── index.js          # Главный роутер для всех endpoints
 │   ├── auth.js           # OAuth endpoints (/auth/google, /auth/callback)
@@ -61,7 +61,7 @@ wrangler secret put JWT_SECRET
 ## Деплой
 
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
@@ -89,13 +89,13 @@ wrangler deploy
 
 ### Локальный запуск
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler dev
 ```
 
 ### Применение SQL схемы
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler d1 execute app-database --file=./schema.sql
 ```
 
@@ -103,7 +103,7 @@ wrangler d1 execute app-database --file=./schema.sql
 1. Перейти в Cloudflare Dashboard → Storage & databases → D1
 2. Выбрать базу данных `app-database`
 3. Перейти в раздел "Execute SQL"
-4. Скопировать содержимое `cloud/cloudflare/workers/schema.sql` и выполнить
+4. Скопировать содержимое `is/cloudflare/edge-api/schema.sql` и выполнить
 
 ### Просмотр логов
 ```bash
@@ -112,7 +112,7 @@ wrangler tail
 
 ### Деплой Worker
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
@@ -137,7 +137,7 @@ wrangler deploy
 ## Структура проекта
 
 ```
-cloud/cloudflare/workers/
+is/cloudflare/edge-api/
 ├── src/
 │   ├── index.js          # Главный роутер
 │   ├── auth.js           # OAuth endpoints
@@ -168,12 +168,12 @@ cloud/cloudflare/workers/
 - `rebalances` — история ребалансировок портфелей (опционально)
 - `user_settings` — пользовательские настройки (опционально)
 
-Подробная схема: `cloud/cloudflare/workers/schema.sql` и `cloud/cloudflare/workers/migrations/001_initial_schema.sql`
+Подробная схема: `is/cloudflare/edge-api/schema.sql` и `is/cloudflare/edge-api/migrations/001_initial_schema.sql`
 
 ### Применение схемы
 
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler d1 execute app-database --file=./schema.sql
 ```
 
@@ -181,7 +181,7 @@ wrangler d1 execute app-database --file=./schema.sql
 1. Cloudflare Dashboard → Storage & databases → D1
 2. Выбрать базу данных `app-database`
 3. Перейти в "Execute SQL"
-4. Скопировать содержимое `cloud/cloudflare/workers/schema.sql` и выполнить
+4. Скопировать содержимое `is/cloudflare/edge-api/schema.sql` и выполнить
 
 ## Безопасность
 
@@ -211,6 +211,8 @@ Authorization: Bearer jwt_token
 
 ## Документация
 
-- **Инфраструктура Cloudflare:** `a/skills/app/skills/integrations/integrations-cloudflare-core.md` — полное описание настройки Workers, D1, R2, Google OAuth
-- **План интеграции:** `a/skills/app/skills/integrations/integrations-cloudflare-plan.md` — детальный план с этапами и прогрессом
-- **Тестовый план:** `a/skills/app/skills/integrations/integrations-cloudflare-testing.md` — чеклист для тестирования всех компонентов интеграции
+- **Инфраструктура Cloudflare (актуально):** docs/ais/ais-infrastructure-integrations.md
+- **Исторические документы:** AIS-миграция заменила
+  - integrations-cloudflare-core (legacy donor: `docs/ais/ais-infrastructure-integrations.md` (LIR-002.A1))
+  - integrations-cloudflare-plan (legacy donor: `docs/ais/ais-infrastructure-integrations.md` (LIR-002.A2))
+  - integrations-cloudflare-testing (legacy donor: `docs/ais/ais-infrastructure-integrations.md` (LIR-002.A3))

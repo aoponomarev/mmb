@@ -34,9 +34,9 @@ id: sk-5cd3c9
 
 **Context**: Edge infrastructure for API Proxy, Auth, Settings, State. SSOT: `core/config/cloudflare-config.js`.
 
-**Infrastructure**: Workers (logic); D1 (Users, Portfolios, Coin Sets); KV — `API_CACHE` (ephemeral), `SETTINGS` (persistent app settings).
+**Infrastructure**: Workers (logic); D1 (Users, Portfolios, Coin Sets); KV — `API_CACHE` (ephemeral), `SETTINGS` (persistent app settings). Migration scripts are stored in `is/cloudflare/edge-api/migrations` (`legacy donor path `cloud/cloudflare/workers/migrations` remapped via `docs/ais/ais-anti-staleness.md#LIR-007.A5`).
 
-**Route map**: /auth/*, /api/portfolios/*, /api/coin-sets/*, /api/datasets/*, /api/coingecko/*, /api/yahoo-finance/*, /api/stooq/*, /api/proxy, /api/settings, /health (HTTP routes, not file paths).
+**Route map**: auth/*, api/portfolios/*, api/coin-sets/*, api/datasets/*, api/coingecko/*, api/yahoo-finance/*, api/stooq/*, api/proxy, api/settings, health (HTTP routes, not file paths; legacy API route notation in prose only, see `docs/ais/ais-anti-staleness.md#LIR-007.A3`).
 
 **Component bindings**: D1, API_CACHE, SETTINGS, GOOGLE_CLIENT_SECRET, JWT_SECRET, SETTINGS_TOKEN.
 
@@ -62,7 +62,7 @@ id: sk-5cd3c9
 
 **Prerequisites**: Wrangler CLI authenticated; Account ID; `GOOGLE_CLIENT_SECRET` and `JWT_SECRET` ready.
 
-**Steps**: (1) Verify bindings in `wrangler.toml` (DB, API_CACHE); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy`; (4) Health check at /health.
+**Steps**: (1) Verify bindings in `is/cloudflare/edge-api/wrangler.toml` (legacy `wrangler.toml` path remapped via `docs/ais/ais-anti-staleness.md#LIR-007.A6`); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy` from `is/cloudflare/edge-api`; (4) Health check via `health` route (see `docs/ais/ais-anti-staleness.md#LIR-007.A3`).
 
 **Client config**: Update `core/config/auth-config.js` with correct `clientId` and `redirectUri`.
 
@@ -102,5 +102,5 @@ id: sk-5cd3c9
 
 ## Contracts
 
-- **Worker Structure**: The Worker code must remain modular (entrypoint, auth handler, utils). Do not bundle everything into a single massive file.
+- **Worker Structure**: The Worker code must remain modular (entrypoint, auth handler, utils) in `is/cloudflare/edge-api/src/{index.js,auth.js,utils/}`. Legacy local paths (`src/index.js`, `src/auth.js`, `src/utils/`) are remapped via `docs/ais/ais-anti-staleness.md#LIR-007.A7`.
 - **CORS Headers**: The Worker must consistently return `Access-Control-Allow-Origin: *` for all proxy and API endpoints.

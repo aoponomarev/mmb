@@ -70,7 +70,7 @@ id: sk-7d810a
 
 **Context**: From idea to deprecation.
 
-**States**: Pending (SKILL_CANDIDATES.json) → Draft (drafts/tasks/) → Active (skills/) → Deprecated (archive/).
+**States**: Pending (legacy `SKILL_CANDIDATES.json`, remapped in `docs/ais/ais-anti-staleness.md#LIR-007.A8`) → Draft (legacy `drafts/tasks/`, remapped in `docs/ais/ais-anti-staleness.md#LIR-007.A9`) → Active (`is/skills/`, `core/skills/`, `app/skills/`) → Deprecated (`docs/backlog/skills/` for deferred items).
 
 **Actions**: Create, Update, Merge, Split, Deprecate.
 
@@ -91,13 +91,13 @@ id: sk-7d810a
 - `Implemented`: Cursor `.cursor/mcp.json` configuration for both MCP servers.
 - `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy App's full frontmatter format). Frontmatter can be adopted incrementally.
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
-- `Simplified`: No skills/MIGRATION.md (migration tracked via docs/plans/ and this skill).
+- `Simplified`: No `skills/MIGRATION.md` (legacy marker tracked via `docs/ais/ais-anti-staleness.md#LIR-007.A10`); migration tracked via `docs/plans/` and this skill.
 
 ### Token Budget (alwaysApply Rules)
 
 - **Budget:** Total alwaysApply rules MUST stay under 1,000 lines (~5,000 tokens). Current: 3 rules, ~55 lines.
 - **Justification:** Each new alwaysApply rule must justify why it cannot be glob-scoped or agent-decided.
-- **Audit:** Run `grep -l "alwaysApply: true" .cursor/rules/**/*.mdc | xargs wc -l` quarterly.
+- **Audit:** Run `rg --files-with-matches "alwaysApply:\\s*true" .cursor/rules | Measure-Object` quarterly.
 
 ### Batch Skills Review
 

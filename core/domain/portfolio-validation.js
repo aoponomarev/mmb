@@ -3,7 +3,7 @@
  * PORTFOLIO VALIDATION - Contract validator for portfolio drafts
  * ================================================================================================
  * Skill: core/skills/domain-portfolio
- * Skill: a/skills/all/recipe-portfolio-engine-mvp-hardening.md
+ * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A4`)
  * Doc: docs/A_PORTFOLIO_SYSTEM.md
  *
  * Enforces invariants: sum=100, weight>=1, no duplicate coinId,

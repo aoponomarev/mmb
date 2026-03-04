@@ -60,7 +60,7 @@ id: sk-bb5cf3
 
 **Security and stability**: Run dependency checks in local preflight for touched package zones; treat security upgrade as controlled rollout; avoid new dependencies without clear runtime ROI.
 
-**Solo validation**: `npm run env:check`, `npm run index:gen`. *(When control-plane exists: `node control-plane/scripts/self-test.js`.)*
+**Solo validation**: `npm run env:check`, `npm run index:gen`. *(When control plane exists: `node is/scripts/infrastructure/control-plane-self-test.js` (`docs/ais/ais-control-plane-llmops.md#LIR-006.A3`).)*
 
 ### Node.js Version Migration Preview
 

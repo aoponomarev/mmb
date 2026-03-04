@@ -37,3 +37,14 @@ related_skills:
 - Взаимодействие между слоями (например, `app/` вызывает `core/api/`) происходит строго через интерфейсы менеджеров (например, `AIProviderManager`, `DataProviderManager`).
 - Инфраструктура настроена на принцип **Fail-Fast**: система должна падать на этапе сборки/префлайта, если нарушен контракт (например, удален казуальный хэш без причины), а не деградировать в рантайме.
 
+## Лог перепривязки legacy-маршрутизации
+
+| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
+|------------|--------------|------|--------|---------------------------|
+| `is/scripts/architecture/` | `LIR-008.A1` | Legacy bucket in old path notation | `MAPPED` | `is/scripts/architecture/` |
+| `is/scripts/infrastructure/` | `LIR-008.A2` | Legacy bucket in old path notation | `MAPPED` | `is/scripts/infrastructure/` |
+| `is/scripts/secrets/` | `LIR-008.A3` | Legacy bucket in old path notation | `MAPPED` | `is/scripts/secrets/` |
+| `is/scripts/tests/` | `LIR-008.A4` | Legacy bucket in old path notation | `MAPPED` | `is/scripts/tests/` |
+| `lib-loader.js` | `LIR-014.A1` | Legacy loader token in layout governance skill | `MAPPED` | `core/module-loader.js` + `core/modules-config.js` |
+| `libs/assets/coins/` | `LIR-014.A2` | Historical assets bucket not deployed in current Target App structure | `REQUIRES_ARCH_CHANGE` | Deferred infra/assets decision; keep as non-active contract until dedicated assets path exists |
+

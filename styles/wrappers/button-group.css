@@ -24,7 +24,7 @@
  * Загружается последним среди компонентных стилей (после button.css, dropdown-menu-item.css, dropdown.css),
  * так как использует все предыдущие компоненты: кнопки (через cmp-button) и dropdown (при схлопывании).
  *
- * Подробнее: a/skills/app/skills/components/components-styling-principles.md
+ * Подробнее: `legacy donor` components-styling-principles (`docs/ais/ais-portfolio-controls.md#LIR-005.A5`)
  */
 
 /* ============================================================================

@@ -15,7 +15,7 @@ id: sk-3225b2
 ## Reasoning
 
 - **#for-mcp-telemetry** A static codebase cannot measure the "usefulness" of its own documentation. By proxying all tool executions and file reads through a local MCP server, we can write telemetry to SQLite and definitively know which skills are relied upon and which are dead weight.
-- **#for-ai-tooling-abstraction** Forcing agents to remember and perfectly type CLI commands (like `node scripts/xyz.js` or `wrangler d1 execute`) is error-prone. Exposing these as strict JSON-schema MCP Tools guarantees safer, more predictable execution.
+- **#for-ai-tooling-abstraction** Forcing agents to remember and perfectly type CLI commands (like `node is/scripts/infrastructure/health-check.js` or `wrangler d1 execute`) is error-prone. Exposing these as strict JSON-schema MCP Tools guarantees safer, more predictable execution.
 - **#for-context-injection** Dynamically injecting telemetry data (e.g., "This skill has 42 anchors") into the top of Markdown files *as they are being read by the agent* dynamically influences agent behavior without mutating the actual markdown file on disk.
 
 ## Core Rules
@@ -51,7 +51,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Goal**: Leverage GitHub cloud intelligence while maintaining local self-sufficiency and minimizing token costs.
 
-**Beacon strategy**: .github/copilot-instructions.md (при наличии) как SSOT для cloud agent context; обновляется index generator.
+**Beacon strategy**: `.github/copilot-instructions.md` moved to historical scope and is now tracked via `docs/ais/ais-anti-staleness.md#LIR-007.A1` (legacy SSOT marker).
 
 **Token-saving workflow (L3 tasks)**: Create Issue → add label `L3-Discovery` → open in Copilot Workspace → request plan only ("Provide step-by-step plan, do not generate code yet") → execute locally via ВЗП protocol.
 
@@ -107,7 +107,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Approve/curation flow**: User action triggers confirm → API updates status; drafting part of initial pass.
 
-**Log sync**: UI fetches the logs API endpoint for real-time events; consecutive events collapsed for readability.
+**Log sync**: UI fetches the logs API endpoint for real-time events; route is an HTTP contract (`api/logs`) and is mapped via `docs/ais/ais-anti-staleness.md#LIR-007.A2`.
 
 **Guidelines**: Use `data-hash` attributes to map UI to backend; visual feedback (spinners, alerts) for long-running LLM tasks; optimistic UI — fade out rejected items while waiting for server.
 

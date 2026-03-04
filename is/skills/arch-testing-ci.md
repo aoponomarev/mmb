@@ -41,7 +41,7 @@ id: sk-d6777d
 
 **Goal**: Run high-value local checks before commit/push in solo mode. SSOT: `scripts/git/preflight-solo.ps1`.
 
-**Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When Docker/control-plane exist: also `control-plane/*`, `docker-compose*.yml`.)*
+**Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When control-plane exists: also control-plane scripts in `docs/ais/ais-control-plane-llmops.md#LIR-006.A6`.)*
 
 **Checks**: (1) `.env` must not be staged; (2) `npm run skills:check` — path existence, @skill resolution (blocking); (3) `npm run skills:affected` — affected skills and causality hashes from staged files (informational, does not block). *(Secret leakage scan, MCP SDK drift check — to be added as needed.)*
 

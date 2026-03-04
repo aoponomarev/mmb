@@ -15,7 +15,7 @@
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md
  * - Documentation метрик: `core/skills/domain-portfolio`
  * - Архитектура портфелей: `is/skills/arch-foundation` (раздел "Портфельная система")
- * - Hardening: `a/skills/all/recipe-portfolio-engine-mvp-hardening.md`
+ * - Hardening: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A1`)
  *
  * NOTE: This module acts as compatibility facade over `core/domain/portfolio-engine.js`.
  * New code should call `window.portfolioEngine.*` directly when possible.

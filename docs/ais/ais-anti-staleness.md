@@ -101,6 +101,33 @@ flowchart TB
 | `README.md` | Path existence не требует путей из README; dead links проверяются. |
 | `PREFLIGHT_SKIP_CAUSALITY=1` | validate-causality и validate-causality-invariant не выполняются (preflight). |
 
+## Лог перепривязки legacy-ссылок (Path Rewrite Log)
+
+| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
+|------------|--------------|------|--------|---------------------------|
+| `.github/copilot-instructions.md` | `LIR-007.A1` | Legacy context marker недоступен в репо | `MAPPED` | `docs/ais/ais-anti-staleness.md` |
+| `/api/logs` | `LIR-007.A2` | HTTP route не file-path | `MAPPED` | API contract note in `docs/ais/ais-anti-staleness.md` |
+| `health` | `LIR-007.A3` | legacy route notation в тексте | `MAPPED` | Runtime-only contract in `docs/ais/ais-anti-staleness.md#LIR-007.A3` |
+| `docs/A_CLOUDFLARE.md` | `LIR-007.A4` | Исторический внешний путь документа | `DEFERRED` | Перенос в `docs/ais/ais-infrastructure-integrations.md` |
+| `cloud/cloudflare/workers/migrations/` | `LIR-007.A5` | Различие legacy-структуры и текущего контекста | `MAPPED` | `is/cloudflare/edge-api/migrations` |
+| `wrangler.toml` | `LIR-007.A6` | Legacy путь в тексте без домена | `MAPPED` | `is/cloudflare/edge-api/wrangler.toml` |
+| `src/auth.js` | `LIR-007.A7` | Legacy относительный путь | `MAPPED` | `is/cloudflare/edge-api/src/auth.js` |
+| `SKILL_CANDIDATES.json` | `LIR-007.A8` | Legacy file in current pipeline | `MAPPED` | `docs/plans/` + skill lifecycle in `docs/ais/ais-anti-staleness.md` |
+| `drafts/tasks/` | `LIR-007.A9` | Legacy state bucket in old lifecycle | `MAPPED` | `docs/ais/ais-anti-staleness.md#LIR-007.A9` |
+| `skills/MIGRATION.md` | `LIR-007.A10` | Legacy migration marker | `MAPPED` | `docs/ais/ais-anti-staleness.md#LIR-007.A10` |
+| `AI/PRO/mmb` | `LIR-007.A11` | Исторические плановые артефакты | `MAPPED` | `process-ai-collaboration.md` rationale (`docs/ais/ais-anti-staleness.md#LIR-007.A11`) |
+| `docs/drafts` (без `/`) | `LIR-012.A1` | Legacy token в rewrite-логах и markdown таблицах | `MAPPED` | Skip-contract in `is/contracts/path-contracts.js` (`SKIP_LINK_PATTERNS`) |
+| `core/is/skills/`, `app/is/skills/` | `LIR-012.A2` | Историческая миграционная нотация путей | `MAPPED` | Skip-contract для legacy tokens в `path-contracts.js` |
+| `core/skills/everything.md` | `LIR-012.A3` | Нефункциональный placeholder, нужен для исторического трека | `MAPPED` | Skip-contract + canonical rewrite in docs governance AIS |
+| `core/config/integration-config.js`, `core/api/integration-manager.js` | `LIR-012.A4` | Известные `REQUIRES_ARCH_CHANGE` ссылки не должны давать шум в dead-link gate | `MAPPED` | Skip-contract для explicit legacy paths |
+| `related_skills/related_ais`, `legacy/path`, `docs/...` (TEMPLATE placeholders) | `LIR-012.A5` | Шаблонные токены ошибочно трактуются как реальные пути | `MAPPED` | Skip-contract placeholder patterns in `path-contracts.js` |
+| `core/lib-loader.js`, `lib-loader.js`, `zod/v4` | `LIR-013.A1` | Legacy references in governance skill no longer match active loader contract | `MAPPED` | `is/skills/process-lib-governance.md` now points to `core/module-loader.js` and `core/modules-config.js` |
+| `Active (skills/)`, `Deprecated (archive/)` lifecycle markers | `LIR-016.A1` | Generic legacy buckets create ambiguous contracts and noisy link semantics | `MAPPED` | Explicit lifecycle paths in `is/skills/arch-skills-mcp.md` (`is/core/app skills` + `docs/backlog/skills/`) |
+| `AI/PRO/mmb` (inline legacy plan token) | `LIR-017.A1` | Legacy donor path token inside process guidance creates avoidable path-noise | `MAPPED` | Replaced by neutral “legacy AI migration plans” wording in `process-ai-collaboration.md` |
+| `logs/control-plane.log` (inline legacy token) | `LIR-018.A1` | Legacy log filename token in skill narrative adds stale path coupling | `MAPPED` | Replaced with neutral “legacy control-plane event-log marker” wording in `arch-control-plane.md` |
+| `node scripts/xyz.js` (generic legacy CLI example) | `LIR-019.A1` | Ambiguous script root path encourages non-SSOT command examples | `MAPPED` | Replaced with explicit `node is/scripts/infrastructure/health-check.js` in MCP ecosystem skill |
+| `(см. внешний репозиторий)` donor note in English skill | `LIR-020.A1` | Mixed-language donor marker in active English skill reduces consistency | `MAPPED` | Replaced with English neutral donor-repository wording in collaboration process skill |
+
 ---
 
 ## Уровень 1: Static Validation — как работает

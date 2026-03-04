@@ -3,7 +3,7 @@
 ## Команда для создания KV namespace:
 
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler kv:namespace create "API_CACHE"
 ```
 

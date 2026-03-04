@@ -5,7 +5,7 @@
 Перед деплоем необходимо создать KV namespace для кэширования API запросов:
 
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler kv:namespace create "API_CACHE"
 ```
 
@@ -21,7 +21,7 @@ Add the following to your configuration file in your kv_namespaces array:
 
 ## Шаг 2: Обновление wrangler.toml
 
-Откройте `cloud/cloudflare/workers/wrangler.toml` и найдите секцию:
+Откройте `is/cloudflare/edge-api/wrangler.toml` и найдите секцию:
 
 ```toml
 # KV хранилище для кэширования API запросов (CoinGecko, Yahoo Finance, Stooq и т.д.)
@@ -44,7 +44,7 @@ id = "abc123def456..."  # Вставьте ваш ID здесь
 ## Шаг 3: Деплой Worker
 
 ```bash
-cd cloud/cloudflare/workers
+cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
@@ -178,10 +178,11 @@ wrangler kv:key list --binding=API_CACHE | jq -r '.[].name' | xargs -I {} wrangl
 **Решение:**
 - KV кэш должен снизить количество запросов к CoinGecko
 - Проверьте, что кэш работает: `wrangler kv:key list --binding=API_CACHE`
-- Увеличьте TTL в `cloud/cloudflare/workers/src/api-proxy.js` (если нужно)
+- Увеличьте TTL в `is/cloudflare/edge-api/src/api-proxy.js` (если нужно)
 
 ## Дополнительная информация
 
-- **Документация:** `a/skills/app/skills/integrations/integrations-cloudflare-core.md`
+- **Документация:** `docs/ais/ais-infrastructure-integrations.md` (AIS-сводка).  
+  Legacy donor: `docs/ais/ais-infrastructure-integrations.md#LIR-002.A1`
 - **Конфигурация:** `core/config/cloudflare-config.js`
-- **Исходный код Worker:** `cloud/cloudflare/workers/src/api-proxy.js`
+- **Исходный код Worker:** `is/cloudflare/edge-api/src/api-proxy.js`

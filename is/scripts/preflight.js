@@ -74,6 +74,7 @@ function runPreflight() {
         execSync('node is/scripts/architecture/generate-skills-index.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/generate-index-ais.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/generate-id-registry.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/validate-docs-encoding.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-docs-ids.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-rules-references.js', { stdio: 'inherit', cwd: PATHS.root });
     } catch (e) {

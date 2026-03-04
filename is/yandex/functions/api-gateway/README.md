@@ -22,4 +22,4 @@
 
 Связанные файлы:
 - API Gateway: `cloud/yandex/api-gateway/app-api-gw/openapi.yaml`
-- Документация интеграции: `a/skills/app/skills/integrations/integrations-strategy.md`
+- Документация интеграций: `docs/ais/ais-integration-strategy-yandex.md`

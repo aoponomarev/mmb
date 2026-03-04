@@ -23,6 +23,7 @@
     "skills:causality:check": "node is/scripts/architecture/validate-causality.js",
     "skills:index": "node is/scripts/architecture/generate-skills-index.js",
     "ais:index": "node is/scripts/architecture/generate-index-ais.js",
+    "docs:encoding:validate": "node is/scripts/architecture/validate-docs-encoding.js",
     "docs:ids:validate": "node is/scripts/architecture/validate-docs-ids.js",
     "docs:ids:registry": "node is/scripts/architecture/generate-id-registry.js",
     "skills:health:trend": "node is/scripts/architecture/skills-health-trend.js",

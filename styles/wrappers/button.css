@@ -21,7 +21,7 @@
  * Загружается первым среди компонентных стилей, так как является базовым компонентом,
  * используемым другими компонентами (dropdown, button-group).
  *
- * Подробнее: a/skills/app/skills/components/components-styling-principles.md
+ * Подробнее: `legacy donor` components-styling-principles (`docs/ais/ais-portfolio-controls.md#LIR-005.A6`)
  */
 
 /* ============================================================================
@@ -67,7 +67,7 @@
    РЕШЕНИЕ: Отступы управляются через margin-right/margin-left для конкретных
    элементов через селекторы :not(:last-child) и :not(:first-child).
 
-   Подробнее: a/skills/app/skills/components/components-layout-alignment.md
+   Подробнее: `legacy donor` components-layout-alignment (`docs/ais/ais-portfolio-controls.md#LIR-005.A8`)
    ============================================================================ */
 
 /* Отступ слева для суффикса, чтобы отделить его от предыдущего элемента (текста или иконки) */
