@@ -2,7 +2,7 @@
 title: "Process: Migration Prioritization Criteria"
 tags: ["#process", "#migration", "#prioritization", "#heuristics"]
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "d59b0f77"
 id: sk-b77a8d
 

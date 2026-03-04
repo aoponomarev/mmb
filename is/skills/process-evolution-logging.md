@@ -1,7 +1,7 @@
 ---
 title: "Process: Project Evolution Logging"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "0f5fa6f6"
 id: sk-683b3c
 
@@ -9,8 +9,8 @@ id: sk-683b3c
 
 # Process: Project Evolution Logging
 
-> **Context**: Defines how architectural decisions, session work, and milestones are recorded in `docs/project-evolution.md`.
-> **SSOT**: `docs/project-evolution.md`
+> **Context**: Defines how architectural decisions, session work, and milestones are recorded in `id:doc-f1a4d3`.
+> **SSOT**: `id:doc-f1a4d3`
 
 ## Reasoning
 
@@ -63,7 +63,7 @@ Service → Transport → HTTP Handler → Node Server.
 ### 5. Agent Trigger
 
 After any non-trivial session (3+ files changed, or architectural decision made):
-1. Check if today's dated block exists in `docs/project-evolution.md`.
+1. Check if today's dated block exists in `id:doc-f1a4d3`.
 2. If missing or incomplete — write or extend it.
 3. Do NOT log: pure documentation reformatting, typo fixes, trivial housekeeping.
 

@@ -1,3 +1,9 @@
+---
+id: readme-069aca
+status: active
+last_updated: "2026-03-04"
+---
+
 # Application Frontend Layer (`app/`)
 
 ## Scope

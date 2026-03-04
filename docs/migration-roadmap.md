@@ -1,3 +1,9 @@
+---
+id: doc-f8d4af
+status: active
+last_updated: "2026-03-04"
+---
+
 # Migration Roadmap
 
 > Категория: Мастер-план (Индексатор)

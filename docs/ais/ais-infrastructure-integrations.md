@@ -23,7 +23,7 @@ related_ais:
 
 ## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
 - **Cloudflare Workers (CORS Proxy):** Браузеры блокируют кросс-доменные запросы с `file://`. Worker выступает в роли "прокладки", которая добавляет нужные CORS-заголовки и скрывает реальные эндпоинты (CoinGecko, Binance).
-- **Yandex Cloud (Geo-оптимизация):** Для пользователей из РФ/СНГ некоторые сервисы (например, YandexGPT или кэши) маршрутизируются через инфраструктуру Яндекса. Ingest/read контуры данных монет (cron fetcher, API Gateway, PostgreSQL) — см. `docs/ais/ais-yandex-cloud.md`.
+- **Yandex Cloud (Geo-оптимизация):** Для пользователей из РФ/СНГ некоторые сервисы (например, YandexGPT или кэши) маршрутизируются через инфраструктуру Яндекса. Ingest/read контуры данных монет (cron fetcher, API Gateway, PostgreSQL) — см. `id:ais-e41384`.
 - **N8N (Рабочие процессы):** Внешние автоматизации (например, сбор новостей или тяжелая агрегация) вынесены в N8N-вебхуки.
 - **AI Providers (Абстракция):** В приложении заложен интерфейс `BaseAIProvider` для работы с LLM. Основной провайдер сейчас — YandexGPT (через прокси).
 
@@ -42,6 +42,6 @@ related_ais:
 
 | Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
 |------------|--------------|------|--------|---------------------------|
-| `integrations-cloudflare-core` (legacy donor) | `LIR-002.A1` | Legacy описание вне target структуры | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |
-| `integrations-cloudflare-plan` (legacy donor) | `LIR-002.A2` | Legacy плановой секции нет в текущей структуре | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |
-| `integrations-cloudflare-testing` (legacy donor) | `LIR-002.A3` | Legacy тестовый plan неактуален для активного контура | `MAPPED` | `docs/ais/ais-infrastructure-integrations.md` |
+| `integrations-cloudflare-core` (legacy donor) | `LIR-002.A1` | Legacy описание вне target структуры | `MAPPED` | `id:ais-775420` |
+| `integrations-cloudflare-plan` (legacy donor) | `LIR-002.A2` | Legacy плановой секции нет в текущей структуре | `MAPPED` | `id:ais-775420` |
+| `integrations-cloudflare-testing` (legacy donor) | `LIR-002.A3` | Legacy тестовый plan неактуален для активного контура | `MAPPED` | `id:ais-775420` |

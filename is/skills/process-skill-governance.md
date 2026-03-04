@@ -1,7 +1,7 @@
 ---
 title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "d0185ad5"
 id: sk-d763e7
 
@@ -188,5 +188,5 @@ Before creating or placing a skill file, answer these in order:
 | Placing a `core/` domain skill in `is/skills/` because "skills go in is/" | Move to `core/skills/` — co-location with domain code |
 | Creating `arch-cache.md` in `is/skills/` to document the browser cache | Belongs in `core/skills/cache-layer.md` |
 | Placing a Windows PowerShell rule in `core/skills/` | Belongs in `is/skills/process-windows-shell.md` |
-| One monolithic `everything` file in `core/skills/` | Split by subdomain — one file per coherent domain area (см. `plan-skills-migration-registry`) |
+| One monolithic `everything` file in `core/skills/` | Split by subdomain — one file per coherent domain area (see `id:plan-4e7a1c`) |
 | Skills folder in `is/` growing beyond 30 files without a review | Trigger a profiling review using this skill |

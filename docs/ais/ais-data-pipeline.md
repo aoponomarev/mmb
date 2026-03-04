@@ -59,4 +59,4 @@ related_ais:
 - `core/config/models-config.js` — SSOT конфигурация математических доменных моделей.
 - `core/api/market-metrics-service.js` — оркестратор TTL и кэширования метрик.
 
-**API и схема PostgreSQL:** см. `docs/ais/ais-yandex-cloud.md`.
+**API и схема PostgreSQL:** см. `id:ais-e41384`.

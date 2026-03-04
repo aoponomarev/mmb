@@ -4,7 +4,7 @@
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 8
+> Auto-generated. Total: 11
 
 ---
 
@@ -13,6 +13,9 @@
 - [ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
 - [ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
 - [ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
+- [ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
 - [ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
 - [ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
+- [ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
+- [ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [ais-e41384](ais/ais-yandex-cloud.md) — AIS: Yandex Cloud — Ingest и Read контуры данных монет

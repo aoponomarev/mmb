@@ -1,3 +1,9 @@
+---
+id: readme-c1e1b4
+status: active
+last_updated: "2026-03-04"
+---
+
 # Shared Layer (`shared/`)
 
 ## Scope

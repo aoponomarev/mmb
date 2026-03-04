@@ -1,7 +1,7 @@
 ---
 title: "Token Discipline (Context Efficiency)"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "229eecc2"
 id: sk-a304ea
 
@@ -42,7 +42,7 @@ Attach only the files the agent needs:
 
 ### 4. Indices as Navigation
 When exploring a new domain:
-- Read `docs/index-skills.md` or `docs/index-ais.md` first
+- Read `id:docidx-0b048e` or `id:docidx-3022eb` first
 - Find relevant skills before deep-diving
 - Resolve ids via `is/contracts/docs/id-registry.json`
 

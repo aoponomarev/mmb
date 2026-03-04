@@ -1,7 +1,7 @@
 ---
 title: "Architecture: Rollback & Recovery"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "df370bfa"
 id: sk-6eeb9a
 
@@ -28,17 +28,17 @@ id: sk-6eeb9a
 
 ### Deployment Rollback (Primary)
 
-See `docs/runbooks/rollback-protocol.md` for the full protocol. Summary:
+See `id:runbook-b188b8` for the full protocol. Summary:
 - **Triggers**: health-check unhealthy, cache:integrity:check fail, Sev-2+ monitoring, validate:single-writer critical fail.
 - **Order**: External Integrations → Backend/Transport → Control-plane.
 - **Checkpoint**: `npm run cache:integrity:check` before nontrivial secret/path/writer changes.
 - **Post-rollback**: `npm run preflight` + `npm run test`; post-mortem with action list.
 
-*Infrastructure Recovery (Docker/Compose) moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
+*Infrastructure Recovery (Docker/Compose) moved to `id:bskill-11683c` — not yet deployed.*
 
 ## Implementation Status in Target App
 
-- `Implemented`: Rollback protocol v1 at `docs/runbooks/rollback-protocol.md`.
+- `Implemented`: Rollback protocol v1 at `id:runbook-b188b8`.
 - `Implemented`: Trigger conditions tied to health-check and monitoring commands.
 - `Implemented`: Layered rollback order by blast radius.
 - `Implemented`: Mandatory checkpoint rule for secret/path/writer changes.

@@ -1,3 +1,9 @@
+---
+id: backlog-37c870
+status: active
+last_updated: "2026-03-04"
+---
+
 # Докер и Контейнеризация (Docker / Control Plane)
 
 > Статус: Отложено (В бэклоге)

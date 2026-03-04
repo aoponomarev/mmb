@@ -1,3 +1,9 @@
+---
+id: doc-f1a4d3
+status: active
+last_updated: "2026-03-04"
+---
+
 # Project Evolution Log
 
 > **SSOT**: This file is the cumulative log of architectural decisions, migration milestones, and session work.

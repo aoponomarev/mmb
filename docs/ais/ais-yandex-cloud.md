@@ -142,4 +142,4 @@ flowchart TD
 
 ---
 
-*См. также: `docs/ais/ais-data-pipeline.md`, `docs/runbooks/data-contour-troubleshooting.md`.*
+*См. также: `id:ais-3732ce`, `id:runbook-ce96aa`.*

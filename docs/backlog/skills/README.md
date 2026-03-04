@@ -1,3 +1,9 @@
+---
+id: bskill-809e7c
+status: active
+last_updated: "2026-03-04"
+---
+
 # Deferred Skills (Отложенные скиллы)
 
 Skills that are useful but do not fit the current infrastructure state. Not tied to `is/`, `core/`, or `app/`.
@@ -25,8 +31,8 @@ Backlog skills must align with arch-foundation when promoted: no mbb/mmb in path
 
 ## When to promote
 
-When the infrastructure appears — move to `is/skills/`, `core/skills/`, or `docs/ais/` and perform full wiring per `docs/plans/plan-skills-migration-registry.md` sections 5–7.
+When the infrastructure appears — move to `is/skills/`, `core/skills/`, or `docs/ais/` and perform full wiring per `id:plan-4e7a1c` sections 5–7.
 
 ## Reference
 
-See `docs/plans/plan-skills-migration-registry.md` § 9.
+See `id:plan-4e7a1c` § 9.

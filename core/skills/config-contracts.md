@@ -1,7 +1,7 @@
 ---
 title: "Config Layer & SSOT Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "9760a656"
 id: sk-02d3ea
 

@@ -1,3 +1,11 @@
+---
+id: sk-87700e
+status: active
+last_updated: "2026-03-04"
+reasoning_audited_at: "2026-03-04"
+reasoning_checksum: "d41d8cd9"
+---
+
 # Agent Command Dictionary
 
 Short commands that predictably switch agent behavior mode.

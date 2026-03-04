@@ -1,7 +1,7 @@
 ---
 title: "Architecture: Monitoring & Observability"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "e9024df0"
 id: sk-92384e
 
@@ -69,6 +69,6 @@ id: sk-92384e
   - `npm run monitoring:baseline` — sanity check on monitoring baseline.
   - `npm run skills:health:trend` — appends skills health metrics to `logs/skills-health-trend.jsonl`.
   - `npm run skills:health:trend:report` — summarizes trend over last N snapshots.
-- `Implemented`: Rollback protocol runbook at `docs/runbooks/rollback-protocol.md`.
-- `Implemented`: Monitoring baseline runbook at `docs/runbooks/monitoring-baseline.md`.
+- `Implemented`: Rollback protocol runbook at `id:runbook-b188b8`.
+- `Implemented`: Monitoring baseline runbook at `id:runbook-94a80a`.
 

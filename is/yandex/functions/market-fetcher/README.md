@@ -1,3 +1,9 @@
+---
+id: readme-7c67c3
+status: active
+last_updated: "2026-03-04"
+---
+
 # coingecko-fetcher — Yandex Cloud Function
 
 Крон-функция: загружает топ-250 монет из CoinGecko в PostgreSQL `coin_market_cache`.

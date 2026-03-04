@@ -1,3 +1,9 @@
+---
+id: readme-5c42c7
+status: active
+last_updated: "2026-03-04"
+---
+
 # Local Data & Cache (`data/`)
 
 ## Scope

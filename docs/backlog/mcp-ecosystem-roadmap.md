@@ -1,3 +1,9 @@
+---
+id: backlog-69de5d
+status: active
+last_updated: "2026-03-04"
+---
+
 # MCP & Causality Ecosystem Roadmap (LLMOps)
 
 **Status:** Planned

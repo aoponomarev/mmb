@@ -1,5 +1,9 @@
 ---
-related_skills: [is/skills/arch-rollback]
+id: runbook-b188b8
+status: active
+last_updated: "2026-03-04"
+related_skills:
+  - sk-6eeb9a
 ---
 
 # Rollback Protocol v1 (Target App)
@@ -24,7 +28,7 @@ No automatic system-wide rollback without human confirmation.
 
 2) **Checkpointing**:
    - restore from latest `npm run secret:restore` snapshot if secrets/paths invalid,
-   - write operational note in `docs/project-evolution.md` and `logs/` evidence.
+   - write operational note in `id:doc-f1a4d3` and `logs/` evidence.
 
 3) **Layered rollback order (by blast radius)**
 

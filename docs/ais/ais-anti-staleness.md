@@ -105,17 +105,17 @@ flowchart TB
 
 | Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
 |------------|--------------|------|--------|---------------------------|
-| `.github/copilot-instructions.md` | `LIR-007.A1` | Legacy context marker недоступен в репо | `MAPPED` | `docs/ais/ais-anti-staleness.md` |
-| `/api/logs` | `LIR-007.A2` | HTTP route не file-path | `MAPPED` | API contract note in `docs/ais/ais-anti-staleness.md` |
-| `health` | `LIR-007.A3` | legacy route notation в тексте | `MAPPED` | Runtime-only contract in `docs/ais/ais-anti-staleness.md#LIR-007.A3` |
-| `docs/A_CLOUDFLARE.md` | `LIR-007.A4` | Исторический внешний путь документа | `DEFERRED` | Перенос в `docs/ais/ais-infrastructure-integrations.md` |
+| `.github/copilot-instructions.md` | `LIR-007.A1` | Legacy context marker недоступен в репо | `MAPPED` | `id:ais-9f4e2d` |
+| `/api/logs` | `LIR-007.A2` | HTTP route не file-path | `MAPPED` | API contract note in `id:ais-9f4e2d` |
+| `health` | `LIR-007.A3` | legacy route notation в тексте | `MAPPED` | Runtime-only contract in `id:ais-9f4e2d#LIR-007.A3` |
+| `A_CLOUDFLARE legacy doc` | `LIR-007.A4` | Исторический внешний путь документа | `DEFERRED` | Перенос в `id:ais-775420` |
 | `cloud/cloudflare/workers/migrations/` | `LIR-007.A5` | Различие legacy-структуры и текущего контекста | `MAPPED` | `is/cloudflare/edge-api/migrations` |
 | `wrangler.toml` | `LIR-007.A6` | Legacy путь в тексте без домена | `MAPPED` | `is/cloudflare/edge-api/wrangler.toml` |
 | `src/auth.js` | `LIR-007.A7` | Legacy относительный путь | `MAPPED` | `is/cloudflare/edge-api/src/auth.js` |
-| `SKILL_CANDIDATES.json` | `LIR-007.A8` | Legacy file in current pipeline | `MAPPED` | `docs/plans/` + skill lifecycle in `docs/ais/ais-anti-staleness.md` |
-| `drafts/tasks/` | `LIR-007.A9` | Legacy state bucket in old lifecycle | `MAPPED` | `docs/ais/ais-anti-staleness.md#LIR-007.A9` |
-| `skills/MIGRATION.md` | `LIR-007.A10` | Legacy migration marker | `MAPPED` | `docs/ais/ais-anti-staleness.md#LIR-007.A10` |
-| `AI/PRO/mmb` | `LIR-007.A11` | Исторические плановые артефакты | `MAPPED` | `process-ai-collaboration.md` rationale (`docs/ais/ais-anti-staleness.md#LIR-007.A11`) |
+| `SKILL_CANDIDATES.json` | `LIR-007.A8` | Legacy file in current pipeline | `MAPPED` | `id:plan-8d3f5a` + skill lifecycle in `id:ais-9f4e2d` |
+| `drafts/tasks/` | `LIR-007.A9` | Legacy state bucket in old lifecycle | `MAPPED` | `id:ais-9f4e2d#LIR-007.A9` |
+| `skills/MIGRATION.md` | `LIR-007.A10` | Legacy migration marker | `MAPPED` | `id:ais-9f4e2d#LIR-007.A10` |
+| `AI/PRO/mmb` | `LIR-007.A11` | Исторические плановые артефакты | `MAPPED` | `process-ai-collaboration.md` rationale (`id:ais-9f4e2d#LIR-007.A11`) |
 | `docs/drafts` (без `/`) | `LIR-012.A1` | Legacy token в rewrite-логах и markdown таблицах | `MAPPED` | Skip-contract in `is/contracts/path-contracts.js` (`SKIP_LINK_PATTERNS`) |
 | `core/is/skills/`, `app/is/skills/` | `LIR-012.A2` | Историческая миграционная нотация путей | `MAPPED` | Skip-contract для legacy tokens в `path-contracts.js` |
 | `core/skills/everything.md` | `LIR-012.A3` | Нефункциональный placeholder, нужен для исторического трека | `MAPPED` | Skip-contract + canonical rewrite in docs governance AIS |
@@ -254,12 +254,12 @@ flowchart TB
 | Оставить stale exception в causality-exceptions.jsonl | Запустить validate-causality-exceptions-stale; удалить stale строки |
 | Менять код с @causality без ревью formulation | Прочитать affected hashes; обновить formulation или удалить хеш |
 
-*(Полный список — `docs/done/plan-skill-anti-staleness.md`, раздел 14.)*
+*(Полный список — `id:done-ec60da`, раздел 14.)*
 
 ---
 
 ## Ссылки
 
-- План внедрения: `docs/done/plan-skill-anti-staleness.md` (завершён)
-- Бэклог чистки: `docs/backlog/fix-anti-staleness.md` — dead links, опциональные улучшения
+- План внедрения: `id:done-ec60da` (завершён)
+- Бэклог чистки: `id:backlog-2c4b0b` — dead links, опциональные улучшения
 - Скиллы: arch-skills-mcp, process-skill-governance, process-code-anchors, arch-testing-ci, arch-causality

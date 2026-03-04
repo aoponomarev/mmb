@@ -17,6 +17,10 @@ const CODE_DIRS = [
   path.join(ROOT, "app"),
 ];
 
+const EXTRA_MD_DIRS = [
+  path.join(ROOT, "docs"),
+];
+
 const EXCLUDE_FILES = [
   "is/mcp/skills/server.js",
   "is/scripts/architecture/validate-causality.js",
@@ -111,6 +115,18 @@ function main() {
       // Skip causality-registry.md itself
       if (relPath.endsWith("causality-registry.md")) continue;
       
+      const content = fs.readFileSync(filePath, "utf8");
+      const hashes = content.match(HASH_REGEX) || [];
+      for (const h of hashes) {
+        usedHashes.add(h);
+      }
+    }
+  }
+
+  for (const dir of EXTRA_MD_DIRS) {
+    const mdFiles = walkMarkdownFiles(dir);
+    for (const filePath of mdFiles) {
+      const relPath = path.relative(ROOT, filePath).split(path.sep).join("/");
       const content = fs.readFileSync(filePath, "utf8");
       const hashes = content.match(HASH_REGEX) || [];
       for (const h of hashes) {

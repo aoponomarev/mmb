@@ -1,3 +1,9 @@
+---
+id: doc-d5083c
+status: active
+last_updated: "2026-03-04"
+---
+
 # Создание KV Namespace для API Proxy Cache
 
 ## Команда для создания KV namespace:

@@ -1,3 +1,9 @@
+---
+id: readme-c8e267
+status: active
+last_updated: "2026-03-04"
+---
+
 # Core Domain & Backend Layer (`core/`)
 
 ## Scope

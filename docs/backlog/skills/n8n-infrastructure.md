@@ -1,3 +1,9 @@
+---
+id: bskill-2cab14
+status: active
+last_updated: "2026-03-04"
+---
+
 # n8n Infrastructure (Deferred)
 
 > **Status**: DEFERRED — n8n not yet deployed in Target App. Move to `is/skills/` when n8n stack exists.

@@ -1,13 +1,14 @@
 /**
  * @skill is/skills/process-language-policy
- * @description Guards docs encoding/mixed mojibake in AIS markdown.
+ * @description Global encoding gate: UTF-8 no BOM + mojibake detection in docs markdown.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "../../contracts/path-contracts.js";
 
-const AIS_DIR = path.join(ROOT, "docs", "ais");
-const TARGET_FILE = path.join(AIS_DIR, "ais-docs-governance.md");
+const DOCS_DIR = path.join(ROOT, "docs");
+const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".cursor"]);
+const MARKDOWN_EXT = ".md";
 
 function hasUtf8Bom(buffer) {
   return (
@@ -18,31 +19,41 @@ function hasUtf8Bom(buffer) {
   );
 }
 
+function walkMarkdown(dir, files = []) {
+  if (!fs.existsSync(dir)) return files;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (EXCLUDE_DIRS.has(entry.name)) continue;
+      walkMarkdown(full, files);
+    } else if (entry.isFile() && entry.name.endsWith(MARKDOWN_EXT)) {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
 function containsMojibake(text) {
-  return text.includes("�");
+  if (text.includes("\uFFFD")) return true; // replacement character
+  if (text.includes("п»ї")) return true; // BOM rendered as cp1251 text
+  if (/�{2,}/.test(text)) return true; // repeated decoding placeholders
+  return false;
 }
 
 function main() {
   const errors = [];
-  if (!fs.existsSync(TARGET_FILE)) {
-    errors.push(`[validate-docs-encoding] Missing file: ${path.relative(ROOT, TARGET_FILE)}`);
-  } else {
-    const buf = fs.readFileSync(TARGET_FILE);
+
+  for (const full of walkMarkdown(DOCS_DIR)) {
+    const rel = path.relative(ROOT, full).replace(/\\/g, "/");
+    const buf = fs.readFileSync(full);
     const text = buf.toString("utf8");
     if (!hasUtf8Bom(buf)) {
-      errors.push("[validate-docs-encoding] ais-docs-governance.md must be UTF-8 BOM.");
+      // expected mode: UTF-8 without BOM; nothing to report
+    } else {
+      errors.push(`[validate-docs-encoding] BOM is forbidden: ${rel}`);
     }
     if (containsMojibake(text)) {
-      errors.push("[validate-docs-encoding] Mojibake marker found in ais-docs-governance.md.");
-    }
-  }
-
-  for (const file of fs.readdirSync(AIS_DIR)) {
-    if (!file.endsWith(".md")) continue;
-    const full = path.join(AIS_DIR, file);
-    const text = fs.readFileSync(full, "utf8");
-    if (containsMojibake(text)) {
-      errors.push(`[validate-docs-encoding] Mojibake marker found: docs/ais/${file}`);
+      errors.push(`[validate-docs-encoding] Mojibake marker found: ${rel}`);
     }
   }
 
@@ -51,7 +62,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log("[validate-docs-encoding] OK: AIS encoding looks valid.");
+  console.log("[validate-docs-encoding] OK: docs markdown is UTF-8 without BOM and no mojibake markers.");
 }
 
 main();

@@ -1,3 +1,9 @@
+---
+id: cheat-0e005f
+status: active
+last_updated: "2026-03-04"
+---
+
 # Расположение настроек Cursor / Markdown Preview
 
 ## Где хранятся настройки

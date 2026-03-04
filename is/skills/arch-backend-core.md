@@ -1,7 +1,7 @@
 ---
 title: "Architecture: Backend Core & Data Pipeline"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "70eadb33"
 id: sk-5c0ef8
 

@@ -1,6 +1,7 @@
 ---
-id: plan-legacy-integrations-strategy
-status: active
+id: plan-8d3f5a
+legacy_id: plan-legacy-integrations-strategy
+status: complete
 last_updated: "2026-03-04"
 ---
 
@@ -246,3 +247,13 @@ last_updated: "2026-03-04"
 - Главный реестр: `docs/plans/legacy-link-remediation-registry.md`.
 - Ответственный: текущий чат/инициатор миграции.
 - Целевая метрика: пилот закрыл 1 источник без появления новых шумных dead links.
+
+## FIN (Закрытие активной фазы)
+
+- Активная remediation-фаза закрыта на `LIR-022`.
+- Финальный контрольный прогон пройден:
+  - `validate-docs-encoding` — `OK`
+  - `validate-dead-links` — `OK`
+  - `validate-docs-ids` — `OK`
+  - `validate-skill-anchors` — `OK`
+- Дальнейшие изменения вести в режиме сопровождения: только адресные `LIR-*` при появлении новых legacy-токенов/дрейфа структуры.

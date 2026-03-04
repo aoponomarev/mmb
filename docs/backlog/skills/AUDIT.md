@@ -1,3 +1,9 @@
+---
+id: bskill-10e421
+status: active
+last_updated: "2026-03-04"
+---
+
 # Backlog Skills Audit
 
 > **Date**: 2026-03-01

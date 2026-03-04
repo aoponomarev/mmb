@@ -1,6 +1,7 @@
 ---
-id: registry-legacy-link-remediation
-status: active
+id: plan-b9c2d4
+legacy_id: registry-legacy-link-remediation
+status: maintenance
 last_updated: "2026-03-04"
 ---
 
@@ -99,7 +100,7 @@ last_updated: "2026-03-04"
 | LIR-020 | `is/skills/process-ai-collaboration.md` | `(см. внешний репозиторий)` mixed-language donor marker | `docs/ais/ais-anti-staleness.md#LIR-020.A1` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | English-only normalization for active skill text while preserving donor-transfer intent |
 | LIR-020.A1 | `is/skills/process-ai-collaboration.md` | donor note in Russian (`см. внешний репозиторий`) | `docs/ais/ais-anti-staleness.md#LIR-020.A1` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | Rewritten to English neutral donor-repository wording |
 | LIR-021 | `docs/ais/ais-docs-governance.md` | `mojibake` encoding risk + final gate checkpoint | `docs/ais/ais-docs-governance.md` (`LIR-021.A1`..`A2`) | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate`, `#for-integration-legacy-remediation` | Финализация потока: закреплен encoding-guard и подтвержден нулевой шум по контрольным gate-скриптам |
-| LIR-021.A1 | `docs/ais/ais-docs-governance.md` | `mojibake` tokens (`����`) | `docs/ais/ais-docs-governance.md#LIR-021.A1` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | Зафиксирован UTF-8 guard для AIS/документов после восстановления кириллицы |
+| LIR-021.A1 | `docs/ais/ais-docs-governance.md` | `mojibake` tokens (`U+FFFD` replacement-char pattern) | `docs/ais/ais-docs-governance.md#LIR-021.A1` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | Зафиксирован UTF-8 guard для AIS/документов после восстановления кириллицы |
 | LIR-021.A2 | `docs/ais/ais-docs-governance.md` | final validation checkpoint (`dead-links`, `docs-ids`, `skill-anchors`) | `docs/ais/ais-docs-governance.md#LIR-021.A2` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | Подтверждено прохождение трех gate-валидаторов в закрывающем проходе |
 | LIR-022 | `docs/ais/ais-docs-governance.md`, `is/scripts/architecture/validate-docs-encoding.js`, `is/scripts/preflight.js` | recurrent Cyrillic decode regression in AIS file | `docs/ais/ais-docs-governance.md` (`LIR-022.A1`..`A2`) | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate`, `#for-integration-legacy-remediation` | Повторный encoding-сбой закрыт через BOM rewrite и автоматизированный preflight guard |
 | LIR-022.A1 | `docs/ais/ais-docs-governance.md` | repeated wrong decode in editor | `docs/ais/ais-docs-governance.md#LIR-022.A1` | `DONE` | `#for-atomic-remediation`, `#for-docs-ids-gate` | File re-saved with UTF-8 BOM to stabilize Windows decode |
@@ -119,3 +120,8 @@ last_updated: "2026-03-04"
 
 Список будет пополняться по мере разбора следующих donor-ссылок в том же процессе.  
 После закрытия LIR-001 формируется следующий батч (5–10 ссылок), чтобы не терять zero-noise контроль.
+
+## FIN Статус
+
+- Активная волна ремедиации legacy-ссылок закрыта на `LIR-022`.
+- Реестр переведен в режим сопровождения (`maintenance`): новые строки добавляются только при новых регрессиях/структурном дрейфе.

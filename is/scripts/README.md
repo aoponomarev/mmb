@@ -1,3 +1,9 @@
+---
+id: readme-c15d55
+status: active
+last_updated: "2026-03-04"
+---
+
 # Automation & Diagnostics Scripts (`is/scripts/`)
 
 ## Scope

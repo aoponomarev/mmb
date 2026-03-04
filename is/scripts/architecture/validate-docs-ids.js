@@ -1,6 +1,6 @@
 /**
  * @skill process-docs-lifecycle
- * @description Gate: validates that all ids in related_skills and related_ais exist.
+ * @description Gate: validates that all ids in related_skills and related_ais exist via global id SSOT registry.
  * Prevents broken links when files are renamed or deleted.
  */
 import fs from "node:fs";
@@ -17,6 +17,7 @@ const SKILL_DIRS = [
     path.join(ROOT, "app", "skills"),
 ];
 const AIS_DIR = path.join(ROOT, "docs", "ais");
+const ID_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
 
 function parseFrontmatter(text) {
     const match = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
@@ -65,35 +66,18 @@ function walkMarkdown(dir, result = []) {
     return result;
 }
 
-function buildIdRegistry() {
-    const registry = {};
-    for (const dir of SKILL_DIRS) {
-        for (const file of walkMarkdown(dir)) {
-            const content = fs.readFileSync(file, "utf8");
-            const fm = parseFrontmatter(content);
-            const id = fm.id;
-            if (id) {
-                const rel = path.relative(ROOT, file).split(path.sep).join("/");
-                registry[id] = rel;
-            }
-        }
+function readGlobalRegistry() {
+    if (!fs.existsSync(ID_REGISTRY_PATH)) {
+        throw new Error(`missing id registry: ${path.relative(ROOT, ID_REGISTRY_PATH)}`);
     }
-    if (fs.existsSync(AIS_DIR)) {
-        for (const file of walkMarkdown(AIS_DIR)) {
-            const content = fs.readFileSync(file, "utf8");
-            const fm = parseFrontmatter(content);
-            const id = fm.id;
-            if (id) {
-                const rel = path.relative(ROOT, file).split(path.sep).join("/");
-                registry[id] = rel;
-            }
-        }
-    }
-    return registry;
+    const raw = fs.readFileSync(ID_REGISTRY_PATH, "utf8");
+    const parsed = JSON.parse(raw);
+    const markdown = parsed.markdown && typeof parsed.markdown === "object" ? parsed.markdown : {};
+    return markdown;
 }
 
 function main() {
-    const registry = buildIdRegistry();
+    const registry = readGlobalRegistry();
     const errors = [];
 
     function checkRefs(sourcePath, refs, prefix) {
@@ -132,7 +116,7 @@ function main() {
         for (const e of errors) console.error(` - ${e}`);
         process.exit(1);
     }
-    console.log("[validate-docs-ids] OK: all related_skills and related_ais ids resolve");
+    console.log("[validate-docs-ids] OK: all related_skills and related_ais ids resolve via global id-registry SSOT");
 }
 
 main();

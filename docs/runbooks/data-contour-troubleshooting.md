@@ -1,7 +1,13 @@
+---
+id: runbook-ce96aa
+status: active
+last_updated: "2026-03-04"
+---
+
 # Data Contour: Monitoring & Troubleshooting
 
 > Runbook для диагностики контура данных монет (PostgreSQL + CoinGecko dual-channel).
-> См. `docs/ais/ais-yandex-cloud.md`, `docs/ais/ais-data-pipeline.md`.
+> См. `id:ais-e41384`, `id:ais-3732ce`.
 
 ## Pre-Flight Checks
 

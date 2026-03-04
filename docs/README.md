@@ -1,3 +1,9 @@
+---
+id: docs-6a2d1f
+status: active
+last_updated: "2026-03-04"
+---
+
 # Documentation & Architecture History (`docs/`)
 
 ## Scope
@@ -19,6 +25,12 @@ This directory serves as the historical ledger and runbook repository for the pr
 - `index-skills.md`: Auto-generated index of all skills (updated by `npm run skills:index`).
 - `index-ais.md`: Auto-generated index of AIS specifications (updated by `npm run ais:index`).
 - `СИМЛИНКИ.txt`: Personal Cursor symlink/junction instructions (not project architecture).
+
+## ID Contracts (Global SSOT)
+- Global registry: `is/contracts/docs/id-registry.json` (single SSOT for markdown id -> path mapping).
+- Contract format in docs: `id:<document-id>` (use id contract first, path as fallback only during migration).
+- Master rollout plan: `id:plan-cd91e4`.
+- Legacy remediation registry: `id:plan-b9c2d4`.
 
 ## Constraints
 - **Russian Language Allowed**: Unlike skills (см. is/skills/, core/skills/, app/skills/) and code, `.md` files in `docs/` are permitted to be in Russian to lower the cognitive barrier for historical planning.

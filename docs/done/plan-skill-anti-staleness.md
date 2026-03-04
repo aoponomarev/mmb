@@ -1,3 +1,9 @@
+---
+id: done-ec60da
+status: archived
+last_updated: "2026-03-04"
+---
+
 # План: Антиустареватель скиллов (Skill Anti-Staleness)
 
 > **Статус**: Завершён (Фазы 1–3); перенесён в `docs/done/`
@@ -5,8 +11,8 @@
 > **Дата**: 2026-03-01
 > **Связанные скиллы**: `arch-skills-mcp`, `process-skill-governance`, `process-code-anchors`, `arch-testing-ci`, `arch-causality`, `process-causality-harvesting`
 > **Цель**: Систематическое обнаружение и предотвращение устаревания скиллов относительно кода и архитектуры.
-> **AIS-спецификация**: `docs/ais/ais-anti-staleness.md` — образец полноты покрытия; после каждой фазы дополнять разделами «как работает» + казуальность + схема.
-> **Бэклог чистки**: `docs/backlog/fix-anti-staleness.md` — хвосты (dead links, false positives).
+> **AIS-спецификация**: `id:ais-9f4e2d` — образец полноты покрытия; после каждой фазы дополнять разделами «как работает» + казуальность + схема.
+> **Бэклог чистки**: `id:backlog-2c4b0b` — хвосты (dead links, false positives).
 > **Аналогия**: По образцу `plan-skills-migration-registry` — регламенты, чеклисты, верификация, антипаттерны, итеративное улучшение.
 
 **ИИ-агент:** При обнаружении недостатка в протоколах — дополнить документ. Согласование не требуется.
@@ -720,4 +726,4 @@ npm run skills:batch-review         [новый: periodic]
 - `process-skill-governance` — структура скиллов, Implementation Status
 - `arch-testing-ci` — preflight-solo, Git Local CI Mirror
 - `plan-skills-migration-registry` — реестр миграции, гейты, протоколы верификации и прошивки
-- `docs/ais/ais-anti-staleness.md` — макро-спецификация антиустаревателя (образец полноты покрытия)
+- `id:ais-9f4e2d` — макро-спецификация антиустаревателя (образец полноты покрытия)

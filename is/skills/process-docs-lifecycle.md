@@ -1,8 +1,8 @@
 ---
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-03"
-reasoning_checksum: "7c132af3"
+reasoning_audited_at: "2026-03-04"
+reasoning_checksum: "5a60cd3f"
 id: sk-0e193a
 
 ---
@@ -17,6 +17,7 @@ id: sk-0e193a
 - **#for-docs-pipeline** A codebase clutters quickly if plans, policies, and specifications are dumped in one folder. A strict pipeline (`docs/plans` -> `docs/done` -> `docs/ais`) ensures agents and developers know exactly where to find active tasks versus established architecture.
 - **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
 - **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
+- **#for-id-contract-navigation** Cross-references to docs artifacts should prefer `id:` contracts (`id:docidx-3022eb`, `id:docidx-0b048e`, `id:ais-e41384`) over path-centric links.
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
 - **#for-ais-mermaid-diagrams** AIS documents without visual diagrams are harder for humans and agents to grasp. Mermaid diagrams in fenced code blocks render on GitHub, VS Code, and GitLab; they are version-controlled as text and avoid stale image files. See `docs/ais/ais-yandex-cloud.md` for the reference format.
 - **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.

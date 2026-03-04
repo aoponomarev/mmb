@@ -1,3 +1,9 @@
+---
+id: bskill-11683c
+status: active
+last_updated: "2026-03-04"
+---
+
 # Docker Infrastructure (Deferred)
 
 > **Status**: DEFERRED — Docker not yet deployed in Target App. Move to `is/skills/` when `docker-compose.yml` exists.

@@ -1,3 +1,9 @@
+---
+id: readme-efc0b5
+status: active
+last_updated: "2026-03-04"
+---
+
 # Project Scripts (`scripts/`)
 
 ## Scope

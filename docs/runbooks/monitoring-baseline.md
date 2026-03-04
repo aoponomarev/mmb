@@ -1,3 +1,9 @@
+---
+id: runbook-94a80a
+status: active
+last_updated: "2026-03-04"
+---
+
 # Monitoring Baseline v1 (Target App)
 
 ## Scope

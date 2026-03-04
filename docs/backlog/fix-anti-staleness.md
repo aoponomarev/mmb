@@ -1,7 +1,13 @@
+---
+id: backlog-2c4b0b
+status: active
+last_updated: "2026-03-04"
+---
+
 # Бэклог: Чистка хвостов антиустаревателя (fix-anti-staleness)
 
 > Статус: Отложено
-> План: `docs/done/plan-skill-anti-staleness.md` (завершён)
+> План: `id:done-ec60da` (завершён)
 > Приоритет: Низкий
 
 ## Описание

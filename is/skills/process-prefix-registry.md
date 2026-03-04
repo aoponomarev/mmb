@@ -1,7 +1,7 @@
 ---
 title: "Process: Prefix Registry Health"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-03"
+reasoning_audited_at: "2026-03-04"
 reasoning_checksum: "d850dc6c"
 id: sk-4b05be
 
