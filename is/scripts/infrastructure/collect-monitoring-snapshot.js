@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Collect and append a compact monitoring snapshot for Target App.
+ * #JS-YCGwWY95
+ * @description Collect and append a compact monitoring snapshot for Target App.
  */
 import { appendFileSync, mkdirSync } from "node:fs";
 import { execSync } from "node:child_process";

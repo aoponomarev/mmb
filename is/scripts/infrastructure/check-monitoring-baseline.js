@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 /**
- * Monitoring baseline sanity check:
- * - control-plane health contract via `health-check --json`
- * - monitoring runbook presence and required sections
- * - snapshot path availability for operational traces
+ * #JS-FJ2YpGBU
+ * @description Monitoring baseline: health contract, runbook sections, snapshot path.
  */
 import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, accessSync, constants, statSync } from "node:fs";

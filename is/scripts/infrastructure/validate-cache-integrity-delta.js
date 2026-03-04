@@ -1,8 +1,7 @@
 /**
+ * #JS-dP2wsqZZ
+ * @description Delta-fast gate: validates staged changes for secret/cache/infra contracts; fails early.
  * @skill id:sk-483943
- * @description Delta-fast gate:
- * - validates only staged changes related to secret/cache/infra contracts
- * - runs in milliseconds and fails early before full integrity checks
  */
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";

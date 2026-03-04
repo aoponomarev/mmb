@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-7d810a
+ * #JS-kMzbwkJo
  * @description Orchestrates batch validation: validate-skills, validate-dead-links, validate-causality-exceptions-stale.
+ * @skill id:sk-7d810a
  */
 import { execSync } from "node:child_process";
 import path from "node:path";

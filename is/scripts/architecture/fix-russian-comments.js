@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * One-off: replace common Russian phrases in code comments with English.
- * Run: node is/scripts/architecture/fix-russian-comments.js
- * After running, use validate-code-comments-english to verify.
+ * #JS-3EYZF3BM
+ * @description One-off: replace common Russian phrases in code comments with English. Verify with validate-code-comments-english.
  */
 import fs from "node:fs";
 import path from "node:path";

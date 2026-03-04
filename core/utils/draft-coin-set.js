@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * DRAFT COIN SET - Utility for working with local "Draft" set
- * ================================================================================================
- * Skill: id:sk-02d3ea
- *
- * PURPOSE: Manage local "Draft" coin set stored only in localStorage,
- * allows transferring sets between user accounts on one device.
+ * #JS-Lh3NhHGs
+ * @description Local "Draft" coin set in localStorage; transfer between accounts on one device.
+ * @skill id:sk-02d3ea
  *
  * PRINCIPLES:
  * - Stored only in localStorage (not synced with D1)

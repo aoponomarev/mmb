@@ -1,6 +1,7 @@
 /**
+ * #JS-4iNPN4fB
+ * @description Tests for validate-affected-skills.js.
  * @skill id:sk-d6777d
- * Tests for validate-affected-skills.js
  */
 import test from "node:test";
 import assert from "node:assert/strict";

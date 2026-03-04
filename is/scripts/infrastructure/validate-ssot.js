@@ -1,11 +1,8 @@
 /**
+ * #JS-gs3VQRd3
+ * @description SSOT policy validator: env in .env.example, no skill-graph in docs, no hardcoded secrets in config.
  * @skill id:sk-483943
  * @skill id:sk-918276
- *
- * SSOT policy validator for the Target App:
- * - Validates that all env vars used in paths.js are declared in .env.example
- * - Validates that docs/*.md files don't contain skill-graph metadata (relations/decision_id)
- * - Validates that no hardcoded secret patterns exist in config files
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * UI STATE - Centralized UI flags state
- * ================================================================================================
- *
- * PURPOSE: SSOT for UI indicators and control availability.
- * Calculation data (portfolios/metrics) not stored here.
- * Skill: id:sk-483943
+ * #JS-RX2UHzMh
+ * @description SSOT for UI flags and control availability; no portfolio/metrics data.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - UI flags and metadata only (e.g. cache staleness)

@@ -1,11 +1,9 @@
 /**
- * ================================================================================================
- * MODULE LOADER - Module loader with automatic dependency resolution
- * ================================================================================================
+ * #JS-xj43kftu
+ * @description Auto-load application modules in correct order with dependency resolution; file:// and http:// via async script tag.
+ * @skill id:sk-a17d41
  *
- * PURPOSE: Auto-load application modules in correct order with dependency resolution.
- * Support for file:// and http:// protocols via async script tag loading.
- * Skill: id:sk-a17d41
+ * PURPOSE: Auto-load modules in correct order with dependency resolution; file:// and http:// via async script tag.
  *
  * PROBLEM:
  * - Manual load order via nested onload callbacks is hard to maintain

@@ -1,8 +1,8 @@
 /**
+ * #JS-PH3KNkKT
+ * @description Market Snapshot server entrypoint — env-driven host/port, graceful shutdown.
  * @skill id:sk-5c0ef8
  * @skill id:sk-918276
- *
- * Market Snapshot server entrypoint — env-driven host/port, graceful shutdown.
  */
 import { createBackendMarketRuntime } from "../../../core/api/backend-market-runtime.js";
 import { createMarketSnapshotNodeServer } from "../../../core/api/market-snapshot-node-server.js";

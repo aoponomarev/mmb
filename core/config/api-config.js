@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * API CONFIG - Configuration for rate limiter
- * ================================================================================================
- *
- * PURPOSE: Rate limiting parameters configuration for various APIs.
- * Used by rate-limiter.js for request management.
- * Skill: id:sk-bb7c8e
+ * #JS-M12i9VHB
+ * @description Rate limiting parameters for various APIs; used by rate-limiter.js.
+ * @skill id:sk-bb7c8e
  *
  * PRINCIPLES:
  * - Adaptive timeout parameters

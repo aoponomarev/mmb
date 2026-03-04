@@ -1,12 +1,7 @@
 /**
- * ================================================================================================
- * VALIDATION SCHEMAS - Data validation schemas
- * ================================================================================================
- * Skill: id:sk-c3d639
- *
- * PURPOSE: Define structure and data types for all application data sources.
- * Validation of API responses, time series, portfolios and strategies.
- * Skill: id:sk-c3d639
+ * #JS-to2j4mpy
+ * @description Data validation schemas for API responses, time series, portfolios and strategies.
+ * @skill id:sk-c3d639
  *
  * PRINCIPLES:
  * - Strict validation of financial data

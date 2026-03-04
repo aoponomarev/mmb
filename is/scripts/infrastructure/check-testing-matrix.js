@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 /**
+ * #JS-Ci2FBv8t
+ * @description Testing matrix runner: premerge, release, ci gate profiles.
  * @skill id:sk-d6777d
- *
- * Testing matrix runner — executes named gate profiles.
- *
- * Usage:
- *   npm run testing:premerge   — fast safety gates before PR merge
- *   npm run testing:release    — full integrity checks before pushing to main
- *   npm run testing:ci         — premerge + release (full CI aggregate)
  */
 import { execSync } from 'node:child_process';
 

@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-3b1519
+ * #JS-4x4Fzd18
  * @description Finds stale exceptions in causality-exceptions.jsonl — hashes fully removed from code.
+ * @skill id:sk-3b1519
  */
 import fs from "node:fs";
 import path from "node:path";

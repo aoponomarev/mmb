@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-0e193a
+ * #JS-V63juXRG
  * @description Validates all project markdown files have unique id in frontmatter.
+ * @skill id:sk-0e193a
  */
 import fs from "node:fs";
 import path from "node:path";

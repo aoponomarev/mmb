@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * EVENT BUS - Global event bus
- * ================================================================================================
- *
- * PURPOSE: Enable component communication without tight coupling.
- * Subscribe to events, emit events, automatic unsubscribe.
- * Skill: id:sk-483943
+ * #JS-v8M9uv5A
+ * @description Global event bus for component communication without tight coupling; subscribe, emit, auto-unsubscribe.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - Global event bus for all components

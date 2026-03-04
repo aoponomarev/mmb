@@ -1,10 +1,7 @@
 /**
- * ================================================================================================
- * SESSION LOG STORE - Session logs storage
- * ================================================================================================
- *
- * PURPOSE: Centralized session logs storage for display in Session Log modal.
- * Skill: id:sk-483943
+ * #JS-AA4DgK6L
+ * @description Centralized session logs storage for display in Session Log modal.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - Stores logs in memory (not in localStorage)

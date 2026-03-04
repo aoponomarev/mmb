@@ -1,6 +1,7 @@
 /**
+ * #JS-TL3oPpPW
+ * @description Tests for validate-dead-links.js.
  * @skill id:sk-d6777d
- * Tests for validate-dead-links.js
  */
 import test from "node:test";
 import assert from "node:assert/strict";

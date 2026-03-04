@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * AUTO COIN SETS - Automatic classification and management of coin sets
- * ================================================================================================
- * Skill: id:sk-02d3ea
- *
- * PURPOSE: Automatically form and populate coin sets by type
- * (stablecoins, wrapped, LST) based on loaded coins.
+ * #JS-xc26vutn
+ * @description Automatic classification and management of coin sets (stablecoins, wrapped, LST) from loaded coins.
+ * @skill id:sk-02d3ea
  *
  * PRINCIPLES:
  * - Auto-sets are formed on each coin load (from rankings or direct search)
@@ -17,12 +13,6 @@
  * - `auto-set-stablecoins` - stablecoins auto-set
  * - `auto-set-wrapped` - wrapped tokens auto-set
  * - `auto-set-lst` - LST (liquid staking tokens) auto-set
- *
- * RATIONALE:
- * - Auto-collector removes manual work of composing homogeneous coin sets
- * - Sets are populated organically as the user works with the app
- * - localStorage ensures persistence across sessions
- * - Three-type split matches current market classification
  *
  * REFERENCES:
  * - SSOT: id:sk-e0b8f3

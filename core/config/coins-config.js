@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * COINS CONFIG - Coin reference configuration
- * ================================================================================================
- * Skill: id:sk-e0b8f3
- *
- * PURPOSE: SSOT for coin reference lists (stablecoins etc.).
- * Used in UI for selections and filters without hardcoding in components.
+ * #JS-jy6Q4juu
+ * @description SSOT for coin reference lists (stablecoins etc.); used in UI for selections and filters.
+ * @skill id:sk-e0b8f3
  *
  * PRINCIPLES:
  * - All coin reference lists defined here

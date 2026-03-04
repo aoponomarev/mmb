@@ -1,6 +1,6 @@
 /**
- * One-time migration: add id (short hash) to each skill's frontmatter.
- * Id is deterministic from relative path. Run once.
+ * #JS-6f2t1U2q
+ * @description One-time migration: add id (short hash) to each skill's frontmatter. Id deterministic from path.
  */
 import fs from "node:fs";
 import path from "node:path";

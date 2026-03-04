@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-0e193a
+ * #JS-HQAGaHLy
  * @description Validates docs/deletion-log.md: table format, deleted files must not exist.
+ * @skill id:sk-0e193a
  */
 import fs from "node:fs";
 import path from "node:path";

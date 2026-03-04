@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Generate concise summary from skills health trend log.
- *
- * Usage: node is/scripts/architecture/skills-health-trend-report.js --last 30
+ * #JS-yWtP9yTh
+ * @description Generate concise summary from skills health trend log. Usage: --last N
  */
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

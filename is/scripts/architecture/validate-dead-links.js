@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-7d810a
+ * #JS-y23qJxuC
  * @description Finds dead links in skills and docs — references to non-existent files.
+ * @skill id:sk-7d810a
  * @see is/contracts/path-contracts.js — SSOT for exclusions and resolve logic.
  */
 import fs from "node:fs";

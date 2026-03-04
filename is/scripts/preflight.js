@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-483943
+ * #JS-NrBeANnz
  * @description Preflight health-check. Runs synchronously before app start or CI.
+ * @skill id:sk-483943
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,11 +1,12 @@
 /**
- * @skill id:sk-f7e2a1
+ * #JS-Am2QGp6w
  * @description SSOT for file header structure: file id pattern, required fields, allowed tags.
- * AIS: id:ais-f7e2a1. Plan: docs/plans/file-header-rollout.md.
+ * @skill id:sk-f7e2a1
+ * @contract file-header-contract. AIS: id:ais-f7e2a1. Plan: docs/plans/file-header-rollout.md.
  */
 
-/** File id pattern: #<EXT>-<hash> where EXT is JS|TS|CSS|HTML, hash is alphanumeric 6–12 chars */
-export const FILE_ID_PATTERN = /^#(JS|TS|CSS|HTML|JSON)-[a-zA-Z0-9]{6,12}\b/;
+/** File id pattern: #<EXT>-<hash> where EXT is JS|TS|CSS|HTML, hash is alphanumeric 6–12 chars (matches anywhere in header) */
+export const FILE_ID_PATTERN = /#(JS|TS|CSS|HTML|JSON)-[a-zA-Z0-9]{6,12}\b/;
 
 /** Required header fields for validation (when file has a file id in header) */
 export const REQUIRED_HEADER_FIELDS = Object.freeze(['fileId', 'description']);

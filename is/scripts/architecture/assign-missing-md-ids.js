@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-0e193a
+ * #JS-vp2qzyrz
  * @description Adds deterministic id frontmatter to markdown files missing id.
+ * @skill id:sk-0e193a
  */
 import fs from "node:fs";
 import path from "node:path";

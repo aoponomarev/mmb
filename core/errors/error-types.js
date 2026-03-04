@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * ERROR TYPES - Error types and classification
- * ================================================================================================
- *
- * PURPOSE: Define error types for uniform handling.
- * Classification by categories and severity levels.
- * Skill: id:sk-483943
+ * #JS-Sq2CfSP1
+ * @description Error types and classification for uniform handling; categories and severity levels.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - Clear error classification

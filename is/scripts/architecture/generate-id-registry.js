@@ -1,6 +1,7 @@
 /**
- * @skill process-docs-lifecycle
+ * #JS-6U3KWB2e
  * @description Generates id→path registry for skills, AIS, and markdown docs.
+ * @skill process-docs-lifecycle
  * Used by MCP (ais://, skill resolution) and tooling for fast id lookup.
  */
 import fs from "node:fs";

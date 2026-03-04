@@ -1,10 +1,7 @@
 /**
- * ================================================================================================
- * PROXY HEALTH CHECK - Proxy availability check
- * ================================================================================================
- *
- * PURPOSE: Check proxy availability before switching or using.
- * Skill: id:sk-7cf3f7
+ * #JS-qo22Mwmy
+ * @description Proxy availability check before switching or using.
+ * @skill id:sk-7cf3f7
  *
  * USAGE:
  * const isAvailable = await window.proxyHealthCheck.check(url);

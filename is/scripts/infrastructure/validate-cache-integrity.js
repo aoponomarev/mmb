@@ -1,6 +1,7 @@
 /**
+ * #JS-JZ7rgJVv
+ * @description Validates cache integrity and secret resilience.
  * @skill id:sk-483943
- * @description Validates cache integrity and secret resilience
  */
 import { spawnSync } from "node:child_process";
 import path from "node:path";

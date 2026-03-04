@@ -1,6 +1,7 @@
 /**
+ * #JS-FG2LDRBS
+ * @description Utility to auto-update reasoning_checksum and reasoning_audited_at in all skills.
  * @skill id:sk-d7bf67
- * @description Utility to auto-update reasoning_checksum and reasoning_audited_at in all skills
  */
 import fs from "node:fs";
 import path from "node:path";

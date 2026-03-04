@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-883639
+ * #JS-ZqVGzZnJ
  * @description Normalizes project text files to UTF-8 without BOM and LF.
+ * @skill id:sk-883639
  */
 import fs from "node:fs";
 import path from "node:path";

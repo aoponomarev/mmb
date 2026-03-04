@@ -1,12 +1,9 @@
 /**
- * ================================================================================================
- * MATH VALIDATION - Mathematical computation validation
- * ================================================================================================
+ * #JS-893TGk4K
+ * @description Mathematical computation validation; range, NaN/Infinity, portfolio checks.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: Check correctness of financial calculations and math operations.
- * Range validation, NaN/Infinity checks, portfolio validation.
- *
- * Skill: id:sk-c3d639
+ * PURPOSE: Check correctness of financial calculations and math operations; range, NaN/Infinity, portfolio validation.
  *
  * PRINCIPLES:
  * - Strict checks before using calculation results

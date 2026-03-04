@@ -1,28 +1,11 @@
 /**
- * ================================================================================================
- * MODULES CONFIG - Modules configuration for module system loading
- * ================================================================================================
- * Skill: id:sk-a17d41
- *
- * PURPOSE: Centralized description of all application modules with their dependencies.
- * Used by module loader (core/module-loader.js) for automatic
- * loading of modules in correct order.
+ * #JS-os34Gxk3
+ * @description Modules config with dependencies for module-loader; automatic load order.
+ * @skill id:sk-a17d41
  *
  * PRINCIPLES:
- * - Modules are grouped by categories: utilities, core, templates, components, app
- * - Each module describes its dependencies via deps array
- * - Loader automatically resolves dependencies and loads modules in correct order
- * - Support for external (type: 'external') and local (type: 'local') modules
- *
- * PRINCIPLES:
- * {
- *   id: 'unique-id',           // Unique module identifier
- *   src: 'path/to/module.js',   // Path to module
- *   type: 'local' | 'external', // Module type
- *   deps: ['dep-id-1', 'dep-id-2'], // Array of dependency IDs
- *   category: 'utilities' | 'core' | 'templates' | 'libraries' | 'components' | 'app', // Category
- *   condition: function() { return true; } // Optional function for conditional loading (feature flag)
- * }
+ * - Modules grouped by category; deps array; loader resolves order
+ * - type: 'local' | 'external'; condition for feature flags
  *
  * COMPONENT TEMPLATES (two-level system):
  * - Components with large HTML use separate *-template.js files (templates category).

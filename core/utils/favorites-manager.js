@@ -1,10 +1,7 @@
 /**
- * ================================================================================================
- * FAVORITES MANAGER - User favorites manager
- * ================================================================================================
- *
- * PURPOSE: Centralized management of user favorite coins.
- * Skill: id:sk-e0b8f3
+ * #JS-Rxw81Ruk
+ * @description Centralized management of user favorite coins.
+ * @skill id:sk-e0b8f3
  *
  * PRINCIPLES:
  * - SSOT: Cloudflare D1 (user_coin_sets table with type='favorite') - primary SSOT.

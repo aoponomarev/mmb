@@ -1,6 +1,6 @@
 /**
- * #JS-XXXXXXXX
- * [MODULE NAME - One-line human-readable description]
+ * #JS-EsMQyEpA
+ * FILE HEADER TEMPLATE - One-line human-readable description
  * @description One-sentence summary for tooling and agents. Required.
  * @skill id:sk-xxxxx
  * @skill-anchor id:sk-xxxxx #for-xxx

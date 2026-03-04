@@ -1,12 +1,7 @@
 /**
- * ================================================================================================
- * ERROR HANDLER - Unified error handling system
- * ================================================================================================
- *
- * PURPOSE: Centralized handling of all application errors.
- * Classification, logging, user messages, retries.
- *
- * Skill: id:sk-483943
+ * #JS-tWuXPtTi
+ * @description Centralized error handling: classification, logging, user messages, retries.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - All errors go through single handler

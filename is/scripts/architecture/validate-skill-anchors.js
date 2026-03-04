@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-8991cd
+ * #JS-QxwSQxtt
  * @description Validates that all @skill references in code point to existing skill files.
+ * @skill id:sk-8991cd
  */
 import fs from "node:fs";
 import path from "node:path";

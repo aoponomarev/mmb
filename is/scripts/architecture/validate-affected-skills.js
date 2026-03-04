@@ -1,7 +1,7 @@
 /**
+ * #JS-5F24tc1R
+ * @description Outputs affected skills and causality hashes from staged files (git diff --cached). Does not block preflight.
  * @skill id:sk-8991cd
- * @description Outputs affected skills and causality hashes from staged files (git diff --cached).
- * Does not block preflight; human decides whether to update skills before commit.
  */
 import fs from "node:fs";
 import path from "node:path";

@@ -1,12 +1,9 @@
 /**
- * ================================================================================================
- * VALIDATOR - Schema-based data validation
- * ================================================================================================
+ * #JS-qP2fyDmZ
+ * @description Schema-based data validation against validation-schemas.js; type checking, required fields, value ranges.
+ * @skill id:sk-c3d639
  *
  * PURPOSE: Validate data against schemas from validation-schemas.js.
- * Type checking, required fields, value ranges.
- *
- * Skill: id:sk-c3d639
  *
  * PRINCIPLES:
  * - Strict validation before using data

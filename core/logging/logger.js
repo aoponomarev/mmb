@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * LOGGER - Structured logging
- * ================================================================================================
- *
- * PURPOSE: Uniform logging with levels and context.
- * Simplifies debugging and application monitoring.
- * Skill: id:sk-bb7c8e
+ * #JS-Dd4AQf9o
+ * @description Uniform logging with levels and context for debugging and monitoring.
+ * @skill id:sk-bb7c8e
  *
  * PRINCIPLES:
  * - Log levels (debug, info, warn, error)

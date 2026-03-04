@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-d7bf67
+ * #JS-Ua2mCTQk
  * @description Gate: validates that all skills have Reasoning and confidence scores per process-reasoning-audit.md
+ * @skill id:sk-d7bf67
  */
 import fs from "node:fs";
 import path from "node:path";

@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Translate Russian comments to English per process-language-policy.md.
- * Run: node is/scripts/architecture/translate-comments-to-english.js
- * Scans: app/, core/, is/, shared/, scripts/ (excludes docs/, node_modules/)
+ * #JS-Tb2x2tPm
+ * @description Translate Russian comments to English per process-language-policy. Scans app/, core/, is/, shared/.
  */
 import fs from 'node:fs';
 import path from 'node:path';

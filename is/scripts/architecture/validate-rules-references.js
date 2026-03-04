@@ -1,6 +1,6 @@
 /**
- * Validates that paths referenced in .cursor/rules/*.mdc exist.
- * Prevents broken references when files are moved or renamed.
+ * #JS-HG4EXrDS
+ * @description Validates that paths referenced in .cursor/rules/*.mdc exist. Prevents broken references when files are moved or renamed.
  */
 import fs from "node:fs";
 import path from "node:path";

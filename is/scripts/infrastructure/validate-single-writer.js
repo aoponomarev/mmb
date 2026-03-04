@@ -1,11 +1,8 @@
 /**
+ * #JS-ka3MqSgk
+ * @description Blocking contract: only one active writer via DATA_PLANE_ACTIVE_APP.
  * @skill id:sk-73dcca
  * @skill id:sk-483943
- * @description Blocking contract for shared external datasets.
- * Ensures only one active writer is allowed at a time via DATA_PLANE_ACTIVE_APP.
- * 
- * Usage:
- *   node is/scripts/infrastructure/validate-single-writer.js
  */
 import fs from "node:fs";
 import path from "node:path";

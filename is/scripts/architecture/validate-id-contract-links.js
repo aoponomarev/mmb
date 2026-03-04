@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-0e193a
+ * #JS-ht4FZQe4
  * @description Validates all inline id:<doc-id> links in markdown against global id registry.
+ * @skill id:sk-0e193a
  */
 import fs from "node:fs";
 import path from "node:path";

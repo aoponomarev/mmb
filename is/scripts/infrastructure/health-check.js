@@ -1,18 +1,8 @@
 #!/usr/bin/env node
 /**
- * Target App Health Check - Control Plane
- *
- * Checks all active service planes for the Target Architecture:
- *  - Knowledge plane: skills directories and key files
- *  - Contract plane: .env contracts (SSOT)
- *  - Runtime plane: Preflight execution and core files
- *
- * Skill: id:sk-483943
- * Causality: Control Plane initialization from Donor migration
- *
- * Usage:
- *   node is/scripts/infrastructure/health-check.js
- *   node is/scripts/infrastructure/health-check.js --json
+ * #JS-ja3UnjWr
+ * @description Target App Health Check: knowledge, contract, and runtime planes. Usage: [--json]
+ * @skill id:sk-483943
  */
 
 import { execSync } from 'node:child_process';

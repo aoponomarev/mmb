@@ -1,10 +1,7 @@
 /**
- * ================================================================================================
- * AUTH CONFIG - Google OAuth authorization configuration
- * ================================================================================================
- * Skill: id:sk-7cf3f7
- *
- * PURPOSE: SSOT for all Google OAuth parameters. Client ID, redirect URIs, scopes, endpoints.
+ * #JS-Uf4GZ4Qq
+ * @description SSOT for Google OAuth parameters: client ID, redirect URIs, scopes, endpoints.
+ * @skill id:sk-7cf3f7
  *
  * PRINCIPLES:
  * - All OAuth parameters are defined here and used everywhere

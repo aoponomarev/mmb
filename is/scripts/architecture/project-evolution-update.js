@@ -1,19 +1,7 @@
 /**
- * is/scripts/architecture/project-evolution-update.js
- *
- * Automated project evolution log updater.
- *
- * Usage:
- *   node is/scripts/architecture/project-evolution-update.js          — append today's commits
- *   node is/scripts/architecture/project-evolution-update.js --rebuild — rebuild full log from scratch
- *   node is/scripts/architecture/project-evolution-update.js --dry-run — print to stdout, no file write
- *
- * Output: docs/project-evolution.md
- *
- * Tier classification:
- *   A = architecture-critical (MCP, docker, paths.js, package.json, skills, .cursor/rules)
- *   B = structural (new scripts, integrations, refactors, tests)
- *   C = operational (chore, formatting, README, gitignore)
+ * #JS-s9Pnps6C
+ * @description Automated project evolution log updater. Output: docs/project-evolution.md. Usage: [--rebuild] [--dry-run].
+ * Tier: A = architecture-critical, B = structural, C = operational.
  */
 import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';

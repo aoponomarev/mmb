@@ -1,6 +1,7 @@
 /**
+ * #JS-VF3AHARR
+ * @description Validates mandatory README files and structure sync (listed subdirs match filesystem).
  * @skill id:sk-c62fb6
- * Validates mandatory README files and structure sync (listed subdirs match filesystem).
  * Run: npm run readmes:check
  */
 import fs from 'node:fs';

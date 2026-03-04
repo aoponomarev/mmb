@@ -1,9 +1,8 @@
 /**
+ * #JS-At3yLS74
+ * @description Validates .env and .env.example in sync (every key present). Fails on mismatch.
  * @skill id:sk-918276
  * @skill id:sk-b7e114
- *
- * Validates .env and .env.example are in sync (EIP — Every Item Present).
- * Fails if any key in .env is missing from .env.example, or vice versa.
  */
 import fs from 'node:fs';
 import path from 'node:path';

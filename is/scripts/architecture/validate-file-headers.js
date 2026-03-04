@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
+ * #JS-zh26RZvs
+ * @description Gate: files with file id (#JS-xxx, #TS-xxx) in header must have @description.
  * @skill id:sk-f7e2a1
  * @causality #for-file-header-standard
- * @description Gate: files with file id (#JS-xxx, #TS-xxx) in header must have @description.
- * SSOT: process-file-header-standard, file-header-contract.js. Plan: docs/plans/file-header-rollout.md.
+ * @ssot process-file-header-standard, file-header-contract.js. Plan: docs/plans/file-header-rollout.md.
  */
 import fs from "node:fs";
 import path from "node:path";

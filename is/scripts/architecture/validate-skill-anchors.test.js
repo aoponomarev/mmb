@@ -1,6 +1,7 @@
 /**
+ * #JS-N9hx1N6W
+ * @description Tests for validate-skill-anchors.js.
  * @skill id:sk-d6777d
- * Tests for validate-skill-anchors.js
  */
 import test from "node:test";
 import assert from "node:assert/strict";

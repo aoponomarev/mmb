@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-0e193a
+ * #JS-E4UcKE1H
  * @description Blocks path-centric docs markdown links in active skills.
+ * @skill id:sk-0e193a
  */
 import fs from "node:fs";
 import path from "node:path";

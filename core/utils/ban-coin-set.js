@@ -1,10 +1,6 @@
 /**
- * ================================================================================================
- * BAN COIN SET - Utility for working with local "Ban" set
- * ================================================================================================
- *
- * PURPOSE: Manage service set of excluded coins "Ban" in localStorage.
- * Used as technical list of tickers/coins for quick exclusions.
+ * #JS-9K47k45V
+ * @description Manages local "Ban" coin set in localStorage for quick exclusions.
  */
 
 (function() {

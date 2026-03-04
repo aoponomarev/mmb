@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * NORMALIZER - Data normalization to unified format
- * ================================================================================================
- *
- * PURPOSE: Normalize data from different sources to unified format.
- * Normalization of API responses, time series, portfolios.
- * Skill: id:sk-c3d639
+ * #JS-WS3aAySc
+ * @description Normalize data from different sources to unified format; API, time series, portfolios.
+ * @skill id:sk-c3d639
  *
  * PRINCIPLES:
  * - Unified format regardless of source

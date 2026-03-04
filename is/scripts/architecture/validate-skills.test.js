@@ -1,6 +1,7 @@
 /**
+ * #JS-yN2wFJuY
+ * @description Tests for validate-skills.js (path existence in Implementation Status).
  * @skill id:sk-d6777d
- * Tests for validate-skills.js (path existence in Implementation Status)
  */
 import test from "node:test";
 import assert from "node:assert/strict";

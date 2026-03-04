@@ -53,11 +53,14 @@ related_ais:
 
 ## Фаза 5: Постепенное покрытие файлов
 
+- [x] Единый вид шапок (AIS): без баннеров `====`, без дублирования Skill при наличии @skill; списки PRINCIPLES/USAGE/REFERENCES сохранять.
 - [ ] Определить порядок обхода по дереву (например: is/scripts → is/contracts → core → shared → app → mm).
-- [ ] Запускать assign-file-ids --write по подмножествам (или один проход по всем целевым файлам).
-- [ ] Для файлов без шапки: вставка шаблона из file-header-template.js с подставленным file id и минимальным @description (название файла/модуля).
+- [ ] Запускать assign-file-ids по реестру; вставка file id + @description вручную/пакетами с опорой на code-file-registry.json.
+- [ ] Для файлов без шапки: вставка шаблона из file-header-template.js с подставленным file id и минимальным @description.
 - [ ] После каждого подмножества: npm run file-headers:check и npm run preflight.
-- [ ] Обновлять code-file-registry при каждом добавлении/переименовании файла (скрипт или ручное правило в скилле).
+- [ ] Обновлять code-file-registry при каждом добавлении/переименовании файла (assign-file-ids при изменении дерева).
+
+**Прогресс:** core: validation (validator, math-validation, normalizer, schemas), utils (session-log-store, proxy-health-check, favorites-manager, auto-coin-sets, ban-coin-set, console-interceptor, draft-coin-set), config (app-config, api-config, auth-config, coins-config), state (ui-state, loading-state, auth-state), events (event-bus), logging (logger), errors (error-types, error-handler), module-loader, modules-config — шапки приведены к единому формату.
 
 ## Критерии завершения
 

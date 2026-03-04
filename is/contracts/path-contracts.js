@@ -1,8 +1,8 @@
 /**
- * @skill id:sk-d763e7
+ * #JS-cMCNbcJ1
  * @description SSOT for path validation config used by validate-skills and validate-dead-links.
+ * @skill id:sk-d763e7
  * Single place to change exclusions, skip patterns, and resolve logic — avoids tech debt drift.
- *
  * @see id:backlog-2c4b0b
  * @see id:ais-9f4e2d
  */

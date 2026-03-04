@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * APP CONFIG - Application configuration
- * ================================================================================================
- * Skill: id:sk-483943
- *
- * PURPOSE: Centralized application configuration.
- * API endpoints, limits, timeouts, default settings, version, feature flags.
+ * #JS-tn3fo2px
+ * @description Centralized application configuration: API endpoints, limits, timeouts, defaults, version, feature flags.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - All settings in one place

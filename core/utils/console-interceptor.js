@@ -1,10 +1,7 @@
 /**
- * ================================================================================================
- * CONSOLE INTERCEPTOR - Intercepts console.* methods
- * ================================================================================================
- *
- * PURPOSE: Intercept all console.log/warn/error/info/debug calls and write them to sessionLogStore.
- * Skill: id:sk-483943
+ * #JS-H232EpDC
+ * @description Intercepts console.* calls and writes to sessionLogStore; preserves original behavior.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - Saves original console.* methods

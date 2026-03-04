@@ -1,14 +1,8 @@
 /**
+ * #JS-i83e3EeJ
+ * @description Switches DATA_PLANE_ACTIVE_APP (TARGET/LEGACY) in .env; single-writer guard and audit log.
  * @skill id:sk-73dcca
  * @skill id:sk-483943
- *
- * Switches DATA_PLANE_ACTIVE_APP between TARGET and LEGACY in .env,
- * validates the change with single-writer guard, and writes an audit log.
- *
- * Usage:
- *   node is/scripts/infrastructure/switch-active-writer.js --to TARGET
- *   node is/scripts/infrastructure/switch-active-writer.js --to LEGACY
- *   node is/scripts/infrastructure/switch-active-writer.js --to TARGET --reason "migration step 3" --by "AO"
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,7 @@
 /**
+ * #JS-tEHhxtB6
+ * @description Tests for validate-causality-exceptions-stale.js.
  * @skill id:sk-d6777d
- * Tests for validate-causality-exceptions-stale.js
  */
 import test from "node:test";
 import assert from "node:assert/strict";

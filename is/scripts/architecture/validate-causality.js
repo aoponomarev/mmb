@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-8991cd
+ * #JS-69pjw66d
  * @description Validates that all @causality and @skill-anchor hashes in code exist in causality-registry.md
+ * @skill id:sk-8991cd
  */
 import fs from "node:fs";
 import path from "node:path";

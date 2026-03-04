@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-8991cd
+ * #JS-eG4BUXaS
  * @description Invariant gate: ensures that causality hashes are not removed from one file while left in others, without explicit acknowledgment.
+ * @skill id:sk-8991cd
  */
 import fs from "node:fs";
 import path from "node:path";

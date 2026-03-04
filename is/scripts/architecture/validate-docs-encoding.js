@@ -1,6 +1,7 @@
 /**
- * @skill id:sk-883639
+ * #JS-BK2i557V
  * @description Global encoding gate: UTF-8 no BOM + mojibake detection in docs markdown.
+ * @skill id:sk-883639
  */
 import fs from "node:fs";
 import path from "node:path";

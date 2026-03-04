@@ -1,12 +1,7 @@
 /**
- * ================================================================================================
- * AUTH STATE - Unified authorization state system
- * ================================================================================================
- *
- * PURPOSE: Centralized management of authorization state for synchronization across all components.
- * All auth component instances use SSOT.
- *
- * Skill: id:sk-7cf3f7
+ * #JS-id3oaqeo
+ * @description SSOT for authorization state; sync across components via Vue reactive API and eventBus.
+ * @skill id:sk-7cf3f7
  *
  * PRINCIPLES:
  * - SSOT for authorization state

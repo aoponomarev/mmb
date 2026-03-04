@@ -1,11 +1,7 @@
 /**
- * ================================================================================================
- * LOADING STATE - Unified loading states system
- * ================================================================================================
- *
- * PURPOSE: Manage loading states (loading, error, success) for all components.
- * State synchronization, progress indicators, request cancellation.
- * Skill: id:sk-483943
+ * #JS-gH2qNvcT
+ * @description Unified loading states (loading, error, success) for all components; sync, progress, cancellation.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
  * - Unified interface for all loading states

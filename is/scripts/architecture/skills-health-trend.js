@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Skills health trend tracker.
- * Collects health snapshot metrics and appends to logs/skills-health-trend.jsonl.
- *
+ * #JS-CqRSWCnE
+ * @description Skills health trend tracker; appends metrics to logs/skills-health-trend.jsonl.
  * @skill id:sk-483943
  */
 import { appendFileSync, existsSync, readFileSync, mkdirSync } from "node:fs";
