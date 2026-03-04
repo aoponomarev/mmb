@@ -1,21 +1,12 @@
 /**
- * ================================================================================================
- * COINS METADATA LOADER
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Load centralized coin metadata (stablecoins, wrapped, LST)
- *
+ * #JS-882U8X4J
+ * @description Load coin metadata (stablecoins, wrapped, LST) from GitHub CDN libs/assets/data/coins.json; cache 24h, populates window.coinsConfig.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * from external JSON file on GitHub CDN.
- *
- * FILE: libs/assets/data/coins.json
  *
  * ARCHITECTURE:
- * - Loads data on startup or on demand
- * - Caches via cacheManager (TTL: 24h)
- * - Populates window.coinsConfig (SSOT)
+ * - Load on startup or on demand; cache via cacheManager (TTL 24h); populates window.coinsConfig (SSOT)
  */
 
 (function() {

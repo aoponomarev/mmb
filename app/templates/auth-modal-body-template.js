@@ -1,30 +1,8 @@
 /**
- * ================================================================================================
- * AUTH MODAL BODY TEMPLATE - Auth modal body component template
- * ================================================================================================
+ * #JS-sy2Co9p9
+ * @description x-template for auth modal body; id="auth-modal-body-template"; loading, user info, unauthenticated message.
  *
- * PURPOSE: Template for auth modal body (auth-modal-body).
- *
- * PROBLEM: Template must be in DOM before Vue.js init for component to work.
- *
- * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
- * on load as <script type="text/x-template"> with id="auth-modal-body-template".
- *
- * HOW:
- * - Template defined as string in TEMPLATE constant
- * - On load, <script type="text/x-template"> element is auto-created
- * - Element added to document.body with id="auth-modal-body-template"
- * - Component uses template via template: '#auth-modal-body-template'
- *
- * TEMPLATE FEATURES:
- * HTML structure:
- * - Container with loading state (spinner)
- * - User info block (if authenticated)
- * - Unauthenticated state message block
- *
- * REFERENCES:
- * - General template principles: id:sk-318305
- * - Component: app/components/auth-modal-body.js
+ * REFERENCES: id:sk-318305; app/components/auth-modal-body.js
  */
 
 (function() {

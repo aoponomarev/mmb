@@ -1,37 +1,13 @@
 /**
- * ================================================================================================
- * TIMEZONE MODAL BODY COMPONENT - Timezone and translation language selection modal
- * ================================================================================================
- *
- * PURPOSE: Integrate timezone-selector and translation language with modal button system.
- *
+ * #JS-nr238Xj2
+ * @description Timezone and translation language modal; cmp-timezone-selector; Cancel/Save via modalApi; inject modalApi.
+ * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-e0b8f3
  *
- * FEATURES:
- * - Uses cmp-timezone-selector for timezone selection
- * - Translation language selection for news (10 languages)
- * - Registers "Cancel" and "Save" buttons via modalApi
- * - Reactive button state on timezone or language change
- * - Cancel logic (restore initial values)
- * - Supports "Saved, close?" state for Save button
- *
- * COMPONENT API:
- *
- * Props:
- * - modelValue (String, required) - current timezone (v-model)
- * - initialValue (String, required) - initial timezone when modal opened
- * - translationLanguage (String, default: 'ru') - current translation language (v-model)
- * - initialTranslationLanguage (String, default: 'ru') - initial translation language when modal opened
- * - onSave (Function, required) - save handler (timezone, translationLanguage)
- * - onCancel (Function, required) - cancel handler
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * Props: modelValue, initialValue, translationLanguage, initialTranslationLanguage, onSave, onCancel.
+ */
 
 window.timezoneModalBody = {
     template: `

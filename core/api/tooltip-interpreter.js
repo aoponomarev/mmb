@@ -1,19 +1,13 @@
 /**
- * ================================================================================================
- * TOOLTIP INTERPRETER - Metric value interpretation for dynamic tooltips
- * ================================================================================================
- *
- * PURPOSE: Generate dynamic part of tooltip from current metric values.
- *
+ * #JS-Kg2tEBFr
+ * @description Dynamic tooltip part from current metric values; static part from tooltipsConfig.
+ * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Static part from tooltipsConfig, dynamic part built here.
- * Skill: id:sk-e0b8f3
  *
  * USAGE:
  * const tooltip = window.tooltipInterpreter.getTooltip('agr', { value: 12.5, lang: 'ru' });
- *
-*/
+ */
 
 (function() {
     'use strict';

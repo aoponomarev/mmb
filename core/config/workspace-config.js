@@ -2,31 +2,19 @@
     'use strict';
 
     /**
-     * ================================================================================================
-     * WORKSPACE CONFIG - Centralized workspace settings storage
-     * ================================================================================================
-     * Skill: id:sk-02d3ea
+     * #JS-fW2M5Jbg
+     * @description SSOT for workspace settings (active model, coin set, main table); persists via cacheManager with localStorage fallback.
+     * @skill id:sk-02d3ea
      *
-     * PURPOSE: SSOT for workspace settings, including main table.
-     * Stores single workspace structure and persists to cacheManager (EI) with localStorage fallback.
+     * PURPOSE: Single workspace structure; all read/write via workspaceConfig.
      *
-     * WORKSPACE CONFIG - Centralized workspace settings storage
-     * {
-     *   activeModelId: 'Median/AIR/260101',     // Current math model
-     *   activeCoinSetIds: [],          // Active coin set IDs (empty = default list)
-     *   mainTable: {                   // Main table settings
-     *     selectedCoinIds: [],
-     *     sortBy: null,
-     *     sortOrder: null,             // 'asc' | 'desc' | null
-     *     coinSortType: null,          // 'alphabet' | 'market_cap' | 'total_volume' | 'favorite' | 'selected'
-     *     showPriceColumn: true
-     *   }
-     * }
+     * STRUCTURE:
+     * - activeModelId, activeCoinSetIds, mainTable: { selectedCoinIds, sortBy, sortOrder, coinSortType, showPriceColumn }
      *
      * PRINCIPLES:
-     * - SSOT: all workspace settings read/write only via workspaceConfig.
-     * - EI: cacheManager with localStorage fallback. No versioning (user data).
-     * - Merge: partial updates do not overwrite other fields.
+     * - SSOT: all workspace settings read/write only via workspaceConfig
+     * - cacheManager with localStorage fallback; no versioning (user data)
+     * - Partial updates do not overwrite other fields
      */
 
     const CACHE_KEY = 'workspaceConfig';

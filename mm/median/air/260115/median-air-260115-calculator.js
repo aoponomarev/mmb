@@ -1,19 +1,9 @@
 /**
- * ================================================================================================
- * MEDIAN AIR 260115 CALCULATOR - Median model version (A.I.R.) 26.01.15
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Doc: docs/A_MATH_MODELS.md
+ * #JS-xQ1VjxLp
+ * @description Median/AIR/260115: robust normalization (median+MAD), λ-blending AGR_short/AGR_long; differs from 260101 by normalizationWeight=1, weights, Lambda.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: New Median/AIR model with Robust normalization (median+MAD)
- *        and λ-blending of short/long AGR.
- * AGR_final = (1-λ)*AGR_long + λ*AGR_short
- * AGR_raw   = R*(w_I*I + w_A*A + w_IA*I*A)
- *
- * Differences from 260101:
- * - normalizationWeight = 1 (robust normalization via median+MAD)
- * - Weights: A=0.40, I=0.40, IA=0.20, I_CGR=0.70, I_CPT=0.30
- * - Lambda: min=0.05, max=0.2, fgiBoost/vixBoost=0.05
+ * REFERENCES: docs/A_MATH_MODELS.md
  */
 
 (function() {

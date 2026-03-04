@@ -1,30 +1,17 @@
 /**
- * ================================================================================================
- * MESSAGES TRANSLATOR - System messages translator (v2 - simplified scheme)
- * ================================================================================================
- * Skill: id:sk-02d3ea
- *
- * PURPOSE: Translate system messages via AI providers with caching.
- *
+ * #JS-Wy3YExT9
+ * @description Translate system messages via AI providers with caching (v2 simplified scheme).
+ * @skill id:sk-02d3ea
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * CACHE FORMAT (localStorage):
- * Key: 'tr-{lang}-{versionHash}' (e.g. 'tr-en-aBc12XyZ')
- * Value: { "e.net": ["Network error", "Check connection"], ... }
- *
- * USAGE:
- * - On app update new cache key created with new versionHash
- * - Old cache becomes stale automatically
- * - Ensures translations match message structure in new version
- * - Prevents errors when message keys change between versions
+ * CACHE FORMAT (localStorage): Key 'tr-{lang}-{versionHash}'; value { "e.net": ["Network error", "Check connection"], ... }. On app update new key with versionHash; old cache stale automatically.
  *
  * USAGE:
  * await messagesTranslator.init('en');
  * await messagesTranslator.updateLanguage('es');
  * const translated = messagesTranslator.translate('e.net');
- *
-*/
+ */
 
 (function() {
     'use strict';

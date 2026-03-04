@@ -1,14 +1,9 @@
 /**
- * ================================================================================================
- * COINGECKO CRON HISTORY MODAL BODY - History of coin data update cycles
- * ================================================================================================
- *
- * PURPOSE: Shows history of recent CoinGecko data fetch cycles (via cron).
- *
+ * #JS-AjyFAjvh
+ * @description History of CoinGecko data fetch cycles; GET /api/coins/cycles (Yandex app-api).
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Data source: GET /api/coins/cycles (Yandex app-api).
  */
 
 (function() {

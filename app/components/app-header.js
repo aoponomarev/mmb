@@ -1,28 +1,13 @@
 /**
- * ================================================================================================
- * APP HEADER COMPONENT - Application header component
- * ================================================================================================
- *
- * PURPOSE: Vue component for application header with menu and settings buttons.
- *
+ * #JS-Cu2wz595
+ * @description Application header: menu and settings buttons; dark theme; cmp-dropdown.
+ * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-e0b8f3
  *
- * SLOTS:
- * - Fixed dark theme (data-bs-theme="dark"), not switchable
- * - Uses cmp-dropdown for menu and settings buttons
- * - Slot support for menu element customization
- *
- * COMPONENT API:
- *
- * SLOTS:
- * - #menu-items — menu elements (hamburger) on the left
- * - #portfolio-items — portfolio menu items (between create and list)
- * - #settings-items — settings menu elements on the right
- *
-*/
+ * SLOTS: #menu-items (hamburger left), #portfolio-items (create/list), #settings-items (right).
+ */
 
 window.appHeader = {
     template: '#app-header-template',

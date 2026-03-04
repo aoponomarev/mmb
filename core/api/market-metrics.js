@@ -1,23 +1,16 @@
 /**
- * ================================================================================================
- * MARKET METRICS API - Utility for market metrics
- * ================================================================================================
- *
- * PURPOSE: Standalone module for market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR).
- *
+ * #JS-bU2BihXe
+ * @description Standalone market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR); exports via window.marketMetrics.
+ * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Exports functions via window.marketMetrics.
- *
- * Skill: id:sk-7cf3f7
  *
  * FEATURES:
  * - VIX: 24h caching + fallback (Yahoo Finance, Stooq, Alpha Vantage)
  * - FGI: alternative.me API
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
- *
-*/
+ */
 
 (function() {
     'use strict';

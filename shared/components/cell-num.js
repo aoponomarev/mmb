@@ -1,23 +1,12 @@
 /**
- * ================================================================================================
- * CELL NUM - Table numeric cell component
- * ================================================================================================
- *
- * PURPOSE: Format and display numeric values in table.
- *
+ * #JS-ed2z5Mao
+ * @description Table numeric cell: format and display numbers; prefix, precision, colorize, unit.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * USAGE:
- * <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price"></cell-num>
- * <cell-num :value="coin.price_change_percentage_24h" :precision="2" colorize unit="%"></cell-num>
- *
- * FORMAT TYPES:
- * - 'default': fixed precision
- * - 'price': dynamic precision, at least 2 significant digits (e.g. $0.000023 instead of $0.00)
- *
-*/
+ * USAGE: <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price" />; type 'price' = dynamic precision (≥2 significant digits).
+ */
 
 (function() {
     'use strict';

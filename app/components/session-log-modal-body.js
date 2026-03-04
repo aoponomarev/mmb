@@ -1,29 +1,11 @@
 /**
- * ================================================================================================
- * SESSION LOG MODAL BODY COMPONENT - Session Log modal body
- * ================================================================================================
- *
- * PURPOSE: Display session logs in modal for debugging.
- *
+ * #JS-VNDFUVK2
+ * @description Session logs in modal for debugging; console.log/warn/error/info; filter by level; Clear/Copy buttons; inject modalApi.
+ * @skill id:sk-483943
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-483943
- *
- * FEATURES:
- * - Auto-collect all console.log/warn/error/info
- * - Integration with logger.js
- * - Filter by level (log/warn/error/info)
- * - "Clear log" button (bottom left)
- * - "Copy to clipboard" button (bottom right)
- * - Auto-scroll to new messages
- *
- * COMPONENT API:
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ */
 
 window.sessionLogModalBody = {
     template: `

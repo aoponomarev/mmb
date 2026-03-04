@@ -1,10 +1,6 @@
 /**
- * ================================================================================================
- * PORTFOLIOS CLIENT - API client for portfolios via Cloudflare Workers
- * ================================================================================================
- *
- * PURPOSE: Browser client for portfolio CRUD operations via Cloudflare Workers API.
- *
+ * #JS-TnWsDTjK
+ * @description Browser client for portfolio CRUD via Cloudflare Workers API; JWT auth, error handling, structured return.
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
@@ -12,8 +8,7 @@
  * - Automatic Authorization header with JWT token
  * - Network and auth error handling
  * - Structured portfolio data return
- *
-*/
+ */
 
 (function() {
     'use strict';

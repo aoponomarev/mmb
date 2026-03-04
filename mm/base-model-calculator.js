@@ -1,16 +1,9 @@
 /**
- * ================================================================================================
- * BASE MODEL CALCULATOR - Base class for math models
- * ================================================================================================
- * Skill: id:sk-c3d639
+ * #JS-ut4EDxr4
+ * @description Base class for math models; abstract interface; each model (Median, etc.) extends this.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: Provide abstract interface for all math models in app.
- * Each model (Median, Momentum, etc.) must extend this class.
- *
- * PRINCIPLES:
- * - Modularity: Each model is independent.
- * - Unified interface: app-ui-root works with models via common methods.
- * - Encapsulation: Calc logic hidden inside model.
+ * PRINCIPLES: Modularity (each model independent); unified interface for app-ui-root; encapsulation of calc logic.
  */
 
 (function() {

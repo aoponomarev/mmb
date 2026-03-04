@@ -1,9 +1,7 @@
 /**
- * ================================================================================================
- * PORTFOLIO VIEW MODAL BODY - Portfolio view component (D.3)
- * ================================================================================================
- *
- * Skill: id:sk-c3d639
+ * #JS-9oNFE9kB
+ * @description Portfolio view modal body (D.3); display portfolio metadata and assets.
+ * @skill id:sk-c3d639
  */
 
 (function() {

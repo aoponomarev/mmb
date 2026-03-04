@@ -1,19 +1,11 @@
 /**
- * ================================================================================================
- * COINS METADATA GENERATOR
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Automatic generation and update of coins.json file on GitHub.
- *
+ * #JS-mi2ffpht
+ * @description Auto-generate and upload coins.json to GitHub: collect stablecoins, detect Wrapped/LST, build JSON, upload via API (app_github_token).
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * FUNCTIONS:
- * 1. Collect stablecoins list via coingecko-stablecoins-loader
- * 2. Detect Wrapped and LST coins via heuristics and API
- * 3. Build final JSON structure
- * 4. Upload to GitHub via API (using app_github_token)
+ * HOW: 1) coingecko-stablecoins-loader 2) detect Wrapped/LST (heuristics + API) 3) build JSON 4) upload to GitHub.
  */
 
 (function() {

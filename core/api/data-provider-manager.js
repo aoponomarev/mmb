@@ -1,33 +1,25 @@
 /**
- * ================================================================================================
- * DATA PROVIDER MANAGER - Manager for switching between data providers
- * ================================================================================================
- * // @skill-anchor id:sk-224210 #for-data-provider-interface #for-dual-channel-fallback
+ * #JS-2436XKxE
+ * @description Single access point for coin data providers (CoinGecko, CoinMarketCap, Binance); switching and unified API.
+ * @skill-anchor id:sk-224210 #for-data-provider-interface #for-dual-channel-fallback
  *
- * PURPOSE: Single access point for coin data providers
- * (CoinGecko, CoinMarketCap, Binance, etc.). Manages provider switching
- * and provides unified interface.
+ * PURPOSE: Manage provider selection and expose one interface for coin data regardless of backend.
  *
  * FEATURES:
  * - Default provider: CoinGecko
- * - Current provider stored in cacheManager ('data-provider')
- * - API keys stored separately per provider in localStorage
- * - API keys in JSON: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
+ * - Current provider in cacheManager key 'data-provider'
+ * - API keys per provider in localStorage (JSON: { 'coingecko': 'key123', ... })
  *
  * USAGE:
- * // Get top 10 coins via current provider
  * const coins = await window.dataProviderManager.getTopCoins(10);
- *
- * // Switch provider
  * await window.dataProviderManager.setProvider('coingecko');
- *
- * // Get current provider
  * const provider = await window.dataProviderManager.getCurrentProvider();
- *
- * // Set API key for provider
  * await window.dataProviderManager.setApiKey('coingecko', 'my-api-key');
  *
-*/
+ * REFERENCES:
+ * - Data providers config: core/config/data-providers-config.js
+ * - Base provider: core/api/data-providers/base-provider.js
+ */
 
 (function() {
     'use strict';

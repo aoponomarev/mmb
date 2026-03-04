@@ -1,33 +1,13 @@
 /**
- * ================================================================================================
- * COIN SET SAVE MODAL BODY COMPONENT - Coin set save modal body component
- * ================================================================================================
- *
- * PURPOSE: Form for saving selected coins into a named set.
- *
+ * #JS-YR467bUb
+ * @description Save selected coins into named set; Cancel/Save via modalApi; inject modalApi.
+ * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-e0b8f3
  *
- * FEATURES:
- * - Form for entering coin set name
- * - Registers "Cancel" and "Save" buttons via modalApi
- * - Reactively updates button state on form data change
- * - Manages cancel logic (restore initial values)
- * - Supports "Saved, close?" state for "Save" button
- *
- * COMPONENT API:
- *
- * Props:
- * - selectedCoinIds (Array, required) — array of selected coin IDs
- * - onSave (Function, required) — save callback (name, description, coinIds)
- * - onCancel (Function, required) — cancel callback
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * Props: selectedCoinIds, onSave, onCancel.
+ */
 
 window.coinSetSaveModalBody = {
     template: `

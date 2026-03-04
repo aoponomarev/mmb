@@ -1,18 +1,11 @@
 /**
- * ================================================================================================
- * POSTGRES SETTINGS COMPONENT - PostgreSQL API layer settings
- * ================================================================================================
- *
- * PURPOSE: Manage basic settings for PostgreSQL API layer.
- *
+ * #JS-xNN9FxKB
+ * @description PostgreSQL API layer settings in modal; base URL, sync toggle; no DB queries.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * No DB queries or table creation.
- *
- * Skill: id:sk-bb7c8e
- *
-*/
+ */
 
 window.postgresSettings = {
     template: '#postgres-settings-template',

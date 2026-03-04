@@ -1,27 +1,23 @@
 /**
- * ================================================================================================
- * I18N CONFIG - Internationalization configuration
- * ================================================================================================
- * Skill: id:sk-e0b8f3
- *
- * PURPOSE: SSOT for all internationalization (i18n) settings.
+ * #JS-HX3kkTDh
+ * @description SSOT for i18n settings: supported languages, base language, language labels.
+ * @skill id:sk-e0b8f3
  *
  * PRINCIPLES:
- * - Centralized definition of supported languages
- * - Single source for application base language
+ * - Centralized supported languages and base language
  * - Mapping of language codes to human-readable names
- * - Constants for use across all i18n modules (tooltips, messages)
+ * - Constants for tooltips, messages and other i18n modules
  *
  * USAGE:
- * window.i18nConfig.BASE_LANGUAGE         // 'ru'
- * window.i18nConfig.SUPPORTED_LANGUAGES   // ['ru', 'en', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ko']
- * window.i18nConfig.getLanguageLabel('en') // 'English'
- * window.i18nConfig.isLanguageSupported('fr') // true
+ * window.i18nConfig.BASE_LANGUAGE;
+ * window.i18nConfig.SUPPORTED_LANGUAGES;
+ * window.i18nConfig.getLanguageLabel('en');
+ * window.i18nConfig.isLanguageSupported('fr');
  *
  * REFERENCES:
- * - SSOT principles: id:sk-e0b8f3
- * - Tooltips config: core/config/tooltips-config.js
- * - Messages config: core/config/messages-config.js
+ * - SSOT: id:sk-e0b8f3
+ * - Tooltips: core/config/tooltips-config.js
+ * - Messages: core/config/messages-config.js
  */
 
 (function() {

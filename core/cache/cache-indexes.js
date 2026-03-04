@@ -1,29 +1,19 @@
 /**
- * ================================================================================================
- * CACHE INDEXES - Indexes for IndexedDB
- * ================================================================================================
+ * #JS-UbWXkUYK
+ * @description IndexedDB index definitions for fast lookup; config only (implementation when IndexedDB added).
+ * @skill id:sk-3c832d
  *
- * PURPOSE: Define IndexedDB indexes for fast data lookup.
- * Skill: id:sk-3c832d
- *
- * INDEX CONFIGURATION:
- * - time-series: coinId, timestamp, coinId_timestamp (composite)
- *   Reason: frequent queries "all points for coin X" and "points for period Y", composite index speeds both
- * - portfolios: userId, createdAt, userId_createdAt (composite)
- *   Reason: filter by user and sort by creation date, composite index for combined queries
- * - strategies: type, isActive, type_isActive (composite)
- *   Reason: filter by strategy type and active/inactive, composite index for combined queries
- * - history: timestamp, type
- *   Reason: filter by operation type and search by date
+ * PURPOSE: Define indexes per table; index fields for WHERE/ORDER BY; composite indexes for multi-condition queries.
  *
  * INDEX CONFIGURATION:
- * - Index fields used in WHERE and ORDER BY queries
- * - Composite indexes for queries with multiple conditions
- * - unique: false (one record can have one index value)
+ * - time-series: coinId, timestamp, coinId_timestamp (composite) — queries by coin and period
+ * - portfolios: userId, createdAt, userId_createdAt (composite) — filter by user, sort by date
+ * - strategies: type, isActive, type_isActive (composite) — filter by type and active/inactive
+ * - history: timestamp, type — filter by operation type and date
+ * - unique: false
  *
- * NOTE: Index implementation will be added when IndexedDB is implemented. File contains config only for now.
- *
- * REFERENCE: General caching principles: id:sk-3c832d
+ * REFERENCES:
+ * - General caching principles: id:sk-3c832d
  */
 
 (function() {

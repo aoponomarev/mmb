@@ -1,34 +1,12 @@
 /**
- * ================================================================================================
- * COIN SET LOAD MODAL BODY COMPONENT - Coin set load modal body component
- * ================================================================================================
- *
- * PURPOSE: List of saved coin sets for loading with multi-select support.
- *
+ * #JS-W23K9iSC
+ * @description Load saved coin sets (Cloudflare D1 via coin-sets-client); multi-select, merge, delete; Draft from localStorage; Load/Delete via modalApi.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * FEATURES:
- * - Displays list of user's saved coin sets
- * - Loads sets from Cloudflare D1 via coin-sets-client
- * - Allows selecting multiple sets for loading (checkboxes)
- * - Merges coins from selected sets on load
- * - Allows deleting selected sets
- * - Registers "Load" and "Delete" buttons via modalApi
- * - Supports local "Draft" set from localStorage (available without auth)
- *
- * COMPONENT API:
- *
- * Props:
- * - onLoad (Function, required) — load sets callback (array of coinSets)
- * - onDelete (Function, required) — delete sets callback (array of IDs)
- * - onCancel (Function, required) — cancel callback
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * Props: onLoad, onDelete, onCancel. Inject: modalApi.
+ */
 
 window.coinSetLoadModalBody = {
     template: `

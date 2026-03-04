@@ -1,16 +1,10 @@
 /**
- * ================================================================================================
- * RATE LIMITER - Centralized API request management
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Prevent API blocking due to rate limit exceeded.
- *
+ * #JS-oX451njh
+ * @description Centralized API request management: adaptive timeouts, request queue, prioritization; prevent rate-limit blocking.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface #for-rate-limiting
- * Adaptive timeouts, request queue, prioritization.
- *
-*/
+ */
 
 (function() {
     'use strict';

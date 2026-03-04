@@ -1,16 +1,10 @@
 /**
- * ================================================================================================
- * POSTGRES CLIENT - Client for PostgreSQL API layer
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Base client for CRUD operations with Yandex Cloud PostgreSQL data.
- *
+ * #JS-9mWnz9iK
+ * @description Base client for Yandex Cloud PostgreSQL API; CRUD for hot data (portfolios, settings); Data Provider pattern.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Implements "Data Provider" pattern for hot data (portfolios, settings).
- *
-*/
+ */
 
 (function() {
     'use strict';

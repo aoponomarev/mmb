@@ -1,25 +1,8 @@
 /**
- * ================================================================================================
- * AUTH BUTTON TEMPLATE - Auth button component template
- * ================================================================================================
+ * #JS-KH3kmtFT
+ * @description x-template for auth-button: login button or user profile dropdown; responsive (mobile icon only).
  *
- * PURPOSE: Template for auth-button with conditional login button or user profile.
- *
- * ADAPTIVE:
- * - If not authenticated: "Sign in with Google" button with icon
- * - If authenticated: dropdown with user profile (avatar, name, email) and logout button
- *
- * BOOTSTRAP CLASSES:
- * - cmp-dropdown for profile menu
- * - cmp-button for login button
- * - All styles via Bootstrap classes
- *
- * RESPONSIVE:
- * - On mobile: Google icon only
- * - On desktop: icon + "Sign in with Google" text
- *
- * REFERENCES:
- * - Component: app/components/auth-button.js
+ * REFERENCES: app/components/auth-button.js
  */
 
 (function() {

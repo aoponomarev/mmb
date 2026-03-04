@@ -1,33 +1,8 @@
 /**
- * ================================================================================================
- * AI API SETTINGS TEMPLATE - AI API provider settings component template
- * ================================================================================================
+ * #JS-kb2TGxgm
+ * @description x-template for ai-api-settings; id="ai-api-settings-template"; provider radio, conditional fields, API key, model select.
  *
- * PURPOSE: Template for AI API provider settings (ai-api-settings).
- * Providers: GitHub, YandexGPT, PostgreSQL.
- *
- * PROBLEM: Template must be in DOM before Vue.js init for component to work.
- *
- * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
- * on load as <script type="text/x-template"> with id="ai-api-settings-template".
- *
- * HOW:
- * - Template defined as string in TEMPLATE constant
- * - On load, <script type="text/x-template"> element is auto-created
- * - Element added to document.body with id="ai-api-settings-template"
- * - Component uses template via template: '#ai-api-settings-template'
- *
- * TEMPLATE FEATURES:
- * HTML structure:
- * - Radio buttons for provider selection (GitHub, YandexGPT, PostgreSQL)
- * - Conditional settings fields based on selected provider
- * - API key input fields (password/text with visibility toggle)
- * - Model selection via select
- * - Compact minimal interface
- *
- * REFERENCES:
- * - General template principles: id:sk-483943 (section "x-template extraction")
- * - Component: app/components/ai-api-settings.js
+ * REFERENCES: id:sk-483943 (x-template extraction); app/components/ai-api-settings.js
  */
 
 (function() {

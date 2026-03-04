@@ -1,12 +1,10 @@
 /**
- * ================================================================================================
- * PORTFOLIO ADAPTERS - Provider payload adapters for canonical draft
- * ================================================================================================
- * Skill: id:sk-02d3ea
- * Skill: id:sk-bb7c8e
- * Doc: docs/A_PORTFOLIO_SYSTEM.md
+ * #JS-fJ68ZfEu
+ * @description Provider payload adapters: toCloudflarePayload, toPostgresPayload (canonical draft → API shape).
+ * @skill id:sk-02d3ea
+ * @skill id:sk-bb7c8e
  *
- * Functions: toCloudflarePayload, toPostgresPayload.
+ * REFERENCES: docs/A_PORTFOLIO_SYSTEM.md
  */
 (function() {
     'use strict';

@@ -1,38 +1,21 @@
 /**
- * ================================================================================================
- * YANDEX AI PROVIDER - Provider for YandexGPT API
- * ================================================================================================
- *
- * PURPOSE: Provider implementation for YandexGPT via Yandex Cloud API.
- *
+ * #JS-273nawxH
+ * @description YandexGPT provider via Yandex Cloud API; proxy for CORS; message format {role, text}.
+ * @skill id:sk-bb7c8e
+ * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: id:sk-bb7c8e
- * Skill: id:sk-7cf3f7
- *
  * FEATURES:
- * - Endpoint: https://llm.api.cloud.yandex.net/foundationModels/v1/completion
- * - Proxy URL: https://functions.yandexcloud.net/d4erd8d1pttbufsl26s1 (Yandex Cloud Functions)
- * - Folder ID: b1gv03a122le5a934cqj
- * - modelUri format: gpt://{folderId}/{model}/latest (e.g. gpt://b1gv03a122le5a934cqj/yandexgpt-lite/latest)
- * - Request format to API: { modelUri, messages: [{role: 'user'|'assistant', text: string}], completionOptions: {temperature: 0.6, maxTokens: 2000} }
- * - Request format to proxy: { apiKey, modelUri, messages, completionOptions } (API key passed in request body)
- * - Response format: { result: { alternatives: [{ message: { text: string } }] } } or { error: { message: string, httpCode: number } }
- * - Message format: YandexGPT uses {role: 'user'|'assistant', text: string}, not {role, content}
- * - Default completionOptions: temperature: 0.6, maxTokens: 2000
- * - API key: obtained from Yandex Cloud IAM (shown only once on creation)
- *
- * CORS:
- * - Yandex API blocks CORS requests from browser, so proxy is required
- * - Proxy handles OPTIONS preflight requests (returns status 204)
- * - Proxy adds CORS headers: Access-Control-Allow-Origin: *, Access-Control-Allow-Methods: POST, OPTIONS
+ * - Endpoint: llm.api.cloud.yandex.net/foundationModels/v1/completion; proxy via Yandex Cloud Functions (CORS)
+ * - modelUri: gpt://{folderId}/{model}/latest; completionOptions: temperature 0.6, maxTokens 2000
+ * - Request: modelUri, messages [{role, text}], completionOptions; proxy receives apiKey in body
+ * - Response: result.alternatives[].message.text or error; API key from Yandex Cloud IAM
  *
  * USAGE:
  * const provider = new YandexProvider();
  * const response = await provider.sendRequest(apiKey, model, messages);
- *
-*/
+ */
 
 (function() {
     'use strict';

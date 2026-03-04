@@ -1,28 +1,14 @@
 /**
- * ================================================================================================
- * MESSAGES MIGRATIONS - Migrations for messages dataset
- * ================================================================================================
+ * #JS-YC3DocUN
+ * @description Version and migration for messages dataset when structure changes; data compatibility between app versions.
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: Version and migration management for messages dataset when structure changes.
- * Ensures data compatibility between application versions.
- * Skill: id:sk-02d3ea
+ * PURPOSE: Run migrations sequentially; apply only when key structure or data format changes; changing texts does not require migration.
  *
  * PRINCIPLES:
- * - Migrations apply only when key structure or data format changes
- * - Changing message texts does not require migration
- * - Each migration has unique version (v1, v2, v3...)
- * - Migrations run sequentially from current to target version
- *
- * WHEN MIGRATIONS ARE NEEDED:
- * - Message key rename (old key → new key)
- * - Message data structure change (adding required fields)
- * - Splitting/merging messages
- * - Action structure change (adding required parameters)
- *
- * WHEN MIGRATIONS ARE NOT NEEDED:
- * - Changing message texts (just update in messages-config.js)
- * - Adding new messages (backward compatibility preserved)
- * - Changing priorities or message types
+ * - Each migration has unique version (v1, v2, v3...); run from current to target
+ * - When needed: key rename, structure change (required fields), splitting/merging messages, action structure change
+ * - When not needed: changing texts (update messages-config.js), adding new messages, changing priorities/types
  *
  * USAGE:
  * const migratedData = await window.messagesMigrations.migrate(cacheData, fromVersion, toVersion);

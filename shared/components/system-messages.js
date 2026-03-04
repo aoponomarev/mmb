@@ -1,20 +1,12 @@
 /**
- * ================================================================================================
- * SYSTEM MESSAGES - System messages container
- * ================================================================================================
- *
- * PURPOSE: Container for list of system messages. Delegates each message to cmp-system-message (template SSOT).
- *
+ * #JS-Gn38YPCx
+ * @description Container for system messages list; delegates to cmp-system-message (template SSOT).
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * USAGE:
- * <cmp-system-messages scope="global" />
- * <cmp-system-messages scope="test-messages" :limit="3" />
- * <cmp-system-messages scope="global" :horizontal-scroll="true" />
- *
-*/
+ * USAGE: <cmp-system-messages scope="global" /> | scope="test-messages" :limit="3" | :horizontal-scroll="true" />
+ */
 
 (function() {
     'use strict';

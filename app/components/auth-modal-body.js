@@ -1,34 +1,13 @@
 /**
- * ================================================================================================
- * AUTH MODAL BODY COMPONENT - Authentication modal body component
- * ================================================================================================
- *
- * PURPOSE: Component for displaying auth state and managing auth via Google OAuth.
- *
+ * #JS-pZ2DyWkj
+ * @description Auth modal body: auth state, user info, Log in/Log out via modalApi; auth-client, auth-state sync.
+ * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: id:sk-7cf3f7
- *
- * FEATURES:
- * - Displays current auth state (authenticated/not authenticated)
- * - Displays user info (name, email)
- * - Registers "Log in" and "Log out" buttons via modalApi
- * - Uses auth-client for auth and logout
- * - Uses centralized state from auth-state for sync across all instances
- * - Reactively updates state on auth change (all instances sync automatically)
- *
- * COMPONENT API:
- *
- * Props:
- * - onLoginSuccess (Function, optional) — called after successful login
- * - onLogoutSuccess (Function, optional) — called after successful logout
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * Props: onLoginSuccess, onLogoutSuccess (optional). Inject: modalApi.
+ */
 
 window.authModalBody = {
     template: '#auth-modal-body-template',

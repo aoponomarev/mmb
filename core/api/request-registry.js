@@ -1,14 +1,9 @@
 /**
- * ================================================================================================
- * REQUEST REGISTRY - Log of external API calls
- * ================================================================================================
- * PURPOSE: Track last request times to endpoints for rate limit compliance.
- * State stored in localStorage, survives page reload.
- *
+ * #JS-iH26jSeT
+ * @description Log of external API calls; track last request times for rate limit compliance; state in localStorage.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- *
- * Skill: id:sk-bb7c8e
  */
 
 (function() {

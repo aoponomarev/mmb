@@ -1,18 +1,12 @@
 /**
- * ================================================================================================
- * SORTABLE HEADER - Table column sortable header
- * ================================================================================================
- *
- * PURPOSE: Column header with sort indicator and emit.
- *
+ * #JS-L22cnWGC
+ * @description Table column sortable header with sort indicator and emit.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * USAGE:
- * <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header>
- *
-*/
+ * USAGE: <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort" />
+ */
 
 (function() {
     'use strict';

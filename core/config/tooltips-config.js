@@ -1,7 +1,6 @@
 /**
- * ================================================================================================
- * TOOLTIPS CONFIG - Tooltip configuration
- * ================================================================================================
+ * #JS-DR3gZC9b
+ * @description Tooltip copy and configuration; language-specific tooltip texts.
  * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-318305 #for-tooltip-reactivity
  */

@@ -1,47 +1,12 @@
 /**
- * ================================================================================================
- * DROPDOWN TEMPLATE - Dropdown menu component template
- * ================================================================================================
+ * #JS-M144RMHB
+ * @description Template for cmp-dropdown (Bootstrap dropdown with search and scroll); x-template id="dropdown-template".
  *
- * PURPOSE: Template for Vue wrapper over Bootstrap dropdown (cmp-dropdown) with search and scroll.
+ * PURPOSE: Template in DOM before Vue init; string → <script type="text/x-template"> → document.body; template: '#dropdown-template'.
  *
- * PROBLEM: Template must be in DOM before Vue.js init for component to work.
+ * FEATURES: Root dropdown + trigger (cmp-button or slot #button) + dropdown-menu; searchable, scrollable; slots #button (isOpen, toggle), #items (filteredItems, searchQuery, handleItemSelect); responsive trigger (buttonIcon, buttonTextShort).
  *
- * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
- * on file load as <script type="text/x-template"> element with id="dropdown-template".
- *
- * HOW:
- * - Template defined as string in TEMPLATE constant
- * - On file load <script type="text/x-template"> element is created
- * - Element appended to document.body with id="dropdown-template"
- * - Component uses template via template: '#dropdown-template'
- *
- * TEMPLATE FEATURES:
- * HTML structure:
- * - Root: ⟨div class="dropdown"⟩ with ref="dropdownContainer"
- * - Trigger button: ⟨cmp-button⟩ or custom via slot #button
- * - Dropdown menu: ⟨ul class="dropdown-menu"⟩ with conditional 'show' when open
- * Layout and CSS:
- * - cmp-button for trigger (via ⟨cmp-button⟩) for consistency
- * - Scrollable area: ⟨div class="dropdown-menu-scrollable"⟩ with overflow-y: auto and max-height
- * - Bootstrap classes only for styling
- * Conditional rendering:
- * - Custom button via slot #button (v-if="!$slots.button" for default)
- * - Search field (v-if="searchable")
- * - Scrollable area for long lists (v-if="scrollable")
- * - Empty state on search (filteredItems && filteredItems.length)
- * Slots:
- * - #button — custom trigger button (scope: isOpen, toggle)
- * - #items — list items (scope: filteredItems, searchQuery, handleItemSelect)
- * Responsiveness:
- * - Trigger button responsiveness via .dropdown-responsive and .btn-responsive
- * - With icon on mobile: if buttonIcon set, show icon only on mobile, buttonText on desktop
- * - With short text on mobile: if buttonTextShort set (no icon), show short on mobile, full on desktop
- * - No responsiveness: if neither buttonIcon nor buttonTextShort, always full buttonText
- *
- * REFERENCES:
- * - General template principles: id:sk-483943 (section "x-template extraction")
- * - Component: shared/components/dropdown.js
+ * REFERENCES: id:sk-483943 (x-template extraction); shared/components/dropdown.js
  */
 
 (function() {

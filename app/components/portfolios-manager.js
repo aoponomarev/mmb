@@ -1,26 +1,13 @@
 /**
- * ================================================================================================
- * PORTFOLIOS MANAGER COMPONENT - Portfolio management component
- * ================================================================================================
- *
- * PURPOSE: Vue component for managing user portfolios via Cloudflare API.
- *
+ * #JS-8j2Hez4u
+ * @description Portfolio management via Cloudflare API; emits portfolio-created, portfolio-updated, portfolio-deleted.
+ * @skill id:sk-c3d639
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: id:sk-c3d639
- *
- * COMPONENT API:
- *
- * Props: none
- *
- * Events:
- * - portfolio-created — emitted after portfolio creation
- * - portfolio-updated — emitted after portfolio update
- * - portfolio-deleted — emitted after portfolio deletion
- *
-*/
+ * EVENTS: portfolio-created, portfolio-updated, portfolio-deleted.
+ */
 
 window.portfoliosManager = {
     template: '#portfolios-manager-template',

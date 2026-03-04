@@ -1,41 +1,17 @@
 /**
- * ================================================================================================
- * DATA PROVIDERS CONFIG - Configuration of coin data providers
- * ================================================================================================
- * Skill: id:sk-bb7c8e
+ * #JS-siMJxsfA
+ * @description SSOT for coin data provider settings (CoinGecko, CoinMarketCap, Binance); multi-provider, seamless switch.
+ * @skill id:sk-bb7c8e
  *
- * PURPOSE: Centralized configuration for all financial data providers.
- * Similar to AI providers, but for cryptocurrency data sources.
+ * PURPOSE: Centralized config for all financial data providers; API keys in localStorage; default and available list.
  *
  * PRINCIPLES:
- * - SSOT for all provider settings
- * - Support multiple providers (CoinGecko, CoinMarketCap, Binance etc.)
- * - Seamless switching between providers
- * - API keys stored in localStorage (same as AI providers)
- * - Default provider and list of available providers
+ * - SSOT for provider settings; no duplication in components
+ * - Per-provider: name, displayName, baseUrl, requiresApiKey, apiKeyUrl, rateLimit, timeout, endpoints, features
+ * - API keys: localStorage 'data-provider-keys', JSON { 'coingecko': 'key123', ... }; managed via DataProviderManager
  *
- * PRINCIPLES:
- * {
- *   name: 'coingecko',                    // Internal name
- *   displayName: 'CoinGecko',             // Display name
- *   baseUrl: 'https://api.coingecko.com', // Base API URL
- *   requiresApiKey: false,                // API key required
- *   apiKeyUrl: 'https://...',             // URL to obtain key
- *   rateLimit: {...},                     // Request limits
- *   timeout: 30000,                       // Request timeout
- *   endpoints: {...},                     // Provider-specific endpoints
- *   features: [...]                       // Supported features
- * }
- *
- * API KEY STORAGE:
- * - localStorage.getItem('data-provider-keys') - JSON object with keys
- * - Format: { 'coingecko': 'key123', 'coinmarketcap': 'key456' }
- * - Managed via DataProviderManager
- *
- * REFERENCES:
- * - External provider data versioned in cache-manager
- * - Key: `coins-list-v${version}` (version changes on data structure change)
- * - On provider switch structure may change → new version needed
+ * CACHE:
+ * - External provider data versioned in cache-manager; key coins-list-v${version}; new version on provider/structure change.
  *
  * REFERENCES:
  * - AI Providers Config (analog): id:sk-bb7c8e

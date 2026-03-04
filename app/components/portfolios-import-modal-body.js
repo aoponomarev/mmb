@@ -1,28 +1,11 @@
 /**
- * ================================================================================================
- * PORTFOLIOS IMPORT MODAL BODY - Selective portfolio import component
- * ================================================================================================
- *
- * PURPOSE: Selective import of portfolios from JSON with date filter and basic validation.
- *
+ * #JS-Ri3c3bMt
+ * @description Import portfolios from JSON; date filter, merge|replace; portfolioConfig + eventBus sync; inject modalApi.
+ * @skill id:sk-c3d639
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-c3d639
- *
- * FEATURES:
- * - JSON file selection and structure validation
- * - Portfolio filter by date range
- * - Import mode: merge | replace
- * - Select specific portfolios via checkboxes
- * - Import via portfolioConfig and UI sync via eventBus
- *
- * COMPONENT API:
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ */
 
 window.portfoliosImportModalBody = {
     template: `

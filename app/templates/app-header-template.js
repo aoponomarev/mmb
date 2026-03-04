@@ -1,41 +1,10 @@
 /**
- * ================================================================================================
- * APP HEADER TEMPLATE - App header component template
- * ================================================================================================
+ * #JS-vK2JcZrV
+ * @description x-template for app header (menu + settings); id="app-header-template"; ref app-header.js, styles/layout/header.css.
  *
- * PURPOSE: Template for app header (app-header) with menu and settings buttons.
+ * PURPOSE: Template in DOM before Vue init; string → script type="text/x-template" → document.body. Slots: #menu-items, #portfolio-items, #settings-items.
  *
- * PROBLEM: Template must be in DOM before Vue.js init for component to work.
- *
- * SOLUTION: Template stored as string in JS file and auto-inserted into DOM
- * on load as <script type="text/x-template"> with id="app-header-template".
- *
- * HOW:
- * - Template defined as string in TEMPLATE constant
- * - On load, <script type="text/x-template"> element is auto-created
- * - Element added to document.body with id="app-header-template"
- * - Component uses template via template: '#app-header-template'
- *
- * TEMPLATE FEATURES:
- * HTML structure:
- * - Root element: ⟨header⟩ with classes fixed-top, bg-dark, bg-opacity-90, clearfix, data-bs-theme="dark"
- * - Menu button (hamburger) left via cmp-dropdown
- * - Settings button (gear) right via cmp-dropdown
- * Layout and CSS classes:
- * - Fixed positioning: fixed-top
- * - Dark theme: bg-dark bg-opacity-90, data-bs-theme="dark" (fixed, not switchable)
- * - Multi-layer shadow downward with white inset for background lightening
- * - Buttons use link variant with text-white text-decoration-none for white color without underline
- * - Settings menu aligned to right via text-end
- * Slots:
- * - #menu-items — menu items (hamburger) left
- * - #portfolio-items — portfolio menu items (between create and list)
- * - #settings-items — settings menu items right
- *
- * REFERENCES:
- * - General template principles: id:sk-483943 (section "x-template extraction")
- * - Component: app/components/app-header.js
- * - Styles: styles/layout/header.css
+ * REFERENCES: id:sk-483943 (x-template extraction); app/components/app-header.js
  */
 
 (function() {

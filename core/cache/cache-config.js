@@ -1,45 +1,34 @@
 /**
- * ================================================================================================
- * CACHE CONFIG - Caching configuration
- * ================================================================================================
+ * #JS-8P3M724Z
+ * @description SSOT for cache TTL, schema versions and strategies; do not duplicate in components.
  * @skill id:sk-3c832d
  *
- * PURPOSE: Centralized TTL, schema versions and caching strategy management.
- * SSOT — do not duplicate TTL values in components.
+ * PURPOSE: Centralized cache policy: TTL per key, strategy, schema versions for user data.
  *
- * TTL (Time To Live) — value explanations:
- * - icons-cache: 1 hour — icons change rarely but may update (new coins, design refresh)
- * - coins-list: 1 day — coin list stable, updates daily via API
- * - market-metrics: 1 hour — metrics update often (prices change constantly)
- * - api-cache: 5 min — API response cache, fast expiry for freshness
- * - time-series: 1 hour — time series update regularly, hour balances freshness/performance
- * - history: 1 day — history changes less often, day sufficient
- * - crypto-news-cache-max-age: 24h — max age of news state (not news content)
- * - market-update-fallback: 3h — fallback on update time calc error
- * - market-update-delay-max: 24h — max metrics update delay
+ * TTL (Time To Live):
+ * - icons-cache: 1h — icons change rarely but may update (new coins, design refresh)
+ * - coins-list: 1d — coin list stable, updates daily via API
+ * - market-metrics: 1h — metrics update often
+ * - api-cache: 5min — API response cache, fast expiry for freshness
+ * - time-series: 1h, history: 1d
+ * - crypto-news-cache-max-age: 24h; market-update-fallback: 3h; market-update-delay-max: 24h
  *
- * No TTL (null) — permanent storage:
- * - User data (portfolios, strategies) — must persist
- * - Settings (settings, theme, timezone) — user must not lose settings
- * - API keys and providers — sensitive data, stored without expiry
+ * No TTL (null) — permanent: user data (portfolios, strategies), settings (theme, timezone), API keys. Use schema migrations on structure change.
  *
- * USAGE:
- * - cache-first: icons-cache, coins-list — data stable, access speed matters
- * - network-first: market-metrics, api-cache — freshness critical, network first
- * - stale-while-revalidate: time-series, history — show cache, update in background
- * - cache-only: portfolios, strategies, settings, API keys — local only, no update source
+ * STRATEGIES:
+ * - cache-first: icons-cache, coins-list
+ * - network-first: market-metrics, api-cache
+ * - stale-while-revalidate: time-series, history
+ * - cache-only: portfolios, strategies, settings, API keys
  *
  * USAGE:
- * Schema versioning for user keys (portfolios, strategies, etc.).
- * On structure change create migration in cache-migrations.js.
- * Schema versioning differs from app versioning (prefix v:{hash}:).
+ * cacheConfig.getTTL('coins-list');
+ * cacheConfig.getStrategy('icons-cache');
+ * cacheConfig.getVersion('portfolios');
  *
- * USAGE:
- * cacheConfig.getTTL('coins-list') // 86400000 (1 day)
- * cacheConfig.getStrategy('icons-cache') // 'cache-first'
- * cacheConfig.getVersion('portfolios') // '1.0.0'
- *
- * REFERENCE: Caching principles: id:sk-3c832d
+ * REFERENCES:
+ * - Schema migrations: core/cache/cache-migrations.js
+ * - Caching principles: id:sk-3c832d
  */
 
 (function() {

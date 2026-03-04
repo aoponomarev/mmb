@@ -1,16 +1,10 @@
 /**
- * ================================================================================================
- * ICON MANAGER - Coin icon manager
- * ================================================================================================
- * Skill: id:sk-318305
- *
- * PURPOSE: SSOT for coin icon URLs.
- *
+ * #JS-1dttw1ah
+ * @description SSOT for coin icon URLs; prioritizes GitHub CDN over CoinGecko.
+ * @skill id:sk-318305
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Prioritizes our GitHub CDN over external sources (CoinGecko).
- *
-*/
+ */
 
 (function() {
     'use strict';

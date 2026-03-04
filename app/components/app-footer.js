@@ -1,56 +1,17 @@
 /**
- * ================================================================================================
- * APP FOOTER COMPONENT - Application footer component
- * ================================================================================================
- *
- * PURPOSE: Vue component for application footer with market metrics.
- *
+ * #JS-zB467gvM
+ * @description Application footer: market metrics (FGI, VIX, BTC Dom, OI, FR, LSR), timezone, time, crypto news via AI.
+ * @skill id:sk-e0b8f3
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-e0b8f3
  *
- * DATA:
- * - Inherits theme from body (bg-body), switches with application theme
- * - Fixed positioning at bottom of page
- * - Displays market metrics (FGI, VIX, BTC Dominance, OI, FR, LSR)
- * - Displays time in selected timezone (clickable for timezone selection)
- * - Updates metrics 3 times per day (09:00, 12:00, 18:00 MSK)
- * - Displays main crypto news via AI provider (YandexGPT, clickable for switching)
+ * DATA: theme from body, fixed bottom; fgi, vix, btcDom, oi, fr, lsr (+ Value); timezone, timeDisplay (ABBR:hh.mm); currentNewsIndex, currentNews, currentNewsTranslated. Metrics 3×/day (09/12/18 MSK).
  *
- * DATA:
- * - Market metrics: fgi, vix, btcDom, oi, fr, lsr (string values)
- * - Numeric values: fgiValue, vixValue, btcDomValue, oiValue, frValue, lsrValue
- * - Timezone: timezone (default 'Europe/Moscow')
- * - Time: timeDisplay (format "ABBR:hh.mm", where ABBR is timezone abbreviation)
- * - Crypto news: currentNewsIndex (0-4), currentNews (text), currentNewsTranslated (translation)
+ * METHODS: fetchMarketIndices, getTime, getTimezoneAbbr, load/saveTimezone, openTimezoneModal, getNextUpdateTime, scheduleNextUpdate, formatOIMobile, formatValueMobile, fetchSingleCryptoNews, parseSingleNews, cleanMarkdown/cleanTranslation, save/loadNewsState, switchToNextNews, loadTranslationLanguage, updateTranslationLanguage.
  *
- * METHODS:
- * - fetchMarketIndices() — load all metrics via window.marketMetrics
- * - getTime() — get current time in selected timezone
- * - getTimezoneAbbr() — get timezone abbreviation
- * - updateTime() — update displayed time
- * - loadTimezone() — load timezone from cache
- * - saveTimezone(timezone) — save timezone to cache
- * - openTimezoneModal() — open timezone selection modal (emits event)
- * - getNextUpdateTime() — calculate next update time (09:00, 12:00, 18:00 MSK)
- * - scheduleNextUpdate() — schedule next update
- * - formatOIMobile() — format OI for mobile (compact format with billion suffix, e.g. "8.4B")
- * - formatValueMobile() — format value for mobile (round to tenths, except FR)
- * - fetchSingleCryptoNews(index) — fetch single crypto news via AI provider (with translation, index 0-4)
- * - parseSingleNews(response) — parse single news with translation by explicit markers (---NEWS---, ---TRANSLATION---, ---END---)
- * - cleanMarkdown(text) — strip markdown and artifacts (footnote numbers after dots)
- * - cleanTranslation(text) — strip translation artifacts (prompt examples, prefixes)
- * - saveCurrentNewsState() — save current news index to cache
- * - loadNewsState() — load last news index from cache
- * - switchToNextNews() — switch to next (less significant) news (async, loads on demand)
- * - loadTranslationLanguage() — load translation language from cache
- * - updateTranslationLanguage(language) — update translation language and reload news with new translation
- *
- * EVENTS:
- * - open-timezone-modal — emitted on footer time click to open timezone selection modal
- *
-*/
+ * EVENTS: open-timezone-modal.
+ */
 
 window.appFooter = {
     template: '#app-footer-template',

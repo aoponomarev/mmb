@@ -1,24 +1,16 @@
 /**
- * ================================================================================================
- * AUTH CLIENT - Client for Google OAuth authorization via Cloudflare Workers
- * ================================================================================================
- *
- * PURPOSE: Client-side OAuth flow implementation: initiating authorization,
- * callback handling, code-to-token exchange, token management.
- *
+ * #JS-He2SJ9Dp
+ * @description Client-side Google OAuth via Cloudflare Workers: initiate auth, callback, code-to-token, token storage and refresh.
+ * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: id:sk-7cf3f7
- *
  * FEATURES:
- * - Initiate Google OAuth with state generation for CSRF protection
- * - Handle callback from Google (extract code and state from URL)
- * - Exchange authorization code for access token via Workers endpoint
- * - Token storage in cache with expiry check
- * - Automatic token refresh when needed
- *
-*/
+ * - Initiate Google OAuth with state for CSRF protection
+ * - Handle callback (extract code and state from URL)
+ * - Exchange code for access token via Workers endpoint
+ * - Token in cache with expiry; automatic refresh when needed
+ */
 
 (function() {
     'use strict';

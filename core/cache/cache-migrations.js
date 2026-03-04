@@ -1,34 +1,22 @@
 /**
- * ================================================================================================
- * CACHE MIGRATIONS - Cache data versioning and migrations
- * ================================================================================================
+ * #JS-FWhpDFTW
+ * @description Schema migrations for cache user data; auto-apply when reading old-version data.
+ * @skill id:sk-3c832d
  *
- * PURPOSE: Ensure compatibility when user data structure in cache changes.
- * Automatic migrations apply when reading data from old version.
- * Skill: id:sk-3c832d
+ * PURPOSE: Keep cache compatible when user data structure changes; app versioning (v:{hash}:) is separate.
  *
  * PRINCIPLES:
- * - Each cache entry contains version field (data schema version)
- * - Migrations defined in MIGRATIONS object per key
- * - Migrations applied sequentially from current to target version
- * - Backward compatibility: old data auto-converted to new format
+ * - Version field in cache entry; MIGRATIONS per key; apply sequentially; idempotent migrations
+ * - App versioning: external API data, auto invalidation. Schema migrations: user data, preserve on structure change
  *
- * PRINCIPLES:
- * - App versioning (v:{hash}:{key}) — for data from external APIs, auto invalidation
- * - Schema migrations (version in data) — for user data, preserve data when structure changes
+ * HOW TO ADD MIGRATION:
+ * 1. Set VERSIONS.{key} in cache-config.js
+ * 2. Add MIGRATIONS.{key}[version] = (data) => migratedData; handle all old formats
  *
- * EXAMPLE:
- * 1. Add version in cache-config.js → VERSIONS.{key}
- * 2. Create migration function in MIGRATIONS.{key}[version]
- * 3. Migration must be idempotent (safe to apply repeatedly)
- * 4. Migration must handle all possible old version formats
+ * EXAMPLE: If portfolios change structure from v1.0.0 to v1.1.0 — update VERSIONS.portfolios = '1.1.0', add MIGRATIONS.portfolios['1.1.0'] = (data) => { ... }.
  *
- * EXAMPLE:
- * If portfolios changed structure from v1.0.0 to v1.1.0:
- * 1. Update VERSIONS.portfolios = '1.1.0'
- * 2. Add migration: MIGRATIONS.portfolios['1.1.0'] = (data) => { return data; }
- *
- * REFERENCE: General caching principles: id:sk-3c832d
+ * REFERENCES:
+ * - cache-config.js for VERSIONS; General caching: id:sk-3c832d
  */
 
 (function() {

@@ -1,45 +1,14 @@
 /**
- * ================================================================================================
- * BUTTON COMPONENT - Button component
- * ================================================================================================
+ * #JS-5n33791x
+ * @description Reusable button: icon, text, suffix, Bootstrap variants/sizes/states, deterministic instance hashes.
+ * @skill-anchor id:sk-f449b3 #for-template-logic-separation #not-doc-duplication
  *
- * PURPOSE: Reusable button with icon, text, suffix, Bootstrap variants,
- * sizes, states, responsiveness and deterministic instance hashes.
- *
- * Event handling:
- * // @skill-anchor id:sk-f449b3 #for-template-logic-separation #not-doc-duplication
- * Layout and CSS: see template header in `shared/templates/button-template.js`
+ * PURPOSE: Layout and CSS: see shared/templates/button-template.js
  *
  * COMPONENT API:
- *
- * Props:
- * - label (String) — button text (desktop; used when icon or labelShort set)
- * - labelShort (String) — short text for mobile (used when icon not set)
- * - icon (String) — left icon CSS class (Font Awesome, Material Symbols)
- * - suffix (Object | Array) — right suffix. Single object or array. Element: { type, value, variant, expanded, tooltip }
- * - tooltipIcon (String) — tooltip for left icon
- * - tooltipText (String) — tooltip for text area
- * - tooltipSuffix (String) — tooltip for suffix (overrides suffix.tooltip, single suffix only)
- * - variant (String, default: 'primary') — Bootstrap variant
- * - size (String) — 'sm', 'lg' or null (default)
- * - disabled (Boolean) — disabled state
- * - loading (Boolean) — loading state (spinner instead of icon/text)
- * - type (String, default: 'button') — 'button', 'submit', 'reset'
- * - iconOpacity (Number, default: 1) — left icon opacity (0-1)
- * - buttonId (String) — instance id for deterministic hash (instanceHash)
- * - classesAdd (Object, default: {}) — classes to add. Shape: { root, icon, label, suffix }
- * - classesRemove (Object, default: {}) — classes to remove. Shape: { root, icon, label, suffix }
- * - buttonAttributes (Object, default: {}) — arbitrary attributes for root <button>. For Bootstrap API (dropdown, modal etc.)
- *
- * Emits:
- * - click — general click (fired on any zone)
- * - click-icon — left icon click (also fires click)
- * - click-text — text area click (also fires click)
- * - click-suffix — suffix click (also fires click, passes suffix element as second arg)
- *
- * Note: All zones emit click by default. Separate events (click-icon, click-text, click-suffix) only when bound in parent.
- *
-*/
+ * Props: label, labelShort, icon, suffix (Object|Array), tooltipIcon, tooltipText, tooltipSuffix, variant, size, disabled, loading, type, iconOpacity, buttonId, classesAdd, classesRemove, buttonAttributes.
+ * Emits: click, click-icon, click-text, click-suffix (all zones emit click by default).
+ */
 
 window.cmpButton = {
     template: '#button-template',

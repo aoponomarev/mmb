@@ -1,22 +1,16 @@
 /**
- * ================================================================================================
- * MESSAGES STORE - Global system messages store
- * ================================================================================================
- *
- * PURPOSE: Single reactive store for all app system messages.
- * Works with Vue (reactivity) and without (via events).
+ * #JS-1Ccp719R
+ * @description Single reactive store for app system messages; Vue.reactive or CustomEvent fallback; priority, scope, eventBus.
+ * @skill id:sk-483943
  *
  * PRINCIPLES:
- * - Reactive store via Vue.reactive (if available)
- * - Fallback to CustomEvent for non-Vue pages
- * - Message priority (danger > warning > info > success)
- * - Integration with eventBus for global events
- * - Scope support for message filtering
+ * - Reactive via Vue.reactive (if available); fallback CustomEvent for non-Vue
+ * - Priority: danger > warning > info > success; scope for filtering; eventBus integration
  *
  * USAGE:
- * window.AppMessages.push({ text: 'Message text', type: 'info', scope: 'global' })
- * window.AppMessages.dismiss(id)
- * window.AppMessages.clear('global')
+ * window.AppMessages.push({ text: 'Message text', type: 'info', scope: 'global' });
+ * window.AppMessages.dismiss(id);
+ * window.AppMessages.clear('global');
  *
  * REFERENCES:
  * - Messages config: core/config/messages-config.js

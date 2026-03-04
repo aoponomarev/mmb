@@ -1,34 +1,18 @@
 /**
- * ================================================================================================
- * CLOUDFLARE CONFIG - Cloudflare Workers API configuration
- * ================================================================================================
- * Skill: id:sk-02d3ea
+ * #JS-4r2GQb12
+ * @description SSOT for Cloudflare Workers API: base URL, endpoints for portfolios, datasets, auth.
+ * @skill id:sk-02d3ea
  *
- * PURPOSE: SSOT for all Cloudflare Workers API parameters.
- * Base URL, endpoints for portfolios, datasets, auth.
+ * PURPOSE: Single place for all Workers API parameters; no duplication in components or clients.
  *
  * PRINCIPLES:
- * - All endpoints are defined here and used everywhere
- * - Duplicating values in components or API clients is forbidden
- * - Use getter functions instead of direct CONFIG access
+ * - All endpoints defined here; use getter functions, not direct CONFIG access
  * - Validate configuration presence at initialization
- *
- * PRINCIPLES:
- * {
- *   workers: {
- *     baseUrl: '...',
- *     endpoints: {
- *       auth: {...},
- *       portfolios: {...},
- *       datasets: {...}
- *     }
- *   }
- * }
+ * - Structure: workers.baseUrl, workers.endpoints.{ auth, portfolios, datasets }
  *
  * REFERENCES:
- * - SSOT principles: id:sk-e0b8f3
- * - Integration plan: id:sk-02d3ea
- * - Cloudflare infrastructure: id:sk-02d3ea
+ * - SSOT: id:sk-e0b8f3
+ * - Integration / infrastructure: id:sk-02d3ea
  */
 
 (function() {

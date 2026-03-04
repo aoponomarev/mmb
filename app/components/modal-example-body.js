@@ -1,20 +1,10 @@
 /**
- * ================================================================================================
- * MODAL EXAMPLE BODY COMPONENT - Example component for modal button system demo
- * ================================================================================================
- *
- * PURPOSE: Demo of modal button management system.
- *
+ * #JS-uD33Z1qP
+ * @description Demo of modal button management; modalApi inject; buttons in header and footer.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- *
- * FEATURES:
- * - Button registration via inject modalApi
- * - Reactive button state updates on form data change
- * - Buttons in header and footer simultaneously
- *
-*/
+ */
 
 window.modalExampleBody = {
     template: `

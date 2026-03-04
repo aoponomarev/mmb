@@ -1,20 +1,11 @@
 /**
- * ================================================================================================
- * BASE AI PROVIDER - Base interface for AI providers
- * ================================================================================================
- *
- * PURPOSE: Base class for all AI providers (YandexGPT, etc.)
- *
+ * #JS-7X4FU63h
+ * @description Base class for AI providers (YandexGPT, etc.); unified interface sendRequest, getDefaultModel, getAvailableModels.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Provides unified interface for working with different providers.
  *
- * Skill: id:sk-bb7c8e
- *
- * USAGE:
- * Extend this class to create new providers:
- * class MyProvider extends BaseAIProvider { ... }
- *
+ * USAGE: class MyProvider extends BaseAIProvider { ... }
  */
 
 (function() {

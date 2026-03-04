@@ -1,21 +1,21 @@
 /**
- * ================================================================================================
- * BASE DATA PROVIDER - Base class for coin data providers
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Unified interface for working with various cryptocurrency data sources
- *
+ * #JS-17n4k14b
+ * @description Base class for coin data providers; unified interface for CoinGecko, CoinMarketCap, Binance, etc.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * (CoinGecko, CoinMarketCap, Binance, etc.).
+ *
+ * PURPOSE: Abstract base; all concrete providers extend this and implement getTopCoins, searchCoins, etc.
  *
  * USAGE:
  * class MyProvider extends BaseDataProvider {
  *   async getTopCoins(count, sortBy) { ... }
- *   // ... other methods
+ *   async searchCoins(query, options) { ... }
  * }
  *
+ * REFERENCES:
+ * - Data provider manager: core/api/data-provider-manager.js
+ * - Provider config: core/config/data-providers-config.js
  */
 
 (function() {

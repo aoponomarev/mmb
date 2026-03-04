@@ -1,7 +1,6 @@
 /**
- * ================================================================================================
- * ICON MANAGER TEMPLATE - Icon manager modal template
- * ================================================================================================
+ * #JS-oQ3b8Dja
+ * @description x-template for icon manager modal (GitHub token, external URL, upload).
  */
 
 (function() {

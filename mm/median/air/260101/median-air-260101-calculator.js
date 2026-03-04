@@ -1,13 +1,9 @@
 /**
- * ================================================================================================
- * MEDIAN AIR 260101 CALCULATOR - Median model version (A.I.R.) 26.01.01
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Doc: docs/A_MATH_MODELS.md
+ * #JS-MW4CKfHg
+ * @description Median/AIR/260101 calculator; AGR clamped, empty PV guarded, CGR slope div-by-zero guarded.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: Pin current working model as version Median/AIR/260101.
- * AGR clamped to [-agrLimit, agrLimit]. Empty PV arrays guarded.
- * CGR slope division-by-zero guarded (dt === 0).
+ * REFERENCES: docs/A_MATH_MODELS.md
  */
 
 (function() {

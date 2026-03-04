@@ -1,9 +1,7 @@
 /**
- * ================================================================================================
- * PORTFOLIO FORM MODAL BODY - Portfolio form component (D.2)
- * ================================================================================================
- *
- * Skill: id:sk-c3d639
+ * #JS-dc3EKYZn
+ * @description Portfolio form modal body (D.2); create/edit form.
+ * @skill id:sk-c3d639
  */
 
 (function() {

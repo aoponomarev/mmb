@@ -1,47 +1,22 @@
 /**
- * ================================================================================================
- * STORAGE LAYERS - Data partitioning by storage layers
- * ================================================================================================
- *
- * PURPOSE: Distribute cache keys across storages (localStorage/IndexedDB) by size and access frequency.
+ * #JS-Fc2QzeBn
+ * @description Partition cache keys across localStorage (hot) and IndexedDB (warm/cold) by size and access frequency.
  * @skill id:sk-3c832d
  *
- * HOT (localStorage, ≤5MB) — synchronous access, fast:
- * - settings, theme, timezone, favorites, ui-state, active-tab — settings and UI state
- *   Reason: small size (<10KB), frequent access on every render/action, sync is important
- * - icons-cache — object {coinId: url}
- *   Reason: size ~100-500KB, access on every coin display, sync critical for rendering
+ * PURPOSE: Route keys to the right storage layer for performance and size limits.
  *
- * WARM (IndexedDB, ≤50MB) — async access, medium size:
- * - coins-list — list of all coins from CoinGecko API
- *   Reason: size 1-5MB (JSON), frequent access for search/filter, structured data
- * - market-metrics — market metrics
- *   Reason: size 100KB-2MB, frequent access, updated regularly
- * - api-cache — API response cache
- *   Reason: size depends on request count, frequent access, structured data
- *
- * COLD (IndexedDB, ≤500MB) — async access, large volumes:
- * - time-series — price time series
- *   Reason: size 10-100MB+ (thousands of points), rare access (on demand), indexes needed for search
- * - history — operation history
- *   Reason: size grows over time, rare access, indexes needed
- * - portfolios, strategies — portfolios and strategies
- *   Reason: size depends on user (can be large), rare access, structured data
- * - correlations — correlations between assets
- *   Reason: size can be large (matrices), rare access, computed data
+ * LAYERS:
+ * - HOT (localStorage, ≤5MB), sync access: settings, theme, timezone, favorites, ui-state, active-tab (small, frequent); icons-cache (object {coinId: url}, ~100–500KB, sync critical for rendering)
+ * - WARM (IndexedDB, ≤50MB), async: coins-list (1–5MB, search/filter), market-metrics, api-cache (frequent, structured)
+ * - COLD (IndexedDB, ≤500MB), async, on-demand: time-series (10–100MB+), history, portfolios, strategies, correlations (indexes for search)
  *
  * ADDING A NEW KEY:
- * - localStorage: sync access, ~5MB limit, simple structures
- * - IndexedDB: async access, large volumes, structured data, indexes
- * - Limits: overflow protection, priority cleanup (cold → warm → hot)
- *
- * ADDING A NEW KEY:
- * 1. Estimate size (<100KB → hot, 100KB-10MB → warm, >10MB → cold)
+ * 1. Estimate size (<100KB → hot, 100KB–10MB → warm, >10MB → cold)
  * 2. Estimate access frequency (every render → hot/warm, on demand → cold)
- * 3. Estimate data type (simple objects → localStorage, arrays/structures → IndexedDB)
- * 4. Add key to LAYERS.{layer}.keys array
+ * 3. Add key to LAYERS.{layer}.keys; overflow protection, cleanup priority: cold → warm → hot
  *
- * REFERENCE: General caching principles: id:sk-3c832d
+ * REFERENCES:
+ * - General caching principles: id:sk-3c832d
  */
 
 (function() {

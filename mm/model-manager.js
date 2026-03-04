@@ -1,11 +1,9 @@
 /**
- * ================================================================================================
- * MODEL MANAGER - Math models manager
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Doc: docs/A_MATH_MODELS.md
+ * #JS-nP3a49iZ
+ * @description Register, switch and manage active math model.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: Register, switch and manage active math model.
+ * REFERENCES: docs/A_MATH_MODELS.md
  */
 
 (function() {

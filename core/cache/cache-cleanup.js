@@ -1,26 +1,20 @@
 /**
- * ================================================================================================
- * CACHE CLEANUP - Cache cleanup policies
- * ================================================================================================
+ * #JS-kq2NZeh1
+ * @description Automatic cleanup of stale cache data to prevent storage overflow.
+ * @skill id:sk-3c832d
  *
- * PURPOSE: Automatic cleanup of stale data to prevent storage overflow.
- * Skill: id:sk-3c832d
+ * PURPOSE: Cleanup policies per key; when quota reached run cold → warm → hot.
  *
  * CLEANUP POLICIES:
- * - time-series: maxAge 90 days, compression true
- *   Reason: time series older than 3 months rarely used, compress to 1 point/hour saves space
- * - history: maxAge 1 year, compression true
- *   Reason: history older than year rarely needed, archiving preserves data but reduces volume
- * - portfolios, strategies: maxAge null (no limit)
- *   Reason: user data, must persist
- * - api-cache: maxAge 7 days
- *   Reason: old API responses stale, 7 days sufficient for fallback on failures
+ * - time-series: maxAge 90 days, compression true (old data rarely used, compress to 1 point/hour)
+ * - history: maxAge 1 year, compression true (archiving preserves data, reduces volume)
+ * - portfolios, strategies: maxAge null (user data, must persist)
+ * - api-cache: maxAge 7 days (stale responses, 7 days for fallback)
  *
- * CLEANUP ORDER:
- * On storage quota reached cleanup runs: cold → warm → hot
- * Reason: cold has largest data (time series), hot has critical settings
+ * CLEANUP ORDER: On quota reached — cold → warm → hot (cold largest, hot critical settings).
  *
- * REFERENCE: Caching principles: id:sk-3c832d
+ * REFERENCES:
+ * - Caching principles: id:sk-3c832d
  */
 
 (function() {

@@ -1,13 +1,8 @@
 /**
- * ================================================================================================
- * POSTGRES SETTINGS TEMPLATE - PostgreSQL API settings component template
- * ================================================================================================
+ * #JS-ZP2M2QVZ
+ * @description Template for postgres-settings component (base URL, sync toggle).
  *
- * PURPOSE: Template for postgres-settings component.
- *
- * REFERENCES:
- * - Component: app/components/postgres-settings.js
- * - Template principles: id:sk-483943
+ * REFERENCES: app/components/postgres-settings.js; id:sk-483943
  */
 
 (function() {

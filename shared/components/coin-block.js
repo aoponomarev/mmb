@@ -1,24 +1,12 @@
 /**
- * ================================================================================================
- * COIN BLOCK - Coin display component
- * ================================================================================================
- *
- * PURPOSE: Reusable component for coin info. Extends cell-coin (coin display, dropdown, favorites).
- *
+ * #JS-2d36obxo
+ * @description Reusable coin display component; extends cell-coin (dropdown, favorites).
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * USAGE:
- * <coin-block
- *   :coin-id="coin.id"
- *   :symbol="coin.symbol"
- *   :name="coin.name"
- *   :image="coin.image"
- *   @context-menu="handleContextMenu">
- * </coin-block>
- *
-*/
+ * USAGE: <coin-block :coin-id="coin.id" :symbol="coin.symbol" :name="coin.name" :image="coin.image" @context-menu="handleContextMenu" />
+ */
 
 (function() {
     'use strict';

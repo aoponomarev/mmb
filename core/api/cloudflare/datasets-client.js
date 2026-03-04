@@ -1,24 +1,17 @@
 /**
- * ================================================================================================
- * DATASETS CLIENT - API client for datasets via Cloudflare Workers
- * ================================================================================================
- *
- * PURPOSE: Browser client for time series and metrics via Cloudflare Workers API.
- *
+ * #JS-Mq23dkJ1
+ * @description Browser client for time series and metrics via Cloudflare Workers API; JWT auth, batch support.
+ * @skill id:sk-02d3ea
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- *
- * Skill: id:sk-02d3ea
  *
  * FEATURES:
  * - Automatic Authorization header with JWT token
  * - Network and auth error handling
  * - Batch operation support for data persistence
  *
- * NOTE: R2 storage is deferred, endpoints return stubs.
- * Full functionality will be implemented after R2 activation.
- *
-*/
+ * NOTE: R2 storage deferred; endpoints return stubs until R2 activation.
+ */
 
 (function() {
     'use strict';

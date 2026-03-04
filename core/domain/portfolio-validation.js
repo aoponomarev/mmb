@@ -1,13 +1,9 @@
 /**
- * ================================================================================================
- * PORTFOLIO VALIDATION - Contract validator for portfolio drafts
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A4`)
- * Doc: docs/A_PORTFOLIO_SYSTEM.md
+ * #JS-hG34MvdS
+ * @description Contract validator for portfolio drafts; invariants: sum=100, weight>=1, no duplicate coinId, disabled => locked + weight=1.
+ * @skill id:sk-c3d639
  *
- * Enforces invariants: sum=100, weight>=1, no duplicate coinId,
- * disabled => locked + weight=1.
+ * REFERENCES: docs/A_PORTFOLIO_SYSTEM.md; legacy donor recipe-portfolio-engine-mvp-hardening (ais-portfolio-controls.md#LIR-005.A4).
  */
 (function() {
     'use strict';

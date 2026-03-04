@@ -1,27 +1,13 @@
 /**
- * ================================================================================================
- * YANDEX CACHE PROVIDER - Data provider from PostgreSQL (Yandex Cloud)
- * ================================================================================================
- *
- * PURPOSE: Reads coin data from coin_market_cache (PostgreSQL Yandex Cloud),
- *
+ * #JS-qz3WnWnA
+ * @description Data provider from PostgreSQL (Yandex Cloud) coin_market_cache; updated by cron every 15 min.
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- *       updated by cron every 15 minutes via coingecko-fetcher.
  *
- * ADVANTAGES over direct CoinGecko:
- * - No rate limit (data already in DB)
- * - Instant load (no delays between chunks)
- * - Data no older than 15 minutes
- * - Works without internet connection to CoinGecko
+ * ADVANTAGES: No rate limit, instant load, data ≤15 min old, works without CoinGecko connection.
  *
- * ENDPOINT: GET /api/coins/market-cache via app-api (Yandex Cloud Function)
- * API Gateway: d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net
- *
- * RESPONSE FORMAT:
- * { coins: [...], count: 250, fetched_at: "2026-02-27T..." }
- *
-*/
+ * ENDPOINT: GET /api/coins/market-cache (API Gateway). Response: { coins, count, fetched_at }.
+ */
 
 (function() {
     'use strict';

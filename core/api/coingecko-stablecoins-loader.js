@@ -1,38 +1,20 @@
 /**
- * ================================================================================================
- * COINGECKO STABLECOINS LOADER
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Fetch stablecoins list from CoinGecko (official source),
- *
+ * #JS-ax34MBX8
+ * @description Fetch stablecoins from CoinGecko; cache (versioned stablecoins-list), pass to coinsConfig; supports non-USD by base currency detection.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * save to cache (versioned key stablecoins-list) and pass to
- * coinsConfig (SSOT). Supports non-USD stables by detecting
- * base currency from proximity to 1 for multiple currencies.
  *
- * USES:
- * - window.cacheManager (for cache, TTL set in call)
- * - window.coinsConfig (for setting actual list)
+ * USES: window.cacheManager, window.coinsConfig.
  *
- * API:
- *   await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
+ * USAGE:
+ * await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
  *
- * Source:
- * - CoinGecko markets: /coins/markets?vs_currency={currency}&category=stablecoins&per_page=250&page=N
- *   For base currency detection use vs_currency from ['usd','eur','gbp'] and
- *   pick the one where price is closest to 1 (tolerance ±8%).
+ * SOURCE: CoinGecko /coins/markets?vs_currency={currency}&category=stablecoins&per_page=250; base currency from ['usd','eur','gbp'] closest to 1 (±8%).
  *
- * FILE PROTOCOL:
- * - On file:// protocol ALL requests MUST be proxied via Cloudflare Worker
- * - buildUrl() auto-selects proxy (file://) or direct request (HTTP/HTTPS)
- * - FORBIDDEN to block file:// requests with early return
- * - Details: `id:sk-7cf3f7`
+ * FILE PROTOCOL: On file:// all requests proxied via Cloudflare Worker; buildUrl() auto-selects proxy or direct; details id:sk-7cf3f7.
  *
- * LIMITATIONS:
- * - CoinGecko limits (30-50 req/min). Shared RateLimiter used (SSOT).
- * - No UI alerts on demand; console only.
+ * LIMITATIONS: CoinGecko 30-50 req/min; shared RateLimiter; no UI alerts on demand.
  */
 
 (function() {

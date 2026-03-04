@@ -1,96 +1,17 @@
 /**
- * ================================================================================================
- * BUTTON GROUP COMPONENT - Button group component
- * ================================================================================================
- *
- * PURPOSE: Vue wrapper over Bootstrap .btn-group with:
- *
+ * #JS-Na3ZaWJk
+ * @description Vue wrapper over Bootstrap .btn-group; button/checkbox/radio; responsive collapse to dropdown; style inheritance; instanceHash.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * - Three button types: button (via cmp-button), checkbox, radio (native HTML)
- * - Style inheritance (variant, size) from group to buttons
- * - Responsive collapse into dropdown at breakpoint
- * - 100% compatibility with Bootstrap JS API
  *
- * Button configuration:
- * - Dual render: button group (>= breakpoint) and dropdown (< breakpoint)
- * - CSS toggle via Bootstrap utilities (d-none, d-md-inline-flex)
- * - Map buttons[] to DropdownMenuItem when collapsed
- * - Event sync between buttons and menu items
- * - Deterministic instance hashes (instanceHash)
+ * PURPOSE: Dual render (group >= breakpoint, dropdown < breakpoint); buttons[] → DropdownMenuItem when collapsed; Layout: shared/templates/button-group-template.js
  *
  * COMPONENT API:
- *
- * Input (props):
- * Group base props:
- * - size (String) — group size: 'sm', 'lg' or '' (default). Applied to all buttons unless overridden
- * - variant (String, default: 'secondary') — base Bootstrap variant for all buttons. Button inherits from group if not set
- * - vertical (Boolean, default: false) — vertical group orientation (adds btn-group-vertical)
- * - verticalBreakpoint (String) — responsive vertical: 'sm' (576px). Mobile (< 576px) vertical, desktop (>= 576px) horizontal
- * - role (String, default: 'group') — ARIA role of group
- * - ariaLabel (String) — ARIA label for group
- * - classesAdd (Object, default: {}) — classes to add to component elements. Shape: { root, dropdown, dropdownButton, dropdownMenu }
- * - classesRemove (Object, default: {}) — classes to remove from component elements. Shape: { root, dropdown, dropdownButton, dropdownMenu }
- * Responsiveness (collapse into dropdown):
- * - collapseBreakpoint (String) — breakpoint for group collapse: 'sm', 'md', 'lg', 'xl', 'xxl'. If omitted, group always shown as buttons
- * - dropdownLabel (String, default: 'Actions') — dropdown button label when collapsed
- * - dropdownIcon (String) — dropdown button icon (Font Awesome class)
- * - dropdownVariant (String) — dropdown button variant. If omitted, inherits from group variant
- * Button configuration:
- * - buttons (Array, required) — array of button configs. Each element is ButtonConfig:
- *   ButtonConfig:
- *   - type (String, required) — 'button', 'checkbox' or 'radio'
- *   - label (String) — button text (all types)
- *   - labelShort (String) — short label for mobile (button only)
- *   - icon (String) — icon CSS class (Font Awesome, Material Symbols)
- *   - variant (String) — Bootstrap variant (overrides group)
- *   - size (String) — button size (overrides group)
- *   - disabled (Boolean) — disabled state
- *   - loading (Boolean) — loading state (button only)
- *   - active (Boolean) — active state (checkbox/radio)
- *   - suffix (Object | Array) — suffix on the right (button only). Same format as cmp-button
- *   - tooltip (String) — general tooltip
- *   - tooltipIcon (String) — icon tooltip (button only)
- *   - tooltipText (String) — text tooltip (button only)
- *   - tooltipSuffix (String) — tooltip for suffix (button only)
- *   - [key: data-bs-${string}] (any) — arbitrary Bootstrap data-* for JS API transparency
- *   - [key: string] (any) — any other attributes
- *
- * Output events (emits):
- * - button-click — button click (type="button"). Payload: (event, { button, index, type })
- * - button-click-icon — icon click (type="button"). Payload: (event, { button, index, type })
- * - button-click-text — text click (type="button"). Payload: (event, { button, index, type })
- * - button-click-suffix — suffix click (type="button"). Payload: (event, { button, index, type })
- * - button-change — checkbox/radio change. Payload: (event, { button, index, active, type })
- * - button-toggle — checkbox/radio toggle. Payload: ({ button, index, active, type })
- *
- * Slots:
- * - default — button content (fallback for custom buttons)
- * - button-{index} — override specific button by index. Slot props: { button, index }
- *
- * Group base props:
- * Layout and CSS: see template header in `shared/templates/button-group-template.js`
- * cmp-button usage for type="button":
- * - All cmp-button props supported via ButtonConfig
- * - Responsiveness via .btn-responsive works automatically
- * - Suffix and tooltips fully supported
- * Style inheritance:
- * - Component inherits variant and size from group to buttons
- * - Button without own variant inherits from group
- * - Button without own size inherits from group
- * - Button can override group styles via own variant or size
- * Data mapping when collapsed:
- * - ButtonConfig → DropdownMenuItem: label → title, icon → icon, suffix → suffix, type="checkbox/radio" + active → active: true, disabled → disabled, tooltip → tooltipText
- * State sync:
- * - Component uses internal buttonStates for sync
- * - On mount state is init from props
- * - On checkbox/radio change state updates in buttonStates
- * - For radio, other radios in group are reset on select
- * - State syncs with dropdown when collapsed
- * - Events sync between buttons and menu items
- *
-*/
+ * Props: size, variant, vertical, verticalBreakpoint, role, ariaLabel, classesAdd, classesRemove, collapseBreakpoint, dropdownLabel, dropdownIcon, dropdownVariant, buttons (ButtonConfig: type, label, labelShort, icon, variant, size, disabled, loading, active, suffix, tooltips, data-bs-*).
+ * Emits: button-click, button-click-icon, button-click-text, button-click-suffix, button-change, button-toggle.
+ * Slots: default, button-{index}. State sync: buttonStates, dropdown sync, radio reset.
+ */
 
 window.cmpButtonGroup = {
     template: '#button-group-template',

@@ -1,9 +1,7 @@
 /**
- * ================================================================================================
- * ICON MANAGER MODAL BODY - Icon management component in modal
- * ================================================================================================
- *
- * Skill: id:sk-318305
+ * #JS-WK5L8WFt
+ * @description Icon management in modal; GitHub token, coin icons upload.
+ * @skill id:sk-318305
  */
 
 (function() {

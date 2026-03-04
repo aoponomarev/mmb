@@ -1,36 +1,24 @@
 /**
- * ================================================================================================
- * MESSAGES CONFIG - System messages configuration (v2 - simplified schema)
- * ================================================================================================
- *
- * PURPOSE: SSOT for all system messages in the application.
- * Source texts in Russian (base language).
- * Skill: id:sk-02d3ea
+ * #JS-2Z2J49xj
+ * @description SSOT for system messages (v2 simplified schema); source texts in Russian (base language).
+ * @skill id:sk-02d3ea
+ * @skill-anchor id:sk-f2bc48 #for-short-message-keys #for-short-message-types
  *
  * PRINCIPLES:
  * - Short keys: e.net, e.rate, w.proxy, i.switch, s.ok
  * - Short types: d (danger), w (warning), i (info), s (success)
  * - Minimal structure: { t: text, d: details, type, p: priority }
- * - Translations via messages-translator.js with simplified format
- *
- * Source texts in Russian (base language).
- * - e.* - errors
- * - w.* - warnings
- * - i.* - info
- * - s.* - success
- * - v.* - validation
- * - a.* - auth
+ * - Translations via messages-translator.js
+ * - Key prefixes: e.* errors, w.* warnings, i.* info, s.* success, v.* validation, a.* auth
  *
  * USAGE:
- * window.messagesConfig.get('e.net')
- * window.messagesConfig.get('e.rate', { time: '5 minutes' })
+ * window.messagesConfig.get('e.net');
+ * window.messagesConfig.get('e.rate', { time: '5 minutes' });
  *
  * REFERENCES:
- * - Single source of truth principles: id:sk-e0b8f3
- * - Translation module: core/api/messages-translator.js
+ * - SSOT: id:sk-e0b8f3
+ * - Translation: core/api/messages-translator.js
  */
-
-// @skill-anchor id:sk-f2bc48 #for-short-message-keys #for-short-message-types
 (function() {
     'use strict';
 

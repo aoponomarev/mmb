@@ -1,62 +1,12 @@
 /**
- * ================================================================================================
- * AI API SETTINGS COMPONENT - AI API provider settings
- * ================================================================================================
- *
- * PURPOSE: AI API provider settings (YandexGPT) for modal window.
- * Allows switching between providers and configuring their parameters.
- *
+ * #JS-u72ZSLqH
+ * @description AI API provider settings modal (YandexGPT, GitHub, PostgreSQL); persistence via cache-manager; inject modalApi.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: id:sk-bb7c8e
- *
- * FEATURES:
- * - Provider switcher via radio buttons (YandexGPT, GitHub, PostgreSQL)
- * - Conditional display of settings fields based on selected provider
- * - Compact minimal interface
- * - Uses modal button management system
- * - Persistence via cache-manager
- * - API key validation
- * - "Saved, close?" state for Save button
- * - API key visibility toggle (eye icon)
- *
- * YANDEXGPT SETTINGS:
- * - yandexApiKey: Yandex Cloud API key (from IAM, shown only once on creation)
- * - yandexFolderId: Folder ID for Yandex Cloud (b1gv03a122le5a934cqj)
- * - yandexModel: Model URI (gpt://{folderId}/{model}/latest)
- * - Models: YandexGPT Lite, YandexGPT
- *
- * COMPONENT API:
- *
- * Data:
- * - provider (String) — current provider ('yandex')
- * - yandexApiKey (String) — Yandex API key
- * - yandexModel (String) — YandexGPT model
- * - initialProvider (String) — initial provider when modal opened
- * - initialYandexApiKey (String) — initial Yandex API key
- * - initialYandexModel (String) — initial Yandex model
- * - showYandexApiKey (Boolean) — Yandex API key visibility
- * - isSaved (Boolean) — successful save state
- * - yandexModels (Array) — list of available YandexGPT models
- *
- * Computed:
- * - hasChanges (Boolean) — whether fields have changes
- * - isValid (Boolean) — form validity (current provider API key non-empty)
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
- * Methods:
- * - loadSettings() — load settings from cache
- * - saveSettings() — save settings to cache
- * - handleCancel() — handle cancel (restore initial values or close)
- * - closeModal() — close modal and remove focus
- * - updateSaveButton() — update Save button state (normal/saved)
- * - toggleYandexApiKeyVisibility() — toggle Yandex API key visibility
- * - toggleGithubTokenVisibility() — toggle GitHub token visibility
- *
+ * FEATURES: Provider switcher, conditional fields, API key validation, Saved-close state, visibility toggle. YandexGPT: yandexApiKey, yandexFolderId, yandexModel (gpt://...). Data/computed/methods: provider, loadSettings, saveSettings, hasChanges, isValid.
  */
 
 window.aiApiSettings = {

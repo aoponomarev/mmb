@@ -1,32 +1,16 @@
 /**
- * ================================================================================================
- * COIN SETS CLIENT - Client for user coin sets API
- * ================================================================================================
- *
- * PURPOSE: Interact with Cloudflare Workers API for managing coin sets.
- *
+ * #JS-Nb3xmCJm
+ * @description Cloudflare Workers API client for user coin sets: CRUD, archive/unarchive.
+ * @skill id:sk-02d3ea
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * Skill: id:sk-02d3ea
- *
- * METHODS:
- * - getCoinSets(activeOnly) - Get user coin sets list
- * - getCoinSet(id) - Get set by ID
- * - createCoinSet(data) - Create new set
- * - updateCoinSet(id, data) - Update set
- * - deleteCoinSet(id) - Delete set
- * - toggleCoinSet(id, isActive) - Archive/unarchive set
- *
- * DEPENDENCIES:
- * - authClient (for token)
- * - cloudflareConfig (for API URL)
+ * METHODS: getCoinSets(activeOnly), getCoinSet(id), createCoinSet(data), updateCoinSet(id, data), deleteCoinSet(id), toggleCoinSet(id, isActive).
  *
  * USAGE:
  * const sets = await window.coinSetsClient.getCoinSets();
  * const newSet = await window.coinSetsClient.createCoinSet({ name: 'My Set', coin_ids: ['bitcoin'] });
- *
-*/
+ */
 
 (function() {
     'use strict';

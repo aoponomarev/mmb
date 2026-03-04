@@ -1,22 +1,8 @@
 /**
- * ================================================================================================
- * PORTFOLIOS MANAGER TEMPLATE - Portfolio management component template
- * ================================================================================================
+ * #JS-mP2tEPhZ
+ * @description Template for portfolios-manager: list, Create button, create/edit modal (cmp-modal, cmp-button).
  *
- * PURPOSE: Template for portfolios-manager with portfolio list and create/edit modal.
- *
- * REFERENCES:
- * - Portfolio list (cards or table)
- * - "Create portfolio" button
- * - Modal for portfolio create/edit
- *
- * BOOTSTRAP CLASSES:
- * - cmp-modal for modal
- * - cmp-button for action buttons
- * - All styles via Bootstrap classes
- *
- * REFERENCES:
- * - Component: app/components/portfolios-manager.js
+ * REFERENCES: app/components/portfolios-manager.js
  */
 
 (function() {

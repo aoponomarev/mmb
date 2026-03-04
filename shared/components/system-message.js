@@ -1,22 +1,12 @@
 /**
- * ================================================================================================
- * SYSTEM MESSAGE - Single system message (SSOT for template)
- * ================================================================================================
- *
- * PURPOSE: SSOT for displaying one system message. Used by cmp-system-messages to render each message.
- *
+ * #JS-su4917p5
+ * @description SSOT for single system message display; used by cmp-system-messages.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * USAGE:
- * <cmp-system-message
- *     :message="messageObject"
- *     @dismiss="handleDismiss"
- *     @action="handleAction"
- * />
- *
-*/
+ * USAGE: <cmp-system-message :message="messageObject" @dismiss="handleDismiss" @action="handleAction" />
+ */
 
 (function() {
     'use strict';

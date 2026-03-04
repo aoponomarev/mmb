@@ -1,17 +1,12 @@
 /**
- * ================================================================================================
- * MODAL BUTTONS COMPONENT - Renders modal buttons in header or footer from single registry
- * ================================================================================================
- *
- * PURPOSE: Render modal buttons in header or footer from unified button API.
- *
+ * #JS-r8Uair5H
+ * @description Renders modal buttons in header or footer from unified button registry; inject modalApi from cmp-modal.
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * API: props location ('header'|'footer'), leftOnly, rightOnly. Inject: modalApi (from cmp-modal).
- *
-*/
+ * API: props location ('header'|'footer'), leftOnly, rightOnly.
+ */
 
 window.cmpModalButtons = {
     template: '#modal-buttons-template',

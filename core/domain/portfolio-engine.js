@@ -1,19 +1,13 @@
 /**
- * ================================================================================================
- * PORTFOLIO ENGINE - Pure domain logic for portfolio draft/rebalance
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A2`)
- * Skill: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A3`)
- * Doc: docs/A_PORTFOLIO_SYSTEM.md
+ * #JS-rrLtero9
+ * @description Pure domain logic for portfolio draft/rebalance; canonical allocation; invariants sum=100, minWeight=1, no delete in rebalance.
+ * @skill id:sk-c3d639
  *
- * Purpose:
- * - Single canonical domain logic for allocation and rebalance.
- * - Pure functions with deterministic output.
- * - Strict invariants: sum=100, minWeight=1, no delete in rebalance.
+ * PURPOSE: Single canonical domain logic; pure functions, deterministic output.
  *
- * Functions: allocateWeights, normalizeWeights, lockAssetWeight, unlockAsset,
- *            setRebalanceEnabled, buildDraftAssets, autoSelectCandidates.
+ * FUNCTIONS: allocateWeights, normalizeWeights, lockAssetWeight, unlockAsset, setRebalanceEnabled, buildDraftAssets, autoSelectCandidates.
+ *
+ * REFERENCES: docs/A_PORTFOLIO_SYSTEM.md; legacy donor recipe-portfolio-engine-mvp-hardening (LIR-005.A2, LIR-005.A3).
  */
 (function() {
     'use strict';

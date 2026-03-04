@@ -10,12 +10,20 @@
  * @contract <contract-name>
  * @see id:sk-xxxxx
  *
- * PURPOSE: What this file does and why. One or two sentences.
- * PRINCIPLES | USAGE | REFERENCES: Optional free-form sections.
+ * PURPOSE: What this file does and why.
+ * (Optional sections below — use only those that fit; list is extensible, not dogma.)
+ * PRINCIPLES: - bullet list
+ * USAGE: - examples or API usage
+ * REFERENCES: - links to related docs/files
+ * PROBLEM: / SOLUTION: / HOW: / FEATURES: - when describing design or flow
+ * STRUCTURE: - when describing data shape
+ * TTL: / STRATEGIES: / LAYERS: / CACHE: - when describing cache/storage policy
+ * EXAMPLE: / HOW TO ADD: - when documenting procedures
+ * CHANGE HISTORY: / YANDEXGPT CONFIGURATION: - when file-specific blocks exist
  */
 // FILE HEADER TEMPLATE — Canonical structure for code file headers (SSOT: docs/ais/ais-file-header-standard.md).
 // Copy the block above into any .js/.ts/.css file. Replace #JS-XXXXXXXX with actual file id (#<EXT>-<hash>).
-// File id: hash from canonical relative path (see AIS). Order of slots is mandatory; omit optional slots if not needed.
+// Section headers: use as needed per file; list can be extended. Order of JSDoc slots is mandatory; omit optional slots if not needed.
 // Plan: docs/plans/file-header-rollout.md. Contract: is/contracts/file-header-contract.js. Gate: validate-file-headers.js.
 
 (function() {

@@ -1,21 +1,13 @@
 /**
- * ================================================================================================
- * MODAL COMPONENT - Modal component
- * ================================================================================================
- *
- * PURPOSE: Vue wrapper over Bootstrap Modal with full Bootstrap API access.
- *
+ * #JS-HF48eDDR
+ * @description Vue wrapper over Bootstrap Modal; full Bootstrap API; title from modals-config; provide/inject modalApi, registerButton, getButtonsForLocation.
  * @skill-anchor id:sk-318305
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * API: props modalId, size, centered, titleId, static, title. Emits: show, shown, hide, hidden. Slots: header, body, footer. Ref: show(), hide(), toggle(), getBootstrapInstance().
- * Usage: No "Close" button; close via header btn-close or backdrop. "Cancel" in footer (revert or close). "Save" in footer when editable: two states (Save -> Saved, close?); close only via X/backdrop/second click. Title from modals-config (SSOT) or prop title; menu/buttons use modalsConfig.getModalTitle(modalId).
- * provide/inject: modalApi.title, registerButton, updateButton, removeButton, getButton, getButtonsForLocation. One button can show in header, footer, or both; state is shared.
- * bodyComponent in modals-config must be registered in app-ui-root and in modules-config deps or modal body will be empty.
- *
-*/
+ * API: props modalId, size, centered, titleId, static, title. Emits: show, shown, hide, hidden. Slots: header, body, footer. Ref: show(), hide(), toggle(), getBootstrapInstance(). bodyComponent in modals-config must be in app-ui-root and modules-config deps.
+ */
 
 window.cmpModal = {
     template: '#modal-template',

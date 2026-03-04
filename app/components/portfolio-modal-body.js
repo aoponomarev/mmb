@@ -1,38 +1,13 @@
 /**
- * ================================================================================================
- * PORTFOLIO MODAL BODY COMPONENT - Modal body for portfolio create/edit
- * ================================================================================================
- *
- * PURPOSE: Integrate portfolio form with modal button management.
- *
+ * #JS-BX21fe7h
+ * @description Modal body for portfolio create/edit; form + modal button management; Saved-close state; inject modalApi.
+ * @skill id:sk-c3d639
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-c3d639
  *
- * FEATURES:
- * - Form for create/edit portfolio (name, description, assets)
- * - Supports "Saved, close?" state for Save button
- * - Reactive button state updates on form data change
- * - Cancel logic (restore initial values)
- *
- * COMPONENT API:
- *
- * Props:
- * - name (String, required) — current portfolio name (v-model)
- * - description (String, default: '') — current portfolio description (v-model)
- * - assets (Array, default: []) — current portfolio assets (v-model)
- * - initialName (String, required) — initial name when modal opened
- * - initialDescription (String, default: '') — initial description when modal opened
- * - initialAssets (Array, default: []) — initial assets when modal opened
- * - isEditing (Boolean, default: false) — edit mode (true) or create (false)
- * - onSave (Function, required) — save callback (name, description, assets)
- * - onCancel (Function, required) — cancel callback
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * Props: name, description, assets (v-model), initialName/initialDescription/initialAssets, isEditing, onSave, onCancel.
+ */
 
 window.portfolioModalBody = {
     template: `

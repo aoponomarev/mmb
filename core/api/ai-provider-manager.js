@@ -1,34 +1,16 @@
 /**
- * ================================================================================================
- * AI PROVIDER MANAGER - Manager for switching between AI providers
- * ================================================================================================
- *
- * PURPOSE: Single access point for AI provider (YandexGPT).
- * Manages provider switching and provides unified interface.
- *
+ * #JS-MW2TvCHg
+ * @description Single access point for AI provider (YandexGPT); switching and unified interface; provider in cacheManager 'ai-provider'.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- *
- * Skill: id:sk-bb7c8e
- *
- * FEATURES:
- * - Default provider: YandexGPT
- * - Current provider stored in cacheManager ('ai-provider')
- * - API keys stored separately per provider
+ * @skill-anchor id:sk-d76b68 #for-ai-provider-abstraction #for-ai-manager-switching
  *
  * USAGE:
- * // Send request via current provider
  * const response = await window.aiProviderManager.sendRequest(messages);
- *
- * // Switch provider
  * await window.aiProviderManager.setProvider('yandex');
- *
- * // Get current provider
  * const provider = await window.aiProviderManager.getCurrentProvider();
- *
-*/
-
-// @skill-anchor id:sk-d76b68 #for-ai-provider-abstraction #for-ai-manager-switching
+ */
 (function() {
     'use strict';
 

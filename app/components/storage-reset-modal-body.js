@@ -1,38 +1,13 @@
 /**
- * ================================================================================================
- * STORAGE RESET MODAL BODY COMPONENT - Cache reset modal body
- * ================================================================================================
- *
- * PURPOSE: Selective cache deletion by category.
- *
+ * #JS-Vz2p3xSA
+ * @description Selective cache reset by category; checkboxes, Full = all except API keys; Reset via modalApi; cacheManager.delete().
+ * @skill id:sk-3c832d
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * Skill: id:sk-3c832d
- *
- * FEATURES:
- * - Checkboxes for cache category selection
- * - Auto-select all categories when "Full" chosen
- * - Register "Reset selected" button via modalApi
- * - Delete data via cacheManager.delete()
- *
- * CATEGORIES:
- * - API settings: yandex-api-key, ai-provider, yandex-folder-id, yandex-model, yandex-proxy-type
- * - UI settings: theme, timezone, favorites, ui-state, active-tab, translation-language
- * - Portfolios: portfolios, strategies
- * - Market data: market-metrics, coins-list, top-coins, top-coins-by-market-cap, top-coins-by-volume, stablecoins-list, vix-index, fear-greed-index, time-series, correlations
- * - Operation history: history
- * - Cache and resources: api-cache, icons-cache, crypto-news-state
- * - Translations: tooltips-*, app-messages-translations-*
- * - Full: all categories EXCEPT API keys (require explicit selection) + settings
- *
- * COMPONENT API:
- *
- * Inject:
- * - modalApi — API for managing buttons (provided by cmp-modal)
- *
-*/
+ * CATEGORIES: API settings, UI settings, Portfolios, Market data, history, Cache/resources, Translations, Full. Inject: modalApi.
+ */
 
 window.storageResetModalBody = {
     template: `

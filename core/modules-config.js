@@ -4,8 +4,9 @@
  * @skill id:sk-a17d41
  *
  * PRINCIPLES:
- * - Modules grouped by category; deps array; loader resolves order
- * - type: 'local' | 'external'; condition for feature flags
+ * - Modules grouped by category; each module describes deps array; loader resolves order
+ * - type: 'local' | 'external'; condition (optional) for feature flags
+ * - Module shape: id, src, type, deps, category, condition (optional)
  *
  * COMPONENT TEMPLATES (two-level system):
  * - Components with large HTML use separate *-template.js files (templates category).

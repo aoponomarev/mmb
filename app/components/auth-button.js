@@ -1,24 +1,13 @@
 /**
- * ================================================================================================
- * AUTH BUTTON COMPONENT - Authentication button and user profile component
- * ================================================================================================
- *
- * PURPOSE: Vue component for displaying Google sign-in button or user profile.
- *
+ * #JS-Jd4ASwEo
+ * @description Google sign-in button or user profile; emits login-success, logout-success.
+ * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
- * Skill: id:sk-7cf3f7
  *
- * COMPONENT API:
- *
- * Props: none
- *
- * Events:
- * - login-success — emitted after successful login
- * - logout-success — emitted after successful logout
- *
-*/
+ * EVENTS: login-success, logout-success.
+ */
 
 window.authButton = {
     template: '#auth-button-template',

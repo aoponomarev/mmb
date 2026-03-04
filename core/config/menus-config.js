@@ -1,30 +1,21 @@
 /**
- * ================================================================================================
- * MENUS CONFIG - Dropdown menus configuration
- * ================================================================================================
- * Skill: id:sk-e0b8f3
- *
- * PURPOSE: SSOT for all dropdown menu items in the application.
- * Used in index.html, test.html and other places for consistency.
+ * #JS-1gU5y1dH
+ * @description SSOT for dropdown menu items; used in index.html, test.html for consistency.
+ * @skill id:sk-e0b8f3
  *
  * PRINCIPLES:
  * - All menu items are defined here
  * - Item order is determined by array order
  * - Conditional display via condition (optional)
- * - Titles are obtained from modalsConfig for modal windows
+ * - Titles for modal windows are obtained from modalsConfig
  * - Menu changes in one place automatically sync everywhere
  *
- * PRINCIPLES:
- * {
- *   id: 'unique-id',              // Unique item ID
- *   title: 'Title' | { modalId: 'modalId' }, // Title directly or via modalId
- *   handler: 'methodName',         // Method name in app-ui-root
- *   condition: () => true          // Optional function for conditional display
- * }
+ * STRUCTURE:
+ * - id, title | { modalId }, handler, condition (optional)
  *
  * REFERENCES:
- * - SSOT principles: id:sk-e0b8f3
- * - Modal windows configuration: core/config/modals-config.js
+ * - Modals config: core/config/modals-config.js
+ * - SSOT: id:sk-e0b8f3
  */
 
 (function() {

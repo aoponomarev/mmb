@@ -1,32 +1,16 @@
 /**
- * ================================================================================================
- * MODALS CONFIG - Modal windows configuration
- * ================================================================================================
- * Skill: id:sk-e0b8f3
+ * #JS-w33hCfsD
+ * @description SSOT for modal titles, icons, metadata; menu/buttons get title from here.
+ * @skill id:sk-e0b8f3
  *
- * PURPOSE: SSOT for modal window titles, icons and metadata.
+ * PURPOSE: One place for modal config; title change syncs everywhere; modal title must match menu/button text.
  *
- * PRINCIPLES:
- * - Modal title is defined here and used everywhere
- * - Menu items, buttons and links get title from this config
- * - Title change in one place automatically syncs everywhere
- * - Required: modal title must match menu item/button text
- *
- * PRINCIPLES:
- * {
- *   modalId: {
- *     title: 'Modal window title',
- *     icon: 'fas fa-icon-class', // Optional
- *     description: 'Description', // Optional
- *     bodyComponent: 'component-name', // Vue component name for body (optional)
- *     centered: true, // Vertical centering (optional, default: false)
- *     condition: () => true // Function for conditional display (optional)
- *   }
- * }
+ * STRUCTURE:
+ * - modalId: { title, icon?, description?, bodyComponent?, centered?, condition? }
  *
  * REFERENCES:
- * - SSOT principles: id:sk-e0b8f3
  * - Modal component: shared/components/modal.js
+ * - Menus config: core/config/menus-config.js
  */
 
 (function() {

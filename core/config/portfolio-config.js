@@ -1,24 +1,22 @@
 /**
- * ================================================================================================
- * PORTFOLIO CONFIG - Configuration and structure of portfolio data
- * ================================================================================================
- * Skill: id:sk-c3d639
+ * #JS-aNzHSaKo
+ * @description SSOT for portfolio data structure and parameters; compatibility facade over portfolio-engine.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: SSOT for portfolio data structure and parameters.
+ * PURPOSE: Portfolio data structure; support mixed portfolios, preserve formation context; compatible with migration plan (Block D.1).
  *
  * PRINCIPLES:
- * - Support mixed portfolios (coins from different models).
- * - Preserve formation context (market metrics, model state).
- * - Compatible with migration plan (Block D.1).
+ * - Support mixed portfolios (coins from different models)
+ * - Preserve formation context (market metrics, model state)
+ * - Compatible with migration plan (Block D.1)
  *
  * REFERENCES:
  * - Doc: docs/A_PORTFOLIO_SYSTEM.md
  * - Metrics documentation: id:sk-c3d639
  * - Portfolio architecture: id:sk-483943 (section "Portfolio system")
- * - Hardening: legacy donor `recipe-portfolio-engine-mvp-hardening` (`docs/ais/ais-portfolio-controls.md#LIR-005.A1`)
+ * - Hardening: legacy donor recipe-portfolio-engine-mvp-hardening (docs/ais/ais-portfolio-controls.md#LIR-005.A1)
  *
- * NOTE: This module acts as compatibility facade over `core/domain/portfolio-engine.js`.
- * New code should call `window.portfolioEngine.*` directly when possible.
+ * NOTE: Compatibility facade over core/domain/portfolio-engine.js; new code should call window.portfolioEngine.* directly when possible.
  */
 
 (function() {

@@ -1,22 +1,12 @@
 /**
- * ================================================================================================
- * COINGECKO PROVIDER - CoinGecko API data provider
- * ================================================================================================
- * Skill: id:sk-bb7c8e
- *
- * PURPOSE: Data provider implementation for CoinGecko API.
- *
+ * #JS-A43TyZ6E
+ * @description CoinGecko API data provider; extends BaseDataProvider; normalization, error messages, config and rate limiting.
+ * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
- * Extends BaseDataProvider and implements all required methods.
  *
- * SOURCE: Adapted from legacy core/api/coingecko (pre-migration)
- * - Preserved all API logic
- * - Added data normalization to unified format
- * - Integrated error message system
- * - Uses config and rate limiting from new architecture
- *
-*/
+ * SOURCE: Adapted from legacy core/api/coingecko; preserved API logic, unified format, file:// proxy (id:sk-7cf3f7).
+ */
 
 (function() {
     'use strict';

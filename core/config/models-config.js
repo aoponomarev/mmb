@@ -1,18 +1,17 @@
 /**
- * ================================================================================================
- * MODELS CONFIG - Registry of math models and their default parameters
- * ================================================================================================
- * Skill: id:sk-c3d639
- * Doc: docs/A_MATH_MODELS.md
+ * #JS-CeYzbCbM
+ * @description SSOT for math model metadata and default calculation parameters.
+ * @skill id:sk-c3d639
  *
- * PURPOSE: SSOT for math model metadata and base calculation parameters.
+ * PURPOSE: Centralized list of models (id, name, description, calculator, default) and default params (horizonDays, mdnHours, agrMethod); avoid hardcoding in components.
  *
  * PRINCIPLES:
- * - Centralized list of models and their attributes (id, name, description, calculator, default flag)
- * - Centralized default calculation parameters (horizonDays, mdnHours, agrMethod)
+ * - Centralized list of models and their attributes
+ * - Centralized default calculation parameters
  * - Avoid hardcoding parameters in components and storage layers
  *
  * REFERENCES:
+ * - Doc: docs/A_MATH_MODELS.md
  * - Metrics documentation: id:sk-c3d639
  * - Models architecture: id:sk-483943 (section "Math models and portfolios")
  */
