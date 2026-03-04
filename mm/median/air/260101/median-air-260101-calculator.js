@@ -5,7 +5,7 @@
  * Skill: id:sk-c3d639
  * Doc: docs/A_MATH_MODELS.md
  *
- * PURPOSE: Зафиксировать текущую рабочую модель как версию Median/AIR/260101.
+ * PURPOSE: Pin current working model as version Median/AIR/260101.
  * AGR clamped to [-agrLimit, agrLimit]. Empty PV arrays guarded.
  * CGR slope division-by-zero guarded (dt === 0).
  */

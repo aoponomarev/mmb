@@ -17,7 +17,7 @@
  * - Component uses template via template: '#modal-template'
  *
  * TEMPLATE FEATURES:
- * Структура HTML:
+ * HTML structure:
  * - Root: ⟨div class="modal fade"⟩ with ref="modalElement" and conditional 'show'
  * - Dialog container: ⟨div class="modal-dialog"⟩ with size and center classes
  * - Content: ⟨div class="modal-content"⟩
@@ -37,8 +37,8 @@
  *
  * REFERENCES:
  * - General template principles: id:sk-483943 (section "x-template extraction")
- * - Компонент: shared/components/modal.js
- * - Компонент кнопок: shared/components/modal-buttons.js
+ * - Component: shared/components/modal.js
+ * - Buttons component: shared/components/modal-buttons.js
  */
 
 (function() {
@@ -77,7 +77,7 @@
 </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -87,7 +87,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

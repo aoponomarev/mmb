@@ -1,44 +1,7 @@
 /**
- * ================================================================================================
- * BUTTON GROUP TEMPLATE - Шаблон компонента группы кнопок
- * ================================================================================================
- *
- * PURPOSE: Шаблон for Vue-обёртки над Bootstrap .btn-group (cmp-button-group).
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="button-group-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="button-group-template"
- * - Компонент использует шаблон через template: '#button-group-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Двойной рендер: группа кнопок (>= breakpoint) и dropdown (< breakpoint)
- * - Группа кнопок: ⟨div class="btn-group"⟩ с условными классами for видимости (d-none d-{breakpoint}-inline-flex)
- * - Dropdown: ⟨cmp-dropdown⟩ с условными классами for видимости (d-{breakpoint}-none)
- * Layout и CSS-классы:
- * - Адаптивное схлопывание в dropdown: CSS-переключение через Bootstrap utilities (d-none, d-{breakpoint}-inline-flex for группы, d-{breakpoint}-none for dropdown)
- * - Мгновенное переключение через CSS (без JS resize listener), использование стандартных Bootstrap utilities
- * - Оба режима независимы и совместимы with Bootstrap JS API
- * Условный рендеринг:
- * - Группа кнопок: условная видимость через классы d-none d-{breakpoint}-inline-flex (видна >= breakpoint)
- * - Dropdown: условная видимость через классы d-{breakpoint}-none (виден < breakpoint)
- * - Типы кнопок: type="button" через ⟨cmp-button⟩, type="checkbox" и type="radio" через нативный HTML
- * Нативный HTML for checkbox/radio:
- * - Используется стандартная Bootstrap структура: ⟨input class="btn-check"⟩ + ⟨label class="btn"⟩
- * - Классы выравнивания: d-flex, align-items-center for label
- * Слоты:
- * - default — содержимое кнопок (fallback for кастомных кнопок)
- * - button-{index} — переопределение конкретной кнопки по индексу (параметры слота: { button, index })
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-483943 (section "Вынос x-template шаблонов")
- * - Компонент: shared/components/button-group.js
+ * BUTTON GROUP TEMPLATE - Template for cmp-button-group (Vue wrapper over Bootstrap .btn-group).
+ * Injected as <script type="text/x-template"> with id="button-group-template" so it is in DOM before Vue.
+ * Structure: dual render — btn-group (>= breakpoint) and cmp-dropdown (< breakpoint). Visibility via Bootstrap d-* classes. Slots: default, button-{index}. Ref: id:sk-483943, shared/components/button-group.js
  */
 
 (function() {
@@ -168,7 +131,7 @@
 </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -178,7 +141,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

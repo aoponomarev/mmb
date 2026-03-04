@@ -37,6 +37,7 @@
     "skills:health:trend:report": "node is/scripts/architecture/skills-health-trend-report.js",
     "readmes:check": "node is/scripts/architecture/validate-readmes.js",
     "readmes:sync": "node is/scripts/architecture/sync-readmes.js",
+    "lang:comments:check": "node is/scripts/architecture/validate-code-comments-english.js",
     "lang:translate": "node is/scripts/architecture/translate-comments-to-english.js",
     "evolution:update": "node is/scripts/architecture/project-evolution-update.js",
     "evolution:rebuild": "node is/scripts/architecture/project-evolution-update.js --rebuild",

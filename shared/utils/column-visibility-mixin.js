@@ -5,31 +5,29 @@
 window.columnVisibilityMixin = {
   computed: {
     /**
-     * CSS-классы for managing видимостью колонок через colgroup
-     * Возвращает объект, где ключ - класс колонки, значение - 'col-hidden' или ''
-     * Поддерживает префиксное совпадение: 'col-percent' скрывает все 'col-percent-*'
+     * CSS classes for column visibility via colgroup. Key = column class, value = 'col-hidden' or ''. Prefix match: 'col-percent' hides 'col-percent-*'.
      */
     columnVisibilityClasses() {
       if (!this.columnVisibilityConfig || !this.activeTabId) {
-        // Если нет конфигурации или активной вкладки - все колонки видимы
+        // No config or active tab -> all columns visible
         return {};
       }
 
       const config = this.columnVisibilityConfig[this.activeTabId];
       if (!config || !config.hide) {
-        // Если for текущей вкладки нет конфигурации - все колонки видимы
+        // No config for current tab -> all columns visible
         return {};
       }
 
       const result = {};
       const hideColumns = config.hide || [];
 
-      // Получаем все классы колонок
+      // Get all column classes
       let allColumnClasses = [];
       if (this.getColumnClasses && typeof this.getColumnClasses === 'function') {
         allColumnClasses = this.getColumnClasses();
       } else {
-        // Собираем все уникальные классы колонок из конфигурации
+        // Collect all unique column classes from config
         const classSet = new Set();
         Object.values(this.columnVisibilityConfig).forEach(tabConfig => {
           if (tabConfig.hide) {
@@ -39,15 +37,14 @@ window.columnVisibilityMixin = {
         allColumnClasses = Array.from(classSet);
       }
 
-      // Для каждой колонки определяем, должна ли она быть скрыта
+      // For each column determine if it should be hidden
       allColumnClasses.forEach(colClass => {
-        // Проверяем, нужно ли скрыть эту колонку на текущей вкладке
-        // Поддерживаем как точное совпадение, так и префиксное (например, 'col-percent' скрывает все 'col-percent-*')
+        // Check if this column should be hidden on current tab (exact or prefix match)
         const shouldHide = hideColumns.some(hideClass => {
           if (hideClass === colClass) {
-            return true; // Точное совпадение
+            return true; // Exact match
           }
-          // Префиксное совпадение: если hideClass = 'col-percent', то скрываем 'col-percent-1h', 'col-percent-24h' и т.д.
+          // Prefix match: e.g. 'col-percent' hides 'col-percent-1h', 'col-percent-24h'
           if (colClass.startsWith(hideClass + '-')) {
             return true;
           }

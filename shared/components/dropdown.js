@@ -1,107 +1,23 @@
 // =========================
-// КОМПОНЕНТ DROPDOWN
-// Vue-обёртка над Bootstrap dropdown с поддержкой поиска и прокрутки
+// DROPDOWN COMPONENT
+// Vue wrapper over Bootstrap dropdown with search and scroll
 // =========================
-// PURPOSE: Переиспользуемый компонент выпадающего списка с поддержкой:
+// PURPOSE: Reusable dropdown with:
 //
 // @skill-anchor id:sk-add9a6 #for-classes-add-remove
 // @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
 // @skill-anchor id:sk-cb75ec #for-utility-availability-check
-// - Поиска по элементам
-// - Прокрутки for длинных списков
-// - Полной совместимости with Bootstrap JS API
-// - Кастомной кнопки через слот
-// - Динамической загрузки элементов
-// - Адаптивности кнопки триггера через CSS классы (.dropdown-responsive)
-// - Детерминированных хэшей экземпляров (instanceHash) for идентификации и кастомной стилизации
-// - Использования компонента cmp-button for кнопки триггера (полная совместимость with Bootstrap API)
-// - Режима select с индикацией выбранного пункта на кнопке (полная замена ⟨select⟩)
+// - Item search, scroll for long lists, full Bootstrap JS API, custom trigger via slot
+// - Trigger responsiveness (.dropdown-responsive), instanceHash, cmp-button for trigger
+// - Select mode with selected item on button (replaces <select>)
 //
-// Кнопка триггера:
-// - Индикация выбранного пункта на кнопке триггера
-// - Гибкое управление отображением через buttonDisplay (icon, label, labelShort, value)
-// - Поддержка любых комбинаций элементов на кнопке
-// - Автоматическое закрытие dropdown после выбора
-// - Поддержка v-model через update:selectedItem
-//
-// API КОМПОНЕНТА:
-//
-// Входные параметры (props):
-// Кнопка триггера:
-// - buttonText (String, default: 'Dropdown') — текст кнопки (отображается на десктопе, если задана иконка или укороченный текст)
-// - buttonTextShort (String) — укороченная версия текста for мобильных (using, если buttonIcon не задан)
-// - buttonIcon (String) — иконка for мобильной версии (Font Awesome класс, отображается только на мобильных)
-// - buttonVariant (String, default: 'primary') — вариант кнопки Bootstrap (primary, secondary, success, danger, warning, info, light, dark, outline-*, link)
-// - buttonSize (String) — размер кнопки (sm, lg)
-// - dropdownId (String) — ID for кнопки триггера (using в buttonAttributes.id for Bootstrap)
-// Поиск:
-// - searchable (Boolean, default: false) — включить поиск по элементам
-// - searchPlaceholder (String, default: 'Поиск...') — placeholder for поля поиска
-// - emptySearchText (String, default: 'Ничего не найдено') — текст при отсутствии результатов
-// - searchFunction (Function) — кастомная функция поиска. Если не указана, using встроенная фильтрация по строке
-// Прокрутка:
-// - scrollable (Boolean, default: false) — включить прокрутку for длинных списков
-// - maxHeight (String, default: '300px') — максимальная высота прокручиваемой области
-// Элементы списка:
-// - items (Array, default: []) — массив элементов for встроенной фильтрации (optional, если using слот)
-// Режим select (индикация выбранного пункта на кнопке):
-// - selectMode (Boolean, default: false) — включить режим select. В этом режиме компонент работает как ⟨select⟩, показывая выбранный пункт меню на кнопке триггера
-// - selectedItem (String | Number | Object) — выбранный элемент. Может быть индексом, value (id) или самим объектом элемента. Поддерживает v-model через update:selectedItem
-// - itemLabel (String | Function, default: 'title') — поле или функция for извлечения label из элемента. Если строка — имя поля (например, 'name', 'title'). Если функция — (item) => item.name
-// - itemValue (String | Function, default: 'id') — поле или функция for извлечения value из элемента. Используется for идентификации и v-model
-// - itemIcon (String | Function, default: 'icon') — поле или функция for извлечения иконки из элемента
-// - itemLabelShort (String | Function, default: 'labelShort') — поле или функция for извлечения укороченного текста из элемента
-// - buttonDisplay (Object, default: { icon: true, label: true, labelShort: false, value: false }) — управление отображением элементов выбранного пункта на кнопке. Поддерживаются любые комбинации: icon, label, labelShort, value
-// Дополнительные:
-// - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', button: 'классы', menu: 'классы' }
-// - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', button: 'классы', menu: 'классы' }
-// - menuClasses (String) — дополнительные CSS классы for dropdown-menu (for обратной совместимости, рекомендуется использовать classesAdd.menu)
-// - menuStyle (Object) — дополнительные inline стили for dropdown-menu
-// - menuOffset (Number | Array, default: null) — отступ между кнопкой и выпадающим меню через Popper.js offset. Число: [0, offsetY] (x, y в пикселях, только вертикальный отступ). Массив: [offsetX, offsetY] (x, y в пикселях). null: использовать дефолтный offset Bootstrap
-//
-// Logoutные события (emits):
-// - show — событие открытия dropdown (синхронизировано с show.bs.dropdown)
-// - hide — событие закрытия dropdown (синхронизировано с hide.bs.dropdown)
-// - search — событие поиска (эмитится при изменении searchQuery)
-// - item-select — событие выбора элемента (эмитится из слота items в обычном режиме)
-// - update:selectedItem — обновление выбранного элемента (for v-model в режиме select)
-// - select — событие выбора элемента в режиме select: { item, value, index }
-//
-// Слоты:
-// - button — кастомная кнопка триггера (с ограниченной областью видимости: isOpen, toggle). Если using, стандартная кнопка через cmp-button не отображается
-// - items — элементы списка (с ограниченной областью видимости: filteredItems, searchQuery, handleItemSelect). В режиме select рекомендуется использовать handleItemSelect for автоматического обновления выбранного элемента и закрытия dropdown
-//
-// Методы (ref API):
-// - show() — программное открытие dropdown через Bootstrap API
-// - hide() — программное закрытие dropdown через Bootstrap API
-// - toggle() — программное переключение dropdown через Bootstrap API
-// - getBootstrapInstance() — получение экземпляра Bootstrap Dropdown for прямого доступа к API
-//
-// Элементы списка:
-// Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/dropdown-template.js`
-// Использование компонента cmp-button for кнопки триггера:
-// - Кнопка триггера реализована через компонент cmp-button for единообразия
-// - Атрибуты Bootstrap передаются через prop buttonAttributes компонента cmp-button
-// - Доступ к реальному DOM-элементу через $refs.dropdownButton.$el for инициализации Bootstrap
-// - Полная совместимость with Bootstrap API: Bootstrap работает с реальным DOM-элементом, а не с Vue-компонентом
-// Поиск:
-// - Встроенная фильтрация по строке (ищет в значениях объектов или строках)
-// - Поддержка кастомной функции поиска через prop searchFunction
-// - Автофокус на поле поиска при открытии dropdown (если searchable === true)
-// - Очистка поиска при закрытии dropdown
-// Режим select:
-// - Выбранный элемент определяется через prop selectedItem (поддерживает v-model)
-// - Данные извлекаются из элементов через itemLabel, itemValue, itemIcon, itemLabelShort (строки или функции)
-// - Отображение на кнопке управляется через buttonDisplay (любые комбинации icon, label, labelShort, value)
-// - После выбора dropdown автоматически закрывается
-// - Эмитится событие select с данными { item, value, index }
-// - В слоте items рекомендуется использовать handleItemSelect из области видимости слота for автоматического обновления выбранного элемента
-//
-// АРХИТЕКТУРА:
-// - Шаблон: shared/templates/dropdown-template.js (ID: dropdown-template)
-// - Зависимости: Bootstrap 5, Vue.js
-// - See also: `id:sk-318305` (section "Maximum compatibility strategy with Bootstrap")
-// - See also: `id:sk-483943` (принципы moduleости, запрет кастомных стилей)
+// API. Props - Trigger: buttonText, buttonTextShort, buttonIcon, buttonVariant, buttonSize, dropdownId
+// Search: searchable, searchPlaceholder, emptySearchText, searchFunction. Scroll: scrollable, maxHeight.
+// Items: items (for built-in filter). Select: selectMode, selectedItem, itemLabel, itemValue, itemIcon, itemLabelShort, buttonDisplay.
+// Extra: classesAdd, classesRemove, menuClasses, menuStyle, menuOffset (Popper offset: number [0,y] or [x,y] px, null = Bootstrap default).
+// Emits: show, hide, search, item-select, update:selectedItem, select. Slots: button, items. Ref: show(), hide(), toggle(), getBootstrapInstance().
+// Layout: see shared/templates/dropdown-template.js. Trigger via cmp-button on $refs.dropdownButton.$el. Search: built-in or searchFunction; autofocus; clear on close. Select: selectedItem, itemLabel/Value/Icon/LabelShort, buttonDisplay, auto-close, emit select.
+// ARCHITECTURE: Template shared/templates/dropdown-template.js. Deps: Bootstrap 5, Vue. See id:sk-318305, id:sk-483943.
 
 window.cmpDropdown = {
     template: '#dropdown-template',
@@ -110,18 +26,18 @@ window.cmpDropdown = {
     },
 
     props: {
-        // === Кнопка триггера ===
+        // === Trigger button ===
         buttonText: {
             type: String,
             default: 'Найти монеты'
         },
         buttonTextShort: {
             type: String,
-            default: null // укороченная версия текста for мобильных (если buttonIcon не задан)
+            default: null // short text for mobile when buttonIcon not set
         },
         buttonIcon: {
             type: String,
-            default: null // иконка for мобильной версии (Font Awesome класс)
+            default: null // icon for mobile (Font Awesome class)
         },
         buttonVariant: {
             type: String,
@@ -134,7 +50,7 @@ window.cmpDropdown = {
             validator: (value) => !value || ['sm', 'lg'].includes(value)
         },
 
-        // === Поиск ===
+        // === Search ===
         searchable: {
             type: Boolean,
             default: false
@@ -153,10 +69,10 @@ window.cmpDropdown = {
         },
         searchFunction: {
             type: Function,
-            default: null // Если не указана, using встроенная фильтрация по строке
+            default: null // if not set, use built-in string filter
         },
 
-        // === Прокрутка ===
+        // === Scroll ===
         scrollable: {
             type: Boolean,
             default: false
@@ -166,22 +82,22 @@ window.cmpDropdown = {
             default: '300px'
         },
 
-        // === Элементы списка ===
+        // === List items ===
         items: {
             type: Array,
             default: () => []
         },
 
-        // === Управление классами ===
+        // === Class control ===
         classesAdd: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'float-start', button: 'custom-button', menu: 'custom-menu' }
+            // e.g. { root: 'float-start', button: 'custom-button', menu: 'custom-menu' }
         },
         classesRemove: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'some-class', button: 'another-class', menu: 'yet-another-class' }
+            // e.g. { root: 'some-class', button: 'another-class', menu: 'yet-another-class' }
         },
         menuClasses: {
             type: String,
@@ -191,27 +107,25 @@ window.cmpDropdown = {
             type: Object,
             default: () => ({})
         },
-        // Режим ширины меню: 'auto' (по контенту, без переноса), 'fixed' (в em)
+        // Menu width: 'auto' (by content), 'fixed' (in em)
         menuWidthMode: {
             type: String,
             default: 'auto',
             validator: (value) => ['auto', 'fixed'].includes(value)
         },
-        // Ширина меню в em (using если menuWidthMode === 'fixed')
+        // Menu width in em when menuWidthMode === 'fixed'
         menuWidth: {
             type: [Number, String],
             default: null
         },
         autoClose: {
             type: [String, Boolean],
-            default: null // null = поведение Bootstrap по умолчанию
+            default: null // null = Bootstrap default
         },
         menuOffset: {
             type: [Number, Array],
             default: null
-            // Число: [0, -16] (x, y в пикселях)
-            // Массив: [0, -16] (x, y в пикселях)
-            // null: использовать дефолтный offset Bootstrap
+            // Number: [0, -16] (x, y px). Array: [0, -16]. null: Bootstrap default offset
         },
 
         // === ID for Bootstrap (optional) ===
@@ -220,7 +134,7 @@ window.cmpDropdown = {
             default: null
         },
 
-        // === Режим select (индикация выбранного пункта на кнопке) ===
+        // === Select mode (selected item on button) ===
         selectMode: {
             type: Boolean,
             default: false
@@ -229,10 +143,10 @@ window.cmpDropdown = {
             type: [String, Number, Object],
             default: null
         },
-        // Функции/строки for извлечения данных из элементов
+        // Functions or field names to get data from items
         itemLabel: {
             type: [String, Function],
-            default: 'name' // или 'title' в зависимости от структуры items
+            default: 'name' // or 'title' depending on items structure
         },
         itemValue: {
             type: [String, Function],
@@ -246,14 +160,14 @@ window.cmpDropdown = {
             type: [String, Function],
             default: 'labelShort'
         },
-        // Управление отображением на кнопке в режиме select
+        // What to show on button in select mode
         buttonDisplay: {
             type: Object,
             default: () => ({
-                icon: true,        // показывать иконку
-                label: true,      // показывать полный текст
-                labelShort: false, // показывать укороченный текст
-                value: false      // показывать value вместо label
+                icon: true,        // show icon
+                label: true,      // show full text
+                labelShort: false, // show short text
+                value: false      // show value instead of label
             })
         },
         tooltip: {
@@ -269,20 +183,20 @@ window.cmpDropdown = {
             isOpen: false,
             searchQuery: '',
             dropdownInstance: null,
-            outsideClickHandler: null // Обработчик клика вне области
+            outsideClickHandler: null // handler for click outside
         };
     },
 
     computed: {
-        // CSS классы for корневого элемента dropdown
+        // CSS classes for dropdown root
         dropdownClasses() {
             const baseClasses = ['dropdown', 'dropdown-responsive', this.instanceHash];
 
-            // Условные классы for адаптивности
+            // Conditional classes for responsiveness
             if (this.buttonIcon) baseClasses.push('has-icon');
             if (this.buttonTextShort) baseClasses.push('has-text-short');
 
-            // Управление классами через classesAdd и classesRemove
+            // Classes via classesAdd and classesRemove
             if (!window.classManager) {
                 console.error('classManager not found in dropdownClasses');
                 return baseClasses.join(' ');
@@ -296,22 +210,22 @@ window.cmpDropdown = {
             return result;
         },
 
-        // CSS классы for выпадающего меню
+        // CSS classes for dropdown menu
         menuClassesComputed() {
             const baseClasses = ['dropdown-menu'];
 
-            // В режиме 'auto' запрещаем перенос строк (однострочные пункты)
+            // In 'auto' mode prevent line wrap (single-line items)
             if (this.menuWidthMode === 'auto') {
                 baseClasses.push('text-nowrap');
             }
 
-            // Добавляем классы из prop menuClasses (for обратной совместимости)
+            // Add classes from menuClasses prop (backward compat)
             if (this.menuClasses) {
                 const extraClasses = this.menuClasses.split(' ').filter(c => c);
                 baseClasses.push(...extraClasses);
             }
 
-            // Управление классами через classesAdd и classesRemove
+            // Classes via classesAdd and classesRemove
             if (!window.classManager) {
                 return baseClasses.join(' ');
             }
@@ -323,20 +237,20 @@ window.cmpDropdown = {
             );
         },
 
-        // Вычисляемые inline-стили for меню
+        // Computed inline styles for menu
         menuStyleComputed() {
             const styles = { ...this.menuStyle };
 
-            // В режиме 'fixed' устанавливаем ширину в em
+            // In 'fixed' mode set width in em
             if (this.menuWidthMode === 'fixed' && this.menuWidth) {
                 styles.width = `${this.menuWidth}em`;
-                styles.minWidth = 'auto'; // Отключаем Bootstrap min-width если задана фиксированная
+                styles.minWidth = 'auto'; // Disable Bootstrap min-width when fixed width set
             }
 
             return styles;
         },
 
-        // Атрибуты for кнопки триггера (for передачи в cmp-button)
+        // Attributes for trigger button (passed to cmp-button)
         buttonAttributes() {
             return {
                 'data-bs-toggle': 'dropdown',
@@ -346,11 +260,10 @@ window.cmpDropdown = {
             };
         },
 
-        // Классы for кнопки триггера (for передачи в cmp-button через classesAdd/classesRemove)
-        // Передаем classesAdd.button как root, classesAdd.buttonIcon как icon и т.д.
+        // Classes for trigger button (passed to cmp-button via classesAdd/classesRemove)
+        // Map classesAdd.button -> root, classesAdd.buttonIcon -> icon, etc.
         buttonClassesForDropdown() {
-            // ВАЖНО: Возвращаем объект с undefined вместо пропуска свойств
-            // Это обеспечивает стабильную структуру объекта for Vue реактивности
+            // Keep undefined for missing keys so Vue reactivity sees stable shape
             const result = {
                 root: this.classesAdd?.button || undefined,
                 container: this.classesAdd?.buttonContainer || undefined,
@@ -361,8 +274,7 @@ window.cmpDropdown = {
             return result;
         },
         buttonClassesRemoveForDropdown() {
-            // ВАЖНО: Возвращаем объект с undefined вместо пропуска свойств
-            // Это обеспечивает стабильную структуру объекта for Vue реактивности
+            // Keep undefined for missing keys so Vue reactivity sees stable shape
             return {
                 root: this.classesRemove?.button || undefined,
                 container: this.classesRemove?.buttonContainer || undefined,
@@ -372,7 +284,7 @@ window.cmpDropdown = {
             };
         },
 
-        // Детерминированный хэш экземпляра на основе родительского контекста и props
+        // Deterministic instance hash from parent context and props
         instanceHash() {
             if (!window.hashGenerator) {
                 console.warn('hashGenerator not found, using fallback');
@@ -385,20 +297,20 @@ window.cmpDropdown = {
             return window.hashGenerator.generateMarkupClass(uniqueId);
         },
 
-        // Отфильтрованные элементы (если using встроенная фильтрация)
+        // Filtered items (when using built-in filter)
         filteredItems() {
-            // Защита от undefined/null items
+            // Guard against undefined/null items
             const items = this.items || [];
             if (!this.searchable || !this.searchQuery) {
                 return items;
             }
 
-            // Если указана кастомная функция поиска
+            // When custom search function is provided
             if (this.searchFunction) {
                 return this.searchFunction(items, this.searchQuery);
             }
 
-            // Встроенная фильтрация по строке (ищет в значениях объектов)
+            // Built-in string filter (searches in object values)
             const query = this.searchQuery.toLowerCase();
             return items.filter(item => {
                 if (typeof item === 'string') {
@@ -414,10 +326,8 @@ window.cmpDropdown = {
         },
 
         /**
-         * Текст кнопки в режиме select
-         * Если selectMode включен и selectedItem задан, возвращает label/value выбранного элемента
-         * Иначе возвращает статический buttonText
-         * @returns {String} Текст for отображения на кнопке
+         * Button text in select mode. If selectMode and selectedItem set, returns label/value of selected item; else static buttonText.
+         * @returns {String} Text to show on button
          */
         computedButtonText() {
             if (!this.selectMode || !this.selectedItem) {
@@ -426,17 +336,17 @@ window.cmpDropdown = {
             const item = this.getSelectedItemObject();
             if (!item) return this.buttonText;
 
-            // Если нужно показать value вместо label
+            // Show value instead of label
             if (this.buttonDisplay.value) {
                 return this.getItemValue(item);
             }
 
-            // Если нужно показать labelShort
+            // Show labelShort
             if (this.buttonDisplay.labelShort && !this.buttonDisplay.label) {
                 return this.getItemLabelShort(item) || this.getItemLabel(item) || this.buttonText;
             }
 
-            // Показываем полный label
+            // Show full label
             if (this.buttonDisplay.label) {
                 return this.getItemLabel(item) || this.buttonText;
             }
@@ -445,10 +355,8 @@ window.cmpDropdown = {
         },
 
         /**
-         * Укороченный текст кнопки в режиме select
-         * Если selectMode включен и selectedItem задан, возвращает labelShort выбранного элемента
-         * Иначе возвращает статический buttonTextShort
-         * @returns {String|null} Укороченный текст for отображения на кнопке
+         * Short button text in select mode. If selectMode and selectedItem set, returns labelShort of selected item; else static buttonTextShort.
+         * @returns {String|null} Short text for button
          */
         computedButtonTextShort() {
             if (!this.selectMode || !this.selectedItem) {
@@ -457,7 +365,7 @@ window.cmpDropdown = {
             const item = this.getSelectedItemObject();
             if (!item) return this.buttonTextShort;
 
-            // labelShort показывается только если включен в buttonDisplay
+            // labelShort only if enabled in buttonDisplay
             if (this.buttonDisplay.labelShort) {
                 return this.getItemLabelShort(item) || this.getItemLabel(item) || this.buttonTextShort;
             }
@@ -466,10 +374,8 @@ window.cmpDropdown = {
         },
 
         /**
-         * Иконка кнопки в режиме select
-         * Если selectMode включен и selectedItem задан, возвращает icon выбранного элемента
-         * Иначе возвращает статический buttonIcon
-         * @returns {String|null} Иконка for отображения на кнопке или null
+         * Button icon in select mode. If selectMode and selectedItem set, returns icon of selected item; else static buttonIcon.
+         * @returns {String|null} Icon for button or null
          */
         computedButtonIcon() {
             if (!this.selectMode || !this.selectedItem) {
@@ -478,18 +384,17 @@ window.cmpDropdown = {
             const item = this.getSelectedItemObject();
             if (!item) return this.buttonIcon;
 
-            // Иконка показывается только если включена в buttonDisplay
+            // Icon only if enabled in buttonDisplay
             if (this.buttonDisplay.icon) {
                 return this.getItemIcon(item) || this.buttonIcon;
             }
 
-            return null; // Не показывать иконку, если выключена
+            return null; // Do not show icon when disabled
         }
     },
 
     methods: {
-        // Get родительский контекст (класс avto-* или ID родителя)
-        // Вызывается из computed, поэтому $el can be еще не доступен
+        // Get parent context (avto-* class or parent ID). Called from computed so $el may not be ready.
         getParentContext() {
             if (!this.$el) {
                 return 'root';
@@ -516,59 +421,54 @@ window.cmpDropdown = {
             return 'root';
         },
 
-        // Обработчик переключения dropdown
+        // Dropdown toggle handler
         handleToggle(event) {
-            // Bootstrap сам управляет открытием/закрытием через data-bs-toggle
-            // Этот метод можно использовать for дополнительной логики
+            // Bootstrap handles open/close via data-bs-toggle; this is for extra logic
         },
 
-        // Обработчик поиска
+        // Search handler
         handleSearch() {
             this.$emit('search', this.searchQuery);
         },
 
-        // Обработчик Escape (закрытие при поиске)
+        // Escape handler (close when searching)
         handleEscape() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.hide();
             }
         },
 
-        // Программное открытие dropdown (через Bootstrap API)
+        // Programmatic open (Bootstrap API)
         show() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.show();
             }
         },
 
-        // Программное закрытие dropdown (через Bootstrap API)
+        // Programmatic close (Bootstrap API)
         hide() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.hide();
             }
         },
 
-        // Программное переключение dropdown (через Bootstrap API)
+        // Programmatic toggle (Bootstrap API)
         toggle() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.toggle();
             }
         },
 
-        // Получение экземпляра Bootstrap Dropdown (for прямого доступа к API)
+        // Get Bootstrap Dropdown instance for direct API access
         getBootstrapInstance() {
             return this.dropdownInstance;
         },
 
-        // === Методы for режима select ===
+        // === Select mode helpers ===
 
         /**
-         * Get объект выбранного элемента из массива items
-         * Поддерживает три формата selectedItem:
-         * - Объект: возвращает сам объект
-         * - Число (индекс): возвращает items[index]
-         * - Строка/число (value): ищет элемент по itemValue
-         * @returns {Object|null} Объект элемента или null
+         * Get selected item object from items array. selectedItem can be: object (return as-is), number (index), string/number (value by itemValue).
+         * @returns {Object|null} Item object or null
          */
         getSelectedItemObject() {
             if (!this.selectedItem) {
@@ -580,14 +480,12 @@ window.cmpDropdown = {
                 return null;
             }
 
-            // Если selectedItem - это объект, вернуть его
+            // If selectedItem is object, return it
             if (typeof this.selectedItem === 'object') {
                 return this.selectedItem;
             }
 
-            // Найти элемент по value (id или строка)
-            // Это важно, потому что value can be числом, и мы не должны путать его с индексом
-            // Найти элемент по value (id или строка)
+            // Find by value (id or string); value may be number so don't confuse with index
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const value = this.getItemValue(item);
@@ -596,8 +494,7 @@ window.cmpDropdown = {
                 }
             }
 
-            // Если не найдено по value и selectedItem - это число, попробуем как индекс (fallback)
-            // Это for обратной совместимости, если кто-то действительно хочет использовать индекс
+            // If not found by value and selectedItem is number, treat as index (backward compat)
             if (typeof this.selectedItem === 'number') {
                 return items[this.selectedItem] || null;
             }
@@ -606,10 +503,9 @@ window.cmpDropdown = {
         },
 
         /**
-         * Извлечь label (текст) из элемента
-         * Поддерживает строку (имя поля) или функцию
-         * @param {Object} item - Элемент из массива items
-         * @returns {String|null} Label элемента или null
+         * Get label (text) from item. itemLabel can be field name (string) or function.
+         * @param {Object} item - Item from items array
+         * @returns {String|null} Label or null
          */
         getItemLabel(item) {
             if (!item) return null;
@@ -619,15 +515,14 @@ window.cmpDropdown = {
             if (typeof this.itemLabel === 'string') {
                 return item[this.itemLabel] || null;
             }
-            // Fallback: попробовать стандартные поля
+            // Fallback: try standard fields
             return item.title || item.name || item.label || null;
         },
 
         /**
-         * Извлечь value (идентификатор) из элемента
-         * Используется for v-model и идентификации выбранного элемента
-         * @param {Object} item - Элемент из массива items
-         * @returns {String|Number|Object|null} Value элемента или null
+         * Get value (id) from item. Used for v-model and selection.
+         * @param {Object} item - Item from items array
+         * @returns {String|Number|Object|null} Value or null
          */
         getItemValue(item) {
             if (!item) return null;
@@ -637,14 +532,14 @@ window.cmpDropdown = {
             if (typeof this.itemValue === 'string') {
                 return item[this.itemValue] || null;
             }
-            // Fallback: попробовать стандартные поля
+            // Fallback: try standard fields
             return item.id || item.value || item;
         },
 
         /**
-         * Извлечь icon (иконку Font Awesome) из элемента
-         * @param {Object} item - Элемент из массива items
-         * @returns {String|null} Иконка элемента или null
+         * Get icon (Font Awesome class) from item.
+         * @param {Object} item - Item from items array
+         * @returns {String|null} Icon or null
          */
         getItemIcon(item) {
             if (!item) return null;
@@ -659,10 +554,9 @@ window.cmpDropdown = {
         },
 
         /**
-         * Извлечь labelShort (укороченный текст) из элемента
-         * Используется for адаптивного отображения на мобильных
-         * @param {Object} item - Элемент из массива items
-         * @returns {String|null} Укороченный текст элемента или null
+         * Get labelShort from item (for mobile display).
+         * @param {Object} item - Item from items array
+         * @returns {String|null} Short text or null
          */
         getItemLabelShort(item) {
             if (!item) return null;
@@ -677,58 +571,53 @@ window.cmpDropdown = {
         },
 
         /**
-         * Обработчик выбора пункта меню (for использования в слоте items)
-         * В режиме select обновляет selectedItem, эмитит события и закрывает dropdown
-         * В обычном режиме только эмитит событие item-select
-         * @param {Object} item - Выбранный элемент
-         * @param {Number} index - Индекс элемента в массиве
+         * Menu item select handler (use in items slot). In select mode: update selectedItem, emit, close. Otherwise: emit item-select.
+         * @param {Object} item - Selected item
+         * @param {Number} index - Index in items array
          */
         handleItemSelect(item, index) {
             if (this.selectMode) {
-                // Обновляем selectedItem
+                // Update selectedItem
                 const value = this.getItemValue(item);
                 this.$emit('update:selectedItem', value);
                 this.$emit('select', { item, value, index });
 
-                // Закрываем dropdown после выбора
+                // Close dropdown after selection
                 this.$nextTick(() => {
                     if (this.dropdownInstance) {
                         this.dropdownInstance.hide();
                     }
                 });
             } else {
-                // Обычный режим - просто эмитим событие
+                // Normal mode: just emit event
                 this.$emit('item-select', { item, index });
             }
         }
     },
 
     mounted() {
-        // Инициализация Bootstrap Dropdown через JavaScript API
-                    // Подписка на события Bootstrap for синхронизации состояния
+        // Init Bootstrap Dropdown via JS API; subscribe to Bootstrap events for state sync
         this.$nextTick(() => {
             if (window.bootstrap && window.bootstrap.Dropdown && this.$refs.dropdownContainer) {
-                // Получаем реальный DOM-элемент кнопки через ref на Vue-компоненте или querySelector
+                // Get trigger DOM: ref to Vue component or querySelector
                 let toggleElement = null;
                 if (this.$refs.dropdownButton) {
-                    // Вариант 1: Через ref на Vue-компоненте (более надежно)
                     toggleElement = this.$refs.dropdownButton.$el;
                 } else {
-                    // Вариант 2: Через querySelector (fallback)
                     toggleElement = this.$refs.dropdownContainer.querySelector('[data-bs-toggle="dropdown"]');
                 }
 
                 if (toggleElement) {
-                    // Подготовка опций for Bootstrap Dropdown
+                    // Bootstrap Dropdown options
                     const dropdownOptions = {};
 
                         if (this.autoClose !== null) {
                             dropdownOptions.autoClose = this.autoClose;
                         }
 
-                    // Если указан menuOffset, используем его for Popper.js offset
+                    // Use menuOffset for Popper.js when set
                     if (this.menuOffset !== null) {
-                        // Преобразуем в формат Popper.js: [x, y] или число (только y)
+                        // Popper format: [x, y] or number (y only)
                         if (Array.isArray(this.menuOffset)) {
                             dropdownOptions.offset = this.menuOffset;
                         } else if (typeof this.menuOffset === 'number') {
@@ -739,12 +628,12 @@ window.cmpDropdown = {
                     this.dropdownInstance = new window.bootstrap.Dropdown(toggleElement, dropdownOptions);
 
 
-                    // Подписка на события Bootstrap for синхронизации состояния
+                    // Subscribe to Bootstrap events for state sync
                     this.$refs.dropdownContainer.addEventListener('show.bs.dropdown', () => {
                         this.isOpen = true;
                         this.$emit('show');
 
-                        // Фокус на поле поиска при открытии (если поиск включен)
+                        // Focus search input on open when searchable
                         if (this.searchable && this.$refs.searchInput) {
                             this.$nextTick(() => {
                                 this.$refs.searchInput.focus();
@@ -753,7 +642,7 @@ window.cmpDropdown = {
                     });
 
                     this.$refs.dropdownContainer.addEventListener('shown.bs.dropdown', () => {
-                        // Дополнительные действия после открытия
+                        // Post-open actions
                     });
 
                     this.$refs.dropdownContainer.addEventListener('hide.bs.dropdown', () => {
@@ -762,13 +651,13 @@ window.cmpDropdown = {
                     });
 
                     this.$refs.dropdownContainer.addEventListener('hidden.bs.dropdown', () => {
-                        // Очистка поиска при закрытии (optional)
+                        // Clear search on close
                         if (this.searchable) {
                             this.searchQuery = '';
                         }
                     });
 
-                    // Обработка closeOnOutsideClick
+                    // closeOnOutsideClick handling
                     if (this.closeOnOutsideClick) {
                         const handleOutsideClick = (event) => {
                             if (this.isOpen && !this.$refs.dropdownContainer.contains(event.target)) {
@@ -785,12 +674,12 @@ window.cmpDropdown = {
 
     beforeUnmount() {
         // @skill-anchor id:sk-eeb23d #for-bootstrap-dispose
-        // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
+        // Dispose Bootstrap Dropdown to avoid leaks
         if (this.dropdownInstance) {
             this.dropdownInstance.dispose();
             this.dropdownInstance = null;
         }
-        // Удаляем обработчик клика вне области
+        // Remove outside-click handler
         if (this.outsideClickHandler) {
             document.removeEventListener('click', this.outsideClickHandler);
             this.outsideClickHandler = null;

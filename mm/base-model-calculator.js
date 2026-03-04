@@ -56,7 +56,7 @@
             throw new Error(`calculateMetrics not implemented in model "${this.name}"`);
         }
 
-        // --- Общие математические утилиты ---
+        // --- Common math utilities ---
 
         clamp(x, min, max) { return Math.max(min, Math.min(max, x)); }
 

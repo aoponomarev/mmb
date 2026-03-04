@@ -1,10 +1,10 @@
 /**
  * ================================================================================================
- * MAIN ROUTER - Главный роутер for Cloudflare Workers API
+ * MAIN ROUTER - Main router for Cloudflare Workers API
  * ================================================================================================
  * Skill: id:sk-02d3ea
  *
- * PURPOSE: Обработка всех входящих запросов и маршрутизация к соответствующим handlers.
+ * PURPOSE: Handle all incoming requests and route to appropriate handlers.
  *
  * ROUTES:
  * - /auth/* → OAuth endpoints (auth.js)
@@ -18,8 +18,8 @@
  * - /health → Health check endpoint
  *
  * @param {Request} request - Incoming HTTP request
- * @param {Object} env - Environment variables и bindings (DB, API_CACHE, secrets)
- * @returns {Promise<Response>} HTTP ответ
+ * @param {Object} env - Environment variables and bindings (DB, API_CACHE, secrets)
+ * @returns {Promise<Response>} HTTP response
  */
 
 import { handleAuth } from './auth.js';
@@ -35,7 +35,7 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Handle preflight OPTIONS запросов
+    // Handle preflight OPTIONS requests
     if (request.method === 'OPTIONS') {
       return handleOptions(request);
     }
@@ -43,7 +43,7 @@ export default {
     try {
       let response;
 
-      // Маршрутизация по путям
+      // Route by path
       if (path.startsWith('/auth/')) {
         // OAuth endpoints
         response = await handleAuth(request, env, path);
@@ -95,7 +95,7 @@ export default {
 
       return response;
     } catch (error) {
-      // Обработка ошибок
+      // Error handling
       console.error('Worker error:', error);
       return jsonResponse(
         {

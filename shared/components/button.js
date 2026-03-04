@@ -1,44 +1,43 @@
 /**
  * ================================================================================================
- * BUTTON COMPONENT - Компонент кнопки
+ * BUTTON COMPONENT - Button component
  * ================================================================================================
  *
- * PURPOSE: Переиспользуемый компонент кнопки с поддержкой иконки, текста, суффикса, вариантов Bootstrap,
- * размеров, состояний, адаптивности и детерминированных хэшей экземпляров.
+ * PURPOSE: Reusable button with icon, text, suffix, Bootstrap variants,
+ * sizes, states, responsiveness and deterministic instance hashes.
  *
- * Обработка событий:
+ * Event handling:
  * // @skill-anchor id:sk-f449b3 #for-template-logic-separation #not-doc-duplication
- * Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/button-template.js`
+ * Layout and CSS: see template header in `shared/templates/button-template.js`
  *
- * API КОМПОНЕНТА:
+ * COMPONENT API:
  *
- * Входные параметры (props):
- * - label (String) — текст кнопки (отображается на десктопе, если задана иконка или укороченный текст)
- * - labelShort (String) — укороченная версия текста for мобильных (using, если icon не задан)
- * - icon (String) — CSS класс иконки слева (Font Awesome, Material Symbols)
- * - suffix (Object | Array) — суффикс справа. Может быть одиночным объектом или массивом элементов. Формат элемента:
- *   { type: 'badge'|'icon'|'indicator'|'chevron'|'info', value: String|Number, variant: String, expanded: Boolean, tooltip: String }
- * - tooltipIcon (String) — всплывающая подсказка for иконки слева
- * - tooltipText (String) — всплывающая подсказка for текстовой области
- * - tooltipSuffix (String) — всплывающая подсказка for суффикса (приоритет над suffix.tooltip, работает только for одиночного suffix)
- * - variant (String, default: 'primary') — вариант Bootstrap: 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'outline-*', 'link'
- * - size (String) — размер кнопки: 'sm', 'lg' или null (по умолчанию)
- * - disabled (Boolean) — отключённое состояние кнопки
- * - loading (Boolean) — состояние загрузки (показывает спиннер вместо иконки/текста)
- * - type (String, default: 'button') — тип кнопки: 'button', 'submit', 'reset'
- * - iconOpacity (Number, default: 1) — прозрачность иконки слева (0-1)
- * - buttonId (String) — идентификатор экземпляра for генерации детерминированного хэша (instanceHash)
- * - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
- * - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', icon: 'классы', label: 'классы', suffix: 'классы' }
- * - buttonAttributes (Object, default: {}) — произвольные атрибуты for передачи на корневой <button> элемент. Используется for интеграции with Bootstrap API (dropdown, modal и т.д.)
+ * Props:
+ * - label (String) — button text (desktop; used when icon or labelShort set)
+ * - labelShort (String) — short text for mobile (used when icon not set)
+ * - icon (String) — left icon CSS class (Font Awesome, Material Symbols)
+ * - suffix (Object | Array) — right suffix. Single object or array. Element: { type, value, variant, expanded, tooltip }
+ * - tooltipIcon (String) — tooltip for left icon
+ * - tooltipText (String) — tooltip for text area
+ * - tooltipSuffix (String) — tooltip for suffix (overrides suffix.tooltip, single suffix only)
+ * - variant (String, default: 'primary') — Bootstrap variant
+ * - size (String) — 'sm', 'lg' or null (default)
+ * - disabled (Boolean) — disabled state
+ * - loading (Boolean) — loading state (spinner instead of icon/text)
+ * - type (String, default: 'button') — 'button', 'submit', 'reset'
+ * - iconOpacity (Number, default: 1) — left icon opacity (0-1)
+ * - buttonId (String) — instance id for deterministic hash (instanceHash)
+ * - classesAdd (Object, default: {}) — classes to add. Shape: { root, icon, label, suffix }
+ * - classesRemove (Object, default: {}) — classes to remove. Shape: { root, icon, label, suffix }
+ * - buttonAttributes (Object, default: {}) — arbitrary attributes for root <button>. For Bootstrap API (dropdown, modal etc.)
  *
- * Logoutные события (emits):
- * - click — общее событие клика по кнопке (эмитится всегда при клике на любую зону)
- * - click-icon — клик по иконке слева (эмитится вместе с click)
- * - click-text — клик по текстовой области (эмитится вместе с click)
- * - click-suffix — клик по элементу суффикса (эмитится вместе с click, передаёт элемент суффикса как второй аргумент)
+ * Emits:
+ * - click — general click (fired on any zone)
+ * - click-icon — left icon click (also fires click)
+ * - click-text — text area click (also fires click)
+ * - click-suffix — suffix click (also fires click, passes suffix element as second arg)
  *
- * Note: Все зоны (иконка, текст, суффикс) эмитят общее событие click по умолчанию. Раздельные события (click-icon, click-text, click-suffix) срабатывают только если назначены явно в родительском компоненте.
+ * Note: All zones emit click by default. Separate events (click-icon, click-text, click-suffix) only when bound in parent.
  *
 */
 
@@ -46,36 +45,36 @@ window.cmpButton = {
     template: '#button-template',
 
     props: {
-        // === Текст кнопки ===
+        // === Button text ===
         label: {
             type: String,
             default: null
         },
         labelShort: {
             type: String,
-            default: null // укороченная версия текста for мобильных (если нет иконки)
+            default: null // short text for mobile (when no icon)
         },
 
-        // === Опциональные ===
+        // === Optional ===
         icon: {
             type: String,
             default: null
         },
 
-        // === Суффикс (правый элемент) - can be объектом или массивом ===
+        // === Suffix (right element) - object or array ===
         suffix: {
             type: [Object, Array],
             default: null,
             validator: (value) => {
                 if (!value) return true;
-                // Если массив - проверяем каждый элемент
+                // If array - check each element
                 if (Array.isArray(value)) {
                     return value.every(item => {
                         const validTypes = ['badge', 'icon', 'indicator', 'chevron', 'info'];
                         return validTypes.includes(item.type) && item.value;
                     });
                 }
-                // Если объект - проверяем как одиночный элемент
+                // If object - treat as single element
                 const validTypes = ['badge', 'icon', 'indicator', 'chevron', 'info'];
                 if (!validTypes.includes(value.type)) return false;
                 if (!value.value) return false;
@@ -83,7 +82,7 @@ window.cmpButton = {
             }
         },
 
-        // === Подсказки for тап-зон ===
+        // === Tooltips for tap zones ===
         tooltipIcon: {
             type: String,
             default: null
@@ -101,7 +100,7 @@ window.cmpButton = {
             default: null
         },
 
-        // === Bootstrap варианты и размеры ===
+        // === Bootstrap variant and size ===
         variant: {
             type: String,
             default: 'primary',
@@ -113,7 +112,7 @@ window.cmpButton = {
             validator: (value) => !value || ['sm', 'lg'].includes(value)
         },
 
-        // === Состояния ===
+        // === States ===
         disabled: {
             type: Boolean,
             default: false
@@ -130,34 +129,33 @@ window.cmpButton = {
         buttonId: {
             type: String,
             default: null
-        }, // Для instanceHash (идентификация экземпляра)
+        }, // For instanceHash (instance identification)
 
-        // === Произвольные атрибуты for использования в комплексных компонентах ===
+        // === Arbitrary attributes for complex usage ===
         buttonAttributes: {
             type: Object,
             default: () => ({})
-            // Пример: { 'data-bs-toggle': 'dropdown', 'aria-expanded': false, 'id': 'dropdown-button', 'class': 'dropdown-toggle' }
-            // Используется for передачи data-атрибутов, aria-атрибутов и дополнительных классов
-            // for интеграции with Bootstrap API (dropdown, modal и т.д.)
+            // Example: { 'data-bs-toggle': 'dropdown', 'aria-expanded': false, 'id': 'dropdown-button', 'class': 'dropdown-toggle' }
+            // Used to pass data-*, aria-* and extra classes for Bootstrap API (dropdown, modal etc.)
         },
 
-        // === Стилизация ===
+        // === Styling ===
         iconOpacity: {
             type: Number,
             default: 1,
             validator: (value) => value >= 0 && value <= 1
         },
 
-        // === Управление классами ===
+        // === Class management ===
         classesAdd: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'float-start', icon: 'custom-icon', label: 'custom-label', suffix: 'hide-suffix' }
+            // Example: { root: 'float-start', icon: 'custom-icon', label: 'custom-label', suffix: 'hide-suffix' }
         },
         classesRemove: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'some-class', icon: 'another-class' }
+            // Example: { root: 'some-class', icon: 'another-class' }
         }
 
     },
@@ -165,37 +163,35 @@ window.cmpButton = {
     emits: ['click', 'click-icon', 'click-text', 'click-suffix'],
 
     computed: {
-        // Нормализация suffix в массив
+        // Normalize suffix to array
         suffixArray() {
             const baseSuffix = this.suffix ? (Array.isArray(this.suffix) ? this.suffix : [this.suffix]) : [];
 
-            // УДАЛЕНО: Автоматическое добавление chevron for dropdown-toggle
-            // Теперь используем стандартный Bootstrap треугольник через CSS псевдоэлемент ::after
-            // (идентично combobox)
+            // REMOVED: Auto chevron for dropdown-toggle; using Bootstrap triangle via CSS ::after (same as combobox)
 
             return baseSuffix;
         },
 
-        // CSS классы for корневого элемента (root)
+        // CSS classes for root element (root)
         buttonClasses() {
             const baseClasses = ['btn', 'btn-responsive', this.instanceHash];
 
-            // Условные классы for адаптивности
+            // Conditional classes for responsiveness
             if (this.icon) baseClasses.push('has-icon');
             if (this.labelShort) baseClasses.push('has-label-short');
 
-            // Если disabled и не loading - используем нейтральные цвета (кроме variant='link')
+            // If disabled and not loading - use neutral colors (except variant='link')
             if (this.disabled && !this.loading && this.variant !== 'link') {
                 baseClasses.push('btn-secondary', 'text-secondary', 'bg-secondary', 'bg-opacity-10', 'border-secondary');
             } else {
-                // Обычный вариант из темы (или link for иконочных кнопок в header)
+                // Theme variant (or link for icon-only buttons in header)
                 baseClasses.push(`btn-${this.variant}`);
             }
 
             if (this.size) baseClasses.push(`btn-${this.size}`);
             if (this.disabled) baseClasses.push('disabled');
 
-            // Добавить дополнительные классы из buttonAttributes (если есть)
+            // Add extra classes from buttonAttributes if present
             if (this.buttonAttributes.class) {
                 const extraClasses = Array.isArray(this.buttonAttributes.class)
                     ? this.buttonAttributes.class
@@ -205,7 +201,7 @@ window.cmpButton = {
 
             // @skill-anchor id:sk-add9a6 #for-classes-add-remove #for-classes-merge-order
             // @skill-anchor id:sk-cb75ec #for-utility-availability-check
-            // Управление классами через classesAdd и classesRemove
+            // Class management via classesAdd and classesRemove
             if (!window.classManager) {
                 console.error('classManager not found in buttonClasses');
                 return baseClasses.join(' ');
@@ -219,9 +215,9 @@ window.cmpButton = {
             return result;
         },
 
-        // CSS классы for обертки иконки (icon)
+        // CSS classes for icon wrapper (icon)
         iconClasses() {
-            // Flexbox for центрирования иконки внутри квадратной обертки
+            // Flexbox to center icon in square wrapper
             const baseClasses = ['icon', 'd-flex', 'align-items-center', 'justify-content-center'];
             if (this.iconOpacity === 0.5) baseClasses.push('opacity-50');
 
@@ -239,7 +235,7 @@ window.cmpButton = {
             );
         },
 
-        // CSS классы for обертки текста (label)
+        // CSS classes for label wrapper (label)
         labelClasses() {
             const baseClasses = ['text-nowrap'];
 
@@ -256,7 +252,7 @@ window.cmpButton = {
             return result;
         },
 
-        // CSS классы for обертки суффиксов (suffix)
+        // CSS classes for suffix wrapper (suffix)
         suffixClasses() {
             const baseClasses = ['d-flex', 'align-items-center', 'suffix-container'];
 
@@ -273,20 +269,18 @@ window.cmpButton = {
             return result;
         },
 
-        // Атрибуты for передачи на корневой элемент (исключая class, который обрабатывается отдельно)
+        // Attributes for root element (class handled separately in buttonClasses)
         buttonAttrs() {
             const attrs = { ...this.buttonAttributes };
-            // Удаляем class из копии, так как он обрабатывается в buttonClasses
+            // Remove class from copy; it is handled in buttonClasses
             delete attrs.class;
             return attrs;
         },
 
-        // CSS классы for внутреннего контейнера
-        // ВАЖНО: Вертикальный padding (py-*) управляется через CSS в зависимости от размера кнопки
-        // Горизонтальный padding (px-2) задан по умолчанию, can be переопределен через classesAdd.container
-        // ВАЖНО: gap НЕ using, так как flexbox gap применяется между ВСЕМИ дочерними элементами,
-        // даже если они скрыты через visibility:hidden или имеют width:0. Это вызывает смещение иконки.
-        // Отступы между элементами управляются через CSS for дочерних элементов.
+        // CSS classes for inner container
+        // Vertical padding (py-*) is controlled via CSS by button size
+        // Horizontal padding (px-2) default; can override via classesAdd.container
+        // gap not used: flexbox gap applies to all children (including hidden/width:0), shifting icon; use margin on children instead
         containerClasses() {
             const baseClasses = ['d-flex', 'align-items-center', 'justify-content-center', 'px-2'];
 
@@ -302,28 +296,27 @@ window.cmpButton = {
             );
         },
 
-        // Детерминированный хэш экземпляра на основе родительского контекста и props
-        // Стабилен между сессиями - один и тот же контекст + идентификатор всегда дает один и тот же хэш
+        // Deterministic instance hash from parent context and props; stable across sessions
         instanceHash() {
             if (!window.hashGenerator) {
                 console.warn('hashGenerator not found, using fallback');
                 return 'avto-00000000';
             }
 
-            // Родительский контекст (стабильный маркер родителя)
+            // Parent context (stable parent marker)
             const parentContext = this.getParentContext();
 
-            // Идентификатор экземпляра из props
+            // Instance id from props
             const instanceId = this.buttonId || this.label || this.icon || 'button';
 
-            // Комбинация for уникальности
+            // Combine for uniqueness
             const uniqueId = `${parentContext}:${instanceId}`;
             return window.hashGenerator.generateMarkupClass(uniqueId);
         }
     },
 
     watch: {
-        // Отслеживаем изменения tooltip props и обновляем Bootstrap tooltips
+        // Watch tooltip props and update Bootstrap tooltips
         tooltipIcon(newVal) {
             this.updateTouchTooltips('icon', newVal);
         },
@@ -333,15 +326,15 @@ window.cmpButton = {
         tooltipSuffix(newVal) {
             this.updateTouchTooltips('suffix', newVal);
         },
-        // Отслеживаем изменения suffix (can be массивом)
+        // Watch suffix changes (can be array)
         suffix: {
             handler(newVal) {
                 if (this._touchTooltips) {
                     this.$nextTick(() => {
-                        // Обновляем tooltips for элементов суффикса
+                        // Update tooltips for suffix elements
                         this._touchTooltips.forEach(({ element, tooltip, elementType }) => {
                             if (elementType === 'suffix' && tooltip) {
-                                // Для суффикса нужно найти соответствующий элемент в массиве
+                                // For suffix find matching element in array
                                 const suffixArray = Array.isArray(newVal) ? newVal : (newVal ? [newVal] : []);
                                 const dataOriginalTitle = element.getAttribute('data-original-title') || '';
                                 const suffixItem = suffixArray.find(item => {
@@ -354,7 +347,7 @@ window.cmpButton = {
                                         tooltip.setContent({ '.tooltip-inner': newTitle });
                                         element.setAttribute('data-original-title', newTitle);
                                     } catch (error) {
-                                        console.error('watch suffix: ошибка обновления tooltip', error, element);
+                                        console.error('watch suffix: tooltip update error', error, element);
                                     }
                                 }
                             }
@@ -367,7 +360,7 @@ window.cmpButton = {
     },
 
     methods: {
-        // Update Bootstrap tooltips for указанного типа элемента
+        // Update Bootstrap tooltips for given element type
         updateTouchTooltips(elementType, newTitle) {
             if (!this._touchTooltips || !newTitle) return;
 
@@ -378,7 +371,7 @@ window.cmpButton = {
                             tooltip.setContent({ '.tooltip-inner': newTitle });
                             element.setAttribute('data-original-title', newTitle);
                         } catch (error) {
-                            console.error('updateTouchTooltips: ошибка обновления tooltip', error, element);
+                            console.error('updateTouchTooltips: tooltip update error', error, element);
                         }
                     }
                 });
@@ -386,32 +379,26 @@ window.cmpButton = {
         },
 
         // @skill-anchor id:sk-cb75ec #for-vue-comment-node-fallback #not-dom-in-computed
-        // Get родительский контекст (класс avto-* или ID родителя)
-        // Вызывается из computed, поэтому $el can be еще не доступен
+        // Get parent context (avto-* class or parent ID). Called from computed so $el may be unavailable
         getParentContext() {
-            // Проверяем доступность DOM элемента
             if (!this.$el) {
                 return 'root';
             }
 
-            // Проверяем наличие родителя
             if (!this.$el.parentElement) {
                 return 'root';
             }
 
-            // Ищем родительский элемент с классом avto-* или ID
             let parent = this.$el.parentElement;
             let depth = 0;
-            const maxDepth = 5; // Ограничение глубины поиска
+            const maxDepth = 5; // Search depth limit
 
             while (parent && depth < maxDepth) {
-                // Проверяем классы avto-*
                 const avtoClass = Array.from(parent.classList).find(cls => cls.startsWith('avto-'));
                 if (avtoClass) {
                     return avtoClass;
                 }
 
-                // Проверяем ID
                 if (parent.id) {
                     return `#${parent.id}`;
                 }
@@ -423,27 +410,27 @@ window.cmpButton = {
             return 'root'; // fallback
         },
 
-        // Обработчик клика по кнопке
+        // Button click handler
         handleClick(event) {
             if (this.disabled || this.loading) return;
             this.$emit('click', event);
         },
 
-        // Обработчик клика по иконке
+        // Icon click handler
         handleIconClick(event) {
             if (this.disabled || this.loading) return;
             this.$emit('click', event);
             this.$emit('click-icon', event);
         },
 
-        // Обработчик клика по тексту
+        // Text click handler
         handleTextClick(event) {
             if (this.disabled || this.loading) return;
             this.$emit('click', event);
             this.$emit('click-text', event);
         },
 
-        // Обработчик клика по элементу суффикса
+        // Suffix element click handler
         handleSuffixClick(event, item) {
             if (this.disabled || this.loading) return;
             this.$emit('click', event);
@@ -451,15 +438,13 @@ window.cmpButton = {
         },
 
         /**
-         * Инициализация Bootstrap tooltips с поддержкой long press на touch-устройствах
-         * Заменяет нативные tooltips (title) на Bootstrap tooltips с manual trigger
+         * Init Bootstrap tooltips with long-press on touch devices.
+         * Replaces native title tooltips with Bootstrap tooltips (manual trigger).
          */
         initTouchTooltips() {
-            // Определение touch-устройства: проверяем несколько способов
             const hasTouchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            // Проверка через media query (for DevTools эмуляции)
             const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-            // Комбинированная проверка: touch support ИЛИ маленький экран (for тестирования в DevTools)
+            // Touch support OR small screen (for DevTools testing)
             const isTouch = hasTouchSupport || isSmallScreen;
 
             if (!isTouch || !window.bootstrap || !window.bootstrap.Tooltip) {
@@ -469,19 +454,17 @@ window.cmpButton = {
             const LONG_PRESS_DURATION = 500; // 500ms for long press
             const tooltipElements = [];
 
-            // Находим все элементы с title (иконка, текст, суффикс)
+            // Find all elements with title (icon, text, suffix)
             const elements = this.$el.querySelectorAll('[title]');
 
             elements.forEach(element => {
                 const title = element.getAttribute('title');
                 if (!title) return;
 
-                // Сохраняем title в data-атрибут for восстановления при необходимости
                 element.setAttribute('data-original-title', title);
-                // Убираем title, чтобы не показывался нативный tooltip
                 element.removeAttribute('title');
 
-                // Определяем тип элемента for связи с props
+                // Determine element type for props mapping
                 let elementType = null;
                 if (element.classList.contains('icon')) {
                     elementType = 'icon';
@@ -493,7 +476,7 @@ window.cmpButton = {
 
                 let tooltip = null;
                 try {
-                    // Создаём Bootstrap tooltip с manual trigger
+                    // Create Bootstrap tooltip with manual trigger
                     tooltip = new window.bootstrap.Tooltip(element, {
                         title: title,
                         trigger: 'manual'
@@ -501,28 +484,26 @@ window.cmpButton = {
 
                     tooltipElements.push({ element, tooltip, elementType });
                 } catch (error) {
-                    console.error('initTouchTooltips: ошибка создания tooltip', error);
-                    // Восстанавливаем title при ошибке
+                    console.error('initTouchTooltips: tooltip create error', error);
                     element.setAttribute('title', title);
                     element.removeAttribute('data-original-title');
-                    return; // Пропускаем этот элемент, если failed to создать tooltip
+                    return;
                 }
 
-                // Long press обработчики
                 let longPressTimer = null;
-                let tooltipShown = false; // Флаг, что tooltip был показан
+                let tooltipShown = false;
 
                 const handleTouchStart = (e) => {
                     if (!tooltip) {
                         return;
                     }
-                    tooltipShown = false; // Сбрасываем флаг при новом touchstart
+                    tooltipShown = false;
                     longPressTimer = setTimeout(() => {
                         try {
                             tooltip.show();
-                            tooltipShown = true; // Устанавливаем флаг, что tooltip был показан
+                            tooltipShown = true;
                         } catch (error) {
-                            console.error('initTouchTooltips: ошибка показа tooltip', error);
+                            console.error('initTouchTooltips: tooltip show error', error);
                         }
                     }, LONG_PRESS_DURATION);
                 };
@@ -532,8 +513,7 @@ window.cmpButton = {
                         clearTimeout(longPressTimer);
                         longPressTimer = null;
                     }
-                    // Скрываем tooltip при touchend только если он НЕ был показан (не было long press)
-                    // Если tooltip был показан, он останется видимым до клика вне элемента
+                    // Hide on touchend only if tooltip was not shown (no long press); if shown, stays until click outside
                     if (tooltip && !tooltipShown) {
                         tooltip.hide();
                     }
@@ -560,7 +540,7 @@ window.cmpButton = {
                 element.addEventListener('touchcancel', handleTouchCancel, { passive: true });
                 element.addEventListener('click', handleClick);
 
-                // Сохраняем обработчики for очистки
+                // Store handlers for cleanup
                 element._touchTooltipHandlers = {
                     touchstart: handleTouchStart,
                     touchend: handleTouchEnd,
@@ -569,20 +549,16 @@ window.cmpButton = {
                 };
             });
 
-            // Сохраняем ссылки for очистки
             this._touchTooltips = tooltipElements;
 
-
-            // Обработчик клика на document for скрытия всех tooltips при клике вне элемента
+            // Document click handler to hide all tooltips when clicking outside
             if (tooltipElements.length > 0 && !this._documentClickHandler) {
                 this._documentClickHandler = (e) => {
-                    // Проверяем, был ли клик вне всех элементов с tooltips
                     const clickedInside = tooltipElements.some(({ element }) => {
                         return element.contains(e.target) || element === e.target;
                     });
 
                     if (!clickedInside) {
-                        // Скрываем все tooltips
                         tooltipElements.forEach(({ tooltip }) => {
                             if (tooltip) {
                                 tooltip.hide();
@@ -591,7 +567,7 @@ window.cmpButton = {
                     }
                 };
 
-                // Используем capture phase for более раннего перехвата
+                // Use capture phase for earlier handling
                 document.addEventListener('click', this._documentClickHandler, true);
                 document.addEventListener('touchend', this._documentClickHandler, true);
             }
@@ -599,7 +575,7 @@ window.cmpButton = {
     },
 
     mounted() {
-        // Инициализация touch tooltips на мобильных устройствах
+        // Init touch tooltips on mobile
         this.$nextTick(() => {
             this.initTouchTooltips();
         });
@@ -607,20 +583,20 @@ window.cmpButton = {
 
     updated() {
         // @skill-anchor id:sk-502074 #for-tooltip-reactivity
-        // Обновляем Bootstrap tooltips при изменении title (например, при смене языка)
+        // Update Bootstrap tooltips when title changes (e.g. language switch)
         if (this._touchTooltips && this._touchTooltips.length > 0) {
             this.$nextTick(() => {
                 this._touchTooltips.forEach(({ element, tooltip, elementType }) => {
                     if (!tooltip) return;
 
-                    // Получаем текущий title из props (Vue обновляет title реактивно)
+                    // Get current title from props (Vue updates title reactively)
                     let currentTitle = null;
                     if (elementType === 'icon') {
                         currentTitle = this.tooltipIcon;
                     } else if (elementType === 'text') {
                         currentTitle = this.tooltipText;
                     } else if (elementType === 'suffix') {
-                        // Для суффикса проверяем suffix prop
+                        // For suffix check suffix prop
                         if (Array.isArray(this.suffix)) {
                             const suffixItem = this.suffix.find(item => {
                                 const itemTooltip = item?.tooltip || '';
@@ -635,7 +611,7 @@ window.cmpButton = {
                         }
                     }
 
-                    // Обновляем tooltip, если title изменился
+                    // Update tooltip if title changed
                     if (currentTitle) {
                         const dataOriginalTitle = element.getAttribute('data-original-title') || '';
                         if (currentTitle !== dataOriginalTitle) {
@@ -643,7 +619,7 @@ window.cmpButton = {
                                 tooltip.setContent({ '.tooltip-inner': currentTitle });
                                 element.setAttribute('data-original-title', currentTitle);
                             } catch (error) {
-                                console.error('updated: ошибка обновления tooltip', error);
+                                console.error('updated: tooltip update error', error);
                             }
                         }
                     }
@@ -653,17 +629,17 @@ window.cmpButton = {
     },
 
     beforeUnmount() {
-        // Удаляем обработчик клика на document
+        // Remove document click handler
         if (this._documentClickHandler) {
             document.removeEventListener('click', this._documentClickHandler, true);
             document.removeEventListener('touchend', this._documentClickHandler, true);
             this._documentClickHandler = null;
         }
 
-        // Очистка touch tooltips
+        // Cleanup touch tooltips
         if (this._touchTooltips) {
             this._touchTooltips.forEach(({ element, tooltip }) => {
-                // Удаляем обработчики событий
+                // Remove event handlers
                 if (element._touchTooltipHandlers) {
                     element.removeEventListener('touchstart', element._touchTooltipHandlers.touchstart);
                     element.removeEventListener('touchend', element._touchTooltipHandlers.touchend);
@@ -672,14 +648,14 @@ window.cmpButton = {
                     delete element._touchTooltipHandlers;
                 }
 
-                // Восстанавливаем title из data-original-title
+                // Restore title from data-original-title
                 const originalTitle = element.getAttribute('data-original-title');
                 if (originalTitle) {
                     element.setAttribute('title', originalTitle);
                     element.removeAttribute('data-original-title');
                 }
 
-                // Уничтожаем Bootstrap tooltip
+                // Dispose Bootstrap tooltip
                 if (tooltip) {
                     tooltip.dispose();
                 }

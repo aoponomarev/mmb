@@ -9,12 +9,12 @@
  * PRINCIPLES:
  * - Reactive store via Vue.reactive (if available)
  * - Fallback to CustomEvent for non-Vue pages
- * - Приоритезация сообщений (danger > warning > info > success)
+ * - Message priority (danger > warning > info > success)
  * - Integration with eventBus for global events
  * - Scope support for message filtering
  *
  * USAGE:
- * window.AppMessages.push({ text: 'Текст', type: 'info', scope: 'global' })
+ * window.AppMessages.push({ text: 'Message text', type: 'info', scope: 'global' })
  * window.AppMessages.dismiss(id)
  * window.AppMessages.clear('global')
  *

@@ -12,7 +12,7 @@
  *
  * Differences from 260101:
  * - normalizationWeight = 1 (robust normalization via median+MAD)
- * - Веса: A=0.40, I=0.40, IA=0.20, I_CGR=0.70, I_CPT=0.30
+ * - Weights: A=0.40, I=0.40, IA=0.20, I_CGR=0.70, I_CPT=0.30
  * - Lambda: min=0.05, max=0.2, fgiBoost/vixBoost=0.05
  */
 

@@ -17,7 +17,7 @@
  * - Component uses template via template: '#dropdown-template'
  *
  * TEMPLATE FEATURES:
- * Структура HTML:
+ * HTML structure:
  * - Root: ⟨div class="dropdown"⟩ with ref="dropdownContainer"
  * - Trigger button: ⟨cmp-button⟩ or custom via slot #button
  * - Dropdown menu: ⟨ul class="dropdown-menu"⟩ with conditional 'show' when open
@@ -35,13 +35,13 @@
  * - #items — list items (scope: filteredItems, searchQuery, handleItemSelect)
  * Responsiveness:
  * - Trigger button responsiveness via .dropdown-responsive and .btn-responsive
- * - С иконкой на мобильных: если задан buttonIcon, на мобильных отображается только иконка, на десктопе — только текст buttonText
- * - С укороченным текстом на мобильных: если buttonIcon не задан, но задан buttonTextShort, на мобильных отображается укороченный текст, на десктопе — полный buttonText
- * - Без адаптивности: если не заданы ни buttonIcon, ни buttonTextShort, всегда отображается полный buttonText
+ * - With icon on mobile: if buttonIcon set, show icon only on mobile, buttonText on desktop
+ * - With short text on mobile: if buttonTextShort set (no icon), show short on mobile, full on desktop
+ * - No responsiveness: if neither buttonIcon nor buttonTextShort, always full buttonText
  *
  * REFERENCES:
  * - General template principles: id:sk-483943 (section "x-template extraction")
- * - Компонент: shared/components/dropdown.js
+ * - Component: shared/components/dropdown.js
  */
 
 (function() {

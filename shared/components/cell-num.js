@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * CELL NUM - Компонент числовой ячейки таблицы
+ * CELL NUM - Table numeric cell component
  * ================================================================================================
  *
- * PURPOSE: Форматирование и отображение числовых значений в таблице.
+ * PURPOSE: Format and display numeric values in table.
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
@@ -13,10 +13,9 @@
  * <cell-num :value="coin.current_price" prefix="$" :precision="2" type="price"></cell-num>
  * <cell-num :value="coin.price_change_percentage_24h" :precision="2" colorize unit="%"></cell-num>
  *
- * ТИПЫ ФОРМАТИРОВАНИЯ:
- * - 'default': стандартное форматирование с фиксированной точностью
- * - 'price': динамическая точность for отображения минимум 2 значащих цифр
- *   (например: $0.000023 вместо $0.00)
+ * FORMAT TYPES:
+ * - 'default': fixed precision
+ * - 'price': dynamic precision, at least 2 significant digits (e.g. $0.000023 instead of $0.00)
  *
 */
 
@@ -27,56 +26,55 @@
         template: '#cell-num-template',
 
         props: {
-            // Исходное число
+            // Raw number
             value: {
                 type: Number,
                 default: 0
             },
-            // Знаки после запятой (0-10)
+            // Decimal places (0-10)
             precision: {
                 type: Number,
                 default: 2,
                 validator: (value) => value >= 0 && value <= 10
             },
-            // Префикс: '$', '€', '%'
+            // Prefix: '$', '€', '%'
             prefix: {
                 type: String,
                 default: ''
             },
-            // Единица измерения: '%', '₽', 'kg'
+            // Unit: '%', '₽', 'kg'
             unit: {
                 type: String,
                 default: ''
             },
-            // Включить автоматическую цветизацию на основе знака значения
+            // Enable color by sign (positive/negative)
             colorize: {
                 type: Boolean,
                 default: false
             },
-            // Отображение for пустых значений
+            // Display for empty value
             emptyValue: {
                 type: String,
                 default: '—'
             },
-            // Десятичный sectionитель
+            // Decimal separator
             decimalSeparator: {
                 type: String,
                 default: '.',
                 validator: (value) => [',', '.'].includes(value)
             },
-            // Разделитель разрядов
+            // Thousands separator
             thousandsSeparator: {
                 type: String,
                 default: ' ',
                 validator: (value) => [' ', '&nbsp;', ',', ''].includes(value)
             },
-            // Скрыть знак "+" for положительных значений (for Price)
+            // Hide "+" for positive values (for price)
             hidePositiveSign: {
                 type: Boolean,
                 default: false
             },
-            // Тип форматирования: 'default' | 'price'
-            // 'price' - всегда показывать минимум 2 значащие цифры
+            // Format type: 'default' | 'price'. 'price' = at least 2 significant digits
             type: {
                 type: String,
                 default: 'default',
@@ -85,18 +83,17 @@
         },
 
         computed: {
-            // Проверка, является ли значение пустым
+            // Is value empty
             isEmpty() {
                 return this.value === null || this.value === undefined || isNaN(this.value);
             },
 
-            // Проверка, является ли значение бесконечностью
+            // Is value infinite
             isInfinite() {
                 return !Number.isFinite(this.value);
             },
 
-            // Динамическая точность for типа 'price'
-            // Для очень малых чисел (< 0.01) вычисляем точность так, чтобы показать минимум 2 значащие цифры
+            // Dynamic precision for 'price' type; for very small numbers (< 0.01) show at least 2 significant digits
             effectivePrecision() {
                 if (this.type !== 'price' || this.isEmpty || this.isInfinite) {
                     return this.precision;
@@ -104,39 +101,37 @@
 
                 const absValue = Math.abs(this.value);
 
-                // Для чисел >= 0.01 используем стандартную точность (2 знака)
+                // For values >= 0.01 use standard precision
                 if (absValue >= 0.01) {
                     return this.precision;
                 }
 
-                // Для очень малых чисел вычисляем, сколько нулей после запятой
-                // и добавляем 2 значащие цифры
+                // For very small numbers compute decimal places for 2 significant digits
                 if (absValue === 0) {
                     return this.precision;
                 }
 
-                // Находим позицию первой ненулевой цифры после запятой
+                // Find first non-zero digit position after decimal
                 const str = absValue.toExponential();
                 const exponent = parseInt(str.split('e')[1]);
                 
-                // Если число в экспоненциальной форме с отрицательным показателем
+                // If exponent is negative (e.g. 0.000023)
                 if (exponent < 0) {
-                    // Возвращаем количество знаков, необходимое for отображения 2 значащих цифр
-                    // Например: 0.000023 -> нужно 6 знаков (000023)
-                    return Math.abs(exponent) + 1; // +1 for второй значащей цифры
+                    // Return decimal places needed for 2 significant digits
+                    return Math.abs(exponent) + 1; // +1 for second significant digit
                 }
 
                 return this.precision;
             },
 
-            // Округленное значение
+            // Rounded value
             roundedValue() {
                 if (this.isEmpty || this.isInfinite) return this.value;
                 const factor = Math.pow(10, this.effectivePrecision);
                 return Math.round(this.value * factor) / factor;
             },
 
-            // Отображение for пустых значений или бесконечности
+            // Display for empty or infinite
             emptyOrInfiniteDisplay() {
                 if (this.isEmpty) {
                     return this.emptyValue;
@@ -155,17 +150,17 @@
                 return null;
             },
 
-            // Знак числа (всегда показываем "+" for положительных, если не отключено через prop)
+            // Number sign (+ for positive unless hidePositiveSign)
             numberSign() {
                 if (this.isEmpty || this.isInfinite) return '';
-                if (this.hidePositiveSign) return ''; // Для Price не показываем "+"
+                if (this.hidePositiveSign) return '';
                 const value = this.roundedValue;
                 if (value < 0) return '−';
                 if (value > 0) return '+';
                 return '';
             },
 
-            // Целая часть числа (с sectionителями разрядов)
+            // Integer part (with thousands separator)
             integerPart() {
                 if (this.isEmpty || this.isInfinite) return '';
 
@@ -175,7 +170,7 @@
                 return this.addThousandsSeparator(intPart.toString());
             },
 
-            // Есть ли дробная часть
+            // Has fraction part
             hasFractionPart() {
                 if (this.isEmpty || this.isInfinite) return false;
                 if (this.effectivePrecision <= 0) return false;
@@ -184,20 +179,20 @@
                 const absValue = Math.abs(value);
                 const fracPart = absValue - Math.floor(absValue);
 
-                // Проверяем, есть ли значащие цифры в дробной части
+                // Check for significant digits in fraction
                 const fracStr = fracPart.toFixed(this.effectivePrecision);
                 const fracDigits = fracStr.substring(2);
                 return fracDigits.replace(/0+$/, '').length > 0 || this.effectivePrecision > 0;
             },
 
-            // Десятичный sectionитель
+            // Decimal separator display
             decimalSeparatorDisplay() {
                 if (this.isEmpty || this.isInfinite) return '';
                 if (!this.hasFractionPart) return '';
                 return this.decimalSeparator;
             },
 
-            // Дробная часть
+            // Fraction part
             fractionPart() {
                 if (this.isEmpty || this.isInfinite) return '';
                 if (!this.hasFractionPart) return '';
@@ -209,22 +204,22 @@
                 const fracStr = fracPart.toFixed(this.effectivePrecision);
                 const fracDigits = fracStr.substring(2);
 
-                // Для типа 'price' НЕ убираем нули в конце, чтобы показать все значащие цифры
+                // For 'price' keep zeros to show significant digits
                 if (this.type === 'price') {
-                    // Убираем только лишние нули в конце, оставляя минимум 2 значащие цифры
+                    // Trim trailing zeros but keep at least 2 significant digits
                     let trimmedFrac = fracDigits;
                     
-                    // Находим позицию первой ненулевой цифры
+                    // Find first non-zero digit
                     const firstNonZeroIndex = fracDigits.search(/[1-9]/);
                     
                     if (firstNonZeroIndex >= 0) {
-                        // Оставляем все до второй значащей цифры включительно
+                        // Keep up to second significant digit
                         const secondSignificantIndex = fracDigits.substring(firstNonZeroIndex + 1).search(/[1-9]/);
                         if (secondSignificantIndex >= 0) {
                             const endIndex = firstNonZeroIndex + 1 + secondSignificantIndex + 1;
                             trimmedFrac = fracDigits.substring(0, endIndex);
                         } else {
-                            // Если вторая значащая цифра - это ноль, оставляем её
+                            // If second significant digit is zero, keep it
                             trimmedFrac = fracDigits.substring(0, firstNonZeroIndex + 2);
                         }
                     }
@@ -232,10 +227,10 @@
                     return trimmedFrac;
                 }
 
-                // Для обычных чисел убираем лишние нули в конце
+                // For default type trim trailing zeros
                 let trimmedFrac = fracDigits.replace(/0+$/, '');
 
-                // Если после удаления нулей ничего не осталось, но precision требует знаки
+                // If nothing left after trim but precision > 0, keep original
                 if (trimmedFrac.length === 0 && this.effectivePrecision > 0) {
                     return fracDigits;
                 }
@@ -243,24 +238,23 @@
                 return trimmedFrac;
             },
 
-            // Единицы измерения
+            // Unit
             numberUnit() {
                 return this.unit || '';
             },
 
-            // CSS классы for частей числа (Bootstrap)
-            // Цветизация применяется через CSS селекторы на основе data-value-sign
+            // CSS classes for number parts (Bootstrap). Color via data-value-sign selectors
             prefixClass() {
                 return 'text-muted';
             },
 
             signClass() {
-                // Знак не имеет собственных классов - цвет применяется через CSS селекторы
+                // Sign has no own classes; color via CSS selectors
                 return '';
             },
 
             integerClass() {
-                // Целая часть: жирный шрифт for положительных чисел с целой частью >= 1
+                // Integer: bold for positive with int part >= 1
                 if (this.colorize && !this.isEmpty && !this.isInfinite) {
                     const value = this.roundedValue;
                     const absValue = Math.abs(value);
@@ -278,7 +272,7 @@
             },
 
             fractionClass() {
-                // Дробная часть не имеет собственных классов - цвет применяется через CSS селекторы
+                // Fraction has no own classes; color via CSS
                 return '';
             },
 
@@ -286,7 +280,7 @@
                 return 'text-muted small';
             },
 
-            // Data-атрибут for определения знака значения (for CSS селекторов)
+            // Data attr for value sign (for CSS selectors)
             colorizeDataAttr() {
                 if (!this.colorize) return null;
 
@@ -295,12 +289,12 @@
                 const value = this.roundedValue;
                 const absValue = Math.abs(value);
 
-                // Если значение близко к нулю (< 1), используем 'zero'
+                // If value near zero (< 1) use 'zero'
                 if (absValue < 1) {
                     return 'zero';
                 }
 
-                // Иначе определяем по знаку
+                // Otherwise by sign
                 if (value > 0) {
                     return 'positive';
                 } else if (value < 0) {
@@ -310,22 +304,21 @@
                 }
             },
 
-            // Tooltip с полным значением
+            // Tooltip with full value
             tooltipText() {
                 if (this.isEmpty || this.isInfinite) return null;
-                // Показываем точное значение в tooltip
                 return this.value.toString();
             }
         },
 
         methods: {
-            // Добавление sectionителя разрядов (каждые 3 цифры)
+            // Add thousands separator (every 3 digits)
             addThousandsSeparator(str) {
                 if (!this.thousandsSeparator || this.thousandsSeparator === '') {
                     return str;
                 }
 
-                // Разбиваем строку на группы по 3 цифры справа налево
+                // Split string into groups of 3 from right to left
                 const parts = [];
                 for (let i = str.length; i > 0; i -= 3) {
                     parts.unshift(str.substring(Math.max(0, i - 3), i));

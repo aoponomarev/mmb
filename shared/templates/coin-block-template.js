@@ -1,34 +1,6 @@
 /**
- * ================================================================================================
- * COIN-BLOCK TEMPLATE - Шаблон компонента блока монеты
- * ================================================================================================
- *
- * PURPOSE: Шаблон for компонента отображения информации о монете (иконка + символ).
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="coin-block-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="coin-block-template"
- * - Компонент использует шаблон через template: '#coin-block-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Корневой элемент: ⟨div class="coin-block d-flex align-items-center"⟩
- * - Иконка монеты: ⟨img⟩ с условным отображением
- * - Символ монеты: ⟨span class="text-uppercase fw-bold"⟩
- * Layout и CSS-классы:
- * - Использование Bootstrap классов for layout (d-flex, align-items-center)
- * - Поддержка tooltip через title атрибут
- * - Курсор pointer for индикации кликабельности
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-483943 (section "Вынос x-template шаблонов")
- * - Компонент: shared/components/coin-block.js
+ * COIN-BLOCK TEMPLATE - Template for coin block (icon + symbol). Injected as <script type="text/x-template"> id="coin-block-template".
+ * Structure: coin-block d-flex; img icon; symbol span. Bootstrap layout; tooltip via title; cursor pointer. Ref: id:sk-483943, shared/components/coin-block.js
  */
 
 (function() {
@@ -115,13 +87,13 @@
         </cmp-dropdown>
     </div>`;
 
-    // Создаём элемент script с типом x-template
+    // Create script element with type x-template
     const scriptElement = document.createElement('script');
     scriptElement.type = 'text/x-template';
     scriptElement.id = 'coin-block-template';
     scriptElement.textContent = TEMPLATE;
 
-    // Добавляем в DOM
+    // Append to DOM
     document.body.appendChild(scriptElement);
 
     console.log('coin-block-template.js: шаблон loaded');

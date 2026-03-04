@@ -1,10 +1,9 @@
 /**
  * ================================================================================================
- * SYSTEM MESSAGE - Единичное системное сообщение (SSOT for шаблона)
+ * SYSTEM MESSAGE - Single system message (SSOT for template)
  * ================================================================================================
  *
- * PURPOSE: SSOT for отображения одного системного сообщения.
- * Используется компонентом cmp-system-messages for рендеринга каждого сообщения.
+ * PURPOSE: SSOT for displaying one system message. Used by cmp-system-messages to render each message.
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
@@ -28,7 +27,7 @@
     }
 
     /**
-     * Компонент единичного системного сообщения
+     * Single system message component
      */
     const cmpSystemMessage = {
         template: `
@@ -66,7 +65,7 @@
 
         props: {
             /**
-             * Объект сообщения
+             * Message object
              * @type {Object}
              * @required
              */
@@ -81,14 +80,14 @@
 
         data() {
             return {
-                // Tick for принудительного пересчета computed при смене языка
+                // Tick to force recompute on language change
                 _translationTick: 0,
                 _onLanguageChanged: null
             };
         },
 
         mounted() {
-            // Подписываемся на изменения языка for принудительного пересчета computed
+            // Subscribe to language change to refresh computed
             this._onLanguageChanged = () => {
                 this._translationTick++;
             };
@@ -103,7 +102,7 @@
 
         computed: {
             /**
-             * CSS классы for сообщения
+             * CSS classes for message
              * @returns {Array<string>}
              */
             messageClasses() {
@@ -116,7 +115,7 @@
             },
 
             /**
-             * Есть ли действия у сообщения
+             * Whether message has actions
              * @returns {boolean}
              */
             hasActions() {
@@ -124,16 +123,13 @@
             },
 
             /**
-             * Переведенный текст сообщения с подставленными параметрами
-             * SSOT: использует messagesTranslator for перевода
+             * Translated message text (SSOT: messagesTranslator)
              * @returns {string}
              */
             translatedText() {
-                // Принудительная зависимость от _translationTick for пересчета при смене языка
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._translationTick;
 
-                // Если есть ключ и переводчик доступен - используем переводчик
                 if (this.message.key && window.messagesTranslator) {
                     const translated = window.messagesTranslator.translate(
                         this.message.key,
@@ -141,21 +137,17 @@
                     );
                     return translated.text || this.message.text || '';
                 }
-                // Fallback на оригинальный текст
                 return this.message.text || '';
             },
 
             /**
-             * Переведенные детали сообщения с подставленными параметрами
-             * SSOT: использует messagesTranslator for перевода
+             * Translated message details (SSOT: messagesTranslator)
              * @returns {string|null}
              */
             translatedDetails() {
-                // Принудительная зависимость от _translationTick for пересчета при смене языка
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._translationTick;
 
-                // Если есть ключ и переводчик доступен - используем переводчик
                 if (this.message.key && window.messagesTranslator) {
                     const translated = window.messagesTranslator.translate(
                         this.message.key,
@@ -163,16 +155,15 @@
                     );
                     return translated.details || this.message.details || null;
                 }
-                // Fallback на оригинальные детали
                 return this.message.details || null;
             }
         },
 
         methods: {
             /**
-             * Get Bootstrap класс for типа сообщения
-             * @param {string} type - тип сообщения (danger|warning|info|success)
-             * @returns {string} - Bootstrap класс alert-*
+             * Bootstrap alert class for message type
+             * @param {string} type - danger|warning|info|success
+             * @returns {string} - alert-*
              */
             getBootstrapAlertClass(type) {
                 const mapping = {
@@ -185,9 +176,9 @@
             },
 
             /**
-             * Get класс кнопки for действия
-             * @param {Object} action - объект действия
-             * @returns {string} - классы Bootstrap кнопки
+             * Button class for action
+             * @param {Object} action - action object
+             * @returns {string} - Bootstrap btn classes
              */
             getActionButtonClass(action) {
                 const variant = action.variant || 'primary';
@@ -195,15 +186,15 @@
             },
 
             /**
-             * Закрыть сообщение
+             * Dismiss message
              */
             dismiss() {
                 this.$emit('dismiss', this.message.id);
             },
 
             /**
-             * Обработать действие
-             * @param {Object} action - объект действия
+             * Handle action
+             * @param {Object} action - action object
              */
             handleAction(action) {
                 this.$emit('action', action);
@@ -211,7 +202,7 @@
         }
     };
 
-    // Экспортируем компонент в window for регистрации в app-ui-root
+    // Export for registration in app-ui-root
     window.cmpSystemMessage = cmpSystemMessage;
 
 })();

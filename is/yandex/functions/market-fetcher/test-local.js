@@ -1,10 +1,10 @@
 /**
- * Локальный тест: загружает 1 страницу (50 монет) по market_cap и сохраняет в БД
- * Использует DB_PASSWORD из env или хардкод for теста
+ * Local test: loads 1 page (50 coins) by market_cap and saves to DB
+ * Uses DB_PASSWORD from env or hardcoded for test
  */
 process.env.DB_PASSWORD = process.env.DB_PASSWORD || '********';
 
-// Патчим handler чтобы загрузить только 1 страницу
+// Patch handler to load only 1 page
 const https = require('https');
 const { Client } = require('pg');
 
@@ -75,7 +75,7 @@ async function main() {
     const countRes = await client.query('SELECT COUNT(*) FROM coin_market_cache');
     console.log('Сохранено:', saved, '| Всего в кэше:', countRes.rows[0].count);
 
-    // Проверяем первые 3 монеты
+    // Check first 3 coins
     const sample = await client.query('SELECT coin_id, symbol, current_price, pv_24h, sort_market_cap FROM coin_market_cache ORDER BY sort_market_cap LIMIT 3');
     console.log('Топ-3 из БД:', sample.rows);
 

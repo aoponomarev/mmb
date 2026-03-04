@@ -1,105 +1,50 @@
 // =========================
-// КОМПОНЕНТ COMBOBOX
-// Vue-обёртка над Bootstrap input-group + dropdown с поддержкой автодополнения
+// COMBOBOX COMPONENT
+// Vue wrapper over Bootstrap input-group + dropdown with autocomplete
 // =========================
-// PURPOSE: Переиспользуемый компонент комбобокса с поддержкой:
+// PURPOSE: Reusable combobox with:
 //
 // @skill-anchor id:sk-add9a6 #for-classes-add-remove
 // @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
 // @skill-anchor id:sk-cb75ec #for-utility-availability-check
-// - Автодополнения и фильтрации
-// - Клавиатурной навигации
-// - Выбора значения из списка
-// - Произвольного ввода
-// - Группировки элементов
-// - Валидации
-// - Полной совместимости with Bootstrap JS API
-// - Переключения в режим простого текстового поля
-// - Структура for: подсветки найденного текста, виртуального скроллинга, множественного выбора
+// - Autocomplete and filtering
+// - Keyboard navigation
+// - Select from list
+// - Free text input
+// - Item grouping
+// - Validation
+// - Full Bootstrap JS API compatibility
+// - Toggle to plain text input mode
+// - Structure for: match highlight, virtual scroll, multi-select
 //
-// API КОМПОНЕНТА:
+// COMPONENT API:
 //
-// Входные параметры (props):
-// Базовые:
-// - modelValue (String | Array) — значение компонента (v-model). Для множественного выбора — массив значений
-// - items (Array) — массив элементов for выбора. Может быть массивом строк или объектов с полями label, value, id
-// - placeholder (String, default: 'Выберите или введите...') — плейсхолдер for поля ввода
-// Режимы:
-// - mode (String, default: 'combobox') — режим работы: 'combobox' (комбобокс) или 'input' (простое текстовое поле)
-// - multiple (Boolean, default: false) — режим множественного выбора (структура заложена for будущей реализации)
-// Поведение:
-// - allowCustom (Boolean, default: true) — разрешить произвольный ввод (не только из списка)
-// - strict (Boolean, default: false) — только значения из списка (запрет произвольного ввода)
-// - autocomplete (Boolean, default: true) — включить автодополнение и фильтрацию
-// - clearable (Boolean, default: true) — показывать крестик for очистки (реализовано через CSS псевдоэлемент ::before)
-// Фильтрация и поиск:
-// - filterFunction (Function, default: null) — кастомная функция фильтрации (items, query) => filteredItems
-// - debounce (Number, default: 300) — задержка for debounce поиска (мс)
-// - highlightMatches (Boolean, default: false) — подсветка найденного текста (структура заложена for будущей реализации)
-// - itemLabel (String | Function, default: null) — поле for label или функция получения label
-// - itemValue (String | Function, default: null) — поле for value или функция получения value
-// Прокрутка:
-// - scrollable (Boolean, default: false) — включить прокрутку for длинных списков
-// - maxHeight (String, default: '300px') — максимальная высота прокручиваемой области
-// - virtualScrolling (Boolean, default: false) — виртуальный скроллинг (структура заложена for будущей реализации)
-// - virtualItemHeight (Number, default: 38) — высота элемента for виртуального скроллинга (px)
-// Группировка:
-// - groupBy (String | Function, default: null) — поле for группировки или функция (структура заложена for будущей реализации)
-// Validation:
-// - required (Boolean, default: false) — обязательное поле
-// - pattern (String, default: null) — паттерн for валидации (HTML5)
-// - disabled (Boolean, default: false) — отключить компонент
-// UI:
-// - size (String, default: null) — размер: 'sm' или 'lg'
-// - variant (String, default: 'outline-secondary') — вариант кнопки dropdown (Bootstrap button variants)
-// - icon (String, default: null) — иконка слева (Font Awesome класс)
-// Дополнительные:
-// - classesAdd (Object, default: {}) — классы for добавления на различные элементы компонента. Структура: { root: 'классы', menu: 'классы' }
-// - classesRemove (Object, default: {}) — классы for удаления с различных элементов компонента. Структура: { root: 'классы', menu: 'классы' }
-// - menuClasses (String, default: '') — дополнительные классы for dropdown-menu (for обратной совместимости, рекомендуется использовать classesAdd.menu)
-// - menuStyle (Object, default: {}) — дополнительные стили for dropdown-menu
-// - dropdownId (String, default: null) — ID for кнопки dropdown (for Bootstrap)
-// - emptySearchText (String, default: 'Ничего не найдено') — текст при пустом результате поиска
+// Props:
+// Basic: modelValue (v-model), items (array of strings or {label, value, id}), placeholder
+// Mode: mode ('combobox' | 'input'), multiple (boolean)
+// Behavior: allowCustom, strict, autocomplete, clearable (clear button via CSS ::before)
+// Filter: filterFunction (items, query) => filteredItems, debounce (ms), highlightMatches, itemLabel, itemValue
+// Scroll: scrollable, maxHeight, virtualScrolling, virtualItemHeight (px)
+// Group: groupBy (field or function)
+// Validation: required, pattern (HTML5), disabled
+// UI: size ('sm'|'lg'), variant (dropdown button), icon (Font Awesome class)
+// Extra: classesAdd { root, menu }, classesRemove { root, menu }, menuClasses, menuStyle, dropdownId, emptySearchText
 //
-// Logoutные события (emits):
-// - update:modelValue — обновление значения (v-model)
-// - select — выбор элемента: { value, label, item }
-// - input — ввод текста: value
-// - focus — фокус на поле ввода
-// - blur — потеря фокуса
-// - clear — очистка значения
-// - show — открытие dropdown
-// - hide — закрытие dropdown
+// Emits: update:modelValue, select, input, focus, blur, clear, show, hide
 //
-// Методы (через ref):
-// - show() — программное открытие dropdown
-// - hide() — программное закрытие dropdown
-// - toggle() — программное переключение dropdown
-// - getBootstrapInstance() — получение экземпляра Bootstrap Dropdown for прямого доступа к API
+// Methods (via ref): show(), hide(), toggle(), getBootstrapInstance()
 //
-// Клавиатурная навигация:
-// Структура layout и CSS-классы: см. в шапке шаблона `shared/templates/combobox-template.js`
-// Клавиатурная навигация:
-// - ArrowDown / ArrowUp — навигация по элементам
-// - Enter — выбор элемента или принятие произвольного значения
-// - Escape — закрытие dropdown
-// - Tab — закрытие dropdown при переходе
-// Структура for будущих расширений:
-// - Подсветка найденного текста: метод highlightItemText(), computed highlightText, слот item с highlightedText
-// - Виртуальный скроллинг: computed visibleItems, virtualVisibleItems, обработчик handleScroll(), props virtualScrolling, virtualItemHeight
-// - Множественный выбор: prop multiple, логика в handleItemSelect(), computed isMultiple
-// - Группировка: prop groupBy, структура в шаблоне
+// Keyboard: ArrowDown/Up (navigate), Enter (select or accept), Escape (close), Tab (close on tab out)
+// Layout/CSS: see shared/templates/combobox-template.js
 //
-// АРХИТЕКТУРА:
-// - Шаблон: shared/templates/combobox-template.js (ID: combobox-template)
-// - Зависимости: Bootstrap 5, Font Awesome 6, Vue.js
-// - See also: id:sk-e0b8f3
+// ARCHITECTURE:
+// Template: shared/templates/combobox-template.js. Deps: Bootstrap 5, Font Awesome 6, Vue. See also: id:sk-e0b8f3
 
 window.cmpCombobox = {
     template: '#combobox-template',
 
     props: {
-        // === Базовые ===
+        // === Basic ===
         modelValue: {
             type: [String, Array],
             default: ''
@@ -113,7 +58,7 @@ window.cmpCombobox = {
             default: 'Выберите или введите...'
         },
 
-        // === Режимы ===
+        // === Mode ===
         mode: {
             type: String,
             default: 'combobox', // 'combobox' | 'input'
@@ -124,47 +69,47 @@ window.cmpCombobox = {
             default: false
         },
 
-        // === Поведение ===
+        // === Behavior ===
         allowCustom: {
             type: Boolean,
-            default: true // разрешить произвольный ввод
+            default: true // allow free input
         },
         strict: {
             type: Boolean,
-            default: false // только значения из списка
+            default: false // only values from list
         },
         autocomplete: {
             type: Boolean,
-            default: true // автодополнение
+            default: true // autocomplete
         },
         clearable: {
             type: Boolean,
-            default: true // показывать крестик for очистки
+            default: true // show clear button
         },
 
-        // === Фильтрация и поиск ===
+        // === Filter and search ===
         filterFunction: {
             type: Function,
-            default: null // кастомная функция фильтрации
+            default: null // custom filter function
         },
         debounce: {
             type: Number,
-            default: 300 // задержка for debounce (мс)
+            default: 300 // debounce delay (ms)
         },
         highlightMatches: {
             type: Boolean,
-            default: false // подсветка найденного текста (структура заложена)
+            default: false // highlight matches (structure in place)
         },
         itemLabel: {
             type: [String, Function],
-            default: null // поле for label или функция получения label
+            default: null // label field or getter function
         },
         itemValue: {
             type: [String, Function],
-            default: null // поле for value или функция получения value
+            default: null // value field or getter function
         },
 
-        // === Прокрутка ===
+        // === Scroll ===
         scrollable: {
             type: Boolean,
             default: false
@@ -175,17 +120,17 @@ window.cmpCombobox = {
         },
         virtualScrolling: {
             type: Boolean,
-            default: false // виртуальный скроллинг (структура заложена)
+            default: false // virtual scrolling (structure in place)
         },
         virtualItemHeight: {
             type: Number,
-            default: 38 // высота элемента for виртуального скроллинга (px)
+            default: 38 // item height for virtual scroll (px)
         },
 
-        // === Группировка ===
+        // === Grouping ===
         groupBy: {
             type: [String, Function],
-            default: null // поле for группировки или функция (структура заложена)
+            default: null // group by field or function (structure in place)
         },
 
         // === Validation ===
@@ -217,42 +162,42 @@ window.cmpCombobox = {
             type: String,
             default: null
         },
-        // Тип инпута (text | number и т.п.)
+        // Input type (text | number etc.)
         inputType: {
             type: String,
             default: 'text'
         },
-        // Стили for инпута (например, maxWidth for компактного режима)
+        // Input styles (e.g. maxWidth for compact)
         inputStyle: {
             type: Object,
             default: () => ({})
         },
-        // Минимальное значение for number input
+        // Min value for number input
         inputMin: {
             type: [Number, String],
             default: null
         },
-        // Максимальное значение for number input
+        // Max value for number input
         inputMax: {
             type: [Number, String],
             default: null
         },
-        // Шаг for number input
+        // Step for number input
         inputStep: {
             type: [Number, String],
             default: null
         },
 
-        // === Управление классами ===
+        // === Class management ===
         classesAdd: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'custom-root', menu: 'custom-menu' }
+            // Example: { root: 'custom-root', menu: 'custom-menu' }
         },
         classesRemove: {
             type: Object,
             default: () => ({})
-            // Пример: { root: 'some-class', menu: 'another-class' }
+            // Example: { root: 'some-class', menu: 'another-class' }
         },
         menuClasses: {
             type: String,
@@ -282,45 +227,45 @@ window.cmpCombobox = {
         return {
             isOpen: false,
             searchQuery: '',
-            selectedIndex: -1, // индекс выбранного элемента for клавиатурной навигации
+            selectedIndex: -1, // selected item index for keyboard nav
             dropdownInstance: null,
             debounceTimer: null,
-            scrollTop: 0, // for виртуального скроллинга
-            virtualStartIndex: 0, // for виртуального скроллинга
-            virtualEndIndex: 0 // for виртуального скроллинга
+            scrollTop: 0, // for virtual scroll
+            virtualStartIndex: 0, // for virtual scroll
+            virtualEndIndex: 0 // for virtual scroll
         };
     },
 
     computed: {
-        // Определение режима множественного выбора
+        // Multiple selection mode
         isMultiple() {
             return this.multiple || Array.isArray(this.modelValue);
         },
 
-        // Отображаемое значение в input
+        // Display value in input
         displayValue() {
             if (this.isMultiple) {
-                // Для множественного выбора показываем поисковый запрос или пусто
+                // For multiple: show query or empty
                 return this.searchQuery;
             }
-            // Для одиночного выбора: если есть выбранное значение, показываем его label, иначе поисковый запрос
+            // Single: show selected label or query
             if (this.modelValue && !this.searchQuery) {
-                // Находим выбранный элемент и показываем его label
+                // Find selected item and show its label
                 const selectedItem = this.items.find(item => this.getItemValue(item) === this.modelValue);
                 if (selectedItem) {
                     return this.getItemLabel(selectedItem);
                 }
-                return this.modelValue; // Если не нашли в списке, показываем значение как есть
+                return this.modelValue; // Not in list - show as-is
             }
             return this.searchQuery || '';
         },
 
-        // CSS классы for input-group
+        // CSS classes for input-group
         inputGroupClasses() {
             const baseClasses = [];
             if (this.size) baseClasses.push(`input-group-${this.size}`);
 
-            // Управление классами через classesAdd и classesRemove
+            // Class management via classesAdd and classesRemove
             if (!window.classManager) {
                 console.error('classManager not found in inputGroupClasses');
                 return baseClasses.join(' ');
@@ -333,11 +278,11 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы for режима input
+        // CSS classes for input mode
         inputModeClasses() {
             const baseClasses = ['position-relative'];
 
-            // Управление классами через classesAdd и classesRemove
+            // Class management via classesAdd and classesRemove
             if (!window.classManager) {
                 console.error('classManager not found in inputModeClasses');
                 return baseClasses.join(' ');
@@ -350,17 +295,17 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы for выпадающего меню
+        // CSS classes for dropdown menu
         menuClassesComputed() {
             const baseClasses = ['dropdown-menu', 'dropdown-menu-end'];
 
-            // Добавляем классы из prop menuClasses (for обратной совместимости)
+            // Add classes from menuClasses prop (backward compat)
             if (this.menuClasses) {
                 const extraClasses = this.menuClasses.split(' ').filter(c => c);
                 baseClasses.push(...extraClasses);
             }
 
-            // Управление классами через classesAdd и classesRemove
+            // Class management via classesAdd and classesRemove
             if (!window.classManager) {
                 return baseClasses.join(' ');
             }
@@ -372,7 +317,7 @@ window.cmpCombobox = {
             );
         },
 
-        // CSS классы for input
+        // CSS classes for input
         inputClasses() {
             const classes = ['form-control'];
             if (this.size) classes.push(`form-control-${this.size}`);
@@ -388,7 +333,7 @@ window.cmpCombobox = {
             );
         },
 
-        // Стили for прокручиваемой области
+        // Styles for scroll area
         scrollableStyle() {
             return {
                 maxHeight: this.maxHeight,
@@ -397,18 +342,18 @@ window.cmpCombobox = {
             };
         },
 
-        // Отфильтрованные элементы
+        // Filtered items
         filteredItems() {
             if (!this.searchQuery || !this.autocomplete) {
                 return this.items;
             }
 
-            // Кастомная функция фильтрации
+            // Custom filter function
             if (this.filterFunction) {
                 return this.filterFunction(this.items, this.searchQuery);
             }
 
-            // Встроенная фильтрация
+            // Built-in filter
             const query = this.searchQuery.toLowerCase();
             return this.items.filter(item => {
                 const label = this.getItemLabel(item).toLowerCase();
@@ -416,39 +361,38 @@ window.cmpCombobox = {
             });
         },
 
-        // Видимые элементы (for виртуального скроллинга или обычного)
+        // Visible items (virtual or normal scroll)
         visibleItems() {
             if (!this.virtualScrolling) {
                 return this.filteredItems;
             }
 
-            // Логика виртуального скроллинга (структура заложена for пункта 8)
-            // Вычисляем startIndex и endIndex на основе scrollTop
+            // Virtual scroll logic; compute startIndex/endIndex from scrollTop
             const containerHeight = this.maxHeight ? parseInt(this.maxHeight) : 300;
             const visibleCount = Math.ceil(containerHeight / this.virtualItemHeight);
 
             const startIndex = Math.floor(this.scrollTop / this.virtualItemHeight);
             const endIndex = Math.min(
-                startIndex + visibleCount + 2, // +2 for буфера
+                startIndex + visibleCount + 2, // +2 buffer
                 this.filteredItems.length
             );
 
             return this.filteredItems.slice(startIndex, endIndex);
         },
 
-        // Виртуальные видимые элементы (for рендеринга)
+        // Virtual visible items (for render)
         virtualVisibleItems() {
             if (!this.virtualScrolling) return this.filteredItems;
-            // Для виртуального скроллинга используем visibleItems
+            // For virtual scroll use visibleItems
             return this.visibleItems;
         },
 
-        // Текст for подсветки
+        // Text for highlight
         highlightText() {
             return this.highlightMatches && this.searchQuery ? this.searchQuery : null;
         },
 
-        // Реактивные подсказки
+        // Reactive tooltips config
         tooltipsConfig() {
             return window.tooltipsConfig || null;
         },
@@ -459,28 +403,27 @@ window.cmpCombobox = {
     },
 
     mounted() {
-        // Инициализация Bootstrap Dropdown через JavaScript API
-        // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
+        // Init Bootstrap Dropdown via JS API. Dispose on unmount to avoid leaks
         if (this.mode === 'combobox') {
             this.$nextTick(() => {
                 if (window.bootstrap && window.bootstrap.Dropdown) {
                     const toggleElement = this.$refs.comboboxContainer?.querySelector('[data-bs-toggle="dropdown"]');
                     if (toggleElement) {
                         this.dropdownInstance = new window.bootstrap.Dropdown(toggleElement, {
-                            // Опции Bootstrap Dropdown можно передать через props при необходимости
+                            // Bootstrap Dropdown options can be passed via props if needed
                         });
 
-                        // Подписка на события Bootstrap for синхронизации состояния
+                        // Subscribe to Bootstrap events for state sync
                         this.$refs.comboboxContainer.addEventListener('show.bs.dropdown', () => {
                             this.isOpen = true;
                             this.$emit('show');
 
-                            // Сброс индекса при открытии
+                            // Reset index on open
                             this.selectedIndex = -1;
                         });
 
                         this.$refs.comboboxContainer.addEventListener('shown.bs.dropdown', () => {
-                            // Дополнительные действия после открытия
+                            // Extra actions after open
                         });
 
                         this.$refs.comboboxContainer.addEventListener('hide.bs.dropdown', () => {
@@ -489,9 +432,9 @@ window.cmpCombobox = {
                         });
 
                         this.$refs.comboboxContainer.addEventListener('hidden.bs.dropdown', () => {
-                            // Очистка поиска при закрытии (optional)
+                            // Clear search on close (optional)
                             if (this.autocomplete) {
-                                // Можно очистить searchQuery, если значение выбрано
+                                // Can clear searchQuery when value selected
                             }
                         });
                     }
@@ -501,20 +444,20 @@ window.cmpCombobox = {
     },
 
     beforeUnmount() {
-        // Уничтожение Bootstrap Dropdown for предотвращения утечек памяти
+        // Dispose Bootstrap Dropdown to avoid leaks
         if (this.dropdownInstance) {
             this.dropdownInstance.dispose();
             this.dropdownInstance = null;
         }
 
-        // Очистка debounce таймера
+        // Clear debounce timer
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
         }
     },
 
     methods: {
-        // Получение label элемента
+        // Get item label
         getItemLabel(item) {
             if (typeof item === 'string') return item;
             if (this.itemLabel) {
@@ -523,11 +466,11 @@ window.cmpCombobox = {
                 }
                 return item[this.itemLabel] || String(item);
             }
-            // Дефолтная логика: ищем label, name, text или приводим к строке
+            // Default: look for label, name, text or stringify
             return item.label || item.name || item.text || String(item);
         },
 
-        // Получение value элемента
+        // Get item value
         getItemValue(item) {
             if (typeof item === 'string') return item;
             if (this.itemValue) {
@@ -536,17 +479,17 @@ window.cmpCombobox = {
                 }
                 return item[this.itemValue];
             }
-            // Дефолтная логика: ищем value, id или используем label
+            // Default: look for value, id or use label
             return item.value !== undefined ? item.value : (item.id !== undefined ? item.id : this.getItemLabel(item));
         },
 
-        // Получение ключа for v-for
+        // Get key for v-for
         getItemKey(item, index) {
             const value = this.getItemValue(item);
             return value !== undefined ? value : index;
         },
 
-        // Проверка, выбран ли элемент
+        // Is item selected
         isItemSelected(item) {
             const value = this.getItemValue(item);
             if (this.isMultiple) {
@@ -555,7 +498,7 @@ window.cmpCombobox = {
             return this.modelValue === value;
         },
 
-        // Подсветка текста в элементе (структура for пункта 6)
+        // Highlight text in item (structure for match highlight)
         highlightItemText(item) {
             if (!this.highlightText) return this.getItemLabel(item);
 
@@ -565,19 +508,19 @@ window.cmpCombobox = {
             return label.replace(regex, '<mark>$1</mark>');
         },
 
-        // Обработчик ввода
+        // Input handler
         handleInput(event) {
             const value = event.target.value;
             this.searchQuery = value;
 
-            // В режиме input обновляем modelValue сразу
+            // In input mode update modelValue immediately
             if (this.mode === 'input') {
                 this.$emit('update:modelValue', value);
                 this.$emit('input', value);
                 return;
             }
 
-            // Debounce for производительности
+            // Debounce for performance
             if (this.debounceTimer) {
                 clearTimeout(this.debounceTimer);
             }
@@ -585,14 +528,14 @@ window.cmpCombobox = {
             this.debounceTimer = setTimeout(() => {
                 this.$emit('input', value);
 
-                // Если автодополнение включено и dropdown закрыт - открываем
+                // If autocomplete on and dropdown closed - open it
                 if (this.autocomplete && !this.isOpen && value) {
                     this.show();
                 }
             }, this.debounce);
         },
 
-        // Обработчик клавиатурной навигации
+        // Keyboard navigation handler
         handleKeydown(event) {
             if (this.mode === 'input') return;
 
@@ -620,7 +563,7 @@ window.cmpCombobox = {
                     if (this.isOpen && this.selectedIndex >= 0 && this.filteredItems[this.selectedIndex]) {
                         this.handleItemSelect(this.filteredItems[this.selectedIndex], event);
                     } else if (this.allowCustom && !this.strict) {
-                        // Принимаем произвольное значение
+                        // Accept custom value
                         this.handleCustomValue(this.searchQuery);
                     }
                     break;
@@ -631,7 +574,7 @@ window.cmpCombobox = {
                     break;
 
                 case 'Tab':
-                    // Закрываем dropdown при Tab
+                    // Close dropdown on Tab
                     if (this.isOpen) {
                         this.hide();
                     }
@@ -639,7 +582,7 @@ window.cmpCombobox = {
             }
         },
 
-        // Прокрутка к выбранному элементу
+        // Scroll to selected item
         scrollToSelected() {
             if (!this.scrollable && !this.virtualScrolling) return;
 
@@ -653,53 +596,53 @@ window.cmpCombobox = {
             });
         },
 
-        // Обработчик прокрутки (for виртуального скроллинга)
+        // Scroll handler (for virtual scroll)
         handleScroll(event) {
             if (this.virtualScrolling) {
                 this.scrollTop = event.target.scrollTop;
             }
         },
 
-        // Обработчик выбора элемента
+        // Item select handler
         handleItemSelect(item, event) {
             const value = this.getItemValue(item);
             const label = this.getItemLabel(item);
 
             if (this.isMultiple) {
-                // Логика множественного выбора (структура for пункта 10)
+                // Multi-select logic
                 const currentValues = Array.isArray(this.modelValue) ? [...this.modelValue] : [];
                 const index = currentValues.indexOf(value);
 
                 if (index >= 0) {
-                    // Удаляем из выбранных
+                    // Remove from selected
                     currentValues.splice(index, 1);
                 } else {
-                    // Добавляем к выбранным
+                    // Add to selected
                     currentValues.push(value);
                 }
 
                 this.$emit('update:modelValue', currentValues);
-                this.searchQuery = ''; // Очищаем поиск
+                this.searchQuery = ''; // Clear search
             } else {
-                // Одиночный выбор
+                // Single select
                 this.$emit('update:modelValue', value);
-                this.searchQuery = ''; // Очищаем поиск после выбора
+                this.searchQuery = ''; // Clear search после выбора
                 this.hide();
             }
 
             this.$emit('select', { value, label, item });
         },
 
-        // Обработчик произвольного значения
+        // Custom value handler
         handleCustomValue(value) {
-            if (this.strict) return; // Если strict - не принимаем произвольные значения
+            if (this.strict) return; // In strict mode reject custom values
 
             this.$emit('update:modelValue', value);
             this.$emit('select', { value, label: value, item: null });
             this.hide();
         },
 
-        // Обработчик очистки
+        // Clear handler
         handleClear(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -713,7 +656,7 @@ window.cmpCombobox = {
             this.searchQuery = '';
             this.$emit('clear');
 
-            // Фокус на input
+            // Focus input
             this.$nextTick(() => {
                 if (this.$refs.inputElement) {
                     this.$refs.inputElement.focus();
@@ -721,7 +664,7 @@ window.cmpCombobox = {
             });
         },
 
-        // Обработчик фокуса
+        // Focus handler
         handleFocus(event) {
             this.$emit('focus', event);
             if (this.autocomplete && this.searchQuery) {
@@ -729,10 +672,10 @@ window.cmpCombobox = {
             }
         },
 
-        // Обработчик blur
+        // Blur handler
         handleBlur(event) {
             this.$emit('blur', event);
-            // Не закрываем dropdown сразу, чтобы клик по элементу успел сработать
+            // Don't close dropdown immediately so item click can fire
             setTimeout(() => {
                 if (!this.$refs.comboboxContainer?.contains(document.activeElement)) {
                     this.hide();
@@ -740,33 +683,33 @@ window.cmpCombobox = {
             }, 200);
         },
 
-        // Обработчик переключения dropdown
+        // Dropdown toggle handler
         handleToggle(event) {
-            // Bootstrap сам управляет открытием/закрытием через data-bs-toggle
+            // Bootstrap handles open/close via data-bs-toggle
         },
 
-        // Программное открытие dropdown (через Bootstrap API)
+        // Programmatic open (via Bootstrap API)
         show() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.show();
             }
         },
 
-        // Программное закрытие dropdown (через Bootstrap API)
+        // Programmatic close (via Bootstrap API)
         hide() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.hide();
             }
         },
 
-        // Программное переключение dropdown (через Bootstrap API)
+        // Programmatic toggle (via Bootstrap API)
         toggle() {
             if (this.dropdownInstance) {
                 this.dropdownInstance.toggle();
             }
         },
 
-        // Получение экземпляра Bootstrap Dropdown (for прямого доступа к API)
+        // Get Bootstrap Dropdown instance (for direct API access)
         getBootstrapInstance() {
             return this.dropdownInstance;
         }

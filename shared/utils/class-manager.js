@@ -1,36 +1,20 @@
 /**
- * ================================================================================================
- * CLASS MANAGER - Утилита for managing CSS классами в компонентах
- * ================================================================================================
- *
- * PURPOSE: Универсальная функция for обработки классов с поддержкой добавления и удаления.
- *
- * PRINCIPLES:
- * - Обрабатывает строки (классы space-separated) и массивы строк
- * - Фильтрует пустые значения
- * - Удаляет дубликаты
- * - Поддерживает добавление и удаление классов
- *
- * USAGE:
- * - В computed свойствах компонентов for обработки classesAdd и classesRemove
- * - Применяется к разным элементам внутри компонента (root, button, menu, suffix и т.д.)
- *
- * REFERENCES:
- * - Documentation компонентов: id:sk-318305
+ * CLASS MANAGER - Utility for managing CSS classes in components (add/remove, strings or arrays, no duplicates).
+ * Usage: in computed for classesAdd/classesRemove. Ref: id:sk-318305
  */
 
 /**
- * Обрабатывает классы: добавляет classesAdd и удаляет classesRemove
- * @param {Array} baseClasses - базовые классы компонента
- * @param {String|Array} classesAdd - классы for добавления (optional)
- * @param {String|Array} classesRemove - классы for удаления (optional)
- * @returns {Array} - итоговый массив классов без дубликатов
+ * Merge classes: add classesAdd, remove classesRemove
+ * @param {Array} baseClasses - base classes
+ * @param {String|Array} classesAdd - classes to add (optional)
+ * @param {String|Array} classesRemove - classes to remove (optional)
+ * @returns {Array} - final class array without duplicates
  */
 function processClasses(baseClasses, classesAdd, classesRemove) {
-    // Начинаем с базовых классов
+    // Start with base classes
     let classes = Array.isArray(baseClasses) ? [...baseClasses] : [baseClasses].filter(c => c);
 
-    // ВАЖНО: Сначала удаляем классы (чтобы убрать базовые классы перед добавлением новых)
+    // Remove first, then add
     if (classesRemove) {
         const removeClasses = Array.isArray(classesRemove)
             ? classesRemove
@@ -38,7 +22,7 @@ function processClasses(baseClasses, classesAdd, classesRemove) {
         classes = classes.filter(c => !removeClasses.includes(c));
     }
 
-    // Затем добавляем классы
+    // Then add
     if (classesAdd) {
         const addClasses = Array.isArray(classesAdd)
             ? classesAdd
@@ -46,22 +30,22 @@ function processClasses(baseClasses, classesAdd, classesRemove) {
         classes.push(...addClasses);
     }
 
-    // Удаляем дубликаты и пустые значения
+    // Remove duplicates and empty values
     return [...new Set(classes.filter(c => c))];
 }
 
 /**
- * Преобразует результат processClasses в строку for использования в :class
- * @param {Array} baseClasses - базовые классы компонента
- * @param {String|Array} classesAdd - классы for добавления (optional)
- * @param {String|Array} classesRemove - классы for удаления (optional)
- * @returns {String} - итоговая строка классов space-separated
+ * Convert processClasses result to string for :class
+ * @param {Array} baseClasses - base classes
+ * @param {String|Array} classesAdd - classes to add (optional)
+ * @param {String|Array} classesRemove - classes to remove (optional)
+ * @returns {String} - space-separated class string
  */
 function processClassesToString(baseClasses, classesAdd, classesRemove) {
     return processClasses(baseClasses, classesAdd, classesRemove).join(' ');
 }
 
-// Экспорт через window for использования в компонентах
+// Export on window for use in components
 window.classManager = {
     processClasses,
     processClassesToString

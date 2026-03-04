@@ -1,33 +1,6 @@
 /**
- * ================================================================================================
- * CELL-NUM TEMPLATE - Шаблон компонента числовой ячейки
- * ================================================================================================
- *
- * PURPOSE: Шаблон for компонента отображения форматированных числовых значений в таблице.
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="cell-num-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="cell-num-template"
- * - Компонент использует шаблон через template: '#cell-num-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Корневой элемент: ⟨span⟩ с data-value-sign for цветизации через CSS
- * - Условное отображение пустых/бесконечных значений
- * - Раздельное отображение префикса, знака, целой части, sectionителя, дробной части, единиц
- * Layout и CSS-классы:
- * - Цветизация через data-value-sign атрибут (Bootstrap классы через CSS селекторы)
- * - Поддержка tooltip через title атрибут
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-318305
- * - Компонент: shared/components/cell-num.js
+ * CELL-NUM TEMPLATE - Template for formatted table numeric cell. Injected as <script type="text/x-template"> id="cell-num-template".
+ * Structure: span root with data-value-sign; empty/infinite display; prefix, sign, integer, separator, fraction, unit. Color via data-value-sign; tooltip via title. Ref: id:sk-318305, shared/components/cell-num.js
  */
 
 (function() {
@@ -61,13 +34,13 @@
         </template>
     </span>`;
 
-    // Создаём элемент script с типом x-template
+    // Create script element with type x-template
     const scriptElement = document.createElement('script');
     scriptElement.type = 'text/x-template';
     scriptElement.id = 'cell-num-template';
     scriptElement.textContent = TEMPLATE;
 
-    // Добавляем в DOM
+    // Append to DOM
     document.body.appendChild(scriptElement);
 
     console.log('cell-num-template.js: шаблон loaded');

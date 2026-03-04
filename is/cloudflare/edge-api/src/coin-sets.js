@@ -111,7 +111,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ coin_set: coinSet }, { status: 201 });
     }
 
-    // PUT /api/coin-sets/:id - обновление набора
+    // PUT /api/coin-sets/:id - update set
     if (method === 'PUT' && pathParts.length === 3) {
       const coinSetId = parseInt(pathParts[2], 10);
       if (isNaN(coinSetId)) {
@@ -142,7 +142,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ coin_set: coinSet });
     }
 
-    // DELETE /api/coin-sets/:id - удаление набора
+    // DELETE /api/coin-sets/:id - delete set
     if (method === 'DELETE' && pathParts.length === 3) {
       const coinSetId = parseInt(pathParts[2], 10);
       if (isNaN(coinSetId)) {
@@ -158,7 +158,7 @@ export async function handleCoinSets(request, env) {
       return jsonResponse({ success: true });
     }
 
-    // PATCH /api/coin-sets/:id/toggle - архивирование/разархивирование
+    // PATCH /api/coin-sets/:id/toggle - archive/unarchive
     if (method === 'PATCH' && pathParts.length === 4 && pathParts[3] === 'toggle') {
       const coinSetId = parseInt(pathParts[2], 10);
       if (isNaN(coinSetId)) {

@@ -79,6 +79,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-header-skill-separation` | File headers must contain only technical API contracts (What/How). Philosophical principles and systemic rules belong in skills to prevent context bloat and divergence. |
 | `#for-english-why-comments` | Inline comments must be in English and explain the "Why" and "For what", never the "What". Describing what code does creates noise; describing why it exists creates value. |
 | `#for-mandatory-comment-rewrite` | AI agents must proactively rewrite legacy Russian or descriptive comments into English causal comments whenever touching a piece of code. |
+| `#for-code-comments-gate` | Preflight runs `validate-code-comments-english.js`; code comments must be English only (no Cyrillic). SSOT: process-language-policy. Gate blocks preflight and CI on violation. |
 | `#for-causality-harvesting` | Using raw `@causality` markers in code allows developers/agents to log rationale instantly without breaking flow to update the registry, creating a searchable backlog of potential patterns. |
 | `#for-data-provider-interface` | A unified interface for data providers (e.g., CoinGecko, Yandex Cache) abstracts the specific data fetching mechanisms from the orchestrator logic. |
 | `#for-dual-channel-fallback` | Implementing a dual-channel fetch (primary + fallback) ensures data availability even when the primary external service goes down or hits rate limits. |

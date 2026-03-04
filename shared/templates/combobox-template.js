@@ -1,49 +1,6 @@
 /**
- * ================================================================================================
- * COMBOBOX TEMPLATE - Шаблон компонента комбобокса
- * ================================================================================================
- *
- * PURPOSE: Шаблон for Vue-обёртки над Bootstrap input-group + dropdown (cmp-combobox)
- * с поддержкой автодополнения, фильтрации и клавиатурной навигации.
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="combobox-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="combobox-template"
- * - Компонент использует шаблон через template: '#combobox-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Режим 'input': ⟨div⟩ с классом position-relative, внутри ⟨input⟩ и крестик через Font Awesome иконку
- * - Режим 'combobox': ⟨div class="input-group"⟩ с иконкой слева (optional), ⟨input⟩, крестик через CSS псевдоэлемент, кнопка dropdown, выпадающее меню ⟨ul class="dropdown-menu"⟩
- * Layout и CSS-классы:
- * - Два режима работы: 'input' (простое текстовое поле) и 'combobox' (с dropdown)
- * - Крестик for очистки в режиме combobox: через CSS псевдоэлемент ::before с Font Awesome иконкой (\f00d) на ⟨span class="input-group-text combobox-clear"⟩
- * - Крестик в режиме input: через Font Awesome иконку ⟨i class="fas fa-times"⟩ с position-absolute
- * - Использование Bootstrap input-group for режима combobox
- * Условный рендеринг:
- * - Режим 'input': v-if="mode === 'input'" — рендерится как простое текстовое поле без dropdown
- * - Режим 'combobox': v-else — рендерится как input-group с dropdown
- * - Иконка слева: условный рендеринг через v-if="icon"
- * - Крестик for очистки: условный рендеринг через v-if="clearable && displayValue" (combobox) или v-if="clearable && modelValue" (input)
- * - Прокручиваемая область: условный рендеринг через v-if="scrollable || virtualScrolling"
- * - Виртуальный скроллинг: рендеринг через v-if="!virtualScrolling" for обычного списка, v-else for виртуального
- * - Пустое состояние: условный рендеринг через v-if="visibleItems.length === 0 && searchQuery"
- * Слоты:
- * - #items — элементы списка (с ограниченной областью видимости: visibleItems, searchQuery, highlightText, selectedIndex)
- * - #item — переопределение отображения элемента (с ограниченной областью видимости: item, index, highlightedText)
- * Структура for будущих расширений:
- * - Подсветка найденного текста: структура заложена через v-html и highlightItemText
- * - Группировка элементов: структура заложена for будущей реализации через v-if="groupBy"
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-318305
- * - Компонент: shared/components/combobox.js
+ * COMBOBOX TEMPLATE - Template for cmp-combobox (input-group + dropdown, autocomplete, keyboard nav). Injected as <script type="text/x-template"> id="combobox-template".
+ * Modes: 'input' (plain field) and 'combobox' (with dropdown). Clear button; scroll/virtual; slots #items, #item. Ref: id:sk-318305, shared/components/combobox.js
  */
 
 (function() {
@@ -219,7 +176,7 @@
 </div>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -229,7 +186,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

@@ -1,24 +1,24 @@
 /**
  * ================================================================================================
- * SETTINGS - Хранение настроек приложения в Cloudflare KV
+ * SETTINGS - App settings storage in Cloudflare KV
  * ================================================================================================
  * Skill: id:sk-02d3ea
  *
- * PURPOSE: Замена continue-wrapper снимков (JSON файлы на диске) на облачное хранилище.
- * Настройки хранятся в KV namespace SETTINGS, доступны с любого устройства.
+ * PURPOSE: Replace continue-wrapper snapshots (JSON files on disk) with cloud storage.
+ * Settings stored in KV namespace SETTINGS, accessible from any device.
  *
  * ROUTES:
- * - GET  /api/settings        — получить all settings (for импорта в UI)
- * - POST /api/settings        — сохранить all settings (экспорт из UI)
- * - GET  /api/settings/:key   — получить одно поле
- * - PUT  /api/settings/:key   — установить одно поле
+ * - GET  /api/settings        — get all settings (for import into UI)
+ * - POST /api/settings        — save all settings (export from UI)
+ * - GET  /api/settings/:key   — get single field
+ * - PUT  /api/settings/:key   — set single field
  *
  * SECURITY:
- * - Все запросы требуют заголовок Authorization: Bearer <githubToken>
- * - githubToken хранится как Cloudflare Secret (SETTINGS_TOKEN)
- * - При отсутствии SETTINGS_TOKEN эндпоинт недоступен (fail-safe)
+ * - All requests require Authorization: Bearer <githubToken> header
+ * - githubToken stored as Cloudflare Secret (SETTINGS_TOKEN)
+ * - Without SETTINGS_TOKEN endpoint is unavailable (fail-safe)
  *
- * ПОЛЯ:
+ * FIELDS:
  * - provider, yandexApiKey, yandexFolderId, yandexModel
  * - perplexityApiKey, perplexityModel
  * - githubToken, apiBaseUrl, syncEnabled
@@ -34,9 +34,9 @@ const KV_KEY = 'app-app-settings';
 const USER_KEY_PREFIX = `${KV_KEY}:user:`;
 
 /**
- * Разрешаем 2 типа авторизации:
- * 1) Service token: SETTINGS_TOKEN (legacy/migration, ручной доступ)
- * 2) OAuth JWT: токен текущего пользователя после Google login
+ * Allow 2 auth types:
+ * 1) Service token: SETTINGS_TOKEN (legacy/migration, manual access)
+ * 2) OAuth JWT: current user token after Google login
  */
 async function resolveAuthorizationContext(request, env) {
   const authHeader = request.headers.get('Authorization') || '';
@@ -56,7 +56,7 @@ async function resolveAuthorizationContext(request, env) {
   }
 
   if (!expectedToken && !env.JWT_SECRET) {
-    return { authorized: false, mode: null, userId: null, reason: 'SETTINGS_TOKEN и JWT_SECRET not configuredы' };
+    return { authorized: false, mode: null, userId: null, reason: 'SETTINGS_TOKEN and JWT_SECRET not configured' };
   }
   return { authorized: false, mode: null, userId: null, reason: 'Token mismatch or invalid JWT' };
 }
@@ -75,14 +75,14 @@ async function readSettings(env, authContext) {
     return scoped || {};
   }
 
-  // Миграционный fallback: ранее настройки были в общем ключе.
+  // Migration fallback: settings were previously in shared key.
   const legacy = await env.SETTINGS.get(KV_KEY, { type: 'json' });
   return legacy || {};
 }
 
 /**
- * Normalize и очистить входящий payload настроек.
- * Принимаем только известные поля — защита от записи мусора в KV.
+ * Normalize and sanitize incoming settings payload.
+ * Accept only known fields — protect from writing junk to KV.
  */
 function normalizeSettings(data) {
   const allowed = [
@@ -121,7 +121,7 @@ export async function handleSettings(request, env, path) {
     return jsonResponse({ data: raw || {} });
   }
 
-  // POST /api/settings — сохранить all settings (полная замена)
+  // POST /api/settings — save all settings (full replace)
   if (method === 'POST' && (path === '/api/settings' || path === '/api/settings/')) {
     let body;
     try {
@@ -135,7 +135,7 @@ export async function handleSettings(request, env, path) {
     return jsonResponse({ success: true, saved: Object.keys(normalized) });
   }
 
-  // GET /api/settings/:key — одно поле
+  // GET /api/settings/:key — single field
   const keyMatch = path.match(/^\/api\/settings\/([a-zA-Z0-9_-]+)$/);
   if (method === 'GET' && keyMatch) {
     const fieldKey = keyMatch[1];
@@ -147,7 +147,7 @@ export async function handleSettings(request, env, path) {
     return jsonResponse({ key: fieldKey, value });
   }
 
-  // PUT /api/settings/:key — обновить одно поле
+  // PUT /api/settings/:key — update single field
   if (method === 'PUT' && keyMatch) {
     const fieldKey = keyMatch[1];
     let body;

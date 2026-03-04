@@ -25,7 +25,7 @@ for (const file of files) {
     // Reset checkboxes
     content = content.replace(/\[x\]/g, '[ ]').replace(/\[~\]/g, '[ ]');
     
-    // Create new name: План_Frontend_UI.md -> plan-frontend-ui.md
+    // Create new name: Plan_Frontend_UI.md -> plan-frontend-ui.md
     const newName = file.replace('План_', 'plan-').toLowerCase().replace(/_/g, '-');
     
     fs.writeFileSync(path.join(targetDocsDir, newName), content, 'utf8');

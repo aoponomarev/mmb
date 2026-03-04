@@ -1,10 +1,9 @@
 /**
  * ================================================================================================
- * SYSTEM MESSAGES - Контейнер системных сообщений
+ * SYSTEM MESSAGES - System messages container
  * ================================================================================================
  *
- * PURPOSE: Контейнер for отображения списка системных сообщений.
- * Делегирует рендеринг каждого сообщения компоненту cmp-system-message (SSOT шаблона).
+ * PURPOSE: Container for list of system messages. Delegates each message to cmp-system-message (template SSOT).
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
@@ -26,11 +25,11 @@
     }
 
     /**
-     * Контейнер системных сообщений
+     * System messages container
      */
     const cmpSystemMessages = {
         components: {
-            // Локальная регистрация дочернего компонента for Vue 3
+            // Local registration of child component (Vue 3)
             'cmp-system-message': window.cmpSystemMessage
         },
         template: `
@@ -62,7 +61,7 @@
 
         props: {
             /**
-             * Горизонтальная прокрутка (for сплэша внизу)
+             * Horizontal scroll (e.g. splash at bottom)
              * @type {Boolean}
              */
             horizontalScroll: {
@@ -70,7 +69,7 @@
                 default: false
             },
             /**
-             * Scope сообщений for фильтрации
+             * Message scope for filtering
              * @type {String}
              */
             scope: {
@@ -79,7 +78,7 @@
             },
 
             /**
-             * Показывать сообщения без scope
+             * Include messages without scope
              * @type {Boolean}
              */
             includeUnscoped: {
@@ -88,7 +87,7 @@
             },
 
             /**
-             * Ограничение количества сообщений (0 = без ограничения)
+             * Max number of messages (0 = no limit)
              * @type {Number}
              */
             limit: {
@@ -99,14 +98,14 @@
 
         data() {
             return {
-                // Fallback tick for принудительного ререндера
+                // Fallback tick to force re-render
                 _appMessagesTick: 0,
                 _onAppMessagesChanged: null
             };
         },
 
         mounted() {
-            // Подписываемся на изменения сообщений (fallback for не-Vue реактивности)
+            // Subscribe to message changes (fallback when not Vue-reactive)
             this._onAppMessagesChanged = () => {
                 this._appMessagesTick++;
             };
@@ -121,7 +120,7 @@
 
         computed: {
             /**
-             * Классы контейнера
+             * Container classes
              */
             containerClasses() {
                 const base = ['messages-container'];
@@ -131,11 +130,11 @@
                 return base;
             },
             /**
-             * Видимые сообщения с учётом фильтров
+             * Visible messages after filters
              * @returns {Array<Object>}
              */
             visibleMessages() {
-                // Принудительная зависимость от _appMessagesTick for fallback
+                // Depend on _appMessagesTick for fallback reactivity
                 // eslint-disable-next-line no-unused-vars
                 const tick = this._appMessagesTick;
 
@@ -145,14 +144,14 @@
 
                 const allMessages = window.AppMessages.state.messages || [];
 
-                // Фильтрация по scope
+                // Filter by scope
                 let filtered = allMessages.filter(m => {
                     if (m.scope === this.scope) return true;
                     if (this.includeUnscoped && !m.scope) return true;
                     return false;
                 });
 
-                // Ограничение количества (если limit > 0)
+                // Apply limit if set
                 if (this.limit > 0) {
                     filtered = filtered.slice(0, this.limit);
                 }
@@ -163,8 +162,8 @@
 
         methods: {
             /**
-             * Закрыть сообщение
-             * @param {string} id - ID сообщения
+             * Dismiss message
+             * @param {string} id - message ID
              */
             dismissMessage(id) {
                 if (window.AppMessages && typeof window.AppMessages.dismiss === 'function') {
@@ -173,8 +172,8 @@
             },
 
             /**
-             * Обработать действие сообщения
-             * @param {Object} action - объект действия
+             * Handle message action
+             * @param {Object} action - action object
              */
             handleAction(action) {
                 if (!action || !action.handler) {
@@ -196,7 +195,7 @@
         }
     };
 
-    // Экспортируем компонент в window for регистрации в app-ui-root
+    // Export for registration in app-ui-root
     window.cmpSystemMessages = cmpSystemMessages;
 
 })();

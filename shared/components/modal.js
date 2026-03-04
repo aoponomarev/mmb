@@ -3,74 +3,17 @@
  * MODAL COMPONENT - Modal component
  * ================================================================================================
  *
- * PURPOSE: Vue-обёртка над Bootstrap Modal с полной проницаемостью for Bootstrap API.
+ * PURPOSE: Vue wrapper over Bootstrap Modal with full Bootstrap API access.
  *
  * @skill-anchor id:sk-318305
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * API КОМПОНЕНТА:
- *
- * Входные параметры (props):
- * - modalId (String, required) — уникальный ID модального окна (using for Bootstrap)
- * - size (String) — размер модального окна ('sm', 'lg', 'xl') или null for дефолтного
- * - centered (Boolean, default: false) — центрирование модального окна по вертикали
- * - titleId (String) — ID заголовка for aria-labelledby (генерируется автоматически, если не указан)
- * - static (Boolean, default: false) — статическое отображение модального окна (без backdrop, всегда видимо, for примеров)
- * - title (String) — заголовок модального окна (optional, если не указан, получается из modalsConfig по modalId)
- *
- * Logoutные события (emits):
- * - show — событие открытия модального окна (синхронизировано с show.bs.modal)
- * - shown — событие после открытия (синхронизировано с shown.bs.modal)
- * - hide — событие закрытия модального окна (синхронизировано с hide.bs.modal)
- * - hidden — событие после закрытия (синхронизировано с hidden.bs.modal)
- *
- * Слоты:
- * - header — заголовок модального окна (modal-header)
- * - body — тело модального окна (modal-body)
- * - footer — футер модального окна (modal-footer)
- *
- * Методы (ref API):
- * - show() — программное открытие модального окна через Bootstrap API
- * - hide() — программное закрытие модального окна через Bootstrap API
- * - toggle() — программное переключение модального окна через Bootstrap API
- * - getBootstrapInstance() — получение экземпляра Bootstrap Modal for прямого доступа к API
- *
- * ПРАВИЛА ИСПОЛЬЗОВАНИЯ:
- * - Кнопка "Закрыть" не using: закрытие модального окна выполняется только через крестик в header (btn-close) или клик вне модального окна (backdrop)
- * - Кнопка "Отмена" обязательна в footer: отменяет введенные данные (восстанавливает исходные значения полей) или закрывает окно, если данные не изменены
- *   - На форме с измененными данными: первый клик по "Отмена" восстанавливает исходные значения полей, второй клик закрывает окно
- *   - На форме без изменений: клик по "Отмена" сразу закрывает окно
- * - Кнопка "Сохранить" обязательна в footer, если есть изменяемые поля: имеет два состояния
- *   - Обычное состояние: "Сохранить" (variant: 'primary', disabled если нет изменений или форма невалидна)
- *     - При клике: сохраняет данные, переходит в состояние "Сохранено, закрыть?"
- *   - Состояние успеха: "Сохранено, закрыть?" (variant: 'success', всегда enabled)
- *     - При клике: закрывает модальное окно
- *     - Автоматически сбрасывается в обычное состояние при изменении любых полей формы
- *   - Кнопка "Сохранить" НЕ закрывает модальное окно напрямую: закрытие происходит только через крестик, клик вне модального окна или второй клик в состоянии "Сохранено, закрыть?"
- * - Заголовок модального окна: обязательное требование идентичности заголовка модального окна и текста пункта меню/кнопки/ссылки, которая его открывает
- *   - Заголовок определяется в `core/config/modals-config.js` (SSOT)
- *   - Компонент поддерживает prop `title` for явной передачи заголовка
- *   - Если prop `title` не передан, заголовок автоматически получается из `modalsConfig` по `modalId`
- *   - Все пункты меню, кнопки и ссылки должны использовать `modalsConfig.getModalTitle(modalId)` for получения заголовка
- *
- * ПРАВИЛА ИСПОЛЬЗОВАНИЯ:
- * Компонент предоставляет через provide/inject API for managing кнопками в header и footer:
- * - title (String|null) — заголовок модального окна (computed, доступен через modalApi.title)
- * - registerButton(buttonId, config) — регистрация кнопки с указанием мест отображения (header, footer или оба)
- * - updateButton(buttonId, updates) — обновление состояния кнопки (реактивно обновляется во всех местах)
- * - removeButton(buttonId) — удаление кнопки
- * - getButton(buttonId) — получение конфигурации кнопки
- * - getButtonsForLocation(location) — получение кнопок for конкретного места (header/footer)
- *
- * Одна кнопка может отображаться в header, footer или в обоих местах одновременно без дублирования функциональности.
- * Состояние кнопки (disabled, visible, onClick) единое for всех мест отображения.
- *
- * ВАЖНО ДЛЯ ИСПОЛЬЗОВАНИЯ bodyComponent:
- * Компонент, указанный в modals-config.js как bodyComponent, ДОЛЖЕН быть зарегистрирован
- * в корневом экземпляре Vue (app/app-ui-root.js) и указан в deps for app-ui-root в modules-config.js.
- * Без этого тело модального окна будет пустым.
+ * API: props modalId, size, centered, titleId, static, title. Emits: show, shown, hide, hidden. Slots: header, body, footer. Ref: show(), hide(), toggle(), getBootstrapInstance().
+ * Usage: No "Close" button; close via header btn-close or backdrop. "Cancel" in footer (revert or close). "Save" in footer when editable: two states (Save -> Saved, close?); close only via X/backdrop/second click. Title from modals-config (SSOT) or prop title; menu/buttons use modalsConfig.getModalTitle(modalId).
+ * provide/inject: modalApi.title, registerButton, updateButton, removeButton, getButton, getButtonsForLocation. One button can show in header, footer, or both; state is shared.
+ * bodyComponent in modals-config must be registered in app-ui-root and in modules-config deps or modal body will be empty.
  *
 */
 
@@ -117,17 +60,16 @@ window.cmpModal = {
         return {
             isOpen: false,
             modalInstance: null,
-            // Единый реестр всех кнопок модального окна
-            // Map<buttonId, buttonConfig> - кнопка регистрируется один раз, может отображаться в header, footer или в обоих
+            // Single registry of all modal buttons (Map<buttonId, config>; one registration, can show in header/footer/both)
             buttons: new Map(),
-            // Счетчик for принудительной реактивности computed свойств
+            // Counter to force reactivity in computed
             buttonsUpdateCounter: 0
         };
     },
 
     computed: {
         modalTitle() {
-            // Приоритет: prop title > modalsConfig > null
+            // Priority: prop title > modalsConfig > null
             if (this.title) {
                 return this.title;
             }
@@ -165,11 +107,9 @@ window.cmpModal = {
         },
 
         /**
-         * Validate presence кнопок for header
-         * Используем buttonsUpdateCounter for реактивности
+         * Whether header has buttons (uses buttonsUpdateCounter for reactivity)
          */
         hasHeaderButtons() {
-            // Используем buttonsUpdateCounter for принудительной реактивности
             const _ = this.buttonsUpdateCounter;
             let hasButtons = false;
             for (const button of this.buttons.values()) {
@@ -182,11 +122,9 @@ window.cmpModal = {
         },
 
         /**
-         * Validate presence кнопок for footer
-         * Используем buttonsUpdateCounter for реактивности
+         * Whether footer has buttons (uses buttonsUpdateCounter for reactivity)
          */
         hasFooterButtons() {
-            // Используем buttonsUpdateCounter for принудительной реактивности
             const _ = this.buttonsUpdateCounter;
             let hasButtons = false;
             for (const button of this.buttons.values()) {
@@ -207,16 +145,13 @@ window.cmpModal = {
         },
 
         hide() {
-            // Убираем фокус с активного элемента перед закрытием модального окна
-            // Это предотвращает ошибку доступности: "Blocked aria-hidden on an element because its descendant retained focus"
+            // Remove focus before close to avoid a11y "Blocked aria-hidden..." when descendant retained focus
             if (document.activeElement && document.activeElement.blur) {
                 document.activeElement.blur();
             }
-            // Перемещаем фокус на body for гарантии
             if (document.body && document.body.focus) {
                 document.body.focus();
             } else {
-                // Если body не может получить фокус, просто убираем фокус
                 document.activeElement?.blur();
             }
             if (this.modalInstance) {
@@ -235,23 +170,10 @@ window.cmpModal = {
         },
 
         /**
-         * Регистрация кнопки в модальном окне
-         * @param {string} buttonId - уникальный ID кнопки
-         * @param {Object} config - конфигурация кнопки
-         * @param {string|Array<string>} config.locations - где отображать: 'header', 'footer', или ['header', 'footer']
-         * @param {string} config.label - текст кнопки
-         * @param {string} config.variant - вариант Bootstrap (primary, secondary, и т.д.)
-         * @param {Function} config.onClick - обработчик клика
-         * @param {boolean} config.disabled - состояние disabled (по умолчанию false)
-         * @param {boolean} config.visible - видимость кнопки (по умолчанию true)
-         * @param {Object} config.classesAdd - дополнительные классы for cmp-button
-         * @param {Object} config.buttonAttributes - атрибуты for передачи на корневой элемент button
-         * @param {string} config.icon - CSS класс иконки (Font Awesome, Material Symbols)
-         * @param {string} config.tooltipIcon - подсказка for иконки (using в header for иконочных кнопок)
-         * @param {string} config.tooltipText - подсказка for текста (using в footer)
+         * Register button in modal. config: locations, label, variant, onClick, disabled, visible, classesAdd, buttonAttributes, icon, tooltipIcon, tooltipText.
          */
         registerButton(buttonId, config) {
-            // Нормализуем locations в массив
+            // Normalize locations to array
             const locations = Array.isArray(config.locations)
                 ? config.locations
                 : [config.locations || 'footer'];
@@ -269,14 +191,13 @@ window.cmpModal = {
                 normalizedLocations.push('footer');
             }
 
-            // Сохраняем кнопку с единым состоянием
             this.buttons.set(buttonId, {
                 id: buttonId,
-                locations: normalizedLocations, // Где отображать
+                locations: normalizedLocations,
                 label: config.label || '',
                 variant: config.variant || 'primary',
                 disabled: config.disabled || false,
-                visible: config.visible !== false, // По умолчанию видима
+                visible: config.visible !== false,
                 onClick: config.onClick || null,
                 classesAdd: config.classesAdd || {},
                 buttonAttributes: config.buttonAttributes || {},
@@ -285,14 +206,14 @@ window.cmpModal = {
                 tooltipText: config.tooltipText || null
             });
 
-            // Увеличиваем счетчик for принудительной реактивности computed свойств
+            // Bump counter to refresh computed
             this.buttonsUpdateCounter++;
         },
 
         /**
-         * Обновление кнопки (реактивно обновляется во всех местах отображения)
-         * @param {string} buttonId - ID кнопки
-         * @param {Object} updates - объект с обновляемыми свойствами (locations не обновляется)
+         * Update button (reactive in all locations). locations are not updated.
+         * @param {string} buttonId - button ID
+         * @param {Object} updates - properties to update
          */
         updateButton(buttonId, updates) {
             const button = this.buttons.get(buttonId);
@@ -301,41 +222,41 @@ window.cmpModal = {
                 return;
             }
 
-            // Обновляем свойства, но locations не меняем (они задаются при регистрации)
+            // Update props but do not change locations (set at registration)
             Object.keys(updates).forEach(key => {
                 if (key !== 'locations') {
                     button[key] = updates[key];
                 }
             });
 
-            // Увеличиваем счетчик for принудительной реактивности computed свойств
+            // Bump counter to refresh computed
             this.buttonsUpdateCounter++;
         },
 
         /**
-         * Удаление кнопки
-         * @param {string} buttonId - ID кнопки
+         * Remove button
+         * @param {string} buttonId - button ID
          */
         removeButton(buttonId) {
             if (this.buttons.delete(buttonId)) {
-                // Увеличиваем счетчик for принудительной реактивности computed свойств
+                // Bump counter to refresh computed
                 this.buttonsUpdateCounter++;
             }
         },
 
         /**
-         * Получение конфигурации кнопки
-         * @param {string} buttonId - ID кнопки
-         * @returns {Object|null} - конфигурация кнопки или null
+         * Get button config
+         * @param {string} buttonId - button ID
+         * @returns {Object|null} - config or null
          */
         getButton(buttonId) {
             return this.buttons.get(buttonId) || null;
         },
 
         /**
-         * Получение кнопок for конкретного места (header или footer)
-         * @param {string} location - 'header' или 'footer'
-         * @returns {Array<Object>} - массив конфигураций кнопок
+         * Get buttons for location (header or footer)
+         * @param {string} location - 'header' or 'footer'
+         * @returns {Array<Object>} - button configs
          */
         getButtonsForLocation(location) {
             const result = [];
@@ -349,7 +270,7 @@ window.cmpModal = {
     },
 
     /**
-     * Предоставление API for managing кнопками через provide/inject
+     * Provide modal button API via provide/inject
      */
     provide() {
         return {
@@ -368,9 +289,7 @@ window.cmpModal = {
     },
 
     mounted() {
-        // Инициализация Bootstrap Modal через JavaScript API
-        // Для статического режима не инициализируем Bootstrap Modal
-        // Для статического режима не инициализируем Bootstrap Modal
+        // Init Bootstrap Modal via JS API; skip in static mode
         if (this.static) {
             return;
         }
@@ -382,7 +301,7 @@ window.cmpModal = {
                     keyboard: !this.disableClose
                 });
 
-                // Подписка на события Bootstrap for синхронизации состояния
+                // Subscribe to Bootstrap events for state sync
                 this.$refs.modalElement.addEventListener('show.bs.modal', () => {
                     this.isOpen = true;
                     this.$emit('show');
@@ -393,16 +312,13 @@ window.cmpModal = {
                 });
 
                 this.$refs.modalElement.addEventListener('hide.bs.modal', () => {
-                    // Убираем фокус с активного элемента перед закрытием модального окна
-                    // Это предотвращает ошибку доступности: "Blocked aria-hidden on an element because its descendant retained focus"
+                    // Remove focus before close (a11y: avoid "Blocked aria-hidden...")
                     if (document.activeElement && document.activeElement.blur) {
                         document.activeElement.blur();
                     }
-                    // Перемещаем фокус на body for гарантии
                     if (document.body && document.body.focus) {
                         document.body.focus();
                     } else {
-                        // Если body не может получить фокус, просто убираем фокус
                         document.activeElement?.blur();
                     }
                     this.isOpen = false;
@@ -418,7 +334,7 @@ window.cmpModal = {
 
     beforeUnmount() {
         // @skill-anchor id:sk-eeb23d #for-bootstrap-dispose
-        // Уничтожение Bootstrap Modal for предотвращения утечек памяти
+        // Dispose Bootstrap Modal to avoid leaks
         if (this.modalInstance) {
             this.modalInstance.dispose();
             this.modalInstance = null;

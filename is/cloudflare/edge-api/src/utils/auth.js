@@ -1,20 +1,20 @@
 /**
  * ================================================================================================
- * AUTH UTILITIES - Утилиты for проверки JWT токенов и авторизации
+ * AUTH UTILITIES - Utilities for JWT token verification and auth
  * ================================================================================================
  *
- * PURPOSE: Проверка JWT токенов на защищённых endpoints, извлечение данных пользователя.
+ * PURPOSE: Verify JWT tokens on protected endpoints, extract user data.
  * Skill: id:sk-7cf3f7
  *
  * PRINCIPLES:
- * - Проверка подписи JWT токена через JWT_SECRET
- * - Извлечение user_id из токена
- * - Middleware for защищённых endpoints
+ * - Verify JWT token signature via JWT_SECRET
+ * - Extract user_id from token
+ * - Middleware for protected endpoints
  *
  * USAGE:
  * import { verifyToken, getUserIdFromToken, requireAuth } from './utils/auth.js';
  *
- * // Проверка токена
+ * // Verify token
  * const userId = await requireAuth(request, env);
  * if (!userId) {
  *   return jsonResponse({ error: 'Unauthorized' }, { status: 401 });
@@ -22,10 +22,10 @@
  */
 
 /**
- * Проверка JWT токена и извлечение user_id
- * @param {string} token - JWT токен
- * @param {string} jwtSecret - Секрет for проверки подписи
- * @returns {Object|null} Данные из токена (user_id, email и т.д.) или null при ошибке
+ * Verify JWT token and extract user_id
+ * @param {string} token - JWT token
+ * @param {string} jwtSecret - Secret for signature verification
+ * @returns {Object|null} Data from token (user_id, email etc.) or null on error
  */
 export async function verifyToken(token, jwtSecret) {
   if (!token || !jwtSecret) {
@@ -33,24 +33,24 @@ export async function verifyToken(token, jwtSecret) {
   }
 
   try {
-    // Разделение токена на части (header.payload.signature)
+    // Split token into parts (header.payload.signature)
     const parts = token.split('.');
     if (parts.length !== 3) {
       return null;
     }
 
-    // Декодирование payload (без проверки подписи пока)
-    // В продакшене нужно использовать библиотеку for проверки подписи
+    // Decode payload (no signature check yet)
+    // In production use a library for signature verification
     const payload = JSON.parse(atob(parts[1]));
 
-    // Проверка срока действия токена
+    // Check token expiry
     if (payload.exp && payload.exp < Date.now() / 1000) {
       return null;
     }
 
-    // TODO: Проверка подписи токена через HMAC-SHA256
-    // Для MVP используем простую проверку наличия данных
-    // В продакшене нужно использовать библиотеку типа jose или crypto.subtle
+    // TODO: Verify token signature via HMAC-SHA256
+    // For MVP use simple presence check
+    // In production use library like jose or crypto.subtle
 
     return {
       user_id: payload.user_id || payload.sub || payload.id,
@@ -64,10 +64,10 @@ export async function verifyToken(token, jwtSecret) {
 }
 
 /**
- * Извлечение user_id из токена
- * @param {string} token - JWT токен
- * @param {string} jwtSecret - Секрет for проверки подписи
- * @returns {Promise<string|null>} user_id или null
+ * Extract user_id from token
+ * @param {string} token - JWT token
+ * @param {string} jwtSecret - Secret for signature verification
+ * @returns {Promise<string|null>} user_id or null
  */
 export async function getUserIdFromToken(token, jwtSecret) {
   const decoded = await verifyToken(token, jwtSecret);
@@ -75,9 +75,9 @@ export async function getUserIdFromToken(token, jwtSecret) {
 }
 
 /**
- * Извлечение токена из заголовка Authorization
+ * Extract token from Authorization header
  * @param {Request} request - HTTP request
- * @returns {string|null} Токен или null
+ * @returns {string|null} Token or null
  */
 export function extractToken(request) {
   const authHeader = request.headers.get('Authorization');
@@ -88,10 +88,10 @@ export function extractToken(request) {
 }
 
 /**
- * Middleware for проверки авторизации на защищённых endpoints
+ * Middleware for auth check on protected endpoints
  * @param {Request} request - HTTP request
- * @param {Object} env - Environment variables (должен содержать JWT_SECRET)
- * @returns {Promise<string|null>} user_id или null при ошибке авторизации
+ * @param {Object} env - Environment variables (must contain JWT_SECRET)
+ * @returns {Promise<string|null>} user_id or null on auth error
  */
 export async function requireAuth(request, env) {
   const token = extractToken(request);
@@ -101,7 +101,7 @@ export async function requireAuth(request, env) {
 
   const jwtSecret = env.JWT_SECRET;
   if (!jwtSecret) {
-    console.error('JWT_SECRET not configured в Workers secrets');
+    console.error('JWT_SECRET not configured in Workers secrets');
     return null;
   }
 
@@ -110,11 +110,11 @@ export async function requireAuth(request, env) {
 }
 
 /**
- * Создание JWT токена (for использования при обмене code на токен)
- * @param {Object} payload - Данные for токена (user_id, email и т.д.)
- * @param {string} jwtSecret - Секрет for подписи
- * @param {number} expiresIn - Время жизни токена в секундах (по умолчанию 1 час)
- * @returns {Promise<string>} JWT токен
+ * Create JWT token (for use when exchanging code for token)
+ * @param {Object} payload - Data for token (user_id, email etc.)
+ * @param {string} jwtSecret - Secret for signature
+ * @param {number} expiresIn - Token lifetime in seconds (default 1 hour)
+ * @returns {Promise<string>} JWT token
  */
 export async function createToken(payload, jwtSecret, expiresIn = 3600) {
   const header = {
@@ -129,13 +129,13 @@ export async function createToken(payload, jwtSecret, expiresIn = 3600) {
     exp: now + expiresIn,
   };
 
-  // Кодирование header и payload
+  // Encode header and payload
   const encodedHeader = btoa(JSON.stringify(header)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
   const encodedPayload = btoa(JSON.stringify(tokenPayload)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 
-  // TODO: Создание подписи через HMAC-SHA256
-  // Для MVP используем простую заглушку
-  // В продакшене нужно использовать crypto.subtle for создания подписи
+  // TODO: Create signature via HMAC-SHA256
+  // For MVP use simple stub
+  // In production use crypto.subtle for signature
   const signature = await createSignature(`${encodedHeader}.${encodedPayload}`, jwtSecret);
   const encodedSignature = signature.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 
@@ -143,14 +143,14 @@ export async function createToken(payload, jwtSecret, expiresIn = 3600) {
 }
 
 /**
- * Создание подписи for JWT токена
- * @param {string} data - Данные for подписи
- * @param {string} secret - Секрет
- * @returns {Promise<string>} Подпись в base64
+ * Create signature for JWT token
+ * @param {string} data - Data for signature
+ * @param {string} secret - Secret
+ * @returns {Promise<string>} Signature in base64
  */
 async function createSignature(data, secret) {
   try {
-    // Использование Web Crypto API for создания подписи
+    // Use Web Crypto API for signature creation
     const encoder = new TextEncoder();
     const keyData = encoder.encode(secret);
     const messageData = encoder.encode(data);
@@ -167,7 +167,7 @@ async function createSignature(data, secret) {
     return btoa(String.fromCharCode(...new Uint8Array(signature)));
   } catch (error) {
     console.error('createSignature error:', error);
-    // Fallback: простая заглушка for разработки
+    // Fallback: simple stub for development
     return btoa(data + secret);
   }
 }

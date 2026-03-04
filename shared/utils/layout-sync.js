@@ -1,39 +1,6 @@
 /**
- * ================================================================================================
- * LAYOUT SYNC - Утилита синхронизации высоты header и footer с padding body
- * ================================================================================================
- * Skill: id:sk-318305
- *
- * PURPOSE: Автоматическая синхронизация padding-top и padding-bottom body с высотой
- * фиксированных header и footer for предотвращения перекрытия контента.
- *
- * ПРОБЛЕМА: Фиксированные header (fixed-top) и footer (fixed-bottom) перекрывают контент,
- * если не зарезервировать for них место через padding body.
- *
- * РЕШЕНИЕ: Автоматическое отслеживание высоты header и footer через ResizeObserver
- * и MutationObserver с установкой соответствующих padding на body.
- *
- * КАК ДОСТИГАЕТСЯ:
- * - ResizeObserver отслеживает изменения размеров header и footer
- * - MutationObserver отслеживает изменения атрибутов (class, style)
- * - CSS переменные (--header-height, --footer-height) for нативного подхода
- * - Автоматическая инициализация при загрузке DOM
- * - Поддержка ручного обновления и остановки наблюдения
- *
- * ОСОБЕННОСТИ:
- * - Работает с фиксированными элементами (fixed-top, fixed-bottom)
- * - Автоматически обновляется при изменении размеров
- * - Использует CSS переменные for совместимости с CSS
- * - Поддержка множественных header/footer (берет первый найденный)
- *
- * USAGE:
- * - Автоматически инициализируется при загрузке DOM
- * - Ручное обновление: window.layoutSync.update()
- * - Остановка наблюдения: window.layoutSync.stop()
- * - Перезапуск: window.layoutSync.start()
- *
- * REFERENCES:
- * - General principles утилит: id:sk-483943
+ * LAYOUT SYNC - Sync header/footer height with body padding to avoid content overlap. Skill: id:sk-318305
+ * ResizeObserver + MutationObserver; CSS vars --header-height, --footer-height. Usage: auto on load; layoutSync.update(); stop(); start(). Ref: id:sk-483943
  */
 
 (function() {
@@ -46,9 +13,7 @@
     let resizeHandler = null;
     let isActive = false;
 
-    /**
-     * Обновляет padding body на основе высоты header и footer
-     */
+    /** Update body padding from header/footer height */
     function updateBodyPadding() {
         const header = document.querySelector('header');
         const footer = document.querySelector('footer');
@@ -59,52 +24,50 @@
         let headerHeight = 0;
         let footerHeight = 0;
 
-        // Получаем высоту header
+        // Get header height
         if (header) {
             headerHeight = header.offsetHeight;
         }
 
-        // Получаем высоту footer
+        // Get footer height
         if (footer) {
             footerHeight = footer.offsetHeight;
         }
 
-        // Устанавливаем CSS переменные
+        // Set CSS vars
         body.style.setProperty('--header-height', `${headerHeight}px`);
         body.style.setProperty('--footer-height', `${footerHeight}px`);
 
-        // Устанавливаем padding
+        // Set padding
         body.style.paddingTop = `${headerHeight}px`;
         body.style.paddingBottom = `${footerHeight}px`;
     }
 
-    /**
-     * Запускает наблюдение за header и footer
-     */
+    /** Start observing header and footer */
     function start() {
         if (isActive) {
-            return; // Уже запущено
+            return; // Already started
         }
 
         const header = document.querySelector('header');
         const footer = document.querySelector('footer');
 
         if (!header && !footer) {
-            console.warn('layout-sync: header и footer не найдены, синхронизация не запущена');
+            console.warn('layout-sync: header and footer not found, sync not started');
             return;
         }
 
         isActive = true;
 
-        // Добавляем обработчик resize события (если еще не добавлен)
+        // Add resize handler if not yet added
         if (!resizeHandler) {
             resizeHandler = update;
             window.addEventListener('resize', resizeHandler);
         }
 
-        // Наблюдение за header
+        // Observe header
         if (header) {
-            // ResizeObserver for отслеживания изменений размеров
+            // ResizeObserver for size changes
             if (window.ResizeObserver) {
                 headerResizeObserver = new ResizeObserver(() => {
                     updateBodyPadding();
@@ -112,7 +75,7 @@
                 headerResizeObserver.observe(header);
             }
 
-            // MutationObserver for отслеживания изменений атрибутов
+            // MutationObserver for attribute changes
             headerObserver = new MutationObserver(() => {
                 updateBodyPadding();
             });
@@ -124,9 +87,9 @@
             });
         }
 
-        // Наблюдение за footer
+        // Observe footer
         if (footer) {
-            // ResizeObserver for отслеживания изменений размеров
+            // ResizeObserver for size changes
             if (window.ResizeObserver) {
                 footerResizeObserver = new ResizeObserver(() => {
                     updateBodyPadding();
@@ -134,7 +97,7 @@
                 footerResizeObserver.observe(footer);
             }
 
-            // MutationObserver for отслеживания изменений атрибутов
+            // MutationObserver for attribute changes
             footerObserver = new MutationObserver(() => {
                 updateBodyPadding();
             });
@@ -146,12 +109,12 @@
             });
         }
 
-        // Первоначальное обновление
+        // Initial update
         updateBodyPadding();
     }
 
     /**
-     * Останавливает наблюдение за header и footer
+     * Stop observing header and footer
      */
     function stop() {
         if (!isActive) {
@@ -178,7 +141,7 @@
             footerResizeObserver = null;
         }
 
-        // Удаляем обработчик resize события
+        // Remove resize handler
         if (resizeHandler) {
             window.removeEventListener('resize', resizeHandler);
             resizeHandler = null;
@@ -188,13 +151,13 @@
     }
 
     /**
-     * Ручное обновление padding (без перезапуска наблюдения)
+     * Manual padding update (no observer restart)
      */
     function update() {
         updateBodyPadding();
     }
 
-    // Экспорт API
+    // Export API
     window.layoutSync = {
         start,
         stop,
@@ -203,7 +166,7 @@
     };
 
     /**
-     * Проверяет наличие header и footer и запускает наблюдение
+     * Check header/footer and start observing
      */
     function tryStart() {
         const header = document.querySelector('header');
@@ -212,7 +175,7 @@
         if (header || footer) {
             start();
         } else if (!isActive) {
-            // Если элементы еще не появились, ждем их появления через MutationObserver
+            // If elements not yet in DOM, wait via MutationObserver
             const bodyObserver = new MutationObserver(() => {
                 const header = document.querySelector('header');
                 const footer = document.querySelector('footer');
@@ -228,15 +191,14 @@
         }
     }
 
-    // Автоматическая инициализация при загрузке DOM
+    // Auto-init on DOM load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', tryStart);
     } else {
-        // DOM уже loaded
+        // DOM already loaded
         tryStart();
     }
 
-    // Обработчик resize будет добавлен в start() при первом запуске
-    // Это предотвращает добавление обработчика до инициализации наблюдения
+    // Resize handler added in start() on first run to avoid adding before observer init
 })();
 

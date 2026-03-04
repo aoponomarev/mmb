@@ -1,30 +1,6 @@
 /**
- * ================================================================================================
- * MODAL BUTTONS TEMPLATE - Шаблон компонента кнопок модального окна
- * ================================================================================================
- *
- * PURPOSE: Шаблон for компонента рендеринга кнопок модального окна (cmp-modal-buttons).
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="modal-buttons-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="modal-buttons-template"
- * - Компонент использует шаблон через template: '#modal-buttons-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Рендеринг списка кнопок через v-for
- * - Каждая кнопка использует cmp-button с конфигурацией из button config
- * - Передача всех свойств кнопки (label, variant, disabled, icon, classesAdd, buttonAttributes)
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-318305
- * - Компонент: shared/components/modal-buttons.js
+ * MODAL BUTTONS TEMPLATE - Template for cmp-modal-buttons. Injected as <script type="text/x-template"> id="modal-buttons-template".
+ * v-for over processedButtons; each button via cmp-button with full config. Ref: id:sk-318305, shared/components/modal-buttons.js
  */
 
 (function() {
@@ -47,7 +23,7 @@
 </template>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -57,7 +33,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

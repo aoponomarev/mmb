@@ -1,9 +1,9 @@
 /**
  * ================================================================================================
- * SORTABLE HEADER - Компонент сортируемого заголовка таблицы
+ * SORTABLE HEADER - Table column sortable header
  * ================================================================================================
  *
- * PURPOSE: Заголовок колонки с возможностью сортировки.
+ * PURPOSE: Column header with sort indicator and emit.
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
@@ -21,28 +21,28 @@
         template: '#sortable-header-template',
 
         props: {
-            // Поле for сортировки (передается в handleSort)
+            // Sort field (passed to handleSort)
             field: {
                 type: String,
                 required: true
             },
-            // Текст заголовка
+            // Header label
             label: {
                 type: String,
                 required: true
             },
-            // Текущее поле сортировки (из родительского компонента)
+            // Current sort field (from parent)
             sortBy: {
                 type: String,
                 default: null
             },
-            // Текущий порядок сортировки (null | 'asc' | 'desc')
+            // Current sort order (null | 'asc' | 'desc')
             sortOrder: {
                 type: String,
                 default: null,
                 validator: (value) => value === null || value === 'asc' || value === 'desc'
             },
-            // Всплывающая подсказка (tooltip)
+            // Tooltip
             tooltip: {
                 type: String,
                 default: ''
@@ -50,22 +50,22 @@
         },
 
         computed: {
-            // Определяет, активна ли сортировка for этого поля
+            // Whether sort is active for this field
             isActive() {
                 return this.sortBy === this.field && this.sortOrder !== null;
             },
 
-            // Иконка сортировки в зависимости от состояния
+            // Sort icon by state
             sortIcon() {
                 if (!this.isActive) {
-                    return 'sort'; // Material Symbols: неактивная сортировка
+                    return 'sort'; // Material Symbols: inactive
                 }
                 return this.sortOrder === 'asc' ? 'north' : 'south'; // Material Symbols: asc/desc
             }
         },
 
         methods: {
-            // Обработчик клика - эмитит событие for родительского компонента
+            // Click handler - emit sort for parent
             handleClick() {
                 this.$emit('sort', this.field);
             }

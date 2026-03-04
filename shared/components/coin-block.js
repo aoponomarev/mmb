@@ -1,10 +1,9 @@
 /**
  * ================================================================================================
- * COIN BLOCK - Компонент for отображения монеты
+ * COIN BLOCK - Coin display component
  * ================================================================================================
  *
- * PURPOSE: Переиспользуемый компонент for отображения информации о монете.
- * Наследник cell-coin: shared/components/coin-block.js (coin display, dropdown, favorites).
+ * PURPOSE: Reusable component for coin info. Extends cell-coin (coin display, dropdown, favorites).
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
@@ -32,37 +31,37 @@
         },
 
         props: {
-            // ID монеты (обязательно for событий и хэширования)
+            // Coin ID (required for events and hashing)
             coinId: {
                 type: String,
                 required: true
             },
-            // Тикер монеты (BTC, ETH, USDT)
+            // Coin ticker (BTC, ETH, USDT)
             symbol: {
                 type: String,
                 default: ''
             },
-            // Полное название монеты (Bitcoin, Ethereum)
+            // Full coin name (Bitcoin, Ethereum)
             name: {
                 type: String,
                 default: ''
             },
-            // URL иконки монеты
+            // Coin icon URL
             image: {
                 type: String,
                 default: ''
             },
-            // Fallback URL иконки монеты (если основная не загрузится)
+            // Fallback icon URL (if primary fails to load)
             fallbackImage: {
                 type: String,
                 default: ''
             },
-            // Находится ли монета в избранном
+            // Is coin in favorites
             isFavorite: {
                 type: Boolean,
                 default: false
             },
-            // CSS-классы for частей компонента
+            // CSS classes for component parts
             cssClasses: {
                 type: Object,
                 default: () => ({
@@ -71,7 +70,7 @@
                     symbol: ''
                 })
             },
-            // Применить стили for обрезания текста (overflow: hidden, text-overflow: ellipsis, white-space: nowrap)
+            // Apply text truncation (overflow: hidden, text-overflow: ellipsis)
             applyTextOverflow: {
                 type: Boolean,
                 default: false
@@ -80,14 +79,13 @@
 
         data() {
             return {
-                // Не подставляем принудительно CDN URL при пустом image:
-                // если у монеты нет картинки, лучше показать текст без "битой" иконки.
+                // Do not force CDN URL when image empty; show text without broken icon
                 currentImage: this.image || this.fallbackImage || ''
             };
         },
 
         watch: {
-            // Если иконка изменилась в props (например, при переключении монет), обновляем локальное состояние
+            // When image changes in props (e.g. coin switch), update local state
             image(newVal) {
                 this.currentImage = newVal || this.fallbackImage || '';
             },
@@ -100,8 +98,7 @@
 
         computed: {
             /**
-             * Детерминированный хэш экземпляра на основе coinId
-             * Стабилен между сессиями - один и тот же coinId всегда дает один и тот же хэш
+             * Deterministic instance hash from coinId; stable across sessions
              */
             instanceHash() {
                 if (!window.hashGenerator) {
@@ -112,14 +109,14 @@
             },
 
             /**
-             * Классы for обрезания текста (если applyTextOverflow === true)
+             * Classes for text truncation when applyTextOverflow === true
              */
             textOverflowClasses() {
                 return this.applyTextOverflow ? 'overflow-hidden text-truncate' : '';
             },
 
             /**
-             * Полный заголовок for tooltip
+             * Full title for tooltip
              */
             tooltipTitle() {
                 if (this.name && this.symbol) {
@@ -133,7 +130,7 @@
                 }
             },
 
-            // Реактивные подсказки
+            // Reactive tooltips config
             tooltipsConfig() {
                 return window.tooltipsConfig || null;
             },
@@ -161,28 +158,28 @@
             },
 
             /**
-             * Можно ли редактировать иконку (Dev-only)
+             * Whether icon can be edited (dev-only)
              */
             canEditIcon() {
                 return window.iconManager && window.iconManager.canEditIcons();
             },
 
             /**
-             * Является ли монета стейблкоином
+             * Is coin a stablecoin
              */
             isStable() {
                 return window.coinsConfig && window.coinsConfig.isStablecoinId(this.coinId);
             },
 
             /**
-             * Является ли монета оберткой или LST
+             * Is coin wrapped or LST
              */
             isWrapped() {
                 return window.coinsConfig && window.coinsConfig.isWrappedOrLst(this.coinId, this.symbol, this.name);
             },
 
             /**
-             * Тип монеты for UI-индикаторов (SSOT)
+             * Coin type for UI indicators (SSOT)
              */
             coinType() {
                 if (!window.coinsConfig || !window.coinsConfig.getCoinType) return null;
@@ -202,7 +199,7 @@
 
         methods: {
             /**
-             * Обработка клика - эмитим событие for родительского компонента
+             * Click handler - emit event for parent
              */
             handleClick(event) {
                 this.$emit('click', event, this.coinId);
@@ -210,14 +207,14 @@
             },
 
             /**
-             * Обработка контекстного меню (ПКМ)
+             * Context menu (right-click) handler
              */
             handleContextMenu(event) {
                 this.$emit('context-menu', event, this.coinId);
             },
 
             /**
-             * Переключить состояние избранного
+             * Toggle favorite state
              */
             handleToggleFavorite() {
                 this.$emit('toggle-favorite', {
@@ -227,31 +224,30 @@
             },
 
             /**
-             * Открыть монету на Bybit
+             * Open coin on Bybit
              */
             handleOpenBybit() {
                 if (!this.symbol) {
-                    console.error('Тикер монеты отсутствует');
+                    console.error('Coin ticker missing');
                     return;
                 }
 
-                // Формируем ссылку: https://www.bybit.com/trade/usdt/{тикер}USDT
                 const ticker = this.symbol.toUpperCase();
                 const url = `https://www.bybit.com/trade/usdt/${ticker}USDT`;
 
-                // Открываем в новой вкладке
+                // Open in new tab
                 window.open(url, '_blank');
             },
 
             /**
-             * Delete монету из таблицы
+             * Delete coin from table
              */
             handleDelete() {
                 this.$emit('delete-coin', this.coinId);
             },
 
             /**
-             * Открыть модальное окно замены иконки
+             * Open icon replace modal
              */
             handleReplaceIcon() {
                 this.$emit('replace-icon', {
@@ -265,15 +261,13 @@
             },
 
             /**
-             * Обработка ошибки загрузки иконки
-             * Переключаемся на fallback URL если доступен
+             * Icon load error handler; switch to fallback URL if available
              */
             handleImageError() {
                 if (this.fallbackImage && this.currentImage !== this.fallbackImage) {
-                    // console.warn(`coin-block: failed to загрузить основную иконку for ${this.coinId}, пробуем fallback...`);
                     this.currentImage = this.fallbackImage;
                 } else {
-                    // Если fallback отсутствует/тоже битый — скрываем img, чтобы не показывать broken icon.
+                    // No fallback or fallback also failed - hide img to avoid broken icon
                     this.currentImage = '';
                 }
             }

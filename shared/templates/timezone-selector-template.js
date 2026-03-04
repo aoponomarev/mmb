@@ -1,32 +1,6 @@
 /**
- * ================================================================================================
- * TIMEZONE SELECTOR TEMPLATE - Шаблон компонента выбора таймзоны
- * ================================================================================================
- *
- * PURPOSE: Шаблон for компонента выбора таймзоны (cmp-timezone-selector).
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="timezone-selector-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="timezone-selector-template"
- * - Компонент использует шаблон через template: '#timezone-selector-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Корневой элемент: ⟨select class="form-select"⟩ с v-model for двусторонней привязки
- * - Список опций: ⟨option⟩ элементы с value и текстом for каждой таймзоны
- * Layout и CSS-классы:
- * - Использование только Bootstrap классов (form-select)
- * - Минималистичный дизайн без дополнительных оберток
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-318305
- * - Компонент: shared/components/timezone-selector.js
+ * TIMEZONE SELECTOR TEMPLATE - Template for cmp-timezone-selector. Injected as <script type="text/x-template"> id="timezone-selector-template".
+ * Structure: select.form-select with v-model; option list. Ref: id:sk-318305, shared/components/timezone-selector.js
  */
 
 (function() {
@@ -45,7 +19,7 @@
 </select>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -55,7 +29,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

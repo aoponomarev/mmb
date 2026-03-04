@@ -1,52 +1,6 @@
 /**
- * ================================================================================================
- * DROPDOWN-MENU-ITEM TEMPLATE - Шаблон компонента пункта выпадающего меню
- * ================================================================================================
- *
- * PURPOSE: Шаблон for универсального компонента пункта выпадающего меню (cmp-dropdown-menu-item)
- * с поддержкой иконки, текста, подзаголовка и суффикса.
- *
- * ПРОБЛЕМА: Шаблон должен быть доступен в DOM до инициализации Vue.js for работы компонента.
- *
- * РЕШЕНИЕ: Шаблон хранится как строка в JavaScript файле и автоматически вставляется в DOM
- * при загрузке файла как <script type="text/x-template"> элемент с id="dropdown-menu-item-template".
- *
- * КАК ДОСТИГАЕТСЯ:
- * - Шаблон определён как строка в константе TEMPLATE
- * - При загрузке файла автоматически создаётся <script type="text/x-template"> элемент
- * - Элемент добавляется в document.body с id="dropdown-menu-item-template"
- * - Компонент использует шаблон через template: '#dropdown-menu-item-template'
- *
- * ОСОБЕННОСТИ ШАБЛОНА:
- * Структура HTML:
- * - Корневой элемент: ⟨li class="dropdown-item p-0"⟩ с условными классами 'active' и 'disabled'
- * - Внутренний контейнер: ⟨div class="d-flex align-items-start px-2 py-2"⟩ for layout
- * - Элементы: иконка (⟨span class="icon"⟩), текстовая область (⟨div class="flex-grow-1 text-break text-wrap"⟩), суффикс (⟨span⟩)
- * Layout и CSS-классы:
- * - Все стили реализованы через Bootstrap утилиты: d-flex, align-items-start, text-break, text-wrap, lh-sm, mt-1, opacity-50 и т.п.
- * - Выравнивание элементов: иконка и суффикс выровнены по первой строке текста через align-items-start и pt-1
- * - Текстовая область растягивается через flex-grow-1
- * - Перенос текста: текстовая область использует text-break и text-wrap for переноса длинного текста
- * - min-width: 0 на flex-элементе for корректного обрезания текста
- * - Подзаголовок отображается через ⟨small⟩ с классом mt-1 for отступа
- * Условный рендеринг:
- * - Иконка: условный рендеринг через v-if="icon"
- * - Подзаголовок: условный рендеринг через v-if="subtitle"
- * - Суффикс: условный рендеринг через v-if="suffix"
- * - Состояния: классы 'active' и 'disabled' применяются условно через :class
- * Responsiveness:
- * - Responsiveness через классы .icon, .subtitle (управляется CSS)
- * События:
- * - Раздельные события кликов по зонам (иконка, текст, суффикс) через @mouseup.stop
- * - Закрытие dropdown при отпускании кнопки мыши (@mouseup вместо @click)
- * Подсказки (tooltips):
- * - Поддержка нативных и Bootstrap tooltips через условные атрибуты (data-bs-toggle, data-bs-title, title)
- * Анимация chevron:
- * - Анимация chevron через Font Awesome класс fa-rotate-90 и inline transition (единственное исключение из запрета inline-стилей)
- *
- * REFERENCES:
- * - General principles работы с шаблонами: id:sk-483943 (section "Вынос x-template шаблонов")
- * - Компонент: shared/components/dropdown-menu-item.js
+ * DROPDOWN-MENU-ITEM TEMPLATE - Template for cmp-dropdown-menu-item (icon, text, subtitle, suffix). Injected as <script type="text/x-template"> id="dropdown-menu-item-template".
+ * Structure: li.dropdown-item; d-flex container; icon, text area, suffix. Zone clicks via @mouseup.stop; close on mouse release. Ref: id:sk-483943, shared/components/dropdown-menu-item.js
  */
 
 (function() {
@@ -123,7 +77,7 @@
 </li>`;
 
     /**
-     * Вставляет шаблон в DOM
+     * Injects template into DOM
      */
     function insertTemplate() {
         const templateScript = document.createElement('script');
@@ -133,7 +87,7 @@
         document.body.appendChild(templateScript);
     }
 
-    // Вставляем шаблон при загрузке
+    // Inject template on load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', insertTemplate);
     } else {

@@ -41,5 +41,14 @@ When a Russian concept must be named in English (e.g. for code or file paths), y
 
 ## Implementation Status
 
+### Enforcement (Gates)
+
+- **Gate script:** `is/scripts/architecture/validate-code-comments-english.js` — scans `core`, `app`, `is`, `shared`, `mm` for Cyrillic in `.js`/`.ts` comment blocks only (string literals excluded). Exits with code 1 on violation.
+- **npm:** `npm run lang:comments:check` — run the gate manually.
+- **Preflight:** The gate is run in `is/scripts/preflight.js` (step 4). Preflight blocks app start and CI if any code comment contains Cyrillic.
+- **Testing matrix:** `npm run testing:premerge` runs preflight, so the comments-English gate is included in premerge/CI.
+
+### Triggers & guardrails
+
 - **Trigger:** Whenever an agent generates variable names, writes documentation, translates concepts, or creates new files based on Russian prompts.
 - **Migration Guardrail:** When migrating legacy code, agents must actively translate Russian comments to English and scan for banned calques, replacing them with correct standard terminology.

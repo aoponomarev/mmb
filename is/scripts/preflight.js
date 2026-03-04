@@ -87,7 +87,16 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 4. Validate Cache Integrity
+    // 4. Code comments English gate (SSOT: process-language-policy)
+    console.log('[preflight] Validating code comments (English only)...');
+    try {
+        execSync('node is/scripts/architecture/validate-code-comments-english.js', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error(`[preflight] ERROR: Code comments must be English only (no Cyrillic). Run npm run lang:comments:check for details.`);
+        process.exit(1);
+    }
+
+    // 5. Validate Cache Integrity
     console.log('[preflight] Validating cache integrity...');
     try {
         execSync('node is/scripts/infrastructure/validate-cache-integrity-delta.js', { stdio: 'inherit', cwd: PATHS.root });

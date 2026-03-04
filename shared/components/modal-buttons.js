@@ -1,21 +1,15 @@
 /**
  * ================================================================================================
- * MODAL BUTTONS COMPONENT - Компонент for рендеринга кнопок модального окна
+ * MODAL BUTTONS COMPONENT - Renders modal buttons in header or footer from single registry
  * ================================================================================================
  *
- * PURPOSE: Рендеринг кнопок модального окна в header или footer на основе единой системы управления.
+ * PURPOSE: Render modal buttons in header or footer from unified button API.
  *
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * API КОМПОНЕНТА:
- *
- * Входные параметры (props):
- * - location (String, required) — место отображения: 'header' или 'footer'
- *
- * Inject:
- * - modalApi — API for managing кнопками (предоставляется cmp-modal)
+ * API: props location ('header'|'footer'), leftOnly, rightOnly. Inject: modalApi (from cmp-modal).
  *
 */
 
@@ -52,7 +46,7 @@ window.cmpModalButtons = {
 
     computed: {
         /**
-         * Обработанные кнопки с учетом особенностей header/footer
+         * Buttons processed for header vs footer (header: icon-only, link style; footer: filter Close)
          */
         processedButtons() {
             let initialButtons = [...this.buttons];
@@ -61,7 +55,7 @@ window.cmpModalButtons = {
                 initialButtons = initialButtons.filter(button => {
                     const isCloseButton = button.id === 'close' || button.label === 'Закрыть';
                     if (isCloseButton) {
-                        // Кнопка Закрыть в новой схеме не нужна, так как есть Отмена и Сохранить
+                        // Close button not used; Cancel and Save used instead
                         return false;
                     }
                     return true;
@@ -69,25 +63,22 @@ window.cmpModalButtons = {
             }
 
             let processed = initialButtons.map(button => {
-                // Для кнопок в header делаем их иконочными (без label, variant='link', без подчеркивания, без горизонтальных паддингов)
+                // Header: icon-only (no label, variant link, no underline, no horizontal padding)
                 if (this.location === 'header') {
                     return {
                         ...button,
-                        label: null, // Убираем текст
-                        variant: 'link', // Убираем окантовку
-                        // Убираем подчеркивание и горизонтальные паддинги у btn-link через classesAdd
+                        label: null,
+                        variant: 'link',
                         classesAdd: {
                             ...(button.classesAdd || {}),
                             root: `${button.classesAdd?.root || ''} text-decoration-none px-0`.trim()
-                        },
-                        // icon остается как есть
+                        }
                     };
                 }
-                // Для footer оставляем как есть
                 return button;
             });
 
-            // Фильтрация по левой/правой стороне for footer
+            // Filter by left/right side for footer
             if (this.location === 'footer') {
                 if (this.leftOnly) {
                     processed = processed.filter(b => b.classesAdd?.root?.includes('me-auto'));
@@ -99,8 +90,7 @@ window.cmpModalButtons = {
             processed.sort((a, b) => {
                 const aHasMeAuto = a.classesAdd?.root?.includes('me-auto') || false;
                 const bHasMeAuto = b.classesAdd?.root?.includes('me-auto') || false;
-                // ВАЖНО: Теперь все кнопки в левом блоке (с me-auto) выравниваются влево.
-                // Сортировка остается for корректного распределения по блокам.
+                // Left block (me-auto) first; sort keeps correct block distribution
                 if (aHasMeAuto && !bHasMeAuto) return -1;
                 if (!aHasMeAuto && bHasMeAuto) return 1;
                 return 0;
@@ -112,7 +102,7 @@ window.cmpModalButtons = {
 
     methods: {
         /**
-         * Обновление списка кнопок for текущего места
+         * Refresh button list for current location
          */
         updateButtons() {
             if (this.modalApi && this.modalApi.getButtonsForLocation) {
@@ -122,8 +112,8 @@ window.cmpModalButtons = {
         },
 
         /**
-         * Обработчик клика по кнопке
-         * @param {Object} button - конфигурация кнопки
+         * Button click handler
+         * @param {Object} button - button config
          */
         handleClick(button) {
             if (button.onClick && !button.disabled) {
@@ -135,11 +125,9 @@ window.cmpModalButtons = {
     mounted() {
         this.updateButtons();
 
-        // Подписка на изменения кнопок через watch
-        // Используем $watch for отслеживания изменений в modalApi
+        // Watch modalApi for button changes
         this.$watch(
             () => {
-                // Принудительно получаем актуальный список кнопок
                 return this.modalApi ? this.modalApi.getButtonsForLocation(this.location) : [];
             },
             (newButtons) => {

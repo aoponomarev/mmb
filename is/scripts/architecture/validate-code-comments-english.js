@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * @skill id:sk-883639
+ * @causality #for-code-comments-gate
  * @description Gate: code comments MUST be in English. Fails on Cyrillic in .js/.ts comments.
  * SSOT: process-language-policy. Excludes string literals (i18n), only checks comment blocks.
  */

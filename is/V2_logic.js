@@ -831,7 +831,7 @@ async function loadSkillsAndTasks() {
   try {
     // Skill anchor: After reset + check-updates, n8n may return stale/empty lists for
     // a short window while local drafts are already created. Merge n8n + local to
-    // avoid false "Нет данных" on Skills & Tasks tab.
+    // avoid false "No data" on Skills & Tasks tab.
     const [n8nTasksRaw, localTasksRaw, n8nSkillsRaw, localSkillsRaw] = await Promise.all([
       api.n8nCall('v2/tasks').catch(() => []),
       api.call('/api/tasks').catch(() => ({})),

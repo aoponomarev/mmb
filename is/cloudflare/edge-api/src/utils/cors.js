@@ -1,47 +1,47 @@
 /**
  * ================================================================================================
- * CORS UTILITIES - Утилиты for обработки CORS заголовков
+ * CORS UTILITIES - Utilities for CORS header handling
  * ================================================================================================
  *
- * PURPOSE: Централизованная обработка CORS заголовков for всех ответов Workers.
+ * PURPOSE: Centralized CORS header handling for all Workers responses.
  * Skill: id:sk-7cf3f7
  *
  * PRINCIPLES:
- * - Все ответы должны включать CORS заголовки
- * - Support preflight OPTIONS запросов
- * - Настраиваемые allowed origins (for продакшена можно ограничить)
+ * - All responses must include CORS headers
+ * - Support preflight OPTIONS requests
+ * - Configurable allowed origins (can restrict in production)
  *
  * USAGE:
  * import { addCorsHeaders, handleOptions } from './utils/cors.js';
  *
- * // Добавление заголовков к ответу
+ * // Add headers to response
  * const response = new Response(data, { headers: addCorsHeaders() });
  *
- * // Handle preflight запроса
+ * // Handle preflight request
  * if (request.method === 'OPTIONS') {
  *   return handleOptions(request);
  * }
  */
 
 /**
- * CORS заголовки for всех ответов
+ * CORS headers for all responses
  */
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // Разрешить любой source for разработки
+  'Access-Control-Allow-Origin': '*', // Allow any origin for development
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400', // Cache preflight запросов на 24 часа
+  'Access-Control-Max-Age': '86400', // Cache preflight requests for 24 hours
 };
 
 /**
- * Get CORS заголовки
- * @param {Object} options - Опции (origin for кастомизации)
- * @returns {Object} Объект с CORS заголовками
+ * Get CORS headers
+ * @param {Object} options - Options (origin for customization)
+ * @returns {Object} Object with CORS headers
  */
 export function getCorsHeaders(options = {}) {
   const headers = { ...corsHeaders };
 
-  // Если указан origin - используем его (for продакшена можно ограничить)
+  // If origin specified - use it (can restrict in production)
   if (options.origin) {
     headers['Access-Control-Allow-Origin'] = options.origin;
   }
@@ -50,10 +50,10 @@ export function getCorsHeaders(options = {}) {
 }
 
 /**
- * Добавить CORS заголовки к существующим заголовкам
- * @param {Headers} existingHeaders - Существующие заголовки (optional)
- * @param {Object} options - Опции for getCorsHeaders
- * @returns {Headers} Новые заголовки с CORS
+ * Add CORS headers to existing headers
+ * @param {Headers} existingHeaders - Existing headers (optional)
+ * @param {Object} options - Options for getCorsHeaders
+ * @returns {Headers} New headers with CORS
  */
 export function addCorsHeaders(existingHeaders = null, options = {}) {
   const headers = existingHeaders ? new Headers(existingHeaders) : new Headers();
@@ -67,9 +67,9 @@ export function addCorsHeaders(existingHeaders = null, options = {}) {
 }
 
 /**
- * Handle preflight OPTIONS запросов
+ * Handle preflight OPTIONS requests
  * @param {Request} request - Incoming request
- * @returns {Response} Ответ с CORS заголовками
+ * @returns {Response} Response with CORS headers
  */
 export function handleOptions(request) {
   return new Response(null, {
@@ -79,10 +79,10 @@ export function handleOptions(request) {
 }
 
 /**
- * Создать JSON response с CORS заголовками
- * @param {any} data - Данные for JSON responseа
- * @param {Object} options - Опции (status, headers, corsOptions)
- * @returns {Response} JSON response с CORS заголовками
+ * Create JSON response with CORS headers
+ * @param {any} data - Data for JSON response
+ * @param {Object} options - Options (status, headers, corsOptions)
+ * @returns {Response} JSON response with CORS headers
  */
 export function jsonResponse(data, options = {}) {
   const {

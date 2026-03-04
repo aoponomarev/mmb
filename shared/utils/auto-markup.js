@@ -1,72 +1,31 @@
 /**
- * ================================================================================================
- * AUTO-MARKUP - Утилита автоматической маркировки элементов DOM
- * ================================================================================================
- * Skill: id:sk-318305
- *
- * PURPOSE: Автоматическая маркировка всех значимых контейнеров в DOM через CSS классы avto-{hash}
- * for навигации в коде через DevTools и указания агенту места в разметке.
- *
- * ПРОБЛЕМА: Ручная маркировка контейнеров for навигации в коде требует постоянного внимания
- * и can be пропущена при добавлении новых элементов, особенно асинхронно загружаемых.
- *
- * РЕШЕНИЕ: Автоматическая маркировка через MutationObserver с детерминированными хэшами
- * на основе пути элемента в DOM.
- *
- * КАК ДОСТИГАЕТСЯ:
- * - MutationObserver отслеживает добавление новых элементов в DOM
- * - Правила shouldMarkup() определяют, какие элементы нужно маркировать
- * - Генерация детерминированного Base58 хэша на основе пути элемента (tagName, позиция, классы)
- * - Автоматическая инициализация после монтирования Vue приложения
- * - Поддержка ручного вызова for асинхронно загружаемых элементов
- *
- * ПРАВИЛА ПРИМЕНЕНИЯ:
- * - Маркируются: основные секции (main, section, article, aside, header, footer, nav),
- *   заголовки (h1-h6), корневые .container, .container-fluid, функциональные блоки
- *   (.card, .card-body, .card-header, .card-footer), элементы с атрибутом data-markup
- * - НЕ маркируются: элементы внутри Vue компонентов (у них уже есть instanceHash),
- *   мелкие обертки без функционального значения (.row, .col-*), элементы с data-no-markup,
- *   элементы с ID (JS-зависимые элементы), служебные элементы (script, style, noscript)
- *
- * ОСОБЕННОСТИ:
- * - Детерминированные хэши: один и тот же путь в DOM всегда дает один и тот же хэш
- * - Стабильность между сессиями for статичных элементов
- * - Исключение элементов внутри Vue компонентов for избежания конфликтов с instanceHash
- * - Поддержка асинхронной загрузки через MutationObserver
- *
- * USAGE:
- * - Автоматически маркирует элементы при загрузке и при добавлении новых элементов
- * - Ручной вызов: window.autoMarkup.markupContainer(element)
- * - Отключение: window.autoMarkup.stopObserver()
- *
- * REFERENCES:
- * - General principles маркировки: id:sk-483943
- * - Детерминированные хэши компонентов: id:sk-483943
+ * AUTO-MARKUP - Auto-markup of DOM elements with avto-{hash} for DevTools/navigation. Skill: id:sk-318305
+ * MutationObserver + deterministic Base58 hash from element path. Mark: main, section, header, footer, .container, .card*, data-markup. Skip: inside Vue, .row/.col-*, data-no-markup, elements with ID, script/style. Usage: auto on load; window.autoMarkup.markupContainer(el); stopObserver(). Ref: id:sk-483943
  */
 
 window.autoMarkup = {
   observer: null,
   isInitialized: false,
 
-  // Правила for определения значимых контейнеров
+  // Rules for which elements to markup
   shouldMarkup(element) {
-    // Исключения: не маркируем
+    // Exclusions
     if (element.hasAttribute('data-no-markup')) return false;
     if (element.classList.contains('row') || element.classList.contains('col-')) return false;
     if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return false;
     if (element.tagName === 'NOSCRIPT') return false;
 
-    // Уже имеет хэш
+    // Already has hash
     if (Array.from(element.classList).some(cls => cls.startsWith('avto-'))) return false;
 
-    // Уже имеет ID (JS-зависимый элемент)
+    // Has ID (JS-bound)
     if (element.id) return false;
 
-    // Пропускаем элементы внутри Vue компонентов
+    // Skip inside Vue components
     if (element.__vue__) return false;
     if (element.closest('[data-v-]')) return false;
 
-    // Проверяем, не находится ли элемент внутри Vue компонента
+    // Check if inside Vue component
     let parent = element.parentElement;
     while (parent && parent !== document.body) {
       if (parent.__vue__ || parent.hasAttribute('data-v-')) {
@@ -75,14 +34,14 @@ window.autoMarkup = {
       parent = parent.parentElement;
     }
 
-    // Значимые контейнеры: маркируем
+    // Significant containers: markup
     const significantTags = ['MAIN', 'SECTION', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER', 'NAV'];
     if (significantTags.includes(element.tagName)) return true;
 
-    // Заголовки (h1-h6) - значимые элементы структуры документа
+    // Headings (h1-h6)
     if (/^H[1-6]$/.test(element.tagName)) return true;
 
-    // Контейнеры с определенными классами
+    // Containers with specific classes
     if (element.classList.contains('container') ||
         element.classList.contains('container-fluid') ||
         element.classList.contains('card') ||
@@ -90,25 +49,25 @@ window.autoMarkup = {
         element.classList.contains('card-header') ||
         element.classList.contains('card-footer')) return true;
 
-    // Элементы с определенными data-атрибутами
+    // Elements with data-markup
     if (element.hasAttribute('data-markup')) return true;
 
     return false;
   },
 
-  // Генерация уникального идентификатора for элемента на основе пути в DOM
+  // Generate element id from DOM path
   generateElementId(element) {
     const path = [];
     let current = element;
     let depth = 0;
-    const maxDepth = 10; // Ограничение глубины
+    const maxDepth = 10; // Depth limit
 
     while (current && depth < maxDepth && current !== document.body) {
       const tag = current.tagName.toLowerCase();
       const index = Array.from(current.parentElement?.children || []).indexOf(current);
       const classes = Array.from(current.classList)
         .filter(c => !c.startsWith('avto-'))
-        .slice(0, 3) // Ограничиваем количество классов for стабильности
+        .slice(0, 3) // Limit classes for stability
         .join('.');
       const id = current.id ? `#${current.id}` : '';
 
@@ -120,7 +79,7 @@ window.autoMarkup = {
     return path.join(' > ') || 'root';
   },
 
-  // Маркировка одного элемента
+  // Markup single element
   markupElement(element) {
     if (!this.shouldMarkup(element)) return false;
 
@@ -136,7 +95,7 @@ window.autoMarkup = {
     return true;
   },
 
-  // Маркировка всего DOM дерева (рекурсивно)
+  // Markup entire DOM tree (recursive)
   markupTree(root = document.body) {
     if (!root) return;
 
@@ -145,7 +104,7 @@ window.autoMarkup = {
       NodeFilter.SHOW_ELEMENT,
       {
         acceptNode: (node) => {
-          // Пропускаем элементы внутри Vue компонентов
+          // Skip inside Vue components
           if (node.__vue__ || node.closest('[data-v-]')) {
             return NodeFilter.FILTER_REJECT;
           }
@@ -167,7 +126,7 @@ window.autoMarkup = {
     return elements.length;
   },
 
-  // Маркировка конкретного контейнера (for ручного вызова)
+  // Markup specific container (for manual call)
   markupContainer(container) {
     if (!container || !container.nodeType) {
       console.warn('autoMarkup.markupContainer: invalid container');
@@ -177,23 +136,23 @@ window.autoMarkup = {
     return this.markupTree(container);
   },
 
-  // Инициализация наблюдателя for автоматической маркировки новых элементов
+  // Init observer for auto-markup of new elements
   initObserver() {
-    if (this.observer) return; // Уже initialized
+    if (this.observer) return; // Already initialized
 
     this.observer = new MutationObserver((mutations) => {
-      // Батчинг: собираем все новые элементы
+      // Batch: collect new elements
       const newElements = new Set();
 
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (node.nodeType === 1) { // Element node
-            // Проверяем сам элемент
+            // Check element itself
             if (this.shouldMarkup(node)) {
               newElements.add(node);
             }
 
-            // Проверяем дочерние элементы (только первый уровень for производительности)
+            // Check children (first level only for perf)
             if (node.querySelectorAll) {
               node.querySelectorAll('*').forEach(child => {
                 if (this.shouldMarkup(child)) {
@@ -205,7 +164,7 @@ window.autoMarkup = {
         });
       });
 
-      // Маркируем все новые элементы одним батчем через requestAnimationFrame
+      // Markup new elements in one batch via requestAnimationFrame
       if (newElements.size > 0) {
         requestAnimationFrame(() => {
           newElements.forEach(el => this.markupElement(el));
@@ -213,14 +172,14 @@ window.autoMarkup = {
       }
     });
 
-    // Наблюдаем за изменениями в body
+    // Observe body changes
     this.observer.observe(document.body, {
       childList: true,
       subtree: true
     });
   },
 
-  // Остановка наблюдения
+  // Stop observing
   stopObserver() {
     if (this.observer) {
       this.observer.disconnect();
@@ -228,7 +187,7 @@ window.autoMarkup = {
     }
   },
 
-  // Инициализация (вызывается один раз при загрузке)
+  // Init (once on load)
   init() {
     if (this.isInitialized) {
       console.warn('autoMarkup already initialized');
@@ -240,16 +199,16 @@ window.autoMarkup = {
       return;
     }
 
-    // Первичная маркировка существующих элементов
+    // Initial markup of existing elements
     this.markupTree(document.body);
 
-    // Запуск наблюдателя for будущих изменений
+    // Start observer for future changes
     this.initObserver();
 
     this.isInitialized = true;
   },
 
-  // Деинициализация (for тестирования)
+  // Deinit (for testing)
   destroy() {
     this.stopObserver();
     this.isInitialized = false;
