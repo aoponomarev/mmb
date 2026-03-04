@@ -38,6 +38,8 @@
     "readmes:check": "node is/scripts/architecture/validate-readmes.js",
     "readmes:sync": "node is/scripts/architecture/sync-readmes.js",
     "lang:comments:check": "node is/scripts/architecture/validate-code-comments-english.js",
+    "file-headers:check": "node is/scripts/architecture/validate-file-headers.js",
+    "file-headers:assign": "node is/scripts/architecture/assign-file-ids.js",
     "lang:translate": "node is/scripts/architecture/translate-comments-to-english.js",
     "evolution:update": "node is/scripts/architecture/project-evolution-update.js",
     "evolution:rebuild": "node is/scripts/architecture/project-evolution-update.js --rebuild",

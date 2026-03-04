@@ -96,7 +96,16 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 5. Validate Cache Integrity
+    // 5. File header gate (SSOT: process-file-header-standard)
+    console.log('[preflight] Validating file headers (file id + @description)...');
+    try {
+        execSync('node is/scripts/architecture/validate-file-headers.js', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error(`[preflight] ERROR: Files with file id in header must have @description. Run npm run file-headers:check for details.`);
+        process.exit(1);
+    }
+
+    // 6. Validate Cache Integrity
     console.log('[preflight] Validating cache integrity...');
     try {
         execSync('node is/scripts/infrastructure/validate-cache-integrity-delta.js', { stdio: 'inherit', cwd: PATHS.root });

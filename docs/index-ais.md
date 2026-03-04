@@ -9,7 +9,7 @@ last_updated: "2026-03-04"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 11
+> Auto-generated. Total: 12
 
 ---
 
@@ -19,6 +19,7 @@ last_updated: "2026-03-04"
 - [ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
 - [ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
 - [ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
+- [ais-f7e2a1](ais/ais-file-header-standard.md) — AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
 - [ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
 - [ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
 - [ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
