@@ -13,10 +13,8 @@ last_updated: "2026-03-04"
 - plan-master-migration — Главный план миграции (этапы и ревизия чекбоксов). См. docs/plans/.
 - plan-naming-and-paths — Регламенты нейминга и гейты. См. docs/plans/.
 - plan-testing-strategy — Стратегия тестирования и Quality Gates. См. docs/plans/.
-- [plan-skills-migration-registry.md](./plans/plan-skills-migration-registry.md) - **Реестр миграции скиллов** из репозитория a (skills/mbb, skills/all, mbb/skills) в Target App.
-
-## Завершённые планы (в done/, на стадии дистилляции):
-- [plan-skill-anti-staleness.md](./done/plan-skill-anti-staleness.md) - **Антиустареватель скиллов** ✓ (Фазы 1–3 реализованы; бэклог: [fix-anti-staleness.md](./backlog/fix-anti-staleness.md))
+## Завершённые планы (дистиллированы):
+- **Антиустареватель скиллов** ✓ — дистиллирован в `id:ais-9f4e2d`; бэклог: [fix-anti-staleness.md](./backlog/fix-anti-staleness.md)
 
 ## Принципы трансляции:
 1. **Нейтральные термины**: Вместо аббревиатур "MBB" или "MMB" используются "Target App", "Legacy Logic", "Donor Architecture".

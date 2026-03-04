@@ -29,19 +29,6 @@ related_skills:
 - **Skill Watcher (Сборщик урожая):** Любое неочевидное решение (костыль, магическое число) должно помечаться в коде сырым маркером `// @causality [объяснение]`. MCP-инструмент `harvest_causalities` собирает их в базу для последующего оформления в скиллы.
 - **Rollback Protocol:** Разработка ведется транзакционно. Если ветка миграции заходит в тупик, применяется жесткий откат (`git reset --hard`) вместо попыток "починить сломанное".
 
-## Лог перепривязки путей (Path Rewrite Log)
-
-| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
-|------------|--------------|------|--------|---------------------------|
-| `control-plane/` | `LIR-006.A1` | Концептуальный reference для архитектурного описания | `DEFERRED` | `id:ais-b7a9ba` |
-| `logs/control-plane.log` | `LIR-006.A2` | Концептуальный event-log в текущем контуре отсутствует | `DEFERRED` | `id:ais-b7a9ba` |
-| `control-plane/scripts/self-test.js` | `LIR-006.A3` | Скрипты control-plane пока не восстановлены | `REQUIRES_ARCH_CHANGE` | Требуется отдельный батч инфраструктурной миграции |
-| `shared/component` | `LIR-006.A4` | Устаревшее имя папки-компонентов | `MAPPED` | `shared/components` + `id:ais-b7a9ba` |
-| `shared/utility` | `LIR-006.A5` | Устаревшее имя вспомогательного слоя | `MAPPED` | `shared/utils` + `id:ais-b7a9ba` |
-| `control-plane/*` | `LIR-006.A6` | legacy-паттерн в CI триггере проверок | `NEEDS_REWRITE` | Заменить на `is/scripts/infrastructure/control-plane-*` после появления пакета control-plane |
-| `control-plane/scripts/self-test.js` | `LIR-006.A7` | Резервный control-plane self-test hook в reliability gates | `MAPPED` | `id:ais-b7a9ba` |
-| `scripts/sqlite-health-snapshot.js` | `LIR-015.A1` | Legacy sqlite diagnostics script path in backend monitoring flow | `MAPPED` | `is/scripts/infrastructure/health-check.js` |
-
 ## Компоненты и Контракты (Components & Contracts)
 - `is/mcp/` — исходный код локального MCP-сервера.
 - `is/skills/causality-registry.md` — единый SSOT реестр всех казуальных хэшей.

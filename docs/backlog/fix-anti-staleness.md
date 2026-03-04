@@ -7,7 +7,7 @@ last_updated: "2026-03-04"
 # Бэклог: Чистка хвостов антиустаревателя (fix-anti-staleness)
 
 > Статус: Отложено
-> План: `id:done-ec60da` (завершён)
+> План: дистиллирован в `id:ais-9f4e2d`
 > Приоритет: Низкий
 
 ## Описание
@@ -37,7 +37,7 @@ last_updated: "2026-03-04"
 - [x] **Уточнить фильтры validate-dead-links** — сделано: API, donor, placeholder, exclude sources
 - [x] **path-contracts.js** — SSOT для exclusions, skip patterns, resolvePath; validate-skills и validate-dead-links импортируют из контракта
 - [ ] **Пройти по списку dead_links** — для каждого: исправить путь, обновить ссылку или пометить как исключение
-- [x] **Исправлено (100% уверенность):** core/api/market-contracts.js→core/contracts/market-contracts.js (arch-backend-core, api-layer); skill-пути +.md в plan-skills-migration-registry и plan-skill-anti-staleness (135 замен)
+- [x] **Исправлено (100% уверенность):** core/api/market-contracts.js→core/contracts/market-contracts.js (arch-backend-core, api-layer); skill-пути +.md в ais-anti-staleness (135 замен)
 - [ ] **Реестр dead-links-registry** — создать JSONL, индекс по source_file, предпроверка при синхронизации
 - [ ] **Обновить Implementation Status** в скиллах — где пути устарели
 

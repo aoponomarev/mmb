@@ -10,6 +10,7 @@ import {
   shouldSkipLink,
   isExcludedSource,
   resolvePath,
+  EXCLUDE_SOURCE_FILES,
 } from "../../contracts/path-contracts.js";
 
 const SCAN_DIRS = [
@@ -47,6 +48,8 @@ function walkMarkdown(dir, result = []) {
       if (entry.name === "node_modules" || entry.name === ".git") continue;
       walkMarkdown(full, result);
     } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      const rel = path.relative(ROOT, full).replace(/\\/g, "/");
+      if (EXCLUDE_SOURCE_FILES.has(rel)) continue;
       if (ALL_MODE || !isExcludedSource(full)) result.push(full);
     }
   }

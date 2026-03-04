@@ -31,8 +31,8 @@ Backlog skills must align with arch-foundation when promoted: no mbb/mmb in path
 
 ## When to promote
 
-When the infrastructure appears — move to `is/skills/`, `core/skills/`, or `docs/ais/` and perform full wiring per `id:plan-4e7a1c` sections 5–7.
+When the infrastructure appears — move to `is/skills/`, `core/skills/`, or `docs/ais/` and perform full wiring (path-contracts, id-registry, causality-registry).
 
 ## Reference
 
-See `id:plan-4e7a1c` § 9.
+See `AUDIT.md` for promotion checklist.

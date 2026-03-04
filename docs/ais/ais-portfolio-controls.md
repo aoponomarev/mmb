@@ -19,8 +19,7 @@ related_ais:
 ## Локальные Политики (Module Policies)
 
 - Для legacy-упоминаний в комментариях используется трассируемый формат `LIR-*`.
-- Значимые решения по портфельному домену и компонентным правилам отражаются в реестре `docs/plans/legacy-link-remediation-registry.md`.
-- При появлении новых `legacy`-путей добавляется отдельный атомарный шаг `LIR-XXX`.
+- При появлении новых `legacy`-путей: добавить в path-contracts.js SKIP_LINK_PATTERNS или обновить ссылку.
 
 ## Компоненты и Контракты (Components & Contracts)
 
@@ -34,20 +33,7 @@ related_ais:
 - `validate-causality` — все решения `@causality #for-*` должны проходить проверку.
 - `validate-docs-ids` — `id` AIS должен оставаться стабильным.
 
-## Лог перепривязки путей (Path Rewrite Log)
-
-| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
-|------------|--------------|------|--------|---------------------------|
-| `recipe-portfolio-engine-mvp-hardening` (legacy donor) | `LIR-005.A1` | Исторический план hardening недоступен в active структуре skills | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `recipe-portfolio-engine-mvp-hardening` (legacy donor) | `LIR-005.A2` | Исторический план hardening недоступен в active структуре skills | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `recipe-portfolio-engine-mvp-hardening` (legacy donor) | `LIR-005.A3` | Исторический план hardening недоступен в active структуре skills | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `components-styling-principles` (legacy donor) | `LIR-005.A4` | Исторический donor для стилизации UI-компонентов | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `components-styling-principles` (legacy donor) | `LIR-005.A5` | Исторический donor для стилизации UI-компонентов | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `components-styling-principles` (legacy donor) | `LIR-005.A6` | Исторический donor для стилизации UI-компонентов | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `components-styling-principles` (legacy donor) | `LIR-005.A7` | Исторический donor для стилизации UI-компонентов | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-| `components-layout-alignment` (legacy donor) | `LIR-005.A8` | Исторический donor для выравнивания layout в кнопках | `MAPPED` | `docs/ais/ais-portfolio-controls.md` |
-
 ## Завершение
 
-- После каждого батча legacy-референсов по `portfolio-controls` обновлять `docs/plans/legacy-link-remediation-registry.md` и `docs/plans/plan-legacy-link-remediation-integrations-strategy.md`.
+- Legacy paths: path-contracts.js SKIP_LINK_PATTERNS.
 

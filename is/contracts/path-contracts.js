@@ -20,6 +20,12 @@ export const EXCLUDE_SOURCE_REL = [
   "docs/done/",
 ];
 
+/** Exact source files excluded (e.g. deletion-log: historical record; TEMPLATE: placeholders) */
+export const EXCLUDE_SOURCE_FILES = new Set([
+  "docs/deletion-log.md",
+  "docs/ais/TEMPLATE.md",
+]);
+
 /** Link patterns to skip in dead-links check (not file paths) */
 export const SKIP_LINK_PATTERNS = [
   /^https?:\/\//,
@@ -139,6 +145,7 @@ export function shouldSkipLink(link) {
  */
 export function isExcludedSource(absPath) {
   const rel = path.relative(ROOT, absPath).replace(/\\/g, "/");
+  if (EXCLUDE_SOURCE_FILES.has(rel)) return true;
   return EXCLUDE_SOURCE_REL.some((p) => rel.startsWith(p));
 }
 

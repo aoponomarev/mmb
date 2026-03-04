@@ -78,6 +78,7 @@ function runPreflight() {
         execSync('node is/scripts/architecture/generate-id-registry.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-docs-encoding.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-docs-ids.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/validate-deletion-log.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/audit-path-centric-doc-links.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/audit-path-centric-skill-links.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-rules-references.js', { stdio: 'inherit', cwd: PATHS.root });

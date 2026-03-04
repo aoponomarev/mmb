@@ -23,23 +23,10 @@ related_ais:
   - `docs/ais/ais-yandex-cloud.md`
   - связанных модулях `core/api/market-snapshot-*` и `core/contracts/market-contracts.js`.
 
-## Нормализация ссылок
-
-### Path Rewrite Log (временный)
-
-| Legacy path | Атомарный шаг | Риск | Статус | Новый путь / rationale |
-|------------|--------------|------|--------|---------------------------|
-| `core/config/app-config.js` | `LIR-001.A1` | Обновлённый SSOT для интеграционной конфигурации в mmb | `MAPPED` | `core/config/app-config.js` |
-| `core/config/integration-config.js` | `LIR-001.A1.2` | Файл не найден в текущей структуре Target App | `REQUIRES_ARCH_CHANGE` | Требует архитектурного решения (legacy-агрегат интеграций в прошлом контуре) |
-| `core/api/integration-manager.js` | `LIR-001.A2` | Не найден в текущей структуре mmb | `REQUIRES_ARCH_CHANGE` | Нет прямого эквивалента после переезда интеграционного слоя; требуется подтверждение архитектуры |
-| `core/contracts/...` | `LIR-010.A1` | Обобщённая ссылка на исторический конфиг-контракт | `MAPPED` | `core/contracts/market-contracts.js` |
-| `core/api/...` | `LIR-010.A2` | Обобщённая ссылка на исторический API-конструкт контекста | `MAPPED` | `core/api/market-snapshot-service.js`, `core/api/market-snapshot-http.js`, `core/api/market-snapshot-node-server.js` |
-| `integrations-strategy` (legacy donor) | `LIR-001.A3` | Источник не в active структуре mmb | `MAPPED` | `docs/ais/ais-integration-strategy-yandex.md` |
-
-### Комплект обязательных контрактов и гейтов
+## Комплект обязательных контрактов и гейтов
 
 - `docs/ais`-спецификация имеет статус `draft`, будет продвинута в `incomplete` после полной ревизии donor-paths и связей.
-- `#for-integration-legacy-remediation` требует завершить `Path Rewrite Log` и зафиксировать решения по каждому legacy-path.
+- Legacy paths: skip patterns в path-contracts.js.
 - Перед каждым значимым изменением проверить:
   - `node is/scripts/architecture/validate-docs-ids.js`
   - `node is/scripts/architecture/validate-causality.js`

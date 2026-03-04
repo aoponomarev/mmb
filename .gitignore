@@ -28,6 +28,9 @@ docs/CRON.txt
 logs/
 *.log
 
+# validate-dead-links --json output (audit artifacts)
+dead-*.json
+
 # Build artifacts (if any)
 dist/
 build/

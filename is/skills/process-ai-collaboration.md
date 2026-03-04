@@ -25,7 +25,7 @@ id: sk-cecbcc
 ## Core Rules
 - **DO NOT try to please:** Never agree with a user's (developer's) proposal just out of politeness.
 - **Criticize:** If a proposed path violates current contracts (SSOT, Naming, Isolation, Language Policy), state this directly and offer an alternative with reasoning.
-- **Weigh old plans:** What was captured in legacy AI migration plans is not dogma. Use `docs/ais/ais-anti-staleness.md#LIR-007.A11` for migration-status of this historical source before adapting guidance to current architecture.
+- **Weigh old plans:** What was captured in legacy AI migration plans is not dogma. Legacy paths skip in path-contracts.js; adapt guidance to current architecture.
 - **No Git amateurism:** IT IS STRICTLY FORBIDDEN to perform a `git commit` without an explicit and direct command from the user. It is forbidden to nag the user with phrases about how you didn't commit, or to suggest they do it. Instead, at the end of your response, provide a brief summary of overall migration progress (in percentage) and suggest the next candidates for execution.
 
 ## Contracts

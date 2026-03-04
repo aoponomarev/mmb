@@ -82,7 +82,7 @@ Every file in `is/skills/` (except `README.md`, `causality-registry.md`, `refere
 
 **Prefix registry health:** See `process-prefix-registry.md` — registration checklist, deprecation policy, review cadence.
 
-**Full prefix spectrum & Donor→Target mapping:** See `docs/plans/plan-skills-migration-registry.md`.
+**Full prefix spectrum & Donor→Target mapping:** See `is/contracts/prefixes.js`, `docs/index-skills.md`.
 
 **Belongs here:**
 - Decisions about folder layout, naming conventions, SSOT
@@ -188,5 +188,5 @@ Before creating or placing a skill file, answer these in order:
 | Placing a `core/` domain skill in `is/skills/` because "skills go in is/" | Move to `core/skills/` — co-location with domain code |
 | Creating `arch-cache.md` in `is/skills/` to document the browser cache | Belongs in `core/skills/cache-layer.md` |
 | Placing a Windows PowerShell rule in `core/skills/` | Belongs in `is/skills/process-windows-shell.md` |
-| One monolithic `everything` file in `core/skills/` | Split by subdomain — one file per coherent domain area (see `id:plan-4e7a1c`) |
+| One monolithic `everything` file in `core/skills/` | Split by subdomain — one file per coherent domain area |
 | Skills folder in `is/` growing beyond 30 files without a review | Trigger a profiling review using this skill |

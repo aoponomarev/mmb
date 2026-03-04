@@ -51,7 +51,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Goal**: Leverage GitHub cloud intelligence while maintaining local self-sufficiency and minimizing token costs.
 
-**Beacon strategy**: `.github/copilot-instructions.md` moved to historical scope and is now tracked via `docs/ais/ais-anti-staleness.md#LIR-007.A1` (legacy SSOT marker).
+**Beacon strategy**: `.github/copilot-instructions.md` moved to historical scope; skip in path-contracts.js.
 
 **Token-saving workflow (L3 tasks)**: Create Issue → add label `L3-Discovery` → open in Copilot Workspace → request plan only ("Provide step-by-step plan, do not generate code yet") → execute locally via ВЗП protocol.
 
@@ -107,7 +107,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Approve/curation flow**: User action triggers confirm → API updates status; drafting part of initial pass.
 
-**Log sync**: UI fetches the logs API endpoint for real-time events; route is an HTTP contract (`api/logs`) and is mapped via `docs/ais/ais-anti-staleness.md#LIR-007.A2`.
+**Log sync**: UI fetches the logs API endpoint for real-time events; route is an HTTP contract (`api/logs`); skip in path-contracts.js.
 
 **Guidelines**: Use `data-hash` attributes to map UI to backend; visual feedback (spinners, alerts) for long-running LLM tasks; optimistic UI — fade out rejected items while waiting for server.
 

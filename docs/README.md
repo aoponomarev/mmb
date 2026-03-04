@@ -15,11 +15,12 @@ This directory serves as the historical ledger and runbook repository for the pr
 - `ais/`: Architecture & Infrastructure Specifications (Russian). Macro-docs distilled from plans. Includes `ais-yandex-cloud.md` (ingest/read contours, Mermaid diagrams).
 - `audits/`: **SYSTEM** — `causality-exceptions.jsonl` consumed by `validate-causality-invariant.js`. **Do not rename or move.**
 - `backlog/`: Deferred plans and future architecture drafts. Not for distillation.
-- `backlog/skills/`: Deferred skills (Docker, n8n, Yandex Cloud, etc.) — useful but not wired until infrastructure exists. See plan-skills-migration-registry § 9.
+- `backlog/skills/`: Deferred skills (Docker, n8n, Yandex Cloud, etc.) — useful but not wired until infrastructure exists.
 - `cheatsheets/`: Quick reference materials (e.g., architecture layers, data-contour-debug). Human-oriented.
 - `runbooks/`: Step-by-step operational procedures (monitoring, rollback, data-contour-troubleshooting). Implements skills.
 
 ## Root Files
+- `deletion-log.md`: Log of removed docs (Doc | Commit | Rationale).
 - `migration-roadmap.md`: Master roadmap tracking all migration stages.
 - `project-evolution.md`: SSOT log of significant project milestones and decisions.
 - `index-skills.md`: Auto-generated index of all skills (updated by `npm run skills:index`).
@@ -29,8 +30,8 @@ This directory serves as the historical ledger and runbook repository for the pr
 ## ID Contracts (Global SSOT)
 - Global registry: `is/contracts/docs/id-registry.json` (single SSOT for markdown id -> path mapping).
 - Contract format in docs: `id:<document-id>` (use id contract first, path as fallback only during migration).
-- Master rollout plan: `id:plan-cd91e4`.
-- Legacy remediation registry: `id:plan-b9c2d4`.
+- ID-contract rollout: id-registry.json + validate-global-md-ids (complete).
+- Legacy remediation: LIR complete; path-contracts.js + Path Rewrite Log in docs/ais/*.md.
 
 ## Constraints
 - **Russian Language Allowed**: Unlike skills (см. is/skills/, core/skills/, app/skills/) and code, `.md` files in `docs/` are permitted to be in Russian to lower the cognitive barrier for historical planning.

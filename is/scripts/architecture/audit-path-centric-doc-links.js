@@ -8,6 +8,8 @@ import { ROOT } from "../../contracts/path-contracts.js";
 
 const DOCS_DIR = path.join(ROOT, "docs");
 const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".cursor"]);
+/** Docs allowed path-centric links (e.g. deletion-log: historical record of removed paths) */
+const EXCLUDE_FILES = new Set(["docs/deletion-log.md"]);
 const LINK_RE = /`(docs\/[A-Za-z0-9_\-\/\.]+\.md(?:#[A-Za-z0-9_\-.]+)?)`/g;
 
 function walkMarkdown(dir, out = []) {
@@ -39,6 +41,7 @@ function main() {
   const rows = [];
   for (const file of walkMarkdown(DOCS_DIR)) {
     const rel = path.relative(ROOT, file).replace(/\\/g, "/");
+    if (EXCLUDE_FILES.has(rel)) continue;
     const text = fs.readFileSync(file, "utf8");
     const fm = parseFrontmatter(text);
     if ((fm.status || "").toLowerCase() !== "active") continue;

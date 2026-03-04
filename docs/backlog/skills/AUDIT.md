@@ -7,7 +7,7 @@ last_updated: "2026-03-04"
 # Backlog Skills Audit
 
 > **Date**: 2026-03-01
-> **Scope**: `docker-infrastructure.md`, `n8n-infrastructure.md` — compliance with arch-foundation, naming contracts, paths SSOT, and plan-skills-migration-registry §9.
+> **Scope**: `docker-infrastructure.md`, `n8n-infrastructure.md` — compliance with arch-foundation, naming contracts, paths SSOT.
 
 ## Summary
 
