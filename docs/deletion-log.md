@@ -18,4 +18,4 @@ last_updated: "2026-03-05"
 | `docs/done/plan-skill-anti-staleness.md` | — | дистиллирован в ais-anti-staleness |
 | `docs/done/rrg-modernization.md` | — | дистиллирован в id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md); удаление по протоколу #for-distillation-cleanup |
 | `docs/plans/plan-skills-migration-registry.md` | — | archived, path-contracts + index-skills SSOT |
-| `docs/done/mcp-data-contour-migration.md` | — | дистиллирован в id:ais-8d3c2a (ais-mcp-data-contour); telemetry.sqlite → mcp.sqlite |
+| `docs/done/mcp-data-contour-migration.md` | ae39770 | дистиллирован в id:ais-8d3c2a (ais-mcp-data-contour); telemetry.sqlite → mcp.sqlite |
