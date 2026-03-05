@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "test": "node --test is/**/*.test.js core/**/*.test.js",
+    "frontend:reactivity:check": "node --test is/scripts/tests/check-frontend-rrg.test.js",
     "preflight": "node is/scripts/preflight.js",
     "health-check": "node is/scripts/infrastructure/health-check.js",
     "health-check:json": "node is/scripts/infrastructure/health-check.js --json",

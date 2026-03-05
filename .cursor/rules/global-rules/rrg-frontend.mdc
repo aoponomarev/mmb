@@ -1,0 +1,24 @@
+---
+description: "RRG (Reactive Reliability Gate) when editing frontend components."
+globs: "app/**/*.js,shared/components/**/*.js"
+alwaysApply: false
+---
+
+# Frontend RRG (Reactive Reliability Gate)
+
+## When This Rule Applies
+When editing files under `app/` or `shared/components/`.
+
+## Critical Rules
+- **No direct window mutation** in component code except one-time registration: `window.X = { ... }`, `window.X = function ...`, or `window.X = X` (same identifier). Any other `window.* =` is a violation.
+- **No `innerHTML` assignment** in components (XSS and reactivity bypass).
+- **State**: use Vue reactivity or store (core/state, messages store); mutations only via defined setters.
+
+## Refactor on edit
+When editing a block that contains outdated reactivity (disallowed window mutation, innerHTML, duplicated state), attempt to rewrite it per RRG. Skip if refactor would require large scope or break dependencies. Skill: id:sk-d4f8a2 (app/skills/rrg-refactor-on-edit.md).
+
+## References
+- Skill: id:sk-318305 (app/skills/ui-architecture.md)
+- Skill: id:sk-d4f8a2 (app/skills/rrg-refactor-on-edit.md)
+- AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md)
+- Gate: `npm run frontend:reactivity:check`

@@ -1,6 +1,8 @@
 /**
  * #JS-Yn27TZUx
- * @description Tests: frontend RRG (rules references) check; walk skills/docs, validate references.
+ * @description Tests: frontend RRG (Reactive Reliability Gate); scan app/components and shared/components for window mutation and innerHTML.
+ * @skill id:sk-318305
+ * AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md)
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -27,9 +29,14 @@ function walkDir(directory, out = []) {
   return out;
 }
 
+// RRG scope: app/components and shared/components only. Not app/templates (Vue template registration uses innerHTML).
+const RRG_SCAN_DIRS = [
+  path.join(ROOT, 'app', 'components'),
+  path.join(ROOT, 'shared', 'components'),
+];
+
 test('Frontend RRG (Reactive Reliability Gate) Contracts', () => {
-  const componentsDir = path.join(ROOT, 'app', 'components');
-  const files = walkDir(componentsDir);
+  const files = RRG_SCAN_DIRS.flatMap(dir => walkDir(dir));
   
   const violations = [];
   
@@ -39,19 +46,19 @@ test('Frontend RRG (Reactive Reliability Gate) Contracts', () => {
     const lines = code.split('\n');
     
     lines.forEach((line, index) => {
-      // RRG Rule 1: No direct mutation of global window state inside components
-      // Components should use Vue reactivity or appStore
-      // Exclude module exports (e.g., window.aiApiSettings = {)
+      // RRG-1: No direct mutation of global window state inside components. Use Vue reactivity or store.
+      // Allowed: one-time module registration (window.X = { ... }, window.X = function ..., window.X = X). AIS id:ais-c4e9b2.
       if (line.match(/window\.[a-zA-Z_$][\w$]*\s*=\s*\{/)) return;
       if (line.match(/window\.[a-zA-Z_$][\w$]*\s*=\s*function/)) return;
-      
+      const winAssignSame = line.match(/window\.([a-zA-Z_$][\w$]*)\s*=\s*([a-zA-Z_$][\w$]*)\s*;?\s*$/);
+      if (winAssignSame && winAssignSame[1] === winAssignSame[2]) return; // window.cmpX = cmpX
       if (line.match(/window\.[a-zA-Z_$][\w$]*\s*=[^=]/)) {
         if (!line.includes('window.consoleInterceptor') && !line.includes('window.location')) {
             violations.push(`${rel}:${index + 1} - Direct window mutation breaks RRG: ${line.trim()}`);
         }
       }
       
-      // RRG Rule 2: Warn about manual DOM manipulation in Vue components (except for specific cases)
+      // RRG-2: No innerHTML assignment in components (XSS / reactivity bypass). AIS id:ais-c4e9b2.
       if (line.match(/\.innerHTML\s*=/)) {
         violations.push(`${rel}:${index + 1} - innerHTML assignment is unsafe in Vue RRG: ${line.trim()}`);
       }

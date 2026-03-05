@@ -1,7 +1,7 @@
 ---
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-04"
+reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "593567bf"
 id: sk-224210
 

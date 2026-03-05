@@ -2,7 +2,7 @@
 title: "Frontend UI Architecture (RRG & UI Contracts)"
 tags: ["#frontend", "#rrg", "#vue", "#ui", "#no-build"]
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-04"
+reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "f5e9e931"
 id: sk-318305
 
@@ -46,11 +46,11 @@ RRG defines the fundamental reliability contract for the reactive layer.
 1. **Single State Source**: Vue reactivity (`appStore`) must be clearly structured. State must not exist in multiple places simultaneously.
 2. **Mutation Discipline**: Avoid uncontrolled state spread — e.g., manually synchronizing two independent variables instead of using `computed`. All mutations go through defined store setters.
 3. **Async Contracts**: Async operations (data fetch, debounce) must have clearly defined loading/error state transitions.
-4. **Reactivity Regression Checks**: Critical components (tables, lists) have their RRG contracts enforced via automated tests (`is/scripts/tests/check-frontend-rrg.test.js`).
+4. **Reactivity Regression Checks**: RRG gate #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js) enforces RRG-1 and RRG-2 on app/components and shared/components. AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md).
 
 **Enforcement commands**:
-- `npm run frontend:reactivity:check`
-- `npm run frontend:smoke`
+- `npm run frontend:reactivity:check` — runs RRG gate (id:ais-c4e9b2); scope: app/components, shared/components.
+- `npm run frontend:smoke` — (optional) if a frontend smoke suite exists.
 
 ### Vue No-Build Architecture
 

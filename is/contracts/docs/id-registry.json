@@ -52,6 +52,7 @@
     "sk-icon-mgr": "app/skills/icon-manager.md",
     "sk-502074": "app/skills/reactive-localization.md",
     "sk-95710f": "app/skills/README.md",
+    "sk-d4f8a2": "app/skills/rrg-refactor-on-edit.md",
     "sk-318305": "app/skills/ui-architecture.md",
     "sk-e0b8f3": "app/skills/ux-principles.md",
     "sk-cb75ec": "app/skills/vue-implementation-patterns.md"
@@ -67,6 +68,7 @@
     "ais-775420": "docs/ais/ais-infrastructure-integrations.md",
     "ais-f6b9e2": "docs/ais/ais-integration-strategy-yandex.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
+    "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
     "ais-e41384": "docs/ais/ais-yandex-cloud.md",
     "ais-1c4d92": "docs/ais/TEMPLATE.md"
   },
@@ -123,6 +125,7 @@
     "sk-icon-mgr": "app/skills/icon-manager.md",
     "sk-502074": "app/skills/reactive-localization.md",
     "sk-95710f": "app/skills/README.md",
+    "sk-d4f8a2": "app/skills/rrg-refactor-on-edit.md",
     "sk-318305": "app/skills/ui-architecture.md",
     "sk-e0b8f3": "app/skills/ux-principles.md",
     "sk-cb75ec": "app/skills/vue-implementation-patterns.md",
@@ -136,6 +139,7 @@
     "ais-775420": "docs/ais/ais-infrastructure-integrations.md",
     "ais-f6b9e2": "docs/ais/ais-integration-strategy-yandex.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
+    "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
     "ais-e41384": "docs/ais/ais-yandex-cloud.md",
     "ais-1c4d92": "docs/ais/TEMPLATE.md",
     "readme-069aca": "app/README.md",

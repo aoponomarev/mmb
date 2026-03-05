@@ -1,7 +1,7 @@
 ---
 title: "Icon Manager (Coin Assets)"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-04"
+reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "1b71a9fa"
 id: sk-icon-mgr
 

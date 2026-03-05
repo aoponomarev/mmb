@@ -1,7 +1,7 @@
 ---
 title: "Cache Layer Architecture"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-04"
+reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "cd189ff0"
 id: sk-3c832d
 

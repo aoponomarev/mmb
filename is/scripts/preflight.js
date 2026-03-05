@@ -106,7 +106,16 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 6. Validate Cache Integrity
+    // 6. Frontend RRG gate (Reactive Reliability Gate; id:ais-c4e9b2)
+    console.log('[preflight] Validating frontend RRG (no window mutation / no innerHTML in components)...');
+    try {
+        execSync('npm run frontend:reactivity:check', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error('[preflight] ERROR: RRG gate failed. Run npm run frontend:reactivity:check for details.');
+        process.exit(1);
+    }
+
+    // 7. Validate Cache Integrity
     console.log('[preflight] Validating cache integrity...');
     try {
         execSync('node is/scripts/infrastructure/validate-cache-integrity-delta.js', { stdio: 'inherit', cwd: PATHS.root });

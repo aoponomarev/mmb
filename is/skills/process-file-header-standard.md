@@ -1,7 +1,7 @@
 ---
 title: "Process: File Header Standard (Structured Code File Headers)"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-04"
+reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "c8fcfafd"
 id: sk-f7e2a1
 
