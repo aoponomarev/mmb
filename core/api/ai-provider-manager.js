@@ -21,6 +21,8 @@
         constructor() {
             this.providers = {};
             this.defaultProvider = 'yandex'; // Yandex by default
+            /** Only these IDs are valid AI providers; e.g. "github" is for token/metadata upload, not AI. */
+            this.validProviderIds = ['yandex'];
             // Flag: KV request already executed this session (success or not).
             // Prevents repeated HTTP requests on each getApiKey call.
             this._kvFetchAttempted = false;
@@ -70,13 +72,14 @@
         }
 
         /**
-         * Validate current provider and reset to default if needed
+         * Validate current provider and reset to default if stored value is not a registered AI provider.
          */
         async validateCurrentProvider() {
             try {
                 const providerName = await window.cacheManager.get('ai-provider');
-                if (providerName && !this.providers[providerName]) {
-                    console.warn(`ai-provider-manager: провайдер "${providerName}" невалиден, сброс на "${this.defaultProvider}"`);
+                const isValid = providerName && this.validProviderIds.includes(providerName) && this.providers[providerName];
+                if (providerName && !isValid) {
+                    console.warn(`ai-provider-manager: provider "${providerName}" is not available (only ${this.validProviderIds.join(', ')}), reset to "${this.defaultProvider}"`);
                     await window.cacheManager.set('ai-provider', this.defaultProvider);
                 }
             } catch (e) {
