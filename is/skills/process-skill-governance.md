@@ -1,9 +1,10 @@
 ---
+id: sk-d763e7
 title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "d0185ad5"
-id: sk-d763e7
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: d0185ad5
+last_change: ""
 
 ---
 
@@ -30,7 +31,7 @@ Skills are not documentation stored centrally — they are contracts co-located 
 
 To reduce hallucinations and ensure AI agents can reliably parse skills, all `.md` files in `is/skills/, core/skills/, app/skills/` directories must strictly follow the AST-like structure enforced by `validate-skills.js`.
 
-1. **Frontmatter**: Must include `title`, `reasoning_confidence`, `reasoning_audited_at`, and `reasoning_checksum`.
+1. **Frontmatter**: Must include `title`, `reasoning_confidence`, `reasoning_audited_at`, and `reasoning_checksum`. Recommended: `last_change` when Reasoning hashes change (see id:sk-d7bf67).
 2. **H1 and Context**: The file must start with `# [Title]` immediately followed by a blockquote starting with `> **Context**:`.
 3. **Allowed H2 Sections**: Only the following exact H2 headers are permitted. Do not invent new H2 names, use H3 (`###`) instead:
    - `## Reasoning` (Must be the first H2 if present)

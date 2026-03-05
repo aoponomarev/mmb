@@ -1,10 +1,16 @@
 ---
-title: "Frontend UI Architecture (RRG & UI Contracts)"
-tags: ["#frontend", "#rrg", "#vue", "#ui", "#no-build"]
-reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "f5e9e931"
 id: sk-318305
+title: "Frontend UI Architecture (RRG & UI Contracts)"
+tags:
+  - "#frontend"
+  - "#rrg"
+  - "#vue"
+  - "#ui"
+  - "#no-build"
+reasoning_confidence: 0.9
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: f5e9e931
+last_change: ""
 
 ---
 

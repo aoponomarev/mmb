@@ -1,9 +1,10 @@
 ---
+id: sk-a304ea
 title: "Token Discipline (Context Efficiency)"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "229eecc2"
-id: sk-a304ea
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 229eecc2
+last_change: ""
 
 ---
 

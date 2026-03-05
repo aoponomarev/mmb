@@ -1,9 +1,10 @@
 ---
+id: sk-130fa2
 title: "Lib Governance"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "2d3d963b"
-id: sk-130fa2
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 2d3d963b
+last_change: ""
 
 ---
 

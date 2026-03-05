@@ -1,9 +1,10 @@
 ---
+id: sk-7cf3f7
 title: "Guard: file:// Protocol & CORS"
 reasoning_confidence: 0.95
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "1f7750de"
-id: sk-7cf3f7
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 1f7750de
+last_change: ""
 
 ---
 

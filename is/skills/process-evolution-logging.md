@@ -1,9 +1,10 @@
 ---
+id: sk-683b3c
 title: "Process: Project Evolution Logging"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "0f5fa6f6"
-id: sk-683b3c
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 0f5fa6f6
+last_change: ""
 
 ---
 

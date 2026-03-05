@@ -10,6 +10,7 @@ import {
     SKILL_ALLOWED,
 } from "../../contracts/prefixes.js";
 import { ROOT, resolvePath, EXCLUDE_PATH_PATTERNS } from "../../contracts/path-contracts.js";
+import { parseFrontmatterBlock, SKILL_FRONTMATTER_ORDER } from "../../contracts/skill-frontmatter-order.js";
 
 const IMPL_STATUS_HEADERS = ["## Implementation Status in Target App", "## Implementation Status"];
 const PATH_EXTENSIONS = /\.(js|ts|json|md|yaml|yml)$/;
@@ -22,6 +23,18 @@ const SKILL_DIRS = [
 
 const JSON_MODE = process.argv.includes("--json");
 const STALE_DAYS = 90;
+
+/** Extract keys from frontmatter block in order of appearance. */
+function extractKeyOrder(block) {
+    const keys = [];
+    const lines = block.split(/\r?\n/);
+    for (let i = 0; i < lines.length; i++) {
+        const m = lines[i].match(/^([\w-]+):/);
+        if (m) keys.push(m[1]);
+        else if (/^\s+-\s+/.test(lines[i])) continue; // array item, skip
+    }
+    return keys;
+}
 
 function walkMarkdownFiles(dir, result = []) {
     if (!fs.existsSync(dir)) return result;
@@ -62,11 +75,28 @@ function validateSkillFormat(file, text, rel, errors) {
     }
 
     // Must have required fields
-    const requiredFields = ["title", "reasoning_confidence", "reasoning_audited_at", "reasoning_checksum"];
+    const requiredFields = ["id", "title", "reasoning_confidence", "reasoning_audited_at", "reasoning_checksum"];
     const frontmatterText = lines.slice(1, frontmatterEndsAt).join("\n");
     for (const field of requiredFields) {
         if (!new RegExp(`^${field}:`, "m").test(frontmatterText)) {
             errors.push(`${rel}: Missing required frontmatter field '${field}'`);
+        }
+    }
+
+    // Frontmatter order: id must be first; known fields in canonical order
+    const fm = parseFrontmatterBlock(frontmatterText);
+    const keyOrder = extractKeyOrder(frontmatterText);
+    if (keyOrder.length > 0 && keyOrder[0] !== "id") {
+        errors.push(`${rel}: Frontmatter must have 'id' as first field (got '${keyOrder[0]}')`);
+    }
+    const knownSet = new Set(SKILL_FRONTMATTER_ORDER);
+    const knownInFile = keyOrder.filter((k) => knownSet.has(k));
+    for (let i = 1; i < knownInFile.length; i++) {
+        const prevIdx = SKILL_FRONTMATTER_ORDER.indexOf(knownInFile[i - 1]);
+        const currIdx = SKILL_FRONTMATTER_ORDER.indexOf(knownInFile[i]);
+        if (currIdx < prevIdx) {
+            errors.push(`${rel}: Frontmatter field '${knownInFile[i]}' must come after '${knownInFile[i - 1]}' (canonical order: id, title, tags, status, ...)`);
+            break;
         }
     }
 

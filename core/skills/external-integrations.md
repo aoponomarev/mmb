@@ -1,9 +1,10 @@
 ---
+id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "e845c465"
-id: sk-7b4ee5
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: e845c465
+last_change: ""
 
 ---
 

@@ -1,9 +1,10 @@
 ---
+id: sk-cecbcc
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "2966c9bc"
-id: sk-cecbcc
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 2966c9bc
+last_change: ""
 
 ---
 

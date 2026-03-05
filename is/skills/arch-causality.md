@@ -1,9 +1,10 @@
 ---
+id: sk-d599bd
 title: "Architecture: Causality & Rationale Tracking"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "8d65409b"
-id: sk-d599bd
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 8d65409b
+last_change: ""
 
 ---
 
@@ -51,5 +52,5 @@ reasoning_audited_at: "2026-03-01"
 
 - **Scale**: 0.9–1.0 = fully aligned; 0.5–0.69 = notable gaps; below 0.5 = fails gate.
 - **Gate**: `npm run skills:reasoning:check` enforces presence and threshold.
-- **Protocol**: See `process-reasoning-audit.md` for the mandatory audit order (Review → Add → Score → Gate).
+- **Protocol**: See id:sk-d7bf67 (process-reasoning-audit) for the mandatory audit order (Review → Add → Score → Gate). Recommended: set `last_change` when modifying Reasoning hashes.
 

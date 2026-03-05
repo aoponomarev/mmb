@@ -136,7 +136,7 @@ function main() {
             if (!actualChecksum) {
                 errors.push(`${rel}: missing reasoning_checksum in frontmatter. Expected: "${expectedChecksum}"`);
             } else if (actualChecksum !== expectedChecksum) {
-                errors.push(`${rel}: reasoning_checksum mismatch. The Reasoning section has changed, but the confidence score was not re-audited. Expected: "${expectedChecksum}", Actual: "${actualChecksum}"`);
+                errors.push(`${rel}: reasoning_checksum mismatch. The Reasoning section has changed, but the confidence score was not re-audited. Expected: "${expectedChecksum}", Actual: "${actualChecksum}". Consider setting last_change (see id:sk-d7bf67).`);
             }
 
             passed++;

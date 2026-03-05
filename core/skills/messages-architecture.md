@@ -1,9 +1,10 @@
 ---
+id: sk-f2bc48
 title: "Messages Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "6acd2165"
-id: sk-f2bc48
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 6acd2165
+last_change: ""
 
 ---
 

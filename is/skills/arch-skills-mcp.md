@@ -1,9 +1,10 @@
 ---
+id: sk-7d810a
 title: "Architecture: Skills & MCP System"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "c243f8c0"
-id: sk-7d810a
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: c243f8c0
+last_change: ""
 
 ---
 

@@ -1,10 +1,14 @@
 ---
-title: "RRG refactor when editing reactive code"
-tags: ["#frontend", "#rrg", "#refactor"]
-reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "765480fa"
 id: sk-d4f8a2
+title: "RRG refactor when editing reactive code"
+tags:
+  - "#frontend"
+  - "#rrg"
+  - "#refactor"
+reasoning_confidence: 0.9
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 765480fa
+last_change: ""
 
 ---
 

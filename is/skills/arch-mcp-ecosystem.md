@@ -1,9 +1,10 @@
 ---
+id: sk-3225b2
 title: "MCP Ecosystem (LLMOps)"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "2caa86cd"
-id: sk-3225b2
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 2caa86cd
+last_change: ""
 
 ---
 

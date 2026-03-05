@@ -1,9 +1,10 @@
 ---
+id: sk-502074
 title: "Reactive Localization"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "12b691ff"
-id: sk-502074
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 12b691ff
+last_change: ""
 
 ---
 

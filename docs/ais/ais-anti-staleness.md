@@ -83,6 +83,7 @@ flowchart TB
 |-----------|------|------------|
 | path-contracts.js | is/contracts/ | SSOT: EXCLUDE_SOURCE_REL, SKIP_LINK_PATTERNS, SEARCH_DIRS, resolvePath; используют validate-skills и validate-dead-links |
 | validate-skills.js | is/scripts/architecture/ | Path existence в Implementation Status, format, prefix, stale, orphan |
+| validate-reasoning.js | is/scripts/architecture/ | Reasoning gate: checksum, confidence; last_change recommended (id:sk-d7bf67) |
 | validate-skill-anchors.js | is/scripts/architecture/ | @skill resolution — каждый @skill ведёт на существующий скилл |
 | validate-affected-skills.js | is/scripts/architecture/ | git diff → affected skills и affected hashes |
 | validate-dead-links.js | is/scripts/architecture/ | Битые ссылки; --all — полный скан без фильтров |

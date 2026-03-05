@@ -1,9 +1,10 @@
 ---
 id: sk-87700e
 status: active
-last_updated: "2026-03-04"
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "d41d8cd9"
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: d41d8cd9
+last_change: ""
+last_updated: 2026-03-04
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->

@@ -1,12 +1,17 @@
 ---
-title: "Architectural Foundation (Naming, Paths, SSOT, MCP)"
-tags: ["#architecture", "#ssot", "#naming", "#mcp"]
-dependencies: []
-updated_at: "2026-03-01T00:00:00.000Z"
-reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "55766084"
 id: sk-483943
+title: "Architectural Foundation (Naming, Paths, SSOT, MCP)"
+tags:
+  - "#architecture"
+  - "#ssot"
+  - "#naming"
+  - "#mcp"
+reasoning_confidence: 0.9
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 55766084
+last_change: ""
+dependencies:
+updated_at: "2026-03-01T00:00:00.000Z"
 
 ---
 

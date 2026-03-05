@@ -7,6 +7,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
+import {
+    parseFrontmatterBlock,
+    buildFrontmatterBlock,
+    SKILL_FRONTMATTER_ORDER,
+} from "../../contracts/skill-frontmatter-order.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,25 +60,18 @@ function updateFile(filePath) {
     const checksum = calculateReasoningChecksum(text);
     const today = new Date().toISOString().split("T")[0];
 
-    let newBlock = block;
-    
-    // Update or add reasoning_audited_at
-    if (/^reasoning_audited_at:/m.test(newBlock)) {
-        newBlock = newBlock.replace(/^reasoning_audited_at:.*$/m, `reasoning_audited_at: "${today}"`);
-    } else {
-        newBlock += `\nreasoning_audited_at: "${today}"`;
-    }
+    const fm = parseFrontmatterBlock(block);
+    const oldChecksum = fm.reasoning_checksum;
+    fm.reasoning_audited_at = today;
+    fm.reasoning_checksum = checksum;
+    if (fm.last_change === undefined) fm.last_change = "";
 
-    // Update or add reasoning_checksum
-    if (/^reasoning_checksum:/m.test(newBlock)) {
-        newBlock = newBlock.replace(/^reasoning_checksum:.*$/m, `reasoning_checksum: "${checksum}"`);
-    } else {
-        newBlock += `\nreasoning_checksum: "${checksum}"`;
-    }
-
-    const newText = text.replace(match[0], `---\n${newBlock}\n\n---`);
+    const newBlock = buildFrontmatterBlock(fm, SKILL_FRONTMATTER_ORDER);
+    const newText = text.replace(match[0], `---\n${newBlock}---`);
     fs.writeFileSync(filePath, newText, "utf8");
-    console.log(`Updated: ${path.relative(ROOT, filePath)} (checksum: ${checksum})`);
+    const rel = path.relative(ROOT, filePath);
+    const changed = (oldChecksum || "") !== checksum;
+    console.log(`Updated: ${rel} (checksum: ${checksum})${changed ? "\n  Reminder: set last_change to the newly added hash (see id:sk-d7bf67)." : ""}`);
 }
 
 function main() {

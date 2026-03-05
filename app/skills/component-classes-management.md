@@ -1,9 +1,10 @@
 ---
+id: sk-add9a6
 title: "Component Classes Management"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "801bc71f"
-id: sk-add9a6
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 801bc71f
+last_change: ""
 
 ---
 

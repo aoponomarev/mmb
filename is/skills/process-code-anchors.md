@@ -1,9 +1,10 @@
 ---
+id: sk-8991cd
 title: "Process: Code Anchors (Skill-to-Code Linking)"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "eb4c3d21"
-id: sk-8991cd
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: eb4c3d21
+last_change: ""
 
 ---
 

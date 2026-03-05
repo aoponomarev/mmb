@@ -1,9 +1,10 @@
 ---
+id: sk-22dc19
 title: "Metrics AIR Model"
 reasoning_confidence: 1.0
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "8e95f44b"
-id: sk-22dc19
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 8e95f44b
+last_change: ""
 
 ---
 

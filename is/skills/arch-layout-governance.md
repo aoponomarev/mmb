@@ -1,9 +1,10 @@
 ---
+id: sk-c62fb6
 title: "Architecture: Layout & README Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "7ebe9e38"
-id: sk-c62fb6
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 7ebe9e38
+last_change: ""
 
 ---
 

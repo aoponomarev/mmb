@@ -1,12 +1,18 @@
 ---
-title: "Architecture: Testing Strategy & CI"
-tags: ["#architecture", "#testing", "#ci", "#github"]
-dependencies: ["arch-foundation"]
-updated_at: "2026-03-01T00:00:00.000Z"
-reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "febd586c"
 id: sk-d6777d
+title: "Architecture: Testing Strategy & CI"
+tags:
+  - "#architecture"
+  - "#testing"
+  - "#ci"
+  - "#github"
+reasoning_confidence: 0.9
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: febd586c
+last_change: ""
+dependencies:
+  - arch-foundation
+updated_at: "2026-03-01T00:00:00.000Z"
 
 ---
 

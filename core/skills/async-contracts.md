@@ -1,9 +1,10 @@
 ---
+id: sk-471974
 title: "Protocol: Node.js Async Safety & Timeout Contracts"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "4f450f17"
-id: sk-471974
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 4f450f17
+last_change: ""
 
 ---
 

@@ -1,0 +1,19 @@
+---
+description: When editing skills, set last_change when adding or modifying Reasoning hashes.
+globs:
+  - "is/skills/**/*.md"
+  - "core/skills/**/*.md"
+  - "app/skills/**/*.md"
+alwaysApply: false
+---
+
+# Skill Reasoning: last_change Convention
+
+When editing a skill and adding/removing a causality hash (#for-X or #not-X) in the Reasoning section:
+
+1. Update `reasoning_checksum` (run `node is/scripts/architecture/update-reasoning-checksums.js` or preflight).
+2. Set `last_change: "#for-X — краткий контекст"` in frontmatter (replace X with the actual hash, add short context).
+
+**Frontmatter order:** `id` always first; canonical order: id, title, tags, status, reasoning_*, last_change (SSOT: is/contracts/skill-frontmatter-order.js).
+
+**Reference:** id:sk-d7bf67 (process-reasoning-audit).

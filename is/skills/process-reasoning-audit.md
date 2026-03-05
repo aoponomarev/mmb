@@ -1,9 +1,10 @@
 ---
+id: sk-d7bf67
 title: "Process: Reasoning Audit Protocol"
 reasoning_confidence: 0.85
-reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "f15d3797"
-id: sk-d7bf67
+reasoning_audited_at: 2026-03-05
+reasoning_checksum: 0be57c17
+last_change: ""
 
 ---
 
@@ -29,6 +30,7 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 | **2** | **Add** — For skills lacking Reasoning, add it based on deep analysis of the skill's scope, governed code, and architectural intent. | AI agent |
 | **3** | **Score** — Assign a confidence score (0–1) to each Reasoning. The AI agent evaluates how well the Reasoning reflects the actual implementation. | AI agent |
 | **4** | **Gate** — Run `npm run skills:reasoning:check`. The gate fails if any skill violates the Reasoning contract. | CI / preflight |
+| **5** | **last_change** — When adding or modifying a causality hash, set `last_change: "#for-&lt;hash&gt; — краткий контекст"` in frontmatter (e.g. `#for-mcp-data-contour — MCP contour`). Recommended for traceability. | AI agent |
 
 ## Contracts
 
@@ -80,6 +82,7 @@ Every skill with Reasoning MUST include a confidence score in frontmatter:
 reasoning_confidence: 0.85
 reasoning_audited_at: "2026-03-01"
 reasoning_checksum: "a1b2c3d4"
+last_change: ""  # Set when adding/modifying Reasoning hashes
 ---
 ```
 
@@ -88,6 +91,7 @@ reasoning_checksum: "a1b2c3d4"
 | `reasoning_confidence` | float 0–1 | Yes | AI agent's assessment: how well Reasoning matches the codebase. See scale below. |
 | `reasoning_audited_at` | ISO date | Yes | Date of last audit. Used to detect stale Reasoning. |
 | `reasoning_checksum` | string (MD5/SHA) | Yes | Tamper-evident hash of all causality hashes inside the skill. |
+| `last_change` | string | Recommended | Hash of the most recent addition + short context. Example: `#for-mcp-data-contour — MCP contour migration`. Helps agents and code review. Set when adding or modifying a causality hash. |
 
 ### Confidence Scale
 

@@ -55,11 +55,12 @@ if (fs.existsSync(fullPath)) {
 }
 
 const template = `---
-title: "${title}"
 id: ${skillId}
+title: "${title}"
 reasoning_confidence: 0.0
 reasoning_audited_at: "${new Date().toISOString().split('T')[0]}"
 reasoning_checksum: "placeholder"
+last_change: ""
 
 ---
 
