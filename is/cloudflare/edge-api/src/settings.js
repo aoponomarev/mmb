@@ -76,6 +76,7 @@ function normalizeSettings(data) {
     'provider', 'yandexApiKey', 'yandexFolderId', 'yandexModel',
     'perplexityApiKey', 'perplexityModel',
     'githubToken', 'apiBaseUrl', 'syncEnabled',
+    'workspace',
   ];
   const result = {};
   for (const key of allowed) {

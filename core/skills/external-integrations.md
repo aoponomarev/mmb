@@ -16,6 +16,7 @@ id: sk-7b4ee5
 
 - **#for-integration-fallbacks** Relying on a single external provider creates a single point of failure. Implementing fallback chains (e.g., Active-Passive or Fallback Chain) ensures that if a primary service (like an AI API or a proxy) goes down, the system automatically switches to a secondary provider without breaking the user experience.
 - **#for-geo-optimization** Different cloud providers have different regional strengths. Routing requests based on geography (e.g., Yandex Cloud for RU/CIS users, Cloudflare for the rest of the world) minimizes latency and complies with regional data localization policies.
+- **#for-endpoint-coherence** Authentication and user settings/workspace APIs must use the same backend domain contract for a given feature. Mixed origins (e.g., auth via one worker and settings via another) can produce false-positive writes and missing readback.
 
 ## Core Rules
 
@@ -27,6 +28,8 @@ id: sk-7b4ee5
     Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (`core/config/app-config.js`) to define the active provider and fallback chain.
 3.  **Geographic Optimization:**
     When configuring endpoints, prefer Yandex Cloud (Cloud Functions, API Gateway) for low-latency access within RU/CIS, and Cloudflare (Workers, Pages) for global edge-computing distribution.
+4.  **Endpoint Coherence for Stateful APIs:**
+    For stateful user data (settings/workspace/session-bound data), read/write/readback must target the same worker origin and namespace contract. Always verify with immediate readback after save in debugging scenarios.
 
 ### API Proxy (CORS Bypass & Caching)
 

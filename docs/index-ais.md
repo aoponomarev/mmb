@@ -11,7 +11,7 @@ last_updated: "2026-03-05"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 13
+> Auto-generated. Total: 14
 
 ---
 
@@ -27,4 +27,5 @@ last_updated: "2026-03-05"
 - [ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
 - [ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
+- [ais-91b7f4](ais/ais-workspace-storage-contour.md) — AIS: Контур хранения workspace-настроек (auth/non-auth)
 - [ais-e41384](ais/ais-yandex-cloud.md) — AIS: Yandex Cloud — Ingest и Read контуры данных монет

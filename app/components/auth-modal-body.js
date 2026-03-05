@@ -156,7 +156,7 @@ window.authModalBody = {
 
                                 // Call callback if provided
                                 if (this.onLoginSuccess) {
-                                    this.onLoginSuccess(tokenData);
+                                    await Promise.resolve(this.onLoginSuccess(tokenData));
                                 }
 
                                 // Remove handler after successful auth
@@ -217,7 +217,7 @@ window.authModalBody = {
 
                 // Call callback if provided
                 if (this.onLogoutSuccess) {
-                    this.onLogoutSuccess();
+                    await Promise.resolve(this.onLogoutSuccess());
                 }
 
                 // Update buttons
@@ -228,7 +228,7 @@ window.authModalBody = {
                 window.authState.clearAuthState();
                 this.updateButtons();
                 if (this.onLogoutSuccess) {
-                    this.onLogoutSuccess();
+                    await Promise.resolve(this.onLogoutSuccess());
                 }
             } finally {
                 window.authState.setLoading(false);

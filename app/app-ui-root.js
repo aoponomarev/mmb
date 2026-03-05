@@ -1197,10 +1197,9 @@
                  * Handle successful login via Google OAuth
                  * @param {Object} tokenData - Token and user data
                  */
-                handleAuthLogin(tokenData) {
+                async handleAuthLogin(tokenData) {
                     console.log('app-ui-root: пользователь успешно авторизован', tokenData);
 
-                    // Update testStep5Result to show successful auth on test card
                     if (tokenData && tokenData.access_token) {
                         const userEmail = tokenData.user?.email || 'неизвестен';
                         const userName = tokenData.user?.name || userEmail;
@@ -1209,22 +1208,90 @@
                             message: `✓ Авторизация успешна! Пользователь ${userName} (${userEmail}) авторизован. Токен сохранен.`
                         };
 
-                        // Auto-update testStep4Result to show user info
                         this.$nextTick(async () => {
                             await this.testStep4_CheckAuthStatus();
                         });
                     }
 
-                    // Can add extra logic on login
-                    // e.g. load user portfolios
+                    // Snapshot local workspace before overwriting with cloud data
+                    if (window.workspaceConfig) {
+                        try {
+                            this._preAuthWorkspace = await window.workspaceConfig.loadWorkspace();
+                        } catch (e) {
+                            console.warn('app-ui-root: failed to snapshot pre-auth workspace', e);
+                        }
+                    }
+
+                    await this._loadCloudWorkspace();
                 },
                 /**
-                 * Handle logout
+                 * Handle logout — restore pre-auth local workspace
                  */
-                handleAuthLogout() {
+                async handleAuthLogout() {
                     console.log('app-ui-root: пользователь вышел из системы');
-                    // Can add extra logic on logout
-                    // e.g. clear user data
+
+                    if (this._cloudSaveTimer) {
+                        clearTimeout(this._cloudSaveTimer);
+                        this._cloudSaveTimer = null;
+                    }
+
+                    const preAuth = this._preAuthWorkspace || null;
+                    this._preAuthWorkspace = null;
+
+                    if (preAuth && window.workspaceConfig) {
+                        try {
+                            await window.workspaceConfig.saveWorkspace(preAuth);
+                            await this.loadCoinsForActiveSet();
+                            await this.loadTableSettings();
+                            this.recalculateAllMetrics();
+                            console.log('app-ui-root: pre-auth workspace restored');
+                        } catch (e) {
+                            console.warn('app-ui-root: failed to restore pre-auth workspace', e);
+                        }
+                    }
+                },
+                /**
+                 * Load workspace from Cloudflare KV and apply to local state
+                 */
+                async _loadCloudWorkspace() {
+                    if (!window.cloudWorkspaceClient) return;
+
+                    try {
+                        const cloudWs = await window.cloudWorkspaceClient.load();
+                        if (!cloudWs || typeof cloudWs !== 'object') {
+                            console.log('app-ui-root: no cloud workspace found, keeping local');
+                            
+                            // If it's a first login or cloud is empty, upload the local preAuthWorkspace to cloud
+                            // so the user starts with their local session saved in the cloud.
+                            if (this._preAuthWorkspace) {
+                                console.log('app-ui-root: uploading local workspace to cloud to initialize');
+                                try {
+                                    await window.cloudWorkspaceClient.save(this._preAuthWorkspace);
+                                } catch (e) {
+                                    console.warn('app-ui-root: failed to init cloud workspace', e);
+                                }
+                            }
+                            return;
+                        }
+
+                        await window.workspaceConfig.saveWorkspace(cloudWs);
+
+                        // Re-read merged workspace and apply: coins first, then table settings
+                        const ws = await window.workspaceConfig.loadWorkspace();
+                        if (Array.isArray(ws.activeCoinSetIds)) {
+                            this.activeCoinSetIds = ws.activeCoinSetIds;
+                        }
+                        if (ws.activeModelId) {
+                            this.activeModelId = ws.activeModelId;
+                        }
+
+                        await this.loadCoinsForActiveSet();
+                        await this.loadTableSettings();
+                        this.recalculateAllMetrics();
+                        console.log('app-ui-root: cloud workspace applied');
+                    } catch (error) {
+                        console.warn('app-ui-root: _loadCloudWorkspace error:', error);
+                    }
                 },
                 /**
                  * Logout from system for test button Step 5
@@ -1536,15 +1603,13 @@
                         this.$refs.authModal.show();
                     }
                 },
-                handleAuthLoginSuccess(tokenData) {
+                async handleAuthLoginSuccess(tokenData) {
                     console.log('app-ui-root: успешная авторизация', tokenData);
-                    // State updates automatically via centralized auth-state store
-                    // No manual update of this.isAuthenticated and this.user needed
+                    await this.handleAuthLogin(tokenData);
                 },
-                handleAuthLogoutSuccess() {
+                async handleAuthLogoutSuccess() {
                     console.log('app-ui-root: успешный logout');
-                    // State updates automatically via centralized auth-state store
-                    // No manual update of this.isAuthenticated and this.user needed
+                    await this.handleAuthLogout();
                 },
                 /**
                  * Handle portfolio create
@@ -2986,6 +3051,7 @@
                                 activeTabId: this.activeTabId
                             }
                         });
+                        this._debouncedCloudSave();
                     } catch (error) {
                         console.error('app-ui-root: ошибка saving настроек workspace:', error);
                     }
@@ -3074,9 +3140,28 @@
 
                     try {
                         await window.workspaceConfig.saveWorkspace({ activeCoinSetIds: normalizedIds });
+                        this._debouncedCloudSave();
                     } catch (error) {
                         console.error('app-ui-root: ошибка saving activeCoinSetIds в workspace:', error);
                     }
+                },
+
+                /**
+                 * Debounced save of full workspace to Cloudflare KV (3s)
+                 * Only fires when user is authenticated.
+                 */
+                _debouncedCloudSave() {
+                    if (!this.isAuthenticated || !window.cloudWorkspaceClient) return;
+                    if (this._cloudSaveTimer) clearTimeout(this._cloudSaveTimer);
+                    this._cloudSaveTimer = setTimeout(async () => {
+                        this._cloudSaveTimer = null;
+                        try {
+                            const ws = await window.workspaceConfig.loadWorkspace();
+                            await window.cloudWorkspaceClient.save(ws);
+                        } catch (e) {
+                            console.warn('app-ui-root: cloud workspace save failed:', e.message);
+                        }
+                    }, 3000);
                 },
 
                 getBanContext() {
@@ -4629,6 +4714,7 @@
                             this.coinsDataCache.set(coin.id, coin);
                         });
                         this.recalculateAllMetrics();
+                        await this.saveActiveCoinSetIds(this.coins.map(c => c.id));
                     } catch (error) {
                         console.warn('app-ui-root: softRefreshCoinsTable error:', error);
                     }
@@ -4681,6 +4767,7 @@
                             this.coins.forEach(coin => this.coinsDataCache.set(coin.id, coin));
                             if (window.autoCoinSets) window.autoCoinSets.classifyAndUpdateAutoSets(this.coins);
                             this.recalculateAllMetrics();
+                            await this.saveActiveCoinSetIds(this.coins.map(c => c.id));
                             console.log(`✅ Топ coins (из кэша): ${this.coins.length}`);
 
                             const threshold = window.ssot?.getTopCoinsTimingWindowMs?.() || 2 * 60 * 60 * 1000;
@@ -4726,6 +4813,7 @@
                         this.coins.forEach(coin => this.coinsDataCache.set(coin.id, coin));
                         if (window.autoCoinSets) window.autoCoinSets.classifyAndUpdateAutoSets(this.coins);
                         this.recalculateAllMetrics();
+                        await this.saveActiveCoinSetIds(this.coins.map(c => c.id));
 
                     } catch (error) {
                         // this.coinsError = error.message || 'Unknown error';
@@ -4741,6 +4829,7 @@
                                     this.coins.forEach(coin => this.coinsDataCache.set(coin.id, coin));
                                     if (window.autoCoinSets) window.autoCoinSets.classifyAndUpdateAutoSets(this.coins);
                                     this.recalculateAllMetrics();
+                                    await this.saveActiveCoinSetIds(this.coins.map(c => c.id));
                                 }
                             } catch (fallbackError) {
                                 console.warn('loadTopCoins: fallback cache read failed', fallbackError);
@@ -4927,9 +5016,10 @@
                     }
 
                     // Check initial auth state via centralized store
+                    let isAuthenticatedOnMount = false;
                     if (window.authState) {
                         try {
-                            await window.authState.checkAuthStatus();
+                            isAuthenticatedOnMount = await window.authState.checkAuthStatus();
                         } catch (error) {
                             console.error('app-ui-root: ошибка проверки авторизации при монтировании:', error);
                         }
@@ -5009,6 +5099,16 @@
                     }
 
                     // Load workspace (active model, active coin set)
+                    // If already authenticated on page load — pull workspace from Cloudflare KV
+                    if (isAuthenticatedOnMount && window.cloudWorkspaceClient) {
+                        if (window.workspaceConfig) {
+                            try {
+                                this._preAuthWorkspace = await window.workspaceConfig.loadWorkspace();
+                            } catch (_) { /* best effort */ }
+                        }
+                        await this._loadCloudWorkspace();
+                    }
+
                     let workspace = null;
                     if (window.workspaceConfig) {
                         workspace = await window.workspaceConfig.loadWorkspace();
@@ -5043,6 +5143,9 @@
                     localStorage.removeItem('activeCoinSetCoinsData');
 
                     // Load coins per workspace (active set or default list)
+                    // IMPORTANT: If we already loaded from cloud, `this.coins` might be populated,
+                    // but we need to ensure the full list is loaded correctly. 
+                    // `loadCoinsForActiveSet` will just re-fetch the active set IDs we got from cloud.
                     await this.loadCoinsForActiveSet();
 
                     // Preload max coin sets (250 by market cap and by volume)
@@ -5069,8 +5172,11 @@
                 }
             },
             beforeUnmount() {
-                // Remove click handler on unmount
                 document.removeEventListener('click', this.handleDocumentClick);
+                if (this._cloudSaveTimer) {
+                    clearTimeout(this._cloudSaveTimer);
+                    this._cloudSaveTimer = null;
+                }
                 if (window.eventBus && this._cacheResetSubId) {
                     window.eventBus.off('cache-reset', this._cacheResetSubId);
                 }

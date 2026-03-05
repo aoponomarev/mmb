@@ -16,6 +16,7 @@ id: sk-a17d41
 
 - **#for-mutation-discipline** Uncontrolled mutation causes Reactive Reliability Gate (RRG) violations, producing unpredictable render orders. We enforce strict state ownership.
 - **#for-module-registry** In our no-build `file://` architecture, the module registry explicitly guarantees load order to prevent silent `undefined` dependency failures.
+- **#for-explicit-runtime-deps** In no-build mode, implicit globals are unsafe: modules and root components must explicitly declare every runtime dependency in `core/modules-config.js` (`deps` list). Missing deps can create intermittent startup behavior (component works, but integration client is not ready at first render).
 
 ---
 
@@ -74,6 +75,10 @@ The event bus handles **cross-component communication** that is not suitable for
 **#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
 
 **Adding a new module**: Register it in `core/modules-config.js` at the correct position in the load sequence. Never rely on script tag order in `index.html` for non-library modules.
+
+**Dependency discipline for root app**:
+- `app-ui-root` must list integration clients it reads during `mounted()` or auth callbacks (for example cloud workspace/auth state clients).
+- If a feature depends on `window.X` being present at startup, `X` must be in `deps`, not only in broad category ordering.
 
 ### Error Handling Integration
 

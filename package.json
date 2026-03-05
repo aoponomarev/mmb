@@ -29,6 +29,7 @@
     "skills:causality:check": "node is/scripts/architecture/validate-causality.js",
     "skills:index": "node is/scripts/architecture/generate-skills-index.js",
     "ais:index": "node is/scripts/architecture/generate-index-ais.js",
+    "ais:index:watch": "node is/scripts/architecture/watch-index-ais.js",
     "docs:encoding:validate": "node is/scripts/architecture/validate-docs-encoding.js",
     "encoding:normalize": "node is/scripts/architecture/normalize-text-encoding.js",
     "docs:ids:validate": "node is/scripts/architecture/validate-docs-ids.js",
