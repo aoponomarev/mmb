@@ -17,5 +17,6 @@ This directory acts as the local storage volume for the application. It contains
 
 ## Typical Contents (Ignored)
 - `cache/`: SQLite database files for market data.
+- `mcp.sqlite`: MCP runtime data (telemetry, dependency graph, causality backlog). See ais-8d3c2a.
 
 > **Note**: MCP memory is stored at `is/memory/memory.jsonl`, not in `data/`.

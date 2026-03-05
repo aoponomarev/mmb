@@ -16,7 +16,7 @@ last_updated: "2026-03-04"
 ## Phase 1: Foundation (Data Layer)
 *Objective: Prepare the SQLite database to store telemetry, graphs, and audit history.*
 - [ ] Verify `data/` directory exists and is git-ignored (Checked: `.gitignore` ignores `data/*.sqlite`).
-- [ ] Initialize `data/telemetry.sqlite` database using Node.js (`better-sqlite3` or built-in `node:sqlite`).
+- [ ] Initialize `data/mcp.sqlite` database using Node.js (`better-sqlite3` or built-in `node:sqlite`).
 - [ ] Create Database Migrations/Schemas:
   - `events`: (id, timestamp, event_type, target_id, agent_id, context).
   - `fragility_stats`: (file_path, failures_count, last_failure_at).

@@ -10,7 +10,7 @@ id: sk-3225b2
 # MCP Ecosystem Architecture
 
 > **Context**: The integration of Model Context Protocol (MCP), SQLite telemetry, and AI agent Tooling.
-> **Scope**: `is/mcp/*`, `data/telemetry.sqlite`, `.cursorrules`
+> **Scope**: `is/mcp/*`, `data/mcp.sqlite`, `.cursorrules`
 
 ## Reasoning
 
@@ -23,7 +23,7 @@ id: sk-3225b2
 *n8n and Continue CLI (Docker) content moved to `docs/backlog/skills/n8n-infrastructure.md` and `docs/backlog/skills/docker-infrastructure.md` — not yet deployed in Target App.*
 
 1.  **SQLite Isolation:**
-    The telemetry database (`data/telemetry.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.
+    The MCP database (`data/mcp.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.
 
 2.  **Tool Priority:**
     If an MCP Tool exists for an operation (e.g., `run_preflight`, `create_skill`), AI agents MUST use the tool rather than falling back to raw shell execution. Tools ensure telemetry is logged.

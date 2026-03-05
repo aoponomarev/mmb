@@ -1,6 +1,6 @@
 /**
  * #JS-YD283xUP
- * @description SQLite DB for MCP telemetry (events, fragility_stats); WAL journal mode; schema init.
+ * @description SQLite DB for MCP runtime data (events, fragility_stats, dependency_graph, etc.); WAL journal mode; schema init.
  */
 import Database from 'better-sqlite3';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.join(ROOT, 'data');
-const DB_PATH = path.join(DATA_DIR, 'telemetry.sqlite');
+const DB_PATH = path.join(DATA_DIR, 'mcp.sqlite');
 
 // Ensure data dir exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -20,6 +20,7 @@ if (!fs.existsSync(DATA_DIR)) {
 
 // Initialize DB
 const db = new Database(DB_PATH);
+// @causality #for-mcp-data-contour Single DB for MCP runtime; SSOT (id-registry, code-file-registry) stays in JSON, no cache.
 // @causality We use WAL journal mode because MCP servers run concurrently with VSCode/Cursor processes reading the DB, preventing database lock issues.
 db.pragma('journal_mode = WAL');
 

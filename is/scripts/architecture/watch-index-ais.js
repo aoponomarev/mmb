@@ -1,5 +1,5 @@
 /**
- * #JS-k7D4mQ2a
+ * #JS-pDx4epAm
  * @description Watches docs/ais and auto-regenerates docs/index-ais.md on file changes.
  */
 import fs from 'node:fs';

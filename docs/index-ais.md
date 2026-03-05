@@ -11,7 +11,7 @@ last_updated: "2026-03-05"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 14
+> Auto-generated. Total: 15
 
 ---
 
@@ -25,6 +25,7 @@ last_updated: "2026-03-05"
 - [ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
 - [ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
 - [ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
+- [ais-8d3c2a](ais/ais-mcp-data-contour.md) — AIS: Контур данных MCP (MCP Data Contour)
 - [ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
 - [ais-91b7f4](ais/ais-workspace-storage-contour.md) — AIS: Контур хранения workspace-настроек (auth/non-auth)
