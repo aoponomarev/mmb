@@ -2,7 +2,7 @@
 title: "External Integrations"
 reasoning_confidence: 1.0
 reasoning_audited_at: "2026-03-05"
-reasoning_checksum: "90ee63c8"
+reasoning_checksum: "e845c465"
 id: sk-7b4ee5
 
 ---
