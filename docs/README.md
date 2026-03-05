@@ -2,7 +2,9 @@
 id: docs-6a2d1f
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Documentation & Architecture History (`docs/`)
 

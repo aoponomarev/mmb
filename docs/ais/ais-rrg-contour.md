@@ -8,7 +8,9 @@ related_skills:
 related_ais:
   - ais-c6c35b
   - ais-f7e2a1
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # AIS: Контур Reactive Reliability Gate (RRG)
 

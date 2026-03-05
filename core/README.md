@@ -2,7 +2,9 @@
 id: readme-c8e267
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Core Domain & Backend Layer (`core/`)
 

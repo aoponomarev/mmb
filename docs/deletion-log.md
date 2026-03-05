@@ -2,7 +2,9 @@
 id: doc-del-log
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Deletion Log
 

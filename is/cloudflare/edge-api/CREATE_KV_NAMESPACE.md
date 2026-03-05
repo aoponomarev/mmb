@@ -2,7 +2,9 @@
 id: doc-d5083c
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Создание KV Namespace для API Proxy Cache
 

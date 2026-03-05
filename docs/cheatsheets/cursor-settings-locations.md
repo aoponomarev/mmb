@@ -2,7 +2,9 @@
 id: cheat-0e005f
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Расположение настроек Cursor / Markdown Preview
 

@@ -2,7 +2,9 @@
 id: doc-584eb1
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Инструкции по деплою Cloudflare Worker с API Proxy
 

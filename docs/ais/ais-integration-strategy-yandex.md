@@ -6,7 +6,9 @@ related_skills:
   - sk-bb7c8e
 related_ais:
   - ais-e41384
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # AIS: Стратегия интеграций для Yandex Cloud и API Gateway
 

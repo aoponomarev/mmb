@@ -52,7 +52,7 @@ function hasIdFrontmatter(content) {
 
 function addFrontmatter(content, id) {
   const today = new Date().toISOString().slice(0, 10);
-  const header = `---\nid: ${id}\nstatus: active\nlast_updated: "${today}"\n---\n\n`;
+  const header = `---\nid: ${id}\nstatus: active\nlast_updated: "${today}"\n\n---\n<!-- Важно: оставлять пустую строку перед "---" ! -->\n\n`;
   return header + content;
 }
 

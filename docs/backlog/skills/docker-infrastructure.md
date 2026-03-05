@@ -2,7 +2,9 @@
 id: bskill-11683c
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Docker Infrastructure (Deferred)
 

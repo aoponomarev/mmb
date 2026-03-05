@@ -10,7 +10,9 @@ related_skills:
 related_ais:
   - ais-8982e7
   - ais-bfd150
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
 

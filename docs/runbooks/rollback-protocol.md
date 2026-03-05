@@ -4,7 +4,9 @@ status: active
 last_updated: "2026-03-04"
 related_skills:
   - sk-6eeb9a
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Rollback Protocol v1 (Target App)
 

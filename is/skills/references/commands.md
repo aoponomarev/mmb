@@ -4,7 +4,9 @@ status: active
 last_updated: "2026-03-04"
 reasoning_audited_at: "2026-03-05"
 reasoning_checksum: "d41d8cd9"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Agent Command Dictionary
 

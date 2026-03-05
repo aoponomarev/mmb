@@ -2,7 +2,9 @@
 id: doc-f1a4d3
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Project Evolution Log
 

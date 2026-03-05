@@ -2,7 +2,9 @@
 id: bskill-2cab14
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # n8n Infrastructure (Deferred)
 

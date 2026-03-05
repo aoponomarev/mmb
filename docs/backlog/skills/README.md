@@ -2,7 +2,9 @@
 id: bskill-809e7c
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Deferred Skills (Отложенные скиллы)
 

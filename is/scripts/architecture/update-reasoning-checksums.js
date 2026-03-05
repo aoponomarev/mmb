@@ -71,7 +71,7 @@ function updateFile(filePath) {
         newBlock += `\nreasoning_checksum: "${checksum}"`;
     }
 
-    const newText = text.replace(match[0], `---\n${newBlock}\n---`);
+    const newText = text.replace(match[0], `---\n${newBlock}\n\n---`);
     fs.writeFileSync(filePath, newText, "utf8");
     console.log(`Updated: ${path.relative(ROOT, filePath)} (checksum: ${checksum})`);
 }

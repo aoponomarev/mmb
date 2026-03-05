@@ -7,7 +7,9 @@ related_skills:
   - sk-0e193a
 related_ais:
   - ais-9f4e2d
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # AIS: Documentation Governance Model
 

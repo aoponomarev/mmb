@@ -2,7 +2,9 @@
 id: runbook-ce96aa
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Data Contour: Monitoring & Troubleshooting
 

@@ -2,7 +2,9 @@
 id: readme-7c67c3
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # coingecko-fetcher — Yandex Cloud Function
 

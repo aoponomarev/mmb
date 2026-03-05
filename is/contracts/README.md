@@ -2,7 +2,9 @@
 id: readme-e31ad4
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Infrastructure Contracts (`is/contracts/`)
 

@@ -2,7 +2,9 @@
 id: readme-b4bf98
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Infrastructure Space (`is/`)
 

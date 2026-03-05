@@ -2,7 +2,9 @@
 id: backlog-69de5d
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # MCP & Causality Ecosystem Roadmap (LLMOps)
 

@@ -2,7 +2,9 @@
 id: readme-166c37
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Cloudflare Workers для интеграции app Dataset
 

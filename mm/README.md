@@ -2,7 +2,9 @@
 id: readme-a6a2ae
 status: active
 last_updated: "2026-03-04"
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Math Models (`mm/`)
 

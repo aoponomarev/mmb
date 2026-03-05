@@ -1,7 +1,9 @@
 ---
 name: git-commit-message
 description: Generate descriptive git commit messages by analyzing staged changes (git diff). Use when the user asks to commit, write a commit message, or clicks the commit button in source control. Always run git diff --staged first, then produce a Conventional Commits title + detailed body enriched with architectural tags.
+
 ---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # Git Commit Message
 
