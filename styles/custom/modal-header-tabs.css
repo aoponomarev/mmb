@@ -1,16 +1,13 @@
 /**
- * ================================================================================================
- * MODAL HEADER TABS CUSTOM STYLES - Кастомные стили для вкладок в заголовке модальных окон
- * ================================================================================================
+ * #CSS-we27dMsp
+ * @description Custom modal header tabs styles (btn-group overrides and fixed-size modal body layout).
  */
 
 .modal-header-tabs-group {
-    /* Отменяем стандартные стили btn-group */
+    /* Reset default btn-group look and align with modal paddings */
     border: none !important;
     border-radius: 0 !important;
 
-    /* Выравниваем с паддингами модального окна */
-    /* Стандартный padding у .modal-header: 1rem (16px) */
     margin-top: -1rem;
     margin-bottom: -1rem;
 }
@@ -20,23 +17,19 @@
     border-radius: 0 !important;
 }
 
-/* Чтобы кнопки выделялись, делаем активную кнопку чуть темнее */
 .modal-header-tabs-group .btn-check:checked + .btn-outline-primary {
     background-color: rgba(var(--bs-primary-rgb));
     border-color: rgba(var(--bs-primary-rgb), 0.15);
 }
 
-/* Убираем лишний маргин у последнего элемента перед кнопкой закрытия */
 .modal-header-tabs-group.ms-auto.me-2 {
-    margin-right: 0 !important; /* Отменяем Bootstrap .me-2 */
+    margin-right: 0 !important; /* override Bootstrap .me-2 */
 }
 
 .modal-body-fixed-size {
-    /* Устанавливаем фиксированную ширину и высоту для содержимого modal-body */
-    /* Это предотвратит "дерганье" модального окна при переключении вкладок с разным контентом */
+    /* Fix modal-body size to avoid jumping on tab switch */
     min-width: 450px;
     min-height: 300px;
-    /* Дополнительно можно добавить flex для выравнивания контента */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

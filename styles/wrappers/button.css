@@ -1,86 +1,30 @@
 /**
- * Стили для компонента BUTTON
- *
- * НАЗНАЧЕНИЕ: Предоставить адаптивность компонента cmp-button через CSS классы
- * и вложенные селекторы для управления видимостью элементов (иконка, текст, укороченный текст, суффикс).
- *
- * ПРИНЦИП РАБОТЫ:
- * - Mobile-first подход: базовые стили для мобильных, переопределение через @media для desktop (>= 576px)
- * - Использование класса .btn-responsive на корневом элементе кнопки
- * - Классы-модификаторы: .has-icon, .has-label-short, .icon-only, .hide-suffix
- * - Управление видимостью через visibility, font-size, max-width вместо display: none
- *   (это позволяет элементам оставаться в DOM для корректной работы flexbox gaps)
- *
- * БРЕЙКПОИНТ: 576px (SM Bootstrap) - стандартный брейкпоинт Bootstrap для перехода mobile → desktop
- *
- * ЗАВИСИМОСТИ:
- * - Bootstrap 5 (классы .btn, .btn-sm, .btn-lg, .d-flex, .align-items-center)
- * - Используется в: cmp-button, cmp-dropdown (кнопка триггера), cmp-button-group
- *
- * ПОРЯДОК ЗАГРУЗКИ:
- * Загружается первым среди компонентных стилей, так как является базовым компонентом,
- * используемым другими компонентами (dropdown, button-group).
- *
- * Подробнее: `legacy donor` components-styling-principles (id:ais-3f4e5c (docs/ais/ais-portfolio-controls.md)#LIR-005.A6)
+ * #CSS-UB45FeQM
+ * @description Responsive base button styles (.btn-responsive) for mobile/desktop, icon/label/short-label/suffix layout.
  */
 
-/* ============================================================================
-   КОМПОНЕНТ BUTTON
-   ============================================================================ */
-
-/* Базовые стили (mobile-first) */
+/* Base mobile-first icon wrapper for btn-responsive */
 .btn-responsive .icon {
-  /* Квадратная обертка иконки по высоте строки */
-  /* Используется height: 1em и width: 1em вместо aspect-ratio для предотвращения растягивания кнопки */
-  height: 1em; /* Высота строки текста */
-  width: 1em; /* Квадрат по высоте строки */
-  flex-shrink: 0; /* Предотвращает сжатие иконки */
+  height: 1em; /* Match text line height */
+  width: 1em;  /* Square icon box */
+  flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
-/* ============================================================================
-   ВЫРАВНИВАНИЕ ВЫСОТЫ С BOOTSTRAP ЭЛЕМЕНТАМИ
-   ============================================================================
-
-   Убираем вертикальный padding с самого <button> элемента для btn-responsive.
-   Bootstrap добавляет padding на .btn, но для btn-responsive весь padding
-   должен быть только на внутреннем контейнере .d-flex (строки 176-189).
-
-   Это обеспечивает, что высота btn-responsive совпадает с высотой стандартных
-   Bootstrap элементов (form-control, btn-check + label) того же размера.
-   ============================================================================ */
-
+/* Align vertical size with Bootstrap controls: move vertical padding to inner .d-flex */
 .btn-responsive.btn {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
-/* Горизонтальный padding остается от Bootstrap (padding-left, padding-right) */
-
-/* ============================================================================
-   ОТСТУПЫ МЕЖДУ ЭЛЕМЕНТАМИ (gaps)
-   ============================================================================
-
-   ВАЖНО: НЕ используется flexbox gap, так как он применяется между ВСЕМИ
-   дочерними элементами, даже скрытыми через visibility:hidden или width:0.
-   Это вызывает смещение иконки в кнопках, где текст скрыт на мобильных.
-
-   РЕШЕНИЕ: Отступы управляются через margin-right/margin-left для конкретных
-   элементов через селекторы :not(:last-child) и :not(:first-child).
-
-   Подробнее: `legacy donor` components-layout-alignment (id:ais-3f4e5c (docs/ais/ais-portfolio-controls.md)#LIR-005.A8)
-   ============================================================================ */
-
-/* Отступ слева для суффикса, чтобы отделить его от предыдущего элемента (текста или иконки) */
+/* Horizontal gaps via margins instead of flex gap to keep hidden items from shifting layout */
 .btn-responsive .suffix-container:not(:first-child) {
-  margin-left: 0.5rem; /* 8px - эквивалент gap-2 */
+  margin-left: 0.5rem; /* ~gap-2 */
 }
 
-/* Отступ справа от укороченного текста (только если есть соседний элемент справа) */
 .btn-responsive .label-short:not(:last-child) {
-  margin-right: 0.5rem; /* 8px - эквивалент gap-2 */
+  margin-right: 0.5rem; /* ~gap-2 */
 }
 
-/* Базовое скрытие текста на мобильных */
 .btn-responsive .label,
 .btn-responsive .label-short {
   visibility: hidden;
@@ -91,7 +35,6 @@
   display: inline;
 }
 
-/* Если есть иконка - скрыть текст на мобильных (текст показывается на десктопе через @media) */
 .btn-responsive.has-icon .label,
 .btn-responsive.has-icon .label-short {
   visibility: hidden;
@@ -102,7 +45,6 @@
   display: inline;
 }
 
-/* Если нет иконки, но есть короткий текст - показать его на мобильных */
 .btn-responsive.has-label-short:not(.has-icon) .label-short {
   visibility: visible;
   font-size: inherit;
@@ -110,7 +52,6 @@
   max-width: none;
   overflow: visible;
   display: inline;
-  /* Убираем margin-right, так как .label (скрытый) все еще в DOM и делает .label-short не :last-child */
   margin-right: 0 !important;
 }
 
@@ -123,33 +64,24 @@
   display: inline;
 }
 
-/* Десктоп 576px */
 @media (min-width: 576px) {
   .btn-responsive .icon {
     display: none;
   }
 
-  /* ========================================================================
-     ОТСТУПЫ МЕЖДУ ЭЛЕМЕНТАМИ НА DESKTOP (gaps)
-     ======================================================================== */
-
-  /* Отступ справа от иконки (только если есть соседний элемент справа) */
   .btn-responsive .icon:not(:last-child) {
-    margin-right: 0.5rem; /* 8px - эквивалент gap-2 */
+    margin-right: 0.5rem;
   }
 
-  /* Переопределение для кнопок только с иконкой (без текста и суффикса) */
   .btn-responsive.icon-only .icon {
     margin-right: 0 !important;
   }
 
-  /* Отступ справа от текста (только если есть соседний элемент справа) */
   .btn-responsive .label:not(:last-child),
   .btn-responsive .label-short:not(:last-child) {
-    margin-right: 0.5rem; /* 8px - эквивалент gap-2 */
+    margin-right: 0.5rem;
   }
 
-  /* Показываем текст на desktop */
   .btn-responsive .label,
   .btn-responsive.has-icon .label {
     visibility: visible;
@@ -160,9 +92,8 @@
     display: inline;
   }
 
-  /* На desktop показываем иконку, если она есть */
   .btn-responsive.has-icon .icon {
-    display: flex; /* Возвращаем flex вместо none для кнопок с иконкой */
+    display: flex; /* Restore icon for desktop buttons with icon */
   }
 
   .btn-responsive.has-label-short:not(.has-icon) .label-short {
@@ -184,11 +115,7 @@
   }
 }
 
-/* Используем стандартный Bootstrap треугольник для dropdown-toggle (идентично combobox) */
-/* Убрано скрытие - теперь треугольник отображается через стандартный Bootstrap CSS */
-/* Выравнивание треугольника по вертикали для btn-responsive */
-/* Проблема: ::after добавляется к <button>, но внутри button есть flexbox .d-flex */
-/* Решение: align-items:center на самом button для выравнивания ::after псевдоэлемента */
+/* Align Bootstrap dropdown-toggle caret with flex contents */
 .btn-responsive.dropdown-toggle {
   display: inline-flex;
   align-items: center;
@@ -198,43 +125,34 @@
   margin-left: 0.5rem;
 }
 
-/* Вертикальный padding для внутреннего контейнера кнопки в зависимости от размера */
-/* Привязка к классам размеров Bootstrap: btn-sm, btn-lg */
-/* БЕЗ !important - используем специфичность селекторов */
 .btn-responsive.btn-sm > .d-flex {
-  padding-top: 0.25rem; /* Соответствует btn-sm padding-y */
+  padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
 
-/* Дефолтные паддинги для стандартного размера (исключая кнопки в хедере приложения) */
 .btn-responsive:not(.btn-sm):not(.btn-lg):not(.app-header .btn-responsive) > .d-flex {
-  padding-top: 0.375rem; /* Соответствует btn default padding-y */
+  padding-top: 0.375rem;
   padding-bottom: 0.375rem;
 }
 
 .btn-responsive.btn-lg > .d-flex {
-  padding-top: 0.5rem; /* Соответствует btn-lg padding-y */
+  padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
 
-/* Переопределение для случая с p-0 - убираем padding для всех размеров */
 .btn-responsive > .d-flex.p-0 {
   padding-top: 0;
   padding-bottom: 0;
 }
 
-/* Скрытие суффиксов (chevron) в кнопке при использовании класса hide-suffix */
 .btn-responsive.hide-suffix .suffix-container {
   display: none !important;
 }
 
-/* Скрытие Bootstrap треугольника для dropdown-toggle с классом hide-suffix */
 .btn-responsive.dropdown-toggle.hide-suffix::after {
   display: none !important;
 }
 
-/* Переопределение отступов для особых случаев */
-/* Кнопки только с иконкой (без текста и суффикса) - убираем margin-right */
 .btn-responsive.icon-only .icon {
   margin-right: 0 !important;
 }

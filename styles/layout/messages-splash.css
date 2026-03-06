@@ -1,60 +1,34 @@
 /**
- * ================================================================================================
- * MESSAGES SPLASH STYLES - Стили для глобального контейнера системных сообщений
- * ================================================================================================
- *
- * ЦЕЛЬ: Стили для контейнера системных сообщений, приклеенного к низу страницы.
- *
- * ОСОБЕННОСТИ:
- * - Фиксированное позиционирование снизу страницы
- * - Полупрозрачный фон для видимости сообщений
- * - Темная тема для контраста
- * - Не блокирует клики по контенту (pointer-events: none на контейнере)
- *
- * ССЫЛКИ:
- * - .global-system-messages-container — контейнер сообщений
- * - .global-system-messages-container .system-messages-host — хост сообщений (pointer-events: auto)
- *
- * ССЫЛКИ:
- * - Компонент: shared/components/system-messages.js
- * - Хранилище: shared/utils/messages-store.js
+ * #CSS-Wq2Ax1T1
+ * @description Fixed bottom splash container styles for global system messages.
  */
 
-/* Глобальный контейнер системных сообщений:
-   - приклеен к низу страницы, поверх основного контента и над футером
-   - показывается только когда есть сообщения (v-if в index.html)
-   - высота по контенту
-   - сообщения выстраиваются горизонтально с overflow-x
-*/
+/* Global container for system messages fixed to the bottom above the footer */
 .global-system-messages-container {
     position: fixed;
     left: 0;
     right: 0;
-    /* Приклеиваем непосредственно к нижней границе окна браузера */
     bottom: 0;
-    z-index: 1050; /* Выше футера, но ниже модальных окон Bootstrap (1060) */
-    pointer-events: none; /* чтобы не блокировать клики по контенту под контейнером */
-    /* Высота по контенту */
+    z-index: 1050; /* Above footer, below Bootstrap modals (1060) */
+    pointer-events: none; /* do not block clicks on underlying content */
     height: auto;
-    max-height: 50vh; /* Ограничение максимальной высоты */
-    /* Вертикальные внутренние отступы */
+    max-height: 50vh; /* limit vertical height of messages */
     padding-top: 1rem;
     padding-bottom: 1rem;
-    /* Полупрозрачный черный фон под сообщениями (75%) */
+    /* Semi-transparent dark backdrop under messages */
     background-color: rgba(0, 0, 0, 0.75);
-    /* Прокрутка: вертикальная и горизонтальная */
+    /* Allow vertical and horizontal scrolling inside container */
     overflow-y: auto;
     overflow-x: auto;
 }
 
 .global-system-messages-container .container-fluid {
-    pointer-events: auto; /* внутри сообщений клики должны работать нормально */
+    pointer-events: auto; /* restore pointer events for message host */
     height: 100%;
 }
 
-/* Скрываем горизонтальную полосу прокрутки в контейнере сообщений */
 .global-system-messages-container .d-flex {
-    /* Скрываем горизонтальную полосу прокрутки */
+    /* Hide horizontal scrollbar inside messages container */
     scrollbar-width: none;
     -ms-overflow-style: none;
 }

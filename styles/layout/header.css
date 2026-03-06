@@ -1,25 +1,10 @@
 /**
- * ================================================================================================
- * HEADER STYLES - Стили компонента хедера приложения
- * ================================================================================================
- *
- * ЦЕЛЬ: Стили для компонента хедера приложения (app-header).
- *
- * ОСОБЕННОСТИ:
- * - Фиксированная темная тема (data-bs-theme="dark"), не переключается
- * - Многослойная тень направленная вниз с белым inset для осветления фона
- * - Использует только Bootstrap классы для базовой стилизации
- *
- * ССЫЛКИ:
- * - .app-header — корневой элемент хедера
- *
- * ССЫЛКИ:
- * - Компонент: app/components/app-header.js
- * - Шаблон: app/templates/app-header-template.js
+ * #CSS-xrZxCxoN
+ * @description Header component styles (.app-header) with layered shadow and responsive info row layout.
  */
 
 .app-header {
-    /* Многослойная тень направленная вниз с белым inset для осветления фона */
+    /* Layered downward shadow with inner white inset to lighten background */
     box-shadow:
         0 2px 4px rgba(30, 35, 45, 0.05),
         0 4px 8px rgba(0, 0, 0, 0.2),
@@ -35,7 +20,6 @@
     padding-bottom: 8px;
 }
 
-/* Отрицательный вертикальный зазор между строками на мобильных при переносе */
 @media (max-width: 991.98px) {
     .header-info-row > div {
         margin-top: -4px;

@@ -5,7 +5,7 @@
  * @contract file-header-contract. AIS: id:ais-f7e2a1. Plan: docs/plans/file-header-rollout.md.
  */
 
-/** File id pattern: #<EXT>-<hash> where EXT is JS|TS|CSS|HTML, hash is alphanumeric 6–12 chars (matches anywhere in header) */
+/** File id pattern: #<EXT>-<hash> where EXT is JS|TS|CSS|HTML|JSON, hash is alphanumeric 6–12 chars (matches anywhere in header) */
 export const FILE_ID_PATTERN = /#(JS|TS|CSS|HTML|JSON)-[a-zA-Z0-9]{6,12}\b/;
 
 /** Required header fields for validation (when file has a file id in header) */
@@ -24,10 +24,10 @@ export const ALLOWED_HEADER_TAGS = Object.freeze([
 ]);
 
 /** Scan directories for file-header validation (same as validate-code-comments-english) */
-export const SCAN_DIRS = Object.freeze(['core', 'app', 'is', 'shared', 'mm']);
+export const SCAN_DIRS = Object.freeze(['core', 'app', 'is', 'shared', 'mm', 'styles']);
 
 /** Extensions to scan */
-export const SCAN_EXTENSIONS = Object.freeze(['.js', '.ts']);
+export const SCAN_EXTENSIONS = Object.freeze(['.js', '.ts', '.css', '.json']);
 
 /** Hash length for file id (must match assign-file-ids.js) */
 export const HASH_LEN = 8;
@@ -62,7 +62,8 @@ function toBase58(n, len) {
 export function getExpectedFileId(relPath) {
   const normalized = relPath.replace(/\\/g, '/');
   const ext = normalized.split('.').pop()?.toUpperCase() || 'JS';
-  const prefix = ext === 'JS' ? 'JS' : ext === 'TS' ? 'TS' : ext === 'CSS' ? 'CSS' : 'JS';
+  const allowedExt = new Set(['JS', 'TS', 'CSS', 'HTML', 'JSON']);
+  const prefix = allowedExt.has(ext) ? ext : 'JS';
   const hash = toBase58(djb2(normalized), HASH_LEN);
   return `#${prefix}-${hash}`;
 }

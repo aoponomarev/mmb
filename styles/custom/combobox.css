@@ -1,16 +1,9 @@
 /**
- * ================================================================================================
- * COMBOBOX CUSTOM STYLES
- * ================================================================================================
- *
- * ЦЕЛЬ: Кастомные стили для компонента combobox (крестик очистки через CSS псевдоэлемент).
- *
- * ИСПОЛЬЗОВАНИЕ:
- * - Подключается в index.html и test.html через <link rel="stylesheet">
- * - Используется компонентом cmp-combobox
+ * #CSS-EP2DLuAZ
+ * @description Custom combobox styles (CSS clear icon via ::before and spinner hiding for numeric inputs).
  */
 
-/* Крестик для очистки через CSS псевдоэлемент (для combobox) */
+/* Clear button inside combobox using a CSS pseudo-element */
 .combobox-clear {
     cursor: pointer;
     position: relative;
@@ -18,7 +11,7 @@
 }
 
 .combobox-clear::before {
-    content: '\f00d'; /* Font Awesome times icon */
+    content: '\f00d'; /* Font Awesome \"times\" icon */
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 0.875rem;
@@ -35,7 +28,7 @@
     opacity: 0.75;
 }
 
-/* Скрытие стрелок (spin buttons) для числовых полей ввода */
+/* Hide numeric input spin buttons */
 .hide-spinners::-webkit-outer-spin-button,
 .hide-spinners::-webkit-inner-spin-button {
     -webkit-appearance: none;

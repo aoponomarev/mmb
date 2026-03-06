@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
  * #JS-1E2YRywQ
- * @description Build code-file-registry: map file id (#JS-xxx, #TS-xxx) to path from canonical scan.
+ * @description Build code-file-registry: map file id (#JS-xxx, #TS-xxx, #CSS-xxx, #JSON-xxx) to path from canonical scan.
  * @skill id:sk-f7e2a1
  * Plan: docs/plans/file-header-rollout.md. Does not modify file contents; use for registry only. Usage: node is/scripts/architecture/assign-file-ids.js [--dry-run]
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { SCAN_DIRS, getExpectedFileId } from "../../contracts/file-header-contract.js";
+import { SCAN_DIRS, SCAN_EXTENSIONS, getExpectedFileId } from "../../contracts/file-header-contract.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..", "..", "..");
@@ -35,7 +35,7 @@ function main() {
   for (const dir of SCAN_DIRS) {
     const dirPath = path.join(ROOT, dir);
     if (!fs.existsSync(dirPath)) continue;
-    for (const ext of [".js", ".ts"]) {
+    for (const ext of SCAN_EXTENSIONS) {
       for (const file of walk(dirPath, ext)) {
         const rel = path.relative(ROOT, file).replace(/\\/g, "/");
         const id = getExpectedFileId(rel);

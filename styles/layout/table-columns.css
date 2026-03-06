@@ -1,15 +1,14 @@
-/* =========================
-   УПРАВЛЕНИЕ ВИДИМОСТЬЮ КОЛОНОК ТАБЛИЦЫ ЧЕРЕЗ CSS
-   Используется для мгновенного переключения видимости колонок при смене вкладок
-   ========================= */
+/**
+ * #CSS-7iJZG7f7
+ * @description Utility styles for toggling table column visibility via .col-hidden on col/th/td.
+ */
 
-/* Скрытие колонок через классы colgroup (для структуры) */
+/* Hide columns via colgroup helpers */
 col.col-hidden {
   width: auto;
 }
 
-/* Скрытие ячеек (th и td) соответствующих скрытым колонкам */
-/* Универсальное правило для всех таблиц: любая ячейка с классом col-hidden скрывается */
+/* Hide th/td cells for hidden columns */
 table th.col-hidden,
 table td.col-hidden {
   display: none;

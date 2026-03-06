@@ -1,5 +1,5 @@
 /**
- * #JS-9a8cW3mQ
+ * #JS-DD2wQC9P
  * @description Cross-platform Node test runner: executes only “*.test.js” files (avoids legacy “test-*.js” scripts).
  */
 import fs from 'node:fs';

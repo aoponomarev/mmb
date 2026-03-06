@@ -1,33 +1,9 @@
 /**
- * Стили для компонента DROPDOWN-MENU-ITEM
- *
- * НАЗНАЧЕНИЕ: Предоставить адаптивность компонента cmp-dropdown-menu-item через CSS классы
- * для управления видимостью элементов (иконка, подзаголовок).
- *
- * ПРИНЦИП РАБОТЫ:
- * - Mobile-first подход: базовые стили для мобильных, переопределение через @media для desktop (>= 576px)
- * - Использование класса .dropdown-menu-item-responsive на корневом элементе пункта меню
- * - Классы-модификаторы: .hide-subtitle-mobile (скрытие подзаголовка на мобильных)
- * - Управление видимостью через display для подзаголовка
- *
- * БРЕЙКПОИНТ: 576px (SM Bootstrap) - стандартный брейкпоинт Bootstrap для перехода mobile → desktop
- *
- * ЗАВИСИМОСТИ:
- * - Bootstrap 5 (классы .dropdown-item, .d-flex)
- * - Используется в: cmp-dropdown (пункты меню), cmp-button-group (при схлопывании в dropdown)
- *
- * ПОРЯДОК ЗАГРУЗКИ:
- * Загружается вторым среди компонентных стилей (после button.css), так как является
- * базовым элементом, используемым внутри dropdown. Независим от button.css.
- *
- * Подробнее: `legacy donor` components-styling-principles (id:ais-3f4e5c (docs/ais/ais-portfolio-controls.md)#LIR-005.A7)
+ * #CSS-1bKCV1Y8
+ * @description Responsive dropdown menu item styles (.dropdown-menu-item-responsive) and subtitle visibility.
  */
 
-/* ============================================================================
-   КОМПОНЕНТ DROPDOWN-MENU-ITEM
-   ============================================================================ */
-
-/* Базовые стили (mobile-first) */
+/* Base mobile-first styles */
 .dropdown-menu-item-responsive .icon {
   display: flex;
 }
@@ -36,7 +12,7 @@
   display: block;
 }
 
-/* Скрытие подзаголовка на мобильных (если нужно) */
+/* Hide subtitle on mobile when .hide-subtitle-mobile is present */
 @media (max-width: 575px) {
   .dropdown-menu-item-responsive.hide-subtitle-mobile .subtitle {
     display: none;

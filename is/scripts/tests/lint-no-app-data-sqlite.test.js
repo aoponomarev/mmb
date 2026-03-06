@@ -1,5 +1,5 @@
 /**
- * #JS-kb6Yp2Vw
+ * #JS-DLBU8DGz
  * @description Lint: forbid any SQLite files under app/data (runtime state must live in data/).
  */
 import test from 'node:test';
