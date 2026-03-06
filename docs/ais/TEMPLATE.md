@@ -61,10 +61,10 @@ flowchart TD
 
 ## Контракты и гейты
 
-- `validate-docs-ids` — обязательная проверка `id` и связей `related_skills/related_ais`.
-- `validate-skill-anchors` — если формулируются привязки к `@skill-anchor`/`@causality` в тексте.
-- `validate-causality` — обязательна для всех решений с `@causality #for-*`.
-- `validate-causality-invariant` — при удалении hash-обоснований через исключения или явное завершение.
+- #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js) — обязательная проверка `id` и связей `related_skills/related_ais`.
+- #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js) — если формулируются привязки к `@skill-anchor`/`@causality` в тексте.
+- #JS-69pjw66d (is/scripts/architecture/validate-causality.js) — обязательна для всех решений с `@causality #for-*`.
+- #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js) — при удалении hash-обоснований через исключения или явное завершение.
 
 ## Лог перепривязки путей (Path Rewrite Log)
 

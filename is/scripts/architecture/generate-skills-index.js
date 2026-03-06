@@ -10,6 +10,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..", "..", "..");
 
+const ID_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
+
+function loadIdRegistry() {
+    if (!fs.existsSync(ID_REGISTRY_PATH)) return {};
+    const raw = fs.readFileSync(ID_REGISTRY_PATH, "utf8");
+    const data = JSON.parse(raw);
+    const pathToId = {};
+    for (const [id, pathVal] of Object.entries(data.skills || {})) {
+        pathToId[pathVal] = id;
+    }
+    return pathToId;
+}
+
 // Folders to scan for skills
 const SKILL_DIRS = [
     path.join(ROOT, "is", "skills"),
@@ -42,6 +55,7 @@ function parseTitle(text) {
 }
 
 function generateIndex() {
+    const pathToId = loadIdRegistry();
     const categories = {};
     let totalSkills = 0;
 
@@ -56,9 +70,10 @@ function generateIndex() {
             const relativePath = path.relative(ROOT, file).split(path.sep).join("/");
             const content = fs.readFileSync(file, "utf8");
             const title = parseTitle(content);
-            const id = path.basename(file, ".md");
+            const registryId = pathToId[relativePath] || "";
+            const linkText = registryId ? `id:${registryId}` : path.basename(file, ".md");
             
-            categories[category].push(`- [${id}](../${relativePath}) — ${title}`);
+            categories[category].push(`- [${linkText}](../${relativePath}) — ${title}`);
             totalSkills++;
         }
     }

@@ -48,7 +48,7 @@ flowchart TD
 | Этап | Компонент | Описание |
 |------|-----------|----------|
 | 1 | Yandex Cloud Triggers | Cron `0/15 * * * ? *` — каждые 15 минут |
-| 2 | `is/yandex/functions/market-fetcher/index.js` | Функция запрашивает CoinGecko API (топ-250 по market_cap + топ-250 по volume) |
+| 2 | #JS-3w3f6pz7 (is/yandex/functions/market-fetcher/index.js) | Функция запрашивает CoinGecko API (топ-250 по market_cap + топ-250 по volume) |
 | 3 | PostgreSQL | Запись в `coin_market_cache_history` с уникальным `cycle_id`, обновление `coin_market_cache` |
 
 ### Read-контур (api-gateway)
@@ -57,7 +57,7 @@ flowchart TD
 |------|-----------|----------|
 | 1 | Пользователь / браузер | Запрос через `YandexCacheProvider` |
 | 2 | Cloudflare (опционально) | Защита / кэширование |
-| 3 | `is/yandex/functions/api-gateway/index.js` | Чтение из PostgreSQL через `GET /api/coins/market-cache` |
+| 3 | #JS-HS3kQFDc (is/yandex/functions/api-gateway/index.js) | Чтение из PostgreSQL через `GET /api/coins/market-cache` |
 | 4 | PostgreSQL | Выборка из `coin_market_cache` |
 
 ## Локальные Политики (Module Policies)
@@ -137,9 +137,9 @@ flowchart TD
 
 ## Интеграция с клиентом
 
-- `core/api/data-providers/yandex-cache-provider.js` — провайдер для `DataProviderManager`.
+- #JS-qz3WnWnA (core/api/data-providers/yandex-cache-provider.js) — провайдер для DataProviderManager.
 - `getCoinDataDualChannel()` — сначала PG, затем CoinGecko для недостающих монет.
 
 ---
 
-*См. также: `id:ais-3732ce`, `id:runbook-ce96aa`.*
+*См. также: id:ais-3732ce (docs/ais/ais-data-pipeline.md), id:runbook-ce96aa (docs/runbooks/data-contour-troubleshooting.md).*

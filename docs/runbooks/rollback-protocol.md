@@ -30,7 +30,7 @@ No automatic system-wide rollback without human confirmation.
 
 2) **Checkpointing**:
    - restore from latest `npm run secret:restore` snapshot if secrets/paths invalid,
-   - write operational note in `id:doc-f1a4d3` and `logs/` evidence.
+   - write operational note in id:doc-f1a4d3 (docs/project-evolution.md) and `logs/` evidence.
 
 3) **Layered rollback order (by blast radius)**
 

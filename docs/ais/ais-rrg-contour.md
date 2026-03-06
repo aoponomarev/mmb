@@ -20,7 +20,7 @@ related_ais:
 
 - id:ais-c4e9b2 — устойчивый идентификатор для ссылок из скиллов, планов и гейтов.
 - status: incomplete (фазы 0–5 плана выполнены: гейт, скрипт, preflight, cursor-правило, causality #for-rrg-contour, index-ais).
-- Связанные артефакты: скилл id:sk-318305 (app/skills/ui-architecture.md), id:sk-a17d41 (core/skills/state-events.md), id:ais-c6c35b (docs/ais/ais-frontend-ui.md). План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: docs/deletion-log.md.
+- Связанные артефакты: скилл id:sk-318305 (app/skills/ui-architecture.md), id:sk-a17d41 (core/skills/state-events.md), id:ais-c6c35b (docs/ais/ais-frontend-ui.md). План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log (docs/deletion-log.md).
 
 ## Концепция (High-Level Concept)
 
@@ -34,7 +34,7 @@ related_ais:
 4. **No unsafe DOM mutation in components** — присвоение `innerHTML` в компонентах запрещено (XSS и обход реактивности).
 5. **Async contracts** — у fetch/debounce явные переходы loading/error.
 
-Архитектура no-build и загрузка через `core/module-loader.js` предполагают **разовую регистрацию** компонентов и утилит на `window` при загрузке скрипта — это не считается нарушением RRG, если оформлено как `window.X = { ... }` или `window.X = function ...`.
+Архитектура no-build и загрузка через #JS-xj43kftu (`core/module-loader.js`) предполагают **разовую регистрацию** компонентов и утилит на `window` при загрузке скрипта — это не считается нарушением RRG, если оформлено как `window.X = { ... }` или `window.X = function ...`.
 
 ## Инфраструктура и потоки данных (Infrastructure & Data Flow)
 
@@ -59,26 +59,26 @@ flowchart TB
     N --> P
 ```
 
-- **Область проверки (актуально):** app/components и shared/components (файлы *.js, *.mjs). Не сканируются app/templates и shared/templates (innerHTML в postgres-settings-template.js — регистрация Vue-шаблона).
+- **Область проверки (актуально):** app/components и shared/components (файлы *.js, *.mjs). Не сканируются app/templates и shared/templates (innerHTML в #JS-ZP2M2QVZ postgres-settings-template.js — регистрация Vue-шаблона).
 - **Триггеры:** `npm run frontend:reactivity:check` (отдельная команда); `npm run test` (premerge/CI); preflight — шаг 6, вызов `npm run frontend:reactivity:check` (при падении exit(1)).
-- **Скрипт:** В package.json зарегистрирован `frontend:reactivity:check` → `node --test is/scripts/tests/check-frontend-rrg.test.js`.
+- **Скрипт:** В package.json зарегистрирован `frontend:reactivity:check` → `node --test` #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js).
 
 ## Правила гейта (текущая реализация)
 
-Гейт: #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js). Константа RRG_SCAN_DIRS: app/components, shared/components; app/templates и shared/templates не входят (innerHTML в postgres-settings-template.js — регистрация Vue-шаблона).
+Гейт: #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js). Константа RRG_SCAN_DIRS: app/components, shared/components; app/templates и shared/templates не входят (innerHTML в #JS-ZP2M2QVZ postgres-settings-template.js — регистрация Vue-шаблона).
 
 | Правило | Проверка | Исключения |
 |--------|----------|------------|
 | **RRG-1** | Нет прямой мутации `window.*` в компонентах | Регистрация: `window.X = { ... }`, `window.X = function ...`, `window.X = X` (одинаковый идентификатор слева и справа); строка содержит `window.consoleInterceptor` или `window.location`. |
 | **RRG-2** | Нет присвоения `innerHTML` в компонентах | Нет (любое `.innerHTML =` — нарушение). |
 
-Проверка построчная, без AST. Вложенные мутации и косвенные присвоения не детектируются. Исключение `window.X = X` (одинаковый идентификатор слева и справа) покрывает регистрацию в shared/components/system-message.js и system-messages.js.
+Проверка построчная, без AST. Вложенные мутации и косвенные присвоения не детектируются. Исключение `window.X = X` (одинаковый идентификатор слева и справа) покрывает регистрацию в #JS-su4917p5 system-message.js и #JS-Gn38YPCx system-messages.js (shared/components/).
 
 ## Локальные политики (Module Policies)
 
 - Все новые и затрагиваемые при рефакторинге файлы в `app/components` и (после расширения) в `shared/components` не должны вводить нарушений RRG-1 и RRG-2.
 - Единственное допустимое присвоение `window` в компонентном коде — разовая регистрация в конце файла в виде `window.ComponentName = { ... }` или `window.utilName = function ...`. Остальные мутации `window` (примитивы, переменные) — нарушение.
-- Файлы вне области проверки (например `app/app-ui-root.js`, `app/templates/*.js`, `core/`, `is/`) формально не проходят RRG-тест. При расширении скана на app/templates или shared/templates потребуются точечные исключения: file-header-template.js — `window.FILE_HEADER_TEMPLATE_REF`; postgres-settings-template.js — innerHTML для вставки Vue-шаблона (либо рефакторинг регистрации без innerHTML).
+- Файлы вне области проверки (например #JS-yx22mAv8 `app/app-ui-root.js`, `app/templates/*.js`, `core/`, `is/`) формально не проходят RRG-тест. При расширении скана на app/templates или shared/templates потребуются точечные исключения: #JS-EsMQyEpA file-header-template.js — `window.FILE_HEADER_TEMPLATE_REF`; #JS-ZP2M2QVZ postgres-settings-template.js — innerHTML для вставки Vue-шаблона (либо рефакторинг регистрации без innerHTML).
 
 ## Инвентарь мест с «кастомной» реактивностью
 
@@ -88,66 +88,66 @@ flowchart TB
 
 **app/components/** (регистрация Vue-компонентов приложения):
 
-| Файл | Идентификатор на window |
-|------|-------------------------|
-| app-header.js | window.appHeader |
-| app-footer.js | window.appFooter |
-| auth-button.js | window.authButton |
-| ai-api-settings.js | window.aiApiSettings |
-| postgres-settings.js | window.postgresSettings |
-| portfolios-manager.js | window.portfoliosManager |
-| modal-example-body.js | window.modalExampleBody |
-| timezone-modal-body.js | window.timezoneModalBody |
-| portfolio-modal-body.js | window.portfolioModalBody |
-| portfolio-form-modal-body.js | window.portfolioFormModalBody |
-| portfolio-view-modal-body.js | window.portfolioViewModalBody |
-| storage-reset-modal-body.js | window.storageResetModalBody |
-| icon-manager-modal-body.js | window.cmpIconManagerModalBody |
-| coin-set-load-modal-body.js | window.coinSetLoadModalBody |
-| coin-set-save-modal-body.js | window.coinSetSaveModalBody |
-| portfolios-import-modal-body.js | window.portfoliosImportModalBody |
-| session-log-modal-body.js | window.sessionLogModalBody |
-| auth-modal-body.js | window.authModalBody |
-| coingecko-cron-history-modal-body.js | window.coingeckoCronHistoryModalBody |
-| missing-coins-modal-body.js | window.missingCoinsModalBody |
+| ID | Файл | Идентификатор на window |
+|------|------|-------------------------|
+| #JS-Cu2wz595 | app-header.js | window.appHeader |
+| #JS-zB467gvM | app-footer.js | window.appFooter |
+| #JS-Jd4ASwEo | auth-button.js | window.authButton |
+| #JS-u72ZSLqH | ai-api-settings.js | window.aiApiSettings |
+| #JS-xNN9FxKB | postgres-settings.js | window.postgresSettings |
+| #JS-8j2Hez4u | portfolios-manager.js | window.portfoliosManager |
+| #JS-uD33Z1qP | modal-example-body.js | window.modalExampleBody |
+| #JS-nr238Xj2 | timezone-modal-body.js | window.timezoneModalBody |
+| #JS-BX21fe7h | portfolio-modal-body.js | window.portfolioModalBody |
+| #JS-dc3EKYZn | portfolio-form-modal-body.js | window.portfolioFormModalBody |
+| #JS-9oNFE9kB | portfolio-view-modal-body.js | window.portfolioViewModalBody |
+| #JS-Vz2p3xSA | storage-reset-modal-body.js | window.storageResetModalBody |
+| #JS-WK5L8WFt | icon-manager-modal-body.js | window.cmpIconManagerModalBody |
+| #JS-W23K9iSC | coin-set-load-modal-body.js | window.coinSetLoadModalBody |
+| #JS-YR467bUb | coin-set-save-modal-body.js | window.coinSetSaveModalBody |
+| #JS-Ri3c3bMt | portfolios-import-modal-body.js | window.portfoliosImportModalBody |
+| #JS-VNDFUVK2 | session-log-modal-body.js | window.sessionLogModalBody |
+| #JS-pZ2DyWkj | auth-modal-body.js | window.authModalBody |
+| #JS-AjyFAjvh | coingecko-cron-history-modal-body.js | window.coingeckoCronHistoryModalBody |
+| #JS-Nz32oDKA | missing-coins-modal-body.js | window.missingCoinsModalBody |
 
 **shared/components/** (общие Vue-компоненты):
 
-| Файл | Идентификатор на window |
-|------|-------------------------|
-| button.js | window.cmpButton |
-| dropdown.js | window.cmpDropdown |
-| dropdown-menu-item.js | window.cmpDropdownMenuItem |
-| button-group.js | window.cmpButtonGroup |
-| combobox.js | window.cmpCombobox |
-| modal.js | window.cmpModal |
-| modal-buttons.js | window.cmpModalButtons |
-| timezone-selector.js | window.cmpTimezoneSelector |
-| system-message.js | window.cmpSystemMessage |
-| system-messages.js | window.cmpSystemMessages |
-| cell-num.js | window.cmpCellNum |
-| sortable-header.js | window.cmpSortableHeader |
-| coin-block.js | window.cmpCoinBlock |
+| ID | Файл | Идентификатор на window |
+|------|------|-------------------------|
+| #JS-5n33791x | button.js | window.cmpButton |
+| #JS-Y3asmXzP | dropdown.js | window.cmpDropdown |
+| #JS-Tm2EL8Pw | dropdown-menu-item.js | window.cmpDropdownMenuItem |
+| #JS-Na3ZaWJk | button-group.js | window.cmpButtonGroup |
+| #JS-hf3mDcdq | combobox.js | window.cmpCombobox |
+| #JS-HF48eDDR | modal.js | window.cmpModal |
+| #JS-r8Uair5H | modal-buttons.js | window.cmpModalButtons |
+| #JS-X32EmWyq | timezone-selector.js | window.cmpTimezoneSelector |
+| #JS-su4917p5 | system-message.js | window.cmpSystemMessage |
+| #JS-Gn38YPCx | system-messages.js | window.cmpSystemMessages |
+| #JS-ed2z5Mao | cell-num.js | window.cmpCellNum |
+| #JS-L22cnWGC | sortable-header.js | window.cmpSortableHeader |
+| #JS-2d36obxo | coin-block.js | window.cmpCoinBlock |
 
 **shared/utils/** (утилиты, загружаемые до Vue):
 
-| Файл | Идентификатор на window |
-|------|-------------------------|
-| hash-generator.js | window.hashGenerator |
-| auto-markup.js | window.autoMarkup |
-| pluralize.js | window.pluralize |
-| class-manager.js | window.classManager |
-| column-visibility-mixin.js | window.columnVisibilityMixin |
-| layout-sync.js | window.layoutSync |
-| messages-store.js | window.AppMessages, window.messagesStore |
+| ID | Файл | Идентификатор на window |
+|------|------|-------------------------|
+| #JS-9m2N115w | hash-generator.js | window.hashGenerator |
+| #JS-1oAiR1jy | auto-markup.js | window.autoMarkup |
+| #JS-mczTXmZo | pluralize.js | window.pluralize |
+| #JS-492QR3zK | class-manager.js | window.classManager |
+| #JS-Vn377WRx | column-visibility-mixin.js | window.columnVisibilityMixin |
+| #JS-pw26xFm7 | layout-sync.js | window.layoutSync |
+| #JS-1Ccp719R | messages-store.js | window.AppMessages, window.messagesStore |
 
 **core / app (вне текущей области теста):**
 
-| Файл | Идентификатор на window | Примечание |
-|------|-------------------------|------------|
-| core/modules-config.js | window.modulesConfig | Конфиг загрузчика |
-| app/app-ui-root.js | window.appRoot, window.appInit | Инициализация приложения (не сканируется тестом) |
-| shared/templates/file-header-template.js | window.FILE_HEADER_TEMPLATE_REF = true | Примитив — при расширении теста потребуется исключение |
+| ID | Файл | Идентификатор на window | Примечание |
+|------|------|-------------------------|------------|
+| #JS-os34Gxk3 | core/modules-config.js | window.modulesConfig | Конфиг загрузчика |
+| #JS-yx22mAv8 | app/app-ui-root.js | window.appRoot, window.appInit | Инициализация приложения (не сканируется тестом) |
+| #JS-EsMQyEpA | shared/templates/file-header-template.js | window.FILE_HEADER_TEMPLATE_REF = true | Примитив — при расширении теста потребуется исключение |
 
 ### 2. Чтение с `window` (не мутация, RRG не запрещает)
 
@@ -155,25 +155,25 @@ flowchart TB
 
 ### 3. Реактивное состояние (store / state)
 
-| Расположение | Назначение |
-|--------------|------------|
-| core/state/ui-state.js | Флаги загрузки, язык тултипов, метаданные кэша |
-| core/state/auth-state.js | OAuth-сессия, токен, статус входа |
-| core/state/loading-state.js | Индикаторы загрузки по операциям |
-| shared/utils/messages-store.js | Реактивный store сообщений (Vue.reactive или fallback), API: push, dismiss, clear |
-| app/app-ui-root.js | Корневой компонент, глобальные флаги темы/языка |
+| ID | Расположение | Назначение |
+|------|--------------|------------|
+| #JS-RX2UHzMh | core/state/ui-state.js | Флаги загрузки, язык тултипов, метаданные кэша |
+| #JS-id3oaqeo | core/state/auth-state.js | OAuth-сессия, токен, статус входа |
+| #JS-gH2qNvcT | core/state/loading-state.js | Индикаторы загрузки по операциям |
+| #JS-1Ccp719R | shared/utils/messages-store.js | Реактивный store сообщений (Vue.reactive или fallback), API: push, dismiss, clear |
+| #JS-yx22mAv8 | app/app-ui-root.js | Корневой компонент, глобальные флаги темы/языка |
 
 Мутации только через сеттеры соответствующих модулей; компоненты не мутируют состояние напрямую.
 
 ### 4. Использование innerHTML
 
-| Файл | Контекст | В зоне RRG-теста? |
-|------|----------|--------------------|
-| app/templates/postgres-settings-template.js | Вставка `<script type="text/x-template">` для Vue | Нет (область теста: app/components и shared/components; app/templates не входит) |
-| is/cloudflare/edge-api/src/auth.js | Страницы колбэка OAuth (не Vue) | Нет |
-| is/V2_logic.js | Legacy UI, не компоненты Vue | Нет |
+| ID | Файл | Контекст | В зоне RRG-теста? |
+|------|------|----------|--------------------|
+| #JS-ZP2M2QVZ | app/templates/postgres-settings-template.js | Вставка `<script type="text/x-template">` для Vue | Нет (область теста: app/components и shared/components; app/templates не входит) |
+| #JS-oi2C6djt | is/cloudflare/edge-api/src/auth.js | Страницы колбэка OAuth (не Vue) | Нет |
+| #JS-ry3942o9 | is/V2_logic.js | Legacy UI, не компоненты Vue | Нет |
 
-При расширении области проверки на `app/templates/` для postgres-settings-template.js потребуется исключение (шаблонная регистрация) или замена способа регистрации шаблона.
+При расширении области проверки на `app/templates/` для #JS-ZP2M2QVZ postgres-settings-template.js потребуется исключение (шаблонная регистрация) или замена способа регистрации шаблона.
 
 ### 5. Исключения в коде теста
 
@@ -189,16 +189,16 @@ flowchart TB
 | Preflight | #JS-NrBeANnz (is/scripts/preflight.js) | Шаг 6: вызов frontend:reactivity:check |
 | Cursor rule | .cursor/rules/global-rules/rrg-frontend.mdc | RRG при правках app/, shared/components/; globs: app/**/*.js, shared/components/**/*.js |
 | Causality registry | id:sk-3b1519 (is/skills/causality-registry.md) | Хеш #for-rrg-contour для @causality/@skill-anchor при ссылке на контур RRG |
-| Index AIS | docs/index-ais.md | Генерируется в preflight (generate-index-ais.js) из docs/ais/; id:ais-c4e9b2 входит в индекс |
-| Module loader | core/module-loader.js | Порядок загрузки, window.modulesConfig |
-| Modules config | core/modules-config.js | Зависимости и порядок скриптов |
+| Index AIS | id:docidx-3022eb (docs/index-ais.md) | Генерируется в preflight (generate-index-ais.js) из docs/ais/; id:ais-c4e9b2 входит в индекс |
+| Module loader | #JS-xj43kftu (core/module-loader.js) | Порядок загрузки, window.modulesConfig |
+| Modules config | #JS-os34Gxk3 (core/modules-config.js) | Зависимости и порядок скриптов |
 
 ## Ссылки
 
 - Скилл: id:sk-318305 (app/skills/ui-architecture.md)
 - Скилл State: id:sk-a17d41 (core/skills/state-events.md)
 - Causality registry: id:sk-3b1519 (is/skills/causality-registry.md) — хеш #for-rrg-contour
-- Индекс AIS: docs/index-ais.md (содержит id:ais-c4e9b2)
+- Индекс AIS: id:docidx-3022eb (docs/index-ais.md) (содержит id:ais-c4e9b2)
 - Тест: #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js)
-- План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: docs/deletion-log.md
+- План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log (docs/deletion-log.md)
 

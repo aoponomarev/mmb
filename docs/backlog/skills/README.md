@@ -29,7 +29,7 @@ Backlog skills must align with arch-foundation when promoted: no mbb/mmb in path
 
 - Adapted markdown files (MBB references removed, frontmatter added)
 - No wiring: no `@skill` anchors, no causality-registry, no id-registry
-- Not scanned by `validate-skills` or `generate-skills-index`
+- Not scanned by #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js) or #JS-mYo7imVc (is/scripts/architecture/generate-skills-index.js)
 
 ## When to promote
 

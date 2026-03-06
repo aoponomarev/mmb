@@ -37,7 +37,7 @@ last_updated: "2026-03-04"
 
 ### Pillar 1: CLI Scripts -> Native AI Tools
 - [ ] **Tool `run_preflight`**: Wrapper around `npm run preflight`. Captures errors and updates `fragility_stats` in the DB.
-- [ ] **Tool `create_skill`**: Native interface for generating new skill files (replaces `node is/scripts/architecture/create-skill.js`).
+- [ ] **Tool `create_skill`**: Native interface for generating new skill files (replaces #JS-25iDr22X is/scripts/architecture/create-skill.js).
 
 ### Pillar 2: Dynamic Causality Graph (Smart Resources)
 - [ ] **Resource `causality_graph://...`**: Dynamic JSON/Markdown resource returning all files connected to a specific hash, read directly from the `dependency_graph` table (which is faster than grep).
@@ -56,12 +56,12 @@ last_updated: "2026-03-04"
 
 ### Pillar 6: Invariant Guard (Hallucination Protection)
 - [ ] Integrate invariant checking directly into the MCP `update_skill` or `refactor_code` loop (if implemented as tools), or enhance `run_preflight` to return strictly formatted invariant violations.
-- [ ] Sync the `validate-causality-invariant.js` output to update the `dependency_graph` table upon success.
+- [ ] Sync the #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js) output to update the `dependency_graph` table upon success.
 
 ## Phase 4: System Integration & Skilling
 *Objective: Teach the system how to use itself.*
-- [ ] Add `is/skills/arch-mcp-ecosystem.md` explaining the Server, SQLite, and Tools.
-- [ ] Update `is/skills/process-causality-harvesting.md` to reference the new SQLite backlog approach.
+- [ ] Add id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md) explaining the Server, SQLite, and Tools.
+- [ ] Update id:sk-802f3b (is/skills/process-causality-harvesting.md) to reference the new SQLite backlog approach.
 - [ ] Enhance `.cursorrules` to instruct the agent to use MCP tools instead of CLI for these specific tasks.
 
 ## Phase 5: Final Documentation

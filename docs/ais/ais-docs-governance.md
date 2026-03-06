@@ -37,16 +37,16 @@ graph TD
 ## Components & Contracts
 
 - id-registry.json + validate-global-md-ids — id-contract rollout complete.
-- LIR complete; path-contracts.js SSOT for skip patterns.
-- `id:ais-9f4e2d` - anti-staleness architecture and validation gates.
-- `is/contracts/docs/id-registry.json` - global SSOT: id -> path for all 104 project markdown files.
+- LIR complete; #JS-cMCNbcJ1 (path-contracts.js) SSOT for skip patterns.
+- id:ais-9f4e2d (docs/ais/ais-anti-staleness.md) — anti-staleness architecture and validation gates.
+- is/contracts/docs/id-registry.json — global SSOT: id → path for all 104 project markdown files.
 
 ## Active Gates (preflight)
 
-| Gate | Script | Scope |
-|------|--------|-------|
-| All markdown have `id` | `validate-global-md-ids.js` | 104 files |
-| `id:` links resolve | `validate-id-contract-links.js` | all `.md` |
-| No path links in active docs | `audit-path-centric-doc-links.js` | `docs/**` active |
-| No path links in active skills | `audit-path-centric-skill-links.js` | `skills/**` active |
-| UTF-8 no BOM, no mojibake | `validate-docs-encoding.js` | `docs/**` |
+| ID | Gate | Script | Scope |
+|------|------|--------|-------|
+| #JS-Hx2xaHE8 | All markdown have `id` | validate-global-md-ids.js | 104 files |
+| #JS-ht4FZQe4 | `id:` links resolve | validate-id-contract-links.js | all `.md` |
+| #JS-3e2BNNyp | No path links in active docs | audit-path-centric-doc-links.js | docs/** active |
+| #JS-E4UcKE1H | No path links in active skills | audit-path-centric-skill-links.js | skills/** active |
+| #JS-BK2i557V | UTF-8 no BOM, no mojibake | validate-docs-encoding.js | docs/** |

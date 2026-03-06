@@ -84,7 +84,7 @@ last_updated: "${new Date().toISOString().slice(0, 10)}"
         const title = parseH1(content);
         const id = fm.id || path.basename(f, ".md");
         const relPath = `ais/${f}`;
-        md += `- [${id}](${relPath}) — ${title}\n`;
+        md += `- [id:${id}](${relPath}) — ${title}\n`;
     }
 
     return md;

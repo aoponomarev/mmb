@@ -20,19 +20,19 @@ related_ais:
 
 ## Текущее состояние (проверено на момент создания)
 
-- `is/yandex/functions/api-gateway/README.md` используется как техническая сводка для функции API Gateway.
+- id:readme-9e335c (is/yandex/functions/api-gateway/README.md) используется как техническая сводка для функции API Gateway.
 - Основной контракт чтения и записи данных по монетам зафиксирован в:
-  - id:ais-e41384
-  - связанных модулях `core/api/market-snapshot-*` и `core/contracts/market-contracts.js`.
+  - id:ais-e41384 (docs/ais/ais-yandex-cloud.md)
+  - связанных модулях core/api/market-snapshot-* и #JS-P149SzKB (core/contracts/market-contracts.js).
 
 ## Комплект обязательных контрактов и гейтов
 
 - `docs/ais`-спецификация имеет статус `draft`, будет продвинута в `incomplete` после полной ревизии donor-paths и связей.
-- Legacy paths: skip patterns в path-contracts.js.
+- Legacy paths: skip patterns в #JS-cMCNbcJ1 (path-contracts.js).
 - Перед каждым значимым изменением проверить:
-  - `node is/scripts/architecture/validate-docs-ids.js`
-  - `node is/scripts/architecture/validate-causality.js`
-  - `node is/scripts/architecture/validate-skill-anchors.js`
+  - #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js)
+  - #JS-69pjw66d (is/scripts/architecture/validate-causality.js)
+  - #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js)
 - Обязательные поля в frontmatter заполнены (`id`, `status`, `last_updated`, `related_skills`, `related_ais`).
 
 ## Микро-правила интеграции для этой области
@@ -50,6 +50,6 @@ related_ais:
    - соответствует текущей архитектуре,
    - либо заменить новым эквивалентом, либо исключить.
 2. После подтверждения перенести ключевые выводы в:
-   - id:sk-d76b68
-   - id:sk-3225b2
+   - id:sk-d76b68 (core/skills/ai-providers-architecture.md)
+   - id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md)
    (если требуется в рамках следующих этапов миграции).

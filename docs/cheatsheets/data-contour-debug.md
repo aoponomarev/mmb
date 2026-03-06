@@ -8,7 +8,7 @@ last_updated: "2026-03-04"
 
 # Шпаргалка: Контур данных монет — трасса вызовов и дебаг
 
-> Быстрый справочник для отладки контура данных. Полная спецификация — `id:ais-3732ce`, `id:ais-e41384`.
+> Быстрый справочник для отладки контура данных. Полная спецификация — id:ais-3732ce (docs/ais/ais-data-pipeline.md), id:ais-e41384 (docs/ais/ais-yandex-cloud.md).
 
 ## Трасса вызовов (для дебага)
 
@@ -24,12 +24,12 @@ last_updated: "2026-03-04"
 10. `recalculateAllMetrics()`
 11. `sortedCoins` → рендер таблицы
 
-## Порядок загрузки модулей (`core/modules-config.js`)
+## Порядок загрузки модулей (#JS-os34Gxk3 core/modules-config.js)
 
 - `ssot-policies` → `cache-config` → `storage-layers` → `cache-manager` → `request-registry`
 - `coingecko-provider` → `yandex-cache-provider` → `data-provider-manager` → `app-ui-root`
 
-## Ключевые методы `app-ui-root.js`
+## Ключевые методы #JS-yx22mAv8 (app-ui-root.js)
 
 | Метод | Назначение |
 |-------|------------|
@@ -52,6 +52,6 @@ last_updated: "2026-03-04"
 
 ## Известные нюансы
 
-- **Тайминговый дрейф:** SSOT задаёт 2h, в `app-ui-root.js` местами hardcoded 4h — выровнять.
+- **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 (app-ui-root.js) местами hardcoded 4h — выровнять.
 - **warm/cold слои:** Заявлены как IndexedDB, фактически fallback на localStorage с префиксами `idb_<layer>_...`.
-- **Серверный ingest:** Полная реализация cron/fetcher — в `is/yandex/functions/`, точки интеграции — `yandex-cache-provider`.
+- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (yandex-cache-provider.js).

@@ -9,7 +9,7 @@ last_updated: "2026-03-04"
 # Data Contour: Monitoring & Troubleshooting
 
 > Runbook для диагностики контура данных монет (PostgreSQL + CoinGecko dual-channel).
-> См. `id:ais-e41384`, `id:ais-3732ce`.
+> См. id:ais-e41384 (docs/ais/ais-yandex-cloud.md), id:ais-3732ce (docs/ais/ais-data-pipeline.md).
 
 ## Pre-Flight Checks
 

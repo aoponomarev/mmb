@@ -1,7 +1,7 @@
 ---
 id: docidx-0b048e
 status: active
-last_updated: "2026-03-05"
+last_updated: "2026-03-06"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -18,65 +18,65 @@ last_updated: "2026-03-05"
 
 ## IS Layer
 
-- [arch-backend-core](../is/skills/arch-backend-core.md) — Architecture: Backend Core & Data Pipeline
-- [arch-causality](../is/skills/arch-causality.md) — Architecture: Causality & Rationale Tracking
-- [arch-cloudflare-infrastructure](../is/skills/arch-cloudflare-infrastructure.md) — Cloudflare Infrastructure
-- [arch-control-plane](../is/skills/arch-control-plane.md) — Architecture: Control Plane
-- [arch-dependency-governance](../is/skills/arch-dependency-governance.md) — Architecture: Dependency Governance
-- [arch-external-parity](../is/skills/arch-external-parity.md) — Architecture: External Infrastructure Parity
-- [arch-foundation](../is/skills/arch-foundation.md) — Architectural Foundation (Naming, Paths, SSOT, MCP)
-- [arch-layout-governance](../is/skills/arch-layout-governance.md) — Architecture: Layout & README Governance
-- [arch-mcp-ecosystem](../is/skills/arch-mcp-ecosystem.md) — MCP Ecosystem (LLMOps)
-- [arch-monitoring](../is/skills/arch-monitoring.md) — Architecture: Monitoring & Observability
-- [arch-rollback](../is/skills/arch-rollback.md) — Architecture: Rollback & Recovery
-- [arch-skills-mcp](../is/skills/arch-skills-mcp.md) — Architecture: Skills & MCP System
-- [arch-testing-ci](../is/skills/arch-testing-ci.md) — Architecture: Testing Strategy & CI
-- [causality-registry](../is/skills/causality-registry.md) — Causality Hash Registry
-- [process-ai-collaboration](../is/skills/process-ai-collaboration.md) — AI Collaboration Protocol
-- [process-causality-harvesting](../is/skills/process-causality-harvesting.md) — Causality Harvesting
-- [process-code-anchors](../is/skills/process-code-anchors.md) — Process: Code Anchors (Skill-to-Code Linking)
-- [process-code-documentation](../is/skills/process-code-documentation.md) — Code Documentation
-- [process-docs-lifecycle](../is/skills/process-docs-lifecycle.md) — Docs Lifecycle Pipeline
-- [process-env-sync](../is/skills/process-env-sync.md) — Process: Environment Sync Governance
-- [process-evolution-logging](../is/skills/process-evolution-logging.md) — Process: Project Evolution Logging
-- [process-file-header-standard](../is/skills/process-file-header-standard.md) — Process: File Header Standard (Structured Code File Headers)
-- [process-language-policy](../is/skills/process-language-policy.md) — Process: Language & Terminology Governance
-- [process-legacy-unknowns-causality](../is/skills/process-legacy-unknowns-causality.md) — Legacy Unknowns (Causality)
-- [process-lib-governance](../is/skills/process-lib-governance.md) — Lib Governance
-- [process-migration-prioritization](../is/skills/process-migration-prioritization.md) — Process: Migration Prioritization Criteria
-- [process-prefix-registry](../is/skills/process-prefix-registry.md) — Process: Prefix Registry Health
-- [process-reasoning-audit](../is/skills/process-reasoning-audit.md) — Process: Reasoning Audit Protocol
-- [process-secrets-hygiene](../is/skills/process-secrets-hygiene.md) — Process: Secrets Hygiene & Git Boundary
-- [process-skill-governance](../is/skills/process-skill-governance.md) — Process: Skill Placement & Profiling
-- [process-token-discipline](../is/skills/process-token-discipline.md) — Token Discipline (Context Efficiency)
-- [process-windows-shell](../is/skills/process-windows-shell.md) — Process: Windows & PowerShell Patterns for AI Agents
-- [README](../is/skills/README.md) — Knowledge Base & MCP Skills (`is/skills/`)
+- [id:sk-0e193a](../is/skills/process-docs-lifecycle.md) — Docs Lifecycle Pipeline
+- [id:sk-130fa2](../is/skills/process-lib-governance.md) — Lib Governance
+- [id:sk-3225b2](../is/skills/arch-mcp-ecosystem.md) — MCP Ecosystem (LLMOps)
+- [id:sk-3b1519](../is/skills/causality-registry.md) — Causality Hash Registry
+- [id:sk-3df9f9](../is/skills/process-legacy-unknowns-causality.md) — Legacy Unknowns (Causality)
+- [id:sk-483943](../is/skills/arch-foundation.md) — Architectural Foundation (Naming, Paths, SSOT, MCP)
+- [id:sk-4b05be](../is/skills/process-prefix-registry.md) — Process: Prefix Registry Health
+- [id:sk-5c0ef8](../is/skills/arch-backend-core.md) — Architecture: Backend Core & Data Pipeline
+- [id:sk-5cd3c9](../is/skills/arch-cloudflare-infrastructure.md) — Cloudflare Infrastructure
+- [id:sk-683b3c](../is/skills/process-evolution-logging.md) — Process: Project Evolution Logging
+- [id:sk-6eeb9a](../is/skills/arch-rollback.md) — Architecture: Rollback & Recovery
+- [id:sk-73dcca](../is/skills/arch-external-parity.md) — Architecture: External Infrastructure Parity
+- [id:sk-7d810a](../is/skills/arch-skills-mcp.md) — Architecture: Skills & MCP System
+- [id:sk-802f3b](../is/skills/process-causality-harvesting.md) — Causality Harvesting
+- [id:sk-883639](../is/skills/process-language-policy.md) — Process: Language & Terminology Governance
+- [id:sk-8991cd](../is/skills/process-code-anchors.md) — Process: Code Anchors (Skill-to-Code Linking)
+- [id:sk-905c12](../is/skills/process-windows-shell.md) — Process: Windows & PowerShell Patterns for AI Agents
+- [id:sk-918276](../is/skills/process-env-sync.md) — Process: Environment Sync Governance
+- [id:sk-92384e](../is/skills/arch-monitoring.md) — Architecture: Monitoring & Observability
+- [id:sk-a304ea](../is/skills/process-token-discipline.md) — Token Discipline (Context Efficiency)
+- [id:sk-a3f46c](../is/skills/README.md) — Knowledge Base & MCP Skills (`is/skills/`)
+- [id:sk-b77a8d](../is/skills/process-migration-prioritization.md) — Process: Migration Prioritization Criteria
+- [id:sk-b7e114](../is/skills/process-secrets-hygiene.md) — Process: Secrets Hygiene & Git Boundary
+- [id:sk-bb5cf3](../is/skills/arch-dependency-governance.md) — Architecture: Dependency Governance
+- [id:sk-c62fb6](../is/skills/arch-layout-governance.md) — Architecture: Layout & README Governance
+- [id:sk-cecbcc](../is/skills/process-ai-collaboration.md) — AI Collaboration Protocol
+- [id:sk-d599bd](../is/skills/arch-causality.md) — Architecture: Causality & Rationale Tracking
+- [id:sk-d6777d](../is/skills/arch-testing-ci.md) — Architecture: Testing Strategy & CI
+- [id:sk-d763e7](../is/skills/process-skill-governance.md) — Process: Skill Placement & Profiling
+- [id:sk-d7a2cc](../is/skills/arch-control-plane.md) — Architecture: Control Plane
+- [id:sk-d7bf67](../is/skills/process-reasoning-audit.md) — Process: Reasoning Audit Protocol
+- [id:sk-f449b3](../is/skills/process-code-documentation.md) — Code Documentation
+- [id:sk-f7e2a1](../is/skills/process-file-header-standard.md) — Process: File Header Standard (Structured Code File Headers)
 
 ## CORE Layer
 
-- [ai-providers-architecture](../core/skills/ai-providers-architecture.md) — AI Providers Architecture
-- [api-layer](../core/skills/api-layer.md) — API Layer & Data Providers
-- [async-contracts](../core/skills/async-contracts.md) — Protocol: Node.js Async Safety & Timeout Contracts
-- [cache-layer](../core/skills/cache-layer.md) — Cache Layer Architecture
-- [config-contracts](../core/skills/config-contracts.md) — Config Layer & SSOT Governance
-- [data-providers-architecture](../core/skills/data-providers-architecture.md) — Data Providers Architecture
-- [domain-portfolio](../core/skills/domain-portfolio.md) — Domain: Portfolio Engine
-- [external-integrations](../core/skills/external-integrations.md) — External Integrations
-- [messages-architecture](../core/skills/messages-architecture.md) — Messages Architecture
-- [metrics-air-model](../core/skills/metrics-air-model.md) — Metrics AIR Model
-- [README](../core/skills/README.md) — Domain Skills (`core/skills/`)
-- [state-events](../core/skills/state-events.md) — State, Events & Module Loading
+- [id:sk-02d3ea](../core/skills/config-contracts.md) — Config Layer & SSOT Governance
+- [id:sk-224210](../core/skills/data-providers-architecture.md) — Data Providers Architecture
+- [id:sk-22dc19](../core/skills/metrics-air-model.md) — Metrics AIR Model
+- [id:sk-3c832d](../core/skills/cache-layer.md) — Cache Layer Architecture
+- [id:sk-471974](../core/skills/async-contracts.md) — Protocol: Node.js Async Safety & Timeout Contracts
+- [id:sk-635743](../core/skills/README.md) — Domain Skills (`core/skills/`)
+- [id:sk-7b4ee5](../core/skills/external-integrations.md) — External Integrations
+- [id:sk-a17d41](../core/skills/state-events.md) — State, Events & Module Loading
+- [id:sk-bb7c8e](../core/skills/api-layer.md) — API Layer & Data Providers
+- [id:sk-c3d639](../core/skills/domain-portfolio.md) — Domain: Portfolio Engine
+- [id:sk-d76b68](../core/skills/ai-providers-architecture.md) — AI Providers Architecture
+- [id:sk-f2bc48](../core/skills/messages-architecture.md) — Messages Architecture
 
 ## APP Layer
 
-- [bootstrap-vue-integration](../app/skills/bootstrap-vue-integration.md) — Bootstrap Vue Integration
-- [component-classes-management](../app/skills/component-classes-management.md) — Component Classes Management
-- [file-protocol-cors-guard](../app/skills/file-protocol-cors-guard.md) — Guard: file:// Protocol & CORS
-- [icon-manager](../app/skills/icon-manager.md) — Icon Manager (Coin Assets)
-- [reactive-localization](../app/skills/reactive-localization.md) — Reactive Localization
-- [README](../app/skills/README.md) — Frontend Application Skills (`app/skills/`)
-- [rrg-refactor-on-edit](../app/skills/rrg-refactor-on-edit.md) — RRG refactor when editing reactive code
-- [ui-architecture](../app/skills/ui-architecture.md) — Frontend UI Architecture (RRG & UI Contracts)
-- [ux-principles](../app/skills/ux-principles.md) — UX: Design Principles & Interface Contracts
-- [vue-implementation-patterns](../app/skills/vue-implementation-patterns.md) — Vue Implementation Patterns
+- [id:sk-318305](../app/skills/ui-architecture.md) — Frontend UI Architecture (RRG & UI Contracts)
+- [id:sk-502074](../app/skills/reactive-localization.md) — Reactive Localization
+- [id:sk-7cf3f7](../app/skills/file-protocol-cors-guard.md) — Guard: file:// Protocol & CORS
+- [id:sk-95710f](../app/skills/README.md) — Frontend Application Skills (`app/skills/`)
+- [id:sk-add9a6](../app/skills/component-classes-management.md) — Component Classes Management
+- [id:sk-cb75ec](../app/skills/vue-implementation-patterns.md) — Vue Implementation Patterns
+- [id:sk-d4f8a2](../app/skills/rrg-refactor-on-edit.md) — RRG refactor when editing reactive code
+- [id:sk-e0b8f3](../app/skills/ux-principles.md) — UX: Design Principles & Interface Contracts
+- [id:sk-eeb23d](../app/skills/bootstrap-vue-integration.md) — Bootstrap Vue Integration
+- [id:sk-icon-mgr](../app/skills/icon-manager.md) — Icon Manager (Coin Assets)
 

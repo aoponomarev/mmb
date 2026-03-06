@@ -20,7 +20,7 @@ last_updated: "2026-03-04"
 
 Cursor использует **встроенный** preview (не расширение VS Code). `markdown.styles` не применяется.
 
-**Правило frontmatter (везде):** Любой markdown с YAML frontmatter должен иметь пустую строку перед закрывающим `---`. Иначе CommonMark парсит вторую `---` как setext underline, и строка `id: ...` рендерится как огромный h2. См. `#for-frontmatter-format` в `process-docs-lifecycle.md`.
+**Правило frontmatter (везде):** Любой markdown с YAML frontmatter должен иметь пустую строку перед закрывающим `---`. Иначе CommonMark парсит вторую `---` как setext underline, и строка `id: ...` рендерится как огромный h2. См. `#for-frontmatter-format` в id:sk-0e193a (is/skills/process-docs-lifecycle.md).
 
 ```yaml
 ---

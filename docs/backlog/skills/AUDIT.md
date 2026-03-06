@@ -26,7 +26,7 @@ last_updated: "2026-03-04"
 
 ### 2. Paths SSOT (arch-foundation, paths.js)
 
-- **scripts/health-check.js** — Wrong. Actual: `is/scripts/infrastructure/health-check.js`, invoked via `npm run health-check`.
+- **scripts/health-check.js** — Wrong. Actual: #JS-ja3UnjWr (is/scripts/infrastructure/health-check.js), invoked via `npm run health-check`.
 - **events/SKILL_CANDIDATES.json** — Not in PATHS. When promoting: use PATHS or add to paths.js; clarify location per project layout.
 - **drafts/tasks/** — PATHS has drafts: docs/drafts. Канонично: docs/drafts/tasks/ при создании.
 

@@ -23,7 +23,7 @@ related_ais:
 
 ## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
 - **Cloudflare Workers (CORS Proxy):** Браузеры блокируют кросс-доменные запросы с `file://`. Worker выступает в роли "прокладки", которая добавляет нужные CORS-заголовки и скрывает реальные эндпоинты (CoinGecko, Binance).
-- **Yandex Cloud (Geo-оптимизация):** Для пользователей из РФ/СНГ некоторые сервисы (например, YandexGPT или кэши) маршрутизируются через инфраструктуру Яндекса. Ingest/read контуры данных монет (cron fetcher, API Gateway, PostgreSQL) — см. `id:ais-e41384`.
+- **Yandex Cloud (Geo-оптимизация):** Для пользователей из РФ/СНГ некоторые сервисы (например, YandexGPT или кэши) маршрутизируются через инфраструктуру Яндекса. Ingest/read контуры данных монет (cron fetcher, API Gateway, PostgreSQL) — см. id:ais-e41384 (docs/ais/ais-yandex-cloud.md).
 - **N8N (Рабочие процессы):** Внешние автоматизации (например, сбор новостей или тяжелая агрегация) вынесены в N8N-вебхуки.
 - **AI Providers (Абстракция):** В приложении заложен интерфейс `BaseAIProvider` для работы с LLM. Основной провайдер сейчас — YandexGPT (через прокси).
 
@@ -34,9 +34,9 @@ related_ais:
 - **Отказоустойчивость AI:** `AIProviderManager` должен поддерживать механизм fallback-провайдеров на случай, если основная модель (например, YandexGPT) недоступна или превышен лимит.
 
 ## Компоненты и Контракты (Components & Contracts)
-- `core/api/cloudflare/*` — клиенты для взаимодействия с Cloudflare Workers.
-- `core/api/ai-provider-manager.js` — роутер AI-моделей.
-- `is/yandex/` — код серверлесс-функций Яндекса.
+- core/api/cloudflare/* — клиенты для взаимодействия с Cloudflare Workers.
+- #JS-MW2TvCHg (core/api/ai-provider-manager.js) — роутер AI-моделей.
+- is/yandex/ — код серверлесс-функций Яндекса.
 
 ## Лог перепривязки путей (Path Rewrite Log)
 

@@ -1,7 +1,7 @@
 ---
 id: docidx-3022eb
 status: active
-last_updated: "2026-03-05"
+last_updated: "2026-03-06"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -15,18 +15,18 @@ last_updated: "2026-03-05"
 
 ---
 
-- [ais-1c4d92](ais/TEMPLATE.md) — AIS: [Название Модуля/Подсистемы]
-- [ais-9f4e2d](ais/ais-anti-staleness.md) — AIS: Антиустареватель скиллов и казуальностей (Skill & Causality Anti-Staleness)
-- [ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
-- [ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
-- [ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
-- [ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
-- [ais-f7e2a1](ais/ais-file-header-standard.md) — AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
-- [ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
-- [ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
-- [ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
-- [ais-8d3c2a](ais/ais-mcp-data-contour.md) — AIS: Контур данных MCP (MCP Data Contour)
-- [ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
-- [ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
-- [ais-91b7f4](ais/ais-workspace-storage-contour.md) — AIS: Контур хранения workspace-настроек (auth/non-auth)
-- [ais-e41384](ais/ais-yandex-cloud.md) — AIS: Yandex Cloud — Ingest и Read контуры данных монет
+- [id:ais-1c4d92](ais/TEMPLATE.md) — AIS: [Название Модуля/Подсистемы]
+- [id:ais-9f4e2d](ais/ais-anti-staleness.md) — AIS: Антиустареватель скиллов и казуальностей (Skill & Causality Anti-Staleness)
+- [id:ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
+- [id:ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
+- [id:ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
+- [id:ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
+- [id:ais-f7e2a1](ais/ais-file-header-standard.md) — AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
+- [id:ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
+- [id:ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, AI, N8N)
+- [id:ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
+- [id:ais-8d3c2a](ais/ais-mcp-data-contour.md) — AIS: Контур данных MCP (MCP Data Contour)
+- [id:ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
+- [id:ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
+- [id:ais-91b7f4](ais/ais-workspace-storage-contour.md) — AIS: Контур хранения workspace-настроек (auth/non-auth)
+- [id:ais-e41384](ais/ais-yandex-cloud.md) — AIS: Yandex Cloud — Ingest и Read контуры данных монет

@@ -23,7 +23,7 @@ related_ais:
 
 ## Что входит в workspace
 
-Контракт workspace задается в `core/config/workspace-config.js`:
+Контракт workspace задается в #JS-fW2M5Jbg (core/config/workspace-config.js):
 
 - `activeModelId`
 - `activeCoinSetIds`

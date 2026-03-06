@@ -9,22 +9,22 @@ last_updated: "2026-03-04"
 # Бэклог: Чистка хвостов антиустаревателя (fix-anti-staleness)
 
 > Статус: Отложено
-> План: дистиллирован в `id:ais-9f4e2d`
+> План: дистиллирован в id:ais-9f4e2d (docs/ais/ais-anti-staleness.md)
 > Приоритет: Низкий
 
 ## Описание
 
-При внедрении Фазы 3 (Batch Review) скрипт `validate-dead-links.js` обнаруживал сотни dead links. После доработки фильтров и исключения источников — ~53 ссылки (источники: skills, docs без plans/backlog/done).
+При внедрении Фазы 3 (Batch Review) скрипт #JS-y23qJxuC (validate-dead-links.js) обнаруживал сотни dead links. После доработки фильтров и исключения источников — ~53 ссылки (источники: skills, docs без plans/backlog/done).
 
 ## Текущее состояние (после доработки фильтров)
 
 ### Dead links (validate-dead-links)
 
 - **Общее число:** ~49 (filtered) / ~262 (--all; было 400, исправлено 138 с 100% уверенностью)
-- **Источник:** `npm run skills:batch-review` → `validate-dead-links.js`
-- **SSOT конфигурации:** `is/contracts/path-contracts.js` — EXCLUDE_SOURCE_REL, SKIP_LINK_PATTERNS, resolvePath (общий с validate-skills).
+- **Источник:** `npm run skills:batch-review` → #JS-y23qJxuC (is/scripts/architecture/validate-dead-links.js)
+- **SSOT конфигурации:** #JS-cMCNbcJ1 (is/contracts/path-contracts.js) — EXCLUDE_SOURCE_REL, SKIP_LINK_PATTERNS, resolvePath (общий с validate-skills).
 
-**Подтверждение:** только агент через консольные проверки (`validate-dead-links`, `validate-dead-links --json`). Нет ручного шага «подтверждено».
+**Подтверждение:** только агент через консольные проверки (#JS-y23qJxuC `validate-dead-links`, #JS-y23qJxuC `validate-dead-links --json`). Нет ручного шага «подтверждено».
 
 ## Реестр dead-links (проект)
 
@@ -37,7 +37,7 @@ last_updated: "2026-03-04"
 
 ### Dead links
 - [x] **Уточнить фильтры validate-dead-links** — сделано: API, donor, placeholder, exclude sources
-- [x] **path-contracts.js** — SSOT для exclusions, skip patterns, resolvePath; validate-skills и validate-dead-links импортируют из контракта
+- [x] **#JS-cMCNbcJ1 (path-contracts.js)** — SSOT для exclusions, skip patterns, resolvePath; validate-skills и validate-dead-links импортируют из контракта
 - [ ] **Пройти по списку dead_links** — для каждого: исправить путь, обновить ссылку или пометить как исключение
 - [x] **Исправлено (100% уверенность):** core/api/market-contracts.js→core/contracts/market-contracts.js (arch-backend-core, api-layer); skill-пути +.md в ais-anti-staleness (135 замен)
 - [ ] **Реестр dead-links-registry** — создать JSONL, индекс по source_file, предпроверка при синхронизации
@@ -48,7 +48,7 @@ last_updated: "2026-03-04"
 - [ ] **4.2** Path existence в Core Rules — расширить проверку на Core Rules (эвристика)
 - [ ] **4.3** CI integration — GitHub Actions: комментировать PR списком affected skills
 - [ ] **4.4** MCP tool — `audit_skill_staleness` для агентов
-- [ ] **4.5** #deprecated- in use — validate-causality: warning при использовании #deprecated-X в коде
+- [ ] **4.5** #deprecated- in use — #JS-69pjw66d (is/scripts/architecture/validate-causality.js): warning при использовании #deprecated-X в коде
 
 ## Команды
 
