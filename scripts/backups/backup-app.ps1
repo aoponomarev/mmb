@@ -32,7 +32,7 @@ if (-Not (Test-Path $destDir)) {
 
 # Exclusion lists (folder names and file masks)
 $excludeFolders = @(".git", "node_modules", "dist", "build", "coverage", "logs", ".next", "out")
-$excludeFiles = @("*.log", "*.sqlite", "*.sqlite-*", "state.vscdb*", "*.zip", "*.tar", "*.gz")
+$excludeFiles = @("*.log", "state.vscdb*", "*.zip", "*.tar", "*.gz")
 
 # Create temporary folder
 $tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "app_Backup_Temp_$dateStr"
