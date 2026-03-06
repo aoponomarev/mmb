@@ -5,6 +5,12 @@ reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-05
 reasoning_checksum: 2966c9bc
 last_change: ""
+related_skills:
+  - sk-0e193a
+  - sk-3b1519
+  - sk-883639
+related_ais:
+  - ais-8982e7
 
 ---
 

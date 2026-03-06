@@ -10,6 +10,10 @@ reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-05
 reasoning_checksum: 55766084
 last_change: ""
+related_skills:
+  - sk-0e193a
+  - sk-d763e7
+  - sk-c62fb6
 dependencies:
 updated_at: "2026-03-01T00:00:00.000Z"
 

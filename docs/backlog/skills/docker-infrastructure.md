@@ -9,11 +9,11 @@ last_updated: "2026-03-04"
 # Docker Infrastructure (Deferred)
 
 > **Status**: DEFERRED — Docker not yet deployed in Target App. Move to `is/skills/` when `docker-compose.yml` exists.
-> **Source**: Extracted from arch-backend-core, arch-mcp-ecosystem, arch-rollback, arch-testing-ci, arch-foundation.
+> **Source**: Extracted from id:sk-5c0ef8 (arch-backend-core), id:sk-3225b2 (arch-mcp-ecosystem), id:sk-6eeb9a (arch-rollback), id:sk-d6777d (arch-testing-ci), id:sk-483943 (arch-foundation).
 
 ## Docker Resource Governance
 
-**Goal**: Keep Docker stack stable under mixed load. SSOT: `docker-compose.yml`. *(When settings sync exists: `INFRASTRUCTURE_CONFIG.yaml` per config-contracts — file may not exist yet.)*
+**Goal**: Keep Docker stack stable under mixed load. SSOT: `docker-compose.yml`. *(When settings sync exists: `INFRASTRUCTURE_CONFIG.yaml` per id:sk-02d3ea (core/skills/config-contracts.md) — file may not exist yet.)*
 
 **Network**: Split networks — `public` for externally exposed services, `internal` for private service-to-service traffic.
 
@@ -27,7 +27,7 @@ last_updated: "2026-03-04"
 
 ## WSL2 & Docker Optimization
 
-**Context**: WSL settings depend on hardware profile. When `INFRASTRUCTURE_CONFIG.yaml` exists (config-contracts), use it for profile-specific paths. File: `C:\Users\[User]\.wslconfig`.
+**Context**: WSL settings depend on hardware profile. When `INFRASTRUCTURE_CONFIG.yaml` exists (id:sk-02d3ea (core/skills/config-contracts.md)), use it for profile-specific paths. File: `C:\Users\[User]\.wslconfig`.
 
 **Profiles**: Home (high perf) — processors=12, memory=32GB, swap=8GB; Office — processors=4, memory=8GB, swap=4GB.
 

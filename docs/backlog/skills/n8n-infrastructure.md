@@ -9,7 +9,7 @@ last_updated: "2026-03-04"
 # n8n Infrastructure (Deferred)
 
 > **Status**: DEFERRED — n8n not yet deployed in Target App. Move to `is/skills/` when n8n stack exists.
-> **Source**: Extracted from arch-mcp-ecosystem.
+> **Source**: Extracted from id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md).
 
 ## n8n Workflow Hygiene
 
@@ -33,7 +33,7 @@ last_updated: "2026-03-04"
 
 ## n8n Docker Internals
 
-**SSOT**: Container data directory (.n8n). Data: database.sqlite, config, binaryData. Rule: use Named Volumes (`n8n_data`), not bind mounts on Windows. SQLite access: stop container; `docker cp n8n:/home/node/.n8n/database.sqlite ./backup.sqlite` (replace `n8n` with actual service name from docker-compose); start. Constraints: reset ownership to `node:node` (UID 1000); when restoring, delete `-shm` and `-wal`. *Anti-calque: no mbb/mmb in container names (arch-foundation).*
+**SSOT**: Container data directory (.n8n). Data: database.sqlite, config, binaryData. Rule: use Named Volumes (`n8n_data`), not bind mounts on Windows. SQLite access: stop container; `docker cp n8n:/home/node/.n8n/database.sqlite ./backup.sqlite` (replace `n8n` with actual service name from docker-compose); start. Constraints: reset ownership to `node:node` (UID 1000); when restoring, delete `-shm` and `-wal`. *Anti-calque: no mbb/mmb in container names (id:sk-483943 (is/skills/arch-foundation.md)).*
 
 ## n8n Browser Cache (404 After DB Reset)
 

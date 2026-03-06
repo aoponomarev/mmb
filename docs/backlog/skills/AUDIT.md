@@ -20,11 +20,11 @@ last_updated: "2026-03-04"
 
 ## Findings
 
-### 1. Anti-calque (arch-foundation, naming-rules.js)
+### 1. Anti-calque (id:sk-483943 (arch-foundation), #JS-kXgRFkUV (naming-rules.js))
 
 - **n8n-mbb** in n8n-infrastructure.md — container name violates `FORBIDDEN_TERMS: ['mbb', 'mmb']`. Replace with generic `n8n` or `n8n-app`.
 
-### 2. Paths SSOT (arch-foundation, paths.js)
+### 2. Paths SSOT (id:sk-483943 (arch-foundation), #JS-1xvfg1uj (paths.js))
 
 - **scripts/health-check.js** — Wrong. Actual: #JS-ja3UnjWr (is/scripts/infrastructure/health-check.js), invoked via `npm run health-check`.
 - **events/SKILL_CANDIDATES.json** — Not in PATHS. When promoting: use PATHS or add to paths.js; clarify location per project layout.
@@ -32,7 +32,7 @@ last_updated: "2026-03-04"
 
 ### 3. INFRASTRUCTURE_CONFIG.yaml
 
-- Referenced in docker-infrastructure but **does not exist** in mmb. config-contracts.md declares it SSOT for settings sync. When promoting: create or document as future artifact.
+- Referenced in docker-infrastructure but **does not exist** in mmb. id:sk-02d3ea (core/skills/config-contracts.md) declares it SSOT for settings sync. When promoting: create or document as future artifact.
 
 ### 4. control-plane / GET /api/infra/dependency-health
 
@@ -50,7 +50,7 @@ These active skills still reference non-existent infrastructure (control-plane/,
 
 ## Promotion Checklist (when moving to is/skills/)
 
-1. Replace all paths with `PATHS` from paths.js.
+1. Replace all paths with `PATHS` from #JS-1xvfg1uj (is/contracts/paths/paths.js).
 2. Ensure no mbb/mmb in paths, filenames, or container names.
 3. Add frontmatter (id, reasoning, etc.) per plan §5.
 4. Register in causality-registry if anchors added.

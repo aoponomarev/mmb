@@ -23,7 +23,7 @@ Skills that are useful but do not fit the current infrastructure state. Not tied
 
 ## Compliance
 
-Backlog skills must align with arch-foundation when promoted: no mbb/mmb in paths or names (anti-calque); paths via `PATHS` from paths.js; naming contracts (kebab-case). See `AUDIT.md` for findings and promotion checklist.
+Backlog skills must align with arch-foundation when promoted: no mbb/mmb in paths or names (anti-calque); paths via `PATHS` from #JS-1xvfg1uj (is/contracts/paths/paths.js); naming contracts (kebab-case). See id:bskill-10e421 (docs/backlog/skills/AUDIT.md) for findings and promotion checklist.
 
 ## What goes here
 
@@ -37,4 +37,4 @@ When the infrastructure appears — move to `is/skills/`, `core/skills/`, or `do
 
 ## Reference
 
-See `AUDIT.md` for promotion checklist.
+See id:bskill-10e421 (AUDIT.md) for promotion checklist.
