@@ -12,7 +12,7 @@ last_updated: "2026-03-05"
 
 | Doc | Commit | Rationale |
 |-----|--------|-----------|
-| docs/plans/legacy-link-remediation-registry.md | — | LIR complete, #JS-cMCNbcJ1 (path-contracts.js) SSOT |
+| `docs/plans/legacy-link-remediation-registry.md` | — | LIR complete, #JS-cMCNbcJ1 (path-contracts.js) SSOT |
 | `docs/plans/plan-legacy-link-remediation-integrations-strategy.md` | — | LIR-022 FIN, Path Rewrite Log in AIS |
 | `docs/plans/plan-global-md-id-contract-rollout.md` | — | id-contract rollout complete, id-registry.json SSOT |
 | `docs/done/plan-skill-anti-staleness.md` | — | дистиллирован в ais-anti-staleness |

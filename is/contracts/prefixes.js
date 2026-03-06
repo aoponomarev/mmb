@@ -1,7 +1,7 @@
 /**
  * #JS-Q6dEzQ3S
  * @description SSOT: Global prefix registry for skills and modules. Single source of truth.
- * @skill process-skill-governance
+ * @skill id:sk-d763e7
  * @see id:sk-d763e7
  *
  * AGENT OBLIGATION: When creating or naming a skill file with a prefix, the AI agent MUST:

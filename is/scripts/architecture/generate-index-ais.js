@@ -13,9 +13,9 @@ const ROOT = path.resolve(__dirname, "..", "..", "..");
 const AIS_DIR = path.join(ROOT, "docs", "ais");
 
 function parseFrontmatter(text) {
-    const match = text.match(/^---\s*\n([\s\S]*?)\n---/);
+    const match = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
     if (!match) return {};
-    const yaml = match[1];
+    const yaml = match[1].replace(/\r\n/g, "\n");
     const result = {};
     for (const line of yaml.split("\n")) {
         const colonIdx = line.indexOf(":");

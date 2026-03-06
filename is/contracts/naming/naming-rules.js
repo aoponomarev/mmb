@@ -1,7 +1,7 @@
 /**
  * #JS-kXgRFkUV
  * @description Gatekeeper for file and module naming contracts (kebab-case, anti-calque).
- * @skill arch-foundation
+ * @skill id:sk-483943
  */
 import { z } from 'zod';
 import { MODULE_PREFIXES } from '../prefixes.js';

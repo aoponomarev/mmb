@@ -14,6 +14,10 @@ export const SKILL_FRONTMATTER_ORDER = [
     "reasoning_audited_at",
     "reasoning_checksum",
     "last_change",
+    "related_skills",
+    "related_ais",
+    "dependencies",
+    "updated_at",
 ];
 
 /** Canonical order for docs (AIS, plans). id must be first. */

@@ -1,7 +1,7 @@
 /**
  * #JS-1xvfg1uj
  * @description SSOT for absolute vs relative path policy, mapping to project structure.
- * @skill arch-foundation
+ * @skill id:sk-483943
  */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

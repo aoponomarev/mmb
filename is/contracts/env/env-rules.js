@@ -1,7 +1,7 @@
 /**
  * #JS-JJ8jnJEw
  * @description Gatekeeper for environment variables (SSOT for secrets and config).
- * @skill arch-foundation
+ * @skill id:sk-483943
  */
 import { z } from 'zod';
 

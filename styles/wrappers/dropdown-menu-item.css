@@ -20,7 +20,7 @@
  * Загружается вторым среди компонентных стилей (после button.css), так как является
  * базовым элементом, используемым внутри dropdown. Независим от button.css.
  *
- * Подробнее: `legacy donor` components-styling-principles (`docs/ais/ais-portfolio-controls.md#LIR-005.A7`)
+ * Подробнее: `legacy donor` components-styling-principles (id:ais-3f4e5c (docs/ais/ais-portfolio-controls.md)#LIR-005.A7)
  */
 
 /* ============================================================================

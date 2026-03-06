@@ -1,7 +1,7 @@
 /**
  * #JS-Hx2xaHE8
  * @description Gate: validates that all ids in related_skills and related_ais exist via global id SSOT registry.
- * @skill process-docs-lifecycle
+ * @skill id:sk-0e193a
  * Prevents broken links when files are renamed or deleted.
  */
 import fs from "node:fs";

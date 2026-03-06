@@ -1,7 +1,7 @@
 /**
  * #JS-PqyKcPnn
  * @description Auto-updates Subdirectories/Subfolders/Structure sections in READMEs to match filesystem. Run: npm run readmes:sync
- * @skill arch-layout-governance
+ * @skill id:sk-c62fb6
  */
 import fs from 'node:fs';
 import path from 'node:path';

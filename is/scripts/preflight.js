@@ -88,7 +88,7 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 4. Code comments English gate (SSOT: process-language-policy)
+    // 4. Code comments English gate (SSOT: id:sk-883639 process-language-policy)
     console.log('[preflight] Validating code comments (English only)...');
     try {
         execSync('node is/scripts/architecture/validate-code-comments-english.js', { stdio: 'inherit', cwd: PATHS.root });
@@ -97,7 +97,7 @@ function runPreflight() {
         process.exit(1);
     }
 
-    // 5. File header gate (SSOT: process-file-header-standard)
+    // 5. File header gate (SSOT: id:sk-f7e2a1 process-file-header-standard)
     console.log('[preflight] Validating file headers (file id + @description)...');
     try {
         execSync('node is/scripts/architecture/validate-file-headers.js', { stdio: 'inherit', cwd: PATHS.root });
