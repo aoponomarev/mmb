@@ -1,0 +1,15 @@
+{
+  "pcs": [
+    {
+      "label": "pc-office",
+      "description": "Office PC",
+      "file": "pc-office.md"
+    },
+    {
+      "label": "pc-home",
+      "description": "Home PC (reference)",
+      "file": "pc-home.md"
+    }
+  ],
+  "checklistRef": "scripts/README-node18.md"
+}
