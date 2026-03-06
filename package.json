@@ -7,7 +7,7 @@
     "node": ">=18.0.0 <19.0.0"
   },
   "scripts": {
-    "test": "node --test is/**/*.test.js core/**/*.test.js",
+    "test": "node is/scripts/infrastructure/run-node-tests.js",
     "frontend:reactivity:check": "node --test is/scripts/tests/check-frontend-rrg.test.js",
     "preflight": "node is/scripts/preflight.js",
     "health-check": "node is/scripts/infrastructure/health-check.js",

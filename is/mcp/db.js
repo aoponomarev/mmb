@@ -4,14 +4,11 @@
  */
 import Database from 'better-sqlite3';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
+import { PATHS } from '../contracts/paths/paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, '..', '..');
-const DATA_DIR = path.join(ROOT, 'data');
-const DB_PATH = path.join(DATA_DIR, 'mcp.sqlite');
+const DATA_DIR = PATHS.data;
+const DB_PATH = PATHS.mcpDb;
 
 // Ensure data dir exists
 if (!fs.existsSync(DATA_DIR)) {

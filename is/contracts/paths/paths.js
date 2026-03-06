@@ -36,6 +36,7 @@ export const PATHS = {
     docsPlans: getAbsolutePath('docs/plans'),
     drafts: getAbsolutePath('docs/drafts'),
     data: getAbsolutePath('data'),
+    mcpDb: getAbsolutePath('data/mcp.sqlite'),
     shared: getAbsolutePath('shared'),
     styles: getAbsolutePath('styles'),
     scripts: getAbsolutePath('scripts'),
