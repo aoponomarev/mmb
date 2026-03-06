@@ -9,8 +9,6 @@ secrets-backup.txt
 data/cache/
 data/memory-mcp/
 data/secret-archives/
-data/*.sqlite
-data/*.sqlite-*
 data/*.json
 data/*.jsonl
 
