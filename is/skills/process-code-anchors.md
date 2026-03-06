@@ -85,7 +85,7 @@ const settled = await Promise.allSettled(entries.map(([, fn]) => fn()));
 this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 ```
 
-**Registry:** All hashes must exist in `is/skills/causality-registry.md`. Add new hashes there before using.
+**Registry:** All hashes must exist in id:sk-3b1519 (is/skills/causality-registry.md). Add new hashes there before using.
 
 ### Where Anchors Are Required
 
@@ -94,8 +94,8 @@ this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 | Path resolution using `PATHS` | `arch-foundation` |
 | Env variable access (SSOT files only) | `arch-foundation` (exception note) |
 | Secret loading / encryption | `process-secrets-hygiene` |
-| Provider data fetching | `core/skills/api-layer.md` |
-| UI state mutations | `app/skills/ui-architecture.md` |
+| Provider data fetching | id:sk-bb7c8e (core/skills/api-layer.md) |
+| UI state mutations | id:sk-318305 (app/skills/ui-architecture.md) |
 | Health / preflight checks | `arch-control-plane` |
 
 ### Anchor Placement (Risk Branches)
@@ -111,5 +111,5 @@ Place inline anchors in branches where developers would otherwise "search from s
 ### Current Implementation Status
 
 The Target App currently uses anchors in infrastructure scripts and key backend files.
-The `audit_skill_coverage` MCP tool (in `is/mcp/skills/server.js`) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
+The `audit_skill_coverage` MCP tool (in #JS-by3WhrY9 (is/mcp/skills/server.js)) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
 The `search_anchors` MCP tool returns file:line for all `@skill-anchor` and `@causality` occurrences, filterable by skill or hash.

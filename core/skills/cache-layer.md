@@ -21,7 +21,7 @@ last_change: ""
 
 ## Core Rules
 
-The cache operates across three named layers managed by `core/cache/storage-layers.js`:
+The cache operates across three named layers managed by #JS-Fc2QzeBn (core/cache/storage-layers.js):
 
 | Layer | Storage backend | Used for |
 |---|---|---|
@@ -47,13 +47,13 @@ Cache keys fall into two categories:
 
 ### Schema Migrations
 
-`core/cache/cache-migrations.js` handles forward-migration of cached data when the in-code schema version is higher than the stored `cached.version`. This applies only to unversioned keys (user data).
+#JS-FWhpDFTW (core/cache/cache-migrations.js) handles forward-migration of cached data when the in-code schema version is higher than the stored `cached.version`. This applies only to unversioned keys (user data).
 
 On `cacheManager.get()`: if `cached.version` is present and migrations are available, the data is migrated before being returned to the caller. The migrated form is written back immediately.
 
 ### TTL (Time-To-Live)
 
-TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt = Date.now() + ttl` is stored. On `get()`, expired entries are deleted and `null` is returned (cache miss).
+TTL per key is defined in #JS-8P3M724Z (core/cache/cache-config.js). On `set()`, `expiresAt = Date.now() + ttl` is stored. On `get()`, expired entries are deleted and `null` is returned (cache miss).
 
 `cacheManager.set(key, value, { ttl: 86400000 })` — caller can override TTL explicitly.
 
@@ -81,24 +81,24 @@ TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt =
 
 | Feature | Rule | Action |
 |---------|------|--------|
-| **Versioning** | Depends on App Version? | Add to `versionedKeys` in `cache-manager.js` |
+| **Versioning** | Depends on App Version? | Add to `versionedKeys` in #JS-XsMewXpA (core/cache/cache-manager.js) |
 | **Persistence** | User Data? | No TTL, No Versioning |
-| **Freshness** | External API? | Define `TTL` in `cache-config.js` |
+| **Freshness** | External API? | Define `TTL` in #JS-8P3M724Z (core/cache/cache-config.js) |
 | **Rate Limits** | CoinGecko/API? | Use **Preload Strategy** (fetch once, slice from cache) |
 
 ### Implementation Workflow
 
-1. **Register Key**: Add to `LAYERS.{layer}.keys` in `storage-layers.js`.
-2. **Set TTL**: Define in `cache-config.js` → `TTL`.
-3. **Set Strategy**: Define in `cache-config.js` → `STRATEGIES` (e.g., `cache-first`).
-4. **Migration**: If schema changes, update `VERSIONS` and `cache-migrations.js`.
+1. **Register Key**: Add to `LAYERS.{layer}.keys` in #JS-Fc2QzeBn (core/cache/storage-layers.js).
+2. **Set TTL**: Define in #JS-8P3M724Z (core/cache/cache-config.js) → `TTL`.
+3. **Set Strategy**: Define in #JS-8P3M724Z (core/cache/cache-config.js) → `STRATEGIES` (e.g., `cache-first`).
+4. **Migration**: If schema changes, update `VERSIONS` and #JS-FWhpDFTW (core/cache/cache-migrations.js).
 
 ### Troubleshooting
 
 | Symptom | Check |
 |---------|-------|
 | **Cache Miss on Every Load** | TTL expired; App Version changed (invalidates versioned keys); `localStorage` full (>5MB) |
-| **Data Not Saving** | Verify key is in `storage-layers.js`; check `cacheManager.set()` return value (must be `true`) |
+| **Data Not Saving** | Verify key is in #JS-Fc2QzeBn (core/cache/storage-layers.js); check `cacheManager.set()` return value (must be `true`) |
 
 ### App Version & Boot Cleanup
 
@@ -106,16 +106,16 @@ TTL per key is defined in `core/cache/cache-config.js`. On `set()`, `expiresAt =
 
 ### Module Load Order
 
-`storage-layers.js` and `cache-config.js` must be loaded before `cache-manager.js`. `cache-migrations.js` is optional (checked at runtime).
+#JS-Fc2QzeBn (core/cache/storage-layers.js) and #JS-8P3M724Z (core/cache/cache-config.js) must be loaded before #JS-XsMewXpA (core/cache/cache-manager.js). #JS-FWhpDFTW (core/cache/cache-migrations.js) is optional (checked at runtime).
 
 ### File Map
 
 | File | Responsibility |
 |---|---|
-| `core/cache/storage-layers.js` | Layer definitions, key-to-layer routing |
-| `core/cache/cache-config.js` | TTL, version, and layer config per key |
-| `core/cache/cache-manager.js` | Unified read/write API — the only entry point |
-| `core/cache/cache-migrations.js` | Schema migration handlers for versioned user data |
-| `core/cache/cache-indexes.js` | Index structures for bulk lookups |
-| `core/cache/cache-cleanup.js` | Utility for purging stale / old-version entries |
-| `core/cache/data-cache-manager.js` | Server-side filesystem cache (Node.js `fs`, used by backend providers) |
+| #JS-Fc2QzeBn (core/cache/storage-layers.js) | Layer definitions, key-to-layer routing |
+| #JS-8P3M724Z (core/cache/cache-config.js) | TTL, version, and layer config per key |
+| #JS-XsMewXpA (core/cache/cache-manager.js) | Unified read/write API — the only entry point |
+| #JS-FWhpDFTW (core/cache/cache-migrations.js) | Schema migration handlers for versioned user data |
+| #JS-UbWXkUYK (core/cache/cache-indexes.js) | Index structures for bulk lookups |
+| #JS-kq2NZeh1 (core/cache/cache-cleanup.js) | Utility for purging stale / old-version entries |
+| #JS-594A3G1K (core/cache/data-cache-manager.js) | Server-side filesystem cache (Node.js `fs`, used by backend providers) |

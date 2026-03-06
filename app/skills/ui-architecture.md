@@ -33,15 +33,15 @@ last_change: ""
 
 All user-facing strings (buttons, headings, tooltips) MUST come from centralized SSOT configurations.
 - Directly assigning hardcoded string literals to `innerText`, `textContent`, `title`, `ariaLabel`, or `innerHTML` in component code is **forbidden**.
-- Enforcement: AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test.js`.
+- Enforcement: AST linter at #JS-uZ2Hc9qj (is/scripts/tests/lint-frontend-hardcode-ast.test.js).
 
 **#for-hardcode-ban** Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point.
 
 ### Zod UI Config Validation (Type-Safe Design System)
 
 Interface configurations (`tooltips-config.js`, `modals-config.js`) are validated against Zod schemas.
-- Schemas live in `core/contracts/ui-contracts.js`.
-- Validation is enforced in `is/scripts/tests/validate-frontend-ui-configs.test.js`.
+- Schemas live in #JS-4KeCe4GT (core/contracts/ui-contracts.js).
+- Validation is enforced in #JS-vK2EcYrV (is/scripts/tests/validate-frontend-ui-configs.test.js).
 
 **#for-zod-ui-validation** A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment.
 
@@ -64,7 +64,7 @@ The project uses Vue 3 loaded via a global `<script>` tag without bundlers (Vite
 
 **Rules**:
 - Templates are defined in separate JS files as strings (`app/templates/`).
-- Module loading order is controlled by `core/module-loader.js`.
+- Module loading order is controlled by #JS-xj43kftu (core/module-loader.js).
 - No bundler output, no dist/ directory — index.html is the deployment artifact directly.
 
 **#for-file-protocol** No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes.
@@ -81,9 +81,9 @@ In both modes, external API calls subject to CORS must go through the Cloudflare
 
 **#for-tooltip-reactivity** Tooltips must be re-initialized or titles reactively bound so that language switches affect hover text immediately.
 
-- **SSOT**: `core/config/tooltips-config.js`
+- **SSOT**: #JS-DR3gZC9b (core/config/tooltips-config.js)
 - **Principle**: Use native browser tooltips (`title` attribute). HTML-based tooltips are forbidden.
-- **Structure**: Static part from config + newline + dynamic part from `tooltip-interpreter.js`
+- **Structure**: Static part from config + newline + dynamic part from #JS-Kg2tEBFr (core/api/tooltip-interpreter.js)
 - **Usage**: `tooltipsConfig.getTooltip(key)` or `tooltipInterpreter.getTooltip(key, { value, lang })`
 - **Constraints**: UTF-8 only, under 2000 chars, no HTML
 
@@ -105,11 +105,11 @@ Toggling table columns without re-rendering. State in `columnVisibilityConfig`; 
 
 ### Layout & Alignment
 
-Use vertical padding on the **inner container** based on size class (e.g. `.component-responsive.size-sm > .inner-container`). Avoid fixed `height` or `line-height` for alignment. Horizontal spacing: Bootstrap utilities (`me-2`, `gap-3`); `gap-2` for button groups, `mb-3` for form fields. Sizing: `sm` (compact: tables, sidebars), `md` (default: forms, modals), `lg` (prominent: hero sections). File Map: `styles/wrappers/`, `shared/components/button.js`.
+Use vertical padding on the **inner container** based on size class (e.g. `.component-responsive.size-sm > .inner-container`). Avoid fixed `height` or `line-height` for alignment. Horizontal spacing: Bootstrap utilities (`me-2`, `gap-3`); `gap-2` for button groups, `mb-3` for form fields. Sizing: `sm` (compact: tables, sidebars), `md` (default: forms, modals), `lg` (prominent: hero sections). File Map: `styles/wrappers/`, #JS-5n33791x (shared/components/button.js).
 
 ### Responsive Visibility (Mobile-First)
 
-Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS — components render all elements, CSS hides based on viewport. Classes: `.label` (desktop), `.label-short` (mobile), `.icon` (always visible). Mobile default: `.label { display: none; }` `.label-short { display: block; }`. Desktop `@media (min-width: 576px)`: swap. Component props: `label`, `labelShort`, `icon`. File Map: `styles/wrappers/button.css`, `shared/components/button.js`.
+Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS — components render all elements, CSS hides based on viewport. Classes: `.label` (desktop), `.label-short` (mobile), `.icon` (always visible). Mobile default: `.label { display: none; }` `.label-short { display: block; }`. Desktop `@media (min-width: 576px)`: swap. Component props: `label`, `labelShort`, `icon`. File Map: `styles/wrappers/button.css`, #JS-5n33791x (shared/components/button.js).
 
 ### Unified Component Library
 
@@ -117,4 +117,4 @@ Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS 
 
 ### DOM Markup & Hashing
 
-**Auto-markup**: Mark significant containers with `avto-{Base58_8char}` for DevTools and agent visibility. Deterministic hash from DOM path; stable across reloads. Scope: major sections, headers, wrappers. Exclusions: inside Vue components, minor wrappers, elements with IDs. **Instance hashing**: `computed: { instanceHash }` from `shared/utils/hash-generator.js`; usage `<div :class="['my-component', instanceHash]">`. **Layout sync**: `shared/utils/layout-sync.js` — `ResizeObserver` + `MutationObserver`; API `window.layoutSync.start()`, `.stop()`, `.update()`. Constraints: `avto-*` classes for identification ONLY, no functional CSS; hashing must be deterministic. File Map: `shared/utils/auto-markup.js`, `shared/utils/hash-generator.js`, `shared/utils/layout-sync.js`.
+**Auto-markup**: Mark significant containers with `avto-{Base58_8char}` for DevTools and agent visibility. Deterministic hash from DOM path; stable across reloads. Scope: major sections, headers, wrappers. Exclusions: inside Vue components, minor wrappers, elements with IDs. **Instance hashing**: `computed: { instanceHash }` from #JS-9m2N115w (shared/utils/hash-generator.js); usage `<div :class="['my-component', instanceHash]">`. **Layout sync**: #JS-pw26xFm7 (shared/utils/layout-sync.js) — `ResizeObserver` + `MutationObserver`; API `window.layoutSync.start()`, `.stop()`, `.update()`. Constraints: `avto-*` classes for identification ONLY, no functional CSS; hashing must be deterministic. File Map: #JS-1oAiR1jy (shared/utils/auto-markup.js), #JS-9m2N115w (shared/utils/hash-generator.js), #JS-pw26xFm7 (shared/utils/layout-sync.js).

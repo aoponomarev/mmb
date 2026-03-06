@@ -49,12 +49,12 @@ Application layers:
 
 ### Naming Contracts (Name Gate)
 All file and folder names MUST be in `kebab-case` format.
-Verification is done via Zod schemas in `is/contracts/naming/naming-rules.js`.
+Verification is done via Zod schemas in #JS-kXgRFkUV (is/contracts/naming/naming-rules.js).
 (System files and folders starting with a dot, e.g., `.github`, are allowed).
 **Module Prefixes:** To explicitly distinguish layers, modules should use prefixes where applicable: `app-*`, `sys-*`, `is-*`, `core-*`, `cmp-*`, `index-*` (for doc index files, e.g. `index-skills.md`, `index-ais.md`).
 
 ### 2. Paths SSOT
-The single source of truth for paths is located in `is/contracts/paths/paths.js`.
+The single source of truth for paths is located in #JS-1xvfg1uj (is/contracts/paths/paths.js).
 It is forbidden to hardcode absolute or relative paths in infrastructure scripts. All paths must be taken from the `PATHS` object. 
 This object automatically validates paths via Naming Contracts upon startup.
 
@@ -63,7 +63,7 @@ This object automatically validates paths via Naming Contracts upon startup.
 - **For file operations (fs.readFile, automation scripts, backups):** STRICTLY absolute paths via `PATHS`. The file system is unforgiving with relative paths.
 
 ### 3. Environment and Secrets SSOT (Secret Resilience)
-The contract for environment variables is described in `is/contracts/env/env-rules.js`.
+The contract for environment variables is described in #JS-JJ8jnJEw (is/contracts/env/env-rules.js).
 The `.env` file cannot be committed (only `.env.example` goes in Git).
 Keys and passwords are encrypted with AES-256 using `SYS_SECRET_ARCHIVE_KEY` (length >= 32 chars) and stored in `is/secrets/archives/` using scripts:
 - `npm run secret:backup`
@@ -130,7 +130,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 
 ### 12. SSOT Cross-Links
 
-**One Home**: A rule exists in ONE place. Do not copy — link or reference. Every new skill MUST be listed in the relevant index (`docs/index-skills.md`). Use `related_skills` in frontmatter for cross-references.
+**One Home**: A rule exists in ONE place. Do not copy — link or reference. Every new skill MUST be listed in the relevant index (id:docidx-0b048e (docs/index-skills.md)). Use `related_skills` in frontmatter for cross-references.
 
 ### 13. Git Foundation Reliability (Solo Baseline)
 
@@ -151,7 +151,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 
 **Context**: Workflow for AI agent when tasked with large-scale infrastructure refactoring. Phases: (1) Discovery — inventory configs, registries, logs, env vars; map dependencies; find hardcoded values. (2) Conflict Analysis — find contradictions between sources; check "Schrödinger state"; assess race conditions. (3) Complex Planning — create living doc (e.g. `INFRA_RECONSTRUCTION.md`); every item MUST have `[ ]` checkbox; maximum detail (paths, functions, formats); SSOT principle; backward compatibility. (4) Execution — atomic steps; self-check after each; if new facts emerge, pause and revise plan (v1.0 → v2.0). (5) Closing — update docs; remove temp files and backups.
 
-*Infrastructure Maintenance (Docker) moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
+*Infrastructure Maintenance (Docker) moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed.*
 
 ### 16. Node Foundation Reliability
 
@@ -170,7 +170,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 
 If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be extracted to SSOT.
 
-**Extraction targets**: Titles/Icons → `core/config/modals-config.js`; API Endpoints → `core/config/app-config.js`; Cache Rules → `core/cache/cache-config.js`; UI Text → `core/config/tooltips-config.js`.
+**Extraction targets**: Titles/Icons → #JS-w33hCfsD (core/config/modals-config.js); API Endpoints → #JS-tn3fo2px (core/config/app-config.js); Cache Rules → #JS-8P3M724Z (core/cache/cache-config.js); UI Text → #JS-DR3gZC9b (core/config/tooltips-config.js).
 
 **Decision matrix**: Repeated HTML → shared/components (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A4`); Repeated Options → core/config; Repeated Logic → shared/utils (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A5`).
 
@@ -178,7 +178,7 @@ If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be
 
 **Context**: Foundational technology choices. All paths via `PATHS` from `paths.js`.
 
-**Execution environment**: Frontend — static SPA (Vanilla JS + Vue 3 Reactivity), `file://` or GitHub Pages; Local backend — Node.js HTTP server (raw `http.createServer`), skills MCP; Edge — API Proxy, Auth, D1/KV; Cloud — serverless functions as needed. *(n8n when deployed — see `docs/backlog/skills/n8n-infrastructure.md`.)*
+**Execution environment**: Frontend — static SPA (Vanilla JS + Vue 3 Reactivity), `file://` or GitHub Pages; Local backend — Node.js HTTP server (raw `http.createServer`), skills MCP; Edge — API Proxy, Auth, D1/KV; Cloud — serverless functions as needed. *(n8n when deployed — see id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md).)*
 
 **Tech stack**: Runtime Node.js v20+; API raw `http.createServer` / Workers; MCP for agent tools; multi-provider LLM fallback. Frontend: no-build Vue 3, Bootstrap 5, 3-layer cache, fetch via Cloudflare Proxy.
 
@@ -192,4 +192,4 @@ If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be
 
 **Access**: Use path resolver or `GLOBAL_ROOT`; atomic writes via registry-service; hot reload via `fs.watch`. *(When Docker deployed: mount global zone via `GLOBAL_ROOT`.)*
 
-*Windows Docker Paths & Lifecycle moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
+*Windows Docker Paths & Lifecycle moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed.*

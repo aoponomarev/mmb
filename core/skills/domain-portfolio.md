@@ -50,11 +50,11 @@ All functions are **pure** — they receive a draft object and return a new draf
 
 ### Compatibility Facade
 
-`core/config/portfolio-config.js` acts as a **bridge** between legacy callers (UI components, event handlers) that use the old Legacy App portfolio API shape and the new pure-function engine in `core/domain/`.
+#JS-aNzHSaKo (core/config/portfolio-config.js) acts as a **bridge** between legacy callers (UI components, event handlers) that use the old Legacy App portfolio API shape and the new pure-function engine in `core/domain/`.
 
 **#for-compatibility-facade** A direct cutover of all callers at once would be too risky. The facade translates calls from the old imperative API to the new pure-function domain model, allowing incremental migration.
 
-### Validation (`core/domain/portfolio-validation.js`)
+### Validation (#JS-hG34MvdS (core/domain/portfolio-validation.js))
 
 Validates the draft object shape and invariants before persistence. Returns a structured error list — never throws. Callers decide whether to block save or warn the user.
 
@@ -64,11 +64,11 @@ The domain engine has **no knowledge of storage** (localStorage, Cloudflare, Pos
 
 ### Portfolio Schema & Storage
 
-**Schema**: `{ id: "YYMMDD-hhmm", name: string, coins: [{ coinId, ticker, portfolioPercent, delegatedBy: { modelId } }], settings: { horizon } }`. **Invariant**: Every coin MUST have `delegatedBy` pointing to a valid Model ID. **Storage**: Local `localStorage` key (e.g. `mbb-portfolios`); Cloud Cloudflare D1 table `portfolios`. File Map: `core/api/cloudflare/portfolios-client.js`.
+**Schema**: `{ id: "YYMMDD-hhmm", name: string, coins: [{ coinId, ticker, portfolioPercent, delegatedBy: { modelId } }], settings: { horizon } }`. **Invariant**: Every coin MUST have `delegatedBy` pointing to a valid Model ID. **Storage**: Local `localStorage` key (e.g. `mbb-portfolios`); Cloud Cloudflare D1 table `portfolios`. File Map: #JS-TnWsDTjK (core/api/cloudflare/portfolios-client.js).
 
 ### Coin Set Management
 
-Auto-generation of coin sets: parse requirements, identify token types (fungible, stablecoins), determine relationship rules. For each token: generate parameters (name, symbol, decimals), create data mappings, set distribution rules. Establish cross-token relationships; document in machine-readable format (`coins.json`). Validation: verify against master registry, economic model, data integrity. File Map: `core/config/coins-config.js`, `coins.json`.
+Auto-generation of coin sets: parse requirements, identify token types (fungible, stablecoins), determine relationship rules. For each token: generate parameters (name, symbol, decimals), create data mappings, set distribution rules. Establish cross-token relationships; document in machine-readable format (`coins.json`). Validation: verify against master registry, economic model, data integrity. File Map: #JS-jy6Q4juu (core/config/coins-config.js), `coins.json`.
 
 **Structured Process**: (1) Requirement Analysis — parse architectural requirements, identify token types, determine relationship rules (e.g. index weighting); (2) Token Generation — for each token generate unique parameters, create data mappings, set distribution rules; (3) Relationship Establishment — implement cross-token relationships (staking, conversion, pairing), document in `coins.json`; (4) Validation — verify against master registry, economic model, data integrity; test inter-token data flows; check security/liquidity vulnerabilities.
 
@@ -96,9 +96,9 @@ Auto-generation of coin sets: parse requirements, identify token types (fungible
 
 | File | Responsibility |
 |---|---|
-| `core/domain/portfolio-engine.js` | Pure allocation and rebalance functions |
-| `core/domain/portfolio-validation.js` | Draft invariant validation |
-| `core/domain/portfolio-adapters.js` | Shape adapters between domain model and external formats (Cloudflare API, localStorage schema) |
-| `core/config/portfolio-config.js` | Compatibility facade for legacy callers |
-| `core/api/cloudflare/portfolios-client.js` | Portfolio schema DAO (local + Cloud) |
-| `core/config/coins-config.js` | Coin set definitions and defaults |
+| #JS-rrLtero9 (core/domain/portfolio-engine.js) | Pure allocation and rebalance functions |
+| #JS-hG34MvdS (core/domain/portfolio-validation.js) | Draft invariant validation |
+| #JS-fJ68ZfEu (core/domain/portfolio-adapters.js) | Shape adapters between domain model and external formats (Cloudflare API, localStorage schema) |
+| #JS-aNzHSaKo (core/config/portfolio-config.js) | Compatibility facade for legacy callers |
+| #JS-TnWsDTjK (core/api/cloudflare/portfolios-client.js) | Portfolio schema DAO (local + Cloud) |
+| #JS-jy6Q4juu (core/config/coins-config.js) | Coin set definitions and defaults |

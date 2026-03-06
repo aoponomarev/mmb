@@ -71,7 +71,7 @@ last_change: ""
 
 **Context**: From idea to deprecation.
 
-**States**: Pending (legacy `SKILL_CANDIDATES.json`, skip in path-contracts.js) → Draft (legacy `drafts/tasks/`, skip in path-contracts.js) → Active (`is/skills/`, `core/skills/`, `app/skills/`) → Deprecated (`docs/backlog/skills/` for deferred items).
+**States**: Pending (legacy `SKILL_CANDIDATES.json`, skip in #JS-cMCNbcJ1 (is/contracts/path-contracts.js)) → Draft (legacy `drafts/tasks/`, skip in #JS-cMCNbcJ1 (is/contracts/path-contracts.js)) → Active (`is/skills/`, `core/skills/`, `app/skills/`) → Deprecated (`docs/backlog/skills/` for deferred items).
 
 **Actions**: Create, Update, Merge, Split, Deprecate.
 
@@ -81,18 +81,18 @@ last_change: ""
 ## Implementation Status in Target App
 
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
-- `Implemented`: `validate-skills.js` — structural validation with JSON output for automation.
-- `Implemented`: `validate-affected-skills.js` — git diff --cached → affected skills and causality hashes (pre-commit flow, informational).
-- `Implemented`: `validate-dead-links.js`, `validate-causality-exceptions-stale.js`, `skills-batch-review.js` — batch audit via `npm run skills:batch-review`.
-- `Implemented`: `generate-skills-index.js` — auto-generates `docs/index-skills.md`.
-- `Implemented`: `skills-health-trend.js` — trend tracking with JSONL append and degradation alerts.
-- `Implemented`: `skills-health-trend-report.js` — summary report over configurable window.
-- `Implemented`: MCP server at `is/mcp/skills/server.js` (adapted from Legacy App).
+- `Implemented`: #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js) — structural validation with JSON output for automation.
+- `Implemented`: #JS-5F24tc1R (is/scripts/architecture/validate-affected-skills.js) — git diff --cached → affected skills and causality hashes (pre-commit flow, informational).
+- `Implemented`: #JS-y23qJxuC (is/scripts/architecture/validate-dead-links.js), #JS-4x4Fzd18 (is/scripts/architecture/validate-causality-exceptions-stale.js), #JS-kMzbwkJo (is/scripts/architecture/skills-batch-review.js) — batch audit via `npm run skills:batch-review`.
+- `Implemented`: #JS-mYo7imVc (is/scripts/architecture/generate-skills-index.js) — auto-generates `docs/index-skills.md`.
+- `Implemented`: #JS-CqRSWCnE (is/scripts/architecture/skills-health-trend.js) — trend tracking with JSONL append and degradation alerts.
+- `Implemented`: #JS-yWtP9yTh (is/scripts/architecture/skills-health-trend-report.js) — summary report over configurable window.
+- `Implemented`: MCP server at #JS-by3WhrY9 (is/mcp/skills/server.js) (adapted from Legacy App).
 - `Implemented`: Memory MCP server via `@modelcontextprotocol/server-memory`.
 - `Implemented`: Cursor `.cursor/mcp.json` configuration for both MCP servers.
 - `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy App's full frontmatter format). Frontmatter can be adopted incrementally.
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
-- `Simplified`: No `skills/MIGRATION.md` (legacy marker skip in path-contracts.js); migration tracked via `docs/plans/` and this skill.
+- `Simplified`: No `skills/MIGRATION.md` (legacy marker skip in #JS-cMCNbcJ1 (is/contracts/path-contracts.js)); migration tracked via `docs/plans/` and this skill.
 
 ### Token Budget (alwaysApply Rules)
 
@@ -104,10 +104,10 @@ last_change: ""
 
 Periodic audit to prevent rot. **Trigger**: Monthly or after major architectural shifts. **Command**: `npm run skills:batch-review`.
 
-- **Dead links**: `validate-dead-links.js` — scan `.md` files for broken paths or references to deleted scripts.
+- **Dead links**: #JS-y23qJxuC (is/scripts/architecture/validate-dead-links.js) — scan `.md` files for broken paths or references to deleted scripts.
 - **Redundancy**: Identify skills covering similar topics; MERGE when appropriate.
-- **Staleness**: Skills older than 90 days need re-validation. `validate-skills.js` flags them.
-- **Stale causality exceptions**: `validate-causality-exceptions-stale.js` — exceptions for hashes fully removed from code.
+- **Staleness**: Skills older than 90 days need re-validation. #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js) flags them.
+- **Stale causality exceptions**: #JS-4x4Fzd18 (is/scripts/architecture/validate-causality-exceptions-stale.js) — exceptions for hashes fully removed from code.
 - **No orphans**: Every skill MUST be linked from at least one index (`docs/index-skills.md` or equivalent).
 
 ### Skills as Playbooks
@@ -128,7 +128,7 @@ When an extraction pipeline (e.g. n8n, Swarm) is used: Signal (commit/release) �
 - Skills older than 90 days without updates are flagged as stale (warning, not blocking).
 - Files with content < 50 chars are flagged as potentially orphaned.
 - `npm run skills:check` must pass before any migration stage can be marked complete.
-- **Path existence:** Paths in `## Implementation Status` / `## Implementation Status in Target App` must exist in the project. Gate: `validate-skills.js`.
-- **@skill resolution:** Every `@skill` in code must point to an existing skill file. Gate: `validate-skill-anchors.js`.
-- **Affected skills (pre-commit):** Before commit, run `scripts/git/preflight-solo.ps1`; it calls `skills:affected` to list affected skills and hashes — human decides whether to update before commit. Gate: `validate-affected-skills.js` (informational only).
+- **Path existence:** Paths in `## Implementation Status` / `## Implementation Status in Target App` must exist in the project. Gate: #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js).
+- **@skill resolution:** Every `@skill` in code must point to an existing skill file. Gate: #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js).
+- **Affected skills (pre-commit):** Before commit, run `scripts/git/preflight-solo.ps1`; it calls `skills:affected` to list affected skills and hashes — human decides whether to update before commit. Gate: #JS-5F24tc1R (is/scripts/architecture/validate-affected-skills.js) (informational only).
 

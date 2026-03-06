@@ -74,8 +74,8 @@ When reviewing any new frontend data-fetch:
 
 ### OAuth on file:// (Popup Bridge)
 
-Since `file://` cannot receive HTTP redirects, use a **Popup Bridge**: (1) App opens OAuth URL in `window.open`; (2) Cloudflare Worker receives code, exchanges for token; (3) Worker serves HTML that sends token via `window.opener.postMessage`; (4) Main app stores JWT in `localStorage`. **Fallback**: If postMessage fails (popup blocked), Worker saves to KV; app polls. **Constraints**: Validate `postMessage` Origin; popups must be triggered by direct user click. File Map: `core/api/cloudflare/auth-client.js`, Cloudflare Worker `auth.js`.
+Since `file://` cannot receive HTTP redirects, use a **Popup Bridge**: (1) App opens OAuth URL in `window.open`; (2) Cloudflare Worker receives code, exchanges for token; (3) Worker serves HTML that sends token via `window.opener.postMessage`; (4) Main app stores JWT in `localStorage`. **Fallback**: If postMessage fails (popup blocked), Worker saves to KV; app polls. **Constraints**: Validate `postMessage` Origin; popups must be triggered by direct user click. File Map: #JS-He2SJ9Dp (core/api/cloudflare/auth-client.js), Cloudflare Worker #JS-oi2C6djt (is/cloudflare/edge-api/src/auth.js).
 
 ### Relationship to Hosting Contract
 
-This guard is a concrete implementation of the **Zero-Config Portability** constraint in `arch-foundation.md` §6: the UI must function on both `file://` and `https://aoponomarev.github.io/...` without code changes. The Cloudflare proxy is the mechanism that enables this.
+This guard is a concrete implementation of the **Zero-Config Portability** constraint in id:sk-483943 (is/skills/arch-foundation.md) §6: the UI must function on both `file://` and `https://aoponomarev.github.io/...` without code changes. The Cloudflare proxy is the mechanism that enables this.

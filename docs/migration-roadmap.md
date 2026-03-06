@@ -16,7 +16,7 @@ last_updated: "2026-03-04"
 - plan-naming-and-paths — Регламенты нейминга и гейты. См. docs/plans/.
 - plan-testing-strategy — Стратегия тестирования и Quality Gates. См. docs/plans/.
 ## Завершённые планы (дистиллированы):
-- **Антиустареватель скиллов** ✓ — дистиллирован в `id:ais-9f4e2d`; бэклог: [fix-anti-staleness.md](./backlog/fix-anti-staleness.md)
+- **Антиустареватель скиллов** ✓ — дистиллирован в `id:ais-9f4e2d` (docs/ais/ais-anti-staleness.md); бэклог: [id:backlog-2c4b0b](backlog/fix-anti-staleness.md)
 
 ## Принципы трансляции:
 1. **Нейтральные термины**: Вместо аббревиатур "MBB" или "MMB" используются "Target App", "Legacy Logic", "Donor Architecture".

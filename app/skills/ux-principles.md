@@ -49,19 +49,19 @@ All user-visible text (button labels, modal titles, tooltips, toast messages) co
 
 | Content type | Config SSOT |
 |---|---|
-| Modal titles and metadata | `core/config/modals-config.js` |
-| Tooltip text | `core/config/tooltips-config.js` |
+| Modal titles and metadata | #JS-w33hCfsD (core/config/modals-config.js) |
+| Tooltip text | #JS-DR3gZC9b (core/config/tooltips-config.js) |
 | System messages / toasts | Centralized messages config |
 
-Enforcement: The AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test.js` catches any hardcoded user-facing string assignments.
+Enforcement: The AST linter at #JS-uZ2Hc9qj (is/scripts/tests/lint-frontend-hardcode-ast.test.js) catches any hardcoded user-facing string assignments.
 
 ### Styling Principles (CSS)
 
-**Bootstrap First**: Use utility classes (`d-flex`, `mb-3`) before custom CSS. **Neutral tones**: `text-secondary` + `opacity` for Light/Dark themes; avoid HEX/RGB hardcoding. **Backgrounds**: `bg-body`, `bg-surface`, `bg-transparent`. **Borders**: `border-secondary` (subtle). **Scoping**: Prefix `avto-{hash}` from `hash-generator.js`; e.g. `.avto-Xy7z .custom-element { ... }`. **Workflow**: (1) Bootstrap utilities in template; (2) if insufficient, add `classesAdd` prop; (3) if custom CSS needed, document in `styles/wrappers/`. File Map: `styles/layout/`, `styles/wrappers/`.
+**Bootstrap First**: Use utility classes (`d-flex`, `mb-3`) before custom CSS. **Neutral tones**: `text-secondary` + `opacity` for Light/Dark themes; avoid HEX/RGB hardcoding. **Backgrounds**: `bg-body`, `bg-surface`, `bg-transparent`. **Borders**: `border-secondary` (subtle). **Scoping**: Prefix `avto-{hash}` from #JS-9m2N115w (shared/utils/hash-generator.js); e.g. `.avto-Xy7z .custom-element { ... }`. **Workflow**: (1) Bootstrap utilities in template; (2) if insufficient, add `classesAdd` prop; (3) if custom CSS needed, document in `styles/wrappers/`. File Map: `styles/layout/`, `styles/wrappers/`.
 
 ### Interface Terms (Glossary)
 
-**Interface**: Visual styling and static components. **Interaction**: Dynamic behavior and user flows. **Container**: Structural wrapper (`avto-*`). **Signal**: Visual indicator of data status (color/icon). **SSOT**: `core/config/tooltips-config.js` for terminology dictionary.
+**Interface**: Visual styling and static components. **Interaction**: Dynamic behavior and user flows. **Container**: Structural wrapper (`avto-*`). **Signal**: Visual indicator of data status (color/icon). **SSOT**: #JS-DR3gZC9b (core/config/tooltips-config.js) for terminology dictionary.
 
 ### Naming Conventions for UI Code
 
@@ -74,7 +74,7 @@ Enforcement: The AST linter at `is/scripts/tests/lint-frontend-hardcode-ast.test
 
 ### Zod Validation Gate
 
-UI config files (`modals-config.js`, `tooltips-config.js`) are validated against Zod schemas in `core/contracts/ui-contracts.js` before the app is considered production-ready.
+UI config files (`modals-config.js`, `tooltips-config.js`) are validated against Zod schemas in #JS-4KeCe4GT (core/contracts/ui-contracts.js) before the app is considered production-ready.
 
 A typo in a config key — missing required field, wrong type — must cause a **test failure** (fail-fast), not a silent runtime defect on the client.
 

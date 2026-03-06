@@ -30,7 +30,7 @@ last_change: ""
 3.  **Pattern Aggregation:**
     If a similar raw `@causality` explanation is found in 3 or more places across the codebase (e.g., repeating the same logic about CORS or Vue rendering), the agent must:
     - **Formulate a Hash**: Create a standardized `#for-xyz` hash.
-    - **Register**: Add it to `is/skills/causality-registry.md`.
+    - **Register**: Add it to id:sk-3b1519 (is/skills/causality-registry.md).
     - **Promote to Skill**: If the pattern warrants it, generate a new architectural skill `.md` file using `npm run skills:create`.
     - **Refactor Code**: Go back to the original files, replace the raw `// @causality ...` with a formalized `// @skill-anchor path/to/skill #for-xyz` linking to the new contract.
 

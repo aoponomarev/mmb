@@ -26,7 +26,7 @@ last_change: ""
 ## Core Rules
 - **DO NOT try to please:** Never agree with a user's (developer's) proposal just out of politeness.
 - **Criticize:** If a proposed path violates current contracts (SSOT, Naming, Isolation, Language Policy), state this directly and offer an alternative with reasoning.
-- **Weigh old plans:** What was captured in legacy AI migration plans is not dogma. Legacy paths skip in path-contracts.js; adapt guidance to current architecture.
+- **Weigh old plans:** What was captured in legacy AI migration plans is not dogma. Legacy paths skip in #JS-cMCNbcJ1 (is/contracts/path-contracts.js); adapt guidance to current architecture.
 - **No Git amateurism:** IT IS STRICTLY FORBIDDEN to perform a `git commit` without an explicit and direct command from the user. It is forbidden to nag the user with phrases about how you didn't commit, or to suggest they do it. Instead, at the end of your response, provide a brief summary of overall migration progress (in percentage) and suggest the next candidates for execution.
 
 ## Contracts
@@ -40,7 +40,7 @@ last_change: ""
 - Before writing code in a new domain, use the `search_skills` or `read_skill` tool to gain context from `is/skills/` or `core/skills/`.
 - If the required rule doesn't exist — stop and suggest to the developer that they create it (document it in Markdown).
 - **Proactive skill transfer:** When migrating code modules from a donor repository, the agent MUST scan the donor in parallel for skills and causalities related to this code. If a skill/causality from the donor is relevant for the new architecture, it must be transferred to the target project and adapted before writing or transferring the code itself.
-- **Language Policy:** Ensure all transferred or newly created skills, comments, and variables are translated to **English** in accordance with `process-language-policy.md`.
+- **Language Policy:** Ensure all transferred or newly created skills, comments, and variables are translated to **English** in accordance with id:sk-883639 (is/skills/process-language-policy.md).
 
 ### Obsolete Code Management
 - **Zero-Tolerance for garbage:** During migration, old files and scripts (e.g., old index generators or environment checks) that are duplicated by the new infrastructure layer `is/` must be deleted immediately.
@@ -55,11 +55,11 @@ last_change: ""
 When the Memory MCP (`is/memory/memory.jsonl`) contains entries that describe architectural decisions, policies, or process rules:
 1. **Trigger:** At task finalization (`ФИН`) or when the user asks to sync memory, scan recent memory entries.
 2. **Classification:** If an entry describes a rule, constraint, or "why" that applies beyond the current chat → it is a candidate for formalization.
-3. **Action:** Create or update a Skill (or AIS policy) using `create_skill` or manual edit. Add causality hashes from `causality-registry.md`. Register new hashes if needed.
+3. **Action:** Create or update a Skill (or AIS policy) using `create_skill` or manual edit. Add causality hashes from id:sk-3b1519 (is/skills/causality-registry.md). Register new hashes if needed.
 4. **Cleanup:** After formalization, the memory entry may remain as historical context; the canonical source is now the skill/AIS file.
 5. **Id references:** When adding `related_skills` or `related_ais` to AIS, use short hash ids (`sk-xxxxxx`, `ais-xxxxxx`). Resolve via `is/contracts/docs/id-registry.json` or `docs/index-skills.md` / `docs/index-ais.md`.
-- **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/backlog/` (см. process-docs-lifecycle), and map this question path in `docs/ais/ais-docs-governance.md#LIR-009.A1`.
-- **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from `causality-registry.md`: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
+- **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/backlog/` (см. id:sk-0e193a (is/skills/process-docs-lifecycle.md)), and map this question path in id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A1.
+- **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from id:sk-3b1519 (is/skills/causality-registry.md): `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
 - **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.
 
 ### Skills Curation (Before Creating Any Skill)
@@ -74,7 +74,7 @@ Before creating a new skill file:
 
 ### Agent Command Dictionary
 
-**Full reference:** `is/skills/references/commands.md` (read on demand for ВЗП, КАИ, АИС, ЕИП, ФИН, ФИНС, ОМК).
+**Full reference:** id:sk-87700e (is/skills/references/commands.md) (read on demand for ВЗП, КАИ, АИС, ЕИП, ФИН, ФИНС, ОМК).
 
 **Summary:** `ВЗП`=Planned Execution | `КАИ`=Full Analysis | `АИС`=Arch Scan | `ЕИП`=SSOT Check | `ФИН`=Finalization | `ФИНС`=Discovery Blocks | `ОМК`=Brevity.
 
@@ -86,13 +86,13 @@ Before creating a new skill file:
 
 **Triggers**: Broken links (relative paths leading to 404s); stale configs (rules referencing renamed/deleted files); logic gaps (missing edge cases in documented workflow).
 
-**Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks в `docs/backlog/` (см. `docs/ais/ais-docs-governance.md#LIR-009.A4`).
+**Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks в `docs/backlog/` (см. id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A4).
 
 ### Bug Resolution Protocol
 
 **Context**: Standardized approach to fixing errors and documenting them.
 
-**Resolution steps**: (1) Reproduce — confirm bug with log or screenshot; (2) Trace — find root cause in code; (3) Fix — apply code change; (4) Log — add entry in `docs/backlog/fixes-tracking.md` (см. `docs/ais/ais-docs-governance.md#LIR-009.A3`); (5) Skill check — should this fix be a new Skill? If yes → `propose_skill`.
+**Resolution steps**: (1) Reproduce — confirm bug with log or screenshot; (2) Trace — find root cause in code; (3) Fix — apply code change; (4) Log — add entry in `docs/backlog/fixes-tracking.md` (см. id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A3); (5) Skill check — should this fix be a new Skill? If yes → `propose_skill`.
 
 **Logging format** (in `docs/backlog/fixes-tracking.md`): Date (YYYY-MM-DD), Issue (short description), Root Cause, Solution (`LIR-009.A3`).
 
@@ -110,6 +110,6 @@ Before creating a new skill file:
 
 **Triggers**: Session termination phrases; completion of major task; mention of project-evolution or session reporting.
 
-**Handoff ritual**: (1) Sync ALL settings to cloud (Cursor, Continue, project, secrets); (2) Update project-evolution with single-date aggregation; (3) Generate `docs/backlog/session-report.md` + `docs/backlog/handoff-note.md` (see `docs/ais/ais-docs-governance.md#LIR-009.A4`); (4) Final git sync — list uncommitted changes, draft message, ASK user before commit.
+**Handoff ritual**: (1) Sync ALL settings to cloud (Cursor, Continue, project, secrets); (2) Update project-evolution with single-date aggregation; (3) Generate `docs/backlog/session-report.md` + `docs/backlog/handoff-note.md` (see id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A4); (4) Final git sync — list uncommitted changes, draft message, ASK user before commit.
 
 **Hard constraints**: No data loss — never terminate if .env has new keys not synced; verifiable sync — agent must state "Cloud SSOT updated"; no unsolicited commits — always wait for user confirmation.

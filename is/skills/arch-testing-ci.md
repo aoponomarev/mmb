@@ -23,7 +23,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 ## Reasoning
 
 - **#for-node-test** Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale.
-- **#for-contract-first-preflight** Strict Zod-based contracts (`preflight.js`) paired with `node:test` provide immediate failure on invalid environment states.
+- **#for-contract-first-preflight** Strict Zod-based contracts (#JS-NrBeANnz (is/scripts/preflight.js)) paired with `node:test` provide immediate failure on invalid environment states.
 - **#for-minimal-ci** Migration-at-scale requires fast feedback loops. CI is kept minimal (Lint, Health, Test) to avoid flaky checks.
 - **#not-manual-verification** Too high a risk of hidden regressions.
 - **#not-heavy-test-frameworks** Jest and Mocha add unnecessary weight for this scale.
@@ -41,13 +41,13 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 **Blocker**: Release blocked if Quality Gate fails.
 
-*Docker Compose Release Validation moved to `docs/backlog/skills/docker-infrastructure.md` — not yet deployed.*
+*Docker Compose Release Validation moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed.*
 
 ### Git Local CI Mirror (Preflight)
 
 **Goal**: Run high-value local checks before commit/push in solo mode. SSOT: `scripts/git/preflight-solo.ps1`.
 
-**Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When control-plane exists: also control-plane scripts in `docs/ais/ais-control-plane-llmops.md#LIR-006.A6`.)*
+**Trigger**: Before commit when staged files include `is/mcp/*`, `package.json`/lockfiles; before push; after large infra edits. *(When control-plane exists: also control-plane scripts in id:ais-b7a9ba (docs/ais/ais-control-plane-llmops.md)#LIR-006.A6.)*
 
 **Checks**: (1) `.env` must not be staged; (2) `npm run skills:check` — path existence, @skill resolution (blocking); (3) `npm run skills:affected` — affected skills and causality hashes from staged files (informational, does not block). *(Secret leakage scan, MCP SDK drift check — to be added as needed.)*
 

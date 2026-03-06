@@ -14,7 +14,7 @@ The `is/` (Infrastructure Space) directory contains all configuration, tooling, 
 ## Architecture & Constraints
 - **Separation of Concerns**: Infrastructure must never leak into `core/` or `app/`. The application should be able to run even if the infrastructure deployment method changes.
 - **SSOT (Single Source of Truth)**: Centralized definitions for paths, naming, and environments live here.
-- **Preflight Enforcement**: All contracts defined here are actively enforced by `preflight.js` before the application can start.
+- **Preflight Enforcement**: All contracts defined here are actively enforced by #JS-NrBeANnz (is/scripts/preflight.js) before the application can start.
 
 ## Subdirectories
 - `cloudflare/`: Edge computing scripts and CORS proxies (Cloudflare Workers).

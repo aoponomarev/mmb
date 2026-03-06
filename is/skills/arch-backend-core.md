@@ -31,7 +31,7 @@ last_change: ""
 
 ## Core Rules
 
-*Docker/n8n infrastructure content moved to `docs/backlog/skills/docker-infrastructure.md` and `docs/backlog/skills/n8n-infrastructure.md` — not yet deployed in Target App.*
+*Docker/n8n infrastructure content moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) and id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) — not yet deployed in Target App.*
 
 ### Client vs Cloud Responsibility
 
@@ -43,7 +43,7 @@ last_change: ""
 
 ### Loading Strategy (Boot Sequence)
 
-**Context**: Boot sequence, dependency management, template injection. SSOT: `core/module-loader.js`, `core/modules-config.js`.
+**Context**: Boot sequence, dependency management, template injection. SSOT: #JS-xj43kftu (core/module-loader.js), #JS-os34Gxk3 (core/modules-config.js).
 
 **Critical order**: Bootstrap JS → Templates (`x-template`) → Vue.js → Components → App Root. **Invariant**: `x-template` scripts MUST be in DOM before Vue initialization.
 
@@ -70,19 +70,19 @@ last_change: ""
 ## Implementation Status in Target App
 
 - `Implemented`: Full backend core v1.
-  - `core/api/data-provider-manager.js` — single entry point for data providers with rate-limit journal.
-  - `core/api/providers/coingecko-provider.js` — CoinGecko market data with query validation.
-  - `core/api/providers/binance-metrics-provider.js` — Binance OI/Funding Rate/LSR.
-  - `core/api/request-registry.js` — rate-limit request tracking.
-  - `core/api/market-data-service.js` — orchestration of raw market data fetching.
-  - `core/api/market-metrics-service.js` — FGI/VIX/BTC dominance with cache + live strategy.
-  - `core/api/market-snapshot-service.js` — composite snapshot (data + metrics).
-  - `core/contracts/market-contracts.js` — Zod-validated query/payload contracts.
-  - `core/api/backend-market-runtime.js` — composition root assembling all services.
-  - `core/api/market-snapshot-transport.js` — query-to-response transport adapter.
-  - `core/api/market-snapshot-http.js` — framework-agnostic HTTP handler.
-  - `core/api/market-snapshot-node-server.js` — lightweight Node.js HTTP server.
-  - `core/api/market-snapshot-client.js` — API consumer with request-id propagation.
+  - #JS-2436XKxE (core/api/data-provider-manager.js) — single entry point for data providers with rate-limit journal.
+  - #JS-DvQtSDsD (core/api/providers/coingecko-provider.js) — CoinGecko market data with query validation.
+  - #JS-RRC5aRN1 (core/api/providers/binance-metrics-provider.js) — Binance OI/Funding Rate/LSR.
+  - #JS-iH26jSeT (core/api/request-registry.js) — rate-limit request tracking.
+  - #JS-Lw3YqzH7 (core/api/market-data-service.js) — orchestration of raw market data fetching.
+  - #JS-Xa3QAdTk (core/api/market-metrics-service.js) — FGI/VIX/BTC dominance with cache + live strategy.
+  - #JS-4K2gU4Fq (core/api/market-snapshot-service.js) — composite snapshot (data + metrics).
+  - #JS-P149SzKB (core/contracts/market-contracts.js) — Zod-validated query/payload contracts.
+  - #JS-1n3NPbwx (core/api/backend-market-runtime.js) — composition root assembling all services.
+  - #JS-ikUJ4ihH (core/api/market-snapshot-transport.js) — query-to-response transport adapter.
+  - #JS-ba38kHXk (core/api/market-snapshot-http.js) — framework-agnostic HTTP handler.
+  - #JS-wZTcVwWG (core/api/market-snapshot-node-server.js) — lightweight Node.js HTTP server.
+  - #JS-3oL8h3k9 (core/api/market-snapshot-client.js) — API consumer with request-id propagation.
 - `Implemented`: Secret Resilience MVP (encrypted backup/restore, cache integrity gate).
 - `Implemented`: Single-writer guard (`DATA_PLANE_ACTIVE_APP`).
 - `Implemented`: 40 automated tests covering all backend contracts.

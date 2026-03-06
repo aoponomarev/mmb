@@ -21,7 +21,7 @@ last_change: ""
 
 ## Core Rules
 
-*n8n and Continue CLI (Docker) content moved to `docs/backlog/skills/n8n-infrastructure.md` and `docs/backlog/skills/docker-infrastructure.md` — not yet deployed in Target App.*
+*n8n and Continue CLI (Docker) content moved to id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) and id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed in Target App.*
 
 1.  **SQLite Isolation:**
     The MCP database (`data/mcp.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.
@@ -114,4 +114,4 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 ## Contracts
 
-- **Telemetry Completeness**: Any new architectural script or process must be exposed through the `is/mcp/index.js` server to maintain 100% observability of agent actions.
+- **Telemetry Completeness**: Any new architectural script or process must be exposed through the #JS-3M2cDJyX (is/mcp/index.js) server to maintain 100% observability of agent actions.

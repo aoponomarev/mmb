@@ -11,7 +11,7 @@ last_change: ""
 # Metrics AIR Model
 
 > **Context**: The mathematical foundation and extensibility architecture for calculating market metrics (AGR, MDN) based on the A.I.R. (Alignment, Impulse, Risk) model.
-> **Scope**: `core/metrics/*`, `core/config/models-config.js`
+> **Scope**: `core/metrics/*`, #JS-CeYzbCbM (core/config/models-config.js)
 
 ## Reasoning
 
@@ -32,7 +32,7 @@ last_change: ""
 
 ### Model Registry & Extensibility
 
-**Architecture**: ModelManager loads classes; BaseModelCalculator ensures input/output consistency. **Inputs**: NormalizedCoinData (PVS, Market Cap). **Outputs**: Signal (Direction, Confidence). **Active models**: Median AIR; Volatility Guard. **Extensibility**: New models extend BaseModelCalculator, implement calculate(snapshot), register in models-config.js. File Map: core/metrics/ (см. base-model-calculator, model-manager).
+**Architecture**: ModelManager loads classes; BaseModelCalculator ensures input/output consistency. **Inputs**: NormalizedCoinData (PVS, Market Cap). **Outputs**: Signal (Direction, Confidence). **Active models**: Median AIR; Volatility Guard. **Extensibility**: New models extend BaseModelCalculator, implement calculate(snapshot), register in #JS-CeYzbCbM (core/config/models-config.js). File Map: core/metrics/ (см. base-model-calculator, model-manager).
 
 ## Contracts
 

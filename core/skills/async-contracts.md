@@ -80,7 +80,7 @@ When changing timeout/abort logic: run `npm run test`; keep HTTP status mapping 
 
 ### Rate Limiting Integration
 
-All external provider calls must go through `core/api/request-registry.js`:
+All external provider calls must go through #JS-iH26jSeT (core/api/request-registry.js):
 - On HTTP 429: interval multiplied by backoff factor.
 - On success: interval resets to base value.
 - The registry journals all calls to prevent ban accumulation.

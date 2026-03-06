@@ -40,7 +40,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 ### Hybrid Bridge (Control Plane ↔ n8n)
 
-*Deferred until Docker/n8n deployed. See `docs/backlog/skills/docker-infrastructure.md`, `docs/backlog/skills/n8n-infrastructure.md`.*
+*Deferred until Docker/n8n deployed. See id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md), id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md).*
 
 **Context**: Safe MCP control plane for orchestrating n8n workflows from agent tools. Agent side stateless and provider-agnostic; strict execution safety.
 
@@ -50,8 +50,8 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 **Safety gates**: Default dry-run; runtime writes disabled unless `CONTROL_PLANE_ALLOW_MUTATIONS=true`; destructive ops require `confirmToken`; invalid gate returns `blocked`, not raw errors.
 
-**Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events are tracked via `docs/ais/ais-control-plane-llmops.md#LIR-006.A2` (legacy control-plane event-log marker).
+**Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events are tracked via id:ais-b7a9ba (docs/ais/ais-control-plane-llmops.md)#LIR-006.A2 (legacy control-plane event-log marker).
 
 ## Implementation Status in Target App
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).
-- `Implemented`: Docs-ids gate — `validate-docs-ids.js` checks `related_skills`/`related_ais` id resolution; `generate-id-registry.js` produces `is/contracts/docs/id-registry.json`.
+- `Implemented`: Docs-ids gate — #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js) checks `related_skills`/`related_ais` id resolution; #JS-6U3KWB2e (is/scripts/architecture/generate-id-registry.js) produces `is/contracts/docs/id-registry.json`.

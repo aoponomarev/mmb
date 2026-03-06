@@ -15,5 +15,5 @@ Skills governing the UI layer, browser-specific constraints, and user experience
 - `ux-principles` — UX design principles: UI consistency, color semantics, action feedback, non-blocking async, reversible destructive actions, SSOT for UI strings.
 
 ## Constraints
-- **English Only**: All files in this directory MUST be written strictly in English (per `process-language-policy.md`).
+- **English Only**: All files in this directory MUST be written strictly in English (per id:sk-883639 (is/skills/process-language-policy.md)).
 - **Validation**: Every file must pass the structural checks enforced by `npm run skills:check`.

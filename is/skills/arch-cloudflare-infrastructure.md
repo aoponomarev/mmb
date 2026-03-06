@@ -33,7 +33,7 @@ last_change: ""
 
 ### Cloudflare Core (Infrastructure Map)
 
-**Context**: Edge infrastructure for API Proxy, Auth, Settings, State. SSOT: `core/config/cloudflare-config.js`.
+**Context**: Edge infrastructure for API Proxy, Auth, Settings, State. SSOT: #JS-4r2GQb12 (core/config/cloudflare-config.js).
 
 **Infrastructure**: Workers (logic); D1 (Users, Portfolios, Coin Sets); KV — `API_CACHE` (ephemeral), `SETTINGS` (persistent app settings). Migration scripts are stored in `is/cloudflare/edge-api/migrations` (legacy donor path in path-contracts.js SKIP_LINK_PATTERNS).
 
@@ -65,7 +65,7 @@ last_change: ""
 
 **Steps**: (1) Verify bindings in `is/cloudflare/edge-api/wrangler.toml` (legacy path in path-contracts.js); (2) `wrangler secret put GOOGLE_CLIENT_SECRET` and `JWT_SECRET`; (3) `wrangler deploy` from `is/cloudflare/edge-api`; (4) Health check via `health` route (HTTP route; skip in path-contracts.js).
 
-**Client config**: Update `core/config/auth-config.js` with correct `clientId` and `redirectUri`.
+**Client config**: Update #JS-Uf4GZ4Qq (core/config/auth-config.js) with correct `clientId` and `redirectUri`.
 
 ### Cloud Functions (Yandex / Serverless Parity)
 
