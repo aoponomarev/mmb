@@ -2770,6 +2770,17 @@
                 },
 
                 /**
+                 * Helper to get icon URL for table coin-block (uses iconManager CDN first)
+                 * Needed for safe access to window.iconManager from template
+                 */
+                getIconUrlForCoin(coin) {
+                    if (!coin) return null;
+                    return (window.iconManager && typeof window.iconManager.getIconUrl === 'function')
+                        ? window.iconManager.getIconUrl(coin.id, coin.image || '')
+                        : (coin.image || null);
+                },
+
+                /**
                  * Select-all toggle handler
                  */
                 handleToggleAllCoins(event) {
