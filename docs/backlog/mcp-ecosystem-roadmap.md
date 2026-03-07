@@ -56,7 +56,7 @@ last_updated: "2026-03-04"
 
 ### Pillar 6: Invariant Guard (Hallucination Protection)
 - [ ] Integrate invariant checking directly into the MCP `update_skill` or `refactor_code` loop (if implemented as tools), or enhance `run_preflight` to return strictly formatted invariant violations.
-- [ ] Sync the #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js) output to update the `dependency_graph` table upon success.
+- [ ] Sync the #JS-eG4BUXaS (validate-causality-invariant.js) output to update the `dependency_graph` table upon success.
 
 ## Phase 4: System Integration & Skilling
 *Objective: Teach the system how to use itself.*

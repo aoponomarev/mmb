@@ -19,6 +19,6 @@ When editing a block that contains outdated reactivity (disallowed window mutati
 
 ## References
 - Skill: id:sk-318305 (app/skills/ui-architecture.md)
-- Skill: id:sk-d4f8a2 (app/skills/rrg-refactor-on-edit.md)
+- Skill: id:sk-d4f8a2
 - AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md)
 - Gate: `npm run frontend:reactivity:check`

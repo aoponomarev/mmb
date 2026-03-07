@@ -26,12 +26,13 @@ related_ais:
 
 Правила:
 
-- `id` — единственный устойчивый идентификатор для ссылок и связей.
+- `id` — единственный канонический идентификатор для ссылок и связей; путь рядом с ним используется только как локальная подсказка при первом важном упоминании.
 - `status`:
   - `draft` — начальный черновик с гипотезами и незавершенными секциями,
   - `incomplete` — функционально полезен, но не покрывает всю область (scope),
   - `complete` — полная спецификация по согласованному чек-листу.
 - `related_skills` / `related_ais` — обязательны, даже если список минимален.
+- Смешанный режим ссылок обязателен: для первого важного упоминания допустимы `id:<ais-id> (docs/ais/file.md)` и `#JS-<file-id> (file.js)`, повторные упоминания в том же файле следует сокращать до bare `id/hash`.
 - Прямые legacy-пути разрешены только в блоке `Path Rewrite Log`/инвентаря с явно обозначенным статусом.
 
 ## Концепция (High-Level Concept)
@@ -40,7 +41,7 @@ related_ais:
 ## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
 - Как данные попадают в модуль и как уходят.
 - Взаимодействие с внешними API, Cloudflare Workers, D1 или локальными хранилищами.
-- **Схема (обязательно):** встраивать Mermaid-диаграмму в fenced code block. Референс: `docs/ais/ais-yandex-cloud.md`.
+- **Схема (обязательно):** встраивать Mermaid-диаграмму в fenced code block. Референс: `id:ais-e41384 (docs/ais/ais-yandex-cloud.md)`.
 
 ```mermaid
 flowchart TD
@@ -56,15 +57,15 @@ flowchart TD
 
 ## Компоненты и Контракты (Components & Contracts)
 Список ключевых файлов/директорий, реализующих эту спецификацию.
-- app/components/ — UI слой (пример пути).
-- core/api/ — API клиент (пример пути).
+- `app/components/` — UI слой (пример пути, когда путь сам является предметом описания).
+- `core/api/` — API клиент (пример пути, когда путь сам является предметом описания).
 
 ## Контракты и гейты
 
-- #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js) — обязательная проверка `id` и связей `related_skills/related_ais`.
-- #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js) — если формулируются привязки к `@skill-anchor`/`@causality` в тексте.
-- #JS-69pjw66d (is/scripts/architecture/validate-causality.js) — обязательна для всех решений с `@causality #for-*`.
-- #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js) — при удалении hash-обоснований через исключения или явное завершение.
+- #JS-Hx2xaHE8 (validate-docs-ids.js) — обязательная проверка `id` и связей `related_skills/related_ais`.
+- #JS-QxwSQxtt (validate-skill-anchors.js) — если формулируются привязки к `@skill-anchor`/`@causality` в тексте.
+- #JS-69pjw66d (validate-causality.js) — обязательна для всех решений с `@causality #for-*`.
+- #JS-eG4BUXaS (validate-causality-invariant.js) — при удалении hash-обоснований через исключения или явное завершение.
 
 ## Лог перепривязки путей (Path Rewrite Log)
 

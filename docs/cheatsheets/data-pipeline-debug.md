@@ -29,7 +29,7 @@ last_updated: "2026-03-04"
 - `ssot-policies` → `cache-config` → `storage-layers` → `cache-manager` → `request-registry`
 - `coingecko-provider` → `yandex-cache-provider` → `data-provider-manager` → `app-ui-root`
 
-## Ключевые методы #JS-yx22mAv8 (app/app-ui-root.js)
+## Ключевые методы #JS-yx22mAv8 (app-ui-root.js)
 
 | Метод | Назначение |
 |-------|------------|
@@ -52,6 +52,6 @@ last_updated: "2026-03-04"
 
 ## Известные нюансы
 
-- **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 (app/app-ui-root.js) местами hardcoded 4h — выровнять.
+- **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 местами hardcoded 4h — выровнять.
 - **warm/cold слои:** Заявлены как IndexedDB, фактически fallback на localStorage с префиксами `idb_<layer>_...`.
-- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (core/api/data-providers/yandex-cache-provider.js).
+- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (yandex-cache-provider.js).

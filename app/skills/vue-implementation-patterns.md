@@ -2,7 +2,7 @@
 id: sk-cb75ec
 title: "Vue Implementation Patterns"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 6a357eda
 last_change: ""
 
@@ -47,7 +47,7 @@ last_change: ""
 
 ### Template Externalization (x-template)
 
-**Directory**: `shared/templates/{name}-template.js` (global), `app/templates/{name}-template.js` (app-specific). **Pattern**: Each file exports `TEMPLATE` string; registers via `script type="text/x-template"` appended to `document.body`. **Boot sequence**: Templates MUST be loaded and injected **before** Vue initializes components. **Constraints**: Template script IDs must match component `template` property; templates contain only HTML and Vue directives, no complex JS. File Map: #JS-xj43kftu (core/module-loader.js), `shared/templates/`, `app/templates/`.
+**Directory**: `shared/templates/{name}-template.js` (global), `app/templates/{name}-template.js` (app-specific). **Pattern**: Each file exports `TEMPLATE` string; registers via `script type="text/x-template"` appended to `document.body`. **Boot sequence**: Templates MUST be loaded and injected **before** Vue initializes components. **Constraints**: Template script IDs must match component `template` property; templates contain only HTML and Vue directives, no complex JS. File Map: #JS-xj43kftu (module-loader.js), `shared/templates/`, `app/templates/`.
 
 ## Contracts
 

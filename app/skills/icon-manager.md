@@ -2,7 +2,7 @@
 id: sk-icon-mgr
 title: "Icon Manager (Coin Assets)"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 1b71a9fa
 last_change: ""
 
@@ -11,7 +11,7 @@ last_change: ""
 # Icon Manager
 
 > **Context**: Resolving coin icon URLs with caching and fallbacks for the portfolio UI.
-> **Scope**: #JS-1dttw1ah (core/api/icon-manager.js), libs assets (coin icons)
+> **Scope**: #JS-1dttw1ah (icon-manager.js), libs assets (coin icons)
 
 ## Reasoning
 
@@ -28,9 +28,9 @@ last_change: ""
 3.  **File Naming:**
     Files on disk are strictly lowercase (`btc.png`).
 4.  **Error Handling:**
-    Component #JS-2d36obxo (shared/components/coin-block.js) must handle load errors and show a generic placeholder. No 404s visible to user.
+    Component #JS-2d36obxo (coin-block.js) must handle load errors and show a generic placeholder. No 404s visible to user.
 
 ## Contracts
 
-- **SSOT**: #JS-1dttw1ah (core/api/icon-manager.js) — resolution logic.
+- **SSOT**: #JS-1dttw1ah — resolution logic.
 - **Storage**: libs assets — icon files.

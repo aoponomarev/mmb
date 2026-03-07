@@ -2,7 +2,7 @@
 id: sk-471974
 title: "Protocol: Node.js Async Safety & Timeout Contracts"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 4f450f17
 last_change: ""
 
@@ -80,7 +80,7 @@ When changing timeout/abort logic: run `npm run test`; keep HTTP status mapping 
 
 ### Rate Limiting Integration
 
-All external provider calls must go through #JS-iH26jSeT (core/api/request-registry.js):
+All external provider calls must go through #JS-iH26jSeT (request-registry.js):
 - On HTTP 429: interval multiplied by backoff factor.
 - On success: interval resets to base value.
 - The registry journals all calls to prevent ban accumulation.

@@ -21,10 +21,10 @@
  * EXAMPLE: / HOW TO ADD: - when documenting procedures
  * CHANGE HISTORY: / YANDEXGPT CONFIGURATION: - when file-specific blocks exist
  */
-// FILE HEADER TEMPLATE — Canonical structure for code file headers (SSOT: docs/ais/ais-file-header-standard.md).
+// FILE HEADER TEMPLATE — Canonical structure for code file headers (SSOT: id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md)).
 // Copy the block above into any .js/.ts/.css file. Replace #JS-XXXXXXXX with actual file id (#<EXT>-<hash>).
 // Section headers: use as needed per file; list can be extended. Order of JSDoc slots is mandatory; omit optional slots if not needed.
-// Plan: docs/plans/file-header-rollout.md. Contract: is/contracts/file-header-contract.js. Gate: validate-file-headers.js.
+// Plan: id:plan-f7e2a1 (docs/plans/file-header-rollout.md). Contract: #JS-Am2QGp6w (file-header-contract.js). Gate: #JS-zh26RZvs (validate-file-headers.js).
 
 (function() {
     'use strict';

@@ -83,8 +83,9 @@ function runPreflight() {
         execSync('node is/scripts/architecture/audit-path-centric-doc-links.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/audit-path-centric-skill-links.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-rules-references.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/validate-mixed-reference-mode.js', { stdio: 'inherit', cwd: PATHS.root });
     } catch (e) {
-        console.error(`[preflight] ERROR: Skills validation, Reasoning gate, index generation, docs-ids, or rules-references validation failed.`);
+        console.error(`[preflight] ERROR: Skills validation, Reasoning gate, index generation, docs-ids, mixed-reference-mode, or rules-references validation failed.`);
         process.exit(1);
     }
 

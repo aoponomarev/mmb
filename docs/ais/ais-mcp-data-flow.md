@@ -116,12 +116,12 @@ flowchart TD
 
 1. `data/mcp.sqlite` не синхронируется в git; остаётся локальным.
 2. Реестры (id, code-file) — SSOT; preflight/generate-id-registry — единственные писатели.
-3. dependency_graph заполняется #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js); MCP только читает.
+3. dependency_graph заполняется #JS-eG4BUXaS (validate-causality-invariant.js); MCP только читает.
 4. Переименование telemetry.sqlite → mcp.sqlite зафиксировано в коде и спеках.
 
 ## Ссылки
 
-- #JS-YD283xUP (is/mcp/db.js)
-- #JS-HU3hEyDe (is/mcp/resources.js)
+- #JS-YD283xUP (db.js)
+- #JS-HU3hEyDe (resources.js)
 - id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md)
 - id:backlog-69de5d (docs/backlog/mcp-ecosystem-roadmap.md)

@@ -2,7 +2,7 @@
 id: sk-7cf3f7
 title: "Guard: file:// Protocol & CORS"
 reasoning_confidence: 0.95
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 1f7750de
 last_change: ""
 
@@ -74,7 +74,7 @@ When reviewing any new frontend data-fetch:
 
 ### OAuth on file:// (Popup Bridge)
 
-Since `file://` cannot receive HTTP redirects, use a **Popup Bridge**: (1) App opens OAuth URL in `window.open`; (2) Cloudflare Worker receives code, exchanges for token; (3) Worker serves HTML that sends token via `window.opener.postMessage`; (4) Main app stores JWT in `localStorage`. **Fallback**: If postMessage fails (popup blocked), Worker saves to KV; app polls. **Constraints**: Validate `postMessage` Origin; popups must be triggered by direct user click. File Map: #JS-He2SJ9Dp (core/api/cloudflare/auth-client.js), Cloudflare Worker #JS-oi2C6djt (is/cloudflare/edge-api/src/auth.js).
+Since `file://` cannot receive HTTP redirects, use a **Popup Bridge**: (1) App opens OAuth URL in `window.open`; (2) Cloudflare Worker receives code, exchanges for token; (3) Worker serves HTML that sends token via `window.opener.postMessage`; (4) Main app stores JWT in `localStorage`. **Fallback**: If postMessage fails (popup blocked), Worker saves to KV; app polls. **Constraints**: Validate `postMessage` Origin; popups must be triggered by direct user click. File Map: #JS-He2SJ9Dp (auth-client.js), Cloudflare Worker #JS-oi2C6djt (is/cloudflare/edge-api/src/auth.js).
 
 ### Relationship to Hosting Contract
 

@@ -7,7 +7,7 @@ tags:
   - "#naming"
   - "#mcp"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 55766084
 last_change: ""
 related_skills:
@@ -53,12 +53,12 @@ Application layers:
 
 ### Naming Contracts (Name Gate)
 All file and folder names MUST be in `kebab-case` format.
-Verification is done via Zod schemas in #JS-kXgRFkUV (is/contracts/naming/naming-rules.js).
+Verification is done via Zod schemas in #JS-kXgRFkUV (naming-rules.js).
 (System files and folders starting with a dot, e.g., `.github`, are allowed).
 **Module Prefixes:** To explicitly distinguish layers, modules should use prefixes where applicable: `app-*`, `sys-*`, `is-*`, `core-*`, `cmp-*`, `index-*` (for doc index files, e.g. `index-skills.md`, `index-ais.md`).
 
 ### 2. Paths SSOT
-The single source of truth for paths is located in #JS-1xvfg1uj (is/contracts/paths/paths.js).
+The single source of truth for paths is located in #JS-1xvfg1uj (paths.js).
 It is forbidden to hardcode absolute or relative paths in infrastructure scripts. All paths must be taken from the `PATHS` object. 
 This object automatically validates paths via Naming Contracts upon startup.
 
@@ -67,7 +67,7 @@ This object automatically validates paths via Naming Contracts upon startup.
 - **For file operations (fs.readFile, automation scripts, backups):** STRICTLY absolute paths via `PATHS`. The file system is unforgiving with relative paths.
 
 ### 3. Environment and Secrets SSOT (Secret Resilience)
-The contract for environment variables is described in #JS-JJ8jnJEw (is/contracts/env/env-rules.js).
+The contract for environment variables is described in #JS-JJ8jnJEw (env-rules.js).
 The `.env` file cannot be committed (only `.env.example` goes in Git).
 Keys and passwords are encrypted with AES-256 using `SYS_SECRET_ARCHIVE_KEY` (length >= 32 chars) and stored in `is/secrets/archives/` using scripts:
 - `npm run secret:backup`
@@ -174,7 +174,7 @@ If `commit.template` points to `.gitmessage`, the file must exist and stay in sy
 
 If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be extracted to SSOT.
 
-**Extraction targets**: Titles/Icons → #JS-w33hCfsD (core/config/modals-config.js); API Endpoints → #JS-tn3fo2px (core/config/app-config.js); Cache Rules → #JS-8P3M724Z (core/cache/cache-config.js); UI Text → #JS-DR3gZC9b (core/config/tooltips-config.js).
+**Extraction targets**: Titles/Icons → #JS-w33hCfsD (modals-config.js); API Endpoints → #JS-tn3fo2px (app-config.js); Cache Rules → #JS-8P3M724Z (cache-config.js); UI Text → #JS-DR3gZC9b (tooltips-config.js).
 
 **Decision matrix**: Repeated HTML → shared/components (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A4`); Repeated Options → core/config; Repeated Logic → shared/utils (legacy term mapped in `docs/ais/ais-control-plane-llmops.md#LIR-006.A5`).
 
@@ -196,4 +196,4 @@ If a UI element (label, icon, logic) repeats in **2 or more** places, it MUST be
 
 **Access**: Use path resolver or `GLOBAL_ROOT`; atomic writes via registry-service; hot reload via `fs.watch`. *(When Docker deployed: mount global zone via `GLOBAL_ROOT`.)*
 
-*Windows Docker Paths & Lifecycle moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed.*
+*Windows Docker Paths & Lifecycle moved to id:bskill-11683c — not yet deployed.*

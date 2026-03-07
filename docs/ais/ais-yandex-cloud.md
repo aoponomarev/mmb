@@ -137,7 +137,7 @@ flowchart TD
 
 ## Интеграция с клиентом
 
-- #JS-qz3WnWnA (core/api/data-providers/yandex-cache-provider.js) — провайдер для DataProviderManager.
+- #JS-qz3WnWnA (yandex-cache-provider.js) — провайдер для DataProviderManager.
 - `getCoinDataDualChannel()` — сначала PG, затем CoinGecko для недостающих монет.
 
 ---

@@ -21,7 +21,7 @@ assembles all services (CoinGecko, Binance, RequestRegistry, DataCacheManager).
 Layer separation enforced: Service → Transport → HTTP Handler → Node Server.
 40 automated tests passing (`node:test`). Request-ID traceability end-to-end.
 
-**[Tier A]** Control Plane v1 implemented: #JS-NrBeANnz (is/scripts/preflight.js) + #JS-ja3UnjWr (is/scripts/infrastructure/health-check.js) + `single-writer guard` (`DATA_PLANE_ACTIVE_APP`).
+**[Tier A]** Control Plane v1 implemented: #JS-NrBeANnz (is/scripts/preflight.js) + #JS-ja3UnjWr (health-check.js) + `single-writer guard` (`DATA_PLANE_ACTIVE_APP`).
 GitHub Actions CI pipeline (`ci.yml`) activated: Lint → Health → Test.
 
 **[Tier A]** MCP infrastructure set up: `is/mcp/skills/server.js` (skills search/read/audit), 
@@ -32,12 +32,12 @@ Causality extracted into 11 `arch-*.md` skill files in `is/skills/`.
 Master plan (`plan-master-migration.md`) marked complete. 
 Stages 4 (Frontend UI) and 5 (n8n) moved to backlog/excluded.
 
-**[Tier B]** Directory contract policy implemented: #JS-VF3AHARR (is/scripts/architecture/validate-readmes.js) enforces README presence 
+**[Tier B]** Directory contract policy implemented: #JS-VF3AHARR (validate-readmes.js) enforces README presence 
 in 8 boundary directories. All READMEs created. Integrated into `npm run health-check`.
 `arch-layout-governance.md` skill formalizes the policy.
 
-**[Tier B]** Skills health infrastructure: #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js) (with `--json` mode + stale/orphan detection),
-#JS-mYo7imVc (is/scripts/architecture/generate-skills-index.js), #JS-CqRSWCnE (is/scripts/architecture/skills-health-trend.js), monitoring snapshot scripts.
+**[Tier B]** Skills health infrastructure: #JS-Mt2rdqJ4 (validate-skills.js) (with `--json` mode + stale/orphan detection),
+#JS-mYo7imVc (generate-skills-index.js), #JS-CqRSWCnE (skills-health-trend.js), monitoring snapshot scripts.
 
 **[Tier B]** Secret Resilience MVP: AES-256 backup/restore via `npm run secret:backup/restore/check`.
 `process-secrets-hygiene.md` skill defines the zero-tolerance policy.

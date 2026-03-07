@@ -20,7 +20,7 @@ related_ais:
 
 - id:ais-c4e9b2 — устойчивый идентификатор для ссылок из скиллов, планов и гейтов.
 - status: incomplete (фазы 0–5 плана выполнены: гейт, скрипт, preflight, cursor-правило, causality #for-rrg-contour, index-ais).
-- Связанные артефакты: скилл id:sk-318305 (app/skills/ui-architecture.md), id:sk-a17d41 (core/skills/state-events.md), id:ais-c6c35b (docs/ais/ais-frontend-ui.md). План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log (docs/deletion-log.md).
+- Связанные артефакты: скилл id:sk-318305, id:sk-a17d41 (core/skills/state-events.md), id:ais-c6c35b (docs/ais/ais-frontend-ui.md). План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log (docs/deletion-log.md).
 
 ## Концепция (High-Level Concept)
 
@@ -61,11 +61,11 @@ flowchart TB
 
 - **Область проверки (актуально):** app/components и shared/components (файлы *.js, *.mjs). Не сканируются app/templates и shared/templates (innerHTML в #JS-ZP2M2QVZ postgres-settings-template.js — регистрация Vue-шаблона).
 - **Триггеры:** `npm run frontend:reactivity:check` (отдельная команда); `npm run test` (premerge/CI); preflight — шаг 6, вызов `npm run frontend:reactivity:check` (при падении exit(1)).
-- **Скрипт:** В package.json зарегистрирован `frontend:reactivity:check` → `node --test` #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js).
+- **Скрипт:** В package.json зарегистрирован `frontend:reactivity:check` → `node --test` #JS-Yn27TZUx (check-frontend-rrg.test.js).
 
 ## Правила гейта (текущая реализация)
 
-Гейт: #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js). Константа RRG_SCAN_DIRS: app/components, shared/components; app/templates и shared/templates не входят (innerHTML в #JS-ZP2M2QVZ postgres-settings-template.js — регистрация Vue-шаблона).
+Гейт: #JS-Yn27TZUx. Константа RRG_SCAN_DIRS: app/components, shared/components; app/templates и shared/templates не входят (innerHTML в #JS-ZP2M2QVZ postgres-settings-template.js — регистрация Vue-шаблона).
 
 | Правило | Проверка | Исключения |
 |--------|----------|------------|
@@ -183,22 +183,22 @@ flowchart TB
 
 | Компонент | Путь | Назначение |
 |-----------|------|------------|
-| RRG-тест | #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js) | RRG-1 и RRG-2; RRG_SCAN_DIRS: app/components, shared/components |
-| Скилл UI Architecture | id:sk-318305 (app/skills/ui-architecture.md) | Правила RRG, scope, enforcement commands |
-| Скилл State & Events | id:sk-a17d41 (core/skills/state-events.md) | Дисциплина мутаций, связь с RRG |
+| RRG-тест | #JS-Yn27TZUx | RRG-1 и RRG-2; RRG_SCAN_DIRS: app/components, shared/components |
+| Скилл UI Architecture | id:sk-318305 | Правила RRG, scope, enforcement commands |
+| Скилл State & Events | id:sk-a17d41 | Дисциплина мутаций, связь с RRG |
 | Preflight | #JS-NrBeANnz (is/scripts/preflight.js) | Шаг 6: вызов frontend:reactivity:check |
 | Cursor rule | .cursor/rules/global-rules/rrg-frontend.mdc | RRG при правках app/, shared/components/; globs: app/**/*.js, shared/components/**/*.js |
 | Causality registry | id:sk-3b1519 (is/skills/causality-registry.md) | Хеш #for-rrg-contour для @causality/@skill-anchor при ссылке на контур RRG |
 | Index AIS | id:docidx-3022eb (docs/index-ais.md) | Генерируется в preflight (generate-index-ais.js) из docs/ais/; id:ais-c4e9b2 входит в индекс |
-| Module loader | #JS-xj43kftu (core/module-loader.js) | Порядок загрузки, window.modulesConfig |
-| Modules config | #JS-os34Gxk3 (core/modules-config.js) | Зависимости и порядок скриптов |
+| Module loader | #JS-xj43kftu (module-loader.js) | Порядок загрузки, window.modulesConfig |
+| Modules config | #JS-os34Gxk3 (modules-config.js) | Зависимости и порядок скриптов |
 
 ## Ссылки
 
-- Скилл: id:sk-318305 (app/skills/ui-architecture.md)
-- Скилл State: id:sk-a17d41 (core/skills/state-events.md)
-- Causality registry: id:sk-3b1519 (is/skills/causality-registry.md) — хеш #for-rrg-contour
-- Индекс AIS: id:docidx-3022eb (docs/index-ais.md) (содержит id:ais-c4e9b2)
-- Тест: #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js)
-- План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log (docs/deletion-log.md)
+- Скилл: id:sk-318305
+- Скилл State: id:sk-a17d41
+- Causality registry: id:sk-3b1519 — хеш #for-rrg-contour
+- Индекс AIS: id:docidx-3022eb (содержит id:ais-c4e9b2)
+- Тест: #JS-Yn27TZUx
+- План модернизации RRG выполнен и дистиллирован в настоящий AIS; лог удаления: id:doc-del-log
 

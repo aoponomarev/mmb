@@ -6,7 +6,7 @@ tags:
   - "#rrg"
   - "#refactor"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 765480fa
 last_change: ""
 related_skills:

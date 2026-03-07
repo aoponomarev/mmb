@@ -27,7 +27,7 @@ last_updated: "2026-03-04"
 
 ## WSL2 & Docker Optimization
 
-**Context**: WSL settings depend on hardware profile. When `INFRASTRUCTURE_CONFIG.yaml` exists (id:sk-02d3ea (core/skills/config-contracts.md)), use it for profile-specific paths. File: `C:\Users\[User]\.wslconfig`.
+**Context**: WSL settings depend on hardware profile. When `INFRASTRUCTURE_CONFIG.yaml` exists (id:sk-02d3ea), use it for profile-specific paths. File: `C:\Users\[User]\.wslconfig`.
 
 **Profiles**: Home (high perf) — processors=12, memory=32GB, swap=8GB; Office — processors=4, memory=8GB, swap=4GB.
 

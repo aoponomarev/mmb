@@ -24,7 +24,7 @@ related_ais:
   1. **Phase 1 (PostgreSQL):** `YandexCacheProvider` → `GET /api/coins/market-cache?ids=...` — быстрая bulk-выдача без rate limit.
   2. **Phase 2 (CoinGecko):** Если `missingIds.length > 0` — `getCoinData(missingIds)` через `CoinGeckoProvider` (chunk 50, задержка 21s между chunk'ами).
   3. **Merge:** `resolvedFromPg + resolvedFromCG` → итоговый набор монет.
-- **A.I.R. Model (Alignment, Impulse, Risk):** Сердцевина финансовой логики. Сырые данные о цене/объемах пропускаются через математическую модель A.I.R. для расчета инвестиционного рейтинга каждой монеты. Эти алгоритмы изолированы в #JS-CeYzbCbM (core/config/models-config.js) и не должны смешиваться с UI-кодом.
+- **A.I.R. Model (Alignment, Impulse, Risk):** Сердцевина финансовой логики. Сырые данные о цене/объемах пропускаются через математическую модель A.I.R. для расчета инвестиционного рейтинга каждой монеты. Эти алгоритмы изолированы в #JS-CeYzbCbM (models-config.js) и не должны смешиваться с UI-кодом.
 - **Менеджер Провайдеров:** `DataProviderManager` абстрагирует конкретные источники (Binance, CoinGecko) под единый интерфейс. UI-слой ничего не знает о том, откуда именно пришли цены.
 
 ### Dual-Channel: Fallback-поведение
@@ -54,9 +54,9 @@ related_ais:
 - **Математический контракт:** Формула A.I.R. является строгим контрактом предметной области. ИИ-агентам запрещено модифицировать весовые коэффициенты без явного указания пользователя-архитектора.
 
 ## Компоненты и Контракты (Components & Contracts)
-- #JS-2436XKxE (core/api/data-provider-manager.js) — точка входа, `getCoinDataDualChannel()` — dual-channel оркестрация.
+- #JS-2436XKxE (data-provider-manager.js) — точка входа, `getCoinDataDualChannel()` — dual-channel оркестрация.
 - core/api/data-providers/* — #JS-DvQtSDsD coingecko-provider, #JS-qz3WnWnA yandex-cache-provider (PostgreSQL через API Gateway).
-- #JS-CeYzbCbM (core/config/models-config.js) — SSOT конфигурация математических доменных моделей.
-- #JS-Xa3QAdTk (core/api/market-metrics-service.js) — оркестратор TTL и кэширования метрик.
+- #JS-CeYzbCbM — SSOT конфигурация математических доменных моделей.
+- #JS-Xa3QAdTk (market-metrics-service.js) — оркестратор TTL и кэширования метрик.
 
 **API и схема PostgreSQL:** см. id:ais-e41384 (docs/ais/ais-yandex-cloud.md).

@@ -1,0 +1,20 @@
+---
+description: Enforce mixed reference mode for ids, file hashes, and paths across docs, skills, rules, and code comments.
+alwaysApply: true
+---
+
+# Mixed Reference Mode
+
+## Core Rules
+- `id:` and file hashes (`#JS-...`, `#TS-...`, `#CSS-...`, `#JSON-...`) are the primary identifiers. Paths are secondary context only.
+- For the first important mention in a file, keep contextual form:
+  `id:ais-xxxxxx (docs/ais/file.md)` for markdown artifacts;
+  `#JS-xxxxxxxx (file.js)` for code files when basename is unique.
+- Repeated mentions of the same id/hash in the same file should be reduced to the bare id/hash unless extra disambiguation is genuinely needed.
+- For code-file references, prefer `hash + basename`; use a full repo-relative path only when the basename is ambiguous in the registry.
+- If you use bare `id:` or bare file hash, you must resolve it through `is/contracts/docs/id-registry.json` or `is/contracts/docs/code-file-registry.json` before relying on it.
+
+## Scope
+- Applies to docs, skills, AIS, causality prose, Cursor rules, and code comments.
+- Keep raw path-only references out of active docs/skills unless the path itself is the subject of discussion.
+- Generated indexes may stay clickable, but prose should still follow the mixed reference rules above.

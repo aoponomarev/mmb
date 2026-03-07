@@ -2,7 +2,7 @@
 id: sk-d599bd
 title: "Architecture: Causality & Rationale Tracking"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 8d65409b
 last_change: ""
 

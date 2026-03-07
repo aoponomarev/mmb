@@ -2,7 +2,7 @@
 id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 7877f86a
 last_change: ""
 
@@ -19,23 +19,23 @@ last_change: ""
 - **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
 - **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
 - **#for-id-contract-navigation** Cross-references to docs artifacts should prefer `id:` contracts (`id:docidx-3022eb`, `id:docidx-0b048e`, `id:ais-e41384`) over path-centric links.
-- **#for-doc-link-format** In documents and comments, references to files or artifacts MUST use the format **id:\<hash\> (path)** — hash identifier first, path in parentheses. Do not insert a space between `id:` and the hash (write as one token, e.g. `id:ais-c4e9b2`, not `id: ais-c4e9b2`). Example: `id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md)`. Deleted plans: do not reference by id; point to distillation target (e.g. id:ais-c4e9b2) and docs/deletion-log.md.
+- **#for-doc-link-format** In documents and comments, references use a mixed mode: the `id:` contract is primary, while `(path)` is optional context for the first important mention. Use `id:<hash> (path)` for the first governance-grade mention in a file, then reduce repeated mentions to bare `id:<hash>`. Do not insert a space after `id:`. Deleted plans: do not reference by deleted id; point to the distillation target and `docs/deletion-log.md`.
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
 - **#for-ais-mermaid-diagrams** AIS documents without visual diagrams are harder for humans and agents to grasp. Mermaid diagrams in fenced code blocks render on GitHub, VS Code, and GitLab; they are version-controlled as text and avoid stale image files. See id:ais-e41384 (docs/ais/ais-yandex-cloud.md) for the reference format.
 - **#for-distillation-cleanup** Once a plan in `docs/done/` has been successfully distilled into AIS and Skills, the original markdown file MUST be deleted. The `docs/done/` folder itself remains as a staging ground, but keeping distilled files creates redundant, dead knowledge.
 - **#not-redundant-folders** Creating new folders when a functionally suitable one exists clutters the structure. Use the existing folders (см. структуру docs/ в репозитории).
 - **#for-frontmatter-format** Any markdown file with YAML frontmatter MUST have a blank line before the closing `---`. Without it, CommonMark parses the second `---` as setext underline and `id: ...` (or similar) renders as huge h2 in Cursor preview. Applies everywhere: `docs/`, `is/skills/`, `core/skills/`, `app/skills/`, plans, runbooks, cheatsheets, etc.
-- **#for-stable-ids** AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; links use ids, not paths. `related_skills` and `related_ais` reference ids. Index files use `index-` prefix: id:docidx-0b048e (docs/index-skills.md), id:docidx-3022eb (docs/index-ais.md).
+- **#for-stable-ids** AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; links use ids as the canonical key, with paths only as optional local context. `related_skills` and `related_ais` reference ids. Index files use `index-` prefix: id:docidx-0b048e (docs/index-skills.md), id:docidx-3022eb (docs/index-ais.md).
 - **#for-docs-ids-gate** Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. Broken links fail the gate. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling.
-- **#for-auto-index-ais** id:docidx-3022eb (docs/index-ais.md) is auto-generated and must never be edited manually. Any AIS add/remove/update must be reflected by running the generator (`npm run ais:index`) or by preflight pipeline that regenerates indexes.
-- **#for-live-ais-index-watch** For live editing sessions, run `npm run ais:index:watch` to auto-regenerate id:docidx-3022eb (docs/index-ais.md) immediately on `docs/ais/*.md` changes.
+- **#for-auto-index-ais** id:docidx-3022eb is auto-generated and must never be edited manually. Any AIS add/remove/update must be reflected by running the generator (`npm run ais:index`) or by preflight pipeline that regenerates indexes.
+- **#for-live-ais-index-watch** For live editing sessions, run `npm run ais:index:watch` to auto-regenerate id:docidx-3022eb immediately on `docs/ais/*.md` changes.
 - **#for-plan-iterative-improvement** Plans are living documents. When an AI agent notices a deficiency in a plan's protocols or algorithms (affecting work quality), it MUST augment the plan directly. Future work benefits. Condition: backward compatibility — improvements must not invalidate results already obtained before the improvement.
 - **#for-plan-backlog** Each plan gets a dedicated backlog file in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a plan.
 
 ## Core Rules
 
 0.  **Reference format (#for-doc-link-format)**  
-    When writing links in docs, plans, AIS, or code comments: use **id:\<hash\> (path)**. Primary is the id (e.g. `id:ais-c4e9b2`); in parentheses add the path (e.g. `docs/ais/ais-rrg-contour.md`). No space after `id:`.
+    Use mixed reference mode. The canonical key is always the `id:` or file hash itself. For the first important mention in a file, use `id:<hash> (path)` for markdown artifacts; for later mentions in the same file, reduce to bare `id:<hash>`. For code files, use `#JS-... (basename.js)` when basename is unique; use a full repo-relative path only for ambiguous basenames. No space after `id:`.
 
 1.  **Phase 1: Planning (`docs/plans/`)**
     - All new work starts here as markdown files with `[ ]` checkboxes.
@@ -50,7 +50,7 @@ last_change: ""
 3.  **Phase 3: Distillation (`docs/ais/` and `is/skills/`)**
     - Upon user request, an AI agent performs "distillation" of the completed plan.
     - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian. The AIS intro sentence ("Спецификации (AIS)...") must be an HTML comment `<!-- ... -->` so it is hidden in preview. **Frontmatter**: See `#for-frontmatter-format`.
-    - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: id:ais-e41384 (docs/ais/ais-yandex-cloud.md).
+    - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: id:ais-e41384.
     - **No execution log in AIS**: Do NOT keep a "Ход выполнения плана" or similar section. Everything that was done (from the plan checklist) MUST be merged into the relevant sections of the specification with maximum specificity and nuance (e.g. scope → Инфраструктура/Правила гейта; скрипты, preflight, cursor rule → Компоненты и контракты; исключения и нюансы → таблицы правил, Локальные политики).
     - **No standalone "recommended" block**: Do NOT keep a "Рекомендуемые усиления" or "вынесены в план" section that repeats plan items. Completed items are already reflected in the spec; possible future extensions belong in Локальные политики or a single short "Расширение области" note where relevant, not as a duplicate list.
     - **Micro-Rules**: The agent extracts strict invariants and adds them to `is/skills/` (Language: English) and registers new causality hashes.
@@ -62,7 +62,7 @@ last_change: ""
 
 5.  **Doc Deletion Protocol** (any doc in `docs/`, not only from `done/`)
     - Applies when: (a) Phase 4 cleanup after distillation, or (b) **user explicitly asks to delete** a plan or doc (e.g. "удали план", "переведи в выполненные и удали"). Same steps in both cases.
-    - Before deleting: grep for `id:<doc-id>` and path refs to the doc; update all to new targets (AIS, deletion-log; remove or replace `id:` so the deleted doc's id is no longer referenced — otherwise validate-id-contract-links will fail after generate-id-registry drops the id).
+    - Before deleting: search for `id:<doc-id>` and path refs to the doc; update all to new targets (AIS, deletion-log; remove or replace `id:` so the deleted doc's id is no longer referenced — otherwise validate-id-contract-links will fail after generate-id-registry drops the id).
     - Delete the file.
     - Append row to `docs/deletion-log.md`: `| \`<path>\` | — | <rationale> |`. Rationale: e.g. "дистиллирован в id:ais-c4e9b2" or "удаление по запросу пользователя". Fill Commit after commit.
     - Run `node is/scripts/architecture/generate-id-registry.js`.
@@ -103,3 +103,4 @@ last_change: ""
 - Never hand-edit `docs/index-ais.md` or `docs/index-skills.md`.
 - Source of truth is `docs/ais/*.md` and skill files; indexes are derived artifacts.
 - If index content is stale after doc edits, regenerate indexes instead of patching index files directly.
+- Generated indexes may stay clickable through Markdown links; prose around them still follows mixed reference mode.

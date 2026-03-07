@@ -262,6 +262,7 @@
   "#JS-vp2qzyrz": "is/scripts/architecture/assign-missing-md-ids.js",
   "#JS-w33hCfsD": "core/config/modals-config.js",
   "#JS-wZTcVwWG": "core/api/market-snapshot-node-server.js",
+  "#JS-ww2hRLt7": "is/scripts/architecture/validate-mixed-reference-mode.js",
   "#JS-xNN9FxKB": "app/components/postgres-settings.js",
   "#JS-xQ1VjxLp": "mm/median/air/260115/median-air-260115-calculator.js",
   "#JS-xc26vutn": "core/utils/auto-coin-sets.js",

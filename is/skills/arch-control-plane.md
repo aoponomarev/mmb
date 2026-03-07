@@ -7,7 +7,7 @@ tags:
   - "#infrastructure"
   - "#health"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 7dea41f2
 last_change: ""
 dependencies:
@@ -54,4 +54,4 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 ## Implementation Status in Target App
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).
-- `Implemented`: Docs-ids gate — #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js) checks `related_skills`/`related_ais` id resolution; #JS-6U3KWB2e (is/scripts/architecture/generate-id-registry.js) produces `is/contracts/docs/id-registry.json`.
+- `Implemented`: Docs-ids gate — #JS-Hx2xaHE8 (validate-docs-ids.js) checks `related_skills`/`related_ais` id resolution; #JS-6U3KWB2e (generate-id-registry.js) produces `is/contracts/docs/id-registry.json`.

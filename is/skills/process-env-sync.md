@@ -2,7 +2,7 @@
 id: sk-918276
 title: "Process: Environment Sync Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: e6167b8e
 last_change: ""
 

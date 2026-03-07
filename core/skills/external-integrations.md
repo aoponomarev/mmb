@@ -2,7 +2,7 @@
 id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: e845c465
 last_change: ""
 
@@ -11,7 +11,7 @@ last_change: ""
 # External Integrations
 
 > **Context**: Strategic integration of external services (Yandex Cloud, Cloudflare, GitHub) to ensure high availability, performance, and fault tolerance.
-> **Scope**: core/api/, #JS-tn3fo2px (core/config/app-config.js)
+> **Scope**: core/api/, #JS-tn3fo2px (app-config.js)
 
 ## Reasoning
 
@@ -26,7 +26,7 @@ last_change: ""
     - If the primary provider is unavailable, automatically switch to the secondary.
     - If the secondary is unavailable, fallback to a tertiary or local mock.
 2.  **Centralized Integration Management:**
-    Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (#JS-tn3fo2px (core/config/app-config.js)) to define the active provider and fallback chain.
+    Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (#JS-tn3fo2px) to define the active provider and fallback chain.
 3.  **Geographic Optimization:**
     When configuring endpoints, prefer Yandex Cloud (Cloud Functions, API Gateway) for low-latency access within RU/CIS, and Cloudflare (Workers, Pages) for global edge-computing distribution.
 4.  **Endpoint Coherence for Stateful APIs:**
@@ -61,5 +61,5 @@ last_change: ""
 **Hard constraints**: No FOMO — flag sensationalist language, reduce impact; verification — high-impact requires 2+ independent sources.
 ## Contracts
 
-- **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in core/config/ (#JS-tn3fo2px (core/config/app-config.js), integration-config при наличии).
+- **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in core/config/ (#JS-tn3fo2px, integration-config при наличии).
 - **Monitoring**: The integration layer must log when a fallback occurs so the system health can be monitored without disrupting the user.

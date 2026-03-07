@@ -2,7 +2,7 @@
 id: sk-8991cd
 title: "Process: Code Anchors (Skill-to-Code Linking)"
 reasoning_confidence: 0.85
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: eb4c3d21
 last_change: ""
 
@@ -37,7 +37,7 @@ Add a JSDoc block at the top of every JS file that has architectural significanc
 
 ```javascript
 /**
- * @skill is/skills/arch-foundation
+ * @skill id:sk-483943
  *
  * Brief description of what this file does.
  */
@@ -47,8 +47,8 @@ For files governed by multiple skills:
 
 ```javascript
 /**
- * @skill is/skills/arch-backend-core
- * @skill core/skills/api-layer
+ * @skill id:sk-5c0ef8
+ * @skill id:sk-bb7c8e
  *
  * Market Snapshot HTTP handler — framework-agnostic route binding.
  */
@@ -57,15 +57,15 @@ For files governed by multiple skills:
 ### Inline Anchor (For Non-Obvious Decisions)
 
 Use inline anchors only for non-trivial decisions inside logic that a reader would not understand without architectural context.
-Use hashes from `causality-registry.md` — one or more `#for-...` or `#not-...`. Optional short context after colon.
+Use hashes from `id:sk-3b1519 (is/skills/causality-registry.md)` — one or more `#for-...` or `#not-...`. Optional short context after colon.
 
 ```javascript
-// @skill-anchor arch-foundation #for-ssot-paths
+// @skill-anchor id:sk-483943 #for-ssot-paths
 const configPath = join(PATHS.REPO_ROOT, '.env.example');
 ```
 
 ```javascript
-// @skill-anchor core/skills/api-layer #for-fail-fast: Binance API stalls
+// @skill-anchor id:sk-bb7c8e #for-fail-fast: Binance API stalls
 const response = await this.fetchFn(url, { signal: AbortSignal.timeout(this.timeoutMs) });
 ```
 
@@ -85,18 +85,18 @@ const settled = await Promise.allSettled(entries.map(([, fn]) => fn()));
 this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 ```
 
-**Registry:** All hashes must exist in id:sk-3b1519 (is/skills/causality-registry.md). Add new hashes there before using.
+**Registry:** All hashes must exist in id:sk-3b1519. Add new hashes there before using.
 
 ### Where Anchors Are Required
 
 | Code Pattern | Required anchor |
 |---|---|
-| Path resolution using `PATHS` | `arch-foundation` |
-| Env variable access (SSOT files only) | `arch-foundation` (exception note) |
-| Secret loading / encryption | `process-secrets-hygiene` |
+| Path resolution using `PATHS` | `id:sk-483943` |
+| Env variable access (SSOT files only) | `id:sk-483943` (exception note) |
+| Secret loading / encryption | `id:sk-b7e114` |
 | Provider data fetching | id:sk-bb7c8e (core/skills/api-layer.md) |
 | UI state mutations | id:sk-318305 (app/skills/ui-architecture.md) |
-| Health / preflight checks | `arch-control-plane` |
+| Health / preflight checks | `id:sk-d7a2cc` |
 
 ### Anchor Placement (Risk Branches)
 
@@ -111,5 +111,5 @@ Place inline anchors in branches where developers would otherwise "search from s
 ### Current Implementation Status
 
 The Target App currently uses anchors in infrastructure scripts and key backend files.
-The `audit_skill_coverage` MCP tool (in #JS-by3WhrY9 (is/mcp/skills/server.js)) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
+The `audit_skill_coverage` MCP tool (in #JS-by3WhrY9 (server.js)) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
 The `search_anchors` MCP tool returns file:line for all `@skill-anchor` and `@causality` occurrences, filterable by skill or hash.

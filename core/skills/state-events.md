@@ -2,7 +2,7 @@
 id: sk-a17d41
 title: "State, Events & Module Loading"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: aea9aebd
 last_change: ""
 
@@ -11,13 +11,13 @@ last_change: ""
 # State, Events & Module Loading
 
 > **Context**: Defines the application's reactive state architecture, event communication pattern, and no-build module loading mechanism.
-> **Scope**: `core/state/`, `core/events/`, #JS-xj43kftu (core/module-loader.js), #JS-os34Gxk3 (core/modules-config.js)
+> **Scope**: `core/state/`, `core/events/`, #JS-xj43kftu (module-loader.js), #JS-os34Gxk3 (modules-config.js)
 
 ## Reasoning
 
 - **#for-mutation-discipline** Uncontrolled mutation causes Reactive Reliability Gate (RRG) violations, producing unpredictable render orders. We enforce strict state ownership.
 - **#for-module-registry** In our no-build `file://` architecture, the module registry explicitly guarantees load order to prevent silent `undefined` dependency failures.
-- **#for-explicit-runtime-deps** In no-build mode, implicit globals are unsafe: modules and root components must explicitly declare every runtime dependency in #JS-os34Gxk3 (core/modules-config.js) (`deps` list). Missing deps can create intermittent startup behavior (component works, but integration client is not ready at first render).
+- **#for-explicit-runtime-deps** In no-build mode, implicit globals are unsafe: modules and root components must explicitly declare every runtime dependency in #JS-os34Gxk3 (`deps` list). Missing deps can create intermittent startup behavior (component works, but integration client is not ready at first render).
 
 ---
 
@@ -27,9 +27,9 @@ last_change: ""
 
 | File | Owns |
 |---|---|
-| #JS-RX2UHzMh (core/state/ui-state.js) | Loading flags, auth status, tooltip language, cloud connection flags, cache metadata (e.g., `coinsCacheMeta.expiresAt`) |
-| #JS-id3oaqeo (core/state/auth-state.js) | OAuth session: user info, token, login/logout status |
-| #JS-gH2qNvcT (core/state/loading-state.js) | Per-operation loading indicators (prevents concurrent duplicate requests) |
+| #JS-RX2UHzMh (ui-state.js) | Loading flags, auth status, tooltip language, cloud connection flags, cache metadata (e.g., `coinsCacheMeta.expiresAt`) |
+| #JS-id3oaqeo (auth-state.js) | OAuth session: user info, token, login/logout status |
+| #JS-gH2qNvcT (loading-state.js) | Per-operation loading indicators (prevents concurrent duplicate requests) |
 
 **Mechanism**: All state objects are created with `Vue.reactive()`. Components subscribe reactively — no manual subscription management, no `EventEmitter` for state changes.
 
@@ -51,7 +51,7 @@ let isLoggedIn = false;
 - Components never mutate state objects directly via property assignment outside of the state module.
 - **#for-mutation-discipline** Uncontrolled mutation spread causes the RRG (Reactive Reliability Gate) violation — two components independently mutating the same field produce unpredictable render order.
 
-### Event Bus (#JS-v8M9uv5A (core/events/event-bus.js))
+### Event Bus (#JS-v8M9uv5A (event-bus.js))
 
 The event bus handles **cross-component communication** that is not suitable for reactive state (one-time events, notifications, imperative triggers).
 
@@ -64,7 +64,7 @@ The event bus handles **cross-component communication** that is not suitable for
 
 ### Module Loading (No-Build Architecture)
 
-#JS-xj43kftu (core/module-loader.js) reads the ordered module registry from #JS-os34Gxk3 (core/modules-config.js) and dynamically injects `<script>` tags into `<head>` in dependency order.
+#JS-xj43kftu reads the ordered module registry from #JS-os34Gxk3 and dynamically injects `<script>` tags into `<head>` in dependency order.
 
 **Load order contract**:
 1. Libraries (Vue, etc.) — loaded first via `<script>` tags in `index.html`
@@ -75,7 +75,7 @@ The event bus handles **cross-component communication** that is not suitable for
 
 **#for-module-registry** Without a bundler, the browser has no static dependency graph. The module registry is the only mechanism guaranteeing load order. A component loaded before its dependency will silently fail (`window.X is undefined`).
 
-**Adding a new module**: Register it in #JS-os34Gxk3 (core/modules-config.js) at the correct position in the load sequence. Never rely on script tag order in `index.html` for non-library modules.
+**Adding a new module**: Register it in #JS-os34Gxk3 at the correct position in the load sequence. Never rely on script tag order in `index.html` for non-library modules.
 
 **Dependency discipline for root app**:
 - `app-ui-root` must list integration clients it reads during `mounted()` or auth callbacks (for example cloud workspace/auth state clients).
@@ -83,6 +83,6 @@ The event bus handles **cross-component communication** that is not suitable for
 
 ### Error Handling Integration
 
-#JS-tWuXPtTi (core/errors/error-handler.js) and #JS-Sq2CfSP1 (core/errors/error-types.js) define the shared error taxonomy. All service-level errors must use these types — never throw raw `new Error('string')` from domain or service code.
+#JS-tWuXPtTi (error-handler.js) and #JS-Sq2CfSP1 (error-types.js) define the shared error taxonomy. All service-level errors must use these types — never throw raw `new Error('string')` from domain or service code.
 
-#JS-fW36ebbg (core/observability/fallback-monitor.js) tracks provider fallback events (e.g., when primary data provider fails and secondary activates) for debugging and health monitoring.
+#JS-fW36ebbg (fallback-monitor.js) tracks provider fallback events (e.g., when primary data provider fails and secondary activates) for debugging and health monitoring.

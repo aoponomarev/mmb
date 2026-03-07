@@ -2,7 +2,7 @@
 id: sk-c62fb6
 title: "Architecture: Layout & README Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 7ebe9e38
 last_change: ""
 
@@ -17,7 +17,7 @@ last_change: ""
 - **#for-readme-local-contract** A `README.md` acts as a localized architectural contract for a boundary, explaining rules without forcing devs to search global docs.
 - **#for-cognitive-load-reduction** Documenting subfolders inside a parent `README.md` makes ownership clear and reduces visual noise.
 - **#for-migration-exit-policy** Temporary migration folders must have strict Exit Policies so they don't become permanent tech debt.
-- **#for-automated-enforcement** The #JS-VF3AHARR (is/scripts/architecture/validate-readmes.js) script enforces documentation presence so it doesn't decay.
+- **#for-automated-enforcement** The #JS-VF3AHARR (validate-readmes.js) script enforces documentation presence so it doesn't decay.
 - **#not-central-docs** Monolithic docs lose context quickly; folder-level READMEs scale better.
 - **#not-no-folder-docs** Skipping folder docs leads to structure degradation over time.
 
@@ -28,8 +28,8 @@ last_change: ""
 - `Implemented`: Required README.md files for core boundaries (`app/`, `core/`, `is/`, `docs/`, `data/`).
 - `Implemented`: Required README.md files for skill directories (`app/skills/`, `core/skills/`, `is/skills/`).
 - `Implemented`: Required README.md files for critical subsystems (`is/scripts/`, `is/contracts/`).
-- `Implemented`: Required README.md files for supplemental root folders (`shared/`, `styles/`, `scripts/`, `mm/`). Enforced by #JS-VF3AHARR (is/scripts/architecture/validate-readmes.js).
-- `Implemented`: Automated enforcement via `npm run readmes:check` (runs #JS-VF3AHARR (is/scripts/architecture/validate-readmes.js)) and integrated into `health-check`.
+- `Implemented`: Required README.md files for supplemental root folders (`shared/`, `styles/`, `scripts/`, `mm/`). Enforced by #JS-VF3AHARR.
+- `Implemented`: Automated enforcement via `npm run readmes:check` (runs #JS-VF3AHARR) and integrated into `health-check`.
 
 ## Core Rules
 
@@ -43,7 +43,7 @@ last_change: ""
    - `styles/`: CSS files (wrappers, layout, custom).
    - `scripts/`: Project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation).
    - `mm/`: Math models (domain-specific calculators). Legacy structure.
-2. **Script Layout**: `is/scripts/` root must contain only `README.md`, top-level entrypoints (#JS-NrBeANnz (is/scripts/preflight.js)), and one-off migration utilities (e.g. #JS-V931HiRK (is/scripts/migrate-plans.js)). All other scripts go into subfolders under `is/scripts/` (`architecture/`, `infrastructure/`, `secrets/`, `tests/`). Это legacy-маркировка маршрутизации модулей, трассируется в id:ais-bfd150 (docs/ais/ais-architecture-foundation.md)#LIR-008.A1.. #LIR-008.A4.
+2. **Script Layout**: `is/scripts/` root must contain only `README.md`, top-level entrypoints (#JS-NrBeANnz (is/scripts/preflight.js)), and one-off migration utilities (e.g. #JS-V931HiRK (migrate-plans.js)). All other scripts go into subfolders under `is/scripts/` (`architecture/`, `infrastructure/`, `secrets/`, `tests/`). Это legacy-маркировка маршрутизации модулей, трассируется в id:ais-bfd150 (docs/ais/ais-architecture-foundation.md)#LIR-008.A1.. #LIR-008.A4.
 3. **Skill Layout**: Skills are distributed per id:sk-d763e7 (is/skills/process-skill-governance.md):
    - `is/skills/`: Infrastructure and process knowledge (`arch-*.md`, `process-*.md`).
    - `core/skills/`: Backend and shared domain knowledge (e.g. `api-layer.md`, `cache-layer.md`, `config-contracts.md`).
@@ -59,11 +59,11 @@ last_change: ""
 
 **Context**: Managing libs repository and dependency updates. Trigger: new lib needed or version update.
 
-**Automation**: Check if file in `libs/<name>/<version>/`; if missing, download UMD from CDN; update #JS-xj43kftu (core/module-loader.js) sources and #JS-os34Gxk3 (core/modules-config.js) wiring; notify user to commit. **Constraints**: Explicit commit (automation prepares, user commits); UMD only for browser loading.
+**Automation**: Check if file in `libs/<name>/<version>/`; if missing, download UMD from CDN; update #JS-xj43kftu (module-loader.js) sources and #JS-os34Gxk3 (modules-config.js) wiring; notify user to commit. **Constraints**: Explicit commit (automation prepares, user commits); UMD only for browser loading.
 
 ### Libs Directory Structure & Load Priority
 
-**Context**: Layout of vendor libs repository. Structure: `libs/<name>/<version>/`; coin/icon assets path is currently not deployed in Target App and must be treated as a deferred infra contract. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage is governed by loader contracts in #JS-xj43kftu (core/module-loader.js).
+**Context**: Layout of vendor libs repository. Structure: `libs/<name>/<version>/`; coin/icon assets path is currently not deployed in Target App and must be treated as a deferred infra contract. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage is governed by loader contracts in #JS-xj43kftu.
 
 ## Contracts
 
@@ -74,7 +74,7 @@ last_change: ""
 | **Add subfolder** | Update parent `README.md` — add entry to Subdirectories/Subfolders/Structure section. |
 | **Remove/rename subfolder** | Update parent `README.md` — remove or rename the corresponding entry. |
 | **Change Scope or Constraints** | Update the relevant section in the affected `README.md`. |
-| **Add new root-level folder** (with README) | Add path to #JS-VF3AHARR (is/scripts/architecture/validate-readmes.js) `REQUIRED_READMES` and to this skill's Directory Policies. |
+| **Add new root-level folder** (with README) | Add path to #JS-VF3AHARR `REQUIRED_READMES` and to this skill's Directory Policies. |
 
 ### Who Updates
 

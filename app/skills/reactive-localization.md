@@ -2,7 +2,7 @@
 id: sk-502074
 title: "Reactive Localization"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 12b691ff
 last_change: ""
 
@@ -31,5 +31,5 @@ last_change: ""
 
 ## Contracts
 
-- **Translation Keys**: Keys used in templates must correspond to the central dictionary defined in #JS-2Z2J49xj (core/config/messages-config.js) or the translation module.
+- **Translation Keys**: Keys used in templates must correspond to the central dictionary defined in #JS-2Z2J49xj (messages-config.js) or the translation module.
 - **Fallback**: If a translation key is missing, the system must gracefully fallback to the default language (English) or display the key itself, but never crash the render cycle.

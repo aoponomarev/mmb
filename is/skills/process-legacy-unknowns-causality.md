@@ -2,7 +2,7 @@
 id: sk-3df9f9
 title: "Legacy Unknowns (Causality)"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: caac12c5
 last_change: ""
 

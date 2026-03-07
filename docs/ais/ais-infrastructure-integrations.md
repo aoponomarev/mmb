@@ -35,7 +35,7 @@ related_ais:
 
 ## Компоненты и Контракты (Components & Contracts)
 - core/api/cloudflare/* — клиенты для взаимодействия с Cloudflare Workers.
-- #JS-MW2TvCHg (core/api/ai-provider-manager.js) — роутер AI-моделей.
+- #JS-MW2TvCHg (ai-provider-manager.js) — роутер AI-моделей.
 - is/yandex/ — код серверлесс-функций Яндекса.
 
 ## Лог перепривязки путей (Path Rewrite Log)

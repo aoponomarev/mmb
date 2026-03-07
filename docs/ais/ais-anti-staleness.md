@@ -75,7 +75,7 @@ flowchart TB
 
 - **Обновление спецификации:** При изменении конвейера (новые скрипты, смена триггеров) — обновить соответствующий раздел «Уровень N — как работает».
 - **Не блокировать change-triggered:** skills:affected выводит список, но не прерывает preflight; решение о коммите — за человеком.
-- **Stale exceptions — housekeeping:** #JS-4x4Fzd18 (is/scripts/architecture/validate-causality-exceptions-stale.js) не блокирует preflight; отчёт в batch для ручной очистки.
+- **Stale exceptions — housekeeping:** #JS-4x4Fzd18 (validate-causality-exceptions-stale.js) не блокирует preflight; отчёт в batch для ручной очистки.
 
 ## Компоненты и Контракты (Components & Contracts)
 
@@ -90,7 +90,7 @@ flowchart TB
 | #JS-4x4Fzd18 | validate-causality-exceptions-stale.js | is/scripts/architecture/ | Stale exceptions в causality-exceptions.jsonl |
 | #JS-kMzbwkJo | skills-batch-review.js | is/scripts/architecture/ | Оркестратор batch-проверок |
 | — | preflight-solo.ps1 | scripts/git/ | Pre-commit flow: secrets, skills:check, skills:affected |
-| id:sk-3b1519 | is/skills/causality-registry.md | is/skills/ | SSOT хешей; ghost/unknown проверяются #JS-69pjw66d (is/scripts/architecture/validate-causality.js) |
+| id:sk-3b1519 | is/skills/causality-registry.md | is/skills/ | SSOT хешей; ghost/unknown проверяются #JS-69pjw66d (validate-causality.js) |
 | — | causality-exceptions.jsonl | docs/audits/ | Исключения при частичном удалении хеша (#for-audits-path-contract) |
 
 ### Исключения и особые случаи
@@ -100,22 +100,22 @@ flowchart TB
 | `docs/backlog/skills/*` | Не сканируются validate-skills, validate-skill-anchors (backlog вне active skills). Ссылки на backlog из active skills могут указывать на несуществующие пути. |
 | id:sk-3b1519 (is/skills/causality-registry.md) | Path existence не парсит (нет Implementation Status). SSOT для хешей. |
 | `README.md` | Path existence не требует путей из README; dead links проверяются. |
-| `PREFLIGHT_SKIP_CAUSALITY=1` | #JS-69pjw66d (is/scripts/architecture/validate-causality.js) и #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js) не выполняются (внутри #JS-NrBeANnz is/scripts/preflight.js). |
+| `PREFLIGHT_SKIP_CAUSALITY=1` | #JS-69pjw66d и #JS-eG4BUXaS (validate-causality-invariant.js) не выполняются (внутри #JS-NrBeANnz is/scripts/preflight.js). |
 
 ## Уровень 1: Static Validation — как работает
 
 ### Описание
 
-1. **#JS-NrBeANnz (is/scripts/preflight.js)** при запуске вызывает (в порядке): #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js), #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js); при отсутствии `PREFLIGHT_SKIP_CAUSALITY=1` также #JS-69pjw66d (is/scripts/architecture/validate-causality.js) и #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js).
-2. **#JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js)** — парсит секции `## Implementation Status in Target App` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
-3. **#JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js)** — сканирует core/, app/, is/, shared/, .cursor/rules/ (первые 50 строк каждого .js, .ts, .mdc). Извлекает `@skill <path>`. Проверяет: файл скилла существует (is/skills/, core/skills/, app/skills/). При битой ссылке — error, exit 1.
+1. **#JS-NrBeANnz (is/scripts/preflight.js)** при запуске вызывает (в порядке): #JS-Mt2rdqJ4 (validate-skills.js), #JS-QxwSQxtt (validate-skill-anchors.js); при отсутствии `PREFLIGHT_SKIP_CAUSALITY=1` также #JS-69pjw66d и #JS-eG4BUXaS.
+2. **#JS-Mt2rdqJ4** — парсит секции `## Implementation Status in Target App` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
+3. **#JS-QxwSQxtt** — сканирует core/, app/, is/, shared/, .cursor/rules/ (первые 50 строк каждого .js, .ts, .mdc). Извлекает `@skill <path>`. Проверяет: файл скилла существует (is/skills/, core/skills/, app/skills/). При битой ссылке — error, exit 1.
 4. **Условие fail:** Любая ошибка в #JS-Mt2rdqJ4, #JS-QxwSQxtt, #JS-69pjw66d или #JS-eG4BUXaS прерывает preflight.
 
 ### Казуальность
 
 - **#for-fail-fast** — preflight падает при первом нарушении; не деградирует в рантайме.
 - **#for-gate-enforcement** — path existence и @skill resolution — блокирующие гейты; без них контракт «скилл описывает существующий код» рассыпается.
-- **#for-validate-skills-single** — @skill resolution вынесен в отдельный скрипт #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js), а не в #JS-Mt2rdqJ4 (is/scripts/architecture/validate-skills.js); допустимо по arch-testing-ci.
+- **#for-validate-skills-single** — @skill resolution вынесен в отдельный скрипт #JS-QxwSQxtt, а не в #JS-Mt2rdqJ4; допустимо по arch-testing-ci.
 
 ### Схема
 
@@ -138,7 +138,7 @@ flowchart TD
 ### Описание
 
 1. **preflight-solo.ps1** вызывается вручную перед коммитом (SSOT: arch-testing-ci). Выполняет: проверка, что `.env` не в staged; `npm run skills:check` (блокирует при ошибке); `npm run skills:affected` (информационно, не блокирует).
-2. **#JS-5F24tc1R (is/scripts/architecture/validate-affected-skills.js)** — читает `git diff --cached --name-only`; для каждого staged-файла парсит первые 50 строк: `@skill`, `@causality`, `@skill-anchor`. Собирает affected_skills (скиллы по @skill) и affected_hashes (#for-X из @causality/@skill-anchor). Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
+2. **#JS-5F24tc1R (validate-affected-skills.js)** — читает `git diff --cached --name-only`; для каждого staged-файла парсит первые 50 строк: `@skill`, `@causality`, `@skill-anchor`. Собирает affected_skills (скиллы по @skill) и affected_hashes (#for-X из @causality/@skill-anchor). Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
 3. **Условие блокировки:** Только skills:check блокирует; skills:affected — только информирует. Решение о коммите — за человеком.
 
 ### Казуальность
@@ -166,9 +166,9 @@ flowchart TB
 
 ### Описание
 
-1. **#JS-kMzbwkJo (is/scripts/architecture/skills-batch-review.js)** оркестрирует три проверки: #JS-Mt2rdqJ4 (--json), #JS-y23qJxuC (--json), #JS-4x4Fzd18 (--json).
-2. **#JS-y23qJxuC (is/scripts/architecture/validate-dead-links.js)** — сканирует is/skills, core/skills, app/skills, docs (исключая docs/plans, docs/backlog, docs/done); ищет markdown-ссылки и inline-пути в backticks; пропускает API-пути, donor-пути, placeholder; проверяет существование; выводит dead_links. Флаг `--all` — полный скан без исключений (для аудита 400+ ссылок). Подтверждение «исправлено» — только через повторный запуск (агент).
-3. **#JS-4x4Fzd18 (is/scripts/architecture/validate-causality-exceptions-stale.js)** — загружает docs/audits/causality-exceptions.jsonl; строит usedHashes из кода и skills; exception считается stale, если hash полностью удалён из кода.
+1. **#JS-kMzbwkJo (skills-batch-review.js)** оркестрирует три проверки: #JS-Mt2rdqJ4 (--json), #JS-y23qJxuC (--json), #JS-4x4Fzd18 (--json).
+2. **#JS-y23qJxuC (validate-dead-links.js)** — сканирует is/skills, core/skills, app/skills, docs (исключая docs/plans, docs/backlog, docs/done); ищет markdown-ссылки и inline-пути в backticks; пропускает API-пути, donor-пути, placeholder; проверяет существование; выводит dead_links. Флаг `--all` — полный скан без исключений (для аудита 400+ ссылок). Подтверждение «исправлено» — только через повторный запуск (агент).
+3. **#JS-4x4Fzd18** — загружает docs/audits/causality-exceptions.jsonl; строит usedHashes из кода и skills; exception считается stale, если hash полностью удалён из кода.
 4. **Формат отчёта:** JSON (--json) или текстовый summary. Ни одна проверка не блокирует preflight; batch — периодический аудит.
 
 ### Казуальность
@@ -196,7 +196,7 @@ flowchart TB
 
 | Аспект | Скиллы | Казуальности |
 |--------|--------|--------------|
-| Хранилище | is/skills, core/skills, app/skills | id:sk-3b1519 (is/skills/causality-registry.md) (один файл) |
+| Хранилище | is/skills, core/skills, app/skills | id:sk-3b1519 (один файл) |
 | Связь с кодом | @skill, Implementation Status | @causality, @skill-anchor |
 | Устаревание | Path missing, dead links | Ghost hash, stale exception, formulation outdated |
 | Гейты | #JS-Mt2rdqJ4, #JS-QxwSQxtt | #JS-69pjw66d, #JS-eG4BUXaS |
@@ -223,7 +223,7 @@ flowchart TB
 | Коммитить без проверки affected-skills | Перед коммитом прочитать вывод skills:affected; обновить скилл или отложить осознанно |
 | Переименовать файл без обновления Implementation Status | Обновить пути в скилле |
 | Добавить @skill без проверки существования файла | Убедиться, что скилл существует |
-| Оставить stale exception в causality-exceptions.jsonl | Запустить #JS-4x4Fzd18 (is/scripts/architecture/validate-causality-exceptions-stale.js); удалить stale строки |
+| Оставить stale exception в causality-exceptions.jsonl | Запустить #JS-4x4Fzd18; удалить stale строки |
 | Менять код с @causality без ревью formulation | Прочитать affected hashes; обновить formulation или удалить хеш |
 
 *(Полный список — в бэклоге `id:backlog-2c4b0b`.)*

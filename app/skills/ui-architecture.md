@@ -8,7 +8,7 @@ tags:
   - "#ui"
   - "#no-build"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: f5e9e931
 last_change: ""
 
@@ -33,15 +33,15 @@ last_change: ""
 
 All user-facing strings (buttons, headings, tooltips) MUST come from centralized SSOT configurations.
 - Directly assigning hardcoded string literals to `innerText`, `textContent`, `title`, `ariaLabel`, or `innerHTML` in component code is **forbidden**.
-- Enforcement: AST linter at #JS-uZ2Hc9qj (is/scripts/tests/lint-frontend-hardcode-ast.test.js).
+- Enforcement: AST linter at #JS-uZ2Hc9qj (lint-frontend-hardcode-ast.test.js).
 
 **#for-hardcode-ban** Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point.
 
 ### Zod UI Config Validation (Type-Safe Design System)
 
 Interface configurations (`tooltips-config.js`, `modals-config.js`) are validated against Zod schemas.
-- Schemas live in #JS-4KeCe4GT (core/contracts/ui-contracts.js).
-- Validation is enforced in #JS-vK2EcYrV (is/scripts/tests/validate-frontend-ui-configs.test.js).
+- Schemas live in #JS-4KeCe4GT (ui-contracts.js).
+- Validation is enforced in #JS-vK2EcYrV (validate-frontend-ui-configs.test.js).
 
 **#for-zod-ui-validation** A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment.
 
@@ -52,7 +52,7 @@ RRG defines the fundamental reliability contract for the reactive layer.
 1. **Single State Source**: Vue reactivity (`appStore`) must be clearly structured. State must not exist in multiple places simultaneously.
 2. **Mutation Discipline**: Avoid uncontrolled state spread — e.g., manually synchronizing two independent variables instead of using `computed`. All mutations go through defined store setters.
 3. **Async Contracts**: Async operations (data fetch, debounce) must have clearly defined loading/error state transitions.
-4. **Reactivity Regression Checks**: RRG gate #JS-Yn27TZUx (is/scripts/tests/check-frontend-rrg.test.js) enforces RRG-1 and RRG-2 on app/components and shared/components. AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md).
+4. **Reactivity Regression Checks**: RRG gate #JS-Yn27TZUx (check-frontend-rrg.test.js) enforces RRG-1 and RRG-2 on app/components and shared/components. AIS: id:ais-c4e9b2 (docs/ais/ais-rrg-contour.md).
 
 **Enforcement commands**:
 - `npm run frontend:reactivity:check` — runs RRG gate (id:ais-c4e9b2); scope: app/components, shared/components.
@@ -64,7 +64,7 @@ The project uses Vue 3 loaded via a global `<script>` tag without bundlers (Vite
 
 **Rules**:
 - Templates are defined in separate JS files as strings (`app/templates/`).
-- Module loading order is controlled by #JS-xj43kftu (core/module-loader.js).
+- Module loading order is controlled by #JS-xj43kftu (module-loader.js).
 - No bundler output, no dist/ directory — index.html is the deployment artifact directly.
 
 **#for-file-protocol** No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes.
@@ -81,9 +81,9 @@ In both modes, external API calls subject to CORS must go through the Cloudflare
 
 **#for-tooltip-reactivity** Tooltips must be re-initialized or titles reactively bound so that language switches affect hover text immediately.
 
-- **SSOT**: #JS-DR3gZC9b (core/config/tooltips-config.js)
+- **SSOT**: #JS-DR3gZC9b (tooltips-config.js)
 - **Principle**: Use native browser tooltips (`title` attribute). HTML-based tooltips are forbidden.
-- **Structure**: Static part from config + newline + dynamic part from #JS-Kg2tEBFr (core/api/tooltip-interpreter.js)
+- **Structure**: Static part from config + newline + dynamic part from #JS-Kg2tEBFr (tooltip-interpreter.js)
 - **Usage**: `tooltipsConfig.getTooltip(key)` or `tooltipInterpreter.getTooltip(key, { value, lang })`
 - **Constraints**: UTF-8 only, under 2000 chars, no HTML
 
@@ -105,11 +105,11 @@ Toggling table columns without re-rendering. State in `columnVisibilityConfig`; 
 
 ### Layout & Alignment
 
-Use vertical padding on the **inner container** based on size class (e.g. `.component-responsive.size-sm > .inner-container`). Avoid fixed `height` or `line-height` for alignment. Horizontal spacing: Bootstrap utilities (`me-2`, `gap-3`); `gap-2` for button groups, `mb-3` for form fields. Sizing: `sm` (compact: tables, sidebars), `md` (default: forms, modals), `lg` (prominent: hero sections). File Map: `styles/wrappers/`, #JS-5n33791x (shared/components/button.js).
+Use vertical padding on the **inner container** based on size class (e.g. `.component-responsive.size-sm > .inner-container`). Avoid fixed `height` or `line-height` for alignment. Horizontal spacing: Bootstrap utilities (`me-2`, `gap-3`); `gap-2` for button groups, `mb-3` for form fields. Sizing: `sm` (compact: tables, sidebars), `md` (default: forms, modals), `lg` (prominent: hero sections). File Map: `styles/wrappers/`, #JS-5n33791x (button.js).
 
 ### Responsive Visibility (Mobile-First)
 
-Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS — components render all elements, CSS hides based on viewport. Classes: `.label` (desktop), `.label-short` (mobile), `.icon` (always visible). Mobile default: `.label { display: none; }` `.label-short { display: block; }`. Desktop `@media (min-width: 576px)`: swap. Component props: `label`, `labelShort`, `icon`. File Map: `styles/wrappers/button.css`, #JS-5n33791x (shared/components/button.js).
+Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS — components render all elements, CSS hides based on viewport. Classes: `.label` (desktop), `.label-short` (mobile), `.icon` (always visible). Mobile default: `.label { display: none; }` `.label-short { display: block; }`. Desktop `@media (min-width: 576px)`: swap. Component props: `label`, `labelShort`, `icon`. File Map: `styles/wrappers/button.css`, #JS-5n33791x.
 
 ### Unified Component Library
 
@@ -117,4 +117,4 @@ Breakpoint: `576px` (Bootstrap `sm`). Visibility controlled via **CSS**, not JS 
 
 ### DOM Markup & Hashing
 
-**Auto-markup**: Mark significant containers with `avto-{Base58_8char}` for DevTools and agent visibility. Deterministic hash from DOM path; stable across reloads. Scope: major sections, headers, wrappers. Exclusions: inside Vue components, minor wrappers, elements with IDs. **Instance hashing**: `computed: { instanceHash }` from #JS-9m2N115w (shared/utils/hash-generator.js); usage `<div :class="['my-component', instanceHash]">`. **Layout sync**: #JS-pw26xFm7 (shared/utils/layout-sync.js) — `ResizeObserver` + `MutationObserver`; API `window.layoutSync.start()`, `.stop()`, `.update()`. Constraints: `avto-*` classes for identification ONLY, no functional CSS; hashing must be deterministic. File Map: #JS-1oAiR1jy (shared/utils/auto-markup.js), #JS-9m2N115w (shared/utils/hash-generator.js), #JS-pw26xFm7 (shared/utils/layout-sync.js).
+**Auto-markup**: Mark significant containers with `avto-{Base58_8char}` for DevTools and agent visibility. Deterministic hash from DOM path; stable across reloads. Scope: major sections, headers, wrappers. Exclusions: inside Vue components, minor wrappers, elements with IDs. **Instance hashing**: `computed: { instanceHash }` from #JS-9m2N115w (hash-generator.js); usage `<div :class="['my-component', instanceHash]">`. **Layout sync**: #JS-pw26xFm7 (layout-sync.js) — `ResizeObserver` + `MutationObserver`; API `window.layoutSync.start()`, `.stop()`, `.update()`. Constraints: `avto-*` classes for identification ONLY, no functional CSS; hashing must be deterministic. File Map: #JS-1oAiR1jy (auto-markup.js), #JS-9m2N115w, #JS-pw26xFm7.

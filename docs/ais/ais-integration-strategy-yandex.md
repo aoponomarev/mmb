@@ -23,16 +23,16 @@ related_ais:
 - id:readme-9e335c (is/yandex/functions/api-gateway/README.md) используется как техническая сводка для функции API Gateway.
 - Основной контракт чтения и записи данных по монетам зафиксирован в:
   - id:ais-e41384 (docs/ais/ais-yandex-cloud.md)
-  - связанных модулях core/api/market-snapshot-* и #JS-P149SzKB (core/contracts/market-contracts.js).
+  - связанных модулях core/api/market-snapshot-* и #JS-P149SzKB (market-contracts.js).
 
 ## Комплект обязательных контрактов и гейтов
 
 - `docs/ais`-спецификация имеет статус `draft`, будет продвинута в `incomplete` после полной ревизии donor-paths и связей.
-- Legacy paths: skip patterns в #JS-cMCNbcJ1 (is/contracts/path-contracts.js).
+- Legacy paths: skip patterns в #JS-cMCNbcJ1 (path-contracts.js).
 - Перед каждым значимым изменением проверить:
-  - #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js)
-  - #JS-69pjw66d (is/scripts/architecture/validate-causality.js)
-  - #JS-QxwSQxtt (is/scripts/architecture/validate-skill-anchors.js)
+  - #JS-Hx2xaHE8 (validate-docs-ids.js)
+  - #JS-69pjw66d (validate-causality.js)
+  - #JS-QxwSQxtt (validate-skill-anchors.js)
 - Обязательные поля в frontmatter заполнены (`id`, `status`, `last_updated`, `related_skills`, `related_ais`).
 
 ## Микро-правила интеграции для этой области

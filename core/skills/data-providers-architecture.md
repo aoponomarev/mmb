@@ -2,7 +2,7 @@
 id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-05
+reasoning_audited_at: 2026-03-07
 reasoning_checksum: 593567bf
 last_change: ""
 
@@ -37,11 +37,11 @@ last_change: ""
 
 ### Provider Add/Register/Config Workflow
 
-When adding a new provider: (1) Create `core/api/data-providers/{name}-provider.js` extending `BaseDataProvider`; (2) Register in #JS-2436XKxE (core/api/data-provider-manager.js); (3) Define limits and URLs in #JS-siMJxsfA (core/config/data-providers-config.js).
+When adding a new provider: (1) Create `core/api/data-providers/{name}-provider.js` extending `BaseDataProvider`; (2) Register in #JS-2436XKxE (data-provider-manager.js); (3) Define limits and URLs in #JS-siMJxsfA (data-providers-config.js).
 
 ### Additional Provider API
 
-`getCoinData(coinIds)` — chunked loading for coin ID arrays. `getCoinIdBySymbol(symbol)` — reverse lookup. `tryLocalTopCoinsFallback()` — fallback to local infra (e.g. `http://127.0.0.1:3002/api/market/top-coins`) when CoinGecko is rate-limited. `BaseDataProvider` utilities: `requiresApiKey()`, `handleHttpError()`, `logError()`, `logWarning()`. `DataProviderManager.getTopCoins()` integrates with #JS-iH26jSeT (core/api/request-registry.js) (4-hour minimum interval between heavy calls).
+`getCoinData(coinIds)` — chunked loading for coin ID arrays. `getCoinIdBySymbol(symbol)` — reverse lookup. `tryLocalTopCoinsFallback()` — fallback to local infra (e.g. `http://127.0.0.1:3002/api/market/top-coins`) when CoinGecko is rate-limited. `BaseDataProvider` utilities: `requiresApiKey()`, `handleHttpError()`, `logError()`, `logWarning()`. `DataProviderManager.getTopCoins()` integrates with #JS-iH26jSeT (request-registry.js) (4-hour minimum interval between heavy calls).
 
 ### Merge Rule for Multiple Coin Sets
 
@@ -59,10 +59,10 @@ When this skill is updated, place or refresh inline code anchors in risk branche
 
 **#for-rate-limiting** Free-tier APIs (e.g. CoinGecko) enforce strict limits. Proactive throttling avoids persistent 429 bans.
 
-- **Token Bucket**: #JS-oX451njh (core/api/rate-limiter.js) — adaptive `requestsPerMinute` / `requestsPerSecond`. One limiter per API domain. Usage: `RateLimiter.getOrCreate('coingecko', 15, 0.5)`; `await limiter.waitForToken()`; on 429 `limiter.increaseTimeout()`; on success `limiter.decreaseTimeout()`.
-- **Request Registry API**: `isAllowed(key)`, `recordCall(key)`, `getTimeUntilNext(key)`, `clear()`. Limits in #JS-siMJxsfA (core/config/data-providers-config.js) (e.g. CoinGecko: 15 rpm, 0.5 rps).
+- **Token Bucket**: #JS-oX451njh (rate-limiter.js) — adaptive `requestsPerMinute` / `requestsPerSecond`. One limiter per API domain. Usage: `RateLimiter.getOrCreate('coingecko', 15, 0.5)`; `await limiter.waitForToken()`; on 429 `limiter.increaseTimeout()`; on success `limiter.decreaseTimeout()`.
+- **Request Registry API**: `isAllowed(key)`, `recordCall(key)`, `getTimeUntilNext(key)`, `clear()`. Limits in #JS-siMJxsfA (e.g. CoinGecko: 15 rpm, 0.5 rps).
 - **Feedback Loop**: MUST call `increaseTimeout()` on 429 and `decreaseTimeout()` on success.
-- **Request Registry**: #JS-iH26jSeT (core/api/request-registry.js) — call-frequency guard (localStorage). Enforces minimum intervals (e.g. 4h for `getTopCoins`), 3× multiplier after 429.
+- **Request Registry**: #JS-iH26jSeT — call-frequency guard (localStorage). Enforces minimum intervals (e.g. 4h for `getTopCoins`), 3× multiplier after 429.
 - **429 Recovery Protocol**:
   1. Honor `Retry-After` header first (bounded by sane min/max).
   2. If absent, use bounded exponential backoff.
@@ -89,14 +89,14 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 
 **#for-validation-at-edge** Validate provider data before calculation to fail fast on malformed responses.
 
-- **Schema**: #JS-qP2fyDmZ (core/validation/validator.js) — JSON structure (types, required fields).
-- **Math**: #JS-893TGk4K (core/validation/math-validation.js) — value ranges (price > 0, percent 0–100).
-- **Sanity**: #JS-WS3aAySc (core/validation/normalizer.js) — common fixes (string to float).
+- **Schema**: #JS-qP2fyDmZ (validator.js) — JSON structure (types, required fields).
+- **Math**: #JS-893TGk4K (math-validation.js) — value ranges (price > 0, percent 0–100).
+- **Sanity**: #JS-WS3aAySc (normalizer.js) — common fixes (string to float).
 - **Hard constraints**: No NaNs; `pvs` array must have exactly 6 elements.
 
 ### Provider Metadata vs Domain Data
 
-**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use the markets API `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations; avoid adding columns for every provider field. **Migration**: `rank` column dropped from `asset_snapshots`; `extra_json JSONB` added. File Map: #JS-fJ68ZfEu (core/domain/portfolio-adapters.js), #JS-aNzHSaKo (core/config/portfolio-config.js), #JS-A43TyZ6E (core/api/data-providers/coingecko-provider.js).
+**Principle**: Provider-specific fields (e.g. `market_cap_rank`) are metadata, not domain data. They MUST NOT appear as top-level columns in domain tables (`asset_snapshots`, `portfolios`), be used in allocation/rebalance math, or be displayed as portfolio properties. They MAY be stored in `extra_json JSONB`, used transiently for sorting/display, or passed through API responses without persistence. **CoinGecko**: `market_cap_rank` is volatile, provider-defined; use the markets API `order` parameter for deterministic sorting; tie-breaking: `name` then `id`. **Schema**: `extra_json JSONB` for extensibility — store arbitrary metadata without schema migrations; avoid adding columns for every provider field. **Migration**: `rank` column dropped from `asset_snapshots`; `extra_json JSONB` added. File Map: #JS-fJ68ZfEu (portfolio-adapters.js), #JS-aNzHSaKo (portfolio-config.js), #JS-A43TyZ6E (core/api/data-providers/coingecko-provider.js).
 
 ### Backend Sync (PostgreSQL)
 
@@ -118,13 +118,13 @@ When using managed PostgreSQL for heavy data:
 
 | File | Responsibility |
 |------|----------------|
-| #JS-oX451njh (core/api/rate-limiter.js) | Token bucket, adaptive throttling |
-| #JS-iH26jSeT (core/api/request-registry.js) | Call-frequency guard (localStorage) |
-| #JS-2436XKxE (core/api/data-provider-manager.js) | Dual-channel orchestration |
+| #JS-oX451njh | Token bucket, adaptive throttling |
+| #JS-iH26jSeT | Call-frequency guard (localStorage) |
+| #JS-2436XKxE | Dual-channel orchestration |
 | `core/api/data-providers/*` | Provider implementations |
-| #JS-siMJxsfA (core/config/data-providers-config.js) | Limits definition |
-| #JS-qP2fyDmZ (core/validation/validator.js) | Schema validation |
-| #JS-893TGk4K (core/validation/math-validation.js) | Domain value ranges |
+| #JS-siMJxsfA | Limits definition |
+| #JS-qP2fyDmZ | Schema validation |
+| #JS-893TGk4K | Domain value ranges |
 
 ## Contracts
 

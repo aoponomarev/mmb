@@ -14,19 +14,19 @@ related_ais:
 
 # План внедрения: стандарт шапки кодовых файлов (File Header Rollout)
 
-**Цель:** Ввести единый структурированный шаблон шапки комментариев во всех целевых кодовых файлах, реестр file id и гейты для поддержания актуальности. Спецификация: id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md). Шаблон: #JS-EsMQyEpA (shared/templates/file-header-template.js).
+**Цель:** Ввести единый структурированный шаблон шапки комментариев во всех целевых кодовых файлах, реестр file id и гейты для поддержания актуальности. Спецификация: id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md). Шаблон: #JS-EsMQyEpA (file-header-template.js).
 
 ---
 
 ## Фаза 0: Подготовка артефактов (готово)
 
-- [x] Шаблон шапки в #JS-EsMQyEpA (shared/templates/file-header-template.js).
-- [x] AIS id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md).
+- [x] Шаблон шапки в #JS-EsMQyEpA.
+- [x] AIS id:ais-f7e2a1.
 - [x] План внедрения id:plan-f7e2a1 (docs/plans/file-header-rollout.md).
 
 ## Фаза 1: Контракт и скилл
 
-- [x] Создать контракт #JS-Am2QGp6w (is/contracts/file-header-contract.js):
+- [x] Создать контракт #JS-Am2QGp6w (file-header-contract.js):
   - [x] Константы: `FILE_ID_PATTERN`, `REQUIRED_HEADER_FIELDS`, `ALLOWED_HEADER_TAGS`.
   - [x] Функции: extractHeaderComment, validateHeader (file id → требует @description).
   - [x] Экспорт для validate-file-headers.js.
@@ -36,7 +36,7 @@ related_ais:
 
 ## Фаза 2: Генерация file id и реестр
 
-- [x] Реализовать #JS-1E2YRywQ (is/scripts/architecture/assign-file-ids.js):
+- [x] Реализовать #JS-1E2YRywQ (assign-file-ids.js):
   - [x] Обход core, app, shared, mm, is; djb2 + Base58; формат #JS-/#TS- + hash.
   - [x] Режим: по умолчанию пишет реестр; --dry-run только вывод.
 - [x] Реестр `is/contracts/docs/code-file-registry.json`: структура id → path; assign-file-ids пишет при каждом запуске.
@@ -44,10 +44,10 @@ related_ais:
 
 ## Фаза 3: Гейт валидации и полная проверка
 
-- [x] Реализовать #JS-zh26RZvs (is/scripts/architecture/validate-file-headers.js): при наличии file id в шапке проверка @description; exit 1 при нарушении.
+- [x] Реализовать #JS-zh26RZvs (validate-file-headers.js): при наличии file id в шапке проверка @description; exit 1 при нарушении.
 - [x] Полная проверка по контракту: file id в шапке должен совпадать с путём (getExpectedFileId); контракт: validateHeaderFull, getExpectedFileId, getFileIdFromHeader.
 - [x] Режим `--fix`: автоматическая правка неверного file id в файле.
-- [x] Вызов в preflight после #JS-GcQ9UGZD (is/scripts/architecture/validate-code-comments-english.js).
+- [x] Вызов в preflight после #JS-GcQ9UGZD (validate-code-comments-english.js).
 - [x] npm: `file-headers:check`, `file-headers:assign`, `file-headers:fix`, `file-headers:audit`.
 
 ## Фаза 4: Causality и индекс
@@ -77,9 +77,9 @@ related_ais:
 
 ## Ссылки
 
-- AIS: id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md)
-- Шаблон: #JS-EsMQyEpA (shared/templates/file-header-template.js)
-- Контракт: #JS-Am2QGp6w (is/contracts/file-header-contract.js)
-- Гейт: #JS-zh26RZvs (is/scripts/architecture/validate-file-headers.js)
-- Назначение id: #JS-1E2YRywQ (is/scripts/architecture/assign-file-ids.js)
+- AIS: id:ais-f7e2a1
+- Шаблон: #JS-EsMQyEpA
+- Контракт: #JS-Am2QGp6w
+- Гейт: #JS-zh26RZvs
+- Назначение id: #JS-1E2YRywQ
 - Реестр: is/contracts/docs/code-file-registry.json
