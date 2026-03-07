@@ -1,22 +1,33 @@
 # First-run / "настрой под этот ПК": ensure Node in PATH, check deps, then npm install + rebuild + preflight.
 # Usage: .\scripts\setup-dev-env.ps1
 #   Idempotent; safe to run on every new PC or after pull.
-# See: .cursor/environment-pc/README.md, scripts/README-node18.md
+# See: scripts/README-node18.md
 
 $ErrorActionPreference = "Stop"
-$NodeRoot = "C:\Program Files\nodejs"
 $ProjectRoot = Join-Path $PSScriptRoot ".."
+Set-Location $ProjectRoot
 
-# 1) Prepend Node to PATH so this session and child processes use it
-$nodeExe = Join-Path $NodeRoot "node.exe"
-if (-not (Test-Path $nodeExe)) {
-    Write-Host "Node not found at $NodeRoot. Install Node 18 LTS there, or edit NodeRoot in this script."
-    Write-Host "See: .cursor/environment-pc/README.md"
-    exit 1
+Write-Host "[Env Setup] Checking Node.js availability..."
+
+# 1) Try to find Node in PATH
+$nodeExe = (Get-Command node.exe -ErrorAction SilentlyContinue).Source
+if (-not $nodeExe) {
+    # Try common fallback location
+    $FallbackNodeRoot = "C:\Program Files\nodejs"
+    if (Test-Path (Join-Path $FallbackNodeRoot "node.exe")) {
+        Write-Host "Node not in PATH, but found at $FallbackNodeRoot. Adding to session PATH."
+        $env:Path = "$FallbackNodeRoot;$env:Path"
+    } else {
+        Write-Host "Node.js not found in PATH or standard locations. Please install Node 18+."
+        Write-Host "See: scripts/README-node18.md"
+        exit 1
+    }
+} else {
+    Write-Host "Node found in PATH: $nodeExe"
 }
-$env:Path = "$NodeRoot;$env:Path"
+
 $nodeVer = & node -v
-Write-Host "Node: $nodeVer ($NodeRoot)"
+Write-Host "Node version: $nodeVer"
 
 # 2) Optional: warn if Python missing (needed for node-gyp if prebuild fails)
 try {
@@ -27,22 +38,21 @@ try {
 }
 
 # 3) npm install
-Set-Location $ProjectRoot
-Write-Host "Running npm install..."
+Write-Host "`n[Env Setup] Running npm install..."
 & npm install
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # 4) Rebuild native deps (better-sqlite3)
-Write-Host "Running npm rebuild better-sqlite3..."
+Write-Host "`n[Env Setup] Rebuilding native dependencies (better-sqlite3) for current PC ($env:COMPUTERNAME)..."
 & npm rebuild better-sqlite3
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Rebuild failed. Ensure Python and VS Build Tools (C++) are installed. See .cursor/environment-pc/README.md"
+    Write-Host "Rebuild failed. Ensure Python and VS Build Tools (C++) are installed. See scripts/README-node18.md"
     exit $LASTEXITCODE
 }
 
 # 5) Preflight
-Write-Host "Running npm run preflight..."
+Write-Host "`n[Env Setup] Running npm run preflight..."
 & npm run preflight
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host "Setup done. This terminal uses Node from $NodeRoot."
+Write-Host "`n[Env Setup] Setup done. Environment is ready for this PC ($env:COMPUTERNAME)."

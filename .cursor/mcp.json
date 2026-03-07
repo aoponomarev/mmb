@@ -3,7 +3,7 @@
     "MMB-Causality": {
       "command": "node",
       "args": [
-        "D:/Clouds/AO/OneDrive/Portfolio-CV/Refactoring/ToDo/Statistics/mmb/is/mcp/index.js"
+        "is/mcp/bootstrap.js"
       ]
     }
   }

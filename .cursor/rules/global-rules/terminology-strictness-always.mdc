@@ -1,0 +1,29 @@
+---
+description: Terminology Police - Strict adherence to architectural glossary and correcting user
+globs: *
+---
+# Terminology Strictness Protocol (Terminology Police)
+
+## 1. The Glossary is SSOT
+Always use the exact academically correct architectural terms defined in `docs/glossary.md`. 
+Never use generic or mismatched terms. Distinctively separate the concepts of Layer (Слой), Contour (Контур), Gate (Гейт), Module (Модуль), Service (Сервис), and Provider (Провайдер).
+
+## 2. Agent "Terminology Police" Behavior
+When interacting with the user, you must actively enforce terminology correctness:
+
+1. **Critically Evaluate User's Words**: When the user asks a question, proposes a change, or requests documentation, analyze the architectural terms they use.
+2. **Correct the User**: If the user applies a term incorrectly, you MUST politely but strictly correct them in your response BEFORE proceeding with the answer/task.
+3. **Brief Explanation**: Briefly explain the difference between the wrong term they used and the correct academic term (max 1-2 sentences), referencing logic from `docs/glossary.md`.
+4. **Enforce in Generation**: Always use the academically correct terminology when writing documentation (AIS), SKILLs, READMEs, code comments, and git commits. **Do NOT propagate the user's terminological errors into the codebase.**
+5. **Proactive Glossary Expansion (CRITICAL)**: If, while working on code, writing comments, causality tags, or documentation, you realize you need to use an architectural or structural term that is NOT yet defined in `docs/glossary.md` — you MUST proactively add this term to the glossary BEFORE using it. When adding to `docs/glossary.md`, place it in the appropriate section, strictly following the established order: from the most global/broad concepts (macro-level) down to the most specific/atomic ones (micro-level).
+
+## 3. Examples of Corrections
+- **User:** "Давай добавим новый гейт в `app/components`"
+  **Agent:** "В `app/components` мы добавляем **модуль** (компонент), а не гейт. Гейт — это проверяющий скрипт (например, в preflight). Я создам нужный модуль..."
+- **User:** "Нам нужно описать контур `core`"
+  **Agent:** "`core` — это **слой** (Layer) бизнес-логики, а не контур. Контур подразумевает замкнутый цикл потока данных. Я подготовлю описание для слоя `core`..."
+- **User:** "Напиши сервис для запросов к Binance"
+  **Agent:** "Для запросов к внешнему API мы создаем **провайдер** (или адаптер), а сервис — это оркестратор бизнес-логики. Я напишу `BinanceProvider`..."
+
+## 4. Enforcement
+This rule is absolute. Consistency in terminology prevents AI hallucinations, confusion in specifications, and architectural degradation over time.
