@@ -51,11 +51,13 @@ function resolveSkillPath(skillPath) {
   return withMd.replace(/\.md$/, "").replace(/\\/g, "/");
 }
 
+const SKILL_HEADER_LINES = 50;
+
 function parseFileContent(content, filePath) {
   const skills = new Map();
   const hashes = new Set();
   const lines = content.split("\n");
-  const headerLines = lines.slice(0, 50).join("\n");
+  const headerLines = lines.slice(0, SKILL_HEADER_LINES).join("\n");
 
   let m;
   SKILL_REGEX.lastIndex = 0;
@@ -67,7 +69,7 @@ function parseFileContent(content, filePath) {
     skills.set(rel, filePath);
   }
 
-  for (let i = 0; i < Math.min(50, lines.length); i++) {
+  for (let i = 0; i < lines.length; i++) {
     const hashesInLine = extractHashesFromLine(lines[i]);
     for (const h of hashesInLine) {
       hashes.add(h);

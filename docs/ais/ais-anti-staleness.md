@@ -138,7 +138,7 @@ flowchart TD
 ### Описание
 
 1. **preflight-solo.ps1** вызывается вручную перед коммитом (SSOT: arch-testing-ci). Выполняет: проверка, что `.env` не в staged; `npm run skills:check` (блокирует при ошибке); `npm run skills:affected` (информационно, не блокирует).
-2. **#JS-5F24tc1R (validate-affected-skills.js)** — читает `git diff --cached --name-only`; для каждого staged-файла парсит первые 50 строк: `@skill`, `@causality`, `@skill-anchor`. Собирает affected_skills (скиллы по @skill) и affected_hashes (#for-X из @causality/@skill-anchor). Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
+2. **#JS-5F24tc1R (validate-affected-skills.js)** — читает `git diff --cached --name-only`; для каждого staged-файла: `@skill` — первые 50 строк (header), `@causality`/`@skill-anchor` — полный файл. Собирает affected_skills и affected_hashes. Выводит в stdout или `--json`. Всегда exit 0 (не блокирует).
 3. **Условие блокировки:** Только skills:check блокирует; skills:affected — только информирует. Решение о коммите — за человеком.
 
 ### Казуальность

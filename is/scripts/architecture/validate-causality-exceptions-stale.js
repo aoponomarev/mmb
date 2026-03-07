@@ -34,34 +34,29 @@ function walkJsFiles(dir, result = []) {
   return result;
 }
 
-function walkMarkdownFiles(dir, result = []) {
-  if (!fs.existsSync(dir)) return result;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (entry.name === "node_modules" || entry.name === ".git") continue;
-      walkMarkdownFiles(full, result);
-    } else if (entry.isFile() && entry.name.endsWith(".md")) {
-      result.push(full);
-    }
-  }
-  return result;
+function extractHashesFromLine(line) {
+  if (!/@(?:causality|skill-anchor)/i.test(line)) return [];
+  const match =
+    line.match(/@causality\s*[:]?\s*(.+?)(?:\s*$)/i) ||
+    line.match(/@skill-anchor\s+(.+?)(?:\s*$)/i);
+  const rest = match ? match[1] : "";
+  return (rest.match(HASH_REGEX) || []).map((h) => h);
 }
 
+/** Aligned with validate-causality-invariant: only hashes in @causality/@skill-anchor lines in .js files. */
 function collectUsedHashes() {
   const used = new Set();
   for (const dir of CODE_DIRS) {
     for (const filePath of walkJsFiles(dir)) {
       const content = fs.readFileSync(filePath, "utf8");
-      const hashes = content.match(HASH_REGEX) || [];
-      hashes.forEach((h) => used.add(h));
-    }
-    for (const filePath of walkMarkdownFiles(dir)) {
-      const rel = path.relative(ROOT, filePath).replace(/\\/g, "/");
-      if (rel.endsWith("causality-registry.md")) continue;
-      const content = fs.readFileSync(filePath, "utf8");
-      const hashes = content.match(HASH_REGEX) || [];
-      hashes.forEach((h) => used.add(h));
+      const lines = content.split("\n");
+      for (const line of lines) {
+        if (/@causality/i.test(line) || /@skill-anchor/i.test(line)) {
+          for (const h of extractHashesFromLine(line)) {
+            used.add(h);
+          }
+        }
+      }
     }
   }
   return used;
