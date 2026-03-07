@@ -11,11 +11,12 @@ last_updated: "2026-03-07"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 15
+> Auto-generated. Total: 16
 
 ---
 
 - [id:ais-1c4d92](ais/TEMPLATE.md) — AIS: [Название Модуля/Подсистемы]
+- [id:ais-e9a5c2](ais/ais-agent-orchestration-contour.md) — AIS: Контур оркестрации агентов (Agent Orchestration Contour)
 - [id:ais-9f4e2d](ais/ais-anti-staleness.md) — AIS: Антиустареватель скиллов и казуальностей (Skill & Causality Anti-Staleness)
 - [id:ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
 - [id:ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)

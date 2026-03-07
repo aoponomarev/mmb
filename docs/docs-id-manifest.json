@@ -56,6 +56,7 @@
     "sk-318305": "app/skills/ui-architecture.md",
     "sk-e0b8f3": "app/skills/ux-principles.md",
     "sk-cb75ec": "app/skills/vue-implementation-patterns.md",
+    "ais-e9a5c2": "docs/ais/ais-agent-orchestration-contour.md",
     "ais-9f4e2d": "docs/ais/ais-anti-staleness.md",
     "ais-bfd150": "docs/ais/ais-architecture-foundation.md",
     "ais-b7a9ba": "docs/ais/ais-control-plane-llmops.md",
@@ -114,5 +115,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-07T09:37:54.014Z"
+  "generated_at": "2026-03-07T11:38:09.238Z"
 }
