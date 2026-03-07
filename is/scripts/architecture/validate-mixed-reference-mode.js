@@ -52,6 +52,50 @@ function expectedCodeDisplay(relPath, basenameCounts) {
   return (basenameCounts.get(basename) || 0) > 1 ? relPath : basename;
 }
 
+function isCommentLine(line, inBlock) {
+  const t = line.trimStart();
+  if (t.startsWith("//")) return true;
+  if (t.startsWith("/*")) return true;
+  if (t.startsWith("*/")) return true;
+  if (t.startsWith("*") && (t.length === 1 || t[1] === " " || t[1] === "\t")) return true;
+  return inBlock;
+}
+
+function isPathInMixedFormat(line, pathStr, pathStart) {
+  const before = line.slice(0, pathStart);
+  return /#(?:JS|TS|CSS|JSON)-[A-Za-z0-9]+\s*\(\s*$/.test(before);
+}
+
+function findPathOnlyInComments(content, codeMap, relFile) {
+  const warns = [];
+  const lines = content.split(/\r?\n/);
+  let inBlock = false;
+  const paths = [...codeMap.entries()].filter(([, p]) => !p.endsWith(".json")).sort((a, b) => b[1].length - a[1].length);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.includes("/*")) inBlock = true;
+    if (!isCommentLine(line, inBlock)) {
+      if (line.includes("*/")) inBlock = false;
+      continue;
+    }
+    if (line.includes("*/")) inBlock = false;
+    for (const [hash, pathStr] of paths) {
+      if (relFile === pathStr) continue;
+      let idx = 0;
+      while ((idx = line.indexOf(pathStr, idx)) !== -1) {
+        if (relFile === pathStr) { idx += pathStr.length; continue; }
+        const before = line.slice(0, idx);
+        if (/node\s+$/.test(before)) { idx += pathStr.length; continue; }
+        if (!isPathInMixedFormat(line, pathStr, idx)) {
+          warns.push(`${relFile}:${i + 1} bare path "${pathStr}" -> use ${hash} (path)`);
+        }
+        idx += pathStr.length;
+      }
+    }
+  }
+  return warns;
+}
+
 function main() {
   if (!fs.existsSync(ID_REGISTRY_PATH) || !fs.existsSync(CODE_REGISTRY_PATH)) {
     console.error("[validate-mixed-reference-mode] FAILED: missing id/code registry");
@@ -61,6 +105,7 @@ function main() {
   const docMap = getDocMap();
   const { codeMap, basenameCounts } = getCodeMapWithBasenameCounts();
   const errors = [];
+  const pathOnlyViolations = [];
 
   for (const [idToken, relPath] of docMap) {
     const abs = path.join(ROOT, relPath.replace(/\//g, path.sep));
@@ -116,6 +161,22 @@ function main() {
         errors.push(`${relFile}: repeated ${hash} should collapse to bare hash after the first contextual mention`);
       }
       seenCodePairs.add(hash);
+    }
+
+    if (!path.extname(file).match(/\.(md|mdc)$/)) {
+      const pathOnlyWarns = findPathOnlyInComments(content, codeMap, relFile);
+      for (const w of pathOnlyWarns) pathOnlyViolations.push(w);
+    }
+  }
+
+  if (pathOnlyViolations.length > 0) {
+    const strict = process.argv.includes("--strict-path-only");
+    for (const v of pathOnlyViolations) {
+      if (strict) errors.push(`path-only: ${v}`);
+      else console.warn(`[validate-mixed-reference-mode] path-only (use #HASH (path)): ${v}`);
+    }
+    if (strict) {
+      console.error("[validate-mixed-reference-mode] FAILED: path-only refs in comments (run migrate-refs or fix manually)");
     }
   }
 

@@ -11,7 +11,7 @@
  * - Slots: #header, #body, #footer; dynamic buttons via cmp-modal-buttons and modalApi
  *
  * REFERENCES:
- * - id:sk-483943 (x-template extraction); shared/components/modal.js; shared/components/modal-buttons.js
+ * - id:sk-483943 (x-template extraction); #JS-HF48eDDR (modal.js); #JS-r8Uair5H (modal-buttons.js)
  */
 
 (function() {

@@ -16,7 +16,7 @@
  * - Portfolio architecture: id:sk-483943 (section "Portfolio system")
  * - Hardening: legacy donor recipe-portfolio-engine-mvp-hardening (docs/ais/ais-portfolio-controls.md#LIR-005.A1)
  *
- * NOTE: Compatibility facade over core/domain/portfolio-engine.js; new code should call window.portfolioEngine.* directly when possible.
+ * NOTE: Compatibility facade over #JS-rrLtero9 (portfolio-engine.js); new code should call window.portfolioEngine.* directly when possible.
  */
 
 (function() {

@@ -17,8 +17,8 @@
     'use strict';
 
     // Dependencies (loaded before this script)
-    // - core/errors/error-types.js (window.errorTypes)
-    // - core/logging/logger.js (window.logger)
+    // - #JS-Sq2CfSP1 (error-types.js) (window.errorTypes)
+    // - #JS-Dd4AQf9o (logger.js) (window.logger)
 
     if (typeof window.errorTypes === 'undefined') {
         console.error('error-handler.js: errorTypes not loaded');

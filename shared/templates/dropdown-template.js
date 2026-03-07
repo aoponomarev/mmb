@@ -9,7 +9,7 @@
  * - Slots: #button (isOpen, toggle), #items (filteredItems, searchQuery, handleItemSelect); responsive trigger (buttonIcon, buttonTextShort)
  *
  * REFERENCES:
- * - id:sk-483943 (x-template extraction); shared/components/dropdown.js
+ * - id:sk-483943 (x-template extraction); #JS-Y3asmXzP (dropdown.js)
  */
 
 (function() {

@@ -15,8 +15,8 @@
  * window.sessionLogStore.clear();
  *
  * REFERENCES:
- * - Session Log Modal: app/components/session-log-modal-body.js
- * - Logger: core/logging/logger.js
+ * - Session Log Modal: #JS-VNDFUVK2 (session-log-modal-body.js)
+ * - Logger: #JS-Dd4AQf9o (logger.js)
  */
 
 (function() {

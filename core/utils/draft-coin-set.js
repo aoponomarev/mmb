@@ -15,7 +15,7 @@
  * window.draftCoinSet.clear();
  *
  * REFERENCES:
- * - Coin Sets: app/components/coin-set-load-modal-body.js
+ * - Coin Sets: #JS-W23K9iSC (coin-set-load-modal-body.js)
  */
 
 (function() {

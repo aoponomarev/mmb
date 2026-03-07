@@ -26,9 +26,9 @@
  *
  * REFERENCES:
  * - Critical structures described in id:sk-483943
- * - Authorization configuration: core/config/auth-config.js
- * - Cloudflare Workers configuration: core/config/cloudflare-config.js
- * - YandexGPT provider: core/api/ai-providers/yandex-provider.js
+ * - Authorization configuration: #JS-Uf4GZ4Qq (auth-config.js)
+ * - Cloudflare Workers configuration: #JS-4r2GQb12 (cloudflare-config.js)
+ * - YandexGPT provider: #JS-273nawxH (yandex-provider.js)
  * - Cloudflare integration plan: id:sk-02d3ea
  */
 

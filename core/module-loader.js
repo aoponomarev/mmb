@@ -12,7 +12,7 @@
  * - file:// protocol does not support fetch() and XMLHttpRequest due to CORS
  *
  * SOLUTION:
- * - Module config in core/modules-config.js with dependency description
+ * - Module config in #JS-os34Gxk3 (modules-config.js) with dependency description
  * - Automatic dependency resolution via topological sort (Kahn algorithm)
  * - Cycle detection
  * - Async load via dynamic script tag creation (works with file:// and http://)
@@ -33,7 +33,7 @@
  *
  * REFERENCES:
  * - General principles module system: id:sk-a17d41
- * - Modules configuration: core/modules-config.js
+ * - Modules configuration: #JS-os34Gxk3
  */
 
 // @skill-anchor id:sk-130fa2 #for-umd-libraries #for-cdn-fallback

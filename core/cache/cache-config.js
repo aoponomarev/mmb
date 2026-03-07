@@ -27,7 +27,7 @@
  * cacheConfig.getVersion('portfolios');
  *
  * REFERENCES:
- * - Schema migrations: core/cache/cache-migrations.js
+ * - Schema migrations: #JS-FWhpDFTW (cache-migrations.js)
  * - Caching principles: id:sk-3c832d
  */
 

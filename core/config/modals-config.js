@@ -9,8 +9,8 @@
  * - modalId: { title, icon?, description?, bodyComponent?, centered?, condition? }
  *
  * REFERENCES:
- * - Modal component: shared/components/modal.js
- * - Menus config: core/config/menus-config.js
+ * - Modal component: #JS-HF48eDDR (modal.js)
+ * - Menus config: #JS-1gU5y1dH (menus-config.js)
  */
 
 (function() {

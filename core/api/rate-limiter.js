@@ -10,7 +10,7 @@
     'use strict';
 
     // Dependencies
-    // - core/config/api-config.js (window.apiConfig)
+    // - #JS-M12i9VHB (api-config.js) (window.apiConfig)
 
     /**
      * Adaptive timeout for requests

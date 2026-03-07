@@ -16,9 +16,9 @@
     'use strict';
 
     // Dependencies (loaded before this script)
-    // - core/config/auth-config.js (window.authConfig)
-    // - core/config/cloudflare-config.js (window.cloudflareConfig)
-    // - core/cache/cache-manager.js (window.cacheManager)
+    // - #JS-Uf4GZ4Qq (auth-config.js) (window.authConfig)
+    // - #JS-4r2GQb12 (cloudflare-config.js) (window.cloudflareConfig)
+    // - #JS-XsMewXpA (cache-manager.js) (window.cacheManager)
 
     if (typeof window.authConfig === 'undefined') {
         console.error('auth-client.js: authConfig not loaded');

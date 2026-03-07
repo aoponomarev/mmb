@@ -3,7 +3,7 @@
  * @description Reusable button: icon, text, suffix, Bootstrap variants/sizes/states, deterministic instance hashes.
  * @skill-anchor id:sk-f449b3 #for-template-logic-separation #not-doc-duplication
  *
- * PURPOSE: Layout and CSS: see shared/templates/button-template.js
+ * PURPOSE: Layout and CSS: see #JS-Gv3d5gD6 (button-template.js)
  *
  * COMPONENT API:
  * Props: label, labelShort, icon, suffix (Object|Array), tooltipIcon, tooltipText, tooltipSuffix, variant, size, disabled, loading, type, iconOpacity, buttonId, classesAdd, classesRemove, buttonAttributes.

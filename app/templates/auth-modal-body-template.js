@@ -2,7 +2,7 @@
  * #JS-sy2Co9p9
  * @description x-template for auth modal body; id="auth-modal-body-template"; loading, user info, unauthenticated message.
  *
- * REFERENCES: id:sk-318305; app/components/auth-modal-body.js
+ * REFERENCES: id:sk-318305; #JS-pZ2DyWkj (auth-modal-body.js)
  */
 
 (function() {

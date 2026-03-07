@@ -18,10 +18,10 @@
 // Methods (via ref): show(), hide(), toggle(), getBootstrapInstance()
 //
 // Keyboard: ArrowDown/Up (navigate), Enter (select or accept), Escape (close), Tab (close on tab out)
-// Layout/CSS: see shared/templates/combobox-template.js
+// Layout/CSS: see #JS-yZ2EWUuj (combobox-template.js)
 //
 // ARCHITECTURE:
-// Template: shared/templates/combobox-template.js. Deps: Bootstrap 5, Font Awesome 6, Vue. See also: id:sk-e0b8f3
+// Template: #JS-yZ2EWUuj. Deps: Bootstrap 5, Font Awesome 6, Vue. See also: id:sk-e0b8f3
  */
 
 window.cmpCombobox = {

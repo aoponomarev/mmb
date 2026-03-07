@@ -14,8 +14,8 @@
  * To deactivate: window.consoleInterceptor.disable()
  *
  * REFERENCES:
- * - Session Log Store: core/utils/session-log-store.js
- * - Logger: core/logging/logger.js
+ * - Session Log Store: #JS-AA4DgK6L (session-log-store.js)
+ * - Logger: #JS-Dd4AQf9o (logger.js)
  */
 
 (function() {

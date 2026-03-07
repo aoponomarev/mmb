@@ -2,7 +2,7 @@
  * #JS-KH3kmtFT
  * @description x-template for auth-button: login button or user profile dropdown; responsive (mobile icon only).
  *
- * REFERENCES: app/components/auth-button.js
+ * REFERENCES: #JS-Jd4ASwEo (auth-button.js)
  */
 
 (function() {

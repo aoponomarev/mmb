@@ -16,8 +16,8 @@
  *
  * REFERENCES:
  * - SSOT: id:sk-e0b8f3
- * - Tooltips: core/config/tooltips-config.js
- * - Messages: core/config/messages-config.js
+ * - Tooltips: #JS-DR3gZC9b (tooltips-config.js)
+ * - Messages: #JS-2Z2J49xj (messages-config.js)
  */
 
 (function() {

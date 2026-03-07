@@ -24,7 +24,7 @@ const noForbiddenTerms = (val) => {
     return !FORBIDDEN_TERMS.some(term => lower.includes(term));
 };
 
-/** @deprecated Use MODULE_PREFIXES from is/contracts/prefixes.js */
+/** @deprecated Use MODULE_PREFIXES from #JS-Q6dEzQ3S (prefixes.js) */
 export const ALLOWED_PREFIXES = MODULE_PREFIXES;
 
 const hasAllowedPrefix = (val) => {

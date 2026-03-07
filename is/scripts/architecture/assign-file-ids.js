@@ -3,7 +3,7 @@
  * #JS-1E2YRywQ
  * @description Build code-file-registry: map file id (#JS-xxx, #TS-xxx, #CSS-xxx, #JSON-xxx) to path from canonical scan.
  * @skill id:sk-f7e2a1
- * Plan: docs/plans/file-header-rollout.md. Usage: node is/scripts/architecture/assign-file-ids.js [--dry-run] [--write]
+ * Plan: docs/plans/file-header-rollout.md. Usage: node #JS-1E2YRywQ (assign-file-ids.js) [--dry-run] [--write]
  */
 import fs from "node:fs";
 import path from "node:path";

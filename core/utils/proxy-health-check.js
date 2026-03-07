@@ -8,7 +8,7 @@
  * const result = await window.proxyHealthCheck.checkWithDetails(url);
  *
  * REFERENCES:
- * - Proxy configuration: core/config/app-config.js
+ * - Proxy configuration: #JS-tn3fo2px (app-config.js)
  */
 
 (function() {

@@ -2,7 +2,7 @@
  * #JS-mP2tEPhZ
  * @description Template for portfolios-manager: list, Create button, create/edit modal (cmp-modal, cmp-button).
  *
- * REFERENCES: app/components/portfolios-manager.js
+ * REFERENCES: #JS-8j2Hez4u (portfolios-manager.js)
  */
 
 (function() {

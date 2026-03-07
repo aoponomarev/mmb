@@ -2,7 +2,7 @@
  * #JS-ZP2M2QVZ
  * @description Template for postgres-settings component (base URL, sync toggle).
  *
- * REFERENCES: app/components/postgres-settings.js; id:sk-483943
+ * REFERENCES: #JS-xNN9FxKB (postgres-settings.js); id:sk-483943
  */
 
 (function() {

@@ -13,8 +13,8 @@
  * window.AppMessages.clear('global');
  *
  * REFERENCES:
- * - Messages config: core/config/messages-config.js
- * - Event system: core/events/event-bus.js
+ * - Messages config: #JS-2Z2J49xj (messages-config.js)
+ * - Event system: #JS-v8M9uv5A (event-bus.js)
  */
 
 (function() {

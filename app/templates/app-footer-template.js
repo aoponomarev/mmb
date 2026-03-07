@@ -1,10 +1,10 @@
 /**
  * #JS-SM3w4kNX
- * @description x-template for app footer; id="app-footer-template"; fixed-bottom, metrics, crypto news; ref app-footer.js, styles/layout/footer.css.
+ * @description x-template for app footer; id="app-footer-template"; fixed-bottom, metrics, crypto news; ref app-footer.js, #CSS-qn3b7kmx (footer.css).
  *
  * PURPOSE: Template in DOM before Vue init; string → script type="text/x-template" → document.body.
  *
- * REFERENCES: id:sk-318305; app/components/app-footer.js
+ * REFERENCES: id:sk-318305; #JS-zB467gvM (app-footer.js)
  */
 
 (function() {

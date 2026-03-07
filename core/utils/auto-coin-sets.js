@@ -16,7 +16,7 @@
  *
  * REFERENCES:
  * - SSOT: id:sk-e0b8f3
- * - Classifier: core/config/coins-config.js
+ * - Classifier: #JS-jy6Q4juu (coins-config.js)
  */
 
 (function() {

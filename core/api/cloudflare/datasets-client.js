@@ -17,8 +17,8 @@
     'use strict';
 
     // Dependencies (loaded before this script)
-    // - core/config/cloudflare-config.js (window.cloudflareConfig)
-    // - core/api/cloudflare/auth-client.js (window.authClient)
+    // - #JS-4r2GQb12 (cloudflare-config.js) (window.cloudflareConfig)
+    // - #JS-He2SJ9Dp (auth-client.js) (window.authClient)
 
     if (typeof window.cloudflareConfig === 'undefined') {
         console.error('datasets-client.js: cloudflareConfig not loaded');

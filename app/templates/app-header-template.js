@@ -1,10 +1,10 @@
 /**
  * #JS-vK2JcZrV
- * @description x-template for app header (menu + settings); id="app-header-template"; ref app-header.js, styles/layout/header.css.
+ * @description x-template for app header (menu + settings); id="app-header-template"; ref app-header.js, #CSS-xrZxCxoN (header.css).
  *
  * PURPOSE: Template in DOM before Vue init; string → script type="text/x-template" → document.body. Slots: #menu-items, #portfolio-items, #settings-items.
  *
- * REFERENCES: id:sk-483943 (x-template extraction); app/components/app-header.js
+ * REFERENCES: id:sk-483943 (x-template extraction); #JS-Cu2wz595 (app-header.js)
  */
 
 (function() {

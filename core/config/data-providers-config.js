@@ -15,9 +15,9 @@
  *
  * REFERENCES:
  * - AI Providers Config (analog): id:sk-bb7c8e
- * - Data Provider Manager: core/api/data-provider-manager.js
- * - Base Data Provider: core/api/data-providers/base-provider.js
- * - Cache Manager: core/cache/cache-manager.js
+ * - Data Provider Manager: #JS-2436XKxE (data-provider-manager.js)
+ * - Base Data Provider: #JS-17n4k14b (core/api/data-providers/base-provider.js)
+ * - Cache Manager: #JS-XsMewXpA (cache-manager.js)
  */
 
 (function() {

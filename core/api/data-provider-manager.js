@@ -17,8 +17,8 @@
  * await window.dataProviderManager.setApiKey('coingecko', 'my-api-key');
  *
  * REFERENCES:
- * - Data providers config: core/config/data-providers-config.js
- * - Base provider: core/api/data-providers/base-provider.js
+ * - Data providers config: #JS-siMJxsfA (data-providers-config.js)
+ * - Base provider: #JS-17n4k14b (core/api/data-providers/base-provider.js)
  */
 
 (function() {

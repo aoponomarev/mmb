@@ -14,9 +14,9 @@
  * const migratedData = await window.messagesMigrations.migrate(cacheData, fromVersion, toVersion);
  *
  * REFERENCES:
- * - Messages config: core/config/messages-config.js
- * - Cache manager: core/cache/cache-manager.js
- * - Cache analogue: core/cache/cache-migrations.js
+ * - Messages config: #JS-2Z2J49xj (messages-config.js)
+ * - Cache manager: #JS-XsMewXpA (cache-manager.js)
+ * - Cache analogue: #JS-FWhpDFTW (cache-migrations.js)
  */
 
 (function() {

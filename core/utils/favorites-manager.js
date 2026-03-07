@@ -13,7 +13,7 @@
  * window.favoritesManager.toggleFavorite(coin);
  *
  * REFERENCES:
- * - API client: core/api/cloudflare/coin-sets-client.js
+ * - API client: #JS-Nb3xmCJm (coin-sets-client.js)
  */
 
 (function() {

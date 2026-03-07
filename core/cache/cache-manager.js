@@ -31,9 +31,9 @@
     'use strict';
 
     // Dependencies (loaded before this script)
-    // - core/cache/storage-layers.js (window.storageLayers)
-    // - core/cache/cache-config.js (window.cacheConfig)
-    // - core/cache/cache-migrations.js (window.cacheMigrations)
+    // - #JS-Fc2QzeBn (storage-layers.js) (window.storageLayers)
+    // - #JS-8P3M724Z (cache-config.js) (window.cacheConfig)
+    // - #JS-FWhpDFTW (cache-migrations.js) (window.cacheMigrations)
 
     if (typeof window.storageLayers === 'undefined') {
         console.error('cache-manager.js: storageLayers not loaded');

@@ -14,8 +14,8 @@
  * }
  *
  * REFERENCES:
- * - Data provider manager: core/api/data-provider-manager.js
- * - Provider config: core/config/data-providers-config.js
+ * - Data provider manager: #JS-2436XKxE (data-provider-manager.js)
+ * - Provider config: #JS-siMJxsfA (data-providers-config.js)
  */
 
 (function() {

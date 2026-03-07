@@ -17,7 +17,7 @@
  *
  * REFERENCES:
  * - SSOT: id:sk-e0b8f3
- * - Translation: core/api/messages-translator.js
+ * - Translation: #JS-Wy3YExT9 (messages-translator.js)
  */
 (function() {
     'use strict';

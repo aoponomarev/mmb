@@ -14,7 +14,7 @@
  * - id, title | { modalId }, handler, condition (optional)
  *
  * REFERENCES:
- * - Modals config: core/config/modals-config.js
+ * - Modals config: #JS-w33hCfsD (modals-config.js)
  * - SSOT: id:sk-e0b8f3
  */
 

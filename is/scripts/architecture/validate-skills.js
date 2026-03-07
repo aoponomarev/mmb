@@ -203,7 +203,7 @@ function validateImplementationStatusPaths(file, text, rel, errors, warnings) {
     }
 }
 
-// 4. Check is/skills/ prefix gate (SSOT: is/contracts/prefixes.js)
+// 4. Check is/skills/ prefix gate (SSOT: #JS-Q6dEzQ3S (prefixes.js))
 function validateSkillPrefixGate(rel, errors) {
     if (!shouldValidateSkillPrefix(rel)) return;
     const base = path.basename(rel);

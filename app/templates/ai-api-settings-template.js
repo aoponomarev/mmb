@@ -2,7 +2,7 @@
  * #JS-kb2TGxgm
  * @description x-template for ai-api-settings; id="ai-api-settings-template"; provider radio, conditional fields, API key, model select.
  *
- * REFERENCES: id:sk-483943 (x-template extraction); app/components/ai-api-settings.js
+ * REFERENCES: id:sk-483943 (x-template extraction); #JS-u72ZSLqH (ai-api-settings.js)
  */
 
 (function() {

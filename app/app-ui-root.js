@@ -1,6 +1,6 @@
 /**
  * #JS-yx22mAv8
- * @description Vue app root: init, module loader, theme/version/markup; components from core/module-loader.js.
+ * @description Vue app root: init, module loader, theme/version/markup; components from #JS-xj43kftu (module-loader.js).
  * @skill id:sk-483943
  *
  * APP INIT: data-bs-theme, app-version-{hash}, clearOldVersions, autoMarkup.

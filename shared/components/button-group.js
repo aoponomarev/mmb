@@ -5,7 +5,7 @@
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
  *
- * PURPOSE: Dual render (group >= breakpoint, dropdown < breakpoint); buttons[] → DropdownMenuItem when collapsed; Layout: shared/templates/button-group-template.js
+ * PURPOSE: Dual render (group >= breakpoint, dropdown < breakpoint); buttons[] → DropdownMenuItem when collapsed; Layout: #JS-m22wt9hC (button-group-template.js)
  *
  * COMPONENT API:
  * Props: size, variant, vertical, verticalBreakpoint, role, ariaLabel, classesAdd, classesRemove, collapseBreakpoint, dropdownLabel, dropdownIcon, dropdownVariant, buttons (ButtonConfig: type, label, labelShort, icon, variant, size, disabled, loading, active, suffix, tooltips, data-bs-*).
