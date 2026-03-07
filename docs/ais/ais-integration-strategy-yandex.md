@@ -15,7 +15,7 @@ related_ais:
 
 # AIS: Стратегия интеграций для Yandex Cloud и API Gateway
 
-<!-- @causality #for-docs-ids-gate #for-causality-harvesting #for-integration-legacy-remediation #for-atomic-remediation #for-readonly-fallbacks #for-cloud-env-readback #for-no-empty-cloud-env #for-serverless-short-runs #for-transport-shape-verification #for-trigger-minute-routing -->
+<!-- @causality #for-docs-ids-gate #for-causality-harvesting #for-integration-legacy-remediation #for-atomic-remediation #for-readonly-fallbacks #for-cloud-env-readback #for-no-empty-cloud-env #for-serverless-short-runs #for-transport-shape-verification #for-trigger-minute-routing #for-yc-public-invoke -->
 
 ## Концепция (High-Level Concept)
 
@@ -209,6 +209,12 @@ Yandex Cloud deploy API может отклонять пустые optional env 
 ### `#for-transport-shape-verification`
 
 Прямой `yc serverless function invoke` не всегда эквивалентен реальному HTTP-вызову через API Gateway, потому что event-shape отличается. Поэтому transport-поведение (`path`, `method`, `CORS`, `403`) нужно проверять по real base URL, а не только через direct invoke.
+
+### `#for-yc-public-invoke`
+
+Функции в Yandex Cloud, к которым обращается API Gateway через интеграцию `cloud_functions`, **обязательно должны быть публичными** (`yc serverless function allow-unauthenticated-invoke`). 
+
+Если этого не сделать, API Gateway получит отказ в доступе (Permission Denied) при попытке вызвать функцию, но для клиента это будет выглядеть как непрозрачная ошибка `502 Bad Gateway`. При этом в логах самой функции (вызов `yc serverless function logs`) никаких ошибок не появится, потому что запрос до неё даже не дойдёт. Это частая ловушка при создании новых функций-шлюзов.
 
 ## Deployment & Verification Protocol
 

@@ -84,6 +84,14 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-causality-harvesting` | Using raw `@causality` markers in code allows developers/agents to log rationale instantly without breaking flow to update the registry, creating a searchable backlog of potential patterns. |
 | `#for-data-provider-interface` | A unified interface for data providers (e.g., CoinGecko, Yandex Cache) abstracts the specific data fetching mechanisms from the orchestrator logic. |
 | `#for-dual-channel-fallback` | Implementing a dual-channel fetch (primary + fallback) ensures data availability even when the primary external service goes down or hits rate limits. |
+| `#for-readonly-fallbacks` | Fallbacks must be Read-Only / Local-Only. Do not write fallback data back to the central SSOT database (e.g. no browser upserts to PostgreSQL) to avoid polluting chronologies and cron data. |
+| `#for-endpoint-coherence` | Stateful read/write/readback flows must stay on the same backend domain contract. Mixing transports for the same feature creates false-positive writes and missing readback. |
+| `#for-cloud-env-readback` | For cloud deployments, the active function version environment is the operational SSOT. Redeploy must read and preserve live env values unless an explicit migration changes them. |
+| `#for-no-empty-cloud-env` | Some cloud deployment APIs reject empty values for optional environment variables. Empty optional keys must be omitted rather than serialized as empty strings. |
+| `#for-serverless-short-runs` | Long sleep chains inside one serverless invocation make timeout budgets, retries, and observability fragile. Prefer multiple short scheduled invocations over one long-running timer job. |
+| `#for-transport-shape-verification` | Direct function invocation and real HTTP/API Gateway traffic can produce different event shapes. Transport behavior must be verified through the real entrypoint, not only via direct invoke. |
+| `#for-trigger-minute-routing` | When multiple timer schedules call the same function artifact without an explicit mode payload, deriving mode from the stable schedule time (for example, current minute) avoids duplicating function packages and deploy paths. |
+| `#for-client-ssot-with-cloud-sync` | When UI state must survive offline/degraded mode and auth transitions, the client-side workspace remains the live SSOT, while cloud storage acts as an authenticated replica and recovery source. |
 | `#for-explicit-unknowns` | Guessing the causality of legacy "magic numbers" leads to dangerous hallucinations. We must explicitly mark unknowns so the human developer can answer them later. |
 | `#for-harvester-integration` | Using the raw `@causality` marker directly in the code with a question mark integrates perfectly with our MCP `harvest_causalities` tool, deprecating standalone draft files. |
 | `#for-mcp-data-contour` | MCP Data Flow: data lives in two domains — SSOT (id-registry, code-file-registry, causality-registry) in JSON/MD read directly; runtime (events, dependency_graph, raw_causalities) in data/mcp.sqlite. No cache of registries in SQLite avoids sync drift. AIS id:ais-8d3c2a. (Hash name is historical; the concept is a Data Flow, not a Contour per glossary.) |
@@ -113,6 +121,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
 | `#for-prefix-semantics` | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
 | `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |
+| `#for-yc-public-invoke` | Yandex Cloud API Gateway with `x-yc-apigateway-integration: cloud_functions` requires the target function to be explicitly set as public (`allow-unauthenticated-invoke`). Otherwise, the gateway returns a silent 502 Bad Gateway to the client. |
 | `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
 | `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
 

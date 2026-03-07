@@ -157,6 +157,7 @@ flowchart TD
    - ручной invoke `coingecko-fetcher` возвращает `coins_fetched: 250`;
    - `GET /api/coins/market-cache?count_only=true` показывает свежий `fetched_at`;
    - `POST /api/coins/market-cache` возвращает `403`.
+4. **Public Invocation:** Функция, обслуживающая Yandex API Gateway через интеграцию `cloud_functions`, обязана быть публичной (`yc serverless function allow-unauthenticated-invoke`). Иначе API Gateway будет возвращать 502 Bad Gateway без явных ошибок в логах функции.
 
 ## Интеграция с клиентом
 
