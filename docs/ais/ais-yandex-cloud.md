@@ -32,21 +32,15 @@ Yandex Cloud обеспечивает два контура работы с ры
 
 ```mermaid
 flowchart TD
-    A1["`Timer Trigger :00
-    market_cap`"] --> B
-    A2["`Timer Trigger :30
-    volume`"] --> B
+    A1[Timer Trigger :00 cap] --> B
+    A2[Timer Trigger :30 vol] --> B
     subgraph B[Yandex Cloud]
         direction LR
-        B1["`coingecko-fetcher
-        #JS-3w3f6pz7`"] --> B2[("`PostgreSQL
-        mbb_db`")]
-        B3["`coins-db-gateway
-        #JS-HS3kQFDc`"]
+        B1[coingecko-fetcher #JS-3w3f6pz7] --> B2[(PostgreSQL mbb_db)]
+        B3[coins-db-gateway #JS-HS3kQFDc]
     end
 
-    B1 -- HTTPS --> D["`CoinGecko API
-    api.coingecko.com`"]
+    B1 -- HTTPS --> D[CoinGecko API]
     E[Browser / UI] --> F[API Gateway URL]
     F --> B3
     B3 --> B2

@@ -42,13 +42,13 @@ flowchart TD
     UI --> YCGW[Yandex API Gateway URL]
     UI --> N8N[N8N Webhooks]
 
-    CFW --> CFKV["`Cloudflare KV / D1 scope`"]
+    CFW --> CFKV[Cloudflare KV / D1 scope]
     CFW --> EXT[External APIs via proxy]
 
     YCGW --> MBB[coins-db-gateway]
-    MBB --> PG[("`PostgreSQL mbb_db`")]
-    TR1["`Timer Trigger :00`"] --> FETCH[coingecko-fetcher]
-    TR2["`Timer Trigger :30`"] --> FETCH
+    MBB --> PG[(PostgreSQL mbb_db)]
+    TR1[Timer Trigger :00] --> FETCH[coingecko-fetcher]
+    TR2[Timer Trigger :30] --> FETCH
     FETCH --> PG
     FETCH --> CG[CoinGecko API]
 
