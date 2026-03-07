@@ -23,11 +23,11 @@ export const SKILL_CONCEPT = ["ssot-", "protocol-", "contract-"];
 /** Vendor: cloud providers, external services */
 export const SKILL_VENDOR = ["yc-", "cf-", "gh-"];
 
-/** Lifecycle: migration, rollback, deploy */
-export const SKILL_LIFECYCLE = ["migrate-", "rollback-", "deploy-"];
+/** Lifecycle: migration, rollback, deploy, lifecycle management */
+export const SKILL_LIFECYCLE = ["migrate-", "rollback-", "deploy-", "lifecycle-"];
 
-/** Domain: security, testing, CI */
-export const SKILL_DOMAIN = ["sec-", "test-", "ci-"];
+/** Domain: security, testing, CI, gates, pipelines */
+export const SKILL_DOMAIN = ["sec-", "test-", "ci-", "gate-", "pipeline-"];
 
 /** Tech: databases, MCP, n8n, Docker */
 export const SKILL_TECH = ["db-", "mcp-", "n8n-", "docker-"];
@@ -50,31 +50,34 @@ export const SKILL_ALLOWED = [
     ...SKILL_LEGACY,
 ];
 
-/** Semantic mapping (for AI agents and docs) */
+/** Semantic mapping (for AI agents and docs). Terms align with docs/glossary.md */
 export const SKILL_SEMANTICS = {
-    "a-": "architecture",
-    "ai-": "artificial intelligence, agent behavior",
-    "ais-": "architecture & infrastructure",
-    "is-": "infrastructure",
-    "ssot-": "single source of truth, canonical contract",
-    "protocol-": "protocol, handshake, interaction contract",
-    "contract-": "contract, schema, invariant",
-    "yc-": "Yandex Cloud",
-    "cf-": "Cloudflare",
-    "gh-": "GitHub",
-    "migrate-": "migration",
-    "rollback-": "rollback, recovery",
-    "deploy-": "deployment",
-    "sec-": "security",
-    "test-": "testing",
-    "ci-": "CI/CD",
-    "db-": "databases (SQLite, PostgreSQL)",
-    "mcp-": "MCP servers, tools",
-    "n8n-": "n8n workflows",
-    "docker-": "Docker",
-    "runbook-": "runbooks",
-    "plan-": "plans",
-    "vue-": "Vue.js (app/skills)",
+    "a-": "architecture (Layer topology, Boundary decisions)",
+    "ai-": "artificial intelligence, agent behavior (Bridge to AI)",
+    "ais-": "architecture & infrastructure specification",
+    "is-": "infrastructure (Infrastructure Layer)",
+    "ssot-": "single source of truth, canonical Contract",
+    "protocol-": "protocol, handshake, interaction Contract",
+    "contract-": "Contract, Schema, invariant",
+    "yc-": "Yandex Cloud (Provider / Adapter)",
+    "cf-": "Cloudflare (Provider / Adapter)",
+    "gh-": "GitHub (Provider / Adapter)",
+    "migrate-": "migration (Lifecycle transition)",
+    "rollback-": "rollback, recovery (Lifecycle transition)",
+    "deploy-": "deployment (Lifecycle transition)",
+    "sec-": "security (Policy, Gate)",
+    "test-": "testing (Gate, validation)",
+    "ci-": "CI/CD (Pipeline, Gate)",
+    "db-": "databases — SQLite, PostgreSQL (Persistence Layer)",
+    "mcp-": "MCP servers, tools (Bridge)",
+    "n8n-": "n8n workflows (Pipeline, Orchestrator)",
+    "docker-": "Docker (Infrastructure Layer)",
+    "runbook-": "runbooks (operational procedure)",
+    "plan-": "plans (Lifecycle roadmap)",
+    "vue-": "Vue.js (Presentation Layer, app/skills)",
+    "lifecycle-": "Lifecycle management, state transitions",
+    "gate-": "Gate definition and enforcement rules",
+    "pipeline-": "Pipeline / data flow patterns",
 };
 
 /** Map create-skill type to prefix */
@@ -101,6 +104,9 @@ export const SKILL_TYPE_TO_PREFIX = {
     docker: "docker-",
     runbook: "runbook-",
     plan: "plan-",
+    lifecycle: "lifecycle-",
+    gate: "gate-",
+    pipeline: "pipeline-",
     arch: "arch-",
     process: "process-",
 };
@@ -120,8 +126,9 @@ export const MODULE_PREFIXES = ["app-", "sys-", "is-", "core-", "cmp-", "index-"
 
 export const CORE_RECOMMENDED = [
     "api-", "cache-", "config-", "domain-", "state-", "async-", "messages-", "metrics-",
+    "provider-", "service-", "pipeline-",
 ];
-export const APP_RECOMMENDED = ["component-", "guard-", "ui-", "ux-", "vue-"];
+export const APP_RECOMMENDED = ["component-", "guard-", "ui-", "ux-", "vue-", "facade-", "lifecycle-"];
 
 // === HELPERS ===
 

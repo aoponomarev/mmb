@@ -6,9 +6,9 @@ last_updated: "2026-03-04"
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
-# Data Contour: Monitoring & Troubleshooting
+# Data Pipeline: Monitoring & Troubleshooting
 
-> Runbook для диагностики контура данных монет (PostgreSQL + CoinGecko dual-channel).
+> Runbook для диагностики конвейера данных монет — Data Pipeline (PostgreSQL + CoinGecko dual-channel).
 > См. id:ais-e41384 (docs/ais/ais-yandex-cloud.md), id:ais-3732ce (docs/ais/ais-data-pipeline.md).
 
 ## Pre-Flight Checks

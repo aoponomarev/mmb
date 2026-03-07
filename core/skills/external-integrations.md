@@ -15,7 +15,7 @@ last_change: ""
 
 ## Reasoning
 
-- **#for-integration-fallbacks** Relying on a single external provider creates a single point of failure. Implementing fallback chains (e.g., Active-Passive or Fallback Chain) ensures that if a primary service (like an AI API or a proxy) goes down, the system automatically switches to a secondary provider without breaking the user experience.
+- **#for-integration-fallbacks** Relying on a single external provider creates a single point of failure. Implementing fallback chains (e.g., Active-Passive or Fallback Chain) ensures that if a primary provider (like an AI API or a proxy) goes down, the system automatically switches to a secondary provider without breaking the user experience.
 - **#for-geo-optimization** Different cloud providers have different regional strengths. Routing requests based on geography (e.g., Yandex Cloud for RU/CIS users, Cloudflare for the rest of the world) minimizes latency and complies with regional data localization policies.
 - **#for-endpoint-coherence** Authentication and user settings/workspace APIs must use the same backend domain contract for a given feature. Mixed origins (e.g., auth via one worker and settings via another) can produce false-positive writes and missing readback.
 
@@ -23,7 +23,7 @@ last_change: ""
 
 1.  **Fault Tolerance by Default:**
     All new features relying on external services must implement a seamless fallback mechanism.
-    - If the primary service is unavailable, automatically switch to the secondary.
+    - If the primary provider is unavailable, automatically switch to the secondary.
     - If the secondary is unavailable, fallback to a tertiary or local mock.
 2.  **Centralized Integration Management:**
     Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (#JS-tn3fo2px (core/config/app-config.js)) to define the active provider and fallback chain.

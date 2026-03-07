@@ -35,7 +35,7 @@ const MSK_WINDOW_START_HOUR = 6;   // 06:00 MSK
 const MSK_WINDOW_END_HOUR   = 24;  // 24:00 MSK (midnight)
 const MAX_CYCLES_KEPT = 2;
 
-// ─── MSK time gate ─────────────────────────────────────────────────────────────
+// ─── MSK time window ────────────────────────────────────────────────────────────
 
 function getMoscowHour() {
     const now = new Date();

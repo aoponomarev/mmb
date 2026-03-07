@@ -197,6 +197,7 @@
   "#JS-fJ68ZfEu": "core/domain/portfolio-adapters.js",
   "#JS-fW2M5Jbg": "core/config/workspace-config.js",
   "#JS-fW36ebbg": "core/observability/fallback-monitor.js",
+  "#JS-fs25a5c3": "is/mcp/bootstrap.js",
   "#JS-gH2qNvcT": "core/state/loading-state.js",
   "#JS-gs3VQRd3": "is/scripts/infrastructure/validate-ssot.js",
   "#JS-gugGqgrV": "is/contracts/env/env-rules.test.js",

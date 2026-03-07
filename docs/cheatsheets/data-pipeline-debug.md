@@ -6,9 +6,9 @@ last_updated: "2026-03-04"
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
-# Шпаргалка: Контур данных монет — трасса вызовов и дебаг
+# Шпаргалка: Data Pipeline монет — трасса вызовов и дебаг
 
-> Быстрый справочник для отладки контура данных. Полная спецификация — id:ais-3732ce (docs/ais/ais-data-pipeline.md), id:ais-e41384 (docs/ais/ais-yandex-cloud.md).
+> Быстрый справочник для отладки конвейера данных (Data Pipeline). Полная спецификация — id:ais-3732ce (docs/ais/ais-data-pipeline.md), id:ais-e41384 (docs/ais/ais-yandex-cloud.md).
 
 ## Трасса вызовов (для дебага)
 
@@ -29,7 +29,7 @@ last_updated: "2026-03-04"
 - `ssot-policies` → `cache-config` → `storage-layers` → `cache-manager` → `request-registry`
 - `coingecko-provider` → `yandex-cache-provider` → `data-provider-manager` → `app-ui-root`
 
-## Ключевые методы #JS-yx22mAv8 (app-ui-root.js)
+## Ключевые методы #JS-yx22mAv8 (app/app-ui-root.js)
 
 | Метод | Назначение |
 |-------|------------|
@@ -40,7 +40,7 @@ last_updated: "2026-03-04"
 | `refreshCoinsCache()` | Ручной refresh (кнопка) |
 | `updateCoinsCacheMeta()` | Мета свежести для UI |
 
-## Чек-лист "контур жив"
+## Чек-лист "pipeline жив"
 
 1. Модули загружены без циклов/ошибок.
 2. `window.ssot.validateContracts()` проходит.
@@ -52,6 +52,6 @@ last_updated: "2026-03-04"
 
 ## Известные нюансы
 
-- **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 (app-ui-root.js) местами hardcoded 4h — выровнять.
+- **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 (app/app-ui-root.js) местами hardcoded 4h — выровнять.
 - **warm/cold слои:** Заявлены как IndexedDB, фактически fallback на localStorage с префиксами `idb_<layer>_...`.
-- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (yandex-cache-provider.js).
+- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (core/api/data-providers/yandex-cache-provider.js).

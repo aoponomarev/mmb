@@ -22,7 +22,7 @@ if (typeArg) {
 
 if (!title) {
     console.error("Usage: npm run skills:create \"Skill Title\" [--type=...]");
-    console.error("  Types: a|ai|ais|is|ssot|protocol|contract|yc|cf|gh|migrate|rollback|deploy|sec|test|ci|db|mcp|n8n|docker|runbook|plan|arch|process|core|app");
+    console.error("  Types: a|ai|ais|is|ssot|protocol|contract|yc|cf|gh|migrate|rollback|deploy|lifecycle|sec|test|ci|gate|pipeline|db|mcp|n8n|docker|runbook|plan|arch|process|core|app");
     process.exit(1);
 }
 
@@ -40,7 +40,7 @@ if (skillPrefix) {
 } else if (type === "app") {
     folderPath = path.join(ROOT, "app", "skills");
 } else {
-    console.error("Invalid type. Use a, ai, ais, is, arch, process, core, or app.");
+    console.error("Invalid type. Use a, ai, ais, is, lifecycle, gate, pipeline, arch, process, core, or app.");
     process.exit(1);
 }
 

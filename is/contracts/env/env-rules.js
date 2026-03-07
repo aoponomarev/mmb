@@ -1,6 +1,6 @@
 /**
  * #JS-JJ8jnJEw
- * @description Gatekeeper for environment variables (SSOT for secrets and config).
+ * @description SSOT contract for environment variables (secrets and config validation).
  * @skill id:sk-483943
  */
 import { z } from 'zod';

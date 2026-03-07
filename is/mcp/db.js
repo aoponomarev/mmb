@@ -51,7 +51,7 @@ function initSchema() {
             status TEXT DEFAULT 'pending' -- 'pending', 'harvested', 'ignored'
         );
 
-        -- 4. Dependency Graph Cache
+        -- 4. Dependency Graph
         CREATE TABLE IF NOT EXISTS dependency_graph (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             source_hash TEXT NOT NULL,

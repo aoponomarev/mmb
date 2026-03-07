@@ -1,12 +1,22 @@
 ---
 description: Terminology Police - Strict adherence to architectural glossary and correcting user
 globs: *
+alwaysApply: true
 ---
 # Terminology Strictness Protocol (Terminology Police)
 
 ## 1. The Glossary is SSOT
-Always use the exact academically correct architectural terms defined in `docs/glossary.md`. 
-Never use generic or mismatched terms. Distinctively separate the concepts of Layer (Слой), Contour (Контур), Gate (Гейт), Module (Модуль), Service (Сервис), and Provider (Провайдер).
+Always use the exact academically correct architectural terms defined in `docs/glossary.md`.
+Never use generic or mismatched terms. Key distinctions to enforce:
+
+| Concept A | Concept B | Core difference |
+|---|---|---|
+| Layer (Слой) | Contour (Контур) | Layer = vertical hierarchy; Contour = closed loop / security perimeter |
+| Service (Сервис) | Provider (Провайдер) | Service = business logic orchestrator; Provider = external data adapter |
+| Gate (Гейт) | Module (Модуль) | Gate = validation checkpoint; Module = code packaging unit |
+| Registry (Реестр) | Cache (Кэш) | Registry = canonical SSOT; Cache = temporary copy with TTL |
+| Orchestrator | Facade | Orchestrator = controls call sequence; Facade = simplifies interface |
+| Pipeline (Конвейер) | Contour (Контур) | Pipeline = linear chain of stages; Contour = closed cycle |
 
 ## 2. Agent "Terminology Police" Behavior
 When interacting with the user, you must actively enforce terminology correctness:
@@ -24,6 +34,8 @@ When interacting with the user, you must actively enforce terminology correctnes
   **Agent:** "`core` — это **слой** (Layer) бизнес-логики, а не контур. Контур подразумевает замкнутый цикл потока данных. Я подготовлю описание для слоя `core`..."
 - **User:** "Напиши сервис для запросов к Binance"
   **Agent:** "Для запросов к внешнему API мы создаем **провайдер** (или адаптер), а сервис — это оркестратор бизнес-логики. Я напишу `BinanceProvider`..."
+- **User:** "Обнови контур хранения настроек"
+  **Agent:** "Хранение настроек — это **подсистема хранения** (Storage System), а не контур. Контур предполагает замкнутый цикл данных. Обновляю подсистему хранения workspace-настроек..."
 
 ## 4. Enforcement
 This rule is absolute. Consistency in terminology prevents AI hallucinations, confusion in specifications, and architectural degradation over time.

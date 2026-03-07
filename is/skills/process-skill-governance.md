@@ -67,8 +67,8 @@ Use this table when deciding where to place a new or migrated skill:
 | Layer | `a-`, `ai-`, `ais-`, `is-` | `a-foundation`, `ai-collaboration`, `yc-functions` |
 | Concept | `ssot-`, `protocol-`, `contract-` | `ssot-paths`, `protocol-commit` |
 | Vendor | `yc-`, `cf-`, `gh-` | `yc-functions`, `cf-workers`, `gh-actions` |
-| Lifecycle | `migrate-`, `rollback-`, `deploy-` | `migrate-plans`, `rollback-triggers` |
-| Domain | `sec-`, `test-`, `ci-` | `sec-secrets`, `test-strategy` |
+| Lifecycle | `migrate-`, `rollback-`, `deploy-`, `lifecycle-` | `migrate-plans`, `rollback-triggers`, `lifecycle-docs` |
+| Domain | `sec-`, `test-`, `ci-`, `gate-`, `pipeline-` | `sec-secrets`, `test-strategy`, `gate-preflight`, `pipeline-data` |
 | Tech | `db-`, `mcp-`, `n8n-`, `docker-` | `db-sqlite`, `mcp-ecosystem`, `n8n-workflows` |
 | Doc | `runbook-`, `plan-` | `runbook-rollback`, `plan-migration` |
 | app/skills | `vue-`, `ui-`, `ux-`, `component-`, `guard-` | `vue-implementation-patterns`, `ui-architecture` |

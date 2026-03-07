@@ -27,6 +27,7 @@ last_change: ""
 2. **When registering a new prefix** — Add to the appropriate category array, `SKILL_SEMANTICS`, `SKILL_TYPE_TO_PREFIX`, and ensure it is in `SKILL_ALLOWED`.
 3. **Prefix format** — 2–4 lowercase letters + hyphen (e.g. `yc-`, `mcp-`, `runbook-`). No numbers. Kebab-case for multi-part (e.g. `runbook-` not `runBook-`).
 4. **Avoid collisions** — Check that the new prefix does not conflict with existing ones (e.g. `is-` vs `infra-`). Prefer vendor codes for external services (`yc-`, `cf-`, `gh-`).
+5. **Glossary alignment** — New prefixes MUST correspond to academically correct terminology from `docs/glossary.md`. If the glossary does not yet contain the relevant term, add it to the glossary first, then register the prefix.
 
 ## Contracts
 

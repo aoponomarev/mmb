@@ -38,12 +38,14 @@ last_change: ""
 
 ## Contracts
 
-When a Russian concept must be named in English (e.g. for code or file paths), you must translate its *meaning* to standard IT terminology.
+When a Russian concept must be named in English (e.g. for code or file paths), you must translate its *meaning* to standard IT terminology. The canonical SSOT for architectural terms is `docs/glossary.md`.
 
 | Russian Concept | Meaning | ❌ BANNED (Calque) | ✅ REQUIRED (Translation) |
 |---|---|---|---|
 | **ЕИП** (Единый Источник Правды) | Single Source of Truth | `EIP` | `SSOT` |
 | **MBB/MMB** | Legacy / Target App | `MBB`, `MMB` | `Legacy App`, `Target App` |
+| **Контур** (когда имеется в виду слой) | Vertical hierarchy level | `Contour` | `Layer` |
+| **Сервис** (когда имеется в виду адаптер к API) | External data fetcher | `Service` | `Provider` / `Adapter` |
 
 ## Implementation Status
 

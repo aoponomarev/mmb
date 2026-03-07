@@ -21,5 +21,19 @@ NEVER create English acronyms, variable names, or identifiers by transliterating
 | ФИН (Финализация) | `FIN` | `Finalization` |
 | ФИНС (Ф/И/Н/С категории) | `FINS` | `Finalization Discovery Blocks` |
 
+## Architectural Term Confusion Guard
+
+Beyond transliteration, agents MUST NOT mix up structurally different architectural concepts.
+SSOT for correct definitions: `docs/glossary.md`.
+
+| Common misuse (RU) | What was actually meant | Correct English term |
+|---|---|---|
+| "Контур `app/`" or "Контур `core/`" | Уровень вертикальной иерархии | **Layer** (Presentation / Business Logic / Infrastructure Layer) |
+| "Контур данных MCP" | Поток/путь данных | **Data Flow** or **Data Plane** |
+| "Сервис для запросов к API" | Адаптер к внешнему API | **Provider** or **Adapter** |
+| "Модуль проверки" (о preflight-скрипте) | Точка контроля | **Gate** |
+| "Слой событий" | Общая среда передачи | **Bus** (Event Bus) |
+| "Контур хранения" | Система/подсистема хранения | **Storage System** or **Persistence Layer** |
+
 ## Enforcement
-When generating variable names, file paths, or identifiers from a Russian concept — always translate the **meaning** to standard IT terminology, never transliterate the letters.
+When generating variable names, file paths, or identifiers from a Russian concept — always translate the **meaning** to standard IT terminology, never transliterate the letters. When writing architectural prose — always verify the term against `docs/glossary.md`.

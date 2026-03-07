@@ -37,7 +37,7 @@ graph TD
 ## Components & Contracts
 
 - id-registry.json + validate-global-md-ids — id-contract rollout complete.
-- LIR complete; #JS-cMCNbcJ1 (path-contracts.js) SSOT for skip patterns.
+- LIR complete; #JS-cMCNbcJ1 (is/contracts/path-contracts.js) SSOT for skip patterns.
 - id:ais-9f4e2d (docs/ais/ais-anti-staleness.md) — anti-staleness architecture and validation gates.
 - is/contracts/docs/id-registry.json — global SSOT: id → path for all 104 project markdown files.
 

@@ -117,7 +117,7 @@ We use the built-in `node:test` (introduced in Node.js v18+) for all tests, to a
 
 ### 8. Control Plane (Protection and State Checks)
 The Control Plane is a set of infrastructure scripts that guarantee the safe and reliable operation of the application before deployment, testing, or launch.
-- **health-check:** Integral check of all contours (Knowledge, Contracts, Runtime) via `npm run health-check`.
+- **health-check:** Integral check of all layers (Knowledge, Contracts, Runtime) via `npm run health-check`.
 - **single-writer guard:** Protection against race conditions when working with external cloud resources. Started via `npm run validate:single-writer`. The `DATA_PLANE_ACTIVE_APP` variable ensures that only one environment (TARGET, LEGACY, etc.) can write data to the cloud, while others work in Read-Only mode.
 
 ### 9. Git Submodule (When Submodules Exist)

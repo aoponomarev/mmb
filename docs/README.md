@@ -15,11 +15,11 @@ This directory serves as the historical ledger and runbook repository for the pr
 - `plans/`: Active migration and architectural plans (with `[ ]` checkboxes). New work starts here.
 - `done/`: Staging for completed plans before distillation. Files are deleted after distillation.
 - `ais/`: Architecture & Infrastructure Specifications (Russian). Macro-docs distilled from plans. Includes `ais-yandex-cloud.md` (ingest/read contours, Mermaid diagrams).
-- `audits/`: **SYSTEM** — causality-exceptions.jsonl consumed by #JS-eG4BUXaS (validate-causality-invariant.js). **Do not rename or move.**
+- `audits/`: **SYSTEM** — causality-exceptions.jsonl consumed by #JS-eG4BUXaS (is/scripts/architecture/validate-causality-invariant.js). **Do not rename or move.**
 - `backlog/`: Deferred plans and future architecture drafts. Not for distillation.
 - `backlog/skills/`: Deferred skills (Docker, n8n, Yandex Cloud, etc.) — useful but not wired until infrastructure exists.
-- `cheatsheets/`: Quick reference materials (e.g., architecture layers, data-contour-debug). Human-oriented.
-- `runbooks/`: Step-by-step operational procedures (monitoring, rollback, data-contour-troubleshooting). Implements skills.
+- `cheatsheets/`: Quick reference materials (e.g., architecture layers, data-pipeline-debug). Human-oriented.
+- `runbooks/`: Step-by-step operational procedures (monitoring, rollback, data-pipeline-troubleshooting). Implements skills.
 
 ## Root Files
 - id:doc-del-log (deletion-log.md): Log of removed docs (Doc | Commit | Rationale).
@@ -33,7 +33,7 @@ This directory serves as the historical ledger and runbook repository for the pr
 - Global registry: `is/contracts/docs/id-registry.json` (single SSOT for markdown id -> path mapping).
 - Contract format in docs: `id:<document-id>` (use id contract first, path as fallback only during migration).
 - ID-contract rollout: id-registry.json + validate-global-md-ids (complete).
-- Legacy remediation: LIR complete; #JS-cMCNbcJ1 (path-contracts.js) + Path Rewrite Log in docs/ais/*.md.
+- Legacy remediation: LIR complete; #JS-cMCNbcJ1 (is/contracts/path-contracts.js) + Path Rewrite Log in docs/ais/*.md.
 
 ## Constraints
 - **Russian Language Allowed**: Unlike skills (см. is/skills/, core/skills/, app/skills/) and code, `.md` files in `docs/` are permitted to be in Russian to lower the cognitive barrier for historical planning.

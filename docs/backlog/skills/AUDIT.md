@@ -20,11 +20,11 @@ last_updated: "2026-03-04"
 
 ## Findings
 
-### 1. Anti-calque (id:sk-483943 (arch-foundation), #JS-kXgRFkUV (naming-rules.js))
+### 1. Anti-calque (id:sk-483943 (arch-foundation), #JS-kXgRFkUV (is/contracts/naming/naming-rules.js))
 
 - **n8n-mbb** in n8n-infrastructure.md — container name violates `FORBIDDEN_TERMS: ['mbb', 'mmb']`. Replace with generic `n8n` or `n8n-app`.
 
-### 2. Paths SSOT (id:sk-483943 (arch-foundation), #JS-1xvfg1uj (paths.js))
+### 2. Paths SSOT (id:sk-483943 (arch-foundation), #JS-1xvfg1uj (is/contracts/paths/paths.js))
 
 - **scripts/health-check.js** — Wrong. Actual: #JS-ja3UnjWr (is/scripts/infrastructure/health-check.js), invoked via `npm run health-check`.
 - **events/SKILL_CANDIDATES.json** — Not in PATHS. When promoting: use PATHS or add to paths.js; clarify location per project layout.

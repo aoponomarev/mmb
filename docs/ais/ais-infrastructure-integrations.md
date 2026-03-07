@@ -44,4 +44,4 @@ related_ais:
 |------------|--------------|------|--------|---------------------------|
 | `integrations-cloudflare-core` (legacy donor) | `LIR-002.A1` | Legacy описание вне target структуры | `MAPPED` | `id:ais-775420` |
 | `integrations-cloudflare-plan` (legacy donor) | `LIR-002.A2` | Legacy плановой секции нет в текущей структуре | `MAPPED` | `id:ais-775420` |
-| `integrations-cloudflare-testing` (legacy donor) | `LIR-002.A3` | Legacy тестовый plan неактуален для активного контура | `MAPPED` | `id:ais-775420` |
+| `integrations-cloudflare-testing` (legacy donor) | `LIR-002.A3` | Legacy тестовый plan неактуален для активной инфраструктуры | `MAPPED` | `id:ais-775420` |

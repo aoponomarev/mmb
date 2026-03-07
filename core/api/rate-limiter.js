@@ -153,7 +153,7 @@
      * Wrapper over existing functional API
      */
     class RateLimiter {
-        // Shared instance store for different services (SSOT)
+        // Shared instance store for different providers (SSOT)
         static instances = new Map();
 
         /**

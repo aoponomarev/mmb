@@ -3,9 +3,9 @@
  * @description Partition cache keys across localStorage (hot) and IndexedDB (warm/cold) by size and access frequency.
  * @skill id:sk-3c832d
  *
- * PURPOSE: Route keys to the right storage layer for performance and size limits.
+ * PURPOSE: Route keys to the right storage tier for performance and size limits.
  *
- * LAYERS:
+ * TIERS:
  * - HOT (localStorage, ≤5MB), sync access: settings, theme, timezone, favorites, ui-state, active-tab (small, frequent); icons-cache (object {coinId: url}, ~100–500KB, sync critical for rendering)
  * - WARM (IndexedDB, ≤50MB), async: coins-list (1–5MB, search/filter), market-metrics, api-cache (frequent, structured)
  * - COLD (IndexedDB, ≤500MB), async, on-demand: time-series (10–100MB+), history, portfolios, strategies, correlations (indexes for search)
@@ -13,7 +13,7 @@
  * ADDING A NEW KEY:
  * 1. Estimate size (<100KB → hot, 100KB–10MB → warm, >10MB → cold)
  * 2. Estimate access frequency (every render → hot/warm, on demand → cold)
- * 3. Add key to LAYERS.{layer}.keys; overflow protection, cleanup priority: cold → warm → hot
+ * 3. Add key to LAYERS.{tier}.keys; overflow protection, cleanup priority: cold → warm → hot
  *
  * REFERENCES:
  * - General caching principles: id:sk-3c832d

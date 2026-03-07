@@ -37,5 +37,5 @@ related_ais:
 
 ## Завершение
 
-- Legacy paths: #JS-cMCNbcJ1 (path-contracts.js) SKIP_LINK_PATTERNS.
+- Legacy paths: #JS-cMCNbcJ1 (is/contracts/path-contracts.js) SKIP_LINK_PATTERNS.
 

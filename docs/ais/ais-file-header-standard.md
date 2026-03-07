@@ -21,7 +21,7 @@ related_ais:
 ## Идентификация и жизненный цикл
 
 - `id: ais-f7e2a1` — устойчивый идентификатор для ссылок из скиллов, планов и кода.
-- `status: draft` → `incomplete` после внедрения гейта и реестра код-файлов; `complete` после покрытия всех целевых файлов.
+- `status: draft` → `incomplete` после внедрения гейта и реестра код-файлов; `complete` после покрытия всех целевых файлов (полной области).
 - Связанные артефакты: `process-code-anchors`, `process-code-documentation`, `process-language-policy`, `path-contracts`; AIS документации и архитектуры.
 
 ## Концепция (High-Level Concept)
@@ -71,7 +71,7 @@ flowchart LR
 ```
 
 - Агент или разработчик при создании/правке файла берёт шаблон из #JS-EsMQyEpA (shared/templates/file-header-template.js) и заполняет слоты; file id берётся из реестра (после запуска #JS-1E2YRywQ is/scripts/architecture/assign-file-ids.js) или подставляется вручную по тому же алгоритму.
-- Скрипт #JS-1E2YRywQ (assign-file-ids.js) обходит целевые директории (`SCAN_DIRS`: core, app, shared, mm, is), для каждого .js/.ts вычисляет file id от канонического относительного пути (djb2 + Base58, 8 символов) и **только обновляет реестр** `code-file-registry.json`; содержимое файлов скрипт не меняет. Режим `--dry-run` — вывод без записи. Вставка `#<EXT>-<hash>` в шапки — вручную или будущим режимом (если появится).
+- Скрипт #JS-1E2YRywQ (is/scripts/architecture/assign-file-ids.js) обходит целевые директории (`SCAN_DIRS`: core, app, shared, mm, is), для каждого .js/.ts вычисляет file id от канонического относительного пути (djb2 + Base58, 8 символов) и **только обновляет реестр** `code-file-registry.json`; содержимое файлов скрипт не меняет. Режим `--dry-run` — вывод без записи. Вставка `#<EXT>-<hash>` в шапки — вручную или будущим режимом (если появится).
 - Гейт #JS-zh26RZvs (is/scripts/architecture/validate-file-headers.js) выполняет **полную проверку** по контракту: (1) при наличии file id в шапке обязан быть @description; (2) file id в шапке должен совпадать с ожидаемым для пути файла (getExpectedFileId). Режим `--fix`: при несовпадении id гейт подставляет в файле правильный id и сохраняет файл. Запуск: `npm run file-headers:check` или в составе preflight; `npm run file-headers:fix` — обновить реестр и автоматически исправить id в шапках.
 - Реестр `is/contracts/docs/code-file-registry.json` хранит соответствие `#JS-xxxx` → относительный путь; при добавлении/переименовании/перемещении файла запустить `npm run file-headers:fix` (или assign-file-ids + validate --fix).
 

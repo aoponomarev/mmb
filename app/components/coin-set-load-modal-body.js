@@ -390,7 +390,7 @@ window.coinSetLoadModalBody = {
                 tickers: '',
                 is_ban: true,
                 is_local: true
-            }, // Local service "Ban" set
+            }, // Built-in "Ban" set
             banTickersInput: '', // Editable field for Ban set ticker input
             banLoading: false, // Ban set loading state
             // Use centralized state from auth-state (SSOT)

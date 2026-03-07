@@ -10,7 +10,7 @@ last_change: ""
 
 # AI Providers Architecture
 
-> **Context**: The abstraction layer for integrating and switching between various AI services (YandexGPT, Perplexity AI, etc.).
+> **Context**: The abstraction layer (Facade) for integrating and switching between various AI providers (YandexGPT, Perplexity AI, etc.).
 > **Scope**: `core/api/ai-providers/*`, `core/api/ai-provider-manager.js`
 
 ## Reasoning

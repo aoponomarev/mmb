@@ -1,5 +1,5 @@
 /**
- * #JS-BootstrapMCP
+ * #JS-fs25a5c3
  * @description Automatically detects environment mismatch (Node ABI version diff, missing modules) and auto-heals before starting the MCP server.
  */
 import { execSync } from 'node:child_process';

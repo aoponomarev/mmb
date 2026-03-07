@@ -1,6 +1,6 @@
 /**
  * #JS-kXgRFkUV
- * @description Gatekeeper for file and module naming contracts (kebab-case, anti-calque).
+ * @description SSOT for file and module naming contracts (kebab-case, anti-calque).
  * @skill id:sk-483943
  */
 import { z } from 'zod';

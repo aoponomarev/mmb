@@ -16,7 +16,7 @@ related_ais:
 
 ## Концепция (High-Level Concept)
 
-Документ описывает, как интеграции на стыке Yandex Cloud Function и API Gateway реализованы в текущей Target App-архитектуре, и какие решения используются для стабильной доставки данных/контура API.
+Документ описывает, как интеграции на стыке Yandex Cloud Function и API Gateway реализованы в текущей Target App-архитектуре, и какие решения используются для стабильной доставки данных через API-слой.
 
 ## Текущее состояние (проверено на момент создания)
 
@@ -28,7 +28,7 @@ related_ais:
 ## Комплект обязательных контрактов и гейтов
 
 - `docs/ais`-спецификация имеет статус `draft`, будет продвинута в `incomplete` после полной ревизии donor-paths и связей.
-- Legacy paths: skip patterns в #JS-cMCNbcJ1 (path-contracts.js).
+- Legacy paths: skip patterns в #JS-cMCNbcJ1 (is/contracts/path-contracts.js).
 - Перед каждым значимым изменением проверить:
   - #JS-Hx2xaHE8 (is/scripts/architecture/validate-docs-ids.js)
   - #JS-69pjw66d (is/scripts/architecture/validate-causality.js)
