@@ -86,24 +86,10 @@
 
     /**
      * Get base URL for auth flow.
-     * SSOT: origin from authConfig.getRedirectUri() so callback and token check
-     * always go through the same Worker.
+     * SSOT: Always use the Workers base URL now that mbb-api is deprecated.
      * @returns {string} Base URL
      */
     function getAuthBaseUrl() {
-        try {
-            if (window.authConfig && typeof window.authConfig.getRedirectUri === 'function') {
-                const redirectUri = window.authConfig.getRedirectUri();
-                if (redirectUri) {
-                    const origin = new URL(redirectUri).origin;
-                    if (origin) {
-                        return origin;
-                    }
-                }
-            }
-        } catch (error) {
-            console.warn('cloudflare-config.getAuthBaseUrl: failed to determine auth origin from redirect_uri', error);
-        }
         return getWorkersBaseUrl();
     }
 

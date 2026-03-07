@@ -1,7 +1,7 @@
 ---
 id: readme-7c67c3
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-07"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -12,10 +12,11 @@ last_updated: "2026-03-04"
 
 ## Что делает
 
-- Каждые **15 минут** запрашивает топ-250 монет по капитализации и топ-250 по объёму
+- Каждые **60 минут** (в 00 минут) запрашивает топ-250 монет по капитализации
+- Каждые **60 минут** (в 30 минут) запрашивает топ-250 монет по объёму
 - Сохраняет в таблицу `coin_market_cache` (upsert по `coin_id`)
 - Итого: ~350 уникальных монет в кэше (пересечение топов)
-- Данные доступны через `app-api` эндпоинт `GET /api/coins/market-cache`
+- Данные доступны через `coins-db-gateway` / API Gateway эндпоинт `GET /api/coins/market-cache`
 
 ## Параметры
 
@@ -24,17 +25,17 @@ last_updated: "2026-03-04"
 | Runtime | nodejs18 |
 | Memory | 256 MB |
 | Timeout | 600s (10 мин) |
-| Cron | `0/15 * * * ? *` |
-| Чанк | 50 монет × 5 страниц = 250 |
-| Задержка | 21s между страницами (публичный API) |
+| Cron | `0 * * * ? *` и `30 * * * ? *` |
+| Чанк | 250 монет × 1 страница = 250 |
+| Задержка | Нет задержек внутри одного запуска |
 
 ## Переменные окружения
 
 ```
 DB_HOST=rc1b-dgs1vgc130gbme2n.mdb.yandexcloud.net
 DB_PORT=6432
-DB_NAME=app_db
-DB_USER=app_admin
+DB_NAME=mbb_db
+DB_USER=mbb_admin
 DB_PASSWORD=<секрет>
 COINGECKO_API_KEY=<опционально, Demo/Pro ключ>
 ```
@@ -63,7 +64,15 @@ COINGECKO_API_KEY=<опционально, Demo/Pro ключ>
 node test-local.js
 ```
 
-Загружает 1 страницу (50 монет) и сохраняет в БД.
+Загружает 1 страницу (250 монет) и сохраняет в БД.
+
+## Operational notes
+
+- Для redeploy production-функции нельзя слепо брать legacy defaults из локальных примеров. Operational SSOT для БД — env активной версии cloud function.
+- Если `COINGECKO_API_KEY` не задан, не передавайте пустое значение в `yc serverless function version create`; Yandex Cloud может отклонить deploy.
+- После deploy проверьте:
+  - ручной invoke `coingecko-fetcher` возвращает `coins_fetched: 250`;
+  - `GET /api/coins/market-cache?count_only=true` показывает свежий `fetched_at`.
 
 ## Структура таблицы coin_market_cache
 

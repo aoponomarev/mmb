@@ -1,15 +1,17 @@
 ---
 id: readme-9e335c
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-07"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
-# app API (Yandex Cloud Functions)
+# coins-db-gateway (Yandex Cloud Function)
 
 Назначение:
 - `/health` — проверка доступности БД.
+- `GET /api/coins/market-cache` — чтение серверного кэша монет из PostgreSQL.
+- `GET /api/coins/cycles` — чтение истории ingest-циклов.
 - Подготовка для CRUD эндпоинтов (портфели/снимки).
 
 Секреты:
@@ -17,9 +19,9 @@ last_updated: "2026-03-04"
 - Шаблон контракта: `.env.example` (DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD).
 
 Параметры функции (рекомендуемые):
-- Runtime: Node.js 22
-- Timeout: 10s
-- Memory: 128 MB
+- Runtime: nodejs18
+- Timeout: 30s
+- Memory: 256 MB
 
 Переменные окружения:
 - `DB_HOST`
@@ -27,6 +29,11 @@ last_updated: "2026-03-04"
 - `DB_NAME`
 - `DB_USER`
 - `DB_PASSWORD`
+
+Operational policy:
+- Для redeploy сохранять env-контракт активной production-версии функции.
+- Прямой `yc serverless function invoke` не является полным эквивалентом HTTP-трафика через API Gateway; чтение/403-поведение проверять через реальный base URL.
+- `POST /api/coins/market-cache` запрещён для браузера и должен возвращать `403`, чтобы fallback не записывал данные в центральный SSOT.
 
 Связанные файлы:
 - API Gateway: `is/yandex/functions/api-gateway/` (OpenAPI spec в Yandex Cloud Console)

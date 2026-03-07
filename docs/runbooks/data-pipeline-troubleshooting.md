@@ -1,7 +1,7 @@
 ---
 id: runbook-ce96aa
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-07"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -15,7 +15,7 @@ last_updated: "2026-03-04"
 
 Before investigating any data issue, verify:
 
-1. **Cron is running** — Check Yandex Cloud console for `market-fetcher` (coingecko-fetcher) invocation logs
+1. **Cron is running** — Check Yandex Cloud console for `coingecko-fetcher` invocation logs and both timer-trigger'и (`coingecko-fetcher-cron-cap`, `coingecko-fetcher-cron-vol`)
 2. **DB is reachable** — `GET /health` should return `{ status: "OK", server_time: "..." }`
 3. **API Gateway is up** — `GET /api/coins/market-cache?limit=1` should return data
 4. **Time window** — Fetcher only runs 06:00-24:00 MSK; night hours return `SKIPPED`
@@ -57,7 +57,7 @@ Open browser DevTools (Console) and look for log lines during coin loading:
 
 **Actions:**
 - Check Yandex Cloud console for DB connectivity
-- Verify `DB_HOST`, `DB_PORT`, `DB_PASSWORD` env vars in app-api function
+- Verify `DB_HOST`, `DB_PORT`, `DB_PASSWORD` env vars in `coins-db-gateway` function
 - Check `GET /health` endpoint directly
 
 ## Scenario: Data is Stale (Not Updating)
@@ -121,7 +121,7 @@ await window.cacheManager.delete('active-coin-set-data');
 
 ## Cycle Rotation Verification
 
-After 3+ fetcher runs, verify only 2 cycles remain:
+After 5+ fetcher runs, verify only 4 cycles remain:
 
 ```sql
 SELECT cycle_id, COUNT(*) as rows, COUNT(DISTINCT coin_id) as coins
@@ -130,7 +130,7 @@ GROUP BY cycle_id
 ORDER BY cycle_id DESC;
 ```
 
-Expected: exactly 2 rows (2 most recent cycle_ids).
+Expected: exactly 4 rows (4 most recent cycle_ids).
 
 ## Environment Variables Reference
 
@@ -144,8 +144,10 @@ Expected: exactly 2 rows (2 most recent cycle_ids).
 | `DB_PASSWORD` | Yes | Database password |
 | `COINGECKO_API_KEY` | No | Demo/Pro key for higher rate limits |
 
+Operational note: if `COINGECKO_API_KEY` is empty, omit it from the deploy command instead of sending an empty value.
+
 ### api-gateway (Yandex Cloud Function)
-Same DB variables as above. Serves the market-cache and cycles API endpoints.
+Function name: `coins-db-gateway`. Same DB variables as above. Serves the market-cache and cycles API endpoints.
 
 ### Cloudflare Worker (app-api)
 | Variable | Type | Description |

@@ -31,7 +31,7 @@
                 local: 'http://localhost:8787/auth/callback',
                 // @exception anti-calque: live Google OAuth redirect URI registered in Google Console.
                 // After adding app-api to Authorized redirect URIs list, replace with app-api origin.
-                production: 'https://mbb-api.ponomarev-ux.workers.dev/auth/callback'
+                production: 'https://app-api.ponomarev-ux.workers.dev/auth/callback'
             },
 
             // OAuth scopes (access rights)

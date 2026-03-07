@@ -37,7 +37,7 @@
             } else {
                 // @exception anti-calque: legacy worker URL used as fallback until OAuth redirect migrated to app-api
                 console.warn('coin-sets-client: cloudflareConfig not loaded, using fallback URL');
-                this.baseUrl = 'https://mbb-api.ponomarev-ux.workers.dev';
+                this.baseUrl = 'https://app-api.ponomarev-ux.workers.dev';
             }
         }
 

@@ -4,7 +4,7 @@
  * @skill id:sk-73dcca
  * @see id:sk-7cf3f7
  *
- * PURPOSE: Health check and future CRUD over PostgreSQL; invoked via API Gateway (OpenAPI spec in Yandex Cloud).
+ * PURPOSE: Health check, market-cache reads, and CRUD over PostgreSQL; invoked via API Gateway (OpenAPI spec in Yandex Cloud).
  *
  * ENV VARS:
  * - DB_HOST, DB_PORT (default 6432), DB_NAME, DB_USER, DB_PASSWORD
@@ -348,7 +348,7 @@ module.exports.handler = async function (event, context) {
                     }
                     response.cycles_available = cycles;
                 } catch (histErr) {
-                    console.warn('[app-api] History query failed (table may not exist yet):', histErr.message);
+                    console.warn('[coins-db-gateway] History query failed (table may not exist yet):', histErr.message);
                     response.prev_cycle = null;
                     response.cycles_available = [];
                 }
@@ -362,105 +362,13 @@ module.exports.handler = async function (event, context) {
         }
 
         // 6. POST /api/coins/market-cache — upsert coins from browser (CoinGecko fallback)
-        // Accepts array of coins in app-normalized format
+        // @causality #for-readonly-fallbacks
+        // Removed to prevent browser from polluting SSOT cache/history table. Fallbacks must be Read-Only.
         if (path.endsWith('/api/coins/market-cache') && method === 'POST') {
-            const body = JSON.parse(event.body || '{}');
-            const coins = Array.isArray(body.coins) ? body.coins : [];
-            if (coins.length === 0) {
-                return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: 'coins array is empty' }) };
-            }
-
-            await ensureCoinCacheTimestampColumns(client);
-            await ensureCoinCacheHistoryTable(client);
-
-            const now = new Date();
-            const cycleId = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
-            const sortType = body.sort_type || 'fallback';
-            let upserted = 0;
-
-            for (let i = 0; i < coins.length; i++) {
-                const coin = coins[i];
-                if (!coin.id) continue;
-                await client.query(`
-                    INSERT INTO coin_market_cache
-                        (coin_id, symbol, name, image,
-                         current_price, market_cap, market_cap_rank, total_volume,
-                         pv_1h, pv_24h, pv_7d, pv_14d, pv_30d, pv_200d,
-                         sort_market_cap, sort_volume, fetched_at, updated_at)
-                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
-                    ON CONFLICT (coin_id) DO UPDATE SET
-                        symbol          = EXCLUDED.symbol,
-                        name            = EXCLUDED.name,
-                        image           = COALESCE(EXCLUDED.image, coin_market_cache.image),
-                        current_price   = EXCLUDED.current_price,
-                        market_cap      = EXCLUDED.market_cap,
-                        market_cap_rank = EXCLUDED.market_cap_rank,
-                        total_volume    = EXCLUDED.total_volume,
-                        pv_1h           = EXCLUDED.pv_1h,
-                        pv_24h          = EXCLUDED.pv_24h,
-                        pv_7d           = EXCLUDED.pv_7d,
-                        pv_14d          = EXCLUDED.pv_14d,
-                        pv_30d          = EXCLUDED.pv_30d,
-                        pv_200d         = EXCLUDED.pv_200d,
-                        sort_market_cap = COALESCE(EXCLUDED.sort_market_cap, coin_market_cache.sort_market_cap),
-                        sort_volume     = COALESCE(EXCLUDED.sort_volume,     coin_market_cache.sort_volume),
-                        fetched_at      = EXCLUDED.fetched_at,
-                        updated_at      = EXCLUDED.updated_at
-                `, [
-                    coin.id,
-                    coin.symbol || null,
-                    coin.name || null,
-                    coin.image || null,
-                    coin.current_price || null,
-                    coin.market_cap || null,
-                    coin.market_cap_rank || null,
-                    coin.total_volume || null,
-                    coin.price_change_percentage_1h || 0,
-                    coin.price_change_percentage_24h || 0,
-                    coin.price_change_percentage_7d || 0,
-                    coin.price_change_percentage_14d || 0,
-                    coin.price_change_percentage_30d || 0,
-                    coin.price_change_percentage_200d || 0,
-                    coin.market_cap_rank || null,  // sort_market_cap = cap rank
-                    null,                          // sort_volume — unknown on manual load
-                    now,
-                    now
-                ]);
-
-                await client.query(`
-                    INSERT INTO coin_market_cache_history
-                        (cycle_id, coin_id, symbol, name, image,
-                         current_price, market_cap, market_cap_rank, total_volume,
-                         pv_1h, pv_24h, pv_7d, pv_14d, pv_30d, pv_200d,
-                         sort_type, sort_rank, fetched_at)
-                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
-                `, [
-                    cycleId,
-                    coin.id,
-                    coin.symbol || null,
-                    coin.name || null,
-                    coin.image || null,
-                    coin.current_price || null,
-                    coin.market_cap || null,
-                    coin.market_cap_rank || null,
-                    coin.total_volume || null,
-                    coin.price_change_percentage_1h || 0,
-                    coin.price_change_percentage_24h || 0,
-                    coin.price_change_percentage_7d || 0,
-                    coin.price_change_percentage_14d || 0,
-                    coin.price_change_percentage_30d || 0,
-                    coin.price_change_percentage_200d || 0,
-                    sortType,
-                    i + 1,
-                    now
-                ]);
-                upserted++;
-            }
-
             return {
-                statusCode: 200,
+                statusCode: 403,
                 headers: CORS_HEADERS,
-                body: JSON.stringify({ upserted, cycle_id: cycleId, sort_type: sortType })
+                body: JSON.stringify({ error: 'Browser fallback writes are disabled by architecture' })
             };
         }
 

@@ -1,17 +1,22 @@
 ---
 id: ais-91b7f4
 status: active
-last_updated: "2026-03-05"
+last_updated: "2026-03-07"
 related_skills:
   - sk-02d3ea
+  - sk-7b4ee5
 related_ais:
   - ais-c6c35b
   - ais-c4e9b2
+  - ais-775420
+  - ais-f6b9e2
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
 # AIS: Система хранения workspace-настроек (auth/non-auth)
+
+<!-- @causality #for-endpoint-coherence #for-client-ssot-with-cloud-sync -->
 
 ## Идентификация и цель
 
@@ -19,7 +24,7 @@ related_ais:
 - Цель: единый, предсказуемый контракт хранения состояния интерфейса в двух режимах:
   1) неавторизованный пользователь (локальный режим),
   2) авторизованный пользователь (облачный режим с привязкой к аккаунту).
-- Принцип: SSOT на уровне клиента через `workspaceConfig`, с синхронизацией в Cloudflare для авторизованной сессии.
+- Принцип: live SSOT остаётся на уровне клиента через `workspaceConfig`, а Cloudflare используется как auth-scoped replica и источник восстановления для авторизованной сессии.
 
 ## Что входит в workspace
 
@@ -75,6 +80,8 @@ related_ais:
 - Во время авторизованной работы:
   - изменения workspace пишутся локально + debounce-синхронизация в облако.
 
+Важно: этот облачный транспорт относится к домену Cloudflare `app-api` и **не** должен путаться с Yandex `coins-db-gateway`, который обслуживает рыночные данные и PostgreSQL transport.
+
 ## Архитектурный поток (SSOT + sync)
 
 ```mermaid
@@ -88,13 +95,13 @@ flowchart TD
     end
 
     subgraph cloud [Cloudflare]
-        API[/api/settings]
+        API[app-api /api/settings]
         KV[SETTINGS KV user scope]
     end
 
     UI -->|saveTableSettings/saveActiveCoinSetIds| WS
     WS --> L1
-    WS --> L2
+    WS -. cache fallback .-> L2
     UI -->|authenticated| CWC
     CWC --> API
     API --> KV
@@ -110,11 +117,14 @@ flowchart TD
 - Локальный SSOT для структуры workspace.
 - Частичные обновления через merge без потери остальных полей.
 - Fallback-поведение при ошибках cacheManager.
+- `localStorage` используется как resilience fallback, а не как параллельный обязательный primary path на каждом сохранении.
 
 ### `core/api/cloudflare/cloud-workspace-client.js`
 
 - Транспорт workspace в Cloudflare.
 - Важно: для workspace используется workers base URL (`app-api`) как primary endpoint.
+- `cloud-workspace-client` должен оставаться в том же transport-домене, что и auth/settings.
+- Замена этого транспорта на `coins-db-gateway` без migration-контракта нарушит endpoint coherence.
 - API:
   - `load(): Promise<Object|null>`
   - `save(workspaceObj): Promise<boolean>`
@@ -137,6 +147,9 @@ flowchart TD
 - Startup flow:
   - проверка auth status;
   - если сессия авторизована на старте, подгрузка cloud workspace.
+- Debounce save:
+  - `workspaceConfig` остаётся источником чтения;
+  - `cloudWorkspaceClient.save(...)` получает уже нормализованный workspace из `workspaceConfig`, а не сырой UI state.
 
 ### `app/components/auth-modal-body.js`
 
@@ -161,7 +174,8 @@ flowchart TD
 2. `workspace` должен быть в allowlist backend-normalizer, иначе данные silently теряются.
 3. `app-ui-root` должен явно зависеть от `cloud-workspace-client` в module graph.
 4. Применение cloud workspace и восстановление pre-auth workspace должны быть idempotent.
-5. Локальный SSOT не отключается: cloud — это source для auth-режима, но клиент продолжает жить через `workspaceConfig`.
+5. Локальный SSOT не отключается: cloud — это источник восстановления для auth-режима, но клиент продолжает жить через `workspaceConfig`.
+6. `workspace` относится к Cloudflare transport domain; `coins-db-gateway` не является корректным backend для этого feature.
 
 ## Наблюдаемость и диагностика
 
@@ -177,6 +191,29 @@ flowchart TD
 - Синхронизация cloud workspace привязана к debounce и event-path в UI, не транзакционна.
 - При недоступности API пользователь продолжает работать локально (degraded mode).
 - Конфликт-резолвинг между несколькими устройствами — last-write-wins на стороне KV.
+- При logout/login консистентность зависит от корректного восстановления pre-auth snapshot и endpoint coherence между auth и settings transport.
+
+## Почему реализация устроена именно так
+
+### `#for-client-ssot-with-cloud-sync`
+
+`workspace` влияет на живое состояние экрана, должно переживать degraded mode и должно корректно возвращаться после logout. Поэтому live SSOT остаётся в `workspaceConfig`, а облако играет роль:
+
+- auth-scoped replica,
+- recovery source,
+- transport для multi-session continuity.
+
+Если бы cloud storage стал единственным live SSOT, UI получил бы лишнюю зависимость от network/auth availability для базовых локальных действий.
+
+### `#for-endpoint-coherence`
+
+Auth и workspace обязаны разделять один transport domain. В текущей реализации это Cloudflare Worker `app-api`.
+
+Причина:
+
+- JWT/user context резолвится в том же backend-домене;
+- read/write/readback workspace должен видеть один и тот же user scope;
+- перенос workspace на `coins-db-gateway` без явной migration policy создаст ложную успешность записей и расхождение readback.
 
 ## Рекомендации по эволюции
 
@@ -194,3 +231,5 @@ flowchart TD
 - `app/app-ui-root.js`
 - `app/components/auth-modal-body.js`
 - `is/cloudflare/edge-api/src/settings.js`
+- `docs/ais/ais-infrastructure-integrations.md`
+- `docs/ais/ais-integration-strategy-yandex.md`

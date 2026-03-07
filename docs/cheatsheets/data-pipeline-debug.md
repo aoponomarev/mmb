@@ -1,7 +1,7 @@
 ---
 id: cheat-78b6b8
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-07"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -54,4 +54,6 @@ last_updated: "2026-03-04"
 
 - **Тайминговый дрейф:** SSOT задаёт 2h, в #JS-yx22mAv8 местами hardcoded 4h — выровнять.
 - **warm/cold слои:** Заявлены как IndexedDB, фактически fallback на localStorage с префиксами `idb_<layer>_...`.
-- **Серверный ingest:** Полная реализация cron/fetcher — в is/yandex/functions/, точки интеграции — #JS-qz3WnWnA (yandex-cache-provider.js).
+- **Серверный ingest:** Полная реализация cron/fetcher — в `is/yandex/functions/`; текущая модель ingest — два trigger'а (`:00` market_cap, `:30` volume) и один top-250 запрос на запуск.
+- **Read-only fallback:** браузерный fallback больше не имеет права писать в `POST /api/coins/market-cache`; эта запись должна возвращать `403`.
+- **Gateway verification:** HTTP-поведение `coins-db-gateway` проверять через реальный API Gateway URL, а не только через direct function invoke.

@@ -97,9 +97,13 @@ last_change: ""
 
 **Context**: Obtaining credentials for Yandex Cloud. Procedure: IAM → Service Account → Create API Key; copy immediately (shown once). Usage: add to `.env` as `YANDEX_API_KEY`; add to Function env vars. Security: if leaked, delete and rotate; if lost, create new (old keys unrecoverable).
 
-### Yandex mbb-api Function (PostgreSQL Gateway)
+### Yandex coins-db-gateway Function (PostgreSQL Gateway)
 
-**Context**: Deploying `mbb-api` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; `yc serverless function version create` with `--source-path` ZIP; preserve DB credentials from existing version. DB migration pattern: add temporary `POST /api/admin/migrate` with safe DDL; deploy; call endpoint; remove endpoint; redeploy. Cleanup: delete profile, remove ZIP.
+**Context**: Deploying `coins-db-gateway` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; build ZIP; run `yc serverless function version create` with `--source-path`; preserve DB credentials from the active version. Do not trust stale repo defaults for production DB selection. If an optional env value is empty, omit it from the deploy command instead of sending an empty string. Verification for HTTP behavior must be performed through the real API Gateway URL, because direct `yc serverless function invoke` can produce false-negative 404 results when the event shape does not match API Gateway transport. Related causalities: `#for-cloud-env-readback`, `#for-no-empty-cloud-env`, `#for-transport-shape-verification`.
+
+### Yandex coingecko-fetcher Function (Coin Market Ingest)
+
+**Context**: `coingecko-fetcher` is a timer-driven ingest function. Current deployment model: two independent timer triggers (`:00` for `market_cap`, `:30` for `volume`), one top-250 request per invocation, no long internal sleep chain. Preserve the production DB env contract from the live Yandex function version. Post-deploy verification: manual invoke should return `coins_fetched: 250`; downstream `GET /api/coins/market-cache?count_only=true` should expose fresh `fetched_at`. Related causalities: `#for-serverless-short-runs`, `#for-trigger-minute-routing`, `#for-cloud-env-readback`.
 
 ## Contracts
 
