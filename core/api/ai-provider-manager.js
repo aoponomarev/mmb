@@ -105,7 +105,7 @@
                 const providerName = await window.cacheManager.get('ai-provider');
                 return providerName || this.defaultProvider;
             } catch (error) {
-                console.warn('ai-provider-manager: ошибка получения провайдера, using дефолтный', error);
+                console.warn('ai-provider-manager: failed to get provider, using default', error);
                 return this.defaultProvider;
             }
         }
@@ -117,7 +117,7 @@
          */
         async setProvider(providerName) {
             if (!this.providers[providerName]) {
-                throw new Error(`Провайдер ${providerName} не найден`);
+                throw new Error(`Provider ${providerName} not found`);
             }
             await window.cacheManager.set('ai-provider', providerName);
         }
@@ -138,7 +138,7 @@
             const model = await this.getModel(providerName);
 
             if (!apiKey) {
-                throw new Error(`API ключ for ${providerName} not configured`);
+                throw new Error(`API key for ${providerName} not configured`);
             }
 
             const result = await provider.sendRequest(apiKey, model, messages, options);
@@ -161,7 +161,7 @@
                 const apiKey = await window.cacheManager.get(keyName);
                 if (apiKey) return apiKey;
             } catch (error) {
-                console.warn(`ai-provider-manager: read error ключа ${providerName} из cacheManager`, error);
+                console.warn(`ai-provider-manager: read error for key ${providerName} from cacheManager`, error);
             }
 
             // Skill anchor: fallback to Cloudflare KV — keys survive cache reset.
@@ -208,7 +208,7 @@
                     if (d.provider)       saves.push(window.cacheManager.set('ai-provider', d.provider));
                     if (d.apiBaseUrl)     saves.push(window.cacheManager.set('postgres-api-base-url', d.apiBaseUrl));
                     await Promise.all(saves);
-                    console.log('ai-provider-manager: настройки восстановлены из Cloudflare KV');
+                    console.log('ai-provider-manager: settings restored from Cloudflare KV');
                     // Notify subscribers (e.g. app-footer) that key is ready
                     window.dispatchEvent(new CustomEvent('ai-api-key-ready', { detail: { provider: providerName } }));
                     if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
@@ -219,7 +219,7 @@
                         });
                     }
                 } catch (kvErr) {
-                    console.warn(`ai-provider-manager: KV fallback не удался:`, kvErr.message);
+                    console.warn(`ai-provider-manager: KV fallback failed:`, kvErr.message);
                     if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
                         window.fallbackMonitor.notify({
                             source: 'aiProviderManager.getApiKey',
@@ -255,7 +255,7 @@
                 const savedModel = await window.cacheManager.get(modelKey);
                 return savedModel || provider.getDefaultModel();
             } catch (error) {
-                console.warn(`ai-provider-manager: ошибка получения модели for ${providerName}`, error);
+                console.warn(`ai-provider-manager: failed to get model for ${providerName}`, error);
                 return provider.getDefaultModel();
             }
         }

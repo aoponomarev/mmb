@@ -94,12 +94,18 @@ window.aiApiSettings = {
 
     watch: {
         activeTab(newValue) {
-            // Tab switching must not reset "Saved" state.
-            // Sync selected provider with active tab without marking dirty-state.
-            this.provider = newValue;
+            // @causality #for-tab-provider-decoupling
+            // Because 'postgres' and 'github' are settings tabs but not valid AI providers,
+            // we must only sync 'activeTab' to 'this.provider' if it's a valid AI provider.
+            // This prevents saving invalid providers to cache and causing startup warnings.
+            const validProviders = window.aiProviderManager ? window.aiProviderManager.validProviderIds : ['yandex'];
+            if (validProviders.includes(newValue)) {
+                this.provider = newValue;
+            }
         },
         provider(newValue) {
-            // If provider changes programmatically (load from cache/import), sync tab.
+            // @causality #for-tab-provider-decoupling
+            // Ensure UI reflects the actual AI provider when loaded from cache or snapshot.
             if (newValue && this.activeTab !== newValue) {
                 this.activeTab = newValue;
             }
@@ -192,7 +198,18 @@ window.aiApiSettings = {
          */
         async loadSettings() {
             try {
-                const savedProvider = await window.cacheManager.get('ai-provider');
+                let savedProvider = await window.cacheManager.get('ai-provider');
+                
+                // @causality #for-invalid-provider-cleanup
+                // Because previous versions might have saved 'postgres' or 'github' as ai-provider,
+                // we must sanitize it to prevent UI breaking and console warnings.
+                const validProviders = window.aiProviderManager ? window.aiProviderManager.validProviderIds : ['yandex'];
+                if (savedProvider && !validProviders.includes(savedProvider)) {
+                    savedProvider = window.aiProviderManager ? window.aiProviderManager.defaultProvider : 'yandex';
+                    // Proactively clean up the cache
+                    await window.cacheManager.set('ai-provider', savedProvider);
+                }
+
                 if (savedProvider) {
                     this.provider = savedProvider;
                     this.activeTab = savedProvider;
@@ -306,7 +323,8 @@ window.aiApiSettings = {
                 if (!d || typeof d !== 'object') return;
 
                 // Apply fields from KV only if missing locally
-                if (d.provider && !this.provider) {
+                const validProviders = window.aiProviderManager ? window.aiProviderManager.validProviderIds : ['yandex'];
+                if (d.provider && validProviders.includes(d.provider) && !this.provider) {
                     this.provider = d.provider;
                     this.initialProvider = d.provider;
                 }
@@ -338,7 +356,7 @@ window.aiApiSettings = {
 
                 // Save restored keys to local cacheManager for next startup
                 const saves = [];
-                if (d.provider)        saves.push(window.cacheManager.set('ai-provider', d.provider));
+                if (d.provider && validProviders.includes(d.provider)) saves.push(window.cacheManager.set('ai-provider', d.provider));
                 if (d.yandexApiKey)    saves.push(window.cacheManager.set('yandex-api-key', d.yandexApiKey));
                 if (d.yandexFolderId)  saves.push(window.cacheManager.set('yandex-folder-id', d.yandexFolderId));
                 if (d.yandexModel)     saves.push(window.cacheManager.set('yandex-model', d.yandexModel));
@@ -613,7 +631,10 @@ window.aiApiSettings = {
         },
 
         async applyImportedPayload(payload) {
-            if (typeof payload.provider === 'string') this.provider = payload.provider;
+            const validProviders = window.aiProviderManager ? window.aiProviderManager.validProviderIds : ['yandex'];
+            if (typeof payload.provider === 'string' && validProviders.includes(payload.provider)) {
+                this.provider = payload.provider;
+            }
             if (typeof payload.yandexApiKey === 'string') this.yandexApiKey = payload.yandexApiKey;
             if (typeof payload.yandexFolderId === 'string') this.yandexFolderId = payload.yandexFolderId;
             if (typeof payload.yandexModel === 'string') this.yandexModel = payload.yandexModel;
