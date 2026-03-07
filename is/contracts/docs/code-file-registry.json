@@ -256,6 +256,7 @@
   "#JS-uD33Z1qP": "app/components/modal-example-body.js",
   "#JS-uZ2Hc9qj": "is/scripts/tests/lint-frontend-hardcode-ast.test.js",
   "#JS-ut4EDxr4": "mm/base-model-calculator.js",
+  "#JS-v1JRkux7": "is/mcp/tools/resolve-id.js",
   "#JS-v8M9uv5A": "core/events/event-bus.js",
   "#JS-vK2EcYrV": "is/scripts/tests/validate-frontend-ui-configs.test.js",
   "#JS-vK2JcZrV": "app/templates/app-header-template.js",

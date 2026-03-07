@@ -6,8 +6,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "../../contracts/path-contracts.js";
+import { resolveId } from "../../contracts/docs/resolve-id.js";
 
-const REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
 const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".cursor"]);
 const ID_LINK_RE = /\bid:([a-z0-9][a-z0-9-]*)\b/g;
 
@@ -25,21 +25,60 @@ function walkMarkdown(dir, result = []) {
   return result;
 }
 
-function main() {
-  if (!fs.existsSync(REGISTRY_PATH)) {
-    console.error(`[validate-id-contract-links] Missing registry: ${path.relative(ROOT, REGISTRY_PATH)}`);
-    process.exit(1);
+/** Extract positions of id:xxx that are NOT inside backticks or fenced code blocks. */
+function findValidIdMentions(text) {
+  const mentions = [];
+  const lines = text.split(/\r?\n/);
+  let inFenced = false;
+  let fenceChar = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const fencedMatch = line.match(/^(`{3,}|~{3,})(\w*)/);
+    if (fencedMatch) {
+      if (!inFenced) {
+        inFenced = true;
+        fenceChar = fencedMatch[1];
+      } else if (line.startsWith(fenceChar)) {
+        inFenced = false;
+        fenceChar = null;
+      }
+      continue;
+    }
+    if (inFenced) continue;
+
+    let pos = 0;
+    while (pos < line.length) {
+      const idx = line.indexOf("id:", pos);
+      if (idx === -1) break;
+      const before = line.slice(Math.max(0, idx - 1), idx);
+      const backtickBefore = before.endsWith("`");
+      const match = line.slice(idx).match(/^id:([a-z0-9][a-z0-9-]*)\b/);
+      if (match) {
+        const after = line.slice(idx + match[0].length, idx + match[0].length + 1);
+        const backtickAfter = after === "`";
+        if (!backtickBefore && !backtickAfter) {
+          mentions.push({ id: match[1], fileLine: i + 1 });
+        }
+        pos = idx + match[0].length;
+      } else {
+        pos = idx + 1;
+      }
+    }
   }
-  const parsed = JSON.parse(fs.readFileSync(REGISTRY_PATH, "utf8"));
-  const registry = parsed.markdown && typeof parsed.markdown === "object" ? parsed.markdown : {};
+  return mentions;
+}
+
+function main() {
   const errors = [];
 
   for (const file of walkMarkdown(ROOT)) {
     const rel = path.relative(ROOT, file).replace(/\\/g, "/");
     const text = fs.readFileSync(file, "utf8");
-    for (const match of text.matchAll(ID_LINK_RE)) {
-      const id = match[1];
-      if (!registry[id]) {
+    const mentions = findValidIdMentions(text);
+    for (const { id } of mentions) {
+      const resolved = resolveId(`id:${id}`);
+      if (!resolved) {
         errors.push(`${rel}: unknown id contract "id:${id}"`);
       }
     }

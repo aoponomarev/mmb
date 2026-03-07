@@ -103,6 +103,15 @@ function main() {
     console.log(
         `[generate-id-registry] OK: skills=${totalSkills}, ais=${totalAis}, markdown=${totalMd} written to ${path.relative(ROOT, REGISTRY_PATH)}`
     );
+
+    const manifestPath = path.join(ROOT, "docs", "docs-id-manifest.json");
+    const manifest = {
+        ids: registry.markdown,
+        index_files: ["docs/index-skills.md", "docs/index-ais.md"],
+        generated_at: new Date().toISOString(),
+    };
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), "utf8");
+    console.log(`[generate-id-registry] docs-id-manifest.json written to ${path.relative(ROOT, manifestPath)}`);
 }
 
 main();

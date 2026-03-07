@@ -61,7 +61,7 @@ function runPreflight() {
     try {
         execSync('node is/scripts/architecture/validate-skills.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-global-md-ids.js', { stdio: 'inherit', cwd: PATHS.root });
-        execSync('node is/scripts/architecture/validate-id-contract-links.js', { stdio: 'inherit', cwd: PATHS.root });
+        execSync('node is/scripts/architecture/validate-id-gate.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-skill-anchors.js', { stdio: 'inherit', cwd: PATHS.root });
         if (!process.env.PREFLIGHT_SKIP_REASONING) {
             execSync('node is/scripts/architecture/validate-reasoning.js', { stdio: 'inherit', cwd: PATHS.root });
@@ -80,10 +80,7 @@ function runPreflight() {
         execSync('node is/scripts/architecture/validate-docs-encoding.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-docs-ids.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-deletion-log.js', { stdio: 'inherit', cwd: PATHS.root });
-        execSync('node is/scripts/architecture/audit-path-centric-doc-links.js', { stdio: 'inherit', cwd: PATHS.root });
-        execSync('node is/scripts/architecture/audit-path-centric-skill-links.js', { stdio: 'inherit', cwd: PATHS.root });
         execSync('node is/scripts/architecture/validate-rules-references.js', { stdio: 'inherit', cwd: PATHS.root });
-        execSync('node is/scripts/architecture/validate-mixed-reference-mode.js', { stdio: 'inherit', cwd: PATHS.root });
     } catch (e) {
         console.error(`[preflight] ERROR: Skills validation, Reasoning gate, index generation, docs-ids, mixed-reference-mode, or rules-references validation failed.`);
         process.exit(1);

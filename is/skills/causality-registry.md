@@ -115,3 +115,11 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |
 | `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
 | `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
+
+## Aliases / Deprecated
+
+When a hash is renamed or superseded, list it here so agents and tooling can resolve references. Use the main table for the canonical hash; this section maps old names to current ones.
+
+| Old / Alias | Current / Replacement | Note |
+|-------------|----------------------|------|
+| *(none yet)* | — | Add entries when hashes are renamed or deprecated. |

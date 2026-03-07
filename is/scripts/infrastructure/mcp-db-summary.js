@@ -1,3 +1,8 @@
+/**
+ * #JS-CM3Rev8X
+ * @description TODO: add description
+ */
+
 import fs from 'node:fs';
 import path from 'node:path';
 import Database from 'better-sqlite3';

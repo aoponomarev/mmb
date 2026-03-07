@@ -7,6 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getDocMap, getCodeMapWithBasenameCounts } from "../../contracts/docs/resolve-id.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,24 +47,6 @@ function walk(dir, out = []) {
   return out;
 }
 
-function loadRegistries() {
-  const rawIds = JSON.parse(fs.readFileSync(ID_REGISTRY_PATH, "utf8"));
-  const markdown = rawIds.markdown && typeof rawIds.markdown === "object" ? rawIds.markdown : {};
-  const docMap = new Map();
-  for (const [id, rel] of Object.entries(markdown)) docMap.set(`id:${id}`, normalize(rel));
-
-  const rawCode = JSON.parse(fs.readFileSync(CODE_REGISTRY_PATH, "utf8"));
-  const codeMap = new Map();
-  const basenameCounts = new Map();
-  for (const [hash, rel] of Object.entries(rawCode)) {
-    const normalized = normalize(rel);
-    codeMap.set(hash, normalized);
-    const basename = path.basename(normalized);
-    basenameCounts.set(basename, (basenameCounts.get(basename) || 0) + 1);
-  }
-  return { docMap, codeMap, basenameCounts };
-}
-
 function expectedCodeDisplay(relPath, basenameCounts) {
   const basename = path.basename(relPath);
   return (basenameCounts.get(basename) || 0) > 1 ? relPath : basename;
@@ -75,8 +58,22 @@ function main() {
     process.exit(1);
   }
 
-  const { docMap, codeMap, basenameCounts } = loadRegistries();
+  const docMap = getDocMap();
+  const { codeMap, basenameCounts } = getCodeMapWithBasenameCounts();
   const errors = [];
+
+  for (const [idToken, relPath] of docMap) {
+    const abs = path.join(ROOT, relPath.replace(/\//g, path.sep));
+    if (!fs.existsSync(abs)) {
+      errors.push(`stale-path: ${idToken} -> ${relPath} (file missing)`);
+    }
+  }
+  for (const [hash, relPath] of codeMap) {
+    const abs = path.join(ROOT, relPath.replace(/\//g, path.sep));
+    if (!fs.existsSync(abs)) {
+      errors.push(`stale-path: ${hash} -> ${relPath} (file missing)`);
+    }
+  }
 
   for (const file of walk(ROOT)) {
     const relFile = normalize(path.relative(ROOT, file));

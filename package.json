@@ -39,6 +39,7 @@
     "docs:ids:validate": "node is/scripts/architecture/validate-docs-ids.js",
     "docs:deletion:validate": "node is/scripts/architecture/validate-deletion-log.js",
     "docs:ids:registry": "node is/scripts/architecture/generate-id-registry.js",
+    "ids:orphan:audit": "node is/scripts/architecture/audit-orphan-ids.js",
     "skills:health:trend": "node is/scripts/architecture/skills-health-trend.js",
     "skills:health:trend:report": "node is/scripts/architecture/skills-health-trend-report.js",
     "readmes:check": "node is/scripts/architecture/validate-readmes.js",

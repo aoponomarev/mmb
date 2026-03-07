@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveId } from "../../contracts/docs/resolve-id.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,20 +50,9 @@ function walkFiles(dir, exts, result = []) {
 
 function resolveSkillPath(skillPath) {
   const normalized = skillPath.replace(/\\/g, "/").trim();
-  // id:xxx — resolve via id-registry (sk-, ais-, readme-, doc-, backlog-, runbook-, cheat-, docidx-, doc-del-log, docs-, bskill-)
   if (/^id:[a-z0-9-]+$/i.test(normalized)) {
-    const id = normalized.replace(/^id:/i, "");
-    const registryPath = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
-    if (fs.existsSync(registryPath)) {
-      const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
-      const all = { ...registry.skills, ...registry.ais, ...registry.markdown };
-      const filePath = all[id];
-      if (filePath) {
-        const full = path.join(ROOT, filePath);
-        if (fs.existsSync(full)) return full;
-      }
-    }
-    return null;
+    const r = resolveId(normalized);
+    return r && r.exists ? path.join(ROOT, r.path.replace(/\//g, path.sep)) : null;
   }
   const withMd = normalized.endsWith(".md") ? normalized : `${normalized}.md`;
   const fullPath = path.join(ROOT, withMd);
