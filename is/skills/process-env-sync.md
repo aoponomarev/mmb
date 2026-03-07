@@ -19,6 +19,8 @@ last_change: ""
 - **#for-preflight-enforcement** Preflight Zod validation ensures the contract is maintained—fix the drift before committing.
 - **#for-placeholders-no-secrets** Committing `.env.example` with descriptive placeholders documents requirements without leaking actual keys.
 - **#for-single-writer-guard** Environment config ensures only one runtime actively writes to cloud resources.
+- **#for-cloud-env-readback** For cloud runtimes, the active function version is the operational env SSOT. Redeploying from stale local defaults can silently point production to the wrong database or account.
+- **#for-no-empty-cloud-env** Some cloud deployment APIs reject empty values for optional env variables. Empty optional keys must be omitted, not serialized as `KEY=`.
 
 ---
 
@@ -54,6 +56,17 @@ When adding a new feature requiring an environment variable:
 2. **Mandatory comments**: Every variable in `.env.example` must have a `#` comment explaining its purpose and where to obtain the value.
 3. **Required vs optional**: Mark each variable's criticality in `env-rules.js` (Zod `.required()` vs `.optional()`).
 4. **Cloud function alignment**: If a variable is consumed by Cloudflare Workers or Yandex Cloud functions, it must be present in both `.env` and `.env.example`.
+
+### Yandex Cloud Redeploy Guard
+
+Before redeploying a Yandex Cloud function with `yc serverless function version create`:
+
+1. Read the current active version first (`yc serverless function version list --function-name ...`).
+2. Treat the active version env map as the operational SSOT for cloud runtime credentials unless a documented migration explicitly changes it.
+3. Preserve unchanged variables from the live function even if local docs, examples, or legacy defaults show different values.
+4. Do not pass empty optional values in `--environment`. If `COINGECKO_API_KEY` or another optional key is absent, omit the key entirely from the deploy command.
+
+**Operational anti-pattern**: redeploying from hardcoded defaults such as a legacy database name when the live function already points to another production database.
 
 ### DATA_PLANE_ACTIVE_APP (Single-Writer Guard)
 

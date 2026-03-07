@@ -1,6 +1,6 @@
 /**
  * #JS-fW2M5Jbg
- * @description TODO: add description
+ * @description Workspace state SSOT: active model, coin set, table state, metrics; persisted via cacheManager with localStorage fallback.
  */
 
 (function() {

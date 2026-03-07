@@ -17,6 +17,7 @@ last_change: ""
 
 - **#for-data-provider-interface** A unified interface (extending `BaseProvider`) ensures that the orchestrator (`DataProviderManager`) does not need to know the specific fetching, parsing, or ratelimiting details of individual providers.
 - **#for-dual-channel-fallback** Relying solely on external APIs (like CoinGecko) exposes the application to strict rate limits and downtime. A dual-channel fetch mechanism (PostgreSQL primary + CoinGecko fallback) guarantees data availability and speed while minimizing external API usage.
+- **#for-readonly-fallbacks** Fallbacks must be Read-Only / Local-Only. Do not write fallback data back to the central SSOT database (e.g. no browser upserts to PostgreSQL) to avoid polluting chronologies and cron data.
 - **#for-rate-limiting** Free-tier APIs have strict rate limits. Proactive waiting and adaptive throttling avoid persistent 429 failures.
 - **#for-validation-at-edge** Validate provider data before calculation to fail fast on malformed responses.
 

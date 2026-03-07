@@ -1,0 +1,19 @@
+---
+description: Dictionary of system commands (ОМК, ЕИП, АИС, КАИ, ФИН) used to trigger specific agent behaviors.
+globs: *
+---
+# Agent Commands Protocol
+
+## Triggers & Command Dictionary
+If the user mentions any of these commands in the chat, you MUST instantly adapt your behavior accordingly:
+
+- **`КАИ`** (Код/Архитектура/Инфраструктура / Full CAI analysis): Perform a deep cross-check between actual code, architecture diagrams, and infrastructure settings. Find discrepancies.
+- **`АИС`** (Arch-Scan): Read and apply the relevant Architecture/Infrastructure Specification (`docs/ais/`) before proceeding.
+- **`ЕИП`** (SSOT Check): Verify against the Unified Source of Truth. Do not guess; find the SSOT file and read it.
+- **`ФИН`** (Finalization): Run the Closure Protocol. Document all decisions, update skills/AIS, and prepare for task closure.
+- **`ОМК`** (Answer Maximally Briefly): Respond in max 3 lines. Essence only. No fluff.
+- **`ВЗП`** (Planned Execution): Default autonomous execution of a plan step-by-step.
+- **`ФИНС`** (Discovery Blocks): Finalization of Discovery Blocks.
+
+## Response Requirement
+When you detect one of these triggers in the user's prompt, explicitly mention that you are executing the requested protocol (e.g. "Выполняю КАИ-анализ...", "Принято, ОМК: ...") so the user knows the skill fired.

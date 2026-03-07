@@ -92,11 +92,11 @@ This is the key enabler of Zero-Config Portability: the same method returns the 
 - `mainTable` — table presentation: `selectedCoinIds`, `sortBy`, `sortOrder`, `coinSortType`, `showPriceColumn`.
 - `metrics` — calculation parameters: `horizonDays`, `mdnHours`, `activeTabId`, `agrMethod`.
 
-**Storage contract**: Primary `cacheManager.get/set('workspaceConfig')` (IndexedDB); fallback `localStorage` key `'workspaceConfig'` when cacheManager is unavailable. Both hold the same JSON structure.
+**Storage contract**: Primary `cacheManager.get/set('workspaceConfig')` (IndexedDB); fallback `localStorage` key `'workspaceConfig'` when cacheManager is unavailable. The localStorage copy is a resilience layer, not a second always-written primary path.
 
-**API**: `saveWorkspace(patch)` — merges partial update, writes to both layers. `loadWorkspace()` — reads cacheManager first, falls back to localStorage. `mergeWorkspace(partial)` — deep-merge utility.
+**API**: `saveWorkspace(patch)` — merges partial update, writes to cacheManager and falls back to localStorage only on cache-layer failure. `loadWorkspace()` — reads cacheManager first, falls back to localStorage. `mergeWorkspace(partial)` — deep-merge utility.
 
-**Rules**: (1) All components MUST read/write workspace via `workspaceConfig` methods. (2) Always use `saveWorkspace({ field: value })`, never replace the entire object. (3) After saving to cacheManager, always write a parallel copy to localStorage for fallback resilience.
+**Rules**: (1) All components MUST read/write workspace via `workspaceConfig` methods. (2) Always use `saveWorkspace({ field: value })`, never replace the entire object. (3) Cloud sync MUST read from `workspaceConfig`; it must not bypass the local workspace SSOT with direct UI serialization. Related causality: `#for-client-ssot-with-cloud-sync`.
 
 ### Lib Loader (External Dependencies)
 

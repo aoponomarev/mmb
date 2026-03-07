@@ -67,30 +67,37 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "Версия задеплоена OK" -ForegroundColor Green
 
-# 5. Создаём cron триггер
-Write-Host "`n[5] Создаём cron триггер (каждые 15 минут)..."
-$triggerName = "$FUNCTION_NAME-cron"
-$existingTrigger = & $YC serverless trigger list --format json 2>&1 | ConvertFrom-Json | Where-Object { $_.name -eq $triggerName }
+# 5. Создаём cron триггеры
+Write-Host "`n[5] Создаём cron триггеры (в :00 и :30)..."
 
-if ($existingTrigger) {
-    Write-Host "Триггер уже существует: $($existingTrigger.id)" -ForegroundColor Yellow
-} else {
-    & $YC serverless trigger create timer `
-        --name $triggerName `
-        --description "Каждые 15 минут: CoinGecko -> PostgreSQL" `
-        --cron-expression "0/15 * * * ? *" `
-        --invoke-function-id $FUNCTION_ID `
-        --invoke-function-tag '$latest' `
-        --invoke-function-service-account-id $SERVICE_ACCOUNT_ID
+$triggers = @(
+    @{ name = "$FUNCTION_NAME-cron-cap"; cron = "0 * * * ? *"; desc = "Every hour at :00: CoinGecko (market_cap) -> PostgreSQL" },
+    @{ name = "$FUNCTION_NAME-cron-vol"; cron = "30 * * * ? *"; desc = "Every hour at :30: CoinGecko (volume) -> PostgreSQL" }
+)
 
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Ошибка создания триггера"
-        exit 1
+foreach ($t in $triggers) {
+    $existingTrigger = & $YC serverless trigger list --format json 2>&1 | ConvertFrom-Json | Where-Object { $_.name -eq $t.name }
+
+    if ($existingTrigger) {
+        Write-Host "Триггер уже существует: $($existingTrigger.id) ($($t.name))" -ForegroundColor Yellow
+    } else {
+        & $YC serverless trigger create timer `
+            --name $($t.name) `
+            --description $($t.desc) `
+            --cron-expression $($t.cron) `
+            --invoke-function-id $FUNCTION_ID `
+            --invoke-function-tag '$latest' `
+            --invoke-function-service-account-id $SERVICE_ACCOUNT_ID
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Ошибка создания триггера $($t.name)"
+            exit 1
+        }
+        Write-Host "Триггер создан OK ($($t.name))" -ForegroundColor Green
     }
-    Write-Host "Триггер создан OK" -ForegroundColor Green
 }
 
 Write-Host "`n=== Деплой завершён ===" -ForegroundColor Cyan
 Write-Host "Function ID: $FUNCTION_ID"
-Write-Host "Триггер: каждые 15 минут"
+Write-Host "Триггеры: каждый час в :00 и :30"
 Write-Host "Таблица: coin_market_cache в app_db"

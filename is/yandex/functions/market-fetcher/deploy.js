@@ -168,9 +168,9 @@ async function createVersion(token, functionId, zipBase64) {
     return versionId;
 }
 
-// ─── Create cron trigger (every 15 min) ────────────────────────────────────
-async function createCronTrigger(token, functionId) {
-    console.log('Creating cron trigger (every 15 min)...');
+// ─── Create cron triggers (every hour at :00 and :30) ────────────────────────
+async function createCronTriggers(token, functionId) {
+    console.log('Creating cron triggers (every hour at :00 and :30)...');
 
     // Check existing triggers
     const list = await apiRequest({
@@ -180,39 +180,44 @@ async function createCronTrigger(token, functionId) {
         headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    const triggerName = `${FUNCTION_NAME}-cron`;
-    const existing = (list.triggers || []).find(t => t.name === triggerName);
-    if (existing) {
-        console.log('Trigger already exists:', existing.id);
-        return existing.id;
-    }
+    const triggers = [
+        { name: `${FUNCTION_NAME}-cron-cap`, cron: '0 * * * ? *', desc: 'Every hour at :00: CoinGecko (market_cap) -> PostgreSQL' },
+        { name: `${FUNCTION_NAME}-cron-vol`, cron: '30 * * * ? *', desc: 'Every hour at :30: CoinGecko (volume) -> PostgreSQL' }
+    ];
 
-    const body = {
-        folderId: FOLDER_ID,
-        name: triggerName,
-        description: 'Every 15 min: CoinGecko → PostgreSQL',
-        rule: {
-            timer: {
-                cronExpression: '0/15 * * * ? *', // every 15 min
-                invokeFunction: {
-                    functionId,
-                    functionTag: '$latest',
-                    serviceAccountId: SERVICE_ACCOUNT_ID
+    for (const t of triggers) {
+        const existing = (list.triggers || []).find(existingT => existingT.name === t.name);
+        if (existing) {
+            console.log(`Trigger already exists: ${existing.id} (${t.name})`);
+            continue;
+        }
+
+        const body = {
+            folderId: FOLDER_ID,
+            name: t.name,
+            description: t.desc,
+            rule: {
+                timer: {
+                    cronExpression: t.cron,
+                    invokeFunction: {
+                        functionId,
+                        functionTag: '$latest',
+                        serviceAccountId: SERVICE_ACCOUNT_ID
+                    }
                 }
             }
-        }
-    };
+        };
 
-    const op = await apiRequest({
-        hostname: 'serverless-triggers.api.cloud.yandex.net',
-        path: '/triggers/v1/triggers',
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-    }, body);
+        const op = await apiRequest({
+            hostname: 'serverless-triggers.api.cloud.yandex.net',
+            path: '/triggers/v1/triggers',
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+        }, body);
 
-    const triggerId = await waitOperation(op, token);
-    console.log('Trigger created:', triggerId);
-    return triggerId;
+        const triggerId = await waitOperation(op, token);
+        console.log(`Trigger created: ${triggerId} (${t.name})`);
+    }
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
@@ -224,11 +229,11 @@ async function main() {
         const zipBase64 = createZip();
         const functionId = await getOrCreateFunction(token);
         await createVersion(token, functionId, zipBase64);
-        await createCronTrigger(token, functionId);
+        await createCronTriggers(token, functionId);
 
         console.log('\n=== Deploy complete ===');
         console.log('Function ID:', functionId);
-        console.log('Trigger: every 15 min');
+        console.log('Triggers: every hour at :00 and :30');
         console.log('Table: coin_market_cache in app_db');
     } catch (err) {
         console.error('\nDEPLOY ERROR:', err.message);

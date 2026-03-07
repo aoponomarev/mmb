@@ -1,8 +1,8 @@
 /**
  * #JS-3w3f6pz7
- * @description Yandex Cloud Function (cron): CoinGecko top-250 by cap/volume → coin_market_cache_history + coin_market_cache; rotate 2 cycles; day window 06:00–24:00 MSK.
+ * @description Yandex Cloud Function (cron): CoinGecko top-250 by scheduled cap/volume run → coin_market_cache_history + coin_market_cache; keep 4 cycles; day window 06:00–24:00 MSK.
  *
- * PURPOSE: Each run loads top-250 from CoinGecko, writes to history with cycle_id, updates main table, keeps last 2 cycles. Night calls return 200 + status: SKIPPED.
+ * PURPOSE: Each run loads one top-250 slice from CoinGecko, writes to history with cycle_id, updates main table, keeps last 4 cycles. Night calls return 200 + status: SKIPPED.
  *
  * ENV VARS: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD; COINGECKO_API_KEY (optional, for higher rate limit).
  */
@@ -26,14 +26,14 @@ const DB_CONFIG = {
 };
 
 const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY || '';
-const CHUNK_SIZE = 50;
+const CHUNK_SIZE = 250;
 const CHUNK_DELAY_MS = 21000;
 const CHUNK_DELAY_WITH_KEY_MS = 2500;
 const REQUEST_TIMEOUT_MS = 30000;
 
 const MSK_WINDOW_START_HOUR = 6;   // 06:00 MSK
 const MSK_WINDOW_END_HOUR   = 24;  // 24:00 MSK (midnight)
-const MAX_CYCLES_KEPT = 2;
+const MAX_CYCLES_KEPT = 4;
 
 // ─── MSK time window ────────────────────────────────────────────────────────────
 
@@ -111,7 +111,7 @@ async function fetchTopCoinsPage(page, order) {
 async function fetchTop250(order) {
     const allCoins = [];
     const delayMs = COINGECKO_API_KEY ? CHUNK_DELAY_WITH_KEY_MS : CHUNK_DELAY_MS;
-    const totalPages = 5;
+    const totalPages = 1;
 
     console.log(`[fetcher] Loading top-250 by ${order} (${totalPages} pages x ${CHUNK_SIZE}, delay ${delayMs}ms)...`);
 
@@ -323,18 +323,17 @@ module.exports.handler = async function (event, context) {
 
         await ensureHistoryTable(client);
 
-        // 1. Fetch top-250 by market_cap
-        const byMarketCap = await fetchTop250('market_cap');
-        await insertHistoryCycle(client, cycleId, byMarketCap, 'market_cap');
+        // @causality #for-trigger-minute-routing
+        // Two timer triggers reuse one function artifact, so the mode
+        // is derived from the stable schedule minute instead of a separate payload contract.
+        // < 15 mins (e.g. at 00) -> market_cap
+        // >= 15 mins (e.g. at 30) -> volume
+        const minute = new Date().getMinutes();
+        const order = minute < 15 ? 'market_cap' : 'volume';
 
-        // Pause between two series
-        const pauseMs = COINGECKO_API_KEY ? CHUNK_DELAY_WITH_KEY_MS : CHUNK_DELAY_MS;
-        console.log(`[fetcher] Pause ${pauseMs}ms before volume fetch...`);
-        await sleep(pauseMs);
-
-        // 2. Fetch top-250 by volume
-        const byVolume = await fetchTop250('volume');
-        await insertHistoryCycle(client, cycleId, byVolume, 'volume');
+        // 1. Fetch top-250 by selected order
+        const coins = await fetchTop250(order);
+        await insertHistoryCycle(client, cycleId, coins, order);
 
         // 3. Refresh latest cache table from this cycle
         await refreshLatestCacheFromCycle(client, cycleId);
@@ -357,8 +356,8 @@ module.exports.handler = async function (event, context) {
                 status: 'OK',
                 cycle_id: cycleId,
                 elapsed_sec: elapsed,
-                market_cap_fetched: byMarketCap.length,
-                volume_fetched: byVolume.length,
+                order_fetched: order,
+                coins_fetched: coins.length,
                 total_in_cache: totalCoins,
                 history_cycles: totalCycles,
                 timestamp: new Date().toISOString()

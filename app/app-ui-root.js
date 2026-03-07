@@ -4587,69 +4587,6 @@
                     }
                 },
 
-                /**
-                 * Fallback sync: send coins from local cache to PostgreSQL,
-                 * if newer than DB data. Runs at start/refresh with page.
-                 * Covers cases when reactivity failed (search, direct load etc.)
-                 */
-                async syncCacheToDb() {
-                    try {
-                        const API_GATEWAY = 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net';
-
-                        // Coins from yandex-cache already in DB - skip.
-                        // Send only coins from CoinGecko (_source absent or !== 'yandex-cache').
-                        const isFromCoinGecko = (coin) => coin._source !== 'yandex-cache';
-
-                        const coinMap = new Map(); // id -> coin (deduplication)
-
-                        // 1. Current coins in table
-                        for (const coin of (this.coins || [])) {
-                            if (coin.id && isFromCoinGecko(coin)) {
-                                coinMap.set(coin.id, coin);
-                            }
-                        }
-
-                        // 2. Top-coins caches (may contain CoinGecko-fallback)
-                        if (window.cacheManager) {
-                            for (const key of ['top-coins-by-market-cap', 'top-coins-by-volume']) {
-                                const cached = await window.cacheManager.get(key);
-                                if (Array.isArray(cached)) {
-                                    for (const coin of cached) {
-                                        if (coin.id && isFromCoinGecko(coin)) {
-                                            coinMap.set(coin.id, coin);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (coinMap.size === 0) {
-                            console.log('app-ui-root: syncCacheToDb — нет coins из CoinGecko for синхронизации');
-                            return;
-                        }
-
-                        const coins = Array.from(coinMap.values());
-                        console.log(`app-ui-root: syncCacheToDb — отправляем ${coins.length} coins из CoinGecko в БД`);
-
-                        const resp = await fetch(`${API_GATEWAY}/api/coins/market-cache`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ coins })
-                        });
-                        if (resp.ok) {
-                            const data = await resp.json();
-                            console.log(`app-ui-root: syncCacheToDb — upserted=${data.upserted}`);
-                            if (data.upserted > 0) {
-                                await this.fetchDbStatus();
-                                console.log(`app-ui-root: syncCacheToDb — счётчик обновлён: ${this.dbStatus.count}`);
-                            }
-                        } else {
-                            console.warn(`app-ui-root: syncCacheToDb — HTTP ${resp.status}`);
-                        }
-                    } catch (e) {
-                        console.warn('app-ui-root: syncCacheToDb ошибка:', e.message);
-                    }
-                },
 
                 async updateCoinsCacheMeta() {
                     try {
@@ -5151,10 +5088,6 @@
                     // Preload max coin sets (250 by market cap and by volume)
                     // Now done lazily (see preloadMaxCoinsData)
                     this.preloadMaxCoinsData();
-
-                    // Safety sync cache → DB (background, non-blocking)
-                    // Sends coins from local cache if newer than DB data
-                    setTimeout(() => { this.syncCacheToDb(); }, 3000);
 
                     // Load table settings (after coin load)
                     await this.loadTableSettings();

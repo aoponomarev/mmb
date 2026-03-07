@@ -1,7 +1,7 @@
 ---
 id: ais-3732ce
 status: active
-last_updated: "2026-03-02"
+last_updated: "2026-03-07"
 related_skills:
   - sk-224210
   - sk-bb7c8e
@@ -24,6 +24,7 @@ related_ais:
   1. **Phase 1 (PostgreSQL):** `YandexCacheProvider` → `GET /api/coins/market-cache?ids=...` — быстрая bulk-выдача без rate limit.
   2. **Phase 2 (CoinGecko):** Если `missingIds.length > 0` — `getCoinData(missingIds)` через `CoinGeckoProvider` (chunk 50, задержка 21s между chunk'ами).
   3. **Merge:** `resolvedFromPg + resolvedFromCG` → итоговый набор монет.
+- **Read-Only Fallback:** fallback-ветка CoinGecko предназначена только для локального разрешения недостающих данных в UI. Она не должна записывать данные обратно в PostgreSQL или историю ingest-циклов.
 - **A.I.R. Model (Alignment, Impulse, Risk):** Сердцевина финансовой логики. Сырые данные о цене/объемах пропускаются через математическую модель A.I.R. для расчета инвестиционного рейтинга каждой монеты. Эти алгоритмы изолированы в #JS-CeYzbCbM (models-config.js) и не должны смешиваться с UI-кодом.
 - **Менеджер Провайдеров:** `DataProviderManager` абстрагирует конкретные источники (Binance, CoinGecko) под единый интерфейс. UI-слой ничего не знает о том, откуда именно пришли цены.
 
