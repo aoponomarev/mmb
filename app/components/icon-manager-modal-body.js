@@ -269,8 +269,8 @@
                     });
 
                     const content = await base64Promise;
-                    const repo = 'aoponomarev/libs'; // Asset repository
-                    const path = `assets/coins/${this.targetFilename}`;
+                    const repo = 'aoponomarev/a'; // Asset repository
+                    const path = `coins/${this.targetFilename}`;
                     const url = `https://api.github.com/repos/${repo}/contents/${path}`;
 
                     // 1. First try to get file SHA if it already exists

@@ -1,6 +1,6 @@
 /**
  * #JS-882U8X4J
- * @description Load coin metadata (stablecoins, wrapped, LST) from GitHub CDN libs/assets/data/coins.json; cache 24h, populates window.coinsConfig.
+ * @description Load coin metadata (stablecoins, wrapped, LST) from GitHub CDN a/data/coins.json; cache 24h, populates window.coinsConfig.
  * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
@@ -13,7 +13,7 @@
     'use strict';
 
     const CONFIG = {
-        baseUrl: 'https://aoponomarev.github.io/libs/assets/data/',
+        baseUrl: 'https://aoponomarev.github.io/a/data/',
         filename: 'coins.json',
         cacheKey: 'coins-metadata',
         defaultTtl: 24 * 60 * 60 * 1000 // 24 часа

@@ -14,7 +14,7 @@
      */
     const CONFIG = {
         // Base URL of our GitHub CDN
-        cdnBaseUrl: 'https://aoponomarev.github.io/libs/assets/coins/',
+        cdnBaseUrl: 'https://aoponomarev.github.io/a/coins/',
 
         // Alias map (if CoinGecko ID differs from CDN filename)
         // Format: { 'coingecko-id': 'cdn-filename' }

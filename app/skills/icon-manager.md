@@ -11,7 +11,7 @@ last_change: ""
 # Icon Manager
 
 > **Context**: Resolving coin icon URLs with caching and fallbacks for the portfolio UI.
-> **Scope**: #JS-1dttw1ah (icon-manager.js), libs assets (coin icons)
+> **Scope**: #JS-1dttw1ah (icon-manager.js), a/coins (coin icons)
 
 ## Reasoning
 
@@ -22,7 +22,7 @@ last_change: ""
 ## Core Rules
 
 1.  **Resolution Order:**
-    Primary: Local/Repo Assets (`libs/assets/coins/`). Fallback: External CDN (CoinGecko). Alias: Map symbols to known filenames (e.g. `WETH` → `ETH`).
+    Primary: Local/Repo Assets (`a/coins/`). Fallback: External CDN (CoinGecko). Alias: Map symbols to known filenames (e.g. `WETH` → `ETH`).
 2.  **API Usage:**
     Components must use `IconManager.getIconUrl('BTC')` and optionally `IconManager.preload(['BTC', 'ETH'])`.
 3.  **File Naming:**
@@ -33,4 +33,4 @@ last_change: ""
 ## Contracts
 
 - **SSOT**: #JS-1dttw1ah — resolution logic.
-- **Storage**: libs assets — icon files.
+- **Storage**: a/coins — icon files.

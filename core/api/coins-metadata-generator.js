@@ -12,8 +12,8 @@
     'use strict';
 
     const CONFIG = {
-        repo: 'aoponomarev/libs',
-        path: 'assets/data/coins.json',
+        repo: 'aoponomarev/a',
+        path: 'data/coins.json',
         branch: 'main'
     };
 
