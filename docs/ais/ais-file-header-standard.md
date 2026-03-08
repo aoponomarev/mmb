@@ -1,7 +1,7 @@
 ---
 id: ais-f7e2a1
-status: draft
-last_updated: "2026-03-04"
+status: complete
+last_updated: "2026-03-08"
 related_skills:
   - sk-8991cd
   - sk-f449b3
@@ -13,6 +13,7 @@ related_ais:
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
+<!-- План внедрения: дистиллирован; см. docs/deletion-log.md -->
 
 # AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
 
@@ -71,16 +72,16 @@ flowchart LR
 ```
 
 - Агент или разработчик при создании/правке файла берёт шаблон из #JS-EsMQyEpA (file-header-template.js) и заполняет слоты; file id берётся из реестра (после запуска #JS-1E2YRywQ) или подставляется вручную по тому же алгоритму.
-- Скрипт #JS-1E2YRywQ обходит целевые директории (`SCAN_DIRS`: core, app, shared, mm, is), для каждого .js/.ts вычисляет file id от канонического относительного пути (djb2 + Base58, 8 символов) и **только обновляет реестр** `code-file-registry.json`; содержимое файлов скрипт не меняет. Режим `--dry-run` — вывод без записи. Вставка `#<EXT>-<hash>` в шапки — вручную или будущим режимом (если появится).
+- Скрипт #JS-1E2YRywQ обходит целевые директории (`SCAN_DIRS`: core, app, is, shared, mm, styles — см. контракт), для каждого .js/.ts/.css/.json вычисляет file id от канонического относительного пути (djb2 + Base58, 8 символов) и **только обновляет реестр** `code-file-registry.json`; содержимое файлов скрипт не меняет. Режим `--dry-run` — вывод без записи. Режим `--write` для подстановки file id в шапки файлов не реализован; при необходимости — в следующих итерациях. Вставка `#<EXT>-<hash>` в шапки — вручную.
 - Гейт #JS-zh26RZvs (validate-file-headers.js) выполняет **полную проверку** по контракту: (1) при наличии file id в шапке обязан быть @description; (2) file id в шапке должен совпадать с ожидаемым для пути файла (getExpectedFileId). Режим `--fix`: при несовпадении id гейт подставляет в файле правильный id и сохраняет файл. Запуск: `npm run file-headers:check` или в составе preflight; `npm run file-headers:fix` — обновить реестр и автоматически исправить id в шапках.
 - Реестр `is/contracts/docs/code-file-registry.json` хранит соответствие `#JS-xxxx` → относительный путь; при добавлении/переименовании/перемещении файла запустить `npm run file-headers:fix` (или assign-file-ids + validate --fix).
 
 ## Локальные Политики (Module Policies)
 
-- Все новые и затрагиваемые при рефакторинге кодовые файлы в `core`, `app`, `shared`, `mm`, `is` (кроме исключений из контракта) должны иметь шапку по данному стандарту.
+- Все новые и затрагиваемые при рефакторинге кодовые файлы в `core`, `app`, `is`, `shared`, `mm`, `styles` (кроме исключений из контракта) должны иметь шапку по данному стандарту.
 - Ссылки на кодовый файл в скиллах, AIS, правилах и планах — по file id (`#JS-xxxx`) как каноническому ключу; путь рядом с hash допустим только как локальная подсказка по смешанному режиму.
 - Шапка должна быть в начале файла (первые строки); для блоковых комментариев — один блок `/** ... */`, для построчных — последовательность `//` с тем же порядком слотов.
-- Язык шапки — только английский (проверяется существующим гейтом #JS-GcQ9UGZD).
+- Язык шапки — только английский (проверяется #JS-GcQ9UGZD).
 - **Единый вид (no visual clutter):** без декоративных баннеров (`====...====`), без дублирования: если есть `@skill`, отдельная строка «Skill: …» не дублируется. Списки в формате `PRINCIPLES:` / `USAGE:` / `REFERENCES:` с маркерами `-` сохраняются; один короткий блок PURPOSE при необходимости, без повтора смысла из @description.
 - **Актуальность шапки:** при проверке шапка должна приводиться в соответствие с реальным кодом. Ложная или устаревшая информация — либо исправляется, либо удаляется. Гейт автоматически правит только несовпадение file id с путём (`--fix`); смысловое соответствие @description и секций коду обеспечивается процессом (запуск проверки после изменений, правка агентом/разработчиком).
 
@@ -93,6 +94,7 @@ flowchart LR
 | **Новый кодовый файл** | 1) Создать файл в одной из SCAN_DIRS. 2) Запустить `npm run file-headers:assign` (или `node is/scripts/architecture/assign-file-ids.js`) — реестр обновится. 3) Открыть `code-file-registry.json`, найти путь нового файла и соответствующий file id. 4) Вставить шапку из шаблона в начало файла, подставить file id и @description (и при необходимости остальные слоты). 5) Запустить `npm run file-headers:check` или preflight. |
 | **Переименование или перемещение файла** | 1) Переименовать/переместить файл. 2) Запустить #JS-1E2YRywQ — реестр пересчитается (у старого пути пропадёт id, у нового появится новый id). 3) В самом файле заменить старый file id в шапке на новый (из обновлённого реестра по новому пути). 4) В документации/скиллах заменить ссылки на старый file id на новый (или оставить старый, если ссылка по смыслу на «удалённый» артефакт). |
 | **Проверка соответствия стандарту** | `npm run file-headers:check` — полная проверка (id совпадает с путём, есть @description). `npm run file-headers:fix` — обновить реестр и автоматически исправить неверный file id в шапках. Полная проверка инфраструктуры: `npm run preflight`. |
+| **Массовая миграция в новом проекте** | Рекомендуемый порядок обхода: is → core → shared → app → mm; внутри is: cloudflare, yandex. |
 | **Сразу после изменений в коде** | Шапка должна перепроверяться полностью после любых правок в файле. Запускать `npm run file-headers:fix` (или как минимум `file-headers:check`) перед коммитом; в CI — preflight. Ложная или устаревшая информация в шапке подлежит исправлению или удалению (агент/разработчик). |
 
 ## Нюансы по типам файлов (File-type nuances)
@@ -108,8 +110,7 @@ flowchart LR
 |------|----------|------------|
 | #JS-EsMQyEpA | file-header-template.js | SSOT шаблона шапки; копировать при создании/обновлении файла. |
 | id:ais-f7e2a1 | docs/ais/ais-file-header-standard.md | Данная спецификация (макро-правила, политики, диаграмма). |
-| id:plan-f7e2a1 | docs/plans/file-header-rollout.md | План внедрения: фазы, чек-листы, порядок обхода. |
-| #JS-Am2QGp6w | is/contracts/file-header-contract.js | Разрешённые теги, обязательные поля, формат file id. |
+| #JS-Am2QGp6w | is/contracts/file-header-contract.js | Разрешённые теги, обязательные поля, формат file id. Константы: FILE_ID_PATTERN, REQUIRED_HEADER_FIELDS, ALLOWED_HEADER_TAGS, SCAN_DIRS, SCAN_EXTENSIONS, HASH_LEN. |
 | id:sk-f7e2a1 | is/skills/process-file-header-standard.md | Скилл для агентов: правила заполнения, примеры, связь с causality. |
 | #JS-zh26RZvs | is/scripts/architecture/validate-file-headers.js | Гейт полной проверки: file id должен совпадать с путём (getExpectedFileId), при наличии id — @description обязателен. Режим `--fix`: запись в файл правильного id при несовпадении. Вызов: preflight, `npm run file-headers:check`, `npm run file-headers:fix`. |
 | #JS-1E2YRywQ | assign-file-ids.js | Построение и запись реестра: обход SCAN_DIRS, вычисление file id (djb2+Base58 от пути); файлы не изменяет. Вызов: `npm run file-headers:assign`. |
@@ -117,9 +118,9 @@ flowchart LR
 
 ## Контракт полной проверки и правки
 
-- **Контракт** #JS-Am2QGp6w (file-header-contract.js): (1) перечень разрешённых тегов и формат file id; (2) обязательность @description при наличии file id; (3) **полная проверка**: file id в шапке должен совпадать с ожидаемым для пути файла (`getExpectedFileId(relPath)` — тот же алгоритм, что в #JS-1E2YRywQ assign-file-ids). Функции: `validateHeaderFull(headerText, relPath)`, `getFileIdFromHeader(headerText)`, `getExpectedFileId(relPath)`.
+- **Контракт** #JS-Am2QGp6w (file-header-contract.js): (1) константы `FILE_ID_PATTERN`, `REQUIRED_HEADER_FIELDS`, `ALLOWED_HEADER_TAGS`, `SCAN_DIRS`, `SCAN_EXTENSIONS`, `HASH_LEN`; (2) перечень разрешённых тегов и формат file id; (3) обязательность @description при наличии file id; (4) **полная проверка**: file id в шапке должен совпадать с ожидаемым для пути файла (`getExpectedFileId(relPath)` — тот же алгоритм, что в #JS-1E2YRywQ assign-file-ids). Функции: `validateHeaderFull`, `getFileIdFromHeader`, `getExpectedFileId`, `extractHeaderComment`, `validateHeader`.
 - **Гейт** #JS-zh26RZvs: для каждого .js/.ts из SCAN_DIRS — извлечь шапку; при наличии file id проверить @description и совпадение id с путём. Режим `--fix`: при несовпадении id подставить в файле правильный id и сохранить. Не исправляет автоматически отсутствие @description или смысловое устаревание — только id.
-- **Preflight**: после гейта «code comments English» выполняется #JS-zh26RZvs (без --fix); при падении preflight не проходит.
+- **Preflight**: после гейта #JS-GcQ9UGZD выполняется #JS-zh26RZvs (без --fix); при падении preflight не проходит.
 - **Политика:** шапка перепроверяется полностью сразу после внесения изменений в код (перед коммитом / в CI). Ложная информация в шапке исправляется или удаляется; автоматическая правка по контракту — только file id.
 
 ## Лог перепривязки путей (Path Rewrite Log)
@@ -133,5 +134,6 @@ flowchart LR
 ## Завершение / completeness
 
 - В causality-registry присутствует хэш `#for-file-header-standard` (связь с данной AIS и гейтом).
-- **Status:** после внедрения гейта и реестра — `incomplete`; после массового прохода по целевым файлам (core, app, shared, mm, is) и успешного preflight — перевести в `complete`. Текущее состояние отражено в плане id:plan-f7e2a1.
+- **Status:** `complete`. Целевая область на момент завершения rollout: 256 .js/.ts (core, app, shared, mm, is). План внедрения выполнен и дистиллирован в данный AIS.
+- **index-ais:** генерируется в preflight и включает ссылки на id:ais-f7e2a1.
 - **npm-скрипты:** `file-headers:check` — полная проверка (id + @description); `file-headers:fix` — обновить реестр и исправить неверный file id в шапках; `file-headers:audit` — то же для разовой ревизии; `file-headers:assign` — только обновление реестра.

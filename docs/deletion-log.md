@@ -20,3 +20,4 @@ last_updated: "2026-03-08"
 | `docs/plans/plan-skills-migration-registry.md` | — | archived, path-contracts + index-skills SSOT |
 | `docs/done/mcp-data-contour-migration.md` | ae39770 | дистиллирован в id:ais-8d3c2a (ais-mcp-data-flow); telemetry.sqlite → mcp.sqlite |
 | `docs/done/ssot-contract-plane-rollout.md` | — | дистиллирован в id:ais-7f8e9d (docs/ais/ais-ssot-contract-plane.md); план выполнен |
+| `docs/done/file-header-rollout.md` | — | дистиллирован в id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md); план выполнен |

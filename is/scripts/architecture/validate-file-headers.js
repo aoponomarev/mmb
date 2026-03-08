@@ -4,7 +4,7 @@
  * @description Gate: full header check — file id must match path, @description required when id present; --fix corrects id mismatch.
  * @skill id:sk-f7e2a1
  * @causality #for-file-header-standard
- * @ssot process-file-header-standard, file-header-contract.js. Plan: docs/plans/file-header-rollout.md.
+ * @ssot process-file-header-standard, file-header-contract.js. AIS: id:ais-f7e2a1.
  */
 import fs from "node:fs";
 import path from "node:path";

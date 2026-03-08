@@ -2,7 +2,7 @@
  * #JS-Am2QGp6w
  * @description SSOT for file header structure: file id pattern, required fields, allowed tags.
  * @skill id:sk-f7e2a1
- * @contract file-header-contract. AIS: id:ais-f7e2a1. Plan: docs/plans/file-header-rollout.md.
+ * @contract file-header-contract. AIS: id:ais-f7e2a1.
  */
 
 /** File id pattern: #<EXT>-<hash> where EXT is JS|TS|CSS|HTML|JSON, hash is alphanumeric 6–12 chars (matches anywhere in header) */
