@@ -56,6 +56,15 @@ function runPreflight() {
         process.exit(1);
     }
 
+    // 2.5. Validate SSOT contracts (EIP; id:sk-87700e, id:ais-7f8e9d)
+    console.log('[preflight] Validating SSOT contracts...');
+    try {
+        execSync('node is/scripts/infrastructure/validate-ssot.js', { stdio: 'inherit', cwd: PATHS.root });
+    } catch (e) {
+        console.error(`[preflight] ERROR: SSOT contract validation failed. Run npm run ssot:check for details.`);
+        process.exit(1);
+    }
+
     // 3. Validate Skills (Format, Reasoning Gate, Index Generation)
     console.log('[preflight] Validating skills...');
     try {

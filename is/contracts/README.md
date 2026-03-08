@@ -11,6 +11,10 @@ last_updated: "2026-03-04"
 ## Scope
 This directory contains the Single Source of Truth (SSOT) definitions and validation schemas for fundamental project boundaries.
 
+## SSOT Index (Entry Point)
+
+**is/contracts/docs/ssot-index.md** — единая точка входа для поиска SSOT. Агенты ищут правду только здесь. Спецификация: id:ais-7f8e9d (docs/ais/ais-ssot-contract-plane.md).
+
 ## Subdirectories
 - `docs/`: ID registry, code-file registry, resolve-id.
 - `env/`: Zod schemas defining the required environment variables. Ensures fail-fast behavior if secrets are missing.

@@ -109,6 +109,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-integration-legacy-remediation` | Legacy integration documentation must be remediated from donor sources with explicit path rewrite decisions to prevent hidden context loss and keep zero-noise validation meaningful. |
 | `#for-atomic-remediation` | Прогрессивная миграция legacy-ссылок через независимые атомарные шаги снижает шум и делает rollback/трассируемость решений управляемыми. |
 | `#for-plan-iterative-improvement` | Plans are living documents. When an agent notices a deficiency in a plan's protocols, it MUST augment the plan. Condition: backward compatibility — improvements must not invalidate results already obtained. |
+| `#for-plan-execution-protocol` | Without a strict step-by-step protocol, agents skip verification, leave stale docs, and accumulate tech debt. Each plan execution: verify each step (console checks), update AIS if nuances arise, add skills/causalities/contracts as discovered, fix bugs along the way. |
 | `#for-memory-to-skills` | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
 | `#for-token-efficiency` | Long context degrades model attention ("lost in the middle"). Minimal viable context produces better results. |
 | `#for-front-load` | Putting all relevant context in the first message avoids 3x token waste from incremental context building. |
@@ -124,6 +125,8 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-yc-public-invoke` | Yandex Cloud API Gateway with `x-yc-apigateway-integration: cloud_functions` requires the target function to be explicitly set as public (`allow-unauthenticated-invoke`). Otherwise, the gateway returns a silent 502 Bad Gateway to the client. |
 | `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
 | `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
+| `#for-tab-provider-decoupling` | Settings modal has tabs (postgres, github) that are not valid AI providers. Sync activeTab ↔ provider only when tab is a valid provider; prevents saving invalid providers to cache and startup warnings. |
+| `#for-invalid-provider-cleanup` | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
 
 ## Aliases / Deprecated
 

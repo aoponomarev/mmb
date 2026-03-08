@@ -1,5 +1,6 @@
 {
   "ids": {
+    "sk-7e4d2b": "is/skills/ai-copilot-delegation.md",
     "sk-5c0ef8": "is/skills/arch-backend-core.md",
     "sk-d599bd": "is/skills/arch-causality.md",
     "sk-5cd3c9": "is/skills/arch-cloudflare-infrastructure.md",
@@ -26,6 +27,7 @@
     "sk-3df9f9": "is/skills/process-legacy-unknowns-causality.md",
     "sk-130fa2": "is/skills/process-lib-governance.md",
     "sk-b77a8d": "is/skills/process-migration-prioritization.md",
+    "sk-8f9e0d": "is/skills/process-plan-execution.md",
     "sk-4b05be": "is/skills/process-prefix-registry.md",
     "sk-d7bf67": "is/skills/process-reasoning-audit.md",
     "sk-b7e114": "is/skills/process-secrets-hygiene.md",
@@ -69,6 +71,7 @@
     "ais-8d3c2a": "docs/ais/ais-mcp-data-flow.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
     "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
+    "ais-7f8e9d": "docs/ais/ais-ssot-contract-plane.md",
     "ais-91b7f4": "docs/ais/ais-workspace-storage.md",
     "ais-e41384": "docs/ais/ais-yandex-cloud.md",
     "ais-1c4d92": "docs/ais/TEMPLATE.md",
@@ -78,6 +81,7 @@
     "backlog-37c870": "docs/backlog/docker-migration-f1d9a2.md",
     "backlog-2c4b0b": "docs/backlog/fix-anti-staleness.md",
     "backlog-19f720": "docs/backlog/fix-naming-violations-a8b2c4.md",
+    "backlog-7f8e9d": "docs/backlog/fix-ssot-contract-plane.md",
     "backlog-69de5d": "docs/backlog/mcp-ecosystem-roadmap.md",
     "bskill-10e421": "docs/backlog/skills/AUDIT.md",
     "bskill-11683c": "docs/backlog/skills/docker-infrastructure.md",
@@ -92,6 +96,7 @@
     "docidx-0b048e": "docs/index-skills.md",
     "doc-f8d4af": "docs/migration-roadmap.md",
     "plan-f7e2a1": "docs/plans/file-header-rollout.md",
+    "plan-7f8e9d": "docs/plans/ssot-contract-plane-rollout.md",
     "doc-f1a4d3": "docs/project-evolution.md",
     "docs-6a2d1f": "docs/README.md",
     "runbook-ce96aa": "docs/runbooks/data-pipeline-troubleshooting.md",
@@ -100,6 +105,7 @@
     "doc-d5083c": "is/cloudflare/edge-api/CREATE_KV_NAMESPACE.md",
     "doc-584eb1": "is/cloudflare/edge-api/DEPLOY_INSTRUCTIONS.md",
     "readme-166c37": "is/cloudflare/edge-api/README.md",
+    "ssotidx-7f8e9d": "is/contracts/docs/ssot-index.md",
     "readme-e31ad4": "is/contracts/README.md",
     "readme-b4bf98": "is/README.md",
     "readme-c15d55": "is/scripts/README.md",
@@ -115,5 +121,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-07T15:16:47.454Z"
+  "generated_at": "2026-03-08T12:57:39.872Z"
 }

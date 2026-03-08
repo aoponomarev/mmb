@@ -12,6 +12,7 @@ last_change: ""
 
 > **Context**: Defines how application configuration is structured, where each type of config lives, and how SSOT is enforced across the config layer.
 > **Scope**: `core/config/`
+> **Full SSOT index**: is/contracts/docs/ssot-index.md (id:ais-7f8e9d) — единая точка входа для поиска SSOT по любому домену.
 
 ## Reasoning
 

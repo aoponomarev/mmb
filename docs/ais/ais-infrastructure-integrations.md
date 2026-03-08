@@ -119,7 +119,7 @@ AI-провайдеры подключаются через provider abstraction
 
 - `is/yandex/functions/api-gateway/index.js` — HTTP transport к PostgreSQL для market cache и server-side CRUD.
 - `is/yandex/functions/market-fetcher/index.js` — server-side ingest top-250 данных CoinGecko.
-- `docs/ais/ais-yandex-cloud.md` — норматив по ingest/read контуру монет.
+- id:ais-e41384 — норматив по ingest/read контуру монет.
 
 ### AI и automation слой
 

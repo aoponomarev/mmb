@@ -14,6 +14,13 @@ alwaysApply: true
 - For code-file references, prefer `hash + basename`; use a full repo-relative path only when the basename is ambiguous in the registry.
 - If you use bare `id:` or bare file hash, you must resolve it through `is/contracts/docs/id-registry.json` or `is/contracts/docs/code-file-registry.json` before relying on it.
 
+## Resolve Algorithm
+
+- `id:xxx` → id-registry.json (markdown section)
+- `#JS-xxx` (and #TS-, #CSS-, #JSON-) → code-file-registry.json
+- When uncertain: use MCP tool `resolve_id` or read the registry directly.
+- **SSOT index:** For finding where truth lives, use is/contracts/docs/ssot-index.md (id:ais-7f8e9d).
+
 ## Scope
 - Applies to docs, skills, AIS, causality prose, Cursor rules, and code comments.
 - Keep raw path-only references out of active docs/skills unless the path itself is the subject of discussion.

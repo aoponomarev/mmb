@@ -21,5 +21,11 @@ After any architectural decision or agent agreement reached in chat:
 - `MigrationState` — current migration progress and stage
 - `AgentAgreement` — behavioral rule agreed in chat
 
+## SSOT vs Memory
+
+- **Memory** stores: ArchDecision, MigrationState, AgentAgreement — decisions and agreements from chat.
+- **SSOT** lives in files: `is/contracts/`, id-registry.json, code-file-registry.json, ssot-index.md.
+- Do NOT search for SSOT via `search_nodes`. For SSOT: use ssot-index.md and `resolve_id` MCP tool.
+
 ## Trigger
 Any time the user says "запомни", "зафиксируй", or reaches a conclusion about how the project should work — write to memory.

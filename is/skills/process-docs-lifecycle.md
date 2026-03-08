@@ -3,8 +3,8 @@ id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-08
-reasoning_checksum: 7877f86a
-last_change: ""
+reasoning_checksum: fcb2bec4
+last_change: "#for-plan-execution-protocol — добавлена ссылка на id:sk-8f9e0d"
 
 ---
 
@@ -40,6 +40,7 @@ last_change: ""
 1.  **Phase 1: Planning (`docs/plans/`)**
     - All new work starts here as markdown files with `[ ]` checkboxes.
     - Language: Russian.
+    - **Execution protocol (`#for-plan-execution-protocol`)**: When executing any plan, follow id:sk-8f9e0d (process-plan-execution): verify each step (console checks), update AIS if nuances arise, add skills/causalities/contracts as discovered, fix bugs along the way. No step without verification; no deferred documentation.
     - **Iterative improvement (`#for-plan-iterative-improvement`)**: When creating or executing any plan, the AI agent has freedom to modernize the plan (add steps, anti-patterns, clarifications) if it notices a deficiency. Condition: **backward compatibility** — changes must not invalidate results already obtained before the improvement. No human approval required before editing.
     - **Plan backlog (`#for-plan-backlog`)**: Every plan MUST have an associated backlog in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a new plan.
 
