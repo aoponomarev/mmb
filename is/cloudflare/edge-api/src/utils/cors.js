@@ -86,3 +86,26 @@ export function jsonResponse(data, options = {}) {
     headers: corsHeaders,
   });
 }
+
+/**
+ * Create text response with CORS headers (for CSV, plain text)
+ * @param {string} body - Response body
+ * @param {Object} options - Options (status, headers, contentType, corsOptions)
+ * @returns {Response} Text response with CORS headers
+ */
+export function textResponse(body, options = {}) {
+  const {
+    status = 200,
+    headers = new Headers(),
+    contentType = 'text/plain',
+    corsOptions = {},
+  } = options;
+
+  headers.set('Content-Type', contentType);
+  const corsHeaders = addCorsHeaders(headers, corsOptions);
+
+  return new Response(body, {
+    status,
+    headers: corsHeaders,
+  });
+}

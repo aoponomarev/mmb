@@ -57,3 +57,11 @@ last_updated: "2026-03-08"
 - **Серверный ingest:** Полная реализация cron/fetcher — в `is/yandex/functions/`; текущая модель ingest — два trigger'а (`:00` market_cap, `:30` volume) и один top-250 запрос на запуск.
 - **Read-only fallback:** браузерный fallback больше не имеет права писать в `POST /api/coins/market-cache`; эта запись должна возвращать `403`.
 - **Gateway verification:** HTTP-поведение `coins-db-gateway` проверять через реальный API Gateway URL, а не только через direct function invoke. Обратите внимание на `allow-unauthenticated-invoke`, иначе Gateway отдаст 502 (id:sk-5cd3c9 is/skills/arch-cloudflare-infrastructure.md `#for-yc-public-invoke`).
+
+## VIX sources (fallback chain)
+
+**Top 2 reliable:** Yahoo Finance, Stooq VI.C. Порядок: Yahoo (proxy/direct) → Stooq (proxy/direct) → Alpha Vantage.
+
+**Тест источников:** `npm run vix:sources:test` — последовательная проверка всех провайдеров. Опционально: `FRED_API_KEY=xxx npm run vix:sources:test` для FRED.
+
+**Stooq symbol:** `vi.c` (S&P 500 VIX Cash). Proxy Cloudflare возвращает CSV; после изменений в api-proxy.js нужен `wrangler deploy`.

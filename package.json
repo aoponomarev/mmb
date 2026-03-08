@@ -11,6 +11,7 @@
     "frontend:reactivity:check": "node --test is/scripts/tests/check-frontend-rrg.test.js",
     "preflight": "node is/scripts/preflight.js",
     "health-check": "node is/scripts/infrastructure/health-check.js",
+    "vix:sources:test": "node is/scripts/infrastructure/test-vix-sources.js",
     "health-check:json": "node is/scripts/infrastructure/health-check.js --json",
     "ssot:check": "node is/scripts/infrastructure/validate-ssot.js",
     "ssot": "npm run ssot:check",

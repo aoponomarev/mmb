@@ -13,7 +13,7 @@
  * SECURITY: domain whitelist, path validation, optional env.RATE_LIMIT.
  */
 
-import { jsonResponse, handleOptions } from './utils/cors.js';
+import { jsonResponse, textResponse, handleOptions } from './utils/cors.js';
 
 // Supported APIs configuration
 const API_CONFIGS = {
@@ -179,6 +179,8 @@ async function handleApiProxy(request, env, apiType, path) {
     const cacheKey = await generateCacheKey(apiType, path, queryString);
     const cacheTTL = getCacheTTL(apiType, path);
 
+    const isStooq = apiType === 'stooq';
+
     // Check KV cache (if available)
     if (env.API_CACHE) {
       const cached = await env.API_CACHE.get(cacheKey, { type: 'json' });
@@ -188,6 +190,9 @@ async function handleApiProxy(request, env, apiType, path) {
         headers.set('X-Cache', 'HIT');
         headers.set('X-Cache-Key', cacheKey);
         headers.set('Cache-Control', `public, max-age=${cacheTTL}`);
+        if (cached.type === 'text') {
+          return textResponse(cached.data, { headers, contentType: 'text/csv' });
+        }
         return jsonResponse(cached.data, { headers });
       }
       console.log(`[API Proxy] Cache MISS: ${cacheKey}`);
@@ -200,12 +205,12 @@ async function handleApiProxy(request, env, apiType, path) {
 
     console.log(`[API Proxy] Fetching: ${targetUrl}`);
 
-    // Make request to external API
+    // Make request to external API (Stooq returns CSV, others JSON)
     const apiResponse = await fetch(targetUrl, {
       method: request.method,
       headers: {
         'User-Agent': 'app-Dataset-Integration/1.0',
-        'Accept': 'application/json',
+        'Accept': isStooq ? 'text/plain, text/csv' : 'application/json',
       },
       signal: AbortSignal.timeout(30000), // 30 second timeout
     });
@@ -224,17 +229,18 @@ async function handleApiProxy(request, env, apiType, path) {
       );
     }
 
-    // Parse response
-    const data = await apiResponse.json();
+    let data;
+    if (isStooq) {
+      data = await apiResponse.text();
+    } else {
+      data = await apiResponse.json();
+    }
 
     // Save to KV cache (if available)
     if (env.API_CACHE) {
-      const cacheEntry = {
-        data,
-        timestamp: Date.now(),
-        ttl: cacheTTL
-      };
-      // KV TTL in seconds, expirationTtl sets key lifetime
+      const cacheEntry = isStooq
+        ? { data, type: 'text', timestamp: Date.now(), ttl: cacheTTL }
+        : { data, timestamp: Date.now(), ttl: cacheTTL };
       await env.API_CACHE.put(cacheKey, JSON.stringify(cacheEntry), {
         expirationTtl: cacheTTL
       });
@@ -246,6 +252,9 @@ async function handleApiProxy(request, env, apiType, path) {
     headers.set('X-Cache', 'MISS');
     headers.set('X-Cache-Key', cacheKey);
     headers.set('Cache-Control', `public, max-age=${cacheTTL}`);
+    if (isStooq) {
+      return textResponse(data, { headers, contentType: 'text/csv' });
+    }
     return jsonResponse(data, { headers });
 
   } catch (error) {

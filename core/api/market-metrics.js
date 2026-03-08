@@ -6,7 +6,7 @@
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
  * FEATURES:
- * - VIX: 24h caching + fallback (Yahoo Finance, Stooq, Alpha Vantage)
+ * - VIX: 24h caching + fallback (Yahoo Finance, Stooq VI.C, Alpha Vantage)
  * - FGI: alternative.me API
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
@@ -167,17 +167,18 @@
                     }
                     return null;
                 },
-                // Stooq via Cloudflare Worker proxy (for file://)
+                // Stooq VI.C via Cloudflare Worker proxy (for file://)
                 async () => {
                     if (isFileProtocol && window.cloudflareConfig) {
                         try {
                             const url = window.cloudflareConfig.getApiProxyEndpoint(
                                 'stooq',
                                 '/q/d/l/',
-                                { s: '^vix', i: 'd' }
+                                { s: 'vi.c', i: 'd' }
                             );
                             const resp = await fetch(url);
                             const text = await resp.text();
+                            if (text.includes('No data') || text.includes('N/A')) return null;
                             const lines = text.trim().split('\n');
                             const last = lines[lines.length - 1]?.split(',');
                             const value = this.safeNumber(last ? parseFloat(last[4]) : null, null);
@@ -190,12 +191,13 @@
                     }
                     return null;
                 },
-                // Stooq (direct request for HTTP/HTTPS)
+                // Stooq VI.C (direct request for HTTP/HTTPS)
                 async () => {
                     if (isFileProtocol) return null;
                     try {
-                        const resp = await fetch('https://stooq.com/q/d/l/?s=^vix&i=d');
+                        const resp = await fetch('https://stooq.com/q/d/l/?s=vi.c&i=d');
                         const text = await resp.text();
+                        if (text.includes('No data') || text.includes('N/A')) return null;
                         const lines = text.trim().split('\n');
                         const last = lines[lines.length - 1]?.split(',');
                         const value = this.safeNumber(last ? parseFloat(last[4]) : null, null);
