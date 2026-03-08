@@ -2,7 +2,7 @@
 id: sk-d76b68
 title: "AI Providers Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: 693e7d6f
 last_change: ""
 

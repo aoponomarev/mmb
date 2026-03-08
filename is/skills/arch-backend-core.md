@@ -2,7 +2,7 @@
 id: sk-5c0ef8
 title: "Architecture: Backend Core & Data Pipeline"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: 70eadb33
 last_change: ""
 

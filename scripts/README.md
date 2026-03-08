@@ -18,4 +18,5 @@ Project-level utilities run by developers (backups, one-off tasks). Not part of 
 ## Subdirectories
 - `backups/`: Backup scripts (PowerShell, ZIP archives). See `scripts/backups/backup-app.ps1`.
 - `encoding-fixes/`: Mojibake recovery, UTF-8 enforcement, syntax fixes for migrated files.
+- `git/`: TODO: add description
 - `observability/`: Fallback observability checks, SSOT guardrails validation.

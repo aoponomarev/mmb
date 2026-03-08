@@ -2,7 +2,7 @@
 id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: 7877f86a
 last_change: ""
 

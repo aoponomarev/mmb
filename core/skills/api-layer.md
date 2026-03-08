@@ -2,7 +2,7 @@
 id: sk-bb7c8e
 title: "API Layer & Data Providers"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: 2afe9bb2
 last_change: ""
 

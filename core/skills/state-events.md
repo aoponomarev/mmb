@@ -2,7 +2,7 @@
 id: sk-a17d41
 title: "State, Events & Module Loading"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: aea9aebd
 last_change: ""
 

@@ -2,7 +2,7 @@
 id: sk-92384e
 title: "Architecture: Monitoring & Observability"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: e9024df0
 last_change: ""
 

@@ -2,7 +2,7 @@
 id: sk-905c12
 title: "Process: Windows & PowerShell Patterns for AI Agents"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-07
+reasoning_audited_at: 2026-03-08
 reasoning_checksum: 41c0dbe9
 last_change: ""
 
