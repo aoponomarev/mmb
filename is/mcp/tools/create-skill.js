@@ -5,12 +5,9 @@
 import { exec } from 'node:child_process';
 import util from 'node:util';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { ROOT } from '../../contracts/path-contracts.js';
 
 const execPromise = util.promisify(exec);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, '..', '..', '..');
 
 export const createSkillToolDef = {
     name: "create_skill",

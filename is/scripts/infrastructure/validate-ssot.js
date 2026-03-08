@@ -1,16 +1,12 @@
 /**
  * #JS-gs3VQRd3
- * @description SSOT policy validator: env in .env.example, no skill-graph in docs, no hardcoded secrets in config.
+ * @description SSOT policy validator: env in .env.example, no skill-graph in docs, no hardcoded secrets in config, no hardcoded ROOT in scripts.
  * @skill id:sk-483943
  * @skill id:sk-918276
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, '../../..');
+import { ROOT } from '../../contracts/path-contracts.js';
 
 let hasErrors = false;
 
@@ -112,12 +108,52 @@ function checkSkillsHaveHeadings() {
     }
 }
 
+/** Paths to scan for hardcoded ROOT (#not-hardcoded-paths) */
+const HARDCODE_SCAN_DIRS = ['is/scripts', 'is/mcp'];
+const HARDCODE_EXCLUDE = new Set([
+    'is/contracts/paths/paths.js',
+    'is/contracts/path-contracts.js',
+]);
+
+/**
+ * Check that scripts use ROOT from path-contracts or PATHS from paths.js, not path.resolve(__dirname).
+ * Per #not-hardcoded-paths: CWD-dependent failures.
+ */
+function checkHardcodedPathsInScripts() {
+    const hasHardcode = /path\.resolve\s*\(\s*__dirname\s*[,\)]/;
+    const hasCorrectImport = /from\s+['\"][^'\"]*(?:path-contracts|paths\/paths)\.js['\"]/;
+
+    for (const scanDir of HARDCODE_SCAN_DIRS) {
+        const absDir = path.join(ROOT, scanDir);
+        if (!fs.existsSync(absDir)) continue;
+        walkJs(absDir, (filePath) => {
+            const rel = path.relative(ROOT, filePath).replace(/\\/g, '/');
+            if (HARDCODE_EXCLUDE.has(rel)) return;
+
+            const content = fs.readFileSync(filePath, 'utf8');
+            if (hasHardcode.test(content) && !hasCorrectImport.test(content)) {
+                reportError(`Hardcoded ROOT in ${rel}. Use ROOT from path-contracts.js or PATHS from paths.js (#not-hardcoded-paths).`);
+            }
+        });
+    }
+}
+
+function walkJs(dir, fn) {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory() && entry.name !== 'node_modules') walkJs(full, fn);
+        else if (entry.isFile() && entry.name.endsWith('.js')) fn(full);
+    }
+}
+
 function main() {
     console.log('[ssot-check] Validating SSOT contracts...');
     checkPathsEnvSync();
     checkDocsAreNotSkills();
     checkConfigsForHardcodedSecrets();
     checkSkillsHaveHeadings();
+    checkHardcodedPathsInScripts();
 
     if (hasErrors) process.exit(1);
     console.log('[ssot-check] OK: All SSOT contracts passed.');

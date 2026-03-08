@@ -5,12 +5,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { resolveId } from "../../contracts/docs/resolve-id.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT } from "../../contracts/path-contracts.js";
 
 const SKILL_BASES = ["is/skills", "core/skills", "app/skills"];
 const SCAN_DIRS = [

@@ -7,7 +7,6 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import {
   SCAN_DIRS,
   SCAN_EXTENSIONS,
@@ -17,9 +16,7 @@ import {
   hasFileId,
   hasDescriptionTag,
 } from "../../contracts/file-header-contract.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT } from "../../contracts/path-contracts.js";
 const EXCLUDE = new Set(["node_modules", ".git", ".cursor", "docs"]);
 /** Extensions that support block comments; --write skips .json */
 const WRITE_EXTENSIONS = new Set([".js", ".ts", ".css"]);

@@ -7,12 +7,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { SCAN_DIRS } from "../../contracts/file-header-contract.js";
+import { ROOT } from "../../contracts/path-contracts.js";
 import { getCodeMapWithBasenameCounts } from "../../contracts/docs/resolve-id.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..", "..", "..");
 const EXCLUDE = new Set(["node_modules", ".git", ".cursor", "docs"]);
 const CODE_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "code-file-registry.json");
 

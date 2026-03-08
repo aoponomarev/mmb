@@ -5,12 +5,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { fileURLToPath } from "node:url";
 import { SKILL_TYPE_TO_PREFIX } from "../../contracts/prefixes.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT } from "../../contracts/path-contracts.js";
 
 const title = process.argv[2];
 let type = "process";

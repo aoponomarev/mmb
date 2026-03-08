@@ -6,11 +6,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { ROOT } from "../../contracts/path-contracts.js";
 import { getDocMap, getCodeMapWithBasenameCounts } from "../../contracts/docs/resolve-id.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..", "..", "..");
 const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".cursor"]);
 const EXCLUDE_FILES = new Set([
   "is/contracts/docs/id-registry.json",

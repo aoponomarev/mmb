@@ -4,10 +4,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT } from "../../contracts/path-contracts.js";
 const RULES_DIR = path.join(ROOT, ".cursor", "rules");
 
 const REF_PATTERN = /`([a-zA-Z0-9/_.-]+\.md)`/g;

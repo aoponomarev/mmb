@@ -5,7 +5,6 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 import {
     parseFrontmatterBlock,
@@ -13,9 +12,7 @@ import {
     SKILL_FRONTMATTER_ORDER,
 } from "../../contracts/skill-frontmatter-order.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
+import { ROOT } from "../../contracts/path-contracts.js";
 
 const SKILL_DIRS = [
     path.join(ROOT, "is", "skills"),

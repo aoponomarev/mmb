@@ -7,12 +7,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
-import { fileURLToPath } from 'node:url';
+import { ROOT } from '../../contracts/path-contracts.js';
 import { frontendUiConfigSchema } from '../../../core/contracts/ui-contracts.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, '../../..');
+const projectRoot = ROOT;
 
 function loadConfig(relPath) {
     const fullPath = path.resolve(projectRoot, relPath);

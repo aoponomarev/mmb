@@ -1,6 +1,6 @@
 ---
 id: ais-7f8e9d
-status: incomplete
+status: complete
 last_updated: "2026-03-08"
 related_skills:
   - sk-02d3ea
@@ -16,7 +16,7 @@ related_ais:
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
-<!-- План внедрения: id:plan-7f8e9d (docs/plans/ssot-contract-plane-rollout.md) -->
+<!-- План внедрения: дистиллирован; см. docs/deletion-log.md -->
 
 # AIS: Плоскость контрактов SSOT (SSOT Contract Plane)
 
@@ -57,14 +57,14 @@ flowchart TD
     I --> D
 ```
 
-**Реализовано (2026-03-08):** ssot-index.md (id:ssotidx-7f8e9d) создан; validate-ssot (#JS-gs3VQRd3) вызывается в preflight (шаг 2.5); mixed-reference-mode и memory-protocol обновлены; config-contracts ссылается на ssot-index. Preflight проходит.
+**Реализовано (2026-03-08):** ssot-index.md (id:ssotidx-7f8e9d) создан; validate-ssot (#JS-gs3VQRd3) вызывается в preflight (шаг 2.5); mixed-reference-mode и memory-protocol обновлены; config-contracts ссылается на ssot-index; hardcoded paths scan — все скрипты is/scripts, is/mcp (включая .test.js) используют ROOT из path-contracts (#not-hardcoded-paths); npm run ssot — short alias. Preflight проходит.
 
 ## Локальные Политики (Module Policies)
 
 - **Один индекс:** Агент ищет SSOT только через `is/contracts/docs/ssot-index.md`. id:sk-02d3ea (config-contracts) остаётся специализированным для `core/config/` и ссылается на ssot-index для полного индекса.
 - **Resolve обязателен:** Bare `id:` → id-registry.json; bare `#JS-xxx` → code-file-registry.json. MCP `resolve_id` или прямое чтение реестров.
 - **Memory MCP ≠ SSOT:** см. раздел ниже.
-- **ЕИП scope:** Текущие проверки (paths↔env, docs≠skills, секреты, заголовки skills). Hardcoded paths scan **пока не включаем** — много false positives, требует настройки исключений.
+- **ЕИП scope:** paths↔env, docs≠skills, секреты, заголовки skills, **hardcoded paths scan** — скрипты is/scripts, is/mcp обязаны использовать ROOT из path-contracts (#not-hardcoded-paths).
 
 ## Memory MCP ≠ SSOT
 
@@ -103,7 +103,7 @@ flowchart TD
 | Артефакт | Назначение |
 |----------|------------|
 | ssot-index.md (id:ssotidx-7f8e9d) | Единый индекс: домен → SSOT-файл → описание |
-| validate-ssot.js | paths↔env, docs≠skills, секреты, заголовки; вызов в preflight шаг 2.5 |
+| validate-ssot.js | paths↔env, docs≠skills, секреты, заголовки, hardcoded paths scan; preflight шаг 2.5 |
 | process-plan-execution (id:sk-8f9e0d) | Протокол выполнения планов: verify → update AIS → fix bugs |
 
 ### config-contracts vs ssot-index
@@ -118,14 +118,14 @@ flowchart TD
 | id:ais-8982e7 (docs-governance) | id-registry, path-contracts; mixed reference mode |
 | id:ais-8d3c2a (mcp-data-flow) | id-registry, code-file-registry, causality-registry — MCP читает напрямую |
 | id:ais-9f4e2d (anti-staleness) | validate-skills, validate-causality; preflight chain |
-| id:sk-02d3ea (config-contracts) | core/config/ governance; добавить ссылку на ssot-index |
+| id:sk-02d3ea (config-contracts) | core/config/ governance; ссылка на ssot-index в Context block |
 | id:sk-87700e (commands) | ЕИП — контракт проверок; формализация в validate-ssot |
 | is/contracts/README.md | Точка входа: ssot-index |
 | preflight.js | validate-ssot вызывается на шаге 2.5 (после env, до skills) |
 
 ## Контракты и гейты
 
-- #JS-gs3VQRd3 (validate-ssot.js) — текущие проверки; расширить под ЕИП; включить в preflight.
+- #JS-gs3VQRd3 (validate-ssot.js) — paths↔env, docs≠skills, секреты, заголовки, hardcoded paths scan (#not-hardcoded-paths); preflight шаг 2.5.
 - #JS-op2rXujz (resolve-id.js) — SSOT resolver для id: и #hash.
 - MCP `resolve_id` (#JS-v1JRkux7) — использует resolve-id.js.
 

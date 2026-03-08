@@ -96,7 +96,6 @@
     "docidx-0b048e": "docs/index-skills.md",
     "doc-f8d4af": "docs/migration-roadmap.md",
     "plan-f7e2a1": "docs/plans/file-header-rollout.md",
-    "plan-7f8e9d": "docs/plans/ssot-contract-plane-rollout.md",
     "doc-f1a4d3": "docs/project-evolution.md",
     "docs-6a2d1f": "docs/README.md",
     "runbook-ce96aa": "docs/runbooks/data-pipeline-troubleshooting.md",
@@ -121,5 +120,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-08T12:57:39.872Z"
+  "generated_at": "2026-03-08T13:15:02.172Z"
 }

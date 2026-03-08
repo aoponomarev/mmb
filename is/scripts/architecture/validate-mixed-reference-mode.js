@@ -6,12 +6,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { ROOT } from "../../contracts/path-contracts.js";
 import { getDocMap, getCodeMapWithBasenameCounts } from "../../contracts/docs/resolve-id.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..", "..", "..");
 
 const ID_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
 const CODE_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "code-file-registry.json");
