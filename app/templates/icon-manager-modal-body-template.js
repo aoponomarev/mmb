@@ -10,7 +10,7 @@
         <!-- Token block (if not configured) -->
         <div v-if="!githubToken" class="alert alert-warning mb-4">
             <h6 class="alert-heading"><i class="fas fa-key me-2"></i>GitHub Token not configured</h6>
-            <p class="small mb-2">Для загрузки иконок в репозиторий <code>libs</code> необходимо указать Personal Access Token.</p>
+            <p class="small mb-2">Для загрузки иконок в репозиторий <code>a</code> необходимо указать Personal Access Token.</p>
             <div class="input-group input-group-sm">
                 <input type="password" class="form-control" v-model="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
                 <button class="btn btn-outline-warning" type="button" @click="saveToken">Сохранить</button>

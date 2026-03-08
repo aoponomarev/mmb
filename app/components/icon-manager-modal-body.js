@@ -98,7 +98,7 @@
 
                 // Publish button
                 this.modalApi.registerButton('publish', {
-                    label: 'Опубликовать в libs',
+                    label: 'Опубликовать в a',
                     icon: 'fas fa-cloud-upload-alt',
                     variant: 'primary',
                     locations: ['footer'],
@@ -129,7 +129,7 @@
 
                 this.modalApi.updateButton('publish', {
                     disabled: !this.imageBlob || !this.githubToken || this.isUploading,
-                    label: this.isUploading ? 'Загрузка...' : 'Опубликовать в libs',
+                    label: this.isUploading ? 'Загрузка...' : 'Опубликовать в a',
                     icon: this.isUploading ? 'spinner-border spinner-border-sm' : 'fas fa-cloud-upload-alt'
                 });
             },

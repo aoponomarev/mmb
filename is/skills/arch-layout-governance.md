@@ -63,7 +63,7 @@ last_change: ""
 
 ### Libs Directory Structure & Load Priority
 
-**Context**: Layout of vendor libs repository. Structure: `libs/<name>/<version>/`; coin/icon assets path is currently not deployed in Target App and must be treated as a deferred infra contract. Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage is governed by loader contracts in #JS-xj43kftu.
+**Context**: Layout of vendor libs repository. Structure: `libs/<name>/<version>/` (vendor only). Coin/icon assets live in a/ root (a/coins, a/data). Load priority: (1) GitHub Pages (primary for web); (2) CDN (backup); (3) Local `file://` (primary for dev/offline). Usage is governed by loader contracts in #JS-xj43kftu.
 
 ## Contracts
 
