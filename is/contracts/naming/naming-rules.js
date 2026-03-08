@@ -34,14 +34,19 @@ const hasAllowedPrefix = (val) => {
 // Base string with kebab-case validation (allows optional leading dot for system files/folders like .github)
 const kebabCaseRegex = /^\.?[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/** Filenames that are only capital Cyrillic + extension (human-created; AI agents must not create such files). */
+const cyrillicOnlyRegex = /^[А-ЯЁ]+(\.[a-z0-9]+)?$/;
+
+const isValidFilename = (val) => kebabCaseRegex.test(val) || cyrillicOnlyRegex.test(val);
+
 /**
  * General filename schema.
- * - must be kebab-case
+ * - must be kebab-case, or capital-Cyrillic-only + extension (human-only)
  * - no forbidden terms (mbb/mmb)
  */
 export const fileNameSchema = z.string()
     .min(1)
-    .regex(kebabCaseRegex, 'File name must be in kebab-case')
+    .refine(isValidFilename, { message: 'File name must be in kebab-case' })
     .refine(noForbiddenTerms, { message: 'Use of legacy terms (MBB/MMB) is forbidden' });
 
 /**

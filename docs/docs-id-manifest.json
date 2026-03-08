@@ -79,10 +79,6 @@
     "readme-c8e267": "core/README.md",
     "readme-5c42c7": "data/README.md",
     "backlog-37c870": "docs/backlog/docker-migration-f1d9a2.md",
-    "backlog-2c4b0b": "docs/backlog/fix-anti-staleness.md",
-    "backlog-19f720": "docs/backlog/fix-naming-violations-a8b2c4.md",
-    "backlog-7f8e9d": "docs/backlog/fix-ssot-contract-plane.md",
-    "backlog-69de5d": "docs/backlog/mcp-ecosystem-roadmap.md",
     "bskill-10e421": "docs/backlog/skills/AUDIT.md",
     "bskill-11683c": "docs/backlog/skills/docker-infrastructure.md",
     "bskill-2cab14": "docs/backlog/skills/n8n-infrastructure.md",
@@ -119,5 +115,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-08T13:23:41.143Z"
+  "generated_at": "2026-03-08T14:15:22.023Z"
 }

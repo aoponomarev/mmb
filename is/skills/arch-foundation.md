@@ -55,6 +55,7 @@ Application layers:
 All file and folder names MUST be in `kebab-case` format.
 Verification is done via Zod schemas in #JS-kXgRFkUV (naming-rules.js).
 (System files and folders starting with a dot, e.g., `.github`, are allowed).
+**Exception:** Filenames that are only capital Cyrillic + extension (e.g. `СИМЛИНКИ.txt`) are allowed; such files are human-created only — AI agents MUST NOT create them.
 **Module Prefixes:** To explicitly distinguish layers, modules should use prefixes where applicable: `app-*`, `sys-*`, `is-*`, `core-*`, `cmp-*`, `index-*` (for doc index files, e.g. `index-skills.md`, `index-ais.md`).
 
 ### 2. Paths SSOT

@@ -33,6 +33,11 @@ test('fileNameSchema: allows forbidden term MMB if context is cloudflare', () =>
     assert.equal(result.success, true);
 });
 
+test('fileNameSchema: allows capital-Cyrillic-only filenames (human-created)', () => {
+    const result = fileNameSchema.safeParse('СИМЛИНКИ.txt');
+    assert.equal(result.success, true);
+});
+
 test('relativePathSchema: allows forbidden term MBB if path contains yandex', () => {
     const result = relativePathSchema.safeParse('is/yandex/mbb-function/index.js');
     assert.equal(result.success, true);

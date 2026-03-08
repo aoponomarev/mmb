@@ -11,6 +11,7 @@ data/memory-mcp/
 data/secret-archives/
 data/*.json
 data/*.jsonl
+data/*.sqlite
 
 # Infrastructure runtime artifacts
 is/secrets/archives/
@@ -28,6 +29,10 @@ logs/
 
 # validate-dead-links --json output (audit artifacts)
 dead-*.json
+
+# Encoding scripts output (regenerated on run)
+scripts/encoding-fixes/utf8-enforcement-report.json
+scripts/encoding-fixes/mojibake-recovery-report.json
 
 # Build artifacts (if any)
 dist/

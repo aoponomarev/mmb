@@ -226,12 +226,13 @@ flowchart TB
 | Оставить stale exception в causality-exceptions.jsonl | Запустить #JS-4x4Fzd18; удалить stale строки |
 | Менять код с @causality без ревью formulation | Прочитать affected hashes; обновить formulation или удалить хеш |
 
-*(Полный список — в бэклоге `id:backlog-2c4b0b`.)*
+### Известные pending (dead links)
+
+По `npm run skills:batch-review`: 5 dead links в id:ais-e9a5c2 (docs/ais/ais-agent-orchestration-contour.md) — планируемые артефакты (триггеры, n8n registry, генератор MCP). Варианты: добавить в SKIP_LINK_PATTERNS (#JS-cMCNbcJ1), создать заглушки или переписать AIS на «будущий артефакт».
 
 ---
 
 ## Ссылки
 
 - План внедрения: дистиллирован в этот AIS (завершён)
-- Бэклог чистки: id:backlog-2c4b0b (docs/backlog/fix-anti-staleness.md) — dead links, опциональные улучшения
 - Скиллы: id:sk-7d810a arch-skills-mcp, id:sk-d763e7 process-skill-governance, id:sk-8991cd process-code-anchors, id:sk-d6777d arch-testing-ci, id:sk-d599bd arch-causality

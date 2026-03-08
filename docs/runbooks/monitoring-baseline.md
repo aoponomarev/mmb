@@ -1,7 +1,9 @@
 ---
 id: runbook-94a80a
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-08"
+related_skills:
+  - sk-92384e
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -9,7 +11,8 @@ last_updated: "2026-03-04"
 # Monitoring Baseline v1 (Target App)
 
 ## Scope
-- Control Plane health (`health-check`)
+
+- Control Plane health (`health-check`) — проверка плоскостей knowledge/contract/runtime (id:sk-92384e is/skills/arch-monitoring.md)
 - Operational snapshot collection
 - Redaction contract for operational artifacts
 - Incident severity and rollback linking

@@ -1,7 +1,7 @@
 ---
 id: runbook-ce96aa
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-08"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -149,7 +149,10 @@ Operational note: if `COINGECKO_API_KEY` is empty, omit it from the deploy comma
 ### api-gateway (Yandex Cloud Function)
 Function name: `coins-db-gateway`. Same DB variables as above. Serves the market-cache and cycles API endpoints.
 
-### Cloudflare Worker (app-api)
+### Cloudflare Worker (app-api) — вне Data Pipeline
+
+> **Контекст:** Data Pipeline — Yandex Cloud (PostgreSQL + CoinGecko). Cloudflare обслуживает auth, settings, proxy (id:ais-775420 docs/ais/ais-infrastructure-integrations.md). Ниже — справочник для полного стека, не для конвейера монет.
+
 | Variable | Type | Description |
 |----------|------|-------------|
 | `DB` | D1 binding | Cloudflare D1 database |

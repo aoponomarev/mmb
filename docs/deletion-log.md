@@ -21,3 +21,7 @@ last_updated: "2026-03-08"
 | `docs/done/mcp-data-contour-migration.md` | ae39770 | дистиллирован в id:ais-8d3c2a (ais-mcp-data-flow); telemetry.sqlite → mcp.sqlite |
 | `docs/done/ssot-contract-plane-rollout.md` | — | дистиллирован в id:ais-7f8e9d (docs/ais/ais-ssot-contract-plane.md); план выполнен |
 | `docs/done/file-header-rollout.md` | — | дистиллирован в id:ais-f7e2a1 (docs/ais/ais-file-header-standard.md); план выполнен |
+| `docs/backlog/fix-ssot-contract-plane.md` | — | все entries fixed; архив по запросу пользователя |
+| `docs/backlog/fix-anti-staleness.md` | — | контент перенесён в id:ais-9f4e2d (раздел Известные pending); удаление по запросу пользователя |
+| `docs/backlog/fix-naming-violations-a8b2c4.md` | — | 7 скриптов переименованы в kebab-case; СИМЛИНКИ.txt — исключение в naming-rules; удаление по запросу пользователя |
+| `docs/backlog/mcp-ecosystem-roadmap.md` | — | roadmap реализован; оставшееся сомнительно; удаление по запросу пользователя |

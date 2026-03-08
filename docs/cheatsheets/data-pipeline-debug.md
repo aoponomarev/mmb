@@ -1,7 +1,7 @@
 ---
 id: cheat-78b6b8
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-08"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -56,4 +56,4 @@ last_updated: "2026-03-07"
 - **warm/cold слои:** Заявлены как IndexedDB, фактически fallback на localStorage с префиксами `idb_<layer>_...`.
 - **Серверный ingest:** Полная реализация cron/fetcher — в `is/yandex/functions/`; текущая модель ingest — два trigger'а (`:00` market_cap, `:30` volume) и один top-250 запрос на запуск.
 - **Read-only fallback:** браузерный fallback больше не имеет права писать в `POST /api/coins/market-cache`; эта запись должна возвращать `403`.
-- **Gateway verification:** HTTP-поведение `coins-db-gateway` проверять через реальный API Gateway URL, а не только через direct function invoke. Обратите внимание на `allow-unauthenticated-invoke`, иначе Gateway отдаст 502 (id:sk-5cd3c9 `#for-yc-public-invoke`).
+- **Gateway verification:** HTTP-поведение `coins-db-gateway` проверять через реальный API Gateway URL, а не только через direct function invoke. Обратите внимание на `allow-unauthenticated-invoke`, иначе Gateway отдаст 502 (id:sk-5cd3c9 is/skills/arch-cloudflare-infrastructure.md `#for-yc-public-invoke`).

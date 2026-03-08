@@ -136,7 +136,7 @@ def main() -> int:
         "failed": failed,
     }
 
-    report_path = ROOT / "scripts" / "utf8-enforcement-report.json"
+    report_path = Path(__file__).resolve().parent / "utf8-enforcement-report.json"
     report_path.write_text(__import__("json").dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(f"Converted: {len(converted)}")

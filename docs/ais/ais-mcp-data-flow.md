@@ -124,4 +124,3 @@ flowchart TD
 - #JS-YD283xUP (db.js)
 - #JS-HU3hEyDe (resources.js)
 - id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md)
-- id:backlog-69de5d (docs/backlog/mcp-ecosystem-roadmap.md)

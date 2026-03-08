@@ -422,7 +422,7 @@ MCP resource `skill://[id]` инжектирует telemetry (использов
 | Фаза | Содержание | Зависимости |
 |------|------------|-------------|
 | **1. Trigger foundation** | launchConfig.json + tasks.json runOn:folderOpen; документировать | KiloCode/Continue установлены |
-| **2. Orchestrator tools** | run_orchestrated_task, get_skill_context в is/mcp/ | Phase 1 MCP roadmap (id:backlog-69de5d) |
+| **2. Orchestrator tools** | run_orchestrated_task, get_skill_context в is/mcp/ | id:sk-3225b2 (arch-mcp-ecosystem) |
 | **3. Telemetry extension** | orchestration_runs table, logging | mcp.sqlite schema |
 | **4. n8n equivalents** | n8n-equivalents-registry.json, generate-mcp-from-n8n-node.js, preflight validation | Phase 2 |
 | **5. n8n deprecation path** | Миграция id:bskill-2cab14 flows в MCP-orchestrated | Phase 2–4 |
@@ -434,6 +434,5 @@ MCP resource `skill://[id]` инжектирует telemetry (использов
 - id:ais-b7a9ba (docs/ais/ais-control-plane-llmops.md)
 - id:ais-8d3c2a (docs/ais/ais-mcp-data-flow.md)
 - id:ais-bfd150 (docs/ais/ais-architecture-foundation.md)
-- id:backlog-69de5d (docs/backlog/mcp-ecosystem-roadmap.md)
 - id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md)
 - docs/glossary.md — Layer, Contour, Orchestrator, SSOT

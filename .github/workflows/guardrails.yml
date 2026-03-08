@@ -18,10 +18,10 @@ jobs:
           python-version: '3.11'
 
       - name: UTF-8 enforcement check
-        run: python scripts/enforce_utf8.py
+        run: python scripts/encoding-fixes/enforce-utf8.py
 
       - name: SSOT guardrails check
-        run: python scripts/check_ssot_guardrails.py
+        run: python scripts/observability/check-ssot-guardrails.py
 
       - name: Fallback observability check
-        run: python scripts/check_fallback_observability.py
+        run: python scripts/observability/check-fallback-observability.py
