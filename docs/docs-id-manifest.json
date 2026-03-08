@@ -8,6 +8,7 @@
     "sk-bb5cf3": "is/skills/arch-dependency-governance.md",
     "sk-73dcca": "is/skills/arch-external-parity.md",
     "sk-483943": "is/skills/arch-foundation.md",
+    "sk-e8f2a1": "is/skills/arch-infrastructure-snapshots.md",
     "sk-c62fb6": "is/skills/arch-layout-governance.md",
     "sk-3225b2": "is/skills/arch-mcp-ecosystem.md",
     "sk-92384e": "is/skills/arch-monitoring.md",
@@ -67,6 +68,7 @@
     "ais-f7e2a1": "docs/ais/ais-file-header-standard.md",
     "ais-c6c35b": "docs/ais/ais-frontend-ui.md",
     "ais-775420": "docs/ais/ais-infrastructure-integrations.md",
+    "ais-8b2f1c": "docs/ais/ais-infrastructure-snapshots.md",
     "ais-f6b9e2": "docs/ais/ais-integration-strategy-yandex.md",
     "ais-8d3c2a": "docs/ais/ais-mcp-data-flow.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
@@ -87,6 +89,7 @@
     "cheat-0e005f": "docs/cheatsheets/cursor-settings-locations.md",
     "cheat-78b6b8": "docs/cheatsheets/data-pipeline-debug.md",
     "doc-del-log": "docs/deletion-log.md",
+    "plan-a3f2c1": "docs/done/plan-infrastructure-snapshots-contract.md",
     "docs-glossary": "docs/glossary.md",
     "docidx-3022eb": "docs/index-ais.md",
     "docidx-0b048e": "docs/index-skills.md",
@@ -115,5 +118,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-08T14:15:22.023Z"
+  "generated_at": "2026-03-08T18:56:07.736Z"
 }

@@ -5,6 +5,9 @@ last_updated: "2026-03-04"
 related_skills:
   - sk-6eeb9a
   - sk-92384e
+  - sk-e8f2a1
+related_ais:
+  - ais-8b2f1c
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -37,9 +40,11 @@ No automatic system-wide rollback without human confirmation.
 
    1. **External Integrations Layer**
       - stop/disable new integration triggers (Cloudflare/Yandex specific switchers),
+      - **restore from deployment snapshot** if needed: `is/deployments/<target>/YYYY-MM-DD/` (id:ais-8b2f1c),
       - validate `npm run validate:single-writer`.
    2. **Backend/Transport Layer**
       - rollback changes in `core/api` + related scripts,
+      - **restore from deployment snapshot** for Yandex/Cloudflare artifacts if deploy caused regression,
       - run `npm run test` to verify backend suite.
    3. **Control-plane/observability**
       - return monitoring snapshot cadence: `npm run monitoring:snapshot`.

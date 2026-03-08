@@ -3,8 +3,8 @@ id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-08
-reasoning_checksum: fcb2bec4
-last_change: "#for-plan-execution-protocol — добавлена ссылка на id:sk-8f9e0d"
+reasoning_checksum: 13cbb841
+last_change: "#for-plan-with-draft-ais #for-plan-to-many-ais — драфт AIS только для арх/инфра планов; один план может порождать несколько AIS"
 
 ---
 
@@ -31,6 +31,8 @@ last_change: "#for-plan-execution-protocol — добавлена ссылка �
 - **#for-live-ais-index-watch** For live editing sessions, run `npm run ais:index:watch` to auto-regenerate id:docidx-3022eb immediately on `docs/ais/*.md` changes.
 - **#for-plan-iterative-improvement** Plans are living documents. When an AI agent notices a deficiency in a plan's protocols or algorithms (affecting work quality), it MUST augment the plan directly. Future work benefits. Condition: backward compatibility — improvements must not invalidate results already obtained before the improvement.
 - **#for-plan-backlog** Each plan gets a dedicated backlog file in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a plan.
+- **#for-plan-with-draft-ais** For plans with **architectural or infrastructure** content, create a draft AIS in `docs/ais/` together with the plan. The draft is a distillation target; creating it upfront keeps scope clear. Use id:ais-1c4d92 (docs/ais/TEMPLATE.md); link the plan via `related_ais`. Purely tactical/process plans (e.g. dead-link cleanup) do not require a draft AIS.
+- **#for-plan-to-many-ais** One plan can and should feed multiple AIS when the plan touches several domains or changes existing specs. Information from the plan goes into every AIS it directly relates to or modifies. Draft AIS file names need not match the plan name (e.g. when a plan decomposes into several specs or under other circumstances).
 
 ## Core Rules
 
@@ -40,6 +42,7 @@ last_change: "#for-plan-execution-protocol — добавлена ссылка �
 1.  **Phase 1: Planning (`docs/plans/`)**
     - All new work starts here as markdown files with `[ ]` checkboxes.
     - Language: Russian.
+    - **Draft AIS with arch/infra plans (`#for-plan-with-draft-ais`)**: When creating a plan with architectural or infrastructure scope, create a draft AIS in `docs/ais/` (e.g. from id:ais-1c4d92) and link the plan via `related_ais`. The draft can be minimal; it is refined during execution. Not required for purely tactical plans. **One plan, multiple AIS (`#for-plan-to-many-ais`)**: Plan content can and should update or create several AIS when it relates to or changes multiple specs; draft AIS names need not match the plan name.
     - **Execution protocol (`#for-plan-execution-protocol`)**: When executing any plan, follow id:sk-8f9e0d (process-plan-execution): verify each step (console checks), update AIS if nuances arise, add skills/causalities/contracts as discovered, fix bugs along the way. No step without verification; no deferred documentation.
     - **Iterative improvement (`#for-plan-iterative-improvement`)**: When creating or executing any plan, the AI agent has freedom to modernize the plan (add steps, anti-patterns, clarifications) if it notices a deficiency. Condition: **backward compatibility** — changes must not invalidate results already obtained before the improvement. No human approval required before editing.
     - **Plan backlog (`#for-plan-backlog`)**: Every plan MUST have an associated backlog in `docs/backlog/` (e.g. `fix-<plan-slug>.md`) for cleanup tails. Issues found during execution (dead links, false positives, deferred fixes) are recorded there. Auto-create when creating a new plan.

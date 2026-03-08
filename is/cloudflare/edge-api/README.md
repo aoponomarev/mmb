@@ -22,10 +22,6 @@ is/cloudflare/edge-api/
 │       ├── auth.js       # Проверка авторизации (JWT)
 │       ├── d1-helpers.js # Хелперы для работы с D1
 │       └── r2-helpers.js # Хелперы для работы с R2
-├── deployments/          # Стабильные версии деплоев (с датировкой)
-│   ├── YYYY-MM-DD-src/   # Архив исходного кода рабочей версии
-│   ├── YYYY-MM-DD-wrangler.toml
-│   └── YYYY-MM-DD-README.md
 ├── wrangler.toml         # Конфигурация Workers
 └── README.md             # Этот файл
 ```
@@ -124,23 +120,21 @@ cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
-## Стабильные версии
+## Стабильные версии (снимки для отката)
 
-Стабильные версии воркеров сохраняются в папке `deployments/` с датировкой в имени файлов **только по явной команде пользователя**.
+Снимки деплоев хранятся в **едином** хранилище по контракту id:ais-8b2f1c (docs/ais/ais-infrastructure-snapshots.md): `is/deployments/cloudflare-edge-api/YYYY-MM-DD/`. Создание снимка — только по явной команде пользователя, после успешного deploy и верификации.
 
-**Формат:** `YYYY-MM-DD-src/`, `YYYY-MM-DD-wrangler.toml`, `YYYY-MM-DD-README.md`
+**Внутри снимка:** копия `src/`, конфиги (например wrangler.toml), обязательный **README.md** (дата, Version ID, env по именам, шаги восстановления, задействованные скиллы, казуальности, цели функциональности). Правила: id:sk-e8f2a1 (arch-infrastructure-snapshots).
 
-**Восстановление версии:**
+**Восстановление:**
 ```bash
-# Скопировать файлы обратно
-cp -r deployments/YYYY-MM-DD-src src
-cp deployments/YYYY-MM-DD-wrangler.toml wrangler.toml
+# Скопировать из снимка в рабочий каталог
+cp -r ../../deployments/cloudflare-edge-api/YYYY-MM-DD/src/* src/
+cp ../../deployments/cloudflare-edge-api/YYYY-MM-DD/wrangler.toml wrangler.toml
 
 # Задеплоить
 wrangler deploy
 ```
-
-**Документация:** Каждая версия содержит README.md с описанием функциональности, Version ID, датой деплоя и инструкциями по восстановлению.
 
 ## Структура проекта
 
@@ -155,10 +149,6 @@ is/cloudflare/edge-api/
 │       ├── cors.js       # CORS утилиты
 │       ├── auth.js       # JWT проверка и создание токенов
 │       └── d1-helpers.js # Хелперы для работы с D1
-├── deployments/          # Стабильные версии деплоев (с датировкой)
-│   ├── YYYY-MM-DD-src/   # Архив исходного кода рабочей версии
-│   ├── YYYY-MM-DD-wrangler.toml
-│   └── YYYY-MM-DD-README.md
 ├── migrations/
 │   └── 001_initial_schema.sql  # SQL миграция
 ├── schema.sql            # SQL схема базы данных
