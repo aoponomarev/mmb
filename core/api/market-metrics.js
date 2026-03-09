@@ -4,6 +4,7 @@
  * @skill id:sk-7cf3f7
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
+ * @skill-anchor id:sk-3c832d #for-market-metrics-cache-fallback
  *
  * FEATURES:
      * - VIX: 4h caching + fallback (Yahoo Finance, Stooq VI.C, Alpha Vantage)

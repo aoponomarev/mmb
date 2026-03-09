@@ -3,7 +3,7 @@ id: sk-3c832d
 title: "Cache Layer Architecture"
 reasoning_confidence: 0.85
 reasoning_audited_at: 2026-03-08
-reasoning_checksum: cd189ff0
+reasoning_checksum: 9e18b4ef
 last_change: ""
 
 ---
@@ -76,6 +76,21 @@ TTL per key is defined in #JS-8P3M724Z (cache-config.js). On `set()`, `expiresAt
 | **network-first** | Critical real-time data (`market-metrics`, `api-cache`) |
 | **stale-while-revalidate** | Background updates (`time-series`, `top-coins`) |
 | **cache-only** | Local-first user data (`portfolios`, `settings`) |
+
+#### Market Metrics (FGI, VIX, BTC Dominance, OI, FR, LSR)
+
+- **TTL policy**:
+  - `fear-greed-index`: 24h — index is published daily; shorter TTL would not increase freshness.
+  - `vix-index`: 4h — VIX is relatively slow-moving intraday but subject to rate limits on Yahoo/Stooq; 4 hours balance freshness with API quotas and startup latency (#for-vix-4h-ttl).
+  - `btc-dominance`, `open-interest`, `funding-rate`, `long-short-ratio`: TTL governed implicitly via `requestRegistry` minimum intervals (typically 4h) plus timestamped cache entries.
+- **Live vs cache behavior**:
+  - Normal **cache hits** and **registry-cooled requests** (within interval, live not needed) are **silent**: UI uses cached values without notifying the user.
+  - On **live success**, values are recomputed and written to cache with `timestamp` (and, for VIX, `source`), then exposed to the footer.
+  - On **live failure**, if a last known-good cached value exists, fetch functions MUST:
+    - return the cached value instead of `null`,
+    - update window metrics,
+    - push a single informative message to `messagesStore` explaining that the metric was loaded from cache, including the cached timestamp and the last live error reason (#for-market-metrics-cache-fallback).
+  - If neither live nor cache is available, the metric returns `success: false` and UI shows `—`.
 
 ### Decision Matrix (New Key)
 
