@@ -13,6 +13,13 @@ Add new hashes here before using in code. Skills and code share the same namespa
 **Formats:**
 - `// @causality #for-X` or `// @causality #for-X #not-Y` or `// @causality #for-X: short context`
 - `// @skill-anchor skill-id #for-X` or `// @skill-anchor skill-id #for-X #not-Y`
+- Optional suffix (id:sk-7f3e2b): `constraint` or `goal` — applies to both `#for-` and `#not-`.
+
+**#for- vs #not- (choice criteria):**
+- **#for-X** — positive reason: why we **chose** or **do** X. Use when explaining the selected solution.
+- **#not-X** — negative reason: why we **rejected** alternative X. Use when explaining considered-and-rejected alternatives. Same decision can have both: `#for-A #not-B` (chose A, rejected B).
+- **When to use which:** If the primary framing is "we chose X" → `#for-X`. If the primary framing is "we rejected Y" → `#not-Y`. Both can coexist in one anchor.
+- **In Reasoning (id:sk-d7bf67):** List all `#for-` first, then all `#not-` at the end.
 
 **Enforcement:** `gate` = preflight/CI gate checks compliance; violation blocks. `advisory` = best practice, no gate; prefer to follow, can deviate with explicit rationale. When two causalities conflict: gate wins over advisory.
 
@@ -146,7 +153,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-invalid-provider-cleanup` | advisory | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
 | `#for-utf8-no-bom-lf` | gate | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
 | `#for-pre-report-docs-sync` | advisory | Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual. |
-| `#for-anchor-causality-type` | advisory | At anchor level, agent can specify `constraint` (из-за) or `goal` (для) to disambiguate reason type. Enables richer traceability. SSOT: process-code-anchors. |
+| `#for-anchor-causality-type` | advisory | At anchor level, agent can specify `constraint` (из-за) or `goal` (для) to disambiguate reason type. Applies to both #for- and #not-. SSOT: id:sk-7f3e2b (process-anchor-causality-type). |
 
 ## Aliases / Deprecated
 

@@ -37,8 +37,8 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 **Reasoning MUST be the first substantive section** (immediately after Context/Scope). Rules and implementation details follow Reasoning.
 
 **Hash prefixes (causality):**
-- **#for-...** — "for" — positive reasons, why we chose this way.
-- **#not-...** — negative reasons, why we rejected alternatives. Placed at the **end** of the Reasoning list. No separate "Alternatives Considered" section; no "rejected" marking (prefix implies it).
+- **#for-...** — positive reasons, why we chose this way.
+- **#not-...** — negative reasons, why we rejected alternatives (при рассмотрении и отвержении альтернатив). Placed at the **end** of the Reasoning list. No separate "Alternatives Considered" section; no "rejected" marking (prefix implies it). Full spec: id:sk-3b1519 (causality-registry).
 
 **Format:**
 - One `## Reasoning` section.

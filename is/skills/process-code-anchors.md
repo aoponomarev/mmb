@@ -3,8 +3,8 @@ id: sk-8991cd
 title: "Process: Code Anchors (Skill-to-Code Linking)"
 reasoning_confidence: 0.85
 reasoning_audited_at: 2026-03-08
-reasoning_checksum: 8a5d0572
-last_change: "#for-anchor-causality-type — optional constraint/goal suffix"
+reasoning_checksum: 04e83c80
+last_change: "#for- vs #not- — criteria and #not- example"
 
 ---
 
@@ -57,7 +57,7 @@ For files governed by multiple skills:
 ### Inline Anchor (For Non-Obvious Decisions)
 
 Use inline anchors only for non-trivial decisions inside logic that a reader would not understand without architectural context.
-Use hashes from `id:sk-3b1519 (is/skills/causality-registry.md)` — one or more `#for-...` or `#not-...`. Optional short context after colon.
+Use hashes from `id:sk-3b1519 (is/skills/causality-registry.md)` — one or more `#for-...` or `#not-...`. **#for-** = why we chose X; **#not-** = why we rejected alternative Y (id:sk-3b1519). Optional short context after colon.
 
 ```javascript
 // @skill-anchor id:sk-483943 #for-ssot-paths
@@ -83,6 +83,11 @@ const settled = await Promise.allSettled(entries.map(([, fn]) => fn()));
 ```javascript
 // @causality #for-distinct-ttls: VIX daily, funding 4h/8h
 this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
+```
+
+```javascript
+// chose file protocol, rejected bundler
+// @causality #for-file-protocol #not-bundler-ui
 ```
 
 **Registry:** All hashes must exist in id:sk-3b1519. Add new hashes there before using.

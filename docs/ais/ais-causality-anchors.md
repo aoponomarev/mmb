@@ -65,9 +65,11 @@ flowchart TD
 
 | Тип | Формат хеша | Семантика | Пример |
 |-----|------------|-----------|--------|
-| **Позитивная** | `#for-X` | «Делаем X потому что...» | `#for-rate-limiting` — адаптивный throttling предотвращает 429 |
-| **Негативная** | `#not-X` | «Не делаем X потому что...» | `#not-bundler-ui` — No-Build архитектура не использует bundler |
+| **Позитивная** | `#for-X` | «Выбрали/делаем X потому что...» — обоснование выбранного решения | `#for-rate-limiting` — адаптивный throttling предотвращает 429 |
+| **Негативная** | `#not-X` | «Отвергли X потому что...» — при рассмотрении и отвержении альтернатив | `#not-bundler-ui` — No-Build архитектура; bundler отвергнут |
 | **Вопросительная** | `QUESTION:` | Причина неизвестна, помечена для будущего анализа | `// @causality QUESTION: why setTimeout here?` |
+
+**Критерий выбора:** Основная формулировка — «мы выбрали X» → `#for-X`. Основная формулировка — «мы отвергли Y» → `#not-Y`. Один и тот же выбор может иметь оба: `#for-A #not-B`. В Reasoning (id:sk-d7bf67): сначала все `#for-`, затем все `#not-`.
 
 ### Форматы якорей в коде
 
@@ -75,14 +77,17 @@ flowchart TD
 // 1. Causality anchor — причинно-следственная связь
 // @causality #for-file-protocol Because file:// blocks direct fetch, we proxy via Worker.
 
-// 2. Skill anchor — привязка к навыку + обоснование
+// 2. Chose A, rejected B — оба хеша
+// @causality #for-file-protocol #not-bundler-ui
+
+// 3. Skill anchor — привязка к навыку + обоснование
 // @skill-anchor id:sk-224210 #for-data-provider-interface
 
-// 3. File header anchors (in JSDoc block)
+// 4. File header anchors (in JSDoc block)
 // @skill id:sk-bb7c8e
 // @skill-anchor id:sk-bb7c8e #for-layer-separation
 
-// 4. Question marker (unresolved causality)
+// 5. Question marker (unresolved causality)
 // @causality QUESTION: Is this TTL optimal for stablecoins?
 ```
 
@@ -103,7 +108,7 @@ flowchart TD
 1. **Обнаружение:** агент или разработчик находит не-очевидное решение в коде.
 2. **Проверка дубля:** `search_nodes` + grep по causality-registry на семантический дубль.
 3. **Регистрация хеша:** добавление в `is/skills/causality-registry.md` с кратким обоснованием.
-4. **Расстановка якорей:** `@causality #for-X` в коде, `#for-X` в AIS/skill документации.
+4. **Расстановка якорей:** `@causality #for-X` или `@causality #not-Y` (или оба) в коде; `#for-X` / `#not-Y` в AIS/skill документации.
 5. **Валидация:** `npm run skills:causality:check` — все хеши в коде резолвятся в реестре.
 
 ### Процесс harvesting (сбор казуальностей)

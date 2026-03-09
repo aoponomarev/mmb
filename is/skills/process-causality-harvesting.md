@@ -3,8 +3,8 @@ id: sk-802f3b
 title: "Causality Harvesting"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-09
-reasoning_checksum: e58d2adc
-last_change: "#for-causality-question-marker — only @causality QUESTION is valid raw candidate format"
+reasoning_checksum: 5b219aeb
+last_change: "#for- vs #not- — use #not- when formalizing prohibition/rejection"
 
 ---
 
@@ -30,12 +30,12 @@ last_change: "#for-causality-question-marker — only @causality QUESTION is val
     
 3.  **Pattern Aggregation:**
     If a similar candidate explanation is found in 3 or more places across the codebase (e.g., repeating the same logic about CORS or Vue rendering), the agent must:
-    - **Formulate a Hash**: Create a standardized `#for-xyz` hash.
+    - **Formulate a Hash**: Create `#for-xyz` (chosen solution) or `#not-xyz` (rejected alternative). Use **#not-** when the pattern describes a prohibition or rejected option (id:sk-3b1519).
     - **Register**: Add it to id:sk-3b1519 (is/skills/causality-registry.md).
     - **Promote to Skill**: If the pattern warrants it, generate a new architectural skill `.md` file using `npm run skills:create`.
     - **Refactor Code**: Replace the candidate marker with formalized hash-based causality:
-      - `// @causality #for-xyz ...` or
-      - `// @skill-anchor path/to/skill #for-xyz`
+      - `// @causality #for-xyz ...` or `// @causality #not-xyz ...` or both
+      - `// @skill-anchor path/to/skill #for-xyz` or `#not-xyz`
     - **Invalid format policy**: `@causality` without hash and without `QUESTION:` is considered unformalized debt, not a valid candidate.
 
 ## Contracts
