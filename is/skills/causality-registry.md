@@ -14,136 +14,139 @@ Add new hashes here before using in code. Skills and code share the same namespa
 - `// @causality #for-X` or `// @causality #for-X #not-Y` or `// @causality #for-X: short context`
 - `// @skill-anchor skill-id #for-X` or `// @skill-anchor skill-id #for-X #not-Y`
 
-| Hash | Formulation |
-|------|-------------|
-| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
-| `#for-ssot-paths` | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
-| `#for-root-path-unambiguity` | In this repository, "PF" means repository root, not the `app/` layer folder. Contracts and archives under `is/` must never be prefixed with `app/`, or agents will create path drift (`app/is/...`) and break SSOT navigation. |
-| `#for-imports-relative` | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
-| `#for-file-protocol` | No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes. |
-| `#for-node-test` | Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale. |
-| `#for-skill-anchors` | Textual reasoning in skills (with #for-/#not- hashes) provides causality value. Skill anchors connect code to reasoning without a separate causality ID namespace. |
-| `#not-central-docs` | Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed. |
-| `#not-hardcoded-paths` | Hardcoded paths in scripts — CWD-dependent failures. |
-| `#not-bundler-ui` | Bundler for UI — violates file:// and GitHub Pages static hosting. |
-| `#for-order-as-contract` | The sequence (Review → Add → Score → Gate) prevents agents from adding confidence scores without verifying alignment. Scoring before review would be meaningless. |
-| `#for-confidence-by-agent` | Only an AI (or human) that has analyzed the codebase can assign a meaningful score. Automated checks cannot verify semantic alignment. |
-| `#for-gate-enforcement` | Without a failing gate, the protocol would be advisory. The gate makes Reasoning accuracy a release blocker, matching the project's "high cost of errors" stance. |
-| `#for-fail-fast` | Fail-fast applies at validation/provider-call boundaries: reject malformed input and surface provider errors immediately. Explicit, observable fallback at orchestrator/facade level is allowed when governed by `#for-dual-channel-fallback` and `#for-readonly-fallbacks`; hidden silent degradation is forbidden. |
-| `#for-partial-failure-tolerance` | `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot. |
-| `#for-rate-limiting` | Free-tier APIs have strict rate limits. Proactive waiting avoids persistent 429 failures. |
-| `#for-single-writer-guard` | A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races. |
-| `#for-hardcode-ban` | Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point. |
-| `#for-zod-ui-validation` | A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment. |
-| `#for-env-sync-ssot` | Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding. |
-| `#for-filesystem-cache` | A file-based cache survives script restarts, is trivially cleared, and does not consume application RAM. |
-| `#for-layer-separation` | Layer separation (Service → Transport → HTTP Handler → Server): each layer has single responsibility, making testing trivial and replacement easy. |
-| `#for-composition-root` | Composition Root pattern: assemble all dependencies in one place, enabling test-time injection of mocks and ensuring no hidden coupling. |
-| `#for-request-id-traceability` | Every HTTP request carries a sanitized `x-request-id` through all layers, making distributed debugging possible from day one. |
-| `#for-error-envelope` | Map errors to a known envelope so the client never receives raw stack traces; structured error objects enable consistent handling. |
-| `#for-distinct-ttls` | Different data sources have different update frequencies; use per-metric TTLs instead of a single global cache duration. |
-| `#for-validation-at-edge` | Validate input near the edge (before orchestrating heavy calls) to fail fast on malformed requests. |
-| `#for-cors-central` | Standardizing OPTIONS preflight in one place avoids duplicating CORS logic across handlers. |
-| `#for-readiness-probe` | Readiness probe ensures server only marks as ready if a basic flow succeeds; prevents routing traffic to broken instances. |
-| `#for-explicit-links` | Without anchors, AI agents and developers lack context for why a file is structured the way it is. Refactors violate contracts silently. |
-| `#for-machine-readable` | `@skill` JSDoc is parseable by MCP tools (`audit_skill_coverage`, `search_anchors`). Scattered prose docs are not discoverable. |
-| `#for-inline-anchors-sparing` | Obvious code needs no anchor; noise reduces signal. Use `@skill-anchor` when the rationale is not self-evident. |
-| `#for-classes-add-remove` | A universal mechanism to inject or override CSS classes inside generic Vue components without breaking encapsulation. |
-| `#not-hardcoded-classes` | Hardcoded classes in `x-template` conflict with the `classesAdd`/`classesRemove` mechanism and cannot be dynamically overridden by parents. |
-| `#for-fixed-class-objects` | Vue reactivity expects consistent object structures. Returning varying structures (e.g., `{}` then `{icon: 'p-0'}`) breaks computed reactivity. |
-| `#for-classes-merge-order` | Merging classes in a specific sequence (base -> adaptive -> instanceHash -> conditional -> remove -> add) ensures overrides take precedence. |
-| `#for-vue-comment-node-fallback` | Vue 3 fragments often leave `this.$el` as a Comment node in `x-template`. Direct DOM selection fails unless we fall back to nextSibling or parent. |
-| `#not-methods-in-computed` | Methods placed inside the `computed` object block cannot be called properly and lead to structural errors. |
-| `#not-dom-in-computed` | Computed properties can execute before the component is fully mounted, causing DOM-dependent functions to fail. |
-| `#for-utility-availability-check` | Global utilities like `window.classManager` load asynchronously; failing to check their existence causes crashes during initial render. |
-| `#for-bootstrap-nexttick-init` | Bootstrap components require the DOM to be fully rendered before initialization. `$nextTick` ensures the elements exist. |
-| `#for-bootstrap-dispose` | Failing to call `instance.dispose()` in `beforeUnmount` causes memory leaks and ghost event listeners in SPAs. |
-| `#for-bootstrap-event-proxying` | Vue components must proxy native Bootstrap events (e.g., `show.bs.modal`) to Vue events (`@show`) to maintain reactivity and component boundaries. |
-| `#for-reactive-translations` | Using a reactive translation function ensures that changing the language state instantly updates all UI text without requiring a page reload. |
-| `#for-tooltip-reactivity` | Tooltips must be re-initialized or their titles reactively bound so that language switches affect hover text immediately. |
-| `#for-model-extensibility` | Using a base class (`BaseModelCalculator`) and a manager (`ModelManager`) allows adding new mathematical models without modifying the core application logic. |
-| `#for-air-math-contract` | The A.I.R. formula (Alignment, Impulse, Risk) is a strict domain contract. AI agents must not alter the mathematical weights or logic without explicit architectural approval. |
-| `#for-ai-provider-abstraction` | A unified `BaseAIProvider` interface ensures the application code remains agnostic to specific AI service APIs (YandexGPT, Perplexity), enabling seamless switching. |
-| `#for-ai-manager-switching` | `AIProviderManager` centralizes the logic for retrieving API keys, models, and routing requests, preventing scattered API calls across components. |
-| `#for-short-message-keys` | Using short keys (`e.net`) instead of long strings (`error.api.network`) reduces payload size and minimizes typos in code. |
-| `#for-short-message-types` | Using single-character types (`d`, `w`, `i`, `s`) maps directly to Bootstrap variants (`danger`, `warning`, `info`, `success`) efficiently. |
-| `#for-compact-translation-format` | The `KEY\|TEXT\|DETAILS` format for translations is highly optimized for parsing and storage compared to verbose JSON or XML. |
-| `#for-integration-fallbacks` | External services (like AI providers or proxies) must implement fallback chains to ensure high availability when the primary provider fails. |
-| `#for-geo-optimization` | Routing requests based on geography (e.g., Yandex Cloud for RU/CIS, Cloudflare for ROW) minimizes latency and complies with data localization policies. |
-| `#for-oauth-postmessage` | Browsers block HTTPS to `file://` redirects. Using a popup window (`window.open`) and sending the token back via `postMessage` is the only reliable way to complete OAuth flows in a pure local static context. |
-| `#for-cloudflare-kv-proxy` | External APIs enforce CORS, blocking `file://` requests. A Cloudflare Worker proxy with KV caching bypasses CORS and reduces rate-limit exhaustion. |
-| `#for-d1-schema-migrations` | D1 is serverless SQLite. All schema changes must be tracked in SQL migration files and applied via Wrangler, never manually mutated in production. |
-| `#for-umd-libraries` | The No-Build architecture requires libraries to be loaded directly in the browser via `<script>` tags. Only libraries providing UMD or Global builds are compatible. |
-| `#for-cdn-fallback` | Relying on a single CDN (e.g., jsdelivr) creates a single point of failure. A fallback chain (GitHub Pages -> jsdelivr -> cdnjs) ensures the UI loads even if one CDN is down. |
-| `#for-template-logic-separation` | In a No-Build Vue architecture, templates and logic are split into separate files. Documentation must follow this split: layout/DOM details in the template file, API/state details in the JS file. |
-| `#not-doc-duplication` | Duplicating documentation across multiple files guarantees that one will eventually become outdated. Use cross-references instead. |
-| `#for-header-skill-separation` | File headers must contain only technical API contracts (What/How). Philosophical principles and systemic rules belong in skills to prevent context bloat and divergence. |
-| `#for-english-why-comments` | Inline comments must be in English and explain the "Why" and "For what", never the "What". Describing what code does creates noise; describing why it exists creates value. |
-| `#for-mandatory-comment-rewrite` | AI agents must proactively rewrite legacy Russian or descriptive comments into English causal comments whenever touching a piece of code. |
-| `#for-code-comments-gate` | Preflight runs `validate-code-comments-english.js`; code comments must be English only (no Cyrillic). SSOT: process-language-policy. Gate blocks preflight and CI on violation. |
-| `#for-file-header-standard` | File header must include file id (`#JS-xxx`, `#TS-xxx`) and @description when file id present. SSOT: process-file-header-standard, AIS id:ais-f7e2a1. Gate: validate-file-headers.js; registry: code-file-registry.json. |
-| `#for-causality-harvesting` | Using raw `@causality` markers in code allows developers/agents to log rationale instantly without breaking flow to update the registry, creating a searchable backlog of potential patterns. |
-| `#for-data-provider-interface` | A unified interface for data providers (e.g., CoinGecko, Yandex Cache) abstracts the specific data fetching mechanisms from the orchestrator logic. |
-| `#for-dual-channel-fallback` | Implementing a dual-channel fetch (primary + fallback) ensures data availability even when the primary external service goes down or hits rate limits. |
-| `#for-readonly-fallbacks` | Fallbacks must be Read-Only / Local-Only. Do not write fallback data back to the central SSOT database (e.g. no browser upserts to PostgreSQL) to avoid polluting chronologies and cron data. |
-| `#for-endpoint-coherence` | Stateful read/write/readback flows must stay on the same backend domain contract. Mixing transports for the same feature creates false-positive writes and missing readback. |
-| `#for-cloud-env-readback` | For cloud deployments, the active function version environment is the operational SSOT. Redeploy must read and preserve live env values unless an explicit migration changes them. |
-| `#for-no-empty-cloud-env` | Some cloud deployment APIs reject empty values for optional environment variables. Empty optional keys must be omitted rather than serialized as empty strings. |
-| `#for-serverless-short-runs` | Long sleep chains inside one serverless invocation make timeout budgets, retries, and observability fragile. Prefer multiple short scheduled invocations over one long-running timer job. |
-| `#for-transport-shape-verification` | Direct function invocation and real HTTP/API Gateway traffic can produce different event shapes. Transport behavior must be verified through the real entrypoint, not only via direct invoke. |
-| `#for-trigger-minute-routing` | When multiple timer schedules call the same function artifact without an explicit mode payload, deriving mode from the stable schedule time (for example, current minute) avoids duplicating function packages and deploy paths. |
-| `#for-client-ssot-with-cloud-sync` | When UI state must survive offline/degraded mode and auth transitions, the client-side workspace remains the live SSOT, while cloud storage acts as an authenticated replica and recovery source. |
-| `#for-explicit-unknowns` | Guessing the causality of legacy "magic numbers" leads to dangerous hallucinations. We must explicitly mark unknowns so the human developer can answer them later. |
-| `#for-harvester-integration` | Using the raw `@causality` marker directly in the code with a question mark integrates perfectly with our MCP `harvest_causalities` tool, deprecating standalone draft files. |
-| `#for-mcp-data-contour` | MCP Data Flow: data lives in two domains — SSOT (id-registry, code-file-registry, causality-registry) in JSON/MD read directly; runtime (events, dependency_graph, raw_causalities) in data/mcp.sqlite. No cache of registries in SQLite avoids sync drift. AIS id:ais-8d3c2a. (Hash name is historical; the concept is a Data Flow, not a Contour per glossary.) |
-| `#for-ai-tooling-abstraction` | Forcing agents to remember and perfectly type CLI commands (like `node scripts/xyz.js` or `wrangler d1 execute`) is error-prone. Exposing these as strict JSON-schema MCP Tools guarantees safer, more predictable execution. |
-| `#for-context-injection` | Dynamically injecting telemetry data (e.g., "This skill has 42 anchors") into the top of Markdown files *as they are being read by the agent* dynamically influences agent behavior without mutating the actual markdown file on disk. |
-| `#for-docs-pipeline` | Separating active plans (`docs/plans`), archived plans (`docs/done`), and macro-specifications (`docs/ais/`) prevents context pollution and keeps active work focused. |
-| `#for-ais-russian` | High-level specifications (AIS) and plans are written in Russian to maximize the user's cognitive bandwidth and strategic planning speed. |
-| `#for-ais-mermaid-diagrams` | Every AIS must include at least one Mermaid diagram in the Infrastructure & Data Flow section. Fenced `mermaid` code blocks render on GitHub, VS Code, GitLab; diagrams stay version-controlled as text and avoid stale image files. |
-| `#for-distillation` | A completed plan contains implementation noise. It must be distilled: macro-knowledge goes to `docs/ais/` (Russian), and micro-rules go to `is/skills/` (English). |
-| `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains as a staging ground, but keeping distilled files creates redundant, dead knowledge. |
-| `#for-audits-path-contract` | The path `docs/audits/causality-exceptions.jsonl` is hardcoded in `validate-causality-invariant.js`. Agents must never rename or move this folder; doing so breaks the invariant gate. |
-| `#not-redundant-folders` | Do not create new folders when a functionally suitable one already exists. Place documents in the existing structure (plans, backlog, runbooks, etc.) instead of inventing new folders (см. структуру docs/ в репозитории). |
-| `#for-stable-ids` | AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; `related_skills` and `related_ais` reference ids. Index files use `index-` prefix. |
-| `#for-docs-ids-gate` | Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling. |
-| `#for-integration-legacy-remediation` | Legacy integration documentation must be remediated from donor sources with explicit path rewrite decisions to prevent hidden context loss and keep zero-noise validation meaningful. |
-| `#for-atomic-remediation` | Прогрессивная миграция legacy-ссылок через независимые атомарные шаги снижает шум и делает rollback/трассируемость решений управляемыми. |
-| `#for-plan-iterative-improvement` | Plans are living documents. When an agent notices a deficiency in a plan's protocols, it MUST augment the plan. Condition: backward compatibility — improvements must not invalidate results already obtained. |
-| `#for-plan-execution-protocol` | Without a strict step-by-step protocol, agents skip verification, leave stale docs, and accumulate tech debt. Each plan execution: verify each step (console checks), update AIS if nuances arise, add skills/causalities/contracts as discovered, fix bugs along the way. |
-| `#for-memory-to-skills` | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
-| `#for-token-efficiency` | Long context degrades model attention ("lost in the middle"). Minimal viable context produces better results. |
-| `#for-front-load` | Putting all relevant context in the first message avoids 3x token waste from incremental context building. |
-| `#for-fresh-chats` | After 6–8 exchanges or when switching domains, start a new chat — condensation loses detail. |
-| `#for-minimum-viable-at` | Attach only files the agent actually needs; agent can explore more if needed. |
-| `#for-token-budget` | alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided. |
-| `#for-prefix-ssot` | A single prefix registry prevents ad-hoc prefixes and naming drift. All consumers read from one source. |
-| `#for-prefix-gate` | The validate-skills gate fails preflight on unregistered prefixes, forcing registration before use. |
-| `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
-| `#for-prefix-semantics` | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
-| `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |
-| `#for-yc-public-invoke` | Function URL invocation in Yandex Cloud requires explicit invoker IAM access for the caller subject (or `system:allUsers`). Missing invoke rights returns `403 Forbidden: Not authorized`; upstream gateways may surface this as integration-level HTTP errors. |
-| `#for-manual-trigger-order-payload` | Minute-based mode routing is valid for timer triggers only. Manual/on-demand trigger endpoints must pass explicit `order` payload (`market_cap`/`volume`) to avoid accidental mode mismatch at arbitrary execution time. |
-| `#for-deploy-snapshot-diff` | Deployment snapshots must include full current settings and explicit diff versus previous stable state (including console settings and access bindings), otherwise configuration drift remains invisible. |
-| `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
-| `#for-post-deploy-auto-archive` | Deployment evidence degrades quickly after manual operations. Archive generation must run immediately after successful deploy + verification so settings/diffs/causalities are captured while state is still precise. |
-| `#for-snapshot-driven-restore` | Stable recovery depends on concrete deployment evidence (`settings.current.json`, source copy, diff), not on memory or ad-hoc commands. Snapshot artifacts are the only safe restore input. |
-| `#for-config-code-parity-restore` | Restoring cloud settings without restoring the matching code/architecture revision causes contract drift (route shapes, env expectations, cache behavior). Deployment restore must include code and architecture parity checks. |
-| `#for-restore-order-external-first` | External integrations define runtime contract boundaries. Recovering external deployment state first reduces cascading failures before app/core layers are validated and restored. |
-| `#for-restore-verification-gates` | A restore is not complete until objective gates pass (`preflight`, target health endpoints, domain smoke tests). Without gates, rollback can silently reintroduce unstable state. |
-| `#for-provider-readback-fallback` | Cloud provider CLIs may return partial/incompatible metadata across versions (for example, some Wrangler commands on Windows). Snapshot generators must preserve available reachable state and gracefully fall back to local config contracts instead of failing snapshot creation. |
-| `#for-mcp-stdio-protocol` | MCP servers communicate with the IDE via JSON-RPC on stdout. Operational logs must go to stderr so protocol frames are never corrupted. |
-| `#for-mcp-wal-concurrency` | MCP runtime uses concurrent readers/writers (IDE + agent processes). SQLite WAL mode prevents lock contention and keeps reads non-blocking. |
-| `#for-mcp-readonly-queries` | MCP query tools must enforce read-only SQL (SELECT-only) to prevent accidental AI-triggered mutations in local telemetry or Cloudflare D1 state. |
-| `#for-telemetry-nonblocking` | Telemetry is auxiliary. Failures in telemetry writes must never crash primary MCP workflows, otherwise observability harms availability. |
-| `#for-causality-question-marker` | Unknown rationale must be marked explicitly as `@causality QUESTION:`. This distinguishes intentional candidates from accidental unformalized comments and keeps backlog ingestion deterministic. |
-| `#for-market-metrics-cache-fallback` | When external market data providers (Yahoo, Stooq, Binance, Alternative.me) are temporarily unavailable, using the last known-good cached metric (FGI, VIX, BTC Dominance, OI, FR, LSR) is preferable to showing an empty value, as long as the UI clearly states that the value is from cache and includes the original fetch timestamp and a short live-error reason. |
-| `#for-vix-4h-ttl` | VIX (volatility index) is rate-limited and relatively slow-moving intraday; a 4-hour TTL for `vix-index` balances freshness with external API limits and startup latency, while still allowing explicit force refresh via UI or scripts. |
-| `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
-| `#for-tab-provider-decoupling` | Settings modal has tabs (postgres, github) that are not valid AI providers. Sync activeTab ↔ provider only when tab is a valid provider; prevents saving invalid providers to cache and startup warnings. |
-| `#for-invalid-provider-cleanup` | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
-| `#for-utf8-no-bom-lf` | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
-| `#for-pre-report-docs-sync` | Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual. |
+**Enforcement:** `gate` = preflight/CI gate checks compliance; violation blocks. `advisory` = best practice, no gate; prefer to follow, can deviate with explicit rationale. When two causalities conflict: gate wins over advisory.
+
+| Hash | Enforcement | Formulation |
+|------|-------------|-------------|
+| `#for-anti-calque` | advisory | Russian abbreviations transliterated into Latin (mbb, mmb) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
+| `#for-ssot-paths` | advisory | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
+| `#for-root-path-unambiguity` | advisory | In this repository, "PF" means repository root, not the `app/` layer folder. Contracts and archives under `is/` must never be prefixed with `app/`, or agents will create path drift (`app/is/...`) and break SSOT navigation. |
+| `#for-imports-relative` | advisory | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
+| `#for-file-protocol` | advisory | No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes. |
+| `#for-node-test` | advisory | Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale. |
+| `#for-skill-anchors` | advisory | Textual reasoning in skills (with #for-/#not- hashes) provides causality value. Skill anchors connect code to reasoning without a separate causality ID namespace. |
+| `#not-central-docs` | advisory | Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed. |
+| `#not-hardcoded-paths` | advisory | Hardcoded paths in scripts — CWD-dependent failures. |
+| `#not-bundler-ui` | advisory | Bundler for UI — violates file:// and GitHub Pages static hosting. |
+| `#for-order-as-contract` | advisory | The sequence (Review → Add → Score → Gate) prevents agents from adding confidence scores without verifying alignment. Scoring before review would be meaningless. |
+| `#for-confidence-by-agent` | advisory | Only an AI (or human) that has analyzed the codebase can assign a meaningful score. Automated checks cannot verify semantic alignment. |
+| `#for-gate-enforcement` | advisory | Without a failing gate, the protocol would be advisory. The gate makes Reasoning accuracy a release blocker, matching the project's "high cost of errors" stance. |
+| `#for-fail-fast` | advisory | Fail-fast applies at validation/provider-call boundaries: reject malformed input and surface provider errors immediately. Explicit, observable fallback at orchestrator/facade level is allowed when governed by `#for-dual-channel-fallback` and `#for-readonly-fallbacks`; hidden silent degradation is forbidden. |
+| `#for-partial-failure-tolerance` | advisory | `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot. |
+| `#for-rate-limiting` | advisory | Free-tier APIs have strict rate limits. Proactive waiting avoids persistent 429 failures. |
+| `#for-single-writer-guard` | advisory | A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races. |
+| `#for-hardcode-ban` | advisory | Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point. |
+| `#for-zod-ui-validation` | advisory | A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment. |
+| `#for-env-sync-ssot` | advisory | Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding. |
+| `#for-filesystem-cache` | advisory | A file-based cache survives script restarts, is trivially cleared, and does not consume application RAM. |
+| `#for-layer-separation` | advisory | Layer separation (Service → Transport → HTTP Handler → Server): each layer has single responsibility, making testing trivial and replacement easy. |
+| `#for-composition-root` | advisory | Composition Root pattern: assemble all dependencies in one place, enabling test-time injection of mocks and ensuring no hidden coupling. |
+| `#for-request-id-traceability` | advisory | Every HTTP request carries a sanitized `x-request-id` through all layers, making distributed debugging possible from day one. |
+| `#for-error-envelope` | advisory | Map errors to a known envelope so the client never receives raw stack traces; structured error objects enable consistent handling. |
+| `#for-distinct-ttls` | advisory | Different data sources have different update frequencies; use per-metric TTLs instead of a single global cache duration. |
+| `#for-validation-at-edge` | advisory | Validate input near the edge (before orchestrating heavy calls) to fail fast on malformed requests. |
+| `#for-cors-central` | advisory | Standardizing OPTIONS preflight in one place avoids duplicating CORS logic across handlers. |
+| `#for-readiness-probe` | advisory | Readiness probe ensures server only marks as ready if a basic flow succeeds; prevents routing traffic to broken instances. |
+| `#for-explicit-links` | advisory | Without anchors, AI agents and developers lack context for why a file is structured the way it is. Refactors violate contracts silently. |
+| `#for-machine-readable` | advisory | `@skill` JSDoc is parseable by MCP tools (`audit_skill_coverage`, `search_anchors`). Scattered prose docs are not discoverable. |
+| `#for-inline-anchors-sparing` | advisory | Obvious code needs no anchor; noise reduces signal. Use `@skill-anchor` when the rationale is not self-evident. |
+| `#for-classes-add-remove` | advisory | A universal mechanism to inject or override CSS classes inside generic Vue components without breaking encapsulation. |
+| `#not-hardcoded-classes` | advisory | Hardcoded classes in `x-template` conflict with the `classesAdd`/`classesRemove` mechanism and cannot be dynamically overridden by parents. |
+| `#for-fixed-class-objects` | advisory | Vue reactivity expects consistent object structures. Returning varying structures (e.g., `{}` then `{icon: 'p-0'}`) breaks computed reactivity. |
+| `#for-classes-merge-order` | advisory | Merging classes in a specific sequence (base -> adaptive -> instanceHash -> conditional -> remove -> add) ensures overrides take precedence. |
+| `#for-vue-comment-node-fallback` | advisory | Vue 3 fragments often leave `this.$el` as a Comment node in `x-template`. Direct DOM selection fails unless we fall back to nextSibling or parent. |
+| `#not-methods-in-computed` | advisory | Methods placed inside the `computed` object block cannot be called properly and lead to structural errors. |
+| `#not-dom-in-computed` | advisory | Computed properties can execute before the component is fully mounted, causing DOM-dependent functions to fail. |
+| `#for-utility-availability-check` | advisory | Global utilities like `window.classManager` load asynchronously; failing to check their existence causes crashes during initial render. |
+| `#for-bootstrap-nexttick-init` | advisory | Bootstrap components require the DOM to be fully rendered before initialization. `$nextTick` ensures the elements exist. |
+| `#for-bootstrap-dispose` | advisory | Failing to call `instance.dispose()` in `beforeUnmount` causes memory leaks and ghost event listeners in SPAs. |
+| `#for-bootstrap-event-proxying` | advisory | Vue components must proxy native Bootstrap events (e.g., `show.bs.modal`) to Vue events (`@show`) to maintain reactivity and component boundaries. |
+| `#for-reactive-translations` | advisory | Using a reactive translation function ensures that changing the language state instantly updates all UI text without requiring a page reload. |
+| `#for-tooltip-reactivity` | advisory | Tooltips must be re-initialized or their titles reactively bound so that language switches affect hover text immediately. |
+| `#for-model-extensibility` | advisory | Using a base class (`BaseModelCalculator`) and a manager (`ModelManager`) allows adding new mathematical models without modifying the core application logic. |
+| `#for-air-math-contract` | advisory | The A.I.R. formula (Alignment, Impulse, Risk) is a strict domain contract. AI agents must not alter the mathematical weights or logic without explicit architectural approval. |
+| `#for-ai-provider-abstraction` | advisory | A unified `BaseAIProvider` interface ensures the application code remains agnostic to specific AI service APIs (YandexGPT, Perplexity), enabling seamless switching. |
+| `#for-ai-manager-switching` | advisory | `AIProviderManager` centralizes the logic for retrieving API keys, models, and routing requests, preventing scattered API calls across components. |
+| `#for-short-message-keys` | advisory | Using short keys (`e.net`) instead of long strings (`error.api.network`) reduces payload size and minimizes typos in code. |
+| `#for-short-message-types` | advisory | Using single-character types (`d`, `w`, `i`, `s`) maps directly to Bootstrap variants (`danger`, `warning`, `info`, `success`) efficiently. |
+| `#for-compact-translation-format` | advisory | The `KEY\|TEXT\|DETAILS` format for translations is highly optimized for parsing and storage compared to verbose JSON or XML. |
+| `#for-integration-fallbacks` | advisory | External services (like AI providers or proxies) must implement fallback chains to ensure high availability when the primary provider fails. |
+| `#for-geo-optimization` | advisory | Routing requests based on geography (e.g., Yandex Cloud for RU/CIS, Cloudflare for ROW) minimizes latency and complies with data localization policies. |
+| `#for-oauth-postmessage` | advisory | Browsers block HTTPS to `file://` redirects. Using a popup window (`window.open`) and sending the token back via `postMessage` is the only reliable way to complete OAuth flows in a pure local static context. |
+| `#for-cloudflare-kv-proxy` | advisory | External APIs enforce CORS, blocking `file://` requests. A Cloudflare Worker proxy with KV caching bypasses CORS and reduces rate-limit exhaustion. |
+| `#for-d1-schema-migrations` | advisory | D1 is serverless SQLite. All schema changes must be tracked in SQL migration files and applied via Wrangler, never manually mutated in production. |
+| `#for-umd-libraries` | advisory | The No-Build architecture requires libraries to be loaded directly in the browser via `<script>` tags. Only libraries providing UMD or Global builds are compatible. |
+| `#for-cdn-fallback` | advisory | Relying on a single CDN (e.g., jsdelivr) creates a single point of failure. A fallback chain (GitHub Pages -> jsdelivr -> cdnjs) ensures the UI loads even if one CDN is down. |
+| `#for-template-logic-separation` | advisory | In a No-Build Vue architecture, templates and logic are split into separate files. Documentation must follow this split: layout/DOM details in the template file, API/state details in the JS file. |
+| `#not-doc-duplication` | advisory | Duplicating documentation across multiple files guarantees that one will eventually become outdated. Use cross-references instead. |
+| `#for-header-skill-separation` | advisory | File headers must contain only technical API contracts (What/How). Philosophical principles and systemic rules belong in skills to prevent context bloat and divergence. |
+| `#for-english-why-comments` | advisory | Inline comments must be in English and explain the "Why" and "For what", never the "What". Describing what code does creates noise; describing why it exists creates value. |
+| `#for-mandatory-comment-rewrite` | advisory | AI agents must proactively rewrite legacy Russian or descriptive comments into English causal comments whenever touching a piece of code. |
+| `#for-code-comments-gate` | gate | Preflight runs `validate-code-comments-english.js`; code comments must be English only (no Cyrillic). SSOT: process-language-policy. Gate blocks preflight and CI on violation. |
+| `#for-file-header-standard` | gate | File header must include file id (`#JS-xxx`, `#TS-xxx`) and @description when file id present. SSOT: process-file-header-standard, AIS id:ais-f7e2a1. Gate: validate-file-headers.js; registry: code-file-registry.json. |
+| `#for-causality-harvesting` | advisory | Using raw `@causality` markers in code allows developers/agents to log rationale instantly without breaking flow to update the registry, creating a searchable backlog of potential patterns. |
+| `#for-data-provider-interface` | advisory | A unified interface for data providers (e.g., CoinGecko, Yandex Cache) abstracts the specific data fetching mechanisms from the orchestrator logic. |
+| `#for-dual-channel-fallback` | advisory | Implementing a dual-channel fetch (primary + fallback) ensures data availability even when the primary external service goes down or hits rate limits. |
+| `#for-readonly-fallbacks` | advisory | Fallbacks must be Read-Only / Local-Only. Do not write fallback data back to the central SSOT database (e.g. no browser upserts to PostgreSQL) to avoid polluting chronologies and cron data. |
+| `#for-endpoint-coherence` | advisory | Stateful read/write/readback flows must stay on the same backend domain contract. Mixing transports for the same feature creates false-positive writes and missing readback. |
+| `#for-cloud-env-readback` | advisory | For cloud deployments, the active function version environment is the operational SSOT. Redeploy must read and preserve live env values unless an explicit migration changes them. |
+| `#for-no-empty-cloud-env` | advisory | Some cloud deployment APIs reject empty values for optional environment variables. Empty optional keys must be omitted rather than serialized as empty strings. |
+| `#for-serverless-short-runs` | advisory | Long sleep chains inside one serverless invocation make timeout budgets, retries, and observability fragile. Prefer multiple short scheduled invocations over one long-running timer job. |
+| `#for-transport-shape-verification` | advisory | Direct function invocation and real HTTP/API Gateway traffic can produce different event shapes. Transport behavior must be verified through the real entrypoint, not only via direct invoke. |
+| `#for-trigger-minute-routing` | advisory | When multiple timer schedules call the same function artifact without an explicit mode payload, deriving mode from the stable schedule time (for example, current minute) avoids duplicating function packages and deploy paths. |
+| `#for-client-ssot-with-cloud-sync` | advisory | When UI state must survive offline/degraded mode and auth transitions, the client-side workspace remains the live SSOT, while cloud storage acts as an authenticated replica and recovery source. |
+| `#for-explicit-unknowns` | advisory | Guessing the causality of legacy "magic numbers" leads to dangerous hallucinations. We must explicitly mark unknowns so the human developer can answer them later. |
+| `#for-harvester-integration` | advisory | Using the raw `@causality` marker directly in the code with a question mark integrates perfectly with our MCP `harvest_causalities` tool, deprecating standalone draft files. |
+| `#for-mcp-data-contour` | advisory | MCP Data Flow: data lives in two domains — SSOT (id-registry, code-file-registry, causality-registry) in JSON/MD read directly; runtime (events, dependency_graph, raw_causalities) in data/mcp.sqlite. No cache of registries in SQLite avoids sync drift. AIS id:ais-8d3c2a. (Hash name is historical; the concept is a Data Flow, not a Contour per glossary.) |
+| `#for-ai-tooling-abstraction` | advisory | Forcing agents to remember and perfectly type CLI commands (like `node scripts/xyz.js` or `wrangler d1 execute`) is error-prone. Exposing these as strict JSON-schema MCP Tools guarantees safer, more predictable execution. |
+| `#for-context-injection` | advisory | Dynamically injecting telemetry data (e.g., "This skill has 42 anchors") into the top of Markdown files *as they are being read by the agent* dynamically influences agent behavior without mutating the actual markdown file on disk. |
+| `#for-docs-pipeline` | advisory | Separating active plans (`docs/plans`), archived plans (`docs/done`), and macro-specifications (`docs/ais/`) prevents context pollution and keeps active work focused. |
+| `#for-ais-russian` | advisory | High-level specifications (AIS) and plans are written in Russian to maximize the user's cognitive bandwidth and strategic planning speed. |
+| `#for-ais-mermaid-diagrams` | advisory | Every AIS must include at least one Mermaid diagram in the Infrastructure & Data Flow section. Fenced `mermaid` code blocks render on GitHub, VS Code, GitLab; diagrams stay version-controlled as text and avoid stale image files. |
+| `#for-distillation` | advisory | A completed plan contains implementation noise. It must be distilled: macro-knowledge goes to `docs/ais/` (Russian), and micro-rules go to `is/skills/` (English). |
+| `#for-distillation-cleanup` | advisory | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains as a staging ground, but keeping distilled files creates redundant, dead knowledge. |
+| `#for-audits-path-contract` | gate | The path `docs/audits/causality-exceptions.jsonl` is hardcoded in `validate-causality-invariant.js`. Agents must never rename or move this folder; doing so breaks the invariant gate. |
+| `#not-redundant-folders` | advisory | Do not create new folders when a functionally suitable one already exists. Place documents in the existing structure (plans, backlog, runbooks, etc.) instead of inventing new folders (см. структуру docs/ в репозитории). |
+| `#for-stable-ids` | advisory | AIS and Skills use short hash ids (`ais-xxxxxx`, `sk-xxxxxx`) instead of semantic names. Ids survive file renames and decomposition; `related_skills` and `related_ais` reference ids. Index files use `index-` prefix. |
+| `#for-docs-ids-gate` | gate | Preflight runs `validate-docs-ids.js` to ensure all ids in `related_skills` and `related_ais` resolve. `generate-id-registry.js` produces `is/contracts/docs/id-registry.json` for MCP and tooling. |
+| `#for-integration-legacy-remediation` | advisory | Legacy integration documentation must be remediated from donor sources with explicit path rewrite decisions to prevent hidden context loss and keep zero-noise validation meaningful. |
+| `#for-atomic-remediation` | advisory | Прогрессивная миграция legacy-ссылок через независимые атомарные шаги снижает шум и делает rollback/трассируемость решений управляемыми. |
+| `#for-plan-iterative-improvement` | advisory | Plans are living documents. When an agent notices a deficiency in a plan's protocols, it MUST augment the plan. Condition: backward compatibility — improvements must not invalidate results already obtained. |
+| `#for-plan-execution-protocol` | advisory | Without a strict step-by-step protocol, agents skip verification, leave stale docs, and accumulate tech debt. Each plan execution: verify each step (console checks), update AIS if nuances arise, add skills/causalities/contracts as discovered, fix bugs along the way. |
+| `#for-memory-to-skills` | advisory | Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. Ensures knowledge lives in files, not only in ephemeral chat history. |
+| `#for-token-efficiency` | advisory | Long context degrades model attention ("lost in the middle"). Minimal viable context produces better results. |
+| `#for-front-load` | advisory | Putting all relevant context in the first message avoids 3x token waste from incremental context building. |
+| `#for-fresh-chats` | advisory | After 6–8 exchanges or when switching domains, start a new chat — condensation loses detail. |
+| `#for-minimum-viable-at` | advisory | Attach only files the agent actually needs; agent can explore more if needed. |
+| `#for-token-budget` | advisory | alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided. |
+| `#for-prefix-ssot` | advisory | A single prefix registry prevents ad-hoc prefixes and naming drift. All consumers read from one source. |
+| `#for-prefix-gate` | gate | The validate-skills gate fails preflight on unregistered prefixes, forcing registration before use. |
+| `#for-prefix-categories` | advisory | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
+| `#for-prefix-semantics` | advisory | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
+| `#not-ad-hoc` | advisory | Inventing prefixes without registration creates gate failures and inconsistent naming. |
+| `#for-yc-public-invoke` | advisory | Function URL invocation in Yandex Cloud requires explicit invoker IAM access for the caller subject (or `system:allUsers`). Missing invoke rights returns `403 Forbidden: Not authorized`; upstream gateways may surface this as integration-level HTTP errors. |
+| `#for-manual-trigger-order-payload` | advisory | Minute-based mode routing is valid for timer triggers only. Manual/on-demand trigger endpoints must pass explicit `order` payload (`market_cap`/`volume`) to avoid accidental mode mismatch at arbitrary execution time. |
+| `#for-deploy-snapshot-diff` | advisory | Deployment snapshots must include full current settings and explicit diff versus previous stable state (including console settings and access bindings), otherwise configuration drift remains invisible. |
+| `#for-key-versioning` | advisory | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
+| `#for-post-deploy-auto-archive` | advisory | Deployment evidence degrades quickly after manual operations. Archive generation must run immediately after successful deploy + verification so settings/diffs/causalities are captured while state is still precise. |
+| `#for-snapshot-driven-restore` | advisory | Stable recovery depends on concrete deployment evidence (`settings.current.json`, source copy, diff), not on memory or ad-hoc commands. Snapshot artifacts are the only safe restore input. |
+| `#for-config-code-parity-restore` | advisory | Restoring cloud settings without restoring the matching code/architecture revision causes contract drift (route shapes, env expectations, cache behavior). Deployment restore must include code and architecture parity checks. |
+| `#for-restore-order-external-first` | advisory | External integrations define runtime contract boundaries. Recovering external deployment state first reduces cascading failures before app/core layers are validated and restored. |
+| `#for-restore-verification-gates` | advisory | A restore is not complete until objective gates pass (`preflight`, target health endpoints, domain smoke tests). Without gates, rollback can silently reintroduce unstable state. |
+| `#for-provider-readback-fallback` | advisory | Cloud provider CLIs may return partial/incompatible metadata across versions (for example, some Wrangler commands on Windows). Snapshot generators must preserve available reachable state and gracefully fall back to local config contracts instead of failing snapshot creation. |
+| `#for-mcp-stdio-protocol` | advisory | MCP servers communicate with the IDE via JSON-RPC on stdout. Operational logs must go to stderr so protocol frames are never corrupted. |
+| `#for-mcp-wal-concurrency` | advisory | MCP runtime uses concurrent readers/writers (IDE + agent processes). SQLite WAL mode prevents lock contention and keeps reads non-blocking. |
+| `#for-mcp-readonly-queries` | advisory | MCP query tools must enforce read-only SQL (SELECT-only) to prevent accidental AI-triggered mutations in local telemetry or Cloudflare D1 state. |
+| `#for-telemetry-nonblocking` | advisory | Telemetry is auxiliary. Failures in telemetry writes must never crash primary MCP workflows, otherwise observability harms availability. |
+| `#for-causality-question-marker` | advisory | Unknown rationale must be marked explicitly as `@causality QUESTION:`. This distinguishes intentional candidates from accidental unformalized comments and keeps backlog ingestion deterministic. |
+| `#for-market-metrics-cache-fallback` | advisory | When external market data providers (Yahoo, Stooq, Binance, Alternative.me) are temporarily unavailable, using the last known-good cached metric (FGI, VIX, BTC Dominance, OI, FR, LSR) is preferable to showing an empty value, as long as the UI clearly states that the value is from cache and includes the original fetch timestamp and a short live-error reason. |
+| `#for-vix-4h-ttl` | advisory | VIX (volatility index) is rate-limited and relatively slow-moving intraday; a 4-hour TTL for `vix-index` balances freshness with external API limits and startup latency, while still allowing explicit force refresh via UI or scripts. |
+| `#for-rrg-contour` | gate | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
+| `#for-tab-provider-decoupling` | advisory | Settings modal has tabs (postgres, github) that are not valid AI providers. Sync activeTab ↔ provider only when tab is a valid provider; prevents saving invalid providers to cache and startup warnings. |
+| `#for-invalid-provider-cleanup` | advisory | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
+| `#for-utf8-no-bom-lf` | gate | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
+| `#for-pre-report-docs-sync` | advisory | Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual. |
+| `#for-anchor-causality-type` | advisory | At anchor level, agent can specify `constraint` (из-за) or `goal` (для) to disambiguate reason type. Enables richer traceability. SSOT: process-code-anchors. |
 
 ## Aliases / Deprecated
 

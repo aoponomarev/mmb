@@ -3,8 +3,8 @@ id: sk-8991cd
 title: "Process: Code Anchors (Skill-to-Code Linking)"
 reasoning_confidence: 0.85
 reasoning_audited_at: 2026-03-08
-reasoning_checksum: eb4c3d21
-last_change: ""
+reasoning_checksum: 8a5d0572
+last_change: "#for-anchor-causality-type — optional constraint/goal suffix"
 
 ---
 
@@ -86,6 +86,8 @@ this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 ```
 
 **Registry:** All hashes must exist in id:sk-3b1519. Add new hashes there before using.
+
+**Optional type suffix (id:sk-7f3e2b):** Add `constraint` (из-за) or `goal` (для) after the hash when the distinction matters: `// @causality #for-rate-limiting constraint`.
 
 **Candidate format (unresolved rationale only):**
 - Use `// @causality QUESTION: ...` when rationale is intentionally unknown yet.

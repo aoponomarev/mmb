@@ -90,10 +90,13 @@ flowchart TD
 
 `is/skills/causality-registry.md` (id:sk-3b1519) — единственный канонический источник всех зарегистрированных хешей.
 
+**Enforcement:** `gate` = гейт preflight проверяет соблюдение; нарушение блокирует. `advisory` = рекомендация, гейта нет; предпочитать соблюдать, можно отступить с явным обоснованием. При конфликте: gate побеждает advisory.
+
+**Тип на уровне якоря:** id:sk-7f3e2b (process-anchor-causality-type) — опционально указывать `constraint` (из-за) или `goal` (для) после хеша.
+
 **Текущие метрики реестра:**
-- ~90 позитивных хешей (`#for-*`)
-- ~9 негативных хешей (`#not-*`)
-- Категории: file-protocol, rate-limiting, layer-separation, validation, UI patterns, deployment, MCP, documentation, skills governance
+- ~105 позитивных хешей (`#for-*`), ~9 негативных (`#not-*`)
+- 7 gate, остальные advisory
 
 ### Процесс добавления новой казуальности
 
