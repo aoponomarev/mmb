@@ -79,7 +79,9 @@
 
         let attempts = 0;
         const maxAttempts = 5;
-        const BASE_RETRY_DELAY = 10000; // 10 seconds base delay on 429
+        // Stablecoins are non-critical for core UI, so retry conservatively on 429.
+        const BASE_RETRY_DELAY = 30000; // 30 seconds base delay on 429
+        const MAX_RETRY_DELAY = 10 * 60 * 1000; // cap backoff to 10 minutes
 
         while (attempts < maxAttempts) {
             attempts++;
@@ -100,8 +102,16 @@
                             limiter.increaseTimeout();
                         }
                         if (attempts < maxAttempts) {
-                            // Exponential backoff: 10s, 20s, 40s, 80s
-                            const delay = BASE_RETRY_DELAY * Math.pow(2, attempts - 1);
+                            // Prefer server hint; fallback to conservative exponential backoff.
+                            const retryAfterHeader = response.headers && typeof response.headers.get === 'function'
+                                ? response.headers.get('Retry-After')
+                                : null;
+                            const retryAfterSeconds = Number(retryAfterHeader);
+                            const backoffDelay = Math.min(BASE_RETRY_DELAY * Math.pow(2, attempts - 1), MAX_RETRY_DELAY);
+                            const retryAfterDelay = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+                                ? retryAfterSeconds * 1000
+                                : 0;
+                            const delay = Math.max(backoffDelay, retryAfterDelay);
                             console.warn(`coingecko-stablecoins-loader: HTTP 429, попытка ${attempts} из ${maxAttempts}, ожидание ${Math.round(delay/1000)}s...`);
                             await new Promise(r => setTimeout(r, delay));
                             continue;
