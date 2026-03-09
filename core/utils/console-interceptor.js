@@ -31,7 +31,11 @@
     };
 
     let isEnabled = false; // Initially false, activated via enable()
-    let suppressBrowserConsole = localStorage.getItem('suppressBrowserConsole') === 'true'; // Load state from localStorage
+
+    const storedSuppressValue = localStorage.getItem('suppressBrowserConsole');
+    let suppressBrowserConsole = storedSuppressValue === null
+        ? true
+        : storedSuppressValue === 'true';
 
     /**
      * Extract source from stack trace
