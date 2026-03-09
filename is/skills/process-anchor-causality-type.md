@@ -6,7 +6,7 @@ tags:
   - "#causality"
   - "#anchors"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-09"
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: 758bf79e
 last_change: "#for- vs #not- — constraint/goal applies to both"
 

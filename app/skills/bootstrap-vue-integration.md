@@ -2,7 +2,7 @@
 id: sk-eeb23d
 title: "Bootstrap Vue Integration"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: d72fe70c
 last_change: ""
 

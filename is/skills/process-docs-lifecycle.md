@@ -2,7 +2,7 @@
 id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: 13cbb841
 last_change: "#for-plan-with-draft-ais #for-plan-to-many-ais — драфт AIS только для арх/инфра планов; один план может порождать несколько AIS"
 

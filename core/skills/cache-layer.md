@@ -2,7 +2,7 @@
 id: sk-3c832d
 title: "Cache Layer Architecture"
 reasoning_confidence: 0.85
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: 9e18b4ef
 last_change: ""
 

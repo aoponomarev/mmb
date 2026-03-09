@@ -153,6 +153,8 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-invalid-provider-cleanup` | advisory | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
 | `#for-utf8-no-bom-lf` | gate | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
 | `#for-pre-report-docs-sync` | advisory | Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual. |
+| `#for-app-backup-restore-no-purge` | advisory | App backup restore syncs only a\ and mmb\; overwrites matching files but never deletes target content not present in archive (e.g. libs, local data). Preserves user-added content. |
+| `#for-app-backup-restore-pair` | advisory | backup-app.ps1 and restore-app.ps1 must be edited in sync. Any change to backup (archive structure, exclusions, paths) requires matching restore logic; otherwise restore cannot unpack or sync correctly. |
 | `#for-anchor-causality-type` | advisory | At anchor level, agent can specify `constraint` (из-за) or `goal` (для) to disambiguate reason type. Applies to both #for- and #not-. SSOT: id:sk-7f3e2b (process-anchor-causality-type). |
 
 ## Aliases / Deprecated

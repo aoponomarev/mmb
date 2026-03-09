@@ -24,3 +24,4 @@ When creating or moving scripts, preserve layout governance.
 2. All other scripts → subfolders: `architecture/`, `infrastructure/`, `secrets/`, `tests/`.
 3. `scripts/` (root): non-Node only (PowerShell backups, encoding utilities).
 4. Register new scripts in `package.json` with `namespace:action` format.
+5. **Backup/restore pair:** `backup-app.ps1` and `restore-app.ps1` must be edited in sync (#for-app-backup-restore-pair). Any change to archive structure, exclusions, or paths in backup requires matching restore logic.

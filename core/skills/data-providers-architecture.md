@@ -2,7 +2,7 @@
 id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: 0a8d82f9
 last_change: ""
 

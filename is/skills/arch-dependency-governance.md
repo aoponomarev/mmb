@@ -2,7 +2,7 @@
 id: sk-bb5cf3
 title: "Architecture: Dependency Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: c221f6b1
 last_change: ""
 

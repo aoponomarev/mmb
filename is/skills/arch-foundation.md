@@ -8,8 +8,8 @@ tags:
   - "#mcp"
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-09
-reasoning_checksum: 4f13e939
-last_change: "#for-root-path-unambiguity — PF means repo root, not app/ layer path"
+reasoning_checksum: 4ea7622a
+last_change: "#for-app-backup-restore-no-purge — app backup archive structure and restore flow"
 related_skills:
   - sk-0e193a
   - sk-d763e7
@@ -49,7 +49,7 @@ Application layers:
 - `is/` (Infrastructure / Information System) — scripts, gates, secrets, MCP servers.
 - `shared/` — reusable components, styles, utils shared across app (hash-generator, pluralize, class-manager, etc.).
 - `styles/` — CSS files (wrappers, layout, custom). Load order matters; see `index.html`.
-- `scripts/` — project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation).
+- `scripts/` — project-level utilities (e.g. `scripts/backups/`). Distinct from `is/scripts/` (infrastructure automation). App backup: `backup-app.ps1` archives parent folder (a + mmb) to ZIP; archive root contains `restore-app.ps1`, `RESTORE-README.txt`, `a/`, `mmb/`. Restore: extract → run `restore-app.ps1` → paste destination path → sync (copy+overwrite, no purge) + npm install. See `#for-app-backup-restore-no-purge`. **Contract:** backup and restore scripts are edited in sync (`#for-app-backup-restore-pair`); any change to archive structure or exclusions requires matching restore logic.
 - `mm/` — math models (domain-specific calculators). Legacy structure.
 
 ### Naming Contracts (Name Gate)

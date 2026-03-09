@@ -8,7 +8,7 @@ tags:
   - "#skills"
   - "#agent-behavior"
 reasoning_confidence: 0.98
-reasoning_audited_at: "2026-03-09"
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: edb1ce2f
 last_change: ""
 

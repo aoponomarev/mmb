@@ -51,7 +51,7 @@ function calculateReasoningChecksum(text) {
 function updateFile(filePath) {
     const text = fs.readFileSync(filePath, "utf8");
     const match = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
-    if (!match) return;
+    if (!match) return false;
 
     const block = match[1];
     const checksum = calculateReasoningChecksum(text);
@@ -59,29 +59,32 @@ function updateFile(filePath) {
 
     const fm = parseFrontmatterBlock(block);
     const oldChecksum = fm.reasoning_checksum;
-    fm.reasoning_audited_at = today;
+    if ((oldChecksum || "") === checksum) return false; // skip write when nothing changed
+
     fm.reasoning_checksum = checksum;
+    fm.reasoning_audited_at = today;
     if (fm.last_change === undefined) fm.last_change = "";
 
     const newBlock = buildFrontmatterBlock(fm, SKILL_FRONTMATTER_ORDER);
     const newText = text.replace(match[0], `---\n${newBlock}---`);
     fs.writeFileSync(filePath, newText, "utf8");
     const rel = path.relative(ROOT, filePath);
-    const changed = (oldChecksum || "") !== checksum;
-    console.log(`Updated: ${rel} (checksum: ${checksum})${changed ? "\n  Reminder: set last_change to the newly added hash (see id:sk-d7bf67)." : ""}`);
+    console.log(`Updated: ${rel} (checksum: ${checksum})\n  Reminder: set last_change to the newly added hash (see id:sk-d7bf67).`);
+    return true;
 }
 
 function main() {
-    let count = 0;
+    let processed = 0;
+    let updated = 0;
     for (const dir of SKILL_DIRS) {
         const files = walkMarkdownFiles(dir);
         for (const file of files) {
             if (isExempt(file)) continue;
-            updateFile(file);
-            count++;
+            processed++;
+            if (updateFile(file)) updated++;
         }
     }
-    console.log(`\nSuccessfully updated ${count} skills with new checksums and audit dates.`);
+    console.log(`\nProcessed ${processed} skills, updated ${updated} with new checksums and audit dates.`);
 }
 
 main();

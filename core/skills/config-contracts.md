@@ -2,7 +2,7 @@
 id: sk-02d3ea
 title: "Config Layer & SSOT Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-08
+reasoning_audited_at: 2026-03-09
 reasoning_checksum: 635c80d1
 last_change: ""
 
