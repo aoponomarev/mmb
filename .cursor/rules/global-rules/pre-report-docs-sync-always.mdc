@@ -1,0 +1,20 @@
+---
+description: Mandatory pre-report documentation sync. Before forming the task report, update docs, causalities, create skills.
+globs: *
+alwaysApply: true
+---
+
+# Pre-Report Documentation Sync (Mandatory)
+
+## Contract
+Before forming any task completion report (summary, "выполнено", итоги), the agent MUST follow id:sk-9e4f2a (process-pre-report-docs-sync).
+
+## Checklist (run before report)
+1. Update docs/AIS with all changes made.
+2. Add new causality hashes to causality-registry.md.
+3. Create skills if explicit automation fragments or specific approaches were discovered.
+4. Update contracts if new gates/config were introduced.
+5. Only then form the report.
+
+## Violation
+Report without completing the checklist = contract violation. Docs and causalities must stay live-actual.

@@ -143,6 +143,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-tab-provider-decoupling` | Settings modal has tabs (postgres, github) that are not valid AI providers. Sync activeTab ↔ provider only when tab is a valid provider; prevents saving invalid providers to cache and startup warnings. |
 | `#for-invalid-provider-cleanup` | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
 | `#for-utf8-no-bom-lf` | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
+| `#for-pre-report-docs-sync` | Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual. |
 
 ## Aliases / Deprecated
 
