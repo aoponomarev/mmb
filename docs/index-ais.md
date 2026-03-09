@@ -11,7 +11,7 @@ last_updated: "2026-03-09"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 18
+> Auto-generated. Total: 28
 
 ---
 
@@ -19,15 +19,25 @@ last_updated: "2026-03-09"
 - [id:ais-e9a5c2](ais/ais-agent-orchestration-contour.md) — AIS: Контур оркестрации агентов (Agent Orchestration Contour)
 - [id:ais-9f4e2d](ais/ais-anti-staleness.md) — AIS: Антиустареватель скиллов и казуальностей (Skill & Causality Anti-Staleness)
 - [id:ais-bfd150](ais/ais-architecture-foundation.md) — AIS: Фундаментальная Архитектура (Architecture Concepts)
+- [id:ais-54c2aa](ais/ais-auth-lifecycle.md) — AIS: Жизненный цикл аутентификации (Authentication Lifecycle)
+- [id:ais-5db77e](ais/ais-bootstrap-lifecycle.md) — AIS: Жизненный цикл bootstrap модулей (Bootstrap Lifecycle)
+- [id:ais-82c9d0](ais/ais-cache-architecture.md) — AIS: Архитектура кэша и реестров (Cache Architecture & Registries)
+- [id:ais-b6c7d8](ais/ais-causality-anchors.md) — AIS: Казуальность и якоря (Causality & Anchors)
 - [id:ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
 - [id:ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
 - [id:ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
+- [id:ais-d4e5f6](ais/ais-domains-map.md) — AIS: Карта доменов и ограниченных контекстов (Domains & Bounded Contexts)
+- [id:ais-c2d3e4](ais/ais-event-transport.md) — AIS: Шина событий, транспорт, мосты и перехватчики (Event Bus, Transport, Bridge, Middleware)
+- [id:ais-71a8b9](ais/ais-executable-units.md) — AIS: Исполняемые единицы — модуль, сервис, провайдер, фасад, оркестратор (Executable Units)
 - [id:ais-f7e2a1](ais/ais-file-header-standard.md) — AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
 - [id:ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
 - [id:ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, Yandex Cloud, AI, N8N)
 - [id:ais-8b2f1c](ais/ais-infrastructure-snapshots.md) — AIS: Инфраструктурные снимки (Rollback-Safe Deployments)
 - [id:ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
+- [id:ais-a1b2c3](ais/ais-layers-topology.md) — AIS: Топология слоёв, сегментов, границ и пространств имён (Layers, Segments, Boundaries, Namespaces)
+- [id:ais-e3f4a5](ais/ais-lifecycle.md) — AIS: Жизненные циклы сущностей (Entity Lifecycles)
 - [id:ais-8d3c2a](ais/ais-mcp-data-flow.md) — AIS: Поток данных MCP (MCP Data Flow)
+- [id:ais-f5a6b7](ais/ais-policies-schemas.md) — AIS: Политики и схемы валидации (Policies & Schemas)
 - [id:ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [id:ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
 - [id:ais-7f8e9d](ais/ais-ssot-contract-plane.md) — AIS: Плоскость контрактов SSOT (SSOT Contract Plane)

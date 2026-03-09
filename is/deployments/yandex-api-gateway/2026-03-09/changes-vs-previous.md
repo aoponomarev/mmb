@@ -1,3 +1,11 @@
+---
+id: doc-6abdf1
+status: active
+last_updated: "2026-03-09"
+
+---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
+
 # Changes vs Previous State
 
 ## Baseline

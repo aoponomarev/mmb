@@ -20,7 +20,7 @@ last_change: ""
 
 ## Reasoning
 
-- **#for-anti-calque** Transliterated Russian abbreviations (mbb, mmb, EIP) break text searches, increase cognitive load, and cause AI hallucination. Use standard English IT terminology instead.
+- **#for-anti-calque** Transliterated Russian abbreviations (mbb, mmb) break text searches, increase cognitive load, and cause AI hallucination. Use standard English IT terminology instead.
 - **#for-skills-english** Skills must be in English since they are indexed and consumed by MCP servers and AI agents.
 - **#for-code-english** Code comments and variables must be universally readable by future maintainers and agents.
 - **#for-russian-in-docs** Stakeholder-facing docs (migration plans, runbooks) may use Russian, but implementation artifacts must stay English.
@@ -34,7 +34,7 @@ last_change: ""
 - This includes titles, section text, comments, checklists, and operational instructions.
 - Legacy non-English content is allowed only as quoted historical context when strictly needed for migration fidelity, including legacy abbreviations and their original Russian expansions.
 - Russian is permitted in ALL documentation files across different folders (not just `docs/plans/`). However, all code, code comments, variable names, commit messages, and skills (`skills/**`) MUST remain strictly in English.
-- Any file containing Cyrillic text MUST be saved in UTF-8. Encoding regressions (mojibake, e.g. U+FFFD replacement character or BOM rendered as cp1251 text) are treated as documentation corruption and must be fixed before closing the task.
+- Any file containing Cyrillic text MUST be saved in UTF-8. Encoding regressions (mojibake, e.g. U+FFFD replacement character or BOM rendered as cp1251 text) are treated as documentation corruption and must be fixed before closing the task. See id:sk-8f3a2e (process-encoding-policy): UTF-8 without BOM + LF globally.
 
 ## Contracts
 
@@ -42,7 +42,7 @@ When a Russian concept must be named in English (e.g. for code or file paths), y
 
 | Russian Concept | Meaning | ❌ BANNED (Calque) | ✅ REQUIRED (Translation) |
 |---|---|---|---|
-| **ЕИП** (Единый Источник Правды) | Single Source of Truth | `EIP` | `SSOT` |
+| **ЕИП** (Единый Источник Правды) | Single Source of Truth | `-` | `SSOT` |
 | **MBB/MMB** | Legacy / PF | `MBB`, `MMB` | `Legacy PF`, `PF` |
 | **Контур** (когда имеется в виду слой) | Vertical hierarchy level | `Contour` | `Layer` |
 | **Сервис** (когда имеется в виду адаптер к API) | External data fetcher | `Service` | `Provider` / `Adapter` |

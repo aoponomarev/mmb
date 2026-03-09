@@ -1,7 +1,8 @@
 /**
  * #JS-BK2i557V
- * @description Global encoding gate: UTF-8 no BOM + mojibake detection in docs markdown.
- * @skill id:sk-883639
+ * @description Global encoding gate: UTF-8 no BOM + LF + mojibake detection in docs markdown.
+ * @skill id:sk-8f3a2e
+ * @causality #for-utf8-no-bom-lf
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -18,6 +19,10 @@ function hasUtf8Bom(buffer) {
     buffer[1] === 0xbb &&
     buffer[2] === 0xbf
   );
+}
+
+function hasCrlf(buffer) {
+  return buffer.includes(0x0d) && buffer.includes(0x0a);
 }
 
 function walkMarkdown(dir, files = []) {
@@ -48,10 +53,11 @@ function main() {
     const rel = path.relative(ROOT, full).replace(/\\/g, "/");
     const buf = fs.readFileSync(full);
     const text = buf.toString("utf8");
-    if (!hasUtf8Bom(buf)) {
-      // expected mode: UTF-8 without BOM; nothing to report
-    } else {
+    if (hasUtf8Bom(buf)) {
       errors.push(`[validate-docs-encoding] BOM is forbidden: ${rel}`);
+    }
+    if (hasCrlf(buf)) {
+      errors.push(`[validate-docs-encoding] CRLF forbidden, use LF: ${rel}`);
     }
     if (containsMojibake(text)) {
       errors.push(`[validate-docs-encoding] Mojibake marker found: ${rel}`);
@@ -63,7 +69,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log("[validate-docs-encoding] OK: docs markdown is UTF-8 without BOM and no mojibake markers.");
+  console.log("[validate-docs-encoding] OK: docs markdown is UTF-8 without BOM, LF line endings, no mojibake.");
 }
 
 main();

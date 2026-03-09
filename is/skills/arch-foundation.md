@@ -7,8 +7,8 @@ tags:
   - "#naming"
   - "#mcp"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-08
-reasoning_checksum: 55766084
+reasoning_audited_at: 2026-03-09
+reasoning_checksum: 4f13e939
 last_change: "#for-root-path-unambiguity — PF means repo root, not app/ layer path"
 related_skills:
   - sk-0e193a
@@ -26,7 +26,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 ## Reasoning
 
-- **#for-anti-calque** We reject old Russian abbreviations (mbb, mmb, EIP) to lower cognitive load and improve AI search accuracy. Standard IT terms are used instead.
+- **#for-anti-calque** We reject old Russian abbreviations (mbb, mmb) to lower cognitive load and improve AI search accuracy. Standard IT terms are used instead.
 - **#for-ssot-paths** `paths.js` centralizes absolute paths, preventing CWD-dependent breakage in scripts.
 - **#for-imports-relative** Module code strictly uses relative imports so we don't break bundlers or IDE static analysis.
 - **#for-file-protocol** The UI must run locally via `file://`. We proxy API requests through Cloudflare Workers to bypass CORS without a local Node backend.

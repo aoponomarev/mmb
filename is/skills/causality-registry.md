@@ -16,7 +16,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 
 | Hash | Formulation |
 |------|-------------|
-| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
+| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
 | `#for-ssot-paths` | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
 | `#for-root-path-unambiguity` | In this repository, "PF" means repository root, not the `app/` layer folder. Contracts and archives under `is/` must never be prefixed with `app/`, or agents will create path drift (`app/is/...`) and break SSOT navigation. |
 | `#for-imports-relative` | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
@@ -29,13 +29,13 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-order-as-contract` | The sequence (Review → Add → Score → Gate) prevents agents from adding confidence scores without verifying alignment. Scoring before review would be meaningless. |
 | `#for-confidence-by-agent` | Only an AI (or human) that has analyzed the codebase can assign a meaningful score. Automated checks cannot verify semantic alignment. |
 | `#for-gate-enforcement` | Without a failing gate, the protocol would be advisory. The gate makes Reasoning accuracy a release blocker, matching the project's "high cost of errors" stance. |
-| `#for-fail-fast` | Fail-fast over graceful degradation during migration: fallback chains for external critical contracts are intentionally avoided. Failed provider = visible failure, not silent data corruption. |
+| `#for-fail-fast` | Fail-fast applies at validation/provider-call boundaries: reject malformed input and surface provider errors immediately. Explicit, observable fallback at orchestrator/facade level is allowed when governed by `#for-dual-channel-fallback` and `#for-readonly-fallbacks`; hidden silent degradation is forbidden. |
 | `#for-partial-failure-tolerance` | `getAllBestEffort` returns healthy metrics alongside error reports for failed ones, preventing one bad metric from blocking the entire snapshot. |
 | `#for-rate-limiting` | Free-tier APIs have strict rate limits. Proactive waiting avoids persistent 429 failures. |
 | `#for-single-writer-guard` | A strict `DATA_PLANE_ACTIVE_APP` contract ensures only one environment (Target or Legacy) writes to shared cloud resources, preventing data races. |
 | `#for-hardcode-ban` | Scattered hardcoded strings cause maintenance drift — the same label updated in one place but not another. A single SSOT config is the only mutation point. |
 | `#for-zod-ui-validation` | A typo in a config (missing required key) must not produce silent runtime errors on the client. Fail-fast at test time catches it before deployment. |
-| `#for-eip` | Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding. |
+| `#for-env-sync-ssot` | Divergence between `.env` and `.env.example` is the #1 cause of "works on my machine" failures. New keys without template entries break CI and onboarding. |
 | `#for-filesystem-cache` | A file-based cache survives script restarts, is trivially cleared, and does not consume application RAM. |
 | `#for-layer-separation` | Layer separation (Service → Transport → HTTP Handler → Server): each layer has single responsibility, making testing trivial and replacement easy. |
 | `#for-composition-root` | Composition Root pattern: assemble all dependencies in one place, enabling test-time injection of mocks and ensuring no hidden coupling. |
@@ -117,7 +117,6 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-fresh-chats` | After 6–8 exchanges or when switching domains, start a new chat — condensation loses detail. |
 | `#for-minimum-viable-at` | Attach only files the agent actually needs; agent can explore more if needed. |
 | `#for-token-budget` | alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided. |
-| `#for-distillation-cleanup` | After a completed plan in `docs/done/` is fully distilled into specifications and skills, the original file MUST be deleted. The folder `docs/done/` remains, but keeping distilled files creates redundant, dead knowledge. |
 | `#for-prefix-ssot` | A single prefix registry prevents ad-hoc prefixes and naming drift. All consumers read from one source. |
 | `#for-prefix-gate` | The validate-skills gate fails preflight on unregistered prefixes, forcing registration before use. |
 | `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
@@ -143,6 +142,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |
 | `#for-tab-provider-decoupling` | Settings modal has tabs (postgres, github) that are not valid AI providers. Sync activeTab ↔ provider only when tab is a valid provider; prevents saving invalid providers to cache and startup warnings. |
 | `#for-invalid-provider-cleanup` | Legacy cache may contain 'postgres' or 'github' as ai-provider. Sanitize on load to valid provider list; proactively clean cache to prevent UI break and console warnings. |
+| `#for-utf8-no-bom-lf` | UTF-8 without BOM and LF line endings everywhere. BOM breaks Unix tooling and Git diffs; CRLF causes cross-platform inconsistency. Single canonical encoding for all text files. |
 
 ## Aliases / Deprecated
 
@@ -150,4 +150,4 @@ When a hash is renamed or superseded, list it here so agents and tooling can res
 
 | Old / Alias | Current / Replacement | Note |
 |-------------|----------------------|------|
-| *(none yet)* | — | Add entries when hashes are renamed or deprecated. |
+| `#for-eip` | `#for-env-sync-ssot` | Legacy alias kept for backward compatibility; use `#for-env-sync-ssot` in new artifacts. |

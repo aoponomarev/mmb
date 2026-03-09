@@ -2,8 +2,8 @@
 id: sk-802f3b
 title: "Causality Harvesting"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-08
-reasoning_checksum: 514aa3d6
+reasoning_audited_at: 2026-03-09
+reasoning_checksum: e58d2adc
 last_change: "#for-causality-question-marker — only @causality QUESTION is valid raw candidate format"
 
 ---

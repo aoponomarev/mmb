@@ -4,8 +4,8 @@ title: "Infrastructure Snapshots (Rollback-Safe Deployments)"
 tags: "[#architecture, #deploy, #rollback, #cloud]"
 status: active
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-08"
-reasoning_checksum: d8cab69d
+reasoning_audited_at: "2026-03-09"
+reasoning_checksum: e17cef3a
 last_change: "#for-deploy-snapshot-diff — every snapshot must include current settings and explicit diff vs previous state"
 
 ---

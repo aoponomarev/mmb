@@ -1,3 +1,11 @@
+---
+id: readme-022440
+status: active
+last_updated: "2026-03-09"
+
+---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
+
 # Deployment Snapshot: `cloudflare-edge-api` (2026-03-09)
 
 ## Scope

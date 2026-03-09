@@ -5,6 +5,10 @@ last_updated: "2026-03-02"
 related_skills:
   - sk-883639
   - sk-02d3ea
+related_ais:
+  - ais-a1b2c3
+  - ais-71a8b9
+  - ais-d4e5f6
 
 ---
 

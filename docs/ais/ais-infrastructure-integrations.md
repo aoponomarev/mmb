@@ -13,6 +13,8 @@ related_ais:
   - ais-e41384
   - ais-f6b9e2
   - ais-91b7f4
+  - ais-c2d3e4
+  - ais-71a8b9
 
 ---
 

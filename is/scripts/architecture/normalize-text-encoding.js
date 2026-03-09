@@ -1,14 +1,13 @@
 /**
  * #JS-ZqVGzZnJ
  * @description Normalizes project text files to UTF-8 without BOM and LF.
- * @skill id:sk-883639
+ * @skill id:sk-8f3a2e
+ * @causality #for-utf8-no-bom-lf
  */
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "../../contracts/path-contracts.js";
-
-const EXCLUDE_DIRS = new Set(["node_modules", ".git", ".cursor"]);
-const TEXT_EXT = new Set([".md", ".mdc", ".js", ".ts", ".json", ".yml", ".yaml", ".ps1", ".css", ".html"]);
+import { TEXT_EXT, EXCLUDE_DIRS } from "../../contracts/encoding-contract.js";
 
 function walk(dir, files = []) {
   if (!fs.existsSync(dir)) return files;

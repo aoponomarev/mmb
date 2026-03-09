@@ -16,6 +16,7 @@ import {
 
 import { ROOT } from "../../contracts/path-contracts.js";
 const EXCLUDE = new Set(["node_modules", ".git", ".cursor", "docs"]);
+const SNAPSHOT_SOURCE_RE = /^is\/deployments\/[^/]+\/\d{4}-\d{2}-\d{2}\/source\//;
 
 function walk(dir, ext, out = []) {
   if (!fs.existsSync(dir)) return out;
@@ -42,6 +43,9 @@ function main() {
     for (const ext of [".js", ".ts"]) {
       for (const file of walk(dirPath, ext)) {
         const rel = path.relative(ROOT, file).replace(/\\/g, "/");
+        // Deployment snapshots intentionally preserve original headers from source files.
+        // We do not rewrite historical evidence to match archive-relative paths.
+        if (SNAPSHOT_SOURCE_RE.test(rel)) continue;
         let content = fs.readFileSync(file, "utf8");
         const header = extractHeaderComment(content);
         if (!header) continue;

@@ -9,6 +9,9 @@ related_skills:
   - sk-3c832d
 related_ais:
   - ais-e41384
+  - ais-82c9d0
+  - ais-d4e5f6
+  - ais-71a8b9
 
 ---
 
@@ -35,6 +38,27 @@ related_ais:
 | PG доступен, все монеты найдены | CoinGecko phase = 0, мгновенная загрузка |
 | PG доступен, часть отсутствует | PG отдаёт bulk, CG добирает остальное |
 | PG недоступен | Полный fallback на CoinGecko |
+
+### Fallback State Machine (formal)
+
+```mermaid
+stateDiagram-v2
+    [*] --> tryPg
+    tryPg --> pgFull: pg_ok && missing_ids==0
+    tryPg --> pgPartial: pg_ok && missing_ids>0
+    tryPg --> pgDown: pg_fail
+    pgPartial --> tryCgMissing: fetch_missing_ids
+    pgDown --> tryCgAll: fetch_all_ids
+    tryCgMissing --> mergedOk: cg_ok
+    tryCgAll --> mergedOk: cg_ok
+    tryCgMissing --> readonlyFallback: cg_fail && pg_partial_data
+    tryCgAll --> hardFail: cg_fail && no_pg_data
+    readonlyFallback --> mergedOk: retry_or_next_cycle
+```
+
+- `#for-dual-channel-fallback`: fallback разрешён на уровне фасада-оркестратора, не внутри низкоуровневого transport слоя.
+- `#for-readonly-fallbacks`: fallback branch never writes back into server SSOT.
+- `#for-fail-fast`: malformed payload or provider contract violation must fail immediately, without hidden retries.
 | CG rate-limited (429) | Retry countdown, requestRegistry |
 | Оба недоступны | Fallback на локальный кэш, stale warning |
 

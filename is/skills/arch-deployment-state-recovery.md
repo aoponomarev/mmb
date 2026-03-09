@@ -5,7 +5,7 @@ tags: "[#architecture, #deploy, #rollback, #recovery]"
 status: active
 reasoning_confidence: 0.95
 reasoning_audited_at: 2026-03-09
-reasoning_checksum: a1e3c7f9
+reasoning_checksum: 78216aab
 last_change: "#for-config-code-parity-restore — recovery must include code/architecture parity, not only cloud config"
 related_skills:
   - sk-e8f2a1

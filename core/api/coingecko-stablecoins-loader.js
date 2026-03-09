@@ -170,7 +170,7 @@
 
     async function load({ forceRefresh = false, ttl = 24 * 60 * 60 * 1000 } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
-            console.warn('coingeckoStablecoinsLoader: cacheManager или coinsConfig not loadedы');
+            console.warn('coingeckoStablecoinsLoader: cacheManager or coinsConfig not loaded');
             return [];
         }
         // Hard 24h limit: block requests if successful one was recent
@@ -228,7 +228,7 @@
                 window.requestRegistry.recordCall('coingecko', 'stablecoins', { vs: BASE_CURRENCIES }, 200, true);
             }
             window.coinsConfig.setStablecoins(normalized);
-            console.log(`coingeckoStablecoinsLoader: loadedо ${normalized.length} стейблкоинов`);
+            console.log(`coingeckoStablecoinsLoader: loaded ${normalized.length} stablecoins`);
 
             return normalized;
         } catch (error) {

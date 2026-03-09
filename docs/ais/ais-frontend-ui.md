@@ -8,6 +8,10 @@ related_skills:
   - sk-add9a6
   - sk-eeb23d
   - sk-130fa2
+related_ais:
+  - ais-a1b2c3
+  - ais-c2d3e4
+  - ais-71a8b9
 
 ---
 

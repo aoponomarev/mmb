@@ -8,6 +8,7 @@ related_skills:
 related_ais:
   - ais-c6c35b
   - ais-f7e2a1
+  - ais-f5a6b7
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->

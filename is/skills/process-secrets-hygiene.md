@@ -2,8 +2,8 @@
 id: sk-b7e114
 title: "Process: Secrets Hygiene & Git Boundary"
 reasoning_confidence: 0.95
-reasoning_audited_at: 2026-03-08
-reasoning_checksum: a580359e
+reasoning_audited_at: 2026-03-09
+reasoning_checksum: 1391be98
 last_change: ""
 
 ---
@@ -18,7 +18,7 @@ last_change: ""
 - **#for-zero-tolerance-secrets** Secrets in Git propagate forever. Prevention is the only strategy, as rotation is costly.
 - **#for-encrypted-backup** AES-256 archives in `is/secrets/archives/` enable quick 1-command restores, avoiding painful manual reconstruction on new machines.
 - **#for-no-bypass-push** Bypassing GitHub secret detection with `--no-verify` defeats the safety net; leaks must be fixed properly.
-- **#for-eip** The `.env` / `.env.example` sync boundary ensures no required keys are silently forgotten by team members.
+- **#for-env-sync-ssot** The `.env` / `.env.example` sync boundary ensures no required keys are silently forgotten by team members.
 
 ---
 

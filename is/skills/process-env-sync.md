@@ -2,8 +2,8 @@
 id: sk-918276
 title: "Process: Environment Sync Governance"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-08
-reasoning_checksum: 590b362d
+reasoning_audited_at: 2026-03-09
+reasoning_checksum: 75b2c9e4
 last_change: ""
 
 ---
@@ -15,7 +15,7 @@ last_change: ""
 
 ## Reasoning
 
-- **#for-eip** Divergence between `.env` and `.env.example` is the primary cause of "works on my machine" and CI failures.
+- **#for-env-sync-ssot** Divergence between `.env` and `.env.example` is the primary cause of "works on my machine" and CI failures.
 - **#for-preflight-enforcement** Preflight Zod validation ensures the contract is maintained—fix the drift before committing.
 - **#for-placeholders-no-secrets** Committing `.env.example` with descriptive placeholders documents requirements without leaking actual keys.
 - **#for-single-writer-guard** Environment config ensures only one runtime actively writes to cloud resources.

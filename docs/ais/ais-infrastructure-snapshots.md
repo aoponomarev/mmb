@@ -1,6 +1,6 @@
 ---
 id: ais-8b2f1c
-status: draft
+status: incomplete
 last_updated: "2026-03-08"
 related_skills:
   - sk-e8f2a1
@@ -9,6 +9,8 @@ related_skills:
 related_ais:
   - ais-e41384
   - ais-775420
+  - ais-e3f4a5
+  - ais-f5a6b7
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->

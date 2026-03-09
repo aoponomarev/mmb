@@ -7,6 +7,8 @@ related_skills:
   - sk-0e193a
 related_ais:
   - ais-9f4e2d
+  - ais-e3f4a5
+  - ais-b6c7d8
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -33,7 +35,7 @@ graph TD
 - Active markdown documents must use `id:` contracts resolved through `is/contracts/docs/id-registry.json`.
 - Mixed reference mode is mandatory: first governance-grade mention may include `(path)`, repeated mentions in the same file should collapse to bare `id:`.
 - For code-file references, use `#JS-... (basename.js)` when basename is unique in the registry; use a full repo-relative path only for ambiguous basenames.
-- Encoding policy is strict: UTF-8 without BOM for markdown, and mojibake markers block preflight.
+- Encoding policy is global: UTF-8 without BOM + LF for all text files. Mojibake markers block preflight. SSOT: id:sk-8f3a2e (process-encoding-policy), contract: encoding-contract.js.
 
 ## Components & Contracts
 
@@ -46,8 +48,8 @@ graph TD
 
 | ID | Gate | Script | Scope |
 |------|------|--------|-------|
-| #JS-Hx2xaHE8 | All markdown have `id` | validate-global-md-ids.js | 104 files |
+| #JS-V63juXRG | All markdown have `id` | validate-global-md-ids.js | 104+ files |
 | #JS-ht4FZQe4 | `id:` links resolve | validate-id-contract-links.js | all `.md` |
 | #JS-3e2BNNyp | No raw path-only doc refs in active docs | audit-path-centric-doc-links.js | docs/** active |
 | #JS-E4UcKE1H | No raw path-only doc refs in active skills | audit-path-centric-skill-links.js | skills/** active |
-| #JS-BK2i557V | UTF-8 no BOM, no mojibake | validate-docs-encoding.js | docs/** |
+| #JS-BK2i557V | UTF-8 no BOM, LF, no mojibake | validate-docs-encoding.js | docs/** |

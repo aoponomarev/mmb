@@ -4,8 +4,11 @@ status: incomplete
 last_updated: "2026-03-04"
 related_skills:
   - sk-0e193a
+  - sk-c3d639
 related_ais:
   - ais-e41384
+  - ais-d4e5f6
+  - ais-71a8b9
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -35,7 +38,9 @@ related_ais:
 - #JS-69pjw66d (validate-causality.js) — все решения `@causality #for-*` должны проходить проверку.
 - #JS-Hx2xaHE8 (validate-docs-ids.js) — id AIS должен оставаться стабильным.
 
-## Завершение
+## Завершение / completeness
 
 - Legacy paths: #JS-cMCNbcJ1 SKIP_LINK_PATTERNS.
+- `@causality #for-integration-legacy-remediation` — legacy-ссылки ремедиируются атомарно.
+- Status: `incomplete` — pending полная спецификация portfolio domain contracts (портфель, хранение, валидация). Подробная доменная карта — в id:ais-d4e5f6.
 

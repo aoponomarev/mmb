@@ -1,3 +1,11 @@
+---
+id: readme-fbd0bf
+status: active
+last_updated: "2026-03-09"
+
+---
+<!-- Важно: оставлять пустую строку перед "---" ! -->
+
 # Deployment Snapshot: `yandex-market-fetcher` (2026-03-09)
 
 ## Scope
