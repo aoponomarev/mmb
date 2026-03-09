@@ -4,7 +4,7 @@ title: "Causality Harvesting"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-08
 reasoning_checksum: 514aa3d6
-last_change: ""
+last_change: "#for-causality-question-marker — only @causality QUESTION is valid raw candidate format"
 
 ---
 
@@ -15,24 +15,28 @@ last_change: ""
 
 ## Reasoning
 
-- **#for-causality-harvesting** Enforcing immediate registry updates for every minor architectural decision breaks developer flow. Using "raw" `@causality` markers in inline comments allows agents and developers to log the "Why" instantly, creating a searchable backlog of potential patterns that can be harvested later.
+- **#for-causality-harvesting** Enforcing immediate registry updates for every minor architectural decision breaks developer flow. Using explicit candidate markers keeps backlog capture fast while preserving machine-readability.
+- **#for-causality-question-marker** The candidate format must be unambiguous (`@causality QUESTION:`). Otherwise agents cannot distinguish intentional backlog items from accidental unfinished annotations.
 
 ## Core Rules
 
-1.  **Raw Causality Markers (The Seed):**
-    When solving edge cases or implementing non-obvious logic, agents and developers must leave a raw marker in the code:
-    `// @causality Because the File API throws on X, we must do Y...`
+1.  **Candidate Marker (The Seed):**
+    When solving edge cases or implementing non-obvious logic with unresolved rationale, agents and developers must use:
+    `// @causality QUESTION: Because the File API throws on X, should we do Y or refactor Z?`
     *(Note: This differs from `@skill-anchor` which links to an existing skill/hash).*
 
 2.  **The Skill Watcher (Harvester Role):**
-    AI agents acting in a maintenance or review capacity must scan the codebase for `// @causality` markers (without hashes).
+    AI agents acting in maintenance/review must scan only `// @causality QUESTION:` markers (without hashes).
     
 3.  **Pattern Aggregation:**
-    If a similar raw `@causality` explanation is found in 3 or more places across the codebase (e.g., repeating the same logic about CORS or Vue rendering), the agent must:
+    If a similar candidate explanation is found in 3 or more places across the codebase (e.g., repeating the same logic about CORS or Vue rendering), the agent must:
     - **Formulate a Hash**: Create a standardized `#for-xyz` hash.
     - **Register**: Add it to id:sk-3b1519 (is/skills/causality-registry.md).
     - **Promote to Skill**: If the pattern warrants it, generate a new architectural skill `.md` file using `npm run skills:create`.
-    - **Refactor Code**: Go back to the original files, replace the raw `// @causality ...` with a formalized `// @skill-anchor path/to/skill #for-xyz` linking to the new contract.
+    - **Refactor Code**: Replace the candidate marker with formalized hash-based causality:
+      - `// @causality #for-xyz ...` or
+      - `// @skill-anchor path/to/skill #for-xyz`
+    - **Invalid format policy**: `@causality` without hash and without `QUESTION:` is considered unformalized debt, not a valid candidate.
 
 ## Contracts
 

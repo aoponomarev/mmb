@@ -27,6 +27,15 @@ const EXCLUDE_FILES = [
 
 const HASH_REGEX = /#(?:for|not)-[\w-]+/g;
 
+function parseCausalityMarker(line) {
+  // Only parse actual comment lines to avoid false positives from regex/string literals.
+  const marker = line.match(/^\s*(?:\/\/+|\*+|\/\*+|<!--)\s*@(?:(causality)|(skill-anchor))\b([\s\S]*)$/i);
+  if (!marker) return null;
+  const kind = marker[1] ? "causality" : "skill-anchor";
+  const rest = (marker[3] || "").trim();
+  return { kind, rest };
+}
+
 function loadRegistryHashes() {
   const content = fs.readFileSync(REGISTRY_PATH, "utf8");
   const hashes = new Set();
@@ -67,17 +76,17 @@ function walkMarkdownFiles(dir, result = []) {
 }
 
 function extractHashesFromLine(line) {
-  if (!/@(?:causality|skill-anchor)/i.test(line)) return [];
-  const match = line.match(/@causality\s*[:]?\s*(.+?)(?:\s*$)/i) || line.match(/@skill-anchor\s+(.+?)(?:\s*$)/i);
-  const rest = match ? match[1] : "";
-  return (rest.match(HASH_REGEX) || []).map((h) => h);
+  const parsed = parseCausalityMarker(line);
+  if (!parsed) return [];
+  return (parsed.rest.match(HASH_REGEX) || []).map((h) => h);
 }
 
 function main() {
   const registryHashes = loadRegistryHashes();
   const usedHashes = new Set();
   const unknown = [];
-  const legacyNoHash = [];
+  const questionCandidates = [];
+  const invalidNoHash = [];
 
   for (const dir of CODE_DIRS) {
     const files = walkJsFiles(dir);
@@ -89,16 +98,20 @@ function main() {
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        if (/@causality/i.test(line) || /@skill-anchor/i.test(line)) {
-          const hashes = extractHashesFromLine(line);
-          if (hashes.length === 0) {
-            legacyNoHash.push({ file: relPath, line: i + 1, text: line.trim().slice(0, 80) });
+        const parsed = parseCausalityMarker(line);
+        if (!parsed) continue;
+        const hashes = (parsed.rest.match(HASH_REGEX) || []).map((h) => h);
+        if (hashes.length === 0) {
+          if (parsed.kind === "causality" && /^:?\s*QUESTION\s*:/i.test(parsed.rest)) {
+            questionCandidates.push({ file: relPath, line: i + 1, text: line.trim().slice(0, 120) });
           } else {
-            for (const h of hashes) {
-              usedHashes.add(h);
-              if (!registryHashes.has(h)) {
-                unknown.push({ file: relPath, line: i + 1, hash: h });
-              }
+            invalidNoHash.push({ file: relPath, line: i + 1, text: line.trim().slice(0, 120) });
+          }
+        } else {
+          for (const h of hashes) {
+            usedHashes.add(h);
+            if (!registryHashes.has(h)) {
+              unknown.push({ file: relPath, line: i + 1, hash: h });
             }
           }
         }
@@ -161,9 +174,16 @@ function main() {
     process.exit(1);
   }
 
-  if (legacyNoHash.length > 0) {
-    console.warn("[validate-causality] WARNING: @causality/@skill-anchor without hashes (legacy format):");
-    for (const l of legacyNoHash) {
+  if (questionCandidates.length > 0) {
+    console.warn("[validate-causality] WARNING: Intentional causality candidates found (@causality QUESTION: ...):");
+    for (const l of questionCandidates) {
+      console.warn(`  ${l.file}:${l.line} — ${l.text}...`);
+    }
+  }
+
+  if (invalidNoHash.length > 0) {
+    console.warn("[validate-causality] WARNING: Unformalized causality markers (missing #for/#not and not QUESTION:):");
+    for (const l of invalidNoHash) {
       console.warn(`  ${l.file}:${l.line} — ${l.text}...`);
     }
   }

@@ -1,6 +1,6 @@
 /**
  * #JS-2w2TdTy7
- * @description MCP tool: harvest_causalities — scans codebase for raw // @causality comments, adds to backlog, marks formalized as harvested.
+ * @description MCP tool: harvest_causalities — scans codebase for intentional @causality QUESTION markers, adds to backlog, marks formalized as harvested.
  * @causality #for-causality-harvesting
  */
 import fs from 'node:fs';
@@ -21,7 +21,7 @@ const HASH_REGEX = /#(?:for|not)-[\w-]+/;
 
 export const harvestCausalitiesToolDef = {
     name: "harvest_causalities",
-    description: "Scans the codebase for raw // @causality comments (without hashes) and adds them to the backlog for review.",
+    description: "Scans the codebase for @causality QUESTION markers and adds them to the backlog for review/formalization.",
     inputSchema: {
         type: "object",
         properties: {},
@@ -43,11 +43,11 @@ function walkCodeFiles(dir, result = []) {
     return result;
 }
 
-/** Only comment lines with raw @causality (excludes code/strings that mention @causality). */
-function isRawCausality(line) {
+/** Only intentional causality candidates: comment line + @causality QUESTION: + no hash. */
+function isQuestionCausality(line) {
     const trimmed = line.trim();
     const isComment = /^\s*(\/\/|\*|\/\*|<!--)/.test(line) || trimmed.startsWith('*');
-    return isComment && /@causality/i.test(line) && !HASH_REGEX.test(line);
+    return isComment && /@causality/i.test(line) && /^.*@causality\s*:?\s*QUESTION\s*:/i.test(line) && !HASH_REGEX.test(line);
 }
 
 export async function harvestCausalitiesHandler() {
@@ -83,7 +83,7 @@ export async function harvestCausalitiesHandler() {
 
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
-                    if (isRawCausality(line)) {
+                    if (isQuestionCausality(line)) {
                         const commentText = line.trim();
                         const { count } = checkStmt.get(relPath, i + 1);
                         if (count === 0) {

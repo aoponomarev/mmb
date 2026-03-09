@@ -87,6 +87,10 @@ this.ttl = { vix: 24 * 60 * 60 * 1000, fundingRate: 4 * 60 * 60 * 1000, ... };
 
 **Registry:** All hashes must exist in id:sk-3b1519. Add new hashes there before using.
 
+**Candidate format (unresolved rationale only):**
+- Use `// @causality QUESTION: ...` when rationale is intentionally unknown yet.
+- `@causality` without hash and without `QUESTION:` is invalid/unformalized and must be formalized or rewritten.
+
 ### Where Anchors Are Required
 
 | Code Pattern | Required anchor |

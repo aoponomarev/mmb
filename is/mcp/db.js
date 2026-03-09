@@ -18,7 +18,7 @@ if (!fs.existsSync(DATA_DIR)) {
 // Initialize DB
 const db = new Database(DB_PATH);
 // @causality #for-mcp-data-contour Single DB for MCP runtime; SSOT (id-registry, code-file-registry) stays in JSON, no cache.
-// @causality We use WAL journal mode because MCP servers run concurrently with VSCode/Cursor processes reading the DB, preventing database lock issues.
+// @causality #for-mcp-wal-concurrency VSCode/Cursor + agent readers require non-blocking concurrent access.
 db.pragma('journal_mode = WAL');
 
 // Define Schema

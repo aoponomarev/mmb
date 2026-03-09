@@ -22,7 +22,7 @@ export const queryTelemetryToolDef = {
 export async function queryTelemetryHandler(args) {
     const { query } = args;
     
-    // @causality We explicitly block mutations via regex here because this MCP tool runs within the user's environment and AI agents should not be able to accidentally drop or alter telemetry tables.
+    // @causality #for-mcp-readonly-queries local telemetry DB is query-only for MCP safety.
     if (!/^\s*SELECT/i.test(query)) {
         return {
             isError: true,

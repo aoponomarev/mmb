@@ -33,7 +33,7 @@ export const cfD1QueryToolDef = {
 export async function cfD1QueryHandler(args) {
     const { dbName, query, remote } = args;
     
-    // @causality We enforce SELECT-only at the MCP layer because D1 schema migrations must go through strict PR reviews and wrangler migrations, never ad-hoc AI mutations.
+    // @causality #for-mcp-readonly-queries D1 mutations must go through controlled migrations, never ad-hoc MCP calls.
     if (!/^\s*SELECT/i.test(query)) {
         return {
             isError: true,

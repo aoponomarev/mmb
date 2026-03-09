@@ -151,7 +151,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    // @causality We must use stderr for all console logs in MCP servers because stdout is exclusively reserved for the JSON-RPC protocol communication with the IDE.
+    // @causality #for-mcp-stdio-protocol stdout stays protocol-only, diagnostics go to stderr.
     console.error("MMB Causality MCP Server running on stdio"); 
 }
 

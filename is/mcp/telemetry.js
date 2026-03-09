@@ -15,7 +15,7 @@ export function logEvent(eventType, targetId, agentId = 'cursor', context = {}) 
         `);
         stmt.run(eventType, targetId, agentId, JSON.stringify(context));
     } catch (e) {
-        // @causality We swallow telemetry errors because a failed analytics write should never crash the core MCP server functionality for the user.
+        // @causality #for-telemetry-nonblocking telemetry failures must not take down core MCP flows.
         console.error('Failed to log telemetry event:', e);
     }
 }
