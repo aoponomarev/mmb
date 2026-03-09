@@ -66,7 +66,7 @@
         'top-coins-by-volume': TOP_COINS_REFRESH_WINDOW_MS,      // 2h (top 250 by volume)
         'active-coin-set-data': TOP_COINS_REFRESH_WINDOW_MS,     // 2h (full data of active coin set)
         'market-metrics': 60 * DURATIONS.HOUR,   // 1 hour
-        'vix-index': 24 * 60 * 60 * 1000,        // 24 hours (VIX volatility index)
+        'vix-index': 4 * 60 * 60 * 1000,         // 4 hours (VIX volatility index)
         'fear-greed-index': 24 * 60 * 60 * 1000,  // 24 hours (Fear & Greed Index)
         'api-cache': 5 * 60 * 1000,              // 5 minutes
         'time-series': 60 * DURATIONS.HOUR,       // 1 hour

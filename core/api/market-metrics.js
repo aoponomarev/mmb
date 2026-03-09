@@ -6,7 +6,7 @@
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
  * FEATURES:
- * - VIX: 24h caching + fallback (Yahoo Finance, Stooq VI.C, Alpha Vantage)
+     * - VIX: 4h caching + fallback (Yahoo Finance, Stooq VI.C, Alpha Vantage)
  * - FGI: alternative.me API
  * - BTC Dominance: CoinGecko API
  * - OI, FR, LSR: Binance Futures API
@@ -45,7 +45,10 @@
         },
 
         // Fetch FGI (Fear & Greed Index)
-        // Cached 24 hours
+        // Strategy:
+        // - Normal path: 24h cache; if cache hit and live not needed — silent.
+        // - On live success: update cache and return fresh value.
+        // - On live failure: if cache exists, use cached value and inform user via messagesStore.
         async fetchFGI(options = {}) {
             const force = options.forceRefresh || false;
             // Check cache (24 hours)
@@ -76,6 +79,34 @@
                 return { success: true, value: fgiVal.toString(), numericValue: fgiVal, source: 'Alternative.me' };
             } catch (error) {
                 console.error('FGI fetch error:', error);
+                // On live failure, try using cached value as fallback
+                if (window.cacheManager) {
+                    const cached = await window.cacheManager.get('fear-greed-index');
+                    if (cached && cached.value !== null) {
+                        fgiVal = cached.value;
+                        this.updateWindowMetrics();
+                        const originalSource = cached.source || 'Alternative.me';
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = error ? `; ошибка live: ${error.message || String(error)}` : '';
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: `FGI: ${fgiVal} (из кэша, live-источник недоступен; исходный source: ${originalSource}, ${date}${errorSuffix})`,
+                                scope: 'global',
+                                duration: 7000
+                            });
+                        }
+                        return { success: true, value: fgiVal.toString(), numericValue: fgiVal, source: originalSource };
+                    }
+                }
+                // No cache fallback available
                 fgiVal = 0;
                 this.updateWindowMetrics();
                 return { success: false, value: null, numericValue: 0 };
@@ -83,45 +114,13 @@
         },
 
         // Fetch VIX from multiple sources (fallback strategy)
-        // Cached 24 hours
+        // Strategy:
+        // 1) Try live sources (Yahoo via Cloudflare proxy, Yahoo direct, Stooq, Alpha Vantage).
+        // 2) On live success: update cache (4h TTL, see cache-config.js: vix-index) and show one success message.
+        // 3) If ALL live sources fail but cache exists: use cache as fallback and show info that live is unavailable.
+        // 4) If neither live nor cache works: mark VIX as unavailable, no cache.
         async fetchVIX(options = {}) {
             const force = options.forceRefresh || false;
-            // Check cache (24 hours)
-            if (window.cacheManager && !force) {
-                const cached = await window.cacheManager.get('vix-index');
-                if (cached && cached.value !== null) {
-                    // If cache has no source, reload from API
-                    if (!cached.source) {
-                        console.log('VIX: cache missing source, reloading from API...');
-                        // Remove cache without source and continue API load
-                        await window.cacheManager.delete('vix-index');
-                    } else {
-                        vixVal = cached.value;
-                        vixAvailable = true;
-                        this.updateWindowMetrics();
-                        const originalSource = cached.source;
-                        console.log('VIX loaded из кэша:', vixVal.toFixed(2), 'исходный source:', originalSource);
-
-                        // Show source message (original source, not "cache")
-                        if (window.messagesStore) {
-                            const date = new Date(cached.timestamp).toLocaleString('ru-RU', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            });
-                            window.messagesStore.addMessage({
-                                type: 'info',
-                                text: `VIX: ${vixVal.toFixed(2)} (из кэша, исходный source: ${originalSource}, ${date})`,
-                                scope: 'global',
-                                duration: 5000
-                            });
-                        }
-
-                        return { success: true, value: vixVal.toFixed(2), numericValue: vixVal, source: originalSource };
-                    }
-                }
-            }
 
             // Determine if proxy needed (file://, GitHub Pages, or localhost)
             const isFileProtocol = window.location.protocol === 'file:' || 
@@ -228,6 +227,9 @@
                 }
             ];
 
+            let lastLiveError = null;
+            let triedLive = false;
+
             for (const getter of sources) {
                 try {
                     const result = await getter.call(this);
@@ -236,29 +238,99 @@
                         vixAvailable = true;
                         this.updateWindowMetrics();
 
-                        // Save to cache 24h
+                        const fetchedAt = Date.now();
+
+                        // Save to cache (TTL 4h via cache-config)
                         if (window.cacheManager) {
-                            await window.cacheManager.set('vix-index', { value: result.value, timestamp: Date.now(), source: result.sourceName });
+                            await window.cacheManager.set('vix-index', {
+                                value: result.value,
+                                timestamp: fetchedAt,
+                                source: result.sourceName
+                            });
                         }
 
                         console.log('VIX успешно получен:', result.value.toFixed(2), 'из', result.sourceName);
 
-                        // Show source message
+                        // Build human-readable source + timestamp for message
+                        let sourceLabel = result.sourceName || 'Unknown source';
+                        let baseSource = sourceLabel;
+                        let qualifier = '';
+                        const match = sourceLabel.match(/^(.+?) \((.+)\)$/);
+                        if (match) {
+                            baseSource = match[1];
+                            qualifier = match[2];
+                        }
+
+                        const dateStr = new Date(fetchedAt).toLocaleString('ru-RU', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        const formattedSource =
+                            qualifier
+                                ? `${baseSource} ${dateStr} (${qualifier})`
+                                : `${baseSource} ${dateStr}`;
+
+                        // Show source message with timestamp
                         if (window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
-                                text: `VIX обновлен из ${result.sourceName}: ${result.value.toFixed(2)}`,
+                                text: `VIX обновлен из ${formattedSource}: ${result.value.toFixed(2)}`,
                                 scope: 'global',
                                 duration: 5000
                             });
                         }
 
                         return { success: true, value: result.value.toFixed(2), numericValue: result.value, source: result.sourceName };
+                    } else {
+                        // Live call completed but returned invalid/empty data
+                        triedLive = true;
                     }
                 } catch (error) {
+                    // Live call threw — remember that we tried and save last error
+                    triedLive = true;
+                    lastLiveError = error;
                     // Try next source
                 }
             }
+
+            // Live failed or returned invalid values: try cache as fallback
+            if (window.cacheManager) {
+                const cached = await window.cacheManager.get('vix-index');
+                if (cached && cached.value !== null) {
+                    // If cache has no source, just treat as anonymous cache
+                    const originalSource = cached.source || 'cache-only';
+                    vixVal = cached.value;
+                    vixAvailable = true;
+                    this.updateWindowMetrics();
+                    console.warn('VIX: using cached fallback due to live source failure. Cached value:', vixVal.toFixed(2), 'source:', originalSource);
+
+                    // Inform user only in fallback case (live failed).
+                    if (triedLive && window.messagesStore) {
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = lastLiveError ? `; последняя ошибка live: ${lastLiveError.message || String(lastLiveError)}` : '';
+                        window.messagesStore.addMessage({
+                            type: 'info',
+                            text: `VIX: ${vixVal.toFixed(2)} (из кэша, live-источники недоступны; исходный source: ${originalSource}, ${date}${errorSuffix})`,
+                            scope: 'global',
+                            duration: 7000
+                        });
+                    }
+
+                    return { success: true, value: vixVal.toFixed(2), numericValue: vixVal, source: originalSource };
+                }
+            }
+
+            // No live data and no cache fallback
             vixVal = null;
             vixAvailable = false;
             this.updateWindowMetrics();
@@ -266,6 +338,10 @@
         },
 
         // Fetch BTC Dominance
+        // Strategy:
+        // - Normal path: respect requestRegistry; if too frequent and cache exists — silent cache hit.
+        // - On live success: update cache and return fresh value.
+        // - On live failure: if cache exists, use cached value and inform user via messagesStore.
         async fetchBTCDominance(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -316,6 +392,32 @@
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall('coingecko', 'global', {}, 500, false);
                 }
+                // On live failure, try using cached value as fallback
+                if (window.cacheManager) {
+                    const cached = await window.cacheManager.get('btc-dominance');
+                    if (cached && cached.value) {
+                        btcDomVal = cached.value;
+                        this.updateWindowMetrics();
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = error ? `; ошибка live: ${error.message || String(error)}` : '';
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: `BTC Dominance: ${btcDomVal.toFixed(2)}% (из кэша, live-источник недоступен; ${date}${errorSuffix})`,
+                                scope: 'global',
+                                duration: 7000
+                            });
+                        }
+                        return { success: true, value: btcDomVal.toFixed(2) + '%', numericValue: btcDomVal };
+                    }
+                }
                 btcDomVal = 0;
                 this.updateWindowMetrics();
                 return { success: false, value: null, numericValue: 0 };
@@ -323,6 +425,7 @@
         },
 
         // Fetch Open Interest
+        // Strategy similar to BTC Dominance: registry-aware, with cache fallback on live failure.
         async fetchOpenInterest(options = {}) {
             const force = options.forceRefresh || false;
             if (window.requestRegistry && !force) {
@@ -362,6 +465,38 @@
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall('binance', 'openInterest', {}, 500, false);
                 }
+
+                // On live failure, try using cached value as fallback
+                if (window.cacheManager) {
+                    const cached = await window.cacheManager.get('open-interest');
+                    if (cached && cached.value) {
+                        oiVal = cached.value;
+                        this.updateWindowMetrics();
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = error ? `; ошибка live: ${error.message || String(error)}` : '';
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: `OI: $${oiVal.toFixed(2)} (из кэша, live-источник недоступен; ${date}${errorSuffix})`,
+                                scope: 'global',
+                                duration: 7000
+                            });
+                        }
+                        return {
+                            success: true,
+                            value: '$' + oiVal.toFixed(2),
+                            numericValue: oiVal
+                        };
+                    }
+                }
+
                 oiVal = 0;
                 this.updateWindowMetrics();
                 return { success: false, value: null, numericValue: 0 };
@@ -406,6 +541,34 @@
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall('binance', 'fundingRate', {}, 500, false);
                 }
+
+                // On live failure, try using cached value as fallback
+                if (window.cacheManager) {
+                    const cached = await window.cacheManager.get('funding-rate');
+                    if (cached && cached.value) {
+                        frVal = cached.value;
+                        this.updateWindowMetrics();
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = error ? `; ошибка live: ${error.message || String(error)}` : '';
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: `FR: ${frVal.toFixed(4)}% (из кэша, live-источник недоступен; ${date}${errorSuffix})`,
+                                scope: 'global',
+                                duration: 7000
+                            });
+                        }
+                        return { success: true, value: frVal.toFixed(4) + '%', numericValue: frVal };
+                    }
+                }
+
                 frVal = 0;
                 this.updateWindowMetrics();
                 return { success: false, value: null, numericValue: 0 };
@@ -448,6 +611,34 @@
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall('binance', 'longShortRatio', {}, 500, false);
                 }
+
+                // On live failure, try using cached value as fallback
+                if (window.cacheManager) {
+                    const cached = await window.cacheManager.get('long-short-ratio');
+                    if (cached && cached.value) {
+                        lsrVal = cached.value;
+                        this.updateWindowMetrics();
+                        const date = cached.timestamp
+                            ? new Date(cached.timestamp).toLocaleString('ru-RU', {
+                                  day: '2-digit',
+                                  month: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                              })
+                            : 'неизвестно';
+                        const errorSuffix = error ? `; ошибка live: ${error.message || String(error)}` : '';
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: `LSR: ${lsrVal.toFixed(2)} (из кэша, live-источник недоступен; ${date}${errorSuffix})`,
+                                scope: 'global',
+                                duration: 7000
+                            });
+                        }
+                        return { success: true, value: lsrVal.toFixed(2), numericValue: lsrVal };
+                    }
+                }
+
                 lsrVal = 0;
                 this.updateWindowMetrics();
                 return { success: false, value: null, numericValue: 0 };
