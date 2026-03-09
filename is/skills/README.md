@@ -6,7 +6,7 @@ id: sk-a3f46c
 # Knowledge Base & MCP Skills (`is/skills/`)
 
 ## Scope
-This directory is the brain of the Target App's AI-assisted development. It contains Markdown files (skills) that define the architectural rules, processes, and boundaries of the project.
+This directory is the brain of the PF's AI-assisted development. It contains Markdown files (skills) that define the architectural rules, processes, and boundaries of the project.
 
 ## Integration
 - These files are served to Cursor and Continue AI agents via the MCP server located in `is/mcp/skills/`.

@@ -18,7 +18,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 # Architecture: Control Plane
 
-> **Context**: Definition of the Control Plane layer and bootstrap contracts for the Target App.
+> **Context**: Definition of the Control Plane layer and bootstrap contracts for the PF.
 
 ## Reasoning
 
@@ -52,6 +52,6 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 **Reliability**: Timeouts for all HTTP; normalize endpoint compatibility; health checks degrade gracefully. Path resolution via path-resolver; events are tracked via id:ais-b7a9ba (docs/ais/ais-control-plane-llmops.md)#LIR-006.A2 (legacy control-plane event-log marker).
 
-## Implementation Status in Target App
+## Implementation Status in PF
 - `Implemented`: Simplified Control Plane v1 (`preflight` + `health-check` + `single-writer`).
 - `Implemented`: Docs-ids gate — #JS-Hx2xaHE8 (validate-docs-ids.js) checks `related_skills`/`related_ais` id resolution; #JS-6U3KWB2e (generate-id-registry.js) produces `is/contracts/docs/id-registry.json`.

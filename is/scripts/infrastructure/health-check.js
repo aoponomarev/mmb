@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * #JS-ja3UnjWr
- * @description Target App Health Check: knowledge, contract, and runtime planes. Usage: [--json]
+ * @description PF Health Check: knowledge, contract, and runtime planes. Usage: [--json]
  * @skill id:sk-483943
  */
 

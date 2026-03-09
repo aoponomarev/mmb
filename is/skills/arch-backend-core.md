@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Backend Core & Data Pipeline
 
-> **Context**: Defines the backend data architecture: provider management, service layering, HTTP transport, and security contracts for the Target App.
+> **Context**: Defines the backend data architecture: provider management, service layering, HTTP transport, and security contracts for the PF.
 
 ## Reasoning
 
@@ -24,14 +24,14 @@ last_change: ""
 - **#for-request-id-traceability** Every HTTP request carries a sanitized `x-request-id` through all layers for distributed debugging.
 - **#for-node-test** Zero external test dependency; built-in test runner is sufficient.
 - **#not-big-bang-rewrite** Full big-bang backend rewrite is too risky for the migration phase.
-- **#not-rewrite-from-scratch** Full rewrite from scratch is expensive, and most Legacy App patterns are sound.
+- **#not-rewrite-from-scratch** Full rewrite from scratch is expensive, and most Legacy PF patterns are sound.
 - **#not-express-fastify** Thin native `http.createServer` is sufficient for a portfolio project.
 
 ---
 
 ## Core Rules
 
-*Docker/n8n infrastructure content moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) and id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) — not yet deployed in Target App.*
+*Docker/n8n infrastructure content moved to id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) and id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) — not yet deployed in PF.*
 
 ### Client vs Cloud Responsibility
 
@@ -67,7 +67,7 @@ last_change: ""
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Full backend core v1.
   - #JS-2436XKxE (data-provider-manager.js) — single entry point for data providers with rate-limit journal.

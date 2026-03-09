@@ -32,7 +32,7 @@ reasoning_checksum: "00000000"
 > **Context**: Test
 ## Reasoning
 - #for-test
-## Implementation Status in Target App
+## Implementation Status in PF
 - \`nonexistent-file-xyz-12345.js\`
 `
   );

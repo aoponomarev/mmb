@@ -6,7 +6,7 @@ status: active
 reasoning_confidence: 0.9
 reasoning_audited_at: "2026-03-08"
 reasoning_checksum: d8cab69d
-last_change: "#for-snapshot-console-settings — mandatory storage of non-secret console settings (memory, timeout, triggers, etc.)"
+last_change: "#for-deploy-snapshot-diff — every snapshot must include current settings and explicit diff vs previous state"
 
 ---
 
@@ -24,6 +24,9 @@ last_change: "#for-snapshot-console-settings — mandatory storage of non-secret
 - **#for-explicit-snapshot-command** Snapshot creation is an explicit, dedicated pipeline step (script or CI job) that runs automatically after a successful deploy and verification. It must not be a hidden side-effect of arbitrary commands, and for failed deploys it is responsible for automatic cleanup and defect logging.
 - **#for-secrets-contract-only** Snapshots contain only the list of env variable names and their contract (required/optional). Never store secret values (passwords, API keys).
 - **#for-snapshot-console-settings** Non-secret settings that an agent or user can change in the console of **any** service or cloud (Cloudflare, Yandex Cloud, N8N, external datasets, etc.) — memory, timeout, runtime, trigger schedule, access flags, binding names and types — MUST be stored in the snapshot (README or dedicated file). Rollback then restores full configuration, not just code.
+- **#for-deploy-snapshot-diff** Snapshot value is incomplete without explicit change tracking. Each snapshot must include both full current settings and a structured diff against the previous stable state, including console settings and access bindings.
+- **#for-post-deploy-auto-archive** If archive creation depends on memory or manual reminders, snapshots are skipped under time pressure. Agent workflow must trigger archive generation immediately after successful deploy + verification.
+- **#for-provider-readback-fallback** Provider CLIs can expose partial metadata depending on platform/version. Snapshot generation must store every reachable setting and transparently mark partial readback instead of failing the entire archive.
 
 ### Unified contract: path and structure (all targets)
 
@@ -59,6 +62,27 @@ Future targets: same pattern under `is/deployments/<target>/`.
 4. **Every snapshot MUST include README.md** with: date; Version ID if applicable; env names (no secret values); **service/cloud settings values** (memory, timeout, triggers, runtime, access flags, bindings — all non-secret console configuration); restore steps; **involved skills**; **causalities** (reasons for changes); **functional goals**.
 5. **Never put secrets or env values** (passwords, API keys) into snapshots. **Do** store non-secret console settings (values) so rollback can restore full configuration.
 6. **One date, one logical release** — if multiple components are deployed as one stable set, use the same date for all; each target still has its own `YYYY-MM-DD/` folder and README.
+7. **Archive completeness is mandatory** — every snapshot must pass all three checks:
+   - Full reachable settings are captured (function/gateway metadata, versions, env contract, runtime resources, timeouts, triggers, access bindings, integration mapping).
+   - Explicit diff vs previous stable state is captured, including configuration/settings changes.
+   - Causality updates are applied and verified (new/updated `#for-` hashes in id:sk-3b1519, and snapshot README references those hashes).
+   - If provider readback is partial, snapshot must include command-level error diagnostics and a fallback contract from local deployment config files (for example `wrangler.toml`), explicitly marked as partial.
+8. **Path contract is strict** — snapshots are stored in `is/deployments/`, and root-level paths for this area must never be prefixed with the `app/` layer segment.
+
+### Auto-Trigger Protocol (mandatory)
+
+When a deploy command succeeds (exit code 0) and minimal verification succeeds:
+
+1. Detect deploy completion for target artifacts (`yc serverless function version create`, `yc serverless api-gateway update/create`, `wrangler deploy`, equivalent CI steps).
+2. Immediately generate/update dated snapshot folders in `is/deployments/<target>/YYYY-MM-DD/`.
+3. Capture current settings and previous-state baseline from provider CLI/API outputs.
+4. Compute and store configuration diff + functional diff summary.
+5. Update causality registry when deployment behavior/rules changed.
+6. Only then consider deploy workflow finished.
+
+Reference implementation in this repository:
+- `is/scripts/infrastructure/archive-deployment-snapshot.js` (CLI: `node ... --target yandex-api-gateway|yandex-market-fetcher|cloudflare-edge-api`).
+- Deploy wrappers must call this script as a mandatory post-deploy step.
 
 ### Relation to rollback and AIS
 

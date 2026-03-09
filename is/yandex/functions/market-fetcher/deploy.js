@@ -8,6 +8,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const REPO_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 // ─── Configuration ──────────────────────────────────────────────────────────────
 const FOLDER_ID       = 'b1gv03a122le5a934cqj';
@@ -220,6 +221,15 @@ async function createCronTriggers(token, functionId) {
     }
 }
 
+function createDeploymentSnapshot() {
+    console.log('Creating deployment snapshot...');
+    execSync('node is/scripts/infrastructure/archive-deployment-snapshot.js --target yandex-market-fetcher', {
+        cwd: REPO_ROOT,
+        stdio: 'inherit'
+    });
+    console.log('Deployment snapshot created');
+}
+
 // ─── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
     console.log('=== Deploy coingecko-fetcher to Yandex Cloud ===\n');
@@ -230,6 +240,7 @@ async function main() {
         const functionId = await getOrCreateFunction(token);
         await createVersion(token, functionId, zipBase64);
         await createCronTriggers(token, functionId);
+        createDeploymentSnapshot();
 
         console.log('\n=== Deploy complete ===');
         console.log('Function ID:', functionId);

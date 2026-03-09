@@ -10,7 +10,7 @@ last_change: ""
 
 # Protocol: Node.js Async Safety & Timeout Contracts
 
-> **Context**: Defines mandatory async patterns for all Node.js code in the Target App to prevent hanging I/O, silent swallowed errors, and unpredictable failure modes.
+> **Context**: Defines mandatory async patterns for all Node.js code in the PF to prevent hanging I/O, silent swallowed errors, and unpredictable failure modes.
 > **Scope**: `core/api/`, `is/scripts/`, any Node.js module making external calls.
 
 ## Reasoning

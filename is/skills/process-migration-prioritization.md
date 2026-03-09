@@ -15,7 +15,7 @@ last_change: ""
 
 # Migration Prioritization Steps (Heuristic Weights)
 
-> **Context**: In a complex migration from Legacy App to Target App with dozens of plans, it is crucial to choose the next step correctly to avoid creating chaos and accumulating technical debt.
+> **Context**: In a complex migration from Legacy PF to PF with dozens of plans, it is crucial to choose the next step correctly to avoid creating chaos and accumulating technical debt.
 > **Scope**: Global (migration process management)
 
 ## Reasoning

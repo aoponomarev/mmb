@@ -12,7 +12,7 @@ import {
 import { ROOT, resolvePath, EXCLUDE_PATH_PATTERNS } from "../../contracts/path-contracts.js";
 import { parseFrontmatterBlock, SKILL_FRONTMATTER_ORDER } from "../../contracts/skill-frontmatter-order.js";
 
-const IMPL_STATUS_HEADERS = ["## Implementation Status in Target App", "## Implementation Status"];
+const IMPL_STATUS_HEADERS = ["## Implementation Status in PF", "## Implementation Status"];
 const PATH_EXTENSIONS = /\.(js|ts|json|md|yaml|yml)$/;
 
 const SKILL_DIRS = [
@@ -128,7 +128,7 @@ function validateSkillFormat(file, text, rel, errors) {
         "## Core Rules",
         "## Contracts",
         "## Risk Mitigation",
-        "## Implementation Status in Target App",
+        "## Implementation Status in PF",
         "## Implementation Status",
         "## Migration Strategy",
         "## Examples"

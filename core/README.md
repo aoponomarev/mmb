@@ -9,7 +9,7 @@ last_updated: "2026-03-04"
 # Core Domain & Backend Layer (`core/`)
 
 ## Scope
-This directory contains the framework-agnostic business logic, data models, and backend services of the Target App.
+This directory contains the framework-agnostic business logic, data models, and backend services of the PF.
 
 ## Architecture & Constraints
 - **Environment Agnostic**: Code in this directory must not depend on specific UI frameworks (like Vue) or specific infrastructure runners, unless explicitly placed in an adapter folder (e.g., `api/market-snapshot-node-server.js`).

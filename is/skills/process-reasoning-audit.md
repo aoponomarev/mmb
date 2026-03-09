@@ -49,7 +49,7 @@ The Reasoning audit MUST be performed in this exact sequence. Skipping or reorde
 ```markdown
 ## Reasoning
 
-- **#for-anti-calque** Russian abbreviations transliterated into Latin cause cognitive load and broken search. Standard IT terms (SSOT, Target App) are unambiguous.
+- **#for-anti-calque** Russian abbreviations transliterated into Latin cause cognitive load and broken search. Standard IT terms (SSOT, PF) are unambiguous.
 - **#for-ssot-paths** Infrastructure scripts run from varying CWDs. Absolute paths from a single registry guarantee correctness.
 - **#not-central-docs** Central docs/ architecture doc — low discoverability for AI agents; skills are MCP-indexed.
 - **#not-hardcoded-paths** Hardcoded paths in scripts — CWD-dependent failures.
@@ -162,6 +162,6 @@ Until all skills have Reasoning and confidence scores, preflight will fail the R
 | Anti-pattern | Correct action |
 |--------------|----------------|
 | Adding `reasoning_confidence` without reviewing the codebase | Run Step 1 first. Score reflects actual alignment. |
-| Copying Reasoning from a donor project without verifying | Audit against Target App codebase only. |
+| Copying Reasoning from a donor project without verifying | Audit against PF codebase only. |
 | Using "Context" as a substitute for Reasoning | Context = when to use. Reasoning = why rules exist. Both required. |
 | Skipping the gate to unblock CI | Fix the skill; do not disable the gate. Use `PREFLIGHT_SKIP_REASONING=1` only during transition. |

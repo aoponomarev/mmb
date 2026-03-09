@@ -835,7 +835,7 @@
             };
 
             // Create pvs array (Price Variations) - for math model
-            // Source: legacy app, old_app_not_write/parsing.js
+            // Source: legacy PF, old_app_not_write/parsing.js
             const pvs = [
                 safeValue(coinData.price_change_percentage_1h_in_currency ?? coinData.price_change_percentage_1h),   // pvs[0] - PV1h
                 safeValue(coinData.price_change_percentage_24h_in_currency ?? coinData.price_change_percentage_24h),  // pvs[1] - PV24h
@@ -865,7 +865,7 @@
                 price_change_percentage_30d: pvs[4],
                 price_change_percentage_200d: pvs[5],
 
-                // For math model compatibility (legacy app)
+                // For math model compatibility (legacy PF)
                 pvs: pvs,
                 PV1h: pvs[0],
                 PV24h: pvs[1],

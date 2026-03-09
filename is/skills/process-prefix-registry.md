@@ -53,7 +53,7 @@ last_change: ""
 - When adding 3+ new prefixes in a session — review the full registry for consistency.
 - When a new vendor/tech is adopted — add its prefix proactively (e.g. `n8n-` before first n8n skill).
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: `is/contracts/prefixes.js` — SSOT with categories, semantics, type map.
 - `Implemented`: `validate-skills.js` — gate for is/skills/ prefix validation.

@@ -9,7 +9,7 @@ tags:
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-08
 reasoning_checksum: 55766084
-last_change: ""
+last_change: "#for-root-path-unambiguity — PF means repo root, not app/ layer path"
 related_skills:
   - sk-0e193a
   - sk-d763e7
@@ -32,6 +32,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 - **#for-file-protocol** The UI must run locally via `file://`. We proxy API requests through Cloudflare Workers to bypass CORS without a local Node backend.
 - **#for-node-test** We use native `node:test` to avoid heavy external frameworks.
 - **#for-skill-anchors** We use skill anchors directly referencing textual reasoning rather than a separate causality ID database.
+- **#for-root-path-unambiguity** "PF" is a project scope term, not a filesystem prefix. Repo-root contracts under `is/` must keep root-relative paths without `app/` prepended.
 - **#not-central-docs** Monolithic docs have low discoverability; distributed skills work better for MCP.
 - **#not-hardcoded-paths** Hardcoded relative paths in scripts fail randomly depending on execution context.
 - **#not-bundler-ui** Requiring a bundler for the UI breaks our `file://` constraint.
@@ -62,6 +63,11 @@ Verification is done via Zod schemas in #JS-kXgRFkUV (naming-rules.js).
 The single source of truth for paths is located in #JS-1xvfg1uj (paths.js).
 It is forbidden to hardcode absolute or relative paths in infrastructure scripts. All paths must be taken from the `PATHS` object. 
 This object automatically validates paths via Naming Contracts upon startup.
+
+**Root path clarification:**
+- "PF" means repository root.
+- `app/` is only the Presentation Layer folder.
+- Contracts and archives under `is/` must use root-relative paths such as `is/deployments/...` and must never use `app/is/...`.
 
 **Path Policy:**
 - **For `import` / `require` (Module code):** STRICTLY relative paths (`../`, `./`). This preserves IDE static analysis and doesn't break bundlers.

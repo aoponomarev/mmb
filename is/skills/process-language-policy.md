@@ -43,7 +43,7 @@ When a Russian concept must be named in English (e.g. for code or file paths), y
 | Russian Concept | Meaning | ❌ BANNED (Calque) | ✅ REQUIRED (Translation) |
 |---|---|---|---|
 | **ЕИП** (Единый Источник Правды) | Single Source of Truth | `EIP` | `SSOT` |
-| **MBB/MMB** | Legacy / Target App | `MBB`, `MMB` | `Legacy App`, `Target App` |
+| **MBB/MMB** | Legacy / PF | `MBB`, `MMB` | `Legacy PF`, `PF` |
 | **Контур** (когда имеется в виду слой) | Vertical hierarchy level | `Contour` | `Layer` |
 | **Сервис** (когда имеется в виду адаптер к API) | External data fetcher | `Service` | `Provider` / `Adapter` |
 

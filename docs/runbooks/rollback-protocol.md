@@ -12,7 +12,7 @@ related_ais:
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
-# Rollback Protocol v1 (Target App)
+# Rollback Protocol v1 (PF)
 
 ## Principle
 

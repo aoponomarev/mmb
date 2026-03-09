@@ -107,7 +107,7 @@ flowchart TB
 ### Описание
 
 1. **#JS-NrBeANnz (is/scripts/preflight.js)** при запуске вызывает (в порядке): #JS-Mt2rdqJ4 (validate-skills.js), #JS-QxwSQxtt (validate-skill-anchors.js); при отсутствии `PREFLIGHT_SKIP_CAUSALITY=1` также #JS-69pjw66d и #JS-eG4BUXaS.
-2. **#JS-Mt2rdqJ4** — парсит секции `## Implementation Status in Target App` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
+2. **#JS-Mt2rdqJ4** — парсит секции `## Implementation Status in PF` / `## Implementation Status` во всех скиллах (is/skills, core/skills, app/skills). Извлекает пути из bullet-списков, таблиц и inline backticks. Проверяет существование каждого пути (относительно ROOT; для коротких имён — поиск в is/scripts/architecture, core, app и др.). При отсутствии пути — error (preflight fail). Для путей в docs/, is/skills/ — warning.
 3. **#JS-QxwSQxtt** — сканирует core/, app/, is/, shared/, .cursor/rules/ (первые 50 строк каждого .js, .ts, .mdc). Извлекает `@skill <path>`. Проверяет: файл скилла существует (is/skills/, core/skills/, app/skills/). При битой ссылке — error, exit 1.
 4. **Условие fail:** Любая ошибка в #JS-Mt2rdqJ4, #JS-QxwSQxtt, #JS-69pjw66d или #JS-eG4BUXaS прерывает preflight.
 

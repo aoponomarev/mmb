@@ -1,6 +1,6 @@
 /**
  * #JS-by3WhrY9
- * @description Target app Skills MCP server: lists skills, reads markdown, gray-matter; adapted from donor app.
+ * @description PF Skills MCP server: lists skills, reads markdown, gray-matter; adapted from donor PF.
  */
 import fs from "fs/promises";
 import * as fsSync from "fs";
@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 const isSkillsRoot = PATHS.skills;
 const coreSkillsRoot = PATHS.coreSkills;
 const appSkillsRoot = PATHS.appSkills;
-const targetAppRoot = PATHS.root;
+const pfRoot = PATHS.root;
 const logsDir = PATHS.logs;
 
 const SKIP_DIRS = new Set(["drafts", "archive", "meta"]);
@@ -28,7 +28,7 @@ const ANCHOR_PATTERN = /\/\/\s*@skill-anchor\s+/i;
 const HEADER_SKILL_PATTERN = /\/\*\*\s*@skill\s+(.+)/i;
 
 const server = new McpServer({
-  name: "skills-target-app",
+  name: "skills-pf",
   version: "0.1.0",
 });
 
@@ -88,7 +88,7 @@ async function walkMarkdownFiles(rootDir) {
 async function buildSkillRecord(filePath, repo) {
   const raw = await readMatterFile(filePath);
   const id = path.basename(filePath, ".md");
-  const relativePath = normalizePath(path.relative(targetAppRoot, filePath));
+  const relativePath = normalizePath(path.relative(pfRoot, filePath));
   return {
     id,
     title: raw.data?.title ?? id,
@@ -190,7 +190,7 @@ async function searchSkillsFullText({ query, limit }) {
       results.push({
         id: path.basename(sf, ".md"),
         title,
-        path: normalizePath(path.relative(targetAppRoot, sf)),
+        path: normalizePath(path.relative(pfRoot, sf)),
         relevance: matchCount,
         snippet: raw.substring(0, 300).replace(/---[\s\S]*?---/, "").trim().slice(0, 200),
       });
@@ -242,7 +242,7 @@ async function auditSkillCoverage() {
   const uncovered = [];
   for (const filePath of allFiles) {
     const content = await fs.readFile(filePath, "utf8");
-    const relPath = normalizePath(path.relative(targetAppRoot, filePath));
+    const relPath = normalizePath(path.relative(pfRoot, filePath));
     const hasHeader = HEADER_SKILL_PATTERN.test(content);
     const hasAnchor = ANCHOR_PATTERN.test(content);
     if (hasHeader || hasAnchor) {
@@ -274,7 +274,7 @@ async function searchAnchors({ skillId, hash, limit }) {
 
   for (const filePath of allFiles) {
     const content = await fs.readFile(filePath, "utf8");
-    const relPath = normalizePath(path.relative(targetAppRoot, filePath));
+    const relPath = normalizePath(path.relative(pfRoot, filePath));
     const lines = content.split("\n");
 
     for (let i = 0; i < lines.length; i++) {

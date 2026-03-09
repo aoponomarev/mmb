@@ -37,7 +37,7 @@ To reduce hallucinations and ensure AI agents can reliably parse skills, all `.m
    - `## Reasoning` (Must be the first H2 if present)
    - `## Core Rules`
    - `## Contracts`
-   - `## Implementation Status` (or `## Implementation Status in Target App`)
+   - `## Implementation Status` (or `## Implementation Status in PF`)
    - `## Migration Strategy`
    - `## Examples`
 4. **Scaffolding Tool**: Always use `npm run skills:create "Skill Title" --type=[...]` to generate the correct boilerplate. See `is/contracts/prefixes.js` for available types.

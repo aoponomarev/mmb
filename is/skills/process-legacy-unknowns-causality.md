@@ -28,4 +28,4 @@ last_change: ""
 
 ## Contracts
 
-- **No Silent Magic Numbers**: No magic number or bizarre legacy workaround may be ported to the Target App without either a valid `#for-` causality hash OR a `// @causality QUESTION:` marker.
+- **No Silent Magic Numbers**: No magic number or bizarre legacy workaround may be ported to the PF without either a valid `#for-` causality hash OR a `// @causality QUESTION:` marker.

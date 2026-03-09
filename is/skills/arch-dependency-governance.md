@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Dependency Governance
 
-> **Context**: Defines the dependency management policy for the Target App, ensuring minimal footprint, version stability, and controlled upgrades.
+> **Context**: Defines the dependency management policy for the PF, ensuring minimal footprint, version stability, and controlled upgrades.
 
 ## Reasoning
 
@@ -25,7 +25,7 @@ last_change: ""
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Minimal dependency set enforced.
   - Production: `better-sqlite3` (local DB), `zod` (contract validation).
@@ -45,7 +45,7 @@ last_change: ""
 
 ## Core Rules
 
-- **Minimal dependency surface**: Every added dependency is a maintenance liability and a security attack surface. The Target App intentionally keeps production deps to 2, preferring built-in Node.js APIs (`node:test`, `node:fs`, `node:crypto`, `node:http`).
+- **Minimal dependency surface**: Every added dependency is a maintenance liability and a security attack surface. The PF intentionally keeps production deps to 2, preferring built-in Node.js APIs (`node:test`, `node:fs`, `node:crypto`, `node:http`).
 - **`node:test` over Jest/Vitest**: Eliminates the heaviest dev dependency tree in JavaScript projects. Built-in test runner is stable since Node 20 LTS and sufficient for contract/integration testing.
 - **Zod as the single validation library**: Chosen for its TypeScript-first design, zero-dependency nature, and ubiquity in the ecosystem. Used across env validation, naming contracts, market data schemas, and UI config validation.
 - **Lockfile as the version contract**: `package-lock.json` is the SSOT for exact dependency versions. Direct `package.json` ranges are kept narrow (caret `^`). Major upgrades require explicit review and rollback plan.

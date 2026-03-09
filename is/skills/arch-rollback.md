@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Rollback & Recovery
 
-> **Context**: Defines the rollback strategy, trigger conditions, and recovery order for the Target App.
+> **Context**: Defines the rollback strategy, trigger conditions, and recovery order for the PF.
 
 ## Reasoning
 
@@ -37,7 +37,7 @@ See `id:runbook-b188b8` for the full protocol. Summary:
 
 *Infrastructure Recovery (Docker/Compose) moved to `id:bskill-11683c` — not yet deployed.*
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Rollback protocol v1 at `id:runbook-b188b8`.
 - `Implemented`: Trigger conditions tied to health-check and monitoring commands.

@@ -8,7 +8,7 @@ related_skills:
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
 
-# Monitoring Baseline v1 (Target App)
+# Monitoring Baseline v1 (PF)
 
 ## Scope
 

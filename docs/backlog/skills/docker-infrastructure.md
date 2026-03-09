@@ -8,7 +8,7 @@ last_updated: "2026-03-04"
 
 # Docker Infrastructure (Deferred)
 
-> **Status**: DEFERRED — Docker not yet deployed in Target App. Move to `is/skills/` when `docker-compose.yml` exists.
+> **Status**: DEFERRED — Docker not yet deployed in PF. Move to `is/skills/` when `docker-compose.yml` exists.
 > **Source**: Extracted from id:sk-5c0ef8 (arch-backend-core), id:sk-3225b2 (arch-mcp-ecosystem), id:sk-6eeb9a (arch-rollback), id:sk-d6777d (arch-testing-ci), id:sk-483943 (arch-foundation).
 
 ## Docker Resource Governance

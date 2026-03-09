@@ -1,0 +1,8 @@
+{
+  "snapshot_date": "2026-03-09",
+  "target": "cloudflare-edge-api",
+  "comparison_baseline": {
+    "type": "none",
+    "notes": "No prior dated cloudflare-edge-api snapshot found."
+  }
+}

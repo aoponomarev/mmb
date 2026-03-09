@@ -10,12 +10,12 @@ last_change: ""
 
 # Guard: file:// Protocol & CORS
 
-> **Context**: The Target App runs from local `index.html` (`origin = null`, protocol `file:`). In this mode, direct browser `fetch()` calls to external APIs are blocked by CORS preflight.
+> **Context**: The PF runs from local `index.html` (`origin = null`, protocol `file:`). In this mode, direct browser `fetch()` calls to external APIs are blocked by CORS preflight.
 > **Scope**: All frontend data-fetching code in `app/`, any direct API call from `index.html`.
 
 ## Reasoning
 
-- **#for-file-protocol** The Target App runs from `index.html` on GitHub Pages, so we cannot depend on a local Node.js server.
+- **#for-file-protocol** The PF runs from `index.html` on GitHub Pages, so we cannot depend on a local Node.js server.
 - **#for-file-origin-null** Browsers treat `file://` as an opaque origin, meaning direct CORS preflight requests to strict APIs will fail.
 - **#for-cloudflare-proxy** Routing through our Cloudflare proxy standardizes CORS, authentication, and rate limiting regardless of whether the app runs locally or on HTTPS.
 - **#for-no-direct-fetch** Direct fetches to external APIs from the frontend will inevitably fail for users running the app locally without a backend.

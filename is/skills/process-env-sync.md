@@ -76,7 +76,7 @@ This special variable controls which application instance is allowed to write da
 
 The health-check (`npm run health-check`) validates this variable explicitly. An invalid or missing value will cause the `contracts` plane to show a warning.
 
-**Rule**: Only one value (`TARGET`) should be active during normal Target App operation. Switch to `LEGACY` only when intentionally handing over write authority.
+**Rule**: Only one value (`TARGET`) should be active during normal PF operation. Switch to `LEGACY` only when intentionally handing over write authority.
 
 ### Env Key Governance
 

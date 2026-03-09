@@ -13,7 +13,7 @@ Skills that are useful but do not fit the current infrastructure state. Not tied
 ## When to use
 
 - Donor skill describes Docker, n8n, Yandex Cloud, Cloudflare Workers, etc.
-- Target App (mmb) does not yet have this infrastructure
+- PF (mmb) does not yet have this infrastructure
 - Content is valuable — do not discard, but not ready for active skills
 
 ## Current backlog skills

@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Causality & Rationale Tracking
 
-> **Context**: Defines how architectural "why" decisions are captured and preserved in the Target App, preventing context loss over time.
+> **Context**: Defines how architectural "why" decisions are captured and preserved in the PF, preventing context loss over time.
 
 ## Reasoning
 
@@ -25,7 +25,7 @@ last_change: ""
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented (Simplified)`: Causality captured as textual reasoning within `is/skills/arch-*.md` files under "Architectural Reasoning (Why this way)" sections. Each finalized migration plan has its key decisions extracted into a dedicated skill.
 - `Implemented`: Active Causality Recording pattern — every plan finalization extracts decisions into new `arch-*.md` skill files.

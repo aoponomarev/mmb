@@ -56,6 +56,11 @@ cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
+Автоматизированный вариант (deploy + snapshot):
+```bash
+node is/cloudflare/edge-api/deploy.js
+```
+
 **Вывод команды:**
 ```
 Total Upload: XX.XX KiB / gzip: XX.XX KiB

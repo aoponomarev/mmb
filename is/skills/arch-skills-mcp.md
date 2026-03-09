@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Skills & MCP System
 
-> **Context**: Defines the knowledge management architecture: skills storage, validation, MCP server integration, Cursor rules, and the skill migration strategy from Legacy App.
+> **Context**: Defines the knowledge management architecture: skills storage, validation, MCP server integration, Cursor rules, and the skill migration strategy from Legacy PF.
 
 ## Reasoning
 
@@ -78,7 +78,7 @@ last_change: ""
 **Gates**: Valid frontmatter; valid links; no overlaps.
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Distributed skill storage across `is/skills/` (18 skills), `core/skills/` (6 skills), `app/skills/` (4 skills) = 28 skills total.
 - `Implemented`: #JS-Mt2rdqJ4 (validate-skills.js) — structural validation with JSON output for automation.
@@ -87,10 +87,10 @@ last_change: ""
 - `Implemented`: #JS-mYo7imVc (generate-skills-index.js) — auto-generates `docs/index-skills.md`.
 - `Implemented`: #JS-CqRSWCnE (skills-health-trend.js) — trend tracking with JSONL append and degradation alerts.
 - `Implemented`: #JS-yWtP9yTh (skills-health-trend-report.js) — summary report over configurable window.
-- `Implemented`: MCP server at #JS-by3WhrY9 (server.js) (adapted from Legacy App).
+- `Implemented`: MCP server at #JS-by3WhrY9 (server.js) (adapted from Legacy PF).
 - `Implemented`: Memory MCP server via `@modelcontextprotocol/server-memory`.
 - `Implemented`: Cursor `.cursor/mcp.json` configuration for both MCP servers.
-- `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy App's full frontmatter format). Frontmatter can be adopted incrementally.
+- `Simplified`: Skills stored as plain Markdown without YAML frontmatter (lightweight approach vs. Legacy PF's full frontmatter format). Frontmatter can be adopted incrementally.
 - `Simplified`: No Obsidian vault integration (not needed for single-project scope).
 - `Simplified`: No `skills/MIGRATION.md` (legacy marker skip in #JS-cMCNbcJ1); migration tracked via `docs/plans/` and this skill.
 
@@ -128,7 +128,7 @@ When an extraction pipeline (e.g. n8n, Swarm) is used: Signal (commit/release) �
 - Skills older than 90 days without updates are flagged as stale (warning, not blocking).
 - Files with content < 50 chars are flagged as potentially orphaned.
 - `npm run skills:check` must pass before any migration stage can be marked complete.
-- **Path existence:** Paths in `## Implementation Status` / `## Implementation Status in Target App` must exist in the project. Gate: #JS-Mt2rdqJ4.
+- **Path existence:** Paths in `## Implementation Status` / `## Implementation Status in PF` must exist in the project. Gate: #JS-Mt2rdqJ4.
 - **@skill resolution:** Every `@skill` in code must point to an existing skill file. Gate: #JS-QxwSQxtt (validate-skill-anchors.js).
 - **Affected skills (pre-commit):** Before commit, run `scripts/git/preflight-solo.ps1`; it calls `skills:affected` to list affected skills and hashes — human decides whether to update before commit. Gate: #JS-5F24tc1R (informational only).
 

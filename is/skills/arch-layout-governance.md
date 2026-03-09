@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Layout & README Governance
 
-> **Context**: Defines the rules for folder structures and mandatory directory documentation (README.md files) in the Target App.
+> **Context**: Defines the rules for folder structures and mandatory directory documentation (README.md files) in the PF.
 
 ## Reasoning
 
@@ -23,7 +23,7 @@ last_change: ""
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Required README.md files for core boundaries (`app/`, `core/`, `is/`, `docs/`, `data/`).
 - `Implemented`: Required README.md files for skill directories (`app/skills/`, `core/skills/`, `is/skills/`).

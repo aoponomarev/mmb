@@ -10,7 +10,7 @@ last_change: ""
 
 # Architecture: Monitoring & Observability
 
-> **Context**: Defines the monitoring, health-check, and observability strategy for the Target App during and after migration.
+> **Context**: Defines the monitoring, health-check, and observability strategy for the PF during and after migration.
 
 ## Reasoning
 
@@ -61,7 +61,7 @@ last_change: ""
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 
 - `Implemented`: Full monitoring baseline v1.
   - `npm run health-check` — checks knowledge/contract/runtime planes.

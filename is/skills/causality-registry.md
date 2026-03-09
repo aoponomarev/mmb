@@ -16,8 +16,9 @@ Add new hashes here before using in code. Skills and code share the same namespa
 
 | Hash | Formulation |
 |------|-------------|
-| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, Target App, Legacy App) is unambiguous. |
+| `#for-anti-calque` | Russian abbreviations transliterated into Latin (mbb, mmb, EIP) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
 | `#for-ssot-paths` | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
+| `#for-root-path-unambiguity` | In this repository, "PF" means repository root, not the `app/` layer folder. Contracts and archives under `is/` must never be prefixed with `app/`, or agents will create path drift (`app/is/...`) and break SSOT navigation. |
 | `#for-imports-relative` | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
 | `#for-file-protocol` | No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes. |
 | `#for-node-test` | Zero external test dependency; built-in since Node 18. Sufficient for contract and integration testing at current scale. |
@@ -122,8 +123,16 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-prefix-categories` | Grouping prefixes by category (Layer, Vendor, Tech, etc.) improves discoverability and prevents semantic overlap. |
 | `#for-prefix-semantics` | SKILL_SEMANTICS documents intent for each prefix so agents choose correctly. |
 | `#not-ad-hoc` | Inventing prefixes without registration creates gate failures and inconsistent naming. |
-| `#for-yc-public-invoke` | Yandex Cloud API Gateway with `x-yc-apigateway-integration: cloud_functions` requires the target function to be explicitly set as public (`allow-unauthenticated-invoke`). Otherwise, the gateway returns a silent 502 Bad Gateway to the client. |
+| `#for-yc-public-invoke` | Function URL invocation in Yandex Cloud requires explicit invoker IAM access for the caller subject (or `system:allUsers`). Missing invoke rights returns `403 Forbidden: Not authorized`; upstream gateways may surface this as integration-level HTTP errors. |
+| `#for-manual-trigger-order-payload` | Minute-based mode routing is valid for timer triggers only. Manual/on-demand trigger endpoints must pass explicit `order` payload (`market_cap`/`volume`) to avoid accidental mode mismatch at arbitrary execution time. |
+| `#for-deploy-snapshot-diff` | Deployment snapshots must include full current settings and explicit diff versus previous stable state (including console settings and access bindings), otherwise configuration drift remains invisible. |
 | `#for-key-versioning` | Cache keys tied to external APIs (e.g. CoinGecko formats) must be versioned so they auto-invalidate when the app updates, preventing crashes from stale schema formats. User data is unversioned and migrated instead. |
+| `#for-post-deploy-auto-archive` | Deployment evidence degrades quickly after manual operations. Archive generation must run immediately after successful deploy + verification so settings/diffs/causalities are captured while state is still precise. |
+| `#for-snapshot-driven-restore` | Stable recovery depends on concrete deployment evidence (`settings.current.json`, source copy, diff), not on memory or ad-hoc commands. Snapshot artifacts are the only safe restore input. |
+| `#for-config-code-parity-restore` | Restoring cloud settings without restoring the matching code/architecture revision causes contract drift (route shapes, env expectations, cache behavior). Deployment restore must include code and architecture parity checks. |
+| `#for-restore-order-external-first` | External integrations define runtime contract boundaries. Recovering external deployment state first reduces cascading failures before app/core layers are validated and restored. |
+| `#for-restore-verification-gates` | A restore is not complete until objective gates pass (`preflight`, target health endpoints, domain smoke tests). Without gates, rollback can silently reintroduce unstable state. |
+| `#for-provider-readback-fallback` | Cloud provider CLIs may return partial/incompatible metadata across versions (for example, some Wrangler commands on Windows). Snapshot generators must preserve available reachable state and gracefully fall back to local config contracts instead of failing snapshot creation. |
 | `#for-market-metrics-cache-fallback` | When external market data providers (Yahoo, Stooq, Binance, Alternative.me) are temporarily unavailable, using the last known-good cached metric (FGI, VIX, BTC Dominance, OI, FR, LSR) is preferable to showing an empty value, as long as the UI clearly states that the value is from cache and includes the original fetch timestamp and a short live-error reason. |
 | `#for-vix-4h-ttl` | VIX (volatility index) is rate-limited and relatively slow-moving intraday; a 4-hour TTL for `vix-index` balances freshness with external API limits and startup latency, while still allowing explicit force refresh via UI or scripts. |
 | `#for-rrg-contour` | Frontend RRG (Reactive Reliability Gate): no direct window mutation and no innerHTML in app/shared components except allowed registration patterns. Gate: check-frontend-rrg.test.js; AIS id:ais-c4e9b2. Preflight step 6 enforces it. |

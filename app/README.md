@@ -9,7 +9,7 @@ last_updated: "2026-03-04"
 # Application Frontend Layer (`app/`)
 
 ## Scope
-This directory contains the user interface and client-side logic of the Target App.
+This directory contains the user interface and client-side logic of the PF.
 It is built using a "No-Build" architecture, meaning it operates directly from native ES modules in the browser without Webpack/Vite.
 
 ## Architecture & Constraints

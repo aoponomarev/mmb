@@ -21,7 +21,7 @@ last_change: ""
 
 ## Core Rules
 
-*n8n and Continue CLI (Docker) content moved to id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) and id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed in Target App.*
+*n8n and Continue CLI (Docker) content moved to id:bskill-2cab14 (docs/backlog/skills/n8n-infrastructure.md) and id:bskill-11683c (docs/backlog/skills/docker-infrastructure.md) — not yet deployed in PF.*
 
 1.  **SQLite Isolation:**
     The MCP database (`data/mcp.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.

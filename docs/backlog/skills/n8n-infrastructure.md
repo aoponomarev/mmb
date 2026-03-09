@@ -8,7 +8,7 @@ last_updated: "2026-03-04"
 
 # n8n Infrastructure (Deferred)
 
-> **Status**: DEFERRED — n8n not yet deployed in Target App. Move to `is/skills/` when n8n stack exists.
+> **Status**: DEFERRED — n8n not yet deployed in PF. Move to `is/skills/` when n8n stack exists.
 > **Source**: Extracted from id:sk-3225b2 (is/skills/arch-mcp-ecosystem.md).
 
 ## n8n Workflow Hygiene

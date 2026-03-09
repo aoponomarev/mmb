@@ -69,6 +69,8 @@ cd is/cloudflare/edge-api
 wrangler deploy
 ```
 
+Рекомендуемый путь для production: `node is/cloudflare/edge-api/deploy.js` — выполняет `wrangler deploy` и обязательный post-deploy snapshot в `is/deployments/cloudflare-edge-api/YYYY-MM-DD/`.
+
 ## Endpoints
 
 ### OAuth

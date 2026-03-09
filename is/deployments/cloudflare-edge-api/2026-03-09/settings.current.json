@@ -1,0 +1,222 @@
+{
+  "snapshot_date": "2026-03-09",
+  "target": "cloudflare-edge-api",
+  "worker": {
+    "name": "app-api",
+    "main": "src/index.js",
+    "compatibility_date": "2024-01-01",
+    "vars": {
+      "ENVIRONMENT": "production"
+    },
+    "bindings": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "app-database",
+          "database_id": "887a3f58-98c2-41a4-a512-8dcdaea751e8"
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "API_CACHE",
+          "id": "b3377378d48649aa81c2e24bb1a0426a"
+        },
+        {
+          "binding": "SETTINGS",
+          "id": "216d28251733449fadff6b2cd82b0458"
+        }
+      ]
+    }
+  },
+  "cloudflare_reachable_state": {
+    "wrangler_deployments": [
+      {
+        "id": "1d367a91-b679-4216-af1d-8b164519a92d",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/message": "Automatic deployment on upload.",
+          "workers/triggered_by": "upload"
+        },
+        "versions": [
+          {
+            "version_id": "91f212d6-0c46-42db-80da-252f75f079e6",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T16:13:34.469254Z"
+      },
+      {
+        "id": "7171ba0d-0415-45a7-b1ab-0010322a0737",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "33f7ed04-1a99-4652-89fa-1acf3032111b",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T16:22:08.130985Z"
+      },
+      {
+        "id": "124e420c-ce7f-4bac-9d41-23a005636911",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "66bac4e1-7333-4274-b921-fb281c7a5be3",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T17:14:39.130174Z"
+      },
+      {
+        "id": "23404efe-9604-4756-be53-5420d38f31fe",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "secret"
+        },
+        "versions": [
+          {
+            "version_id": "80cbdeaf-e174-440d-b457-821fecb85db4",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T17:24:58.217573Z"
+      },
+      {
+        "id": "73aec622-594d-4af3-a986-bacc593e8e67",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "secret"
+        },
+        "versions": [
+          {
+            "version_id": "8badb4da-150d-40e2-981d-0e436a7c0737",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T17:37:57.705906Z"
+      },
+      {
+        "id": "a79889d3-fe37-4d07-9ef9-cddc6ac06d48",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "7ce026ed-33b2-4156-8ca4-81c3d1c8f164",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T17:42:52.781956Z"
+      },
+      {
+        "id": "9418044c-05e6-44cd-a0e5-03c881921b89",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "secret"
+        },
+        "versions": [
+          {
+            "version_id": "7ba44322-2ffa-425f-88d6-89e04decda14",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-02-27T17:44:34.062647Z"
+      },
+      {
+        "id": "1413948b-b1c1-4329-9b0e-5cd27e37bd7a",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "9c9171cd-a516-4a45-99a2-4b9006f35d19",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-03-05T12:45:36.306115Z"
+      },
+      {
+        "id": "b941d468-4638-403b-a712-e0343ca401f4",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "f655bf9b-1cb2-4ab1-a37a-25e58f9c6c2a",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-03-05T12:55:10.30306Z"
+      },
+      {
+        "id": "fd906e53-4b95-468b-88a6-737f29a52001",
+        "source": "wrangler",
+        "strategy": "percentage",
+        "author_email": "ponomarev.ux@gmail.com",
+        "annotations": {
+          "workers/triggered_by": "deployment"
+        },
+        "versions": [
+          {
+            "version_id": "e3fa23e8-1a16-4724-99f8-d887e472fa44",
+            "percentage": 100
+          }
+        ],
+        "created_on": "2026-03-08T17:45:36.557218Z"
+      }
+    ],
+    "kv_namespace_catalog": [
+      {
+        "binding": "API_CACHE",
+        "id": "b3377378d48649aa81c2e24bb1a0426a"
+      },
+      {
+        "binding": "SETTINGS",
+        "id": "216d28251733449fadff6b2cd82b0458"
+      }
+    ],
+    "d1_database_catalog": [
+      {
+        "uuid": "887a3f58-98c2-41a4-a512-8dcdaea751e8",
+        "name": "mbb-database",
+        "created_at": "2026-01-02T13:24:44.928Z",
+        "version": "production",
+        "num_tables": 0,
+        "file_size": 114688,
+        "jurisdiction": null
+      }
+    ],
+    "command_errors": {
+      "deployments_list": null,
+      "kv_namespace_list": null,
+      "d1_list": null
+    }
+  }
+}

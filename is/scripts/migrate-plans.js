@@ -23,8 +23,8 @@ for (const file of files) {
     let content = fs.readFileSync(path.join(donorDocsDir, file), 'utf8');
     
     // Replace terms
-    content = content.replace(/\bMBB\b/g, 'Legacy App')
-                     .replace(/\bMMB\b/g, 'Target App');
+    content = content.replace(/\bMBB\b/g, 'Legacy PF')
+                     .replace(/\bMMB\b/g, 'PF');
                      
     // Reset checkboxes
     content = content.replace(/\[x\]/g, '[ ]').replace(/\[~\]/g, '[ ]');

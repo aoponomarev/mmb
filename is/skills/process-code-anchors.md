@@ -110,6 +110,6 @@ Place inline anchors in branches where developers would otherwise "search from s
 
 ### Current Implementation Status
 
-The Target App currently uses anchors in infrastructure scripts and key backend files.
+The PF currently uses anchors in infrastructure scripts and key backend files.
 The `audit_skill_coverage` MCP tool (in #JS-by3WhrY9 (server.js)) can detect which JS files lack any skill references — this identifies "blind spots" where agents operate without architectural guidance.
 The `search_anchors` MCP tool returns file:line for all `@skill-anchor` and `@causality` occurrences, filterable by skill or hash.

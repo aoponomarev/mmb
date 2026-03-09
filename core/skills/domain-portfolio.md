@@ -50,7 +50,7 @@ All functions are **pure** — they receive a draft object and return a new draf
 
 ### Compatibility Facade
 
-#JS-aNzHSaKo (portfolio-config.js) acts as a **bridge** between legacy callers (UI components, event handlers) that use the old Legacy App portfolio API shape and the new pure-function engine in `core/domain/`.
+#JS-aNzHSaKo (portfolio-config.js) acts as a **bridge** between legacy callers (UI components, event handlers) that use the old Legacy PF portfolio API shape and the new pure-function engine in `core/domain/`.
 
 **#for-compatibility-facade** A direct cutover of all callers at once would be too risky. The facade translates calls from the old imperative API to the new pure-function domain model, allowing incremental migration.
 

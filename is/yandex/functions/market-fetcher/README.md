@@ -52,11 +52,15 @@ COINGECKO_API_KEY=<опционально, Demo/Pro ключ>
 .\deploy-with-token.ps1 -OAuthToken "y0_AgAAAA..."
 ```
 
+Скрипт автоматически делает post-deploy snapshot в `is/deployments/yandex-market-fetcher/YYYY-MM-DD/`.
+
 ### Обновление кода (без смены конфига)
 
 ```powershell
 .\deploy-with-token.ps1 -OAuthToken "y0_AgAAAA..."
 ```
+
+Альтернатива через Node-скрипт (service-account API key): `node is/yandex/functions/market-fetcher/deploy.js` — также включает обязательный post-deploy snapshot.
 
 ## Локальный тест
 

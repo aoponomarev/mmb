@@ -18,7 +18,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 # Architecture: Testing Strategy & CI
 
-> **Context**: Defines the approach to testing and continuous integration during and after the migration to the Target App.
+> **Context**: Defines the approach to testing and continuous integration during and after the migration to the PF.
 
 ## Reasoning
 
@@ -71,6 +71,6 @@ updated_at: "2026-03-01T00:00:00.000Z"
 
 ---
 
-## Implementation Status in Target App
+## Implementation Status in PF
 - `Implemented`: `node:test` adopted globally. Minimal CI pipeline created via GitHub Actions (`ci.yml`).
 - `Implemented`: `scripts/git/preflight-solo.ps1` — pre-commit flow with skills:check (blocking) and skills:affected (informational).
