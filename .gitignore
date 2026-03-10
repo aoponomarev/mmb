@@ -27,8 +27,8 @@ docs/CRON.txt
 # Copilot cron output (generated, not committed)
 docs/backlog/copilot-gh/.cron-output.json
 
-# Logs
-logs/
+# Logs (root-level only; is/logs/ kept for .gitkeep)
+/logs/
 *.log
 
 # validate-dead-links --json output (audit artifacts)
