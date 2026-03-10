@@ -119,7 +119,7 @@
             },
             {
                 id: 'ssot-policies',
-                src: 'core/ssot/policies.js',
+                src: 'core/config/runtime-policies.js',
                 type: 'local',
                 deps: [],
                 category: 'core'

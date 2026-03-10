@@ -11,6 +11,7 @@ related_ais:
   - ais-bfd150
   - ais-c6c35b
   - ais-7f8e9d
+  - ais-b3c4d5
 
 ---
 
@@ -33,7 +34,7 @@ related_ais:
 | **Business Logic** | `core/` | Конфигурация, кэш, API-клиенты, домены, события, состояние | → shared/ (только utils) |
 | **Metrics Models** | `mm/` | Калькуляторы моделей (Median/AIR), model-manager | → core/ (только config) |
 | **Infrastructure** | `is/` | Cloudflare Workers, Yandex Functions, MCP, контракты, скрипты | → (внешние системы) |
-| **Data** | `data/` | Статические данные (coins.json, иконки) | → (ничего, read-only) |
+| **Data** | `data/` | Runtime: кэш, SQLite (gitignored). Статика (coins, иконки) — в a/. См. id:ais-b3c4d5. | → (ничего, read-only) |
 
 ### Инвариант направления зависимостей
 
@@ -65,7 +66,7 @@ is/ ──→ (external systems, не зависит от app/core/shared runtim
 | State | `core/state/` | auth-state, ui-state, loading-state |
 | Validation | `core/validation/` | schemas, validator, normalizer |
 | Errors | `core/errors/` | error-types, error-handler |
-| SSOT | `core/ssot/` | policies (runtime SSOT) |
+| Runtime policies | `core/config/` | runtime-policies.js (TTL, intervals) |
 | Logging | `core/logging/` | logger |
 | Observability | `core/observability/` | fallback-monitor |
 | Utils | `core/utils/` | draft-coin-set, ban-coin-set, favorites-manager, и др. |

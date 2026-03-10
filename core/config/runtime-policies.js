@@ -1,6 +1,8 @@
 /**
- * #JS-iH2gWJeT
- * @description SSOT policies: TTL and interval contracts for topCoins, marketMetrics; DURATIONS_MS.
+ * #JS-2j3LgAxu
+ * @description Runtime policies: TTL and interval contracts for topCoins, marketMetrics; DURATIONS_MS.
+ * @skill id:sk-483943
+ * @causality #for-ssot-migration-to-config — core/ssot/ removed; runtime policies live in core/config/.
  */
 (function() {
     'use strict';
@@ -161,5 +163,5 @@
     window.ssot = ssot;
     ssot.validateContracts();
 
-    console.log('ssot-policies.js: initialized');
+    console.log('runtime-policies.js: initialized');
 })();

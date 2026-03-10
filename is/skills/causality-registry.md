@@ -27,6 +27,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 |------|-------------|-------------|
 | `#for-anti-calque` | advisory | Russian abbreviations transliterated into Latin (mbb, mmb) cause cognitive load, broken search, and AI hallucination. Standard IT terminology (SSOT, PF, Legacy PF) is unambiguous. |
 | `#for-ssot-paths` | advisory | Infrastructure scripts run from varying CWDs (preflight, CI, local dev). Relative paths break; absolute paths from a single registry (`paths.js`) guarantee correctness. |
+| `#for-ssot-migration-to-config` | advisory | core/ssot/ removed; runtime policies (TTL, intervals) moved to core/config/runtime-policies.js. Config layer owns runtime policy contracts. |
 | `#for-root-path-unambiguity` | advisory | In this repository, "PF" means repository root, not the `app/` layer folder. Contracts and archives under `is/` must never be prefixed with `app/`, or agents will create path drift (`app/is/...`) and break SSOT navigation. |
 | `#for-imports-relative` | advisory | Bundlers and IDE static analysis rely on import paths. Absolute paths in imports break resolution; file operations use PATHS. |
 | `#for-file-protocol` | advisory | No local Node.js server may be a UI dependency — GitHub Pages serves static files only. Cloudflare Worker proxy enables CORS bypass for both `file://` and `https://` without code changes. |

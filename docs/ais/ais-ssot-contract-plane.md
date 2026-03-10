@@ -9,6 +9,7 @@ related_skills:
   - sk-3b1519
   - sk-87700e
 related_ais:
+  - ais-b3c4d5
   - ais-bfd150
   - ais-8982e7
   - ais-9f4e2d
@@ -33,7 +34,7 @@ related_ais:
 | Тип | Где | Пример |
 |-----|-----|--------|
 | **Contract Plane SSOT** | `is/contracts/`, реестры, core/config | paths.js, id-registry.json, causality-registry.md |
-| **Runtime SSOT** | domain-specific, браузерный runtime | #JS-iH2gWJeT (policies.js) — TTL, intervals для cache/request-registry |
+| **Runtime SSOT** | domain-specific, браузерный runtime | #JS-2j3LgAxu (runtime-policies.js) — TTL, intervals для cache/request-registry |
 
 Contract Plane — статические контракты, версионируемые в git. Runtime SSOT — политики, загружаемые в `window.ssot` при старте приложения. Данный AIS описывает только Contract Plane.
 
@@ -98,7 +99,7 @@ flowchart TD
 | Казуальность | causality-registry.md | is/skills/causality-registry.md |
 | Конфигурация | core/config/* | core/config/ |
 | Env | .env.example | .env.example |
-| Runtime policies | core/ssot/policies.js | core/ssot/ (вне Contract Plane) |
+| Runtime policies | core/config/runtime-policies.js | core/config/ |
 
 ### Реализованные артефакты
 

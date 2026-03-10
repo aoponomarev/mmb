@@ -218,7 +218,7 @@
   "#JS-ht4FZQe4": "is/scripts/architecture/validate-id-contract-links.js",
   "#JS-i83e3EeJ": "is/scripts/infrastructure/switch-active-writer.js",
   "#JS-iH26jSeT": "core/api/request-registry.js",
-  "#JS-iH2gWJeT": "core/ssot/policies.js",
+  "#JS-2j3LgAxu": "core/config/runtime-policies.js",
   "#JS-id3oaqeo": "core/state/auth-state.js",
   "#JS-ikUJ4ihH": "core/api/market-snapshot-transport.js",
   "#JS-j1384efB": "is/cloudflare/edge-api/src/coin-sets.js",

@@ -56,6 +56,7 @@ const text = window.tooltipsConfig.get('refresh-data');
 | `portfolio-config.js` | Portfolio domain compatibility facade (bridges legacy callers to `core/domain/`) |
 | `auth-config.js` | OAuth provider settings (Google), token handling rules |
 | `postgres-config.js` | Yandex Cloud PostgreSQL connection parameters |
+| `runtime-policies.js` | TTL and interval contracts for topCoins, marketMetrics, cache, request-registry. Exposes `window.ssot`. |
 | `workspace-config.js` | Persistent user workspace state: activeModelId, activeCoinSetIds, mainTable, metrics. SSOT for all workspace reads/writes. |
 | `menus-config.js` | Navigation menu structure |
 | `i18n-config.js` | Internationalization locale mappings |

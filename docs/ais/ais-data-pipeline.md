@@ -64,7 +64,7 @@ stateDiagram-v2
 
 Все события деградации — через `fallbackMonitor.notify()`.
 
-### SSOT Timing (#JS-iH2gWJeT core/ssot/policies.js)
+### SSOT Timing (#JS-2j3LgAxu core/config/runtime-policies.js)
 
 | Contract | Value | Использование |
 |----------|-------|---------------|

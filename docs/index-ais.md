@@ -11,7 +11,7 @@ last_updated: "2026-03-10"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 28
+> Auto-generated. Total: 29
 
 ---
 
@@ -30,6 +30,7 @@ last_updated: "2026-03-10"
 - [id:ais-c2d3e4](ais/ais-event-transport.md) — AIS: Шина событий, транспорт, мосты и перехватчики (Event Bus, Transport, Bridge, Middleware)
 - [id:ais-71a8b9](ais/ais-executable-units.md) — AIS: Исполняемые единицы — модуль, сервис, провайдер, фасад, оркестратор (Executable Units)
 - [id:ais-f7e2a1](ais/ais-file-header-standard.md) — AIS: Стандарт шапки комментариев кодовых файлов (File Header Standard)
+- [id:ais-b3c4d5](ais/ais-folder-placement.md) — AIS: Спецификация размещения папок (Folder Placement Specification)
 - [id:ais-c6c35b](ais/ais-frontend-ui.md) — AIS: Frontend UI & Взаимодействие (No-Build Vue)
 - [id:ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, Yandex Cloud, AI, N8N)
 - [id:ais-8b2f1c](ais/ais-infrastructure-snapshots.md) — AIS: Инфраструктурные снимки (Rollback-Safe Deployments)

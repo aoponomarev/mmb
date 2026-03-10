@@ -20,6 +20,7 @@ last_updated: "2026-03-08"
 | Doc ids | is/contracts/docs/id-registry.json | id → path для markdown (skills, AIS, docs) |
 | Code hashes | is/contracts/docs/code-file-registry.json | #JS-xxx → path |
 | Resolve | is/contracts/docs/resolve-id.js | SSOT resolver для id: и #hash |
+| Размещение папок | docs/ais/ais-folder-placement.md | id:ais-b3c4d5 — полная карта папок, логика размещения |
 | Казуальность | is/skills/causality-registry.md | #for-X / #not-Y формулировки |
 | Конфигурация UI | core/config/* | app-config, tooltips, modals, messages, workspace и др. |
 | Env template | .env.example | Шаблон переменных окружения |
@@ -28,7 +29,7 @@ last_updated: "2026-03-08"
 
 | Домен | SSOT-файл | Описание |
 |-------|-----------|----------|
-| Cache/Request policies | core/ssot/policies.js | TTL, intervals для topCoins, marketMetrics |
+| Cache/Request policies | core/config/runtime-policies.js | TTL, intervals для topCoins, marketMetrics |
 
 ## Инфраструктура (когда развёрнута)
 

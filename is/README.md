@@ -19,6 +19,7 @@ The `is/` (Infrastructure Space) directory contains all configuration, tooling, 
 ## Subdirectories
 - `cloudflare/`: Edge computing scripts and CORS proxies (Cloudflare Workers).
 - `contracts/`: SSOT schemas for paths, naming rules, and environment variables.
+- `deployments/`: Versioned deployment snapshots per target (`<target>/YYYY-MM-DD/`). See arch-infrastructure-snapshots.
 - `docker/`: Docker configuration (currently in backlog).
 - `google/`: Google Cloud service configurations.
 - `logs/`: Runtime logs directory (gitignored contents).

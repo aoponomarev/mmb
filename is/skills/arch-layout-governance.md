@@ -11,6 +11,7 @@ last_change: ""
 # Architecture: Layout & README Governance
 
 > **Context**: Defines the rules for folder structures and mandatory directory documentation (README.md files) in the PF.
+> **Full folder map**: id:ais-b3c4d5 (docs/ais/ais-folder-placement.md).
 
 ## Reasoning
 

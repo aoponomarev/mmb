@@ -33,14 +33,14 @@ related_ais:
 | Тип | Место проверки | Примеры | Enforcement |
 |-----|---------------|---------|-------------|
 | **Архитектурные** | Build-time (preflight) | Layer separation, naming conventions, prefix registry | Гейты в `is/scripts/` |
-| **Runtime SSOT** | Runtime | Cache TTL, request frequency, provider priority | `core/ssot/policies.js` |
+| **Runtime SSOT** | Runtime | Cache TTL, request frequency, provider priority | `core/config/runtime-policies.js` |
 | **Документационные** | Build-time | AIS completeness, skill frontmatter, causality integrity | Validate-* scripts |
 | **Агентские** | Chat-time | Terminology strictness, comment rewrite, anti-calque | `.cursorrules`, `.cursor/rules/` |
 | **Security** | Runtime + Deploy | OAuth origin validation, secrets hygiene, env sync | `authConfig`, env gates |
 
-### Runtime политики (`core/ssot/policies.js`)
+### Runtime политики (`core/config/runtime-policies.js`)
 
-Файл `core/ssot/policies.js` → `window.ssot` — единственный источник правды для runtime-политик:
+Файл `core/config/runtime-policies.js` → `window.ssot` — единственный источник правды для runtime-политик:
 
 - **Cache policies:** TTL по типам данных (market data: 5 min, stablecoins: 24h, icons: 7d), стратегия invalidation.
 - **Request policies:** минимальный интервал между запросами к одному endpoint (requestRegistry enforces 24h для stablecoins).
@@ -75,7 +75,7 @@ flowchart LR
     end
 
     subgraph policies ["Policy Layer"]
-        ssotPolicies["ssot/policies.js"]
+        ssotPolicies["runtime-policies.js"]
         reqRegistry["request-registry.js"]
         rateLimiter["rate-limiter.js"]
     end
@@ -117,12 +117,12 @@ flowchart LR
 
 1. **Schema-first validation:** данные из внешнего мира (API, localStorage) проходят через `validator.validate()` **до** использования в бизнес-логике.
 2. **Fail-fast for invalid schema:** если данные не соответствуют схеме, модуль возвращает `[]` или `null` — без silent corruption (`#for-fail-fast`).
-3. **Policy immutability:** runtime-политики в `core/ssot/policies.js` — read-only. Изменение политик требует пересмотра в docs и обновления SSOT.
+3. **Policy immutability:** runtime-политики в `core/config/runtime-policies.js` — read-only. Изменение политик требует пересмотра в docs и обновления SSOT.
 4. **Gate ≠ Policy:** гейт проверяет, но не определяет правило. Правило живёт в документации/SSOT; гейт — executable enforcement.
 
 ## Компоненты и Контракты (Components & Contracts)
 
-- `core/ssot/policies.js` — runtime SSOT политик
+- `core/config/runtime-policies.js` — runtime SSOT политик
 - `core/validation/schemas.js` — схемы валидации данных
 - `core/validation/validator.js` — движок валидации
 - `core/validation/normalizer.js` — нормализация после валидации

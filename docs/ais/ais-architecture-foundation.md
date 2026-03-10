@@ -6,6 +6,7 @@ related_skills:
   - sk-883639
   - sk-02d3ea
 related_ais:
+  - ais-b3c4d5
   - ais-a1b2c3
   - ais-71a8b9
   - ais-d4e5f6
