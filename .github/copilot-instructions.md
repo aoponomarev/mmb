@@ -1,0 +1,32 @@
+---
+id: copilot-beacon
+status: active
+last_updated: "2026-03-10"
+---
+
+# GitHub Copilot — Repository Context (Beacon)
+
+> Copilot reads this file on every chat/agent request. Use it to align with project governance.
+
+## SSOT References (read before making changes)
+
+| Artifact | Path | Purpose |
+|----------|------|---------|
+| **Glossary** | [docs/glossary.md](../docs/glossary.md) | Terminology: Layer vs Contour, Service vs Provider, Gate vs Module. No calques (EIP→SSOT). |
+| **ID Registry** | [is/contracts/docs/id-registry.json](../is/contracts/docs/id-registry.json) | Resolve `id:sk-xxx`, `id:ais-xxx` to file paths. |
+| **Causality Registry** | [is/skills/causality-registry.md](../is/skills/causality-registry.md) | Use `#for-xxx` / `#not-xxx` hashes from here when adding rationale. |
+| **Code File Registry** | [is/contracts/docs/code-file-registry.json](../is/contracts/docs/code-file-registry.json) | Resolve `#JS-xxx` hashes to file paths. |
+
+## Layer Structure
+
+- **app/** — Presentation Layer (UI, Vue components).
+- **core/** — Business Logic Layer (services, providers, config).
+- **is/** — Infrastructure Layer (scripts, contracts, skills, MCP).
+
+Do not create `app/is/` or `core/is/` — "PF" means repository root.
+
+## Output Conventions
+
+- **Backlog tasks** (if creating): place in `docs/backlog/copilot-gh/` with date prefix.
+- **No direct merges** — propose via PR; human reviews and merges.
+- **Preflight** — code must pass `npm run preflight` before merge.

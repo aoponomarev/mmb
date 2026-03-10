@@ -20,12 +20,12 @@ The `is/` (Infrastructure Space) directory contains all configuration, tooling, 
 - `cloudflare/`: Edge computing scripts and CORS proxies (Cloudflare Workers).
 - `contracts/`: SSOT schemas for paths, naming rules, and environment variables.
 - `deployments/`: Versioned deployment snapshots per target (`<target>/YYYY-MM-DD/`). See arch-infrastructure-snapshots.
-- `docker/`: Docker configuration (currently in backlog).
-- `google/`: Google Cloud service configurations.
+- `docker/`: Docker configuration (reserved for future integration).
+- `google/`: Google Cloud service configurations (reserved for future integration).
 - `logs/`: Runtime logs directory (gitignored contents).
 - `mcp/`: Model Context Protocol servers for AI agents.
 - `memory/`: MCP memory JSONL files for long-term agent context.
-- `n8n/`: n8n orchestration workflows (currently in backlog).
+- `n8n/`: n8n orchestration workflows (reserved for future integration).
 - `scripts/`: Automation, diagnostics, and deployment tools (see `is/scripts/README.md`).
 - `secrets/`: Encrypted local secret archives and resilience scripts.
 - `skills/`: The MCP knowledge base and architectural ADRs (see `is/skills/README.md`).

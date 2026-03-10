@@ -52,7 +52,7 @@ All logic for external APIs (knowledge base, task management, Git) must live in 
 
 **Goal**: Leverage GitHub cloud intelligence while maintaining local self-sufficiency and minimizing token costs.
 
-**Beacon strategy**: `.github/copilot-instructions.md` moved to historical scope; skip in path-contracts.js.
+**Beacon strategy**: `.github/copilot-instructions.md` — active; Copilot reads it on every request. SSOT: glossary, id-registry, causality-registry, layers.
 
 **Token-saving workflow (L3 tasks)**: Create Issue → add label `L3-Discovery` → open in Copilot Workspace → request plan only ("Provide step-by-step plan, do not generate code yet") → execute locally via ВЗП protocol.
 

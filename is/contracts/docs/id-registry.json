@@ -188,6 +188,7 @@
     "ais-91b7f4": "docs/ais/ais-workspace-storage.md",
     "ais-e41384": "docs/ais/ais-yandex-cloud.md",
     "ais-1c4d92": "docs/ais/TEMPLATE.md",
+    "copilot-beacon": ".github/copilot-instructions.md",
     "readme-069aca": "app/README.md",
     "readme-c8e267": "core/README.md",
     "readme-5c42c7": "data/README.md",
