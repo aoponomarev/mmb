@@ -89,5 +89,19 @@ jobs:
               };
             }
 
-            const { data: issue } = await github.rest.issues.create(createParams);
+            let issue;
+            try {
+              const res = await github.rest.issues.create(createParams);
+              issue = res.data;
+            } catch (err) {
+              if (err.message?.includes('cannot be assigned') && createParams.assignees) {
+                delete createParams.assignees;
+                delete createParams.agent_assignment;
+                const res = await github.rest.issues.create(createParams);
+                issue = res.data;
+                core.warning('Copilot assignment skipped (Coding Agent may be disabled for repo). Issue created without assignee.');
+              } else {
+                throw err;
+              }
+            }
             core.setOutput('issue_number', issue.number);
