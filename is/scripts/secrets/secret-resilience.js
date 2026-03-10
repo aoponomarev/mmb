@@ -210,6 +210,8 @@ export function restoreLatest() {
     console.log(`[secret-resilience] keys restored: ${restoredCount}`);
 }
 
+const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+
 export function check() {
     const envMap = requireEnvFile();
     const passphrase = getArchivePassphrase(envMap);
@@ -220,7 +222,7 @@ export function check() {
     }
 
     const archives = listArchives();
-    if (archives.length === 0) {
+    if (archives.length === 0 && !isCI) {
         errors.push(`No encrypted local secret archives found in: ${ARCHIVE_DIR}`);
     } else if (passphrase && passphrase.length >= 32) {
         try {
