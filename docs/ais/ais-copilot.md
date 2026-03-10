@@ -105,3 +105,6 @@ docs/backlog/
 | Дата | Изменение |
 |------|-----------|
 | 2026-03-10 | Создание AIS. Beacon восстановлен. Постановщик задач — заглушка, детали добавляются по мере работы. |
+| 2026-03-10 | Добавлен источник infra-cloudflare-workers (Workers Platform Changelog). Cursor rule infra-cloudflare.mdc — проект-адаптация для Cloudflare plugin. |
+| 2026-03-10 | Sentry, PostHog, Firecrawl: MCP в mcp.json; rules infra-sentry.mdc, infra-posthog.mdc, infra-firecrawl.mdc; sources obs-sentry-changelog, obs-posthog-changelog; AIS-775420 дополнен observability. |
+| 2026-03-10 | Skills id:sk-7f4e5d, sk-8e5f6a, sk-9f6a7b (arch-integration-sentry/posthog/firecrawl); causalities #for-production-error-plane, #for-product-analytics, #for-docs-scraping-agent; полная семантическая привязка к AIS, SSOT, rules. |

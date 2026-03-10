@@ -1,0 +1,16 @@
+{
+  "plugins": {
+    "cloudflare": {
+      "enabled": true
+    },
+    "sentry": {
+      "enabled": true
+    },
+    "posthog": {
+      "enabled": true
+    },
+    "firecrawl": {
+      "enabled": true
+    }
+  }
+}

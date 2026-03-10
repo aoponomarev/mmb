@@ -1,0 +1,28 @@
+---
+description: |
+  Project-specific Cloudflare integration. Use when editing Edge API Worker, D1, KV, R2, or wrangler config.
+  Bridges Cloudflare Cursor plugin with project architecture. Read before applying Cloudflare docs/skills.
+globs:
+  - "is/cloudflare/**"
+  - "core/config/cloudflare*.js"
+  - "**/wrangler.toml"
+alwaysApply: false
+---
+
+# Cloudflare — Project Integration
+
+## SSOT
+- **Skill:** id:sk-5cd3c9 (is/skills/arch-cloudflare-infrastructure.md)
+- **Config:** #JS-4r2GQb12 (cloudflare-config.js)
+- **Deploy:** `npm run deploy:cloudflare:edge-api` → snapshot in is/deployments/cloudflare-edge-api/
+
+## Project Conventions (override generic Cloudflare advice)
+1. **KV key limit:** 512 bytes. Hash query strings via SHA-256 when key >480 bytes. Format: `api-cache:coingecko:/coins/markets?h=<sha256hex>`.
+2. **OAuth on file://:** Use auth-client popup + Worker returns `postMessage` HTML, not 302 redirect.
+3. **D1 migrations:** All schema changes in `is/cloudflare/edge-api/migrations/`; apply via `wrangler d1 migrations apply`.
+4. **Bindings:** D1, API_CACHE, SETTINGS, GOOGLE_CLIENT_SECRET, JWT_SECRET, SETTINGS_TOKEN.
+5. **CORS:** `Access-Control-Allow-Origin: *` for proxy/API endpoints.
+6. **Local-First:** App must remain functional via localStorage if Cloudflare unreachable.
+
+## Terminology (docs/glossary.md)
+- Worker = edge compute unit; Provider = external data adapter; Layer = vertical hierarchy.

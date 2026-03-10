@@ -1,12 +1,12 @@
 {
   "folders": [
     {
-      "name": "a",
-      "path": "../a"
-    },
-    {
       "name": "PF (Project Folder)",
       "path": "."
+    },
+    {
+      "name": "a",
+      "path": "../a"
     }
   ],
   "settings": {

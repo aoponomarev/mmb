@@ -40,6 +40,7 @@ last_updated: "2026-03-08"
 | Pre-commit | scripts/git/preflight-solo.ps1 | Локальный flow перед коммитом |
 | Preflight | is/scripts/preflight.js | #JS-NrBeANnz — главный архитектурный гейт |
 | Cloudflare Edge | core/config/cloudflare-config.js | #JS-4r2GQb12 — Worker URLs, proxy endpoints |
+| Observability (Sentry, PostHog, Firecrawl) | is/skills/arch-integration-sentry.md, arch-integration-posthog.md, arch-integration-firecrawl.md | id:sk-7f4e5d, sk-8e5f6a, sk-9f6a7b — skills; .cursor/rules/infra-*.mdc — rules |
 | Module load order | core/modules-config.js | #JS-os34Gxk3 — порядок загрузки JS модулей |
 | MCP manifests | is/mcp/* | package.json в каждом MCP-сервере |
 

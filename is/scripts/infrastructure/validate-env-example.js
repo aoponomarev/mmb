@@ -18,6 +18,7 @@ const ENV_EXAMPLE_PATH = path.join(ROOT, '.env.example');
 const OPTIONAL_ENV_KEYS = new Set([
     'DATASETS_ROOT',
     'SYS_SECRET_ARCHIVE_KEY',
+    'FIRECRAWL_API_KEY',  // Cursor MCP Firecrawl; optional if not using docs scraping
 ]);
 
 function parseEnvKeys(content) {

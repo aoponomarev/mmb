@@ -22,6 +22,7 @@ last_change: ""
 - **#for-redaction-by-design** Monitoring logs must never contain secrets or PII; structured outputs use known safe fields only.
 - **#for-rollback-linkage** Explicitly tying monitoring to rollback triggers removes emotional decision-making.
 - **#not-prometheus-grafana** Enterprise observability stacks are over-engineering for a portfolio project.
+- **Complement:** id:sk-7f4e5d (Sentry) = production error plane; id:sk-8e5f6a (PostHog) = product analytics. Local monitoring (this skill) remains for health-check, jsonl, preflight.
 - **#not-manual-diagnosis** Unreproducible and error-prone during active migration.
 - **#not-defer-monitoring** Waiting until after migration risks invisible regressions.
 

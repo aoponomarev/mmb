@@ -1,0 +1,28 @@
+---
+description: |
+  Firecrawl integration for web scraping and docs extraction. Use when Copilot backlog needs external content, analyzing sources from docs/backlog/copilot-gh/sources.json, or fetching changelog/release notes.
+  Skill: id:sk-9f6a7b (arch-integration-firecrawl).
+globs:
+  - "docs/backlog/**"
+  - "is/scripts/infrastructure/**"
+alwaysApply: false
+---
+
+# Firecrawl — Project Integration
+
+## Scope
+- **Use cases:** Copilot backlog analysis (id:ais-c8f2a1), scraping changelogs from sources.json, extracting structured data from external docs.
+- **Skill:** id:sk-9f6a7b (arch-integration-firecrawl). Sources: docs/backlog/copilot-gh/sources.json.
+
+## Project Conventions
+1. **firecrawl_scrape:** For single URL (changelog, release notes) — use when Copilot Issue references a source URL.
+2. **firecrawl_search:** For broad research — "TypeScript MCP best practices", "Cloudflare Workers KV limits".
+3. **firecrawl_extract:** For structured output — JSON schema for release notes, feature lists.
+4. **Output location:** Copilot backlog writes to docs/backlog/copilot-gh/YYYY-MM-DD-{source-id}.md per id:ais-c8f2a1.
+
+## Env
+- **FIRECRAWL_API_KEY:** Add to .env. Wrapper `is/scripts/infrastructure/firecrawl-mcp-wrapper.js` loads .env before spawning firecrawl-mcp. Get key at firecrawl.dev/app.
+
+## SSOT Links
+- docs/backlog/copilot-gh/sources.json — source URLs
+- id:ais-c8f2a1 — Copilot integration, backlog format

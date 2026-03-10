@@ -5,6 +5,16 @@
       "args": [
         "is/mcp/bootstrap.js"
       ]
+    },
+    "sentry": {
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "posthog": {
+      "url": "https://mcp.posthog.com/mcp"
+    },
+    "firecrawl": {
+      "command": "node",
+      "args": ["is/scripts/infrastructure/firecrawl-mcp-wrapper.js"]
     }
   }
 }

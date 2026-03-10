@@ -146,6 +146,33 @@
       "integrated": true
     },
     {
+      "id": "infra-cloudflare-workers",
+      "name": "Cloudflare Workers (Platform)",
+      "url": "https://developers.cloudflare.com/workers/platform/changelog/",
+      "type": "official",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "obs-sentry-changelog",
+      "name": "Sentry Changelog",
+      "url": "https://docs.sentry.io/changelog/",
+      "type": "official",
+      "priority": 6,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "obs-posthog-changelog",
+      "name": "PostHog Changelog",
+      "url": "https://posthog.com/changelog",
+      "type": "official",
+      "priority": 6,
+      "enabled": true,
+      "integrated": true
+    },
+    {
       "id": "github-copilot-workspace",
       "name": "GitHub Copilot Workspace",
       "url": "https://github.blog/changelog/label/copilot/",

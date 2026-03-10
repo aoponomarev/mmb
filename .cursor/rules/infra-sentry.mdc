@@ -1,0 +1,29 @@
+---
+description: |
+  Sentry integration for error tracking. Use when debugging production errors, reviewing Sentry issues, or instrumenting Cloudflare Workers / Yandex Functions.
+  Skill: id:sk-7f4e5d (arch-integration-sentry). Complements id:sk-92384e (local monitoring).
+globs:
+  - "is/cloudflare/**"
+  - "is/yandex/**"
+  - "app/**"
+  - "core/**"
+alwaysApply: false
+---
+
+# Sentry — Project Integration
+
+## Scope
+- **Error plane:** Cloudflare Workers (Edge API), Yandex Cloud Functions (coins-db-gateway, coingecko-fetcher).
+- **Layers:** app (UI errors), core (provider/orchestrator errors), is (infra scripts).
+- **Skill:** id:sk-7f4e5d (arch-integration-sentry). Local monitoring: id:sk-92384e.
+
+## Project Conventions
+1. **Transport domains:** Errors from Cloudflare → tag `source:cloudflare`; Yandex → `source:yandex`. Map to id:ais-775420 domains.
+2. **No PII in breadcrumbs:** id:sk-92384e #for-redaction-by-design — never log tokens, emails, user IDs in Sentry context.
+3. **Command `/seer`:** Use for "top errors last 24h", "critical issues in edge-api".
+4. **Skill `sentry-code-review`:** For PRs with Sentry-detected bugs — agent applies fixes per project conventions.
+
+## SSOT Links
+- id:ais-775420 — Cloudflare vs Yandex domain separation
+- id:sk-5cd3c9 — Cloudflare routes (auth, api/*, proxy)
+- id:sk-92384e — Monitoring baseline (health-check, logs/)

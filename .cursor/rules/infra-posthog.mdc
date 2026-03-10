@@ -1,0 +1,28 @@
+---
+description: |
+  PostHog integration for product analytics and feature flags. Use when analyzing usage, creating feature flags, or implementing Edge Analytics (roadmap).
+  Skill: id:sk-8e5f6a (arch-integration-posthog). MCP runs on Cloudflare Workers.
+globs:
+  - "app/**"
+  - "core/config/**"
+  - "is/cloudflare/**"
+alwaysApply: false
+---
+
+# PostHog — Project Integration
+
+## Scope
+- **Analytics plane:** Product usage, feature adoption, A/B experiments.
+- **Skill:** id:sk-8e5f6a (arch-integration-posthog). Roadmap: id:sk-5cd3c9 Edge Analytics.
+- **Layers:** app (event capture), core/config (feature flag reads).
+
+## Project Conventions
+1. **Event naming:** Use `snake_case`, prefix by domain: `portfolio_created`, `market_cache_refreshed`, `ai_provider_switched`.
+2. **Feature flags:** Align with id:ais-775420 — flags for Cloudflare vs Yandex transport features; never mix domains in one flag.
+3. **MCP tools:** "What are my most common errors?", "Add feature flag for homepage redesign" — apply to our layer structure (app/core/is).
+4. **LLM analytics:** PostHog tracks AI costs — map to AIProviderManager (id:sk-d76b68) providers.
+
+## SSOT Links
+- id:ais-775420 — Transport domains (Cloudflare settings, Yandex market)
+- id:sk-5cd3c9 — Cloudflare roadmap (Edge Analytics)
+- core/config/* — appConfig, feature toggles

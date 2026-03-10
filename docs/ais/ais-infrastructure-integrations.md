@@ -9,6 +9,9 @@ related_skills:
   - sk-7b4ee5
   - sk-bb7c8e
   - sk-02d3ea
+  - sk-7f4e5d
+  - sk-8e5f6a
+  - sk-9f6a7b
 related_ais:
   - ais-e41384
   - ais-f6b9e2
@@ -31,6 +34,7 @@ related_ais:
 2. **Yandex Cloud** — server-side ingest/read транспорт для рыночных данных и Yandex-specific integrations.
 3. **N8N** — внешние webhook-driven автоматизации.
 4. **AI providers** — провайдеры, скрытые за фасадом `AIProviderManager`.
+5. **Observability (Cursor MCP)** — Sentry (errors), PostHog (analytics/feature flags), Firecrawl (docs scraping для Copilot backlog). Skills: id:sk-7f4e5d (arch-integration-sentry), id:sk-8e5f6a (arch-integration-posthog), id:sk-9f6a7b (arch-integration-firecrawl). Rules: `.cursor/rules/infra-sentry.mdc`, `infra-posthog.mdc`, `infra-firecrawl.mdc`.
 
 Ключевой принцип: Cloudflare и Yandex Cloud здесь не являются взаимозаменяемыми платформами. Каждая обслуживает свой bounded context и свой набор контрактов.
 
