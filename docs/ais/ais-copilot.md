@@ -61,7 +61,8 @@ related_ais:
 - **Workflow:** `.github/workflows/copilot-backlog-cron.yml`
 - **Расписание:** `0 23 * * *` (23:00 UTC = 02:00 MSK)
 - **Скрипт:** `is/scripts/infrastructure/copilot-backlog-cron.js` — собирает источники, формирует Issue
-- **Issue:** создаётся для Copilot с задачей на аналитику
+- **Issue:** создаётся и назначается Copilot (assignee `copilot-swe-agent[bot]`)
+- **Полная автоматизация:** нужен секрет `COPILOT_PAT` — PAT пользователя с лицензией Copilot (fine-grained: issues read+write, contents). Без него — Issue создаётся, но Copilot не назначается.
 
 ### Роль Copilot (аналитическая работа)
 
