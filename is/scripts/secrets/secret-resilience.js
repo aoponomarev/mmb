@@ -224,7 +224,7 @@ export function check() {
     const archives = listArchives();
     if (archives.length === 0 && !isCI) {
         errors.push(`No encrypted local secret archives found in: ${ARCHIVE_DIR}`);
-    } else if (passphrase && passphrase.length >= 32) {
+    } else if (archives.length > 0 && passphrase && passphrase.length >= 32) {
         try {
             const latest = JSON.parse(fs.readFileSync(archives[0], 'utf8'));
             const payload = decryptPayload(latest, passphrase);

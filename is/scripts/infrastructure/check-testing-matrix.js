@@ -42,9 +42,9 @@ const PREMERGE = [
 
 /**
  * release — full integrity: run before pushing to main/master.
+ * Note: secret:check excluded from CI — requires local encrypted archives (gitignored).
  */
 const RELEASE = [
-    ['secret integrity', 'npm run secret:check'],
     ['cache full', 'npm run cache:integrity:check'],
     ['single-writer', 'npm run validate:single-writer'],
     ['monitoring baseline', 'npm run monitoring:baseline'],
