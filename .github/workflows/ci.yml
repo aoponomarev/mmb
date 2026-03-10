@@ -47,3 +47,4 @@ jobs:
         with:
           name: monitoring-snapshot
           path: is/logs/monitoring-health.jsonl
+          if-no-files-found: ignore
