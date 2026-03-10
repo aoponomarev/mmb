@@ -12,6 +12,12 @@ import { getDocMap, getCodeMapWithBasenameCounts } from "../../contracts/docs/re
 const ID_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "id-registry.json");
 const CODE_REGISTRY_PATH = path.join(ROOT, "is", "contracts", "docs", "code-file-registry.json");
 const EXCLUDE_DIRS = new Set(["node_modules", ".git"]);
+
+/** Paths allowed to be missing (gitignored runtime files). Skip stale-path check for these. */
+const STALE_PATH_SKIP = [
+  (p) => p.startsWith("is/secrets/archives/"),
+  (p) => p === "is/contracts/.causality-lock.json",
+];
 const TARGET_EXTS = new Set([".md", ".mdc", ".js", ".ts"]);
 
 const DOC_PAIR_RE = /\b(id:[a-z0-9][a-z0-9-]*)\s*\(([^)\n]+?\.md(?:#[^)]+)?)\)/g;
@@ -103,15 +109,17 @@ function main() {
   const errors = [];
   const pathOnlyViolations = [];
 
+  const skipStale = (relPath) => STALE_PATH_SKIP.some((fn) => fn(relPath.replace(/\\/g, "/")));
+
   for (const [idToken, relPath] of docMap) {
     const abs = path.join(ROOT, relPath.replace(/\//g, path.sep));
-    if (!fs.existsSync(abs)) {
+    if (!fs.existsSync(abs) && !skipStale(relPath)) {
       errors.push(`stale-path: ${idToken} -> ${relPath} (file missing)`);
     }
   }
   for (const [hash, relPath] of codeMap) {
     const abs = path.join(ROOT, relPath.replace(/\//g, path.sep));
-    if (!fs.existsSync(abs)) {
+    if (!fs.existsSync(abs) && !skipStale(relPath)) {
       errors.push(`stale-path: ${hash} -> ${relPath} (file missing)`);
     }
   }
