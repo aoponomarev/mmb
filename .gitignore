@@ -15,7 +15,8 @@ data/*.sqlite
 
 # Infrastructure runtime artifacts
 is/secrets/archives/
-is/logs/
+is/logs/*
+!is/logs/.gitkeep
 is/memory/*.jsonl
 is/memory/*.json
 is/contracts/.causality-lock.json
