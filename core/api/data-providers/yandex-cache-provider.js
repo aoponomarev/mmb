@@ -25,7 +25,7 @@
 
         /**
          * Get top N coins from DB cache
-         * @param {number} count - Coin count (1-500)
+         * @param {number} count - Coin count (1-1000)
          * @param {string} sortBy - 'market_cap' | 'volume'
          * @param {Object} options - { onProgress, signal }
          * @returns {Promise<Array>} Normalized coins

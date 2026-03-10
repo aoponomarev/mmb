@@ -86,6 +86,7 @@
                 ...(window.coinSetLoadModalBody ? { 'coin-set-load-modal-body': window.coinSetLoadModalBody } : {}),
                 ...(window.cmpIconManagerModalBody ? { 'icon-manager-modal-body': window.cmpIconManagerModalBody } : {}),
                 ...(window.coingeckoCronHistoryModalBody ? { 'coingecko-cron-history-modal-body': window.coingeckoCronHistoryModalBody } : {}),
+                ...(window.candlesModalBody ? { 'candles-modal-body': window.candlesModalBody } : {}),
                 'app-header': window.appHeader,
                 'app-footer': window.appFooter,
                 // System message components
@@ -162,6 +163,8 @@
                     authState: window.authState ? window.authState.getState() : null,
                     // Modal config (for template access)
                     modalsConfig: window.modalsConfig || null,
+                    // Candles modal state
+                    currentCandlesCoin: null,
                     // Portfolio form state
                     currentViewingPortfolio: null,
                     portfolioFormKey: 0,
@@ -4574,27 +4577,34 @@
                  * Update top-coins cache metadata (expiresAt/timestamp)
                  */
                 /**
-                 * Request coin count in cloud PostgreSQL DB
-                 * Uses checkCacheStatus() from yandex-cache-provider
+                 * Request effective coin count for table replacement from cloud PostgreSQL DB
+                 * Uses same selection path as "apply DB coins" action.
                  */
                 async fetchDbStatus() {
                     if (!window.dataProviderManager) return;
                     this.dbStatus = { count: null, loading: true, error: false };
                     try {
                         const provider = window.dataProviderManager.providers?.['yandex-cache'];
-                        if (!provider || typeof provider.checkCacheStatus !== 'function') {
+                        if (!provider || typeof provider.checkCacheStatus !== 'function' || typeof provider.getTopCoins !== 'function') {
                             this.dbStatus = { count: null, loading: false, error: false };
                             return;
                         }
                         const status = await provider.checkCacheStatus();
+                        const rawCount = status.available ? Number(status.count ?? 0) : 0;
+                        const targetCount = rawCount > 0 ? Math.min(rawCount, 1000) : 250;
+                        const coinsFromDb = status.available
+                            ? await provider.getTopCoins(targetCount, 'market_cap')
+                            : [];
+                        const effectiveCount = this.applyBanFilterToCoins(coinsFromDb).length;
                         this.dbStatus = {
-                            count: status.available ? (status.count ?? null) : null,
+                            count: status.available ? effectiveCount : null,
                             loading: false,
                             error: !status.available,
+                            rawCount: status.available ? rawCount : null,
                             fetchedAt: status.fetchedAt || null
                         };
                     } catch (e) {
-                        this.dbStatus = { count: null, loading: false, error: true, fetchedAt: null };
+                        this.dbStatus = { count: null, loading: false, error: true, rawCount: null, fetchedAt: null };
                     }
                 },
 
@@ -5012,6 +5022,28 @@
                         });
                     }
 
+                    // Subscribe to generic modal show events
+                    if (window.eventBus) {
+                        // @skill-anchor id:sk-318305 #for-modal-open-chain
+                        this._uiShowModalSubId = window.eventBus.on('ui:show-modal', (data) => {
+                            const { modalId, props } = data;
+                            const modalRef = this.$refs[modalId];
+                            if (modalRef) {
+                                // If props provided, update currentViewingPortfolio or other appropriate state
+                                // For candlesModal, we need a specific state if it's not automatically handled
+                                if (modalId === 'candlesModal' && props) {
+                                    this.currentCandlesCoin = props;
+                                }
+                                
+                                this.$nextTick(() => {
+                                    modalRef.show();
+                                });
+                            } else {
+                                console.warn(`app-ui-root: modal ref "${modalId}" not found for event ui:show-modal`);
+                            }
+                        });
+                    }
+
                     // Init local "Draft" set from 77.json (if not yet exists)
                     this.initializeDraftSet();
 
@@ -5126,6 +5158,9 @@
                 }
                 if (window.eventBus && this._banSetUpdatedSubId) {
                     window.eventBus.off('ban-set-updated', this._banSetUpdatedSubId);
+                }
+                if (window.eventBus && this._uiShowModalSubId) {
+                    window.eventBus.off('ui:show-modal', this._uiShowModalSubId);
                 }
             },
         });

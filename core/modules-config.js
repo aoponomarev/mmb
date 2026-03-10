@@ -298,6 +298,20 @@
                 category: 'core'
             },
             {
+                id: 'bybit-kline-provider',
+                src: 'core/api/data-providers/bybit-kline-provider.js',
+                type: 'local',
+                deps: ['base-data-provider', 'data-providers-config', 'cloudflare-config'],
+                category: 'core'
+            },
+            {
+                id: 'kline-service',
+                src: 'core/api/kline-service.js',
+                type: 'local',
+                deps: ['bybit-kline-provider', 'cache-manager', 'request-registry'],
+                category: 'core'
+            },
+            {
                 id: 'yandex-cache-provider',
                 src: 'core/api/data-providers/yandex-cache-provider.js',
                 type: 'local',
@@ -855,6 +869,13 @@
                 src: 'app/components/modal-example-body.js',
                 type: 'local',
                 deps: ['vue', 'modal'],
+                category: 'components'
+            },
+            {
+                id: 'candles-modal-body',
+                src: 'app/components/candles-modal-body.js',
+                type: 'local',
+                deps: ['vue', 'modal', 'kline-service'],
                 category: 'components'
             },
             {

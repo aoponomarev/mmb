@@ -533,7 +533,7 @@
                                             v-else-if="dbStatus.count !== null"
                                             class="btn btn-link text-muted ms-auto p-0 border-0 text-decoration-none"
                                             style="font-size: 0.7rem; opacity: 0.6; white-space: nowrap;"
-                                            :title="`Монет в облачной БД (PostgreSQL): ${dbStatus.count}. Нажмите for истории Cron`"
+                                            :title="`Монет для подстановки в таблицу: ${dbStatus.count}. Нажмите для истории Cron`"
                                             @click="openCoinGeckoCronHistoryModal">
                                             <i class="fas fa-database me-1" style="font-size: 0.6rem;"></i>{{ dbStatus.count }}
                                         </button>
@@ -895,6 +895,30 @@
                     :on-rebalance="handleRebalancePortfolio"
                     :on-delete="handleDeletePortfolio"
                 ></portfolio-view-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно свечей -->
+        <cmp-modal
+            ref="candlesModal"
+            modal-id="candlesModal"
+            :title="modalsConfig?.getModalTitle('candlesModal')"
+            :centered="true"
+            size="lg"
+        >
+            <template #header>
+                <h5 class="modal-title">
+                    {{ modalsConfig?.getModalTitle('candlesModal') }}
+                </h5>
+                <div id="candlesModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <candles-modal-body
+                    v-if="currentCandlesCoin"
+                    :coin-id="currentCandlesCoin.coinId"
+                    :symbol="currentCandlesCoin.symbol"
+                ></candles-modal-body>
             </template>
         </cmp-modal>
 

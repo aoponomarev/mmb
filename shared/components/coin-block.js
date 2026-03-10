@@ -228,6 +228,24 @@
             },
 
             /**
+             * Show candles modal
+             */
+            handleShowCandles() {
+                // Emit event to app-ui-root to show modal
+                if (window.eventBus) {
+                    window.eventBus.emit('ui:show-modal', {
+                        modalId: 'candlesModal',
+                        props: {
+                            coinId: this.coinId,
+                            symbol: this.symbol
+                        }
+                    });
+                } else {
+                    console.warn('coin-block: eventBus not found');
+                }
+            },
+
+            /**
              * Delete coin from table
              */
             handleDelete() {

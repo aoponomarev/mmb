@@ -1,7 +1,7 @@
 ---
 id: ais-e41384
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-10"
 related_skills:
   - sk-224210
   - sk-bb7c8e
@@ -142,8 +142,14 @@ flowchart TD
 |-------|------|---------|-------------|
 | `ids` | string | — | Comma-separated coin IDs |
 | `sort` | string | `market_cap` | `market_cap` или `volume` |
-| `limit` | number | 250 | Max 500 |
+| `limit` | number | 250 | Max 1000 |
 | `include_prev` | string | `false` | Если `true`, включает данные предыдущего цикла |
+
+### Семантика счётчиков для UI
+
+- `count_only=true` возвращает raw-число уникальных `coin_id` в БД и подходит для диагностики наполнения кэша.
+- Для пользовательского счётчика "сколько монет будет подставлено в таблицу" нужно использовать effective-count: тот же read-запрос (`sort`, `limit`) и те же клиентские фильтры, что у операции подстановки.
+- Практическое правило: кнопка подстановки, toast и верхний правый индикатор должны показывать одно и то же effective-значение.
 
 ### GET /api/coins/cycles
 

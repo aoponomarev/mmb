@@ -67,6 +67,14 @@
                         @click="handleOpenBybit">
                     </cmp-dropdown-menu-item>
                 </li>
+                <li>
+                    <cmp-dropdown-menu-item
+                        title="Свечи"
+                        icon="fas fa-chart-line"
+                        highlight-class="bg-hover-secondary-soft"
+                        @click="handleShowCandles">
+                    </cmp-dropdown-menu-item>
+                </li>
                 <li><hr class="dropdown-divider"></li>
                 <li v-if="canEditIcon">
                     <cmp-dropdown-menu-item

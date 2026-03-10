@@ -96,6 +96,24 @@
                     'icons',
                     'instant-load'
                 ]
+            },
+            'bybit': {
+                name: 'bybit',
+                displayName: 'Bybit',
+                description: 'Биржа Bybit (публичные данные по свечам)',
+                baseUrl: 'https://api.bybit.com',
+                requiresApiKey: false,
+                rateLimit: {
+                    requestsPerMinute: 600, // 600 per 5s = 7200 per minute, but we'll be conservative
+                    requestsPerSecond: 120
+                },
+                timeout: 15000,
+                endpoints: {
+                    kline: '/v5/market/kline'
+                },
+                features: [
+                    'klines'
+                ]
             }
             // Future providers:
             // coinmarketcap: { ... },

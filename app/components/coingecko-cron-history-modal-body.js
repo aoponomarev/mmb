@@ -75,11 +75,22 @@
                 loading: false,
                 error: '',
                 rows: [],
-                triggering: false
+                triggering: false,
+                applyingDbCoins: false,
+                dbCoinCount: null,
+                dbCoinCountRaw: null,
+                dbCoinsPrepared: []
             };
         },
 
         methods: {
+            getDbButtonLabel() {
+                if (typeof this.dbCoinCount === 'number' && this.dbCoinCount > 0) {
+                    return String(this.dbCoinCount);
+                }
+                return '...';
+            },
+
             formatDateTime(value) {
                 if (!value) return { date: '—', time: '—' };
                 const dt = new Date(value);
@@ -135,15 +146,129 @@
                     this.rows = [];
                     this.error = err?.message || 'Unknown error';
                 } finally {
+                    await this.fetchDbCoinCount();
                     this.loading = false;
+                    this.updateButtons();
+                }
+            },
+
+            async fetchDbCoinCount() {
+                try {
+                    const provider = window.dataProviderManager?.providers?.['yandex-cache'];
+                    if (!provider || typeof provider.checkCacheStatus !== 'function' || typeof provider.getTopCoins !== 'function') {
+                        this.dbCoinCount = null;
+                        this.dbCoinCountRaw = null;
+                        this.dbCoinsPrepared = [];
+                        return;
+                    }
+                    const status = await provider.checkCacheStatus();
+                    const rawCount = status?.available ? (status.count ?? null) : null;
+                    this.dbCoinCountRaw = rawCount;
+
+                    const targetCount = Number.isFinite(rawCount) && rawCount > 0
+                        ? Math.min(rawCount, 1000)
+                        : 250;
+                    const coinsFromDb = await provider.getTopCoins(targetCount, 'market_cap');
+                    const appRoot = window.appRoot;
+                    const filtered = (appRoot && typeof appRoot.applyBanFilterToCoins === 'function')
+                        ? appRoot.applyBanFilterToCoins(coinsFromDb)
+                        : coinsFromDb;
+
+                    this.dbCoinsPrepared = Array.isArray(filtered) ? filtered : [];
+                    this.dbCoinCount = this.dbCoinsPrepared.length;
+                } catch (_) {
+                    this.dbCoinCount = null;
+                    this.dbCoinCountRaw = null;
+                    this.dbCoinsPrepared = [];
+                } finally {
+                    this.updateButtons();
+                }
+            },
+
+            async applyDbCoinsToWorkingTable() {
+                if (this.loading || this.triggering || this.applyingDbCoins) {
+                    return;
+                }
+
+                const provider = window.dataProviderManager?.providers?.['yandex-cache'];
+                if (!provider || typeof provider.getTopCoins !== 'function') {
+                    this.error = 'Yandex cache provider недоступен';
+                    return;
+                }
+
+                this.applyingDbCoins = true;
+                this.error = '';
+                this.updateButtons();
+
+                try {
+                    let coinsFromDb = Array.isArray(this.dbCoinsPrepared) ? this.dbCoinsPrepared : [];
+                    if (!coinsFromDb.length) {
+                        await this.fetchDbCoinCount();
+                        coinsFromDb = Array.isArray(this.dbCoinsPrepared) ? this.dbCoinsPrepared : [];
+                    }
+
+                    if (!Array.isArray(coinsFromDb) || coinsFromDb.length === 0) {
+                        throw new Error('В БД нет монет для замены таблицы');
+                    }
+
+                    if (window.cacheManager) {
+                        await window.cacheManager.set('top-coins-by-market-cap', coinsFromDb);
+                        await window.cacheManager.set('top-coins-by-market-cap-meta', { timestamp: Date.now() });
+                    }
+
+                    const appRoot = window.appRoot;
+                    if (appRoot) {
+                        const nextCoins = coinsFromDb;
+                        appRoot.coins = nextCoins;
+                        appRoot.selectedCoinIds = [];
+
+                        if (appRoot.coinsDataCache && typeof appRoot.coinsDataCache.set === 'function') {
+                            nextCoins.forEach(coin => {
+                                if (coin && coin.id) {
+                                    appRoot.coinsDataCache.set(coin.id, coin);
+                                }
+                            });
+                        }
+
+                        if (window.autoCoinSets && typeof window.autoCoinSets.classifyAndUpdateAutoSets === 'function') {
+                            window.autoCoinSets.classifyAndUpdateAutoSets(nextCoins);
+                        }
+
+                        if (typeof appRoot.recalculateAllMetrics === 'function') {
+                            appRoot.recalculateAllMetrics();
+                        }
+
+                        if (typeof appRoot.saveActiveCoinSetIds === 'function') {
+                            await appRoot.saveActiveCoinSetIds(nextCoins.map(c => c.id));
+                        }
+
+                        if (typeof appRoot.updateCoinsCacheMeta === 'function') {
+                            await appRoot.updateCoinsCacheMeta();
+                        }
+                    }
+
+                    if (window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'success',
+                            text: `Таблица заменена монетами из БД (${this.dbCoinCount})`,
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
+                } catch (err) {
+                    this.error = err?.message || 'Unknown error';
+                } finally {
+                    this.applyingDbCoins = false;
+                    await this.fetchDbCoinCount();
                     this.updateButtons();
                 }
             },
 
             updateButtons() {
                 if (!this.modalApi) return;
-                const isBusy = this.loading || this.triggering;
+                const isBusy = this.loading || this.triggering || this.applyingDbCoins;
                 this.modalApi.updateButton('refresh-history', { disabled: isBusy });
+                this.modalApi.updateButton('apply-db-coins', { disabled: isBusy, label: this.getDbButtonLabel() });
                 this.modalApi.updateButton('trigger-cap', { disabled: isBusy });
                 this.modalApi.updateButton('trigger-vol', { disabled: isBusy });
             },
@@ -170,11 +295,18 @@
                     disabled: this.loading || this.triggering,
                     onClick: () => this.triggerManual('volume')
                 });
+                this.modalApi.registerButton('apply-db-coins', {
+                    label: this.getDbButtonLabel(),
+                    variant: 'primary',
+                    locations: ['footer'],
+                    classesAdd: { root: 'ms-auto' },
+                    disabled: this.loading || this.triggering || this.applyingDbCoins,
+                    onClick: () => this.applyDbCoinsToWorkingTable()
+                });
                 this.modalApi.registerButton('refresh-history', {
                     label: 'Обновить',
                     variant: 'primary',
                     locations: ['footer'],
-                    classesAdd: { root: 'ms-auto' },
                     disabled: this.loading || this.triggering,
                     onClick: () => this.loadHistory()
                 });
@@ -223,6 +355,7 @@
             if (!this.modalApi) return;
             this.modalApi.removeButton('close-history');
             this.modalApi.removeButton('refresh-history');
+            this.modalApi.removeButton('apply-db-coins');
             this.modalApi.removeButton('trigger-cap');
             this.modalApi.removeButton('trigger-vol');
         }

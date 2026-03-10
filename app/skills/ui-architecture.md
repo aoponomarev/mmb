@@ -75,7 +75,7 @@ The UI must be functional in two modes without code changes:
 - `file://` (local, opened by double-clicking `index.html`)
 - `https://aoponomarev.github.io/...` (GitHub Pages)
 
-In both modes, external API calls subject to CORS must go through the Cloudflare Worker proxy (`cloudflareConfig.getApiProxyEndpoint`). No local Node.js server may be a dependency of the UI runtime.
+In both modes, external API calls subject to CORS should use Cloudflare Worker proxy by default. Exception: public read-only endpoints may use direct-first transport with proxy fallback when the proxy denies the domain by policy (allowlist/forbidden). No local Node.js server may be a dependency of the UI runtime.
 
 ### Tooltip System
 
@@ -87,6 +87,10 @@ In both modes, external API calls subject to CORS must go through the Cloudflare
 - **Usage**: `tooltipsConfig.getTooltip(key)` or `tooltipInterpreter.getTooltip(key, { value, lang })`
 - **Constraints**: UTF-8 only, under 2000 chars, no HTML
 
+### Counter Consistency Contract
+
+When UI shows an action-oriented counter (for example "coins to apply into table"), it must be derived from the same effective dataset as the action itself (`#for-effective-count-parity`). Raw backend counters (`count_only`) are diagnostic and must not be presented as apply-result counters.
+
 ### Modal Action Manager
 
 `cmp-modal` provides `modalApi` via provide/inject. Buttons register to appear in Header or Footer.
@@ -94,6 +98,14 @@ In both modes, external API calls subject to CORS must go through the Cloudflare
 - **API**: `registerButton(id, config)`, `updateButton(id, updates)`, `removeButton(id)`
 - **Layout**: Cancel footer left; Save/Action footer right; Close header right
 - **Constraints**: Buttons MUST be removed in `beforeUnmount()`; check `modalApi` exists before calling
+
+### Modal Open Reliability Checklist
+
+Before adding a new modal trigger from `shared/components/*`, verify all four links:
+- **Event bridge exists**: emitter (`eventBus.emit`) and subscriber (`eventBus.on`) are both implemented.
+- **Modal ref exists**: `index.html` has `<cmp-modal ref="...">` matching the id used by opener logic.
+- **State bridge exists**: payload from trigger is persisted in `app-ui-root` state and passed to modal body props.
+- **No phantom button updates**: call `modalApi.updateButton()` only for ids that were previously `registerButton()`-ed.
 
 ### Composition Boundaries
 

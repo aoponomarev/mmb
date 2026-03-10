@@ -120,6 +120,15 @@
             bodyComponent: 'coingecko-cron-history-modal-body',
             centered: true,
             autoRegister: true
+        },
+        'candlesModal': {
+            title: 'Свечи (Bybit)',
+            icon: 'fas fa-chart-line',
+            description: 'Просмотр последних свечей (OHLC) с биржи Bybit',
+            bodyComponent: 'candles-modal-body',
+            centered: true,
+            autoRegister: false, // Requires props (coinId, symbol)
+            size: 'lg'
         }
     };
 

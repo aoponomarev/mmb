@@ -331,7 +331,7 @@ module.exports.handler = async function (event, context) {
             const qp = event.queryStringParameters || event.params || {};
             const ids = qp.ids ? String(qp.ids).split(',').map(s => s.trim()).filter(Boolean) : null;
             const sort = qp.sort || 'market_cap';
-            const limit = Math.min(parseInt(qp.limit || '250'), 500);
+            const limit = Math.min(parseInt(qp.limit || '250'), 1000);
             const includePrev = qp.include_prev === 'true';
             const countOnly = qp.count_only === 'true';
 
