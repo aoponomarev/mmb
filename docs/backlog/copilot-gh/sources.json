@@ -1,0 +1,185 @@
+{
+  "filter": {
+    "excludeIds": [
+      "n8n-releases",
+      "dep-sqlite3",
+      "infra-docker",
+      "infra-docker-compose",
+      "infra-ollama"
+    ],
+    "excludeNote": "n8n, Docker, Ollama — временно исключены из поиска материалов"
+  },
+  "sources": [
+    {
+      "id": "continue-releases",
+      "name": "Continue AI Releases",
+      "url": "https://github.com/continuedev/continue/releases",
+      "type": "github",
+      "priority": 9,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "cursor-changelog",
+      "name": "Cursor IDE Changelog",
+      "url": "https://cursor.com/changelog",
+      "type": "official",
+      "priority": 10,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "dep-modelcontextprotocol-sdk",
+      "name": "Library: MCP SDK",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/releases",
+      "type": "github",
+      "priority": 5,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "dep-zod",
+      "name": "Library: zod",
+      "url": "https://github.com/colinhacks/zod/releases",
+      "type": "github",
+      "priority": 5,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "infra-docker",
+      "name": "Software: Docker",
+      "url": "https://github.com/moby/moby/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "infra-git",
+      "name": "Software: Git",
+      "url": "https://github.com/git-for-windows/git/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "dep-better-sqlite3",
+      "name": "Library: better-sqlite3",
+      "url": "https://github.com/WiseLibs/better-sqlite3/releases",
+      "type": "github",
+      "priority": 6,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "dep-sqlite3",
+      "name": "Library: sqlite3",
+      "url": "https://github.com/TryGhost/node-sqlite3/releases",
+      "type": "github",
+      "priority": 6,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "infra-node",
+      "name": "Software: Node.js",
+      "url": "https://github.com/nodejs/node/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "infra-ollama",
+      "name": "Software: Ollama",
+      "url": "https://github.com/ollama/ollama/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "llm-groq",
+      "name": "Model Provider: Groq",
+      "url": "https://console.groq.com/docs/changelog",
+      "type": "llm-api",
+      "priority": 10,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "llm-openrouter",
+      "name": "Model Provider: OpenRouter",
+      "url": "https://openrouter.ai/announcements/all",
+      "type": "llm-api",
+      "priority": 10,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "llm-kilocode",
+      "name": "Model Provider: KiloCode",
+      "url": "https://kilo.ai/docs/advanced-usage/free-and-budget-models",
+      "type": "llm-api",
+      "priority": 9,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "n8n-releases",
+      "name": "n8n Releases",
+      "url": "https://github.com/n8n-io/n8n/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "infra-docker-compose",
+      "name": "Software: Docker Compose",
+      "url": "https://github.com/docker/compose/releases",
+      "type": "github",
+      "priority": 8,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "github-copilot-workspace",
+      "name": "GitHub Copilot Workspace",
+      "url": "https://github.blog/changelog/label/copilot/",
+      "type": "official",
+      "priority": 10,
+      "enabled": true,
+      "integrated": true
+    },
+    {
+      "id": "tether-qvac",
+      "name": "Tether QVAC (Local AI)",
+      "url": "https://tether.io/news/",
+      "type": "official",
+      "priority": 7,
+      "enabled": true,
+      "integrated": false
+    },
+    {
+      "id": "llm-minimax",
+      "name": "Model Provider: MiniMax",
+      "url": "https://platform.minimax.io/docs/release-notes/models",
+      "type": "official",
+      "priority": 6,
+      "enabled": true,
+      "integrated": false
+    },
+    {
+      "id": "oort-ai",
+      "name": "OORT AI (Decentralized Agents)",
+      "url": "https://docs.oort.io/release-notes",
+      "type": "official",
+      "priority": 5,
+      "enabled": true,
+      "integrated": false
+    }
+  ]
+}

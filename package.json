@@ -16,6 +16,7 @@
     "deploy:yandex:market-fetcher": "node is/yandex/functions/market-fetcher/deploy.js",
     "deploy:cloudflare:edge-api": "node is/cloudflare/edge-api/deploy.js",
     "vix:sources:test": "node is/scripts/infrastructure/test-vix-sources.js",
+    "backlog:copilot:cron": "node is/scripts/infrastructure/copilot-backlog-cron.js",
     "health-check:json": "node is/scripts/infrastructure/health-check.js --json",
     "ssot:check": "node is/scripts/infrastructure/validate-ssot.js",
     "ssot": "npm run ssot:check",

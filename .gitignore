@@ -23,6 +23,9 @@ is/contracts/.causality-lock.json
 # Compromised or local operational files
 docs/CRON.txt
 
+# Copilot cron output (generated, not committed)
+docs/backlog/copilot-gh/.cron-output.json
+
 # Logs
 logs/
 *.log

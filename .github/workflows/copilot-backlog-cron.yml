@@ -1,0 +1,77 @@
+name: Copilot Backlog Cron
+
+on:
+  schedule:
+    # 02:00 MSK (UTC+3) = 23:00 UTC
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+jobs:
+  create-copilot-issue:
+    name: Create Copilot analysis Issue
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm install
+
+      - name: Run copilot-backlog-cron
+        run: node is/scripts/infrastructure/copilot-backlog-cron.js
+
+      - name: Create Issue for Copilot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('docs/backlog/copilot-gh/.cron-output.json', 'utf8'));
+
+            const githubItems = data.items.filter(i => i.tag);
+            const otherItems = data.items.filter(i => !i.tag);
+
+            let body = `## Задача для Copilot: аналитика интеграций
+
+            **Цель:** Провести аналитическую работу по источникам ниже. Не просто "проверить релиз", а:
+            1. Изучить релиз-ноты, changelog, новые фичи
+            2. Сопоставить с архитектурой приложения (см. Beacon, glossary, слои app/core/is)
+            3. Предложить **конкретные улучшения** — что внедрить, куда, зачем
+            4. Записать в \`docs/backlog/copilot-gh/\` в формате \`YYYY-MM-DD-{source-id}.md\` на русском, доходчивым языком
+
+            **Формат записи:** каждая запись должна содержать:
+            - Конкретное предложение (что сделать)
+            - Обоснование (какая новая фича источника, как применима к нашему стеку)
+            - Ссылку на источник
+
+            ---
+
+            ### GitHub-релизы
+            `;
+
+            for (const i of githubItems) {
+              body += `\n- **${i.name}** ${i.isNew ? '🆕' : ''} — ${i.tag}: ${i.url}`;
+              if (i.body) body += `\n  \`\`\`\n  ${i.body.slice(0, 500)}...\n  \`\`\``;
+            }
+
+            body += `\n\n### Остальные источники (changelog, docs)\n`;
+            for (const i of otherItems) {
+              body += `\n- **${i.name}** — ${i.url}`;
+            }
+
+            body += `\n\n---\n*Сгенерировано cron ${data.date}*`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Copilot] Аналитика интеграций — ${data.date}`,
+              body,
+            });

@@ -30,3 +30,15 @@ Do not create `app/is/` or `core/is/` — "PF" means repository root.
 - **Backlog tasks** (if creating): place in `docs/backlog/copilot-gh/` with date prefix.
 - **No direct merges** — propose via PR; human reviews and merges.
 - **Preflight** — code must pass `npm run preflight` before merge.
+
+## Analytical Backlog Tasks (Issue "[Copilot] Аналитика интеграций")
+
+When working on integration-analysis Issues:
+1. **Do not** write generic "проверить релиз" — do analytical work.
+2. **Study** release notes, changelog, new features of each source.
+3. **Map** to app architecture (Beacon, glossary, layers app/core/is).
+4. **Propose concrete improvements** — what to adopt, where, why.
+5. **Write** to `docs/backlog/copilot-gh/YYYY-MM-DD-{source-id}.md` in Russian, with:
+   - конкретное предложение (что сделать)
+   - обоснование (какая новая фича, как применима к стеку)
+   - ссылка на источник

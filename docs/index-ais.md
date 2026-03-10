@@ -11,7 +11,7 @@ last_updated: "2026-03-10"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 29
+> Auto-generated. Total: 30
 
 ---
 
@@ -24,6 +24,7 @@ last_updated: "2026-03-10"
 - [id:ais-82c9d0](ais/ais-cache-architecture.md) — AIS: Архитектура кэша и реестров (Cache Architecture & Registries)
 - [id:ais-b6c7d8](ais/ais-causality-anchors.md) — AIS: Казуальность и якоря (Causality & Anchors)
 - [id:ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
+- [id:ais-c8f2a1](ais/ais-copilot.md) — AIS: GitHub Copilot — интеграция и постановщик задач
 - [id:ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
 - [id:ais-8982e7](ais/ais-docs-governance.md) — AIS: Documentation Governance Model
 - [id:ais-d4e5f6](ais/ais-domains-map.md) — AIS: Карта доменов и ограниченных контекстов (Domains & Bounded Contexts)

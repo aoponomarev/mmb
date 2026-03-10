@@ -1,0 +1,8 @@
+{
+  "continue-releases": "v1.5.45",
+  "dep-modelcontextprotocol-sdk": "v1.27.1",
+  "dep-zod": "v4.3.6",
+  "infra-git": "v2.53.0.windows.1",
+  "dep-better-sqlite3": "v12.6.2",
+  "infra-node": "v25.8.0"
+}

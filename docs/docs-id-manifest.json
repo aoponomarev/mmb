@@ -71,6 +71,7 @@
     "ais-82c9d0": "docs/ais/ais-cache-architecture.md",
     "ais-b6c7d8": "docs/ais/ais-causality-anchors.md",
     "ais-b7a9ba": "docs/ais/ais-control-plane-llmops.md",
+    "ais-c8f2a1": "docs/ais/ais-copilot.md",
     "ais-3732ce": "docs/ais/ais-data-pipeline.md",
     "ais-8982e7": "docs/ais/ais-docs-governance.md",
     "ais-d4e5f6": "docs/ais/ais-domains-map.md",
@@ -96,6 +97,7 @@
     "readme-069aca": "app/README.md",
     "readme-c8e267": "core/README.md",
     "readme-5c42c7": "data/README.md",
+    "backlog-copilot-gh": "docs/backlog/copilot-gh/README.md",
     "backlog-37c870": "docs/backlog/docker-migration-f1d9a2.md",
     "bskill-10e421": "docs/backlog/skills/AUDIT.md",
     "bskill-11683c": "docs/backlog/skills/docker-infrastructure.md",
@@ -140,5 +142,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-10T11:15:55.206Z"
+  "generated_at": "2026-03-10T12:00:11.202Z"
 }
