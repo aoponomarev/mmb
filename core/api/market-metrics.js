@@ -228,6 +228,7 @@
                 }
             ];
 
+            const MAX_SILENT_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours window for silent updates
             let lastLiveError = null;
             let triedLive = false;
 
@@ -274,8 +275,9 @@
                                 ? `${baseSource} ${dateStr} (${qualifier})`
                                 : `${baseSource} ${dateStr}`;
 
-                        // Show source message with timestamp
-                        if (window.messagesStore) {
+                        // Show source message with timestamp only if data is older than 2 hours
+                        const ageMs = Date.now() - fetchedAt;
+                        if (ageMs > MAX_SILENT_AGE_MS && window.messagesStore) {
                             window.messagesStore.addMessage({
                                 type: 'success',
                                 text: `VIX обновлен из ${formattedSource}: ${result.value.toFixed(2)}`,
@@ -308,8 +310,9 @@
                     this.updateWindowMetrics();
                     console.warn('VIX: using cached fallback due to live source failure. Cached value:', vixVal.toFixed(2), 'source:', originalSource);
 
-                    // Inform user only in fallback case (live failed).
-                    if (triedLive && window.messagesStore) {
+                    // Inform user only in fallback case (live failed), and only if cache is older than 2 hours.
+                    const ageMs = Date.now() - (cached.timestamp || Date.now());
+                    if (triedLive && ageMs > MAX_SILENT_AGE_MS && window.messagesStore) {
                         const date = cached.timestamp
                             ? new Date(cached.timestamp).toLocaleString('ru-RU', {
                                   day: '2-digit',

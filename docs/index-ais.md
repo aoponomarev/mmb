@@ -1,7 +1,7 @@
 ---
 id: docidx-3022eb
 status: active
-last_updated: "2026-03-09"
+last_updated: "2026-03-10"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
