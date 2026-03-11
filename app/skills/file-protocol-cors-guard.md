@@ -3,8 +3,8 @@ id: sk-7cf3f7
 title: "Guard: file:// Protocol & CORS"
 reasoning_confidence: 0.95
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 9aefe863
-last_change: "#for-direct-first-transport — proxy mandatory on file://, direct-first allowed only after transport smoke on safe public endpoints"
+reasoning_checksum: 126e5bed
+last_change: "#for-browser-runtime-smoke — file:// transport changes require real browser smoke, not only node checks"
 
 ---
 
@@ -20,6 +20,7 @@ last_change: "#for-direct-first-transport — proxy mandatory on file://, direct
 - **#for-cloudflare-proxy** Routing through our Cloudflare proxy standardizes CORS, authentication, and rate limiting regardless of whether the app runs locally or on HTTPS.
 - **#for-no-direct-fetch** Direct fetches to external APIs from the frontend will inevitably fail for users running the app locally without a backend.
 - **#for-direct-first-transport** For public read-only endpoints on safe origins, direct-first transport may be used only after explicit direct/proxy smoke verification proves that proxy policy or allowlist is the weaker path. This exception never applies blindly to `file://`.
+- **#for-browser-runtime-smoke** Browser/file:// runtime can fail in ways that Node checks do not see: unbound host APIs, `file://` URL resolution, browser security policies. Transport refactors must be verified in a real browser runtime.
 
 ## Contracts
 
@@ -38,6 +39,8 @@ For non-opaque origins and public read-only endpoints, direct-first transport is
 - direct path was smoke-tested successfully;
 - proxy path was also tested and found weaker/blocked by policy or allowlist;
 - the adapter keeps proxy as fallback and does not leak secrets.
+
+After changing frontend transport, adapter injection, or proxy-selection logic, run a real browser smoke on the active `file://` entrypoint and force-refresh at least one live provider path. Static inspection and Node-only tests do not cover this class of regressions.
 
 ## Examples
 
@@ -76,6 +79,7 @@ When reviewing any new frontend data-fetch:
 - [ ] Does it check `window.location.protocol` before calling an external API?
 - [ ] Does it route through `cloudflareConfig.getApiProxyEndpoint()` for `file://` and CORS-restricted origins?
 - [ ] If direct-first is used, is there documented direct/proxy smoke verification and proxy fallback?
+- [ ] After transport changes, was there a real browser smoke on the active `file://` entrypoint with at least one live refresh path?
 - [ ] Is the fallback/proxy path tested and confirmed to return valid data for the UI?
 - [ ] Is there no CORS `ERR_FAILED` spam in the browser console?
 

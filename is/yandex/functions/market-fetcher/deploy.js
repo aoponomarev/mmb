@@ -223,6 +223,10 @@ async function createCronTriggers(token, functionId) {
 
 function createDeploymentSnapshot() {
     console.log('Creating deployment snapshot...');
+    // @causality #for-ais-rollout-gap-marking
+    // Transitional deviation from AIS target lifecycle: this wrapper still archives
+    // immediately after deploy. The target state is verify-before-archive once the
+    // health/smoke gate is wired into all deploy wrappers.
     execSync('node is/scripts/infrastructure/archive-deployment-snapshot.js --target yandex-market-fetcher', {
         cwd: REPO_ROOT,
         stdio: 'inherit'

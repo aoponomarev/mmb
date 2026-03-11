@@ -2,9 +2,9 @@
 id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 13cbb841
-last_change: "#for-plan-with-draft-ais #for-plan-to-many-ais — драфт AIS только для арх/инфра планов; один план может порождать несколько AIS"
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 3a76958c
+last_change: "#for-ais-rollout-gap-marking — AIS задает target state; rollout-gap обязан быть отмечен в AIS и рядом с временной веткой кода"
 
 ---
 
@@ -18,6 +18,7 @@ last_change: "#for-plan-with-draft-ais #for-plan-to-many-ais — драфт AIS 
 - **#for-docs-pipeline** A codebase clutters quickly if plans, policies, and specifications are dumped in one folder. A strict pipeline (`docs/plans` -> `docs/done` -> `docs/ais`) ensures agents and developers know exactly where to find active tasks versus established architecture.
 - **#for-audits-path-contract** The folder `docs/audits/` and file `causality-exceptions.jsonl` are consumed by `validate-causality-invariant.js`. Renaming or moving them breaks the invariant gate.
 - **#for-ais-russian** While code and skills must be in English, macro-level planning (Plans) and architectural narratives (AIS) are written in Russian. This maximizes cognitive bandwidth for the human user when discussing complex strategy.
+- **#for-ais-rollout-gap-marking** AIS is a strategic target-state specification, not a line-by-line mirror of the current implementation. Temporary rollout gaps are allowed only when they are stated explicitly in the AIS and mirrored by an inline comment at the exact code branch that still carries the deviation.
 - **#for-id-contract-navigation** Cross-references to docs artifacts should prefer `id:` contracts (`id:docidx-3022eb`, `id:docidx-0b048e`, `id:ais-e41384`) over path-centric links.
 - **#for-doc-link-format** In documents and comments, references use a mixed mode: the `id:` contract is primary, while `(path)` is optional context for the first important mention. Use `id:<hash> (path)` for the first governance-grade mention in a file, then reduce repeated mentions to bare `id:<hash>`. Do not insert a space after `id:`. Deleted plans: do not reference by deleted id; point to the distillation target and `docs/deletion-log.md`.
 - **#for-distillation** A completed plan (`docs/done`) is a historical artifact full of implementation noise (checkboxes, dead ends). It must be *distilled* into clean architectural truths: the "Big Picture" goes to a new/updated `docs/ais/` specification, and the "Strict Rules" go to `is/skills/`.
@@ -54,6 +55,7 @@ last_change: "#for-plan-with-draft-ais #for-plan-to-many-ais — драфт AIS 
 3.  **Phase 3: Distillation (`docs/ais/` and `is/skills/`)**
     - Upon user request, an AI agent performs "distillation" of the completed plan.
     - **Macro-Architecture**: The agent updates or creates an Architecture & Infrastructure Specification (AIS) in `docs/ais/` using the `TEMPLATE.md`. Language: Russian. The AIS intro sentence ("Спецификации (AIS)...") must be an HTML comment `<!-- ... -->` so it is hidden in preview. **Frontmatter**: See `#for-frontmatter-format`.
+    - **Target state with explicit rollout gaps (`#for-ais-rollout-gap-marking`)**: AIS may stay ahead of the current Arch-Scan when a migration is still rolling out. This is allowed only if every known gap is stated directly in the AIS and mirrored by an inline comment at the exact temporary deviation branch in code.
     - **AIS Diagrams**: Every AIS MUST include at least one Mermaid diagram in section "Инфраструктура и Потоки данных". Use fenced code block with `mermaid` language. Reference: id:ais-e41384.
     - **No execution log in AIS**: Do NOT keep a "Ход выполнения плана" or similar section. Everything that was done (from the plan checklist) MUST be merged into the relevant sections of the specification with maximum specificity and nuance (e.g. scope → Инфраструктура/Правила гейта; скрипты, preflight, cursor rule → Компоненты и контракты; исключения и нюансы → таблицы правил, Локальные политики).
     - **No standalone "recommended" block**: Do NOT keep a "Рекомендуемые усиления" or "вынесены в план" section that repeats plan items. Completed items are already reflected in the spec; possible future extensions belong in Локальные политики or a single short "Расширение области" note where relevant, not as a duplicate list.

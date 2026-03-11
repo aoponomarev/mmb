@@ -1,0 +1,20 @@
+---
+description: Windows shell sessions use PowerShell syntax; never use bash-style && chaining.
+alwaysApply: true
+---
+
+# PowerShell Command Chaining
+
+## Contract
+- Workspace shell sessions run in PowerShell.
+- Never use bash-style `&&` in shell commands.
+
+## Mandatory behavior
+- For independent steps, use `;`.
+- For dependent steps that must stop on failure, preserve fail-fast semantics explicitly:
+  `cmd1; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; cmd2`
+- Do not assume bash operator semantics in Windows shell sessions.
+
+## Scope
+- Applies to every shell command composed by the agent in this workspace.
+- Reinforces id:sk-905c12 (`is/skills/process-windows-shell.md`).

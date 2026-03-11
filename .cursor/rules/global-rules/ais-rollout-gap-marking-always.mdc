@@ -1,0 +1,20 @@
+---
+description: Keep AIS strategic, and mark rollout gaps explicitly in AIS and code.
+alwaysApply: true
+---
+
+# AIS Rollout Gap Marking
+
+## Contract
+- `AIS` is a strategic target-state specification, not a line-by-line mirror of the current code.
+- Do not silently "downgrade" `AIS` to match temporary implementation debt.
+
+## Mandatory behavior
+- When the current Arch-Scan lags behind the `AIS` target state, leave two traces:
+  1. an explicit rollout-gap note in the relevant `AIS`;
+  2. an inline comment at the exact temporary deviation branch in code.
+- If the mismatch is not a conscious target-state gap but simply stale documentation, update the `AIS` to the current reality instead of adding a rollout-gap note.
+
+## Scope
+- Applies to `docs/ais/`, governance skills, and implementation code comments.
+- Use existing causality `#for-ais-rollout-gap-marking` when marking temporary deviations in code.

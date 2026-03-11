@@ -7,6 +7,8 @@ related_skills:
   - sk-bb7c8e
   - sk-3c832d
   - sk-7b4ee5
+  - sk-7cf3f7
+  - sk-8f9e0d
 related_ais:
   - ais-71a8b9
   - ais-3732ce
@@ -28,6 +30,8 @@ related_skills:
   - sk-bb7c8e
   - sk-3c832d
   - sk-7b4ee5
+  - sk-7cf3f7
+  - sk-8f9e0d
 related_ais:
   - ais-71a8b9
   - ais-3732ce
@@ -35,7 +39,7 @@ related_ais:
   - ais-775420
 ```
 
-**Статус:** `complete` — план id:plan-a9b2c4 закрыт; единая система адаптеров реализована и дистиллирована в код, skills и causality-registry.
+**Статус:** `complete` — единая система адаптеров реализована и дистиллирована в код, skills и causality-registry; исторический план удалён по протоколу и зафиксирован в id:doc-del-log (docs/deletion-log.md).
 
 ## Концепция
 
@@ -47,6 +51,8 @@ related_ais:
 4. **Health tracking** фиксирует success/failure/latency per provider и позволяет фасадам понижать деградировавшие адаптеры без скрытой магии в самих провайдерах.
 
 Система покрывает активный браузерный слой `app/`, инфраструктурный слой `is/` и legacy IS-артефакты, оставленные для обратной совместимости.
+
+Эта `AIS` задаёт target state для unified adapter architecture и не обязана повторять текущую реализацию 1:1. Если rollout ещё не завершён, разрыв между этой стратегией и текущим Arch-Scan обязан быть помечен прямо в спецификации и рядом с временной веткой кода.
 
 ## Инфраструктура и Потоки данных
 
@@ -149,13 +155,17 @@ flowchart TD
 |-------|----------------|------------------------|--------|
 | Coin data | `DataProviderManager` | `YandexCacheProvider`, `CoinGeckoProvider` | Реализовано |
 | Market metrics | `MarketMetricsProviderManager` | `AlternativeMeProvider`, `YahooVixProvider`, `StooqVixProvider`, `AlphaVantageVixProvider`, `BinanceMetricsProvider`, `CoinGeckoBtcDomProvider` | Реализовано |
-| AI | `AIProviderManager` | `YandexProvider` + Cloudflare settings restore path | Реализовано |
+| AI | `AIProviderManager` | `YandexProvider`; Cloudflare only restores settings/keys and не является вторым AI provider | Реализовано |
 | Stateful Cloudflare APIs | `CloudWorkspaceClient`, `CoinSetsClient` | Cloudflare Workers `/api/settings`, `/api/coin-sets` | Реализовано |
 | Yandex API Gateway | `YandexApiGatewayProvider` | `cycles`, `market-cache/trigger` endpoints | Реализовано |
 | Legacy IS | `V2ApiClient`, `N8nApiClient` | local `/api/*`, n8n webhooks | Реализовано |
 | Automation / backlog | `GitHubReleasesProvider` | GitHub Releases API + tag fallback | Реализовано |
 | PostgreSQL serverless | `PostgresAdapter` | `pg.Client` inside Yandex Functions | Реализовано |
 | Cross-domain policy | `AdapterRegistry` | policy config + health tracker | Реализовано |
+
+Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): домен `Coin data` уже использует `AdapterRegistry` как shared policy/health plane, но provider ordering в `DataProviderManager` пока частично удерживается локально через `preferYandexFirst` / `allowCoinGeckoFallback` ради обратной совместимости startup-path на `file://`. Это не отменяет стратегию AIS; это явно отмечённый переходный зазор до полного выноса order policy в registry.
+
+Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): часть presentation-layer admin/settings flows всё ещё держит прямой transport в компонентах вместо вынесенного facade/client слоя. Это касается Cloudflare settings sync, icon-management proxy/GitHub upload и chunk push в market-cache. Для этой временной совместимости target-state policy `No direct transport in components` не отменяется; отклоняющиеся ветки обязаны быть помечены inline-комментариями в коде до завершения выноса transport в adapters/facades.
 
 ## Политики модуля
 
@@ -167,6 +177,8 @@ flowchart TD
 6. **Endpoint coherence for stateful APIs** — `CloudWorkspaceClient` и `CoinSetsClient` обязаны читать/писать в тот же origin contract, что и auth flow.
 7. **Connection injection for tests** — провайдеры принимают fetch/client injection там, где это снижает стоимость тестирования без build-time DI.
 8. **Legacy coverage is explicit** — legacy `IS.html` не является активным Presentation Layer, но его transport-слой всё равно должен соответствовать adapter policy, чтобы не плодить второй стандарт.
+9. **Browser host APIs must keep receiver semantics** — если адаптер кэширует `fetch`, он обязан bind/wrap browser implementation; raw assignment создаёт browser-only `Illegal invocation`.
+10. **Browser runtime smoke is a handoff gate** — после изменений transport/adapters в браузерном слое требуется реальный smoke в `file://` runtime с live refresh representative path.
 
 ## Компоненты и Контракты
 
@@ -197,6 +209,8 @@ flowchart TD
 | `#for-endpoint-coherence` | Stateful read/write/readback не смешивает origin contracts |
 | `#for-validation-at-edge` | Адаптер валидирует payload до бизнес-логики |
 | `#for-partial-failure-tolerance` | Частичный успех допустим для multi-metric flows |
+| `#for-bound-browser-fetch` | Browser transport injection сохраняет receiver semantics у `fetch` |
+| `#for-browser-runtime-smoke` | Browser/file:// smoke обязателен после transport refactor |
 | `#for-local-runtime-disposable` | Локальные runtime artifacts не блокируют unrelated work |
 
 ## Контракты и гейты
@@ -209,6 +223,7 @@ flowchart TD
 
 ## Завершение
 
-- Все этапы плана id:plan-a9b2c4 закрыты.
+- Все этапы внедрения закрыты; historical execution artifact removed after distillation and logged in id:doc-del-log.
 - Архитектурный разрыв между активным `app/` и legacy `IS.html` устранён: оба пути теперь используют adapter/facade pattern.
 - Семантический разрыв между proxy-only и direct-first transport формализован в skills: proxy обязателен на `file://`, direct-first допускается только после transport smoke и только для safe public read-only endpoints.
+- Дополнительная эксплуатационная политика из практики внедрения: browser transport injection должен сохранять receiver semantics у host API, а handoff по transport-refactor считается завершённым только после реального browser/file runtime smoke.

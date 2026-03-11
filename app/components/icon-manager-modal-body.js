@@ -163,6 +163,10 @@
                 if (!targetUrl) return;
 
                 try {
+                    // @causality #for-ais-rollout-gap-marking
+                    // Transitional deviation from AIS target state: icon loading still
+                    // calls the generic proxy directly from the component until this
+                    // transport is extracted into a dedicated facade/client.
                     const proxyUrl = window.cloudflareConfig?.getGenericProxyUrl(targetUrl);
                     const response = await fetch(proxyUrl);
 
@@ -261,6 +265,10 @@
                 this.isUploading = true;
 
                 try {
+                    // @causality #for-ais-rollout-gap-marking
+                    // Transitional deviation from AIS target state: GitHub Contents API
+                    // transport is still owned by this component for backward-compatible
+                    // icon publishing until a dedicated integration facade is introduced.
                     // Convert Blob to Base64 for GitHub API
                     const reader = new FileReader();
                     const base64Promise = new Promise((resolve) => {

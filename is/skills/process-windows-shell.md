@@ -2,9 +2,9 @@
 id: sk-905c12
 title: "Process: Windows & PowerShell Patterns for AI Agents"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 41c0dbe9
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 43b752af
+last_change: "#for-semicolon-over-and — dependent PowerShell steps must preserve fail-fast semantics via $LASTEXITCODE guard instead of bash-style &&"
 
 ---
 
@@ -17,7 +17,7 @@ last_change: ""
 
 - **#for-bash-ban-powershell** Windows Defender and OneDrive file locks block Unix pipe creation in Git Bash, resulting in unfixable OS-level `Win32 error 5`. PowerShell is required for reliable execution.
 - **#for-path-format-context** Mixing forward slashes (Node.js) with backslashes (PowerShell `-Path`) causes silent failures.
-- **#for-semicolon-over-and** The `&&` operator is bash syntax; PowerShell uses `;` for chaining commands.
+- **#for-semicolon-over-and** The `&&` operator is bash syntax and breaks in PowerShell sessions. Use `;` for independent steps, and for dependent steps preserve fail-fast semantics with an explicit `$LASTEXITCODE` guard.
 - **#for-sqlite-no-onedrive** OneDrive locking during file sync corrupts SQLite databases.
 
 ### HARD BAN: Never Use Bash in Cursor
@@ -36,8 +36,9 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 ## Core Rules
 
 1. Does the command start with `bash`? → **STOP. Rewrite for PowerShell.**
-2. Using Unix operators (`&&`, `|`, `>`, backtick)? → **Wrap in `powershell -Command`.**
+2. Using Unix operators (`&&`, `|`, `>`, backtick)? → **Rewrite for PowerShell instead of assuming bash semantics.**
 3. Path uses forward slashes for PowerShell `-Path`? → **Convert to backslashes.**
+4. Do later steps depend on earlier success? → **Use `; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE };` between them.**
 
 ### Command Translation Table
 
@@ -49,7 +50,7 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 | `rm -rf path` | `Remove-Item -Path 'path' -Recurse -Force` |
 | `ls -la` | `Get-ChildItem -Force` |
 | `test -f file` | `Test-Path 'file'` |
-| `cmd1 && cmd2` | `cmd1; cmd2` (or use `;` in `-Command` string) |
+| `cmd1 && cmd2` | `cmd1; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; cmd2` |
 
 ### Path Format Rules
 
@@ -63,8 +64,11 @@ bash (XXXXX) C:\Program Files\Git\bin\..\usr\bin\bash.exe:
 ### Multiple Operations
 
 ```powershell
-# Chain with semicolons (NOT &&):
-powershell -Command "New-Item -ItemType Directory -Force -Path 'path1'; Copy-Item 'src' 'dest' -Force"
+# Independent steps:
+powershell -Command "Write-Host 'step1'; Write-Host 'step2'"
+
+# Dependent steps (NOT &&):
+powershell -Command "node script1.js; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node script2.js"
 ```
 
 ### Troubleshooting

@@ -146,6 +146,10 @@
          * @returns {Promise<Array>} Normalized coin data array
          */
         async getTopCoins(count = 100, sortBy = 'market_cap', options = {}) {
+            // @causality #for-ais-rollout-gap-marking
+            // Transitional deviation from AIS target state: coin-data health is already centralized
+            // in adapterRegistry, but provider ordering is still kept locally here to preserve
+            // backward-compatible file:// startup behavior until registry-driven ordering is rolled out.
             const preferYandexFirst = options.preferYandexFirst !== false;
             const allowCoinGeckoFallback = typeof options.allowCoinGeckoFallback === 'boolean'
                 ? options.allowCoinGeckoFallback

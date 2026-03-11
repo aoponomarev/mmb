@@ -3,8 +3,8 @@ id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: c71e883e
-last_change: "#for-provider-health-tracking — shared provider health tracking linked to adapter registry"
+reasoning_checksum: 22302450
+last_change: "#for-bound-browser-fetch — browser transport injection must preserve fetch receiver semantics"
 
 ---
 
@@ -21,6 +21,7 @@ last_change: "#for-provider-health-tracking — shared provider health tracking 
 - **#for-rate-limiting** Free-tier APIs have strict rate limits. Proactive waiting and adaptive throttling avoid persistent 429 failures.
 - **#for-validation-at-edge** Validate provider data before calculation to fail fast on malformed responses.
 - **#for-provider-health-tracking** Provider health (failures, latency, degraded state) must be tracked in the orchestration layer so fallback order is observable and deterministic.
+- **#for-bound-browser-fetch** Browser transport adapters often cache `fetch` for injection and tests. In browser runtime that dependency must preserve receiver semantics, otherwise live calls can fail with `Illegal invocation` while Node tests still pass.
 
 ## Core Rules
 
@@ -56,6 +57,24 @@ For any service wrapping providers (example: kline service), initialization must
 - Return clear runtime error messages when provider class is missing, so UI can show actionable diagnostics.
 - For public read-only market endpoints, prefer direct transport first and use proxy as fallback when proxy policy returns 403 for that domain.
 
+### Browser Transport Injection Safety
+
+**#for-bound-browser-fetch** If a browser-executed provider or facade stores `fetch` on `this` or passes it to another adapter, preserve invocation context. Do not assign raw `window.fetch` directly.
+
+Canonical pattern:
+
+```javascript
+function resolveFetchFn(fetchFn) {
+  const candidate = typeof fetchFn === 'function' ? fetchFn : globalThis.fetch;
+  if (typeof window !== 'undefined' && candidate === window.fetch) {
+    return window.fetch.bind(window);
+  }
+  return (...args) => candidate(...args);
+}
+```
+
+Without this guard, browser runtime may throw `Failed to execute 'fetch' on 'Window': Illegal invocation` even when unit tests and injected mocks are green.
+
 ### Pre-Handoff Transport Smoke (Mandatory)
 
 **#for-pre-handoff-transport-smoke** Before handing off provider-based features, verify both direct and proxy paths with real requests instead of assuming proxy policy/allowlists are correct.
@@ -64,6 +83,7 @@ Before handing off provider-based features, run a quick transport smoke:
 - Check direct endpoint response (status + minimal payload shape).
 - Check proxy path response (status + explicit policy errors like allowlist 403).
 - If direct works and proxy is blocked by policy, lock in direct-first strategy and document it in AIS/skills.
+- After transport/injection refactors in browser code, run at least one real browser `file://` smoke with `forceRefresh` on a representative live provider path. Node-only verification is insufficient for host-API bugs.
 
 ### Merge Rule for Multiple Coin Sets
 

@@ -1,7 +1,7 @@
 ---
 id: ais-e3f4a5
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-11"
 related_skills:
   - sk-0e193a
   - sk-683b3c
@@ -102,6 +102,8 @@ stateDiagram-v2
     archived --> rollback_target: Используется для restore
     rollback_target --> deployed: Rollback executed
 ```
+
+Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): диаграмма выше фиксирует target lifecycle. В текущем Arch-Scan deploy wrappers для active infrastructure targets ещё вызывают `archive-deployment-snapshot.js` сразу после deploy, то есть фактический путь местами ближе к `deployed -> snapshot_taken`, а не к полному `deployed -> verified -> archived`. Это допустимый переходный зазор только потому, что он явно помечен в соответствующем `AIS` и inline-комментариях в коде.
 
 Управляется через id:sk-e8f2a1 (arch-infrastructure-snapshots) и id:sk-6eeb9a (arch-rollback).
 

@@ -1,7 +1,7 @@
 ---
 id: doc-del-log
 status: active
-last_updated: "2026-03-08"
+last_updated: "2026-03-11"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -25,3 +25,5 @@ last_updated: "2026-03-08"
 | `docs/backlog/fix-anti-staleness.md` | — | контент перенесён в id:ais-9f4e2d (раздел Известные pending); удаление по запросу пользователя |
 | `docs/backlog/fix-naming-violations-a8b2c4.md` | — | 7 скриптов переименованы в kebab-case; СИМЛИНКИ.txt — исключение в naming-rules; удаление по запросу пользователя |
 | `docs/backlog/mcp-ecosystem-roadmap.md` | — | roadmap реализован; оставшееся сомнительно; удаление по запросу пользователя |
+| `docs/plans/plan-unified-adapter-system.md` | — | дистиллирован в id:ais-d8e7f6 (docs/ais/ais-unified-adapter-system.md) и связанные skills; удаление по запросу пользователя |
+| `docs/done/plan-infrastructure-snapshots-contract.md` | — | дистиллирован в id:ais-8b2f1c (docs/ais/ais-infrastructure-snapshots.md) и id:sk-e8f2a1; удаление по запросу пользователя |

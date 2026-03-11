@@ -303,6 +303,10 @@ window.aiApiSettings = {
          * Called automatically when keys are missing in local cache.
          */
         async _restoreFromCloudflareKV() {
+            // @causality #for-ais-rollout-gap-marking
+            // Transitional deviation from AIS target state: this component still owns
+            // direct /api/settings transport for restore/list/export/import flows until
+            // the settings transport is extracted into a dedicated facade/client layer.
             const token = await this.resolveSettingsToken();
             if (!token) {
                 this.warnMissingSettingsToken('auto-restore from KV');

@@ -149,6 +149,10 @@ function main() {
   );
 
   console.log("[deploy:api-gateway] Creating mandatory deployment snapshot...");
+  // @causality #for-ais-rollout-gap-marking
+  // Transitional deviation from AIS target lifecycle: this wrapper still archives
+  // immediately after deploy. The target state is verify-before-archive once the
+  // health/smoke gate is wired into all deploy wrappers.
   run(["is/scripts/infrastructure/archive-deployment-snapshot.js", "--target", "yandex-api-gateway"], {
     cwd: REPO_ROOT,
     capture: false,
