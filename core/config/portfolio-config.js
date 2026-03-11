@@ -313,6 +313,13 @@
             });
         }
 
+        // Sync state for cloud/local dual storage.
+        // Client remains live SSOT; Cloudflare is auth-scoped replica.
+        // Default: if cloudflareId present → assume synced; otherwise local-only.
+        if (!portfolio.syncState) {
+            portfolio.syncState = portfolio.cloudflareId ? 'synced' : 'local-only';
+        }
+
         return portfolio;
     }
 

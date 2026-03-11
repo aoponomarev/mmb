@@ -12,7 +12,7 @@
             <div class="portfolio-form-modal">
                 <!-- Main portfolio parameters -->
                 <div class="mb-3">
-                    <label class="form-label small text-muted mb-1">Название portfolioя *</label>
+                    <label class="form-label small text-muted mb-1">Название портфеля *</label>
                     <div class="d-flex align-items-center gap-2">
                         <input
                             type="text"
@@ -115,7 +115,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Delete из portfolioя
+                                                                Удалить из портфеля
                                                             </button>
                                                         </li>
                                                         <li>
@@ -210,7 +210,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
                                                         <li>
                                                             <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Delete из portfolioя
+                                                                Удалить из портфеля
                                                             </button>
                                                         </li>
                                                         <li>
@@ -452,7 +452,7 @@
                 });
 
                 this.modalApi.registerButton('save', {
-                    label: this.initialData ? 'Сохранить изменения' : 'Создать portfolioь',
+                    label: this.initialData ? 'Сохранить изменения' : 'Создать портфель',
                     variant: 'primary',
                     locations: ['footer'],
                     disabled: true,

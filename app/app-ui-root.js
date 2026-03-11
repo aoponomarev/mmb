@@ -1028,7 +1028,7 @@
                  * Enter rebalance mode (D.4)
                  */
                 handleRebalancePortfolio(portfolio) {
-                    console.log('app-ui-root: ребалансировка portfolioя', portfolio.id);
+                    console.log('app-ui-root: ребалансировка портфеля', portfolio.id);
 
                     // Ensure rebalance opens form with prepared/normalized portfolio snapshot.
                     this.currentViewingPortfolio = portfolio;
@@ -1050,7 +1050,7 @@
                  * Save formed portfolio
                  */
                 async handleSaveCreatedPortfolio(portfolio) {
-                    console.log('app-ui-root: сохранение portfolioя', portfolio);
+                    console.log('app-ui-root: сохранение портфеля', portfolio);
                     const existingIndex = this.userPortfolios.findIndex(p => p.id === portfolio.id);
                     const previousPortfolio = existingIndex !== -1 ? this.userPortfolios[existingIndex] : null;
 
@@ -1067,15 +1067,29 @@
                         // Add new (D.2)
                         this.userPortfolios.unshift(portfolio);
                     }
+
+                    // Mark portfolio as pending sync before touching cloud.
+                    if (!portfolio.syncState) {
+                        portfolio.syncState = portfolio.cloudflareId ? 'synced' : 'local-only';
+                    }
+                    // Persist local-first view immediately.
                     window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
 
-                    // 2.5 Cloudflare - primary online persistence (best effort).
-                    await this.syncPortfolioToCloudflare(portfolio, previousPortfolio);
+                    // 2.5 Cloudflare - auth-scoped replica sync.
+                    // Result controls syncState to keep list consistent with cloud when available.
+                    const cloudSynced = await this.syncPortfolioToCloudflare(portfolio, previousPortfolio);
+                    if (cloudSynced) {
+                        portfolio.syncState = 'synced';
+                    } else if (!portfolio.syncState || portfolio.syncState === 'synced') {
+                        // Degrade explicitly to avoid silent mismatch.
+                        portfolio.syncState = 'error';
+                    }
+                    window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
 
                     // 2.6 PostgreSQL - optional secondary sync (best effort).
                     if (window.postgresSyncManager) {
                         window.postgresSyncManager.savePortfolio(portfolio).catch(err => {
-                            console.warn('app-ui-root: фоновая синхронизация portfolioя не удалась', err);
+                            console.warn('app-ui-root: фоновая синхронизация портфеля не удалась', err);
                         });
                     }
 
@@ -1141,18 +1155,18 @@
                  * Does not interrupt UX on network/Auth unavailable.
                  */
                 async syncPortfolioToCloudflare(portfolio, previousPortfolio) {
-                    if (!window.portfoliosClient || !window.authClient) return;
+                    if (!window.portfoliosClient || !window.authClient) return false;
                     const cloudSyncEnabled = window.appConfig?.isFeatureEnabled?.('cloudSync') !== false;
-                    if (!cloudSyncEnabled) return;
+                    if (!cloudSyncEnabled) return false;
 
                     let authenticated = false;
                     try {
                         authenticated = await window.authClient.isAuthenticated();
                     } catch (error) {
                         console.warn('app-ui-root: failed to проверить auth for Cloudflare sync', error);
-                        return;
+                        return false;
                     }
-                    if (!authenticated) return;
+                    if (!authenticated) return false;
 
                     const cloudflareId = portfolio.cloudflareId || previousPortfolio?.cloudflareId || null;
                     const assets = Array.isArray(portfolio.coins)
@@ -1184,6 +1198,7 @@
                             portfolio.cloudflareId = savedId;
                             window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
                         }
+                        return true;
                     } catch (error) {
                         console.warn('app-ui-root: Cloudflare sync skipped (local save kept)', error);
                         if (window.messagesStore) {
@@ -1195,6 +1210,7 @@
                             });
                         }
                     }
+                    return false;
                 },
                 /**
                  * Handle successful login via Google OAuth
@@ -1619,7 +1635,7 @@
                  * @param {Object} portfolio - Created portfolio
                  */
                 handlePortfolioCreated(portfolio) {
-                    console.log('app-ui-root: portfolioь создан', portfolio);
+                    console.log('app-ui-root: портфель создан', portfolio);
                     // Can add extra logic on portfolio create
                 },
                 /**
@@ -1627,7 +1643,7 @@
                  * @param {Object} portfolio - Updated portfolio
                  */
                 handlePortfolioUpdated(portfolio) {
-                    console.log('app-ui-root: portfolioь обновлён', portfolio);
+                    console.log('app-ui-root: портфель обновлён', portfolio);
                     // Can add extra logic on portfolio update
                 },
                 /**
@@ -1635,7 +1651,7 @@
                  * @param {string|number} portfolioId - ID of deleted portfolio
                  */
                 handlePortfolioDeleted(portfolioId) {
-                    console.log('app-ui-root: portfolioь удалён', portfolioId);
+                    console.log('app-ui-root: портфель удалён', portfolioId);
                     // Can add extra logic on portfolio delete
                 },
 

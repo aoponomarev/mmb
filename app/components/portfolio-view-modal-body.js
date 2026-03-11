@@ -229,7 +229,7 @@
                 if (!this.modalApi) return;
 
                 this.modalApi.registerButton('delete', {
-                    label: 'Delete portfolioь',
+                    label: 'Delete',
                     variant: 'outline-danger',
                     icon: 'fas fa-trash-alt',
                     locations: ['footer'],

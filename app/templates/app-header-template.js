@@ -174,12 +174,14 @@
                     <template v-if="userPortfolios && userPortfolios.length > 0">
                         <div class="dropdown-divider border-secondary opacity-25"></div>
                         <h6 class="dropdown-header d-flex justify-content-between align-items-center py-2 px-3">
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Мои portfolioи</span>
+                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Мои портфели</span>
                             <span class="badge bg-secondary ms-2" style="font-size: 0.6rem;">{{ userPortfolios.length }}</span>
                         </h6>
                         <li v-for="p in userPortfolios" :key="p.id">
                             <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
-                               href="#" @click.prevent="handleViewPortfolio(p.id)">
+                               href="#"
+                               @click.prevent="handleViewPortfolio(p.id)"
+                               :class="p.syncState && p.syncState !== 'synced' ? 'opacity-50' : ''">
                                 <div class="d-flex flex-column">
                                     <span class="fw-bold small">{{ p.name }}</span>
                                     <span class="text-white-50" style="font-size: 0.65rem;">{{ p.id }}</span>

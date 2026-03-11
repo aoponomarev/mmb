@@ -49,7 +49,7 @@ window.portfoliosManager = {
                 const title = window.modalsConfig.getModalTitle('portfolioModal');
                 if (title) return title;
             }
-            return this.isEditing ? 'Редактировать portfolioь' : 'Создать portfolioь';
+            return this.isEditing ? 'Редактировать портфель' : 'Создать портфель';
         },
 
     },
