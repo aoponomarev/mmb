@@ -13,14 +13,14 @@ window.portfolioModalBody = {
     template: `
         <form @submit.prevent="handleSave">
             <div class="mb-3">
-                <label :for="formIdPrefix + '-portfolio-name'" class="form-label">Название portfolioя *</label>
+                <label :for="formIdPrefix + '-portfolio-name'" class="form-label">Название портфеля *</label>
                 <input
                     type="text"
                     class="form-control"
                     :id="formIdPrefix + '-portfolio-name'"
                     v-model="formName"
                     required
-                    placeholder="Введите название portfolioя"
+                    placeholder="Введите название портфеля"
                 />
             </div>
             <div class="mb-3">
@@ -30,11 +30,11 @@ window.portfolioModalBody = {
                     :id="formIdPrefix + '-portfolio-description'"
                     v-model="formDescription"
                     rows="3"
-                    placeholder="Введите описание portfolioя (необязательно)"
+                    placeholder="Введите описание портфеля (необязательно)"
                 ></textarea>
             </div>
             <div class="mb-3">
-                <label class="form-label">Активы portfolioя</label>
+                <label class="form-label">Активы портфеля</label>
                 <div v-if="formAssets && formAssets.length > 0" class="mb-2">
                     <div
                         v-for="(asset, index) in formAssets"

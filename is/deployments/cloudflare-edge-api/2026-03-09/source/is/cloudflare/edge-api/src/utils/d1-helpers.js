@@ -143,7 +143,7 @@ export async function createPortfolio(db, userId, portfolioData) {
     const { name, description = null, assets = [] } = portfolioData;
 
     if (!name) {
-      throw new Error('Название portfolioя обязательно');
+      throw new Error('Название портфеля обязательно');
     }
 
     const result = await db
@@ -162,7 +162,7 @@ export async function createPortfolio(db, userId, portfolioData) {
       .run();
 
     if (!result.success) {
-      throw new Error('Ошибка при создании portfolioя');
+      throw new Error('Ошибка при создании портфеля');
     }
 
     return await getPortfolio(db, result.meta.last_row_id);
@@ -277,7 +277,7 @@ export async function updatePortfolio(db, portfolioId, userId, updates) {
       .run();
 
     if (!result.success) {
-      throw new Error('Ошибка при обновлении portfolioя');
+      throw new Error('Ошибка при обновлении портфеля');
     }
 
     return await getPortfolio(db, portfolioId);

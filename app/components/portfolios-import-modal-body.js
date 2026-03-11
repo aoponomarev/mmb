@@ -226,7 +226,7 @@ window.portfoliosImportModalBody = {
             const selectedSet = new Set(this.selectedIds);
             const filtered = this.portfolios.filter(p => selectedSet.has(p.id));
             if (!filtered.length) {
-                this.errors = ['Не выбраны portfolioи for импорта.'];
+                this.errors = ['Не выбраны портфели для импорта.'];
                 this.updateImportButton();
                 return;
             }

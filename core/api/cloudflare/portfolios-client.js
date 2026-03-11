@@ -118,12 +118,12 @@
     async function getPortfolio(portfolioId) {
         try {
             if (!portfolioId) {
-                throw new Error('ID portfolioя обязателен');
+                throw new Error('ID портфеля обязателен');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('get', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for portfolioя');
+                throw new Error('Не удалось получить URL для портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -145,7 +145,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.getPortfolio',
-                    userMessage: 'Ошибка при загрузке portfolioя'
+                    userMessage: 'Ошибка при загрузке портфеля'
                 });
             }
             throw error;
@@ -161,12 +161,12 @@
     async function createPortfolio(portfolioData) {
         try {
             if (!portfolioData || !portfolioData.name) {
-                throw new Error('Название portfolioя обязательно');
+                throw new Error('Название портфеля обязательно');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('create');
             if (!url) {
-                throw new Error('Не удалось получить URL for создания portfolioя');
+                throw new Error('Не удалось получить URL для создания портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -190,7 +190,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.createPortfolio',
-                    userMessage: 'Ошибка при создании portfolioя'
+                    userMessage: 'Ошибка при создании портфеля'
                 });
             }
             throw error;
@@ -207,7 +207,7 @@
     async function updatePortfolio(portfolioId, updates) {
         try {
             if (!portfolioId) {
-                throw new Error('ID portfolioя обязателен');
+                throw new Error('ID портфеля обязателен');
             }
 
             if (!updates || Object.keys(updates).length === 0) {
@@ -216,7 +216,7 @@
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('update', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for обновления portfolioя');
+                throw new Error('Не удалось получить URL для обновления портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -239,7 +239,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.updatePortfolio',
-                    userMessage: 'Ошибка при обновлении portfolioя'
+                    userMessage: 'Ошибка при обновлении портфеля'
                 });
             }
             throw error;
@@ -255,12 +255,12 @@
     async function deletePortfolio(portfolioId) {
         try {
             if (!portfolioId) {
-                throw new Error('ID portfolioя обязателен');
+                throw new Error('ID портфеля обязателен');
             }
 
             const url = window.cloudflareConfig.getPortfoliosEndpoint('delete', portfolioId);
             if (!url) {
-                throw new Error('Не удалось получить URL for удаления portfolioя');
+                throw new Error('Не удалось получить URL для удаления портфеля');
             }
 
             const response = await fetchWithAuth(url, {
@@ -282,7 +282,7 @@
             if (window.errorHandler) {
                 window.errorHandler.handleError(error, {
                     context: 'portfolios-client.deletePortfolio',
-                    userMessage: 'Ошибка при удалении portfolioя'
+                    userMessage: 'Ошибка при удалении портфеля'
                 });
             }
             throw error;

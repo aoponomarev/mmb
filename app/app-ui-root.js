@@ -1133,7 +1133,7 @@
                         try {
                             await window.portfoliosClient.deletePortfolio(removed.cloudflareId);
                         } catch (error) {
-                            console.warn('app-ui-root: удаление Cloudflare-portfolioя failed to', error);
+                            console.warn('app-ui-root: удаление портфеля в Cloudflare не удалось', error);
                         }
                     }
 
@@ -1213,6 +1213,87 @@
                     return false;
                 },
                 /**
+                 * Hydrate portfolios list from Cloudflare D1 on authenticated devices.
+                 * Local list remains SSOT; cloud acts as auth-scoped replica and recovery source.
+                 */
+                async hydratePortfoliosFromCloud() {
+                    if (!window.portfoliosClient || !window.authClient) return;
+                    if (!window.portfolioAdapters || typeof window.portfolioAdapters.fromCloudflareRecord !== 'function') return;
+                    const cloudSyncEnabled = window.appConfig?.isFeatureEnabled?.('cloudSync') !== false;
+                    if (!cloudSyncEnabled) return;
+
+                    let authenticated = false;
+                    try {
+                        authenticated = await window.authClient.isAuthenticated();
+                    } catch (error) {
+                        console.warn('app-ui-root: failed to проверить auth for Cloudflare hydrate', error);
+                        return;
+                    }
+                    if (!authenticated) return;
+
+                    let cloudPortfolios = [];
+                    try {
+                        cloudPortfolios = await window.portfoliosClient.getPortfolios();
+                    } catch (error) {
+                        console.warn('app-ui-root: hydratePortfoliosFromCloud getPortfolios error', error);
+                        return;
+                    }
+                    const localList = Array.isArray(this.userPortfolios) ? this.userPortfolios : [];
+
+                    // Index cloud portfolios by id for merge decisions.
+                    const cloudById = new Map();
+                    if (Array.isArray(cloudPortfolios)) {
+                        cloudPortfolios.forEach(record => {
+                            if (!record || record.id === undefined || record.id === null) return;
+                            cloudById.set(record.id, record);
+                        });
+                    }
+
+                    // 1) Mark local portfolios that used to be synced but now отсутствуют в D1 как устаревшие (stale).
+                    localList.forEach(p => {
+                        if (!p) return;
+                        const cfId = p.cloudflareId;
+                        if (cfId === undefined || cfId === null) return;
+                        if (!cloudById.has(cfId)) {
+                            // Не перезаписываем явные ошибки/локальные-only, только "synced"-ветку.
+                            if (!p.syncState || p.syncState === 'synced') {
+                                p.syncState = 'stale';
+                            }
+                        }
+                    });
+
+                    // 2) Добавить cloud-портфели, которых ещё нет локально.
+                    const byCloudIdLocal = new Map();
+                    localList.forEach(p => {
+                        if (p && p.cloudflareId !== undefined && p.cloudflareId !== null) {
+                            byCloudIdLocal.set(p.cloudflareId, p);
+                        }
+                    });
+
+                    const hydrated = [];
+                    for (const record of cloudPortfolios || []) {
+                        const cfId = record && record.id;
+                        if (cfId != null && byCloudIdLocal.has(cfId)) {
+                            continue;
+                        }
+                        const converted = window.portfolioAdapters.fromCloudflareRecord(record);
+                        if (!converted) continue;
+                        converted.cloudflareId = cfId ?? converted.cloudflareId ?? null;
+                        converted.syncState = 'synced';
+                        hydrated.push(converted);
+                    }
+
+                    if (hydrated.length === 0 && localList === this.userPortfolios) {
+                        // Нечего обновлять.
+                        return;
+                    }
+
+                    this.userPortfolios = [...localList, ...hydrated];
+                    if (window.portfolioConfig && typeof window.portfolioConfig.saveLocalPortfolios === 'function') {
+                        window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    }
+                },
+                /**
                  * Handle successful login via Google OAuth
                  * @param {Object} tokenData - Token and user data
                  */
@@ -1242,6 +1323,7 @@
                     }
 
                     await this._loadCloudWorkspace();
+                    await this.hydratePortfoliosFromCloud();
                 },
                 /**
                  * Handle logout — restore pre-auth local workspace
@@ -5194,6 +5276,7 @@
                             } catch (_) { /* best effort */ }
                         }
                         await this._loadCloudWorkspace();
+                        await this.hydratePortfoliosFromCloud();
                     }
 
                     let workspace = null;

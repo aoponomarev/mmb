@@ -30,6 +30,53 @@
         };
     }
 
+    /**
+     * Convert Cloudflare D1 portfolio record to local draft-like structure.
+     * Input shape: { id, name, description, assets, created_at, updated_at, ... }.
+     */
+    function fromCloudflareRecord(record) {
+        if (!record || typeof record !== 'object') return null;
+
+        const assets = Array.isArray(record.assets) ? record.assets : [];
+        const createdAt = record.created_at || record.updated_at || new Date().toISOString();
+        let localId = null;
+        try {
+            if (window.portfolioConfig && typeof window.portfolioConfig.generatePortfolioId === 'function') {
+                localId = window.portfolioConfig.generatePortfolioId(new Date(createdAt));
+            }
+        } catch (_) {
+            // Fallback handled below.
+        }
+        if (!localId) {
+            localId = String(record.id ?? createdAt);
+        }
+
+        const coins = assets.map((asset, index) => ({
+            coinId: asset.coinId || asset.coin_id || `${asset.ticker || 'coin'}-${index}`,
+            ticker: (asset.ticker || '').toUpperCase(),
+            name: '',
+            metrics: { agr: asset.agr ?? 0 },
+            portfolioPercent: Number.isFinite(Number(asset.weight)) ? Number(asset.weight) : 0,
+            delegatedBy: {
+                modelId: asset.delegatedBy?.modelId || null,
+                modelName: asset.delegatedBy?.modelName || ''
+            }
+        }));
+
+        return {
+            id: localId,
+            name: record.name || 'New Portfolio',
+            description: record.description || null,
+            coins,
+            createdAt,
+            updatedAt: record.updated_at || createdAt,
+            marketMetrics: record.marketMetrics || {},
+            settings: {
+                mode: 'equal'
+            }
+        };
+    }
+
     function toPostgresPayload(draft, context) {
         const safeDraft = draft || {};
         const safeContext = context || {};
@@ -98,6 +145,7 @@
 
     window.portfolioAdapters = {
         toCloudflarePayload,
-        toPostgresPayload
+        toPostgresPayload,
+        fromCloudflareRecord
     };
 })();

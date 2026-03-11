@@ -180,7 +180,7 @@ window.portfoliosManager = {
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.deletePortfolio error:', error);
-                this.error = error.message || 'Ошибка при удалении portfolioя';
+                this.error = error.message || 'Ошибка при удалении портфеля';
             } finally {
                 this.isLoading = false;
             }
@@ -238,7 +238,7 @@ window.portfoliosManager = {
                 await this.loadPortfolios();
             } catch (error) {
                 console.error('portfolios-manager.handleSave error:', error);
-                this.error = error.message || 'Ошибка при сохранении portfolioя';
+                this.error = error.message || 'Ошибка при сохранении портфеля';
                 this.isLoading = false;
             }
         },

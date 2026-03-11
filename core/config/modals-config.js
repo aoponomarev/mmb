@@ -36,22 +36,22 @@
         'portfolioModal': {
             title: 'Портфель',
             icon: 'fas fa-briefcase',
-            description: 'Создание или редактирование portfolioя',
+            description: 'Создание или редактирование портфеля',
             bodyComponent: 'portfolio-modal-body',
             centered: true,
             autoRegister: false, // Requires props
             condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
         },
         'portfolioFormModal': {
-            title: 'Формирование portfolioя',
-            description: 'Автоматическое формирование portfolioя на основе математической модели',
+            title: 'Формирование портфеля',
+            description: 'Автоматическое формирование портфеля на основе математической модели',
             bodyComponent: 'portfolio-form-modal-body',
             centered: true,
             autoRegister: false // Requires props (allCoins, onSave)
         },
         'portfolioViewModal': {
-            title: 'Просмотр portfolioя',
-            description: 'Детальный просмотр состава portfolioя и metrics',
+            title: 'Просмотр портфеля',
+            description: 'Детальный просмотр состава портфеля и метрик',
             bodyComponent: 'portfolio-view-modal-body',
             centered: true,
             autoRegister: false // Requires props (portfolio, onDelete)
