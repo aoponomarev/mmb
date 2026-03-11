@@ -1,11 +1,12 @@
 ---
 id: ais-d8e7f6
-status: incomplete
+status: complete
 last_updated: "2026-03-11"
 related_skills:
   - sk-224210
   - sk-bb7c8e
   - sk-3c832d
+  - sk-7b4ee5
 related_ais:
   - ais-71a8b9
   - ais-3732ce
@@ -16,161 +17,198 @@ related_ais:
 
 # AIS: Единая система адаптеров (Unified Adapter System)
 
-<!-- Черновик. Требует обсуждения. Спецификации (AIS) пишутся на русском языке. -->
-
 ## Идентификация и жизненный цикл
 
 ```yml
 id: ais-d8e7f6
-status: draft
+status: complete
 last_updated: "2026-03-11"
 related_skills:
   - sk-224210
   - sk-bb7c8e
   - sk-3c832d
+  - sk-7b4ee5
 related_ais:
   - ais-71a8b9
   - ais-3732ce
   - ais-e41384
+  - ais-775420
 ```
 
-**Статус:** `incomplete` — план id:plan-a9b2c4 утверждён и выполняется; спецификация обновляется по шагам реализации.
+**Статус:** `complete` — план id:plan-a9b2c4 закрыт; единая система адаптеров реализована и дистиллирована в код, skills и causality-registry.
 
-## Концепция (High-Level Concept)
+## Концепция
 
-Единая система адаптеров объединяет все интеграции с внешним миром (API, БД) под общими принципами:
+Единая система адаптеров нормализует все внешние интеграции к одной архитектурной модели:
 
-1. **Adapter (Provider)** — инкапсулирует transport + нормализацию форматов к внутренним контрактам (docs/glossary.md).
-2. **Registry** — центральная точка разрешения провайдера по домену/ключу.
-3. **Connection-слой** — опциональная инъекция для тестирования (Test Double).
-4. **Failover Policy** — переключение при деградации primary; circuit breaker per provider.
+1. **Provider / Adapter** инкапсулирует transport и нормализацию ответа к внутреннему контракту.
+2. **Facade / Client** предоставляет одному домену стабильный интерфейс и держит orchestration-логику.
+3. **Registry** хранит доменные allowlist/order/health-policy правила и не допускает расхождения между фасадами.
+4. **Health tracking** фиксирует success/failure/latency per provider и позволяет фасадам понижать деградировавшие адаптеры без скрытой магии в самих провайдерах.
 
-Существующие фасады (`DataProviderManager`, `AIProviderManager`) уже реализуют часть паттерна. Спецификация формализует расширение на домены market-metrics, Yandex API Gateway, N8N, PostgreSQL.
+Система покрывает активный браузерный слой `app/`, инфраструктурный слой `is/` и legacy IS-артефакты, оставленные для обратной совместимости.
 
-## Инфраструктура и Потоки данных (Infrastructure & Data Flow)
+## Инфраструктура и Потоки данных
 
 ```mermaid
 flowchart TD
-    subgraph UI ["app/"]
-        comp[UI Components]
+    subgraph Presentation["Presentation Layer"]
+        APP[app/ components]
+        LEGACY[IS.html + V2_logic.js]
+        AUTO[Automation scripts]
     end
 
-    subgraph Facades ["Фасады"]
+    subgraph Facades["Facades / Clients"]
         DPM[DataProviderManager]
         MMPM[MarketMetricsProviderManager]
         AIPM[AIProviderManager]
-    end
-
-    subgraph Registry ["Registry / Реестр"]
-        reg[Adapter Registry]
-    end
-
-    subgraph Adapters ["Адаптеры (Providers)"]
-        CG[CoinGeckoProvider]
-        YC[YandexCacheProvider]
-        AM[AlternativeMeProvider]
-        VIX[VixProvider]
-        BN[BinanceMetricsProvider]
+        CWC[CloudWorkspaceClient]
+        CSC[CoinSetsClient]
+        V2[V2ApiClient + N8nApiClient]
+        GHR[GitHubReleasesProvider]
         YAG[YandexApiGatewayProvider]
+        PG[PostgresAdapter]
     end
 
-    subgraph External ["Внешний мир"]
-        api1[CoinGecko API]
-        api2[Yandex API Gateway]
-        api3[Alternative.me]
-        api4[Binance Futures]
-        pg[(PostgreSQL)]
+    subgraph Registry["Registry + Health"]
+        ARC[adapter-registry-config.js]
+        AR[adapter-registry.js]
+        AHT[adapter-health-tracker.js]
     end
 
-    comp --> DPM
-    comp --> MMPM
-    comp --> AIPM
+    subgraph Providers["Providers / Adapters"]
+        YC[YandexCacheProvider]
+        CG[CoinGeckoProvider]
+        ALT[AlternativeMeProvider]
+        YV[YahooVixProvider]
+        SV[StooqVixProvider]
+        AV[AlphaVantageVixProvider]
+        BM[BinanceMetricsProvider]
+        CBD[CoinGeckoBtcDomProvider]
+        YP[YandexProvider]
+    end
 
-    DPM --> reg
-    MMPM --> reg
-    AIPM --> reg
+    subgraph External["External Systems"]
+        YAPIGW[Yandex API Gateway]
+        CFGW[Cloudflare Workers API]
+        GHAPI[GitHub API]
+        N8N[n8n webhooks]
+        CGAPI[CoinGecko / Yahoo / Stooq / Binance / Alternative.me]
+        PGDB[(PostgreSQL)]
+        LOCAL[Local app API]
+    end
 
-    reg --> CG
-    reg --> YC
-    reg --> AM
-    reg --> VIX
-    reg --> BN
-    reg --> YAG
+    APP --> DPM
+    APP --> MMPM
+    APP --> AIPM
+    APP --> CWC
+    APP --> CSC
+    APP --> YAG
+    LEGACY --> V2
+    AUTO --> GHR
 
-    CG --> api1
-    YC --> api2
-    AM --> api3
-    BN --> api4
-    YAG --> api2
-    YC --> pg
+    DPM --> AR
+    MMPM --> AR
+    AIPM --> AR
+    CWC --> AR
+    CSC --> AR
+    YAG --> AR
+    AR --> ARC
+    AR --> AHT
+
+    DPM --> YC
+    DPM --> CG
+    MMPM --> ALT
+    MMPM --> YV
+    MMPM --> SV
+    MMPM --> AV
+    MMPM --> BM
+    MMPM --> CBD
+    AIPM --> YP
+    CWC --> CFGW
+    CSC --> CFGW
+    YAG --> YAPIGW
+    V2 --> N8N
+    V2 --> LOCAL
+    GHR --> GHAPI
+    YC --> YAPIGW
+    YC --> PGDB
+    PG --> PGDB
+    CG --> CGAPI
+    ALT --> CGAPI
+    YV --> CGAPI
+    SV --> CGAPI
+    AV --> CGAPI
+    BM --> CGAPI
+    CBD --> CGAPI
 ```
 
-### Домены адаптеров
+## Домены адаптеров
 
-| Домен | Фасад | Провайдеры | Статус |
-|-------|-------|------------|--------|
-| Coin data | DataProviderManager | CoinGecko, YandexCache | Реализовано |
-| Market metrics | MarketMetricsProviderManager | AlternativeMe, YahooVix, StooqVix, AlphaVantageVix, Binance, CoinGecko (BTC dom) | **Этап 1 реализован** |
-| Yandex API Gateway | YandexApiGatewayProvider | cycles, trigger | **Этап 2 реализован** |
-| AI | AIProviderManager | Yandex, OpenRouter, Groq, … | Реализовано |
-| N8N | — | webhooks | **Требует N8nProvider** |
-| PostgreSQL | PostgresAdapter | Yandex Functions (`api-gateway`, `market-fetcher`) | **Этап 4 реализован** |
+| Домен | Фасад / Client | Провайдеры / Backends | Статус |
+|-------|----------------|------------------------|--------|
+| Coin data | `DataProviderManager` | `YandexCacheProvider`, `CoinGeckoProvider` | Реализовано |
+| Market metrics | `MarketMetricsProviderManager` | `AlternativeMeProvider`, `YahooVixProvider`, `StooqVixProvider`, `AlphaVantageVixProvider`, `BinanceMetricsProvider`, `CoinGeckoBtcDomProvider` | Реализовано |
+| AI | `AIProviderManager` | `YandexProvider` + Cloudflare settings restore path | Реализовано |
+| Stateful Cloudflare APIs | `CloudWorkspaceClient`, `CoinSetsClient` | Cloudflare Workers `/api/settings`, `/api/coin-sets` | Реализовано |
+| Yandex API Gateway | `YandexApiGatewayProvider` | `cycles`, `market-cache/trigger` endpoints | Реализовано |
+| Legacy IS | `V2ApiClient`, `N8nApiClient` | local `/api/*`, n8n webhooks | Реализовано |
+| Automation / backlog | `GitHubReleasesProvider` | GitHub Releases API + tag fallback | Реализовано |
+| PostgreSQL serverless | `PostgresAdapter` | `pg.Client` inside Yandex Functions | Реализовано |
+| Cross-domain policy | `AdapterRegistry` | policy config + health tracker | Реализовано |
 
-## Локальные Политики (Module Policies)
+## Политики модуля
 
-1. **No direct fetch in components** — UI не вызывает `fetch` напрямую для рыночных данных. Все запросы через фасад (id:sk-224210).
-2. **Normalization in adapter** — все провайдеры нормализуют ответы к внутренним схемам; inline-парсинг в сервисах запрещён.
-3. **Connection injection** — провайдеры принимают опциональный `connection` (fetch-подобная функция) в конструкторе для тестов.
-4. **Circuit breaker per provider** — сбой одного провайдера не влияет на health-статус других.
-5. **Registry policies** — rate limit, timeout, allowlist хранятся в конфиге реестра, не в коде провайдера.
-6. **Adapter mandatory for new integrations** — каждая новая интеграция с внешней системой (API, БД) MUST иметь выделенный адаптер. Прямой `fetch`/`client.query` в сервисах или компонентах запрещён. `@causality #for-adapter-mandatory`
-7. **Fallback stays in facade** — multi-source fallback (пример: VIX через Yahoo/Stooq/Alpha Vantage) оркестрируется `MarketMetricsProviderManager`, а не скрывается внутри одного провайдера.
+1. **No direct transport in components** — UI-компоненты и orchestration-скрипты не держат raw `fetch`/`client.query` для внешнего мира.
+2. **Normalization in adapter** — преобразование внешнего payload в внутренний контракт выполняется в адаптере/провайдере, не в компоненте и не в фасаде.
+3. **Fallback stays in facade** — multi-source fallback и downgrade-order принадлежат фасаду (`DataProviderManager`, `MarketMetricsProviderManager`, `V2ApiClient`), не отдельному провайдеру.
+4. **Registry policies are SSOT** — order, allowlist и health thresholds живут в `core/config/adapter-registry-config.js`, а не рассеиваются по отдельным модулям.
+5. **Provider health is shared state** — success/failure/latency считаются в `core/observability/adapter-health-tracker.js`; сами провайдеры остаются fail-fast и stateless.
+6. **Endpoint coherence for stateful APIs** — `CloudWorkspaceClient` и `CoinSetsClient` обязаны читать/писать в тот же origin contract, что и auth flow.
+7. **Connection injection for tests** — провайдеры принимают fetch/client injection там, где это снижает стоимость тестирования без build-time DI.
+8. **Legacy coverage is explicit** — legacy `IS.html` не является активным Presentation Layer, но его transport-слой всё равно должен соответствовать adapter policy, чтобы не плодить второй стандарт.
 
-## Компоненты и Контракты (Components & Contracts)
+## Компоненты и Контракты
 
 | Компонент | Путь | Ответственность |
 |-----------|------|-----------------|
-| DataProviderManager | core/api/data-provider-manager.js | Фасад coin data |
-| BaseDataProvider | core/api/data-providers/base-provider.js | Базовый контракт coin data |
-| BaseMarketMetricsProvider | core/api/market-metrics-providers/base-provider.js | Базовый контракт market metrics |
-| MarketMetricsProviderManager | core/api/market-metrics-provider-manager.js | Фасад market metrics, fallback, cache, request registry |
-| AlternativeMeProvider | core/api/market-metrics-providers/alternative-me-provider.js | FGI adapter |
-| YahooVixProvider | core/api/market-metrics-providers/yahoo-vix-provider.js | Primary VIX adapter |
-| StooqVixProvider | core/api/market-metrics-providers/stooq-vix-provider.js | Secondary VIX adapter |
-| AlphaVantageVixProvider | core/api/market-metrics-providers/alpha-vantage-vix-provider.js | Tertiary VIX adapter |
-| BinanceMetricsProvider | core/api/market-metrics-providers/binance-metrics-provider.js | OI / FR / LSR adapter |
-| CoinGeckoBtcDomProvider | core/api/market-metrics-providers/coingecko-btc-dom-provider.js | BTC dominance adapter |
-| YandexApiGatewayProvider | core/api/yandex-api-gateway-provider.js | cycles history + manual trigger adapter |
-| PostgresAdapter | is/yandex/functions/shared/postgres-adapter.js | Shared pg.Client adapter for Yandex Functions |
-| market-metrics.js | core/api/market-metrics.js | Совместимый browser facade над `MarketMetricsProviderManager` |
-| market-metrics-providers-config.js | core/config/market-metrics-providers-config.js | SSOT для metric routing, timeout и endpoint order |
-| causality-registry | is/skills/causality-registry.md | #for-data-provider-interface, #for-dual-channel-fallback |
+| `AdapterRegistryConfig` | `core/config/adapter-registry-config.js` | SSOT для domain order, allowlist и health thresholds |
+| `AdapterHealthTracker` | `core/observability/adapter-health-tracker.js` | Shared success/failure/latency state |
+| `AdapterRegistry` | `core/api/adapter-registry.js` | Unified ordering facade over config + health |
+| `DataProviderManager` | `core/api/data-provider-manager.js` | Coin-data facade, dual-channel fallback, request registry |
+| `MarketMetricsProviderManager` | `core/api/market-metrics-provider-manager.js` | Multi-provider metrics facade, cache, fallback, request registry |
+| `AIProviderManager` | `core/api/ai-provider-manager.js` | AI facade, provider selection, settings restore integration |
+| `YandexApiGatewayProvider` | `core/api/yandex-api-gateway-provider.js` | Cycles history + manual trigger adapter |
+| `CloudWorkspaceClient` | `core/api/cloudflare/cloud-workspace-client.js` | Stateful workspace gateway to Cloudflare Workers |
+| `CoinSetsClient` | `core/api/cloudflare/coin-sets-client.js` | Stateful coin-set gateway to Cloudflare Workers |
+| `V2ApiClient` / `N8nApiClient` | `is/v2-api-client.js` | Legacy IS facade over local API and n8n webhook layer |
+| `GitHubReleasesProvider` | `is/scripts/infrastructure/github-releases-provider.js` | GitHub release/tag adapter for backlog automation |
+| `PostgresAdapter` | `is/yandex/functions/shared/postgres-adapter.js` | Shared `pg.Client` adapter for Yandex Functions |
+| `market-metrics-providers-config.js` | `core/config/market-metrics-providers-config.js` | Metric-specific routing, timeout and registry keys |
 
-## Казуальности (Causality Links)
+## Казуальности
 
 | Hash | Применение |
 |------|------------|
-| `#for-data-provider-interface` | Единый интерфейс провайдеров |
-| `#for-dual-channel-fallback` | Primary + fallback |
-| `#for-readonly-fallbacks` | Fallback не пишет в SSOT |
-| `#for-fail-fast` | Валидация на границе |
-| `#for-rate-limiting` | Throttling в провайдерах |
-| `#for-validation-at-edge` | Схема перед расчётами |
-| `#for-partial-failure-tolerance` | Частичный успех при сбоях |
-| `#for-composition-root` | Сборка в app-ui-root |
-| `#for-adapter-mandatory` | Каждая новая внешняя интеграция — свой адаптер |
-| `#for-local-runtime-disposable` | `data/mcp.sqlite*` не блокирует unrelated implementation work |
+| `#for-adapter-mandatory` | Каждая внешняя интеграция получает свой adapter/provider |
+| `#for-adapter-registry` | Cross-domain registry держит allowlist/order/policy SSOT |
+| `#for-provider-health-tracking` | Health tracking живёт в orchestration plane |
+| `#for-dual-channel-fallback` | Primary + fallback orchestration |
+| `#for-endpoint-coherence` | Stateful read/write/readback не смешивает origin contracts |
+| `#for-validation-at-edge` | Адаптер валидирует payload до бизнес-логики |
+| `#for-partial-failure-tolerance` | Частичный успех допустим для multi-metric flows |
+| `#for-local-runtime-disposable` | Локальные runtime artifacts не блокируют unrelated work |
 
 ## Контракты и гейты
 
-- #JS-Hx2xaHE8 (validate-docs-ids.js) — валидация id и связей
-- #JS-QxwSQxtt (validate-skill-anchors.js) — при добавлении @skill-anchor в новые провайдеры
+- `core/config/adapter-registry-config.js` — contract SSOT для cross-domain adapter policies.
+- `is/skills/causality-registry.md` — все `@causality` и reasoning hashes для этой AIS обязаны быть зарегистрированы.
+- #JS-Hx2xaHE8 (`validate-docs-ids.js`) — проверяет ids и cross-reference между планом, AIS и skills.
+- #JS-QxwSQxtt (`validate-skill-anchors.js`) — проверяет `@skill-anchor` для новых/изменённых adapter-модулей.
+- #JS-ww2hRLt7 (`is/scripts/architecture/validate-mixed-reference-mode.js`) — удерживает mixed-reference contract для AIS и skills.
 
-## Уточняющие вопросы (из плана)
+## Завершение
 
-См. id:plan-a9b2c4 § Уточняющие вопросы. Q1–Q5 приняты; политика #for-adapter-mandatory зафиксирована.
-
-## Завершение / completeness
-
-- Этапы 1, 2 и 4 реализованы; далее остаются N8N/GitHub-адаптеры и доведение cross-domain registry/health-policy до полного unified state.
-- После полной реализации: status `complete`, дистилляция в skills.
+- Все этапы плана id:plan-a9b2c4 закрыты.
+- Архитектурный разрыв между активным `app/` и legacy `IS.html` устранён: оба пути теперь используют adapter/facade pattern.
+- Семантический разрыв между proxy-only и direct-first transport формализован в skills: proxy обязателен на `file://`, direct-first допускается только после transport smoke и только для safe public read-only endpoints.

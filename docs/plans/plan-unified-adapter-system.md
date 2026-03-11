@@ -1,6 +1,6 @@
 ---
 id: plan-a9b2c4
-status: active
+status: complete
 last_updated: "2026-03-11"
 related_skills:
   - sk-224210
@@ -17,7 +17,7 @@ related_ais:
 
 # План: Единая система адаптеров (Unified Adapter System)
 
-> Агрегация практик из веб-исследования и аудита приложения. Связь с существующими скиллами и казуальностями. **Статус: active** — решения приняты, идёт пошаговое выполнение.
+> Агрегация практик из веб-исследования и аудита приложения. Связь с существующими скиллами и казуальностями. **Статус: complete** — внедрение завершено, план служит исполненным артефактом и базой для дистилляции.
 
 ## Цель
 
@@ -103,9 +103,9 @@ related_ais:
 
 ### Этап 3: N8N, Cloudflare, GitHub — низкоприоритетные
 
-- [ ] `N8nProvider` / `n8nApiClient` для `is/V2_logic.js`
-- [ ] `CloudflareWorkspaceClient` — уже есть; проверить соответствие паттерну Gateway
-- [ ] `GitHubApiProvider` для copilot-backlog-cron (опционально)
+- [x] `N8nProvider` / `n8nApiClient` для `is/V2_logic.js`
+- [x] `CloudflareWorkspaceClient` — уже есть; проверить соответствие паттерну Gateway
+- [x] `GitHubApiProvider` для copilot-backlog-cron (опционально)
 
 ### Этап 4: PostgreSQL — адаптер в Yandex Functions
 
@@ -116,8 +116,8 @@ related_ais:
 ### Этап 5: Registry и единая система
 
 - [x] Расширить `DataProviderManager` или создать `AdapterRegistry` — домен market-metrics
-- [ ] Конфиг политик (rate limit, timeout, allowlist) в `data-providers-config.js` или отдельном реестре
-- [ ] Health tracking per provider (уже частично в id:sk-224210)
+- [x] Конфиг политик (rate limit, timeout, allowlist) в `data-providers-config.js` или отдельном реестре
+- [x] Health tracking per provider (уже частично в id:sk-224210)
 - [x] Документировать в AIS id:ais-d8e7f6 (docs/ais/ais-unified-adapter-system.md)
 
 ---
@@ -190,3 +190,10 @@ Serverless functions — короткие инвайки. `pg.Client` созда
 - Макро-знания → id:ais-d8e7f6
 - Микро-правила → core/skills/data-providers-architecture.md, новый skill arch-market-metrics-adapters.md (если нужен)
 - План → docs/done/plan-unified-adapter-system.md (архив)
+
+## Фактическое исполнение
+
+- Реализован cross-domain `AdapterRegistry` с отдельным policy-конфигом и shared health tracking.
+- `is/V2_logic.js` переведён на standalone `v2-api-client.js`; raw `fetch` из legacy UI убран.
+- `copilot-backlog-cron.js` переведён на `GitHubReleasesProvider`; GitHub transport вынесен из orchestration-скрипта.
+- `CloudflareWorkspaceClient` и `CoinSetsClient` приведены к явному gateway-формату с единым request helper и health bookkeeping.

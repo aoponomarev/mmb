@@ -32,6 +32,7 @@
             this.providers = {};
             this.defaultProvider = 'coingecko'; // CoinGecko by default
             this.apiKeysStorageKey = 'data-provider-keys'; // Key for localStorage
+            this.registry = window.adapterRegistry || null;
         }
 
         isFileProtocol() {
@@ -66,6 +67,18 @@
         filterCoinsByBan(coins) {
             if (!Array.isArray(coins) || coins.length === 0) return [];
             return coins.filter(coin => !this.isCoinBanned(coin));
+        }
+
+        recordAdapterSuccess(providerName, operation, latencyMs) {
+            this.registry?.recordSuccess?.('coin-data', providerName, { operation, latencyMs });
+        }
+
+        recordAdapterFailure(providerName, operation, error, latencyMs) {
+            this.registry?.recordFailure?.('coin-data', providerName, {
+                operation,
+                latencyMs,
+                errorMessage: error?.message || 'unknown'
+            });
         }
 
         /**
@@ -148,6 +161,7 @@
 
             // 1) PostgreSQL primary
             if (preferYandexFirst && this.providers['yandex-cache']) {
+                const startedAt = Date.now();
                 try {
                     emitProgress({ source: 'postgres', phase: 'start', total: count, loaded: 0 });
                     const pgOptions = {
@@ -167,8 +181,10 @@
                     if (window.requestRegistry) {
                         window.requestRegistry.recordCall('yandex-cache', 'getTopCoins', { count, sortBy }, 200, true);
                     }
+                    this.recordAdapterSuccess('yandex-cache', 'getTopCoins', Date.now() - startedAt);
                     return filtered;
                 } catch (pgError) {
+                    this.recordAdapterFailure('yandex-cache', 'getTopCoins', pgError, Date.now() - startedAt);
                     emitProgress({
                         source: 'postgres',
                         phase: 'error',
@@ -243,6 +259,7 @@
                 options.apiKey = apiKey;
             }
 
+            const startedAt = Date.now();
             try {
                 const providerOptions = { ...options };
                 if (providerName === 'coingecko') {
@@ -255,8 +272,10 @@
                 if (window.requestRegistry) {
                     window.requestRegistry.recordCall(providerName, 'getTopCoins', { count, sortBy }, 200, true);
                 }
+                this.recordAdapterSuccess(providerName, 'getTopCoins', Date.now() - startedAt);
                 return filtered;
             } catch (error) {
+                this.recordAdapterFailure(providerName, 'getTopCoins', error, 0);
                 if (window.requestRegistry) {
                     // Skill anchor: real HTTP status must be logged, else 429 cycle masked as "generic error".
                     // See id:sk-bb7c8e
@@ -293,13 +312,16 @@
 
             // 1) PostgreSQL search
             if (preferYandexFirst && this.providers['yandex-cache']) {
+                const startedAt = Date.now();
                 try {
                     const fromPg = await this.providers['yandex-cache'].searchCoins(query, options);
                     appendUnique(this.filterCoinsByBan(fromPg));
+                    this.recordAdapterSuccess('yandex-cache', 'searchCoins', Date.now() - startedAt);
                     if (merged.length >= limit) {
                         return merged.slice(0, limit);
                     }
                 } catch (pgError) {
+                    this.recordAdapterFailure('yandex-cache', 'searchCoins', pgError, Date.now() - startedAt);
                     if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
                         window.fallbackMonitor.notify({
                             component: 'data-provider-manager',
@@ -320,10 +342,13 @@
                     cgOptions.apiKey = apiKey;
                 }
 
+                const startedAt = Date.now();
                 try {
                     const fromCg = await provider.searchCoins(query, cgOptions);
                     appendUnique(this.filterCoinsByBan(fromCg));
+                    this.recordAdapterSuccess('coingecko', 'searchCoins', Date.now() - startedAt);
                 } catch (cgError) {
+                    this.recordAdapterFailure('coingecko', 'searchCoins', cgError, 0);
                     if (merged.length === 0) {
                         throw cgError;
                     }
@@ -368,8 +393,15 @@
                 options.apiKey = apiKey;
             }
 
-            const result = await provider.getCoinData(filteredIds, options);
-            return this.filterCoinsByBan(result);
+            const startedAt = Date.now();
+            try {
+                const result = await provider.getCoinData(filteredIds, options);
+                this.recordAdapterSuccess(providerName, 'getCoinData', Date.now() - startedAt);
+                return this.filterCoinsByBan(result);
+            } catch (error) {
+                this.recordAdapterFailure(providerName, 'getCoinData', error, Date.now() - startedAt);
+                throw error;
+            }
         }
 
         /**
@@ -396,6 +428,7 @@
 
             // ── Phase 1: PostgreSQL ────────────────────────────────────────
             if (pgProvider) {
+                const startedAt = Date.now();
                 try {
                     if (options.onProgress) {
                         options.onProgress({
@@ -422,7 +455,9 @@
                             total: filteredIds.length, loaded: resolvedMap.size
                         });
                     }
+                    this.recordAdapterSuccess('yandex-cache', 'getCoinDataDualChannel', Date.now() - startedAt);
                 } catch (pgErr) {
+                    this.recordAdapterFailure('yandex-cache', 'getCoinDataDualChannel', pgErr, Date.now() - startedAt);
                     console.warn('dual-channel: PG phase failed, falling through to CoinGecko', pgErr.message);
                     if (window.fallbackMonitor) {
                         window.fallbackMonitor.notify({
@@ -445,6 +480,7 @@
             const missingIds = filteredIds.filter(id => !resolvedMap.has(id));
 
             if (missingIds.length > 0 && cgProvider && allowCoinGeckoFallback) {
+                const startedAt = Date.now();
                 try {
                     if (options.onProgress) {
                         options.onProgress({
@@ -479,7 +515,9 @@
                             loaded: missingIds.filter(id => resolvedMap.has(id)).length
                         });
                     }
+                    this.recordAdapterSuccess('coingecko', 'getCoinDataDualChannel', Date.now() - startedAt);
                 } catch (cgErr) {
+                    this.recordAdapterFailure('coingecko', 'getCoinDataDualChannel', cgErr, Date.now() - startedAt);
                     console.warn('dual-channel: CoinGecko phase failed', cgErr.message);
                     if (window.fallbackMonitor) {
                         window.fallbackMonitor.notify({

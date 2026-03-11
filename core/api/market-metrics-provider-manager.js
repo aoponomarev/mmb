@@ -15,6 +15,7 @@
         constructor() {
             this.providers = {};
             this.config = window.marketMetricsProvidersConfig;
+            this.registry = window.adapterRegistry || null;
         }
 
         getMetricConfig(metricKey) {
@@ -46,6 +47,25 @@
                 this.providers[providerName] = this.createProvider(providerName);
             }
             return this.providers[providerName];
+        }
+
+        getProviderOrder(metricKey, metricConfig) {
+            if (this.registry?.getProviderOrder) {
+                return this.registry.getProviderOrder('market-metrics', metricConfig.providers || [], { metricKey });
+            }
+            return [...(metricConfig.providers || [])];
+        }
+
+        recordAdapterSuccess(providerName, metricKey, latencyMs) {
+            this.registry?.recordSuccess?.('market-metrics', providerName, { metricKey, latencyMs });
+        }
+
+        recordAdapterFailure(providerName, metricKey, error, latencyMs) {
+            this.registry?.recordFailure?.('market-metrics', providerName, {
+                metricKey,
+                latencyMs,
+                errorMessage: error?.message || 'unknown'
+            });
         }
 
         getMarketMetricsIntervalMs() {
@@ -240,15 +260,18 @@
 
             let lastError = null;
 
-            for (const providerName of metricConfig.providers || []) {
+            for (const providerName of this.getProviderOrder(metricKey, metricConfig)) {
+                const startedAt = Date.now();
                 try {
                     const provider = this.ensureProvider(providerName);
                     const live = await provider.fetchMetric(metricKey, options);
                     const normalizedValue = this.validateMetricValue(metricKey, live.value);
                     await this.saveCachedMetric(metricConfig, normalizedValue, live.source);
+                    this.recordAdapterSuccess(providerName, metricKey, Date.now() - startedAt);
                     this.recordRequestSuccess(metricConfig);
                     return this.buildSuccessResult(metricKey, normalizedValue, live.source);
                 } catch (error) {
+                    this.recordAdapterFailure(providerName, metricKey, error, Date.now() - startedAt);
                     lastError = error;
                 }
             }

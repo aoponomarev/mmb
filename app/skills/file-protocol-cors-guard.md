@@ -2,9 +2,9 @@
 id: sk-7cf3f7
 title: "Guard: file:// Protocol & CORS"
 reasoning_confidence: 0.95
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 1f7750de
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 9aefe863
+last_change: "#for-direct-first-transport — proxy mandatory on file://, direct-first allowed only after transport smoke on safe public endpoints"
 
 ---
 
@@ -19,6 +19,7 @@ last_change: ""
 - **#for-file-origin-null** Browsers treat `file://` as an opaque origin, meaning direct CORS preflight requests to strict APIs will fail.
 - **#for-cloudflare-proxy** Routing through our Cloudflare proxy standardizes CORS, authentication, and rate limiting regardless of whether the app runs locally or on HTTPS.
 - **#for-no-direct-fetch** Direct fetches to external APIs from the frontend will inevitably fail for users running the app locally without a backend.
+- **#for-direct-first-transport** For public read-only endpoints on safe origins, direct-first transport may be used only after explicit direct/proxy smoke verification proves that proxy policy or allowlist is the weaker path. This exception never applies blindly to `file://`.
 
 ## Contracts
 
@@ -31,7 +32,12 @@ if (window.location.protocol === 'file:') {
 }
 ```
 
-All external API calls from the UI **must** go through `cloudflareConfig.getApiProxyEndpoint()` — in **both** `file://` and `https://` modes. The Cloudflare Worker handles CORS, auth headers, and rate limiting.
+For `file://` and other opaque/CORS-restricted origins, external API calls from the UI **must** go through `cloudflareConfig.getApiProxyEndpoint()`.
+
+For non-opaque origins and public read-only endpoints, direct-first transport is allowed only when all conditions hold:
+- direct path was smoke-tested successfully;
+- proxy path was also tested and found weaker/blocked by policy or allowlist;
+- the adapter keeps proxy as fallback and does not leak secrets.
 
 ## Examples
 
@@ -42,7 +48,7 @@ No 'Access-Control-Allow-Origin' header is present
 net::ERR_FAILED
 ```
 
-If the UI keeps working only after a fallback fires but the console is noisy with CORS errors — root cause is: **direct call is attempted first, proxy fallback second**. Fix: route through proxy from the start.
+If the UI keeps working only after a fallback fires but the console is noisy with CORS errors on `file://` — root cause is: **direct call is attempted first, proxy fallback second**. Fix: route through proxy from the start.
 
 ### Canonical Fix Pattern
 
@@ -50,7 +56,7 @@ If the UI keeps working only after a fallback fires but the console is noisy wit
 // BAD — direct call, fails on file:// protocol
 const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?...');
 
-// GOOD — always proxy through Cloudflare Worker
+// GOOD on file:// — proxy through Cloudflare Worker
 const proxyUrl = cloudflareConfig.getApiProxyEndpoint('/coingecko/markets');
 const response = await fetch(proxyUrl);
 ```
@@ -68,7 +74,8 @@ const response = await fetch(proxyUrl);
 
 When reviewing any new frontend data-fetch:
 - [ ] Does it check `window.location.protocol` before calling an external API?
-- [ ] Does it route through `cloudflareConfig.getApiProxyEndpoint()` for external calls?
+- [ ] Does it route through `cloudflareConfig.getApiProxyEndpoint()` for `file://` and CORS-restricted origins?
+- [ ] If direct-first is used, is there documented direct/proxy smoke verification and proxy fallback?
 - [ ] Is the fallback/proxy path tested and confirmed to return valid data for the UI?
 - [ ] Is there no CORS `ERR_FAILED` spam in the browser console?
 

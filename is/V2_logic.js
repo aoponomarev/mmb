@@ -12,8 +12,6 @@
 
 // ─── Configuration & State ───────────────────────────────────────
 
-const N8N_HOST = `${window.location.hostname}:5678`;
-
 const V2State = {
   lastLoadTime: null,
   isLoading: false,
@@ -229,80 +227,14 @@ const FALLBACK_DATA = {
     { ts: '2026-02-19T10:50:16.000Z', event: 'STARTUP_HEALTH_CHECK', data: { totalModels: 34, missingKeys: 0, skippedModels: [] } },
   ],
 };
+window.V2State = V2State;
 
 // ─── API Layer ───────────────────────────────────────────────────
 
-const api = {
-  /** Fetch with centralized error handling. */
-  async call(path, options = {}) {
-    const res = await fetch(path, options);
-    if (res.status === 429) throw new Error('RATE_LIMIT');
-    if (!res.ok) {
-      const errText = await res.text();
-      try {
-        const errJson = errText ? JSON.parse(errText) : {};
-        throw new Error(errJson.error || errJson.message || `${res.status} ${res.statusText}`);
-      } catch {
-        throw new Error(errText || `${res.status} ${res.statusText}`);
-      }
-    }
-    const text = await res.text();
-    return text ? JSON.parse(text) : {};
-  },
-
-  /** Fetch from n8n webhook (raw — may return array). */
-  async n8nCall(webhookPath, options = {}) {
-    const res = await fetch(`http://${N8N_HOST}/webhook/${webhookPath}`, options);
-    if (res.status === 429) throw new Error('RATE_LIMIT');
-    if (!res.ok) throw new Error(`n8n ${res.status}`);
-    const text = await res.text();
-    return text ? JSON.parse(text) : {};
-  },
-
-  /** POST JSON to n8n webhook. Unwraps n8n's single-element array wrapper. */
-  async n8nPost(webhookPath, body) {
-    const raw = await this.n8nCall(webhookPath, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    return Array.isArray(raw) && raw.length === 1 ? raw[0] : raw;
-  },
-
-  /** POST JSON to local server. */
-  async post(path, body) {
-    return this.call(path, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-  },
-
-  /**
-   * Try n8n first, fall back to local server.
-   * @param {string} n8nPath  - e.g. 'v2/sources'
-   * @param {string} localPath - e.g. '/api/skills/news/sources'
-   * @param {Function} extract - picks the array from the response object
-   */
-  async fetchWithFallback(n8nPath, localPath, extract) {
-    try {
-      return extract(await this.n8nCall(n8nPath));
-    } catch {
-      console.warn(`n8n ${n8nPath} unavailable, falling back to ${localPath}`);
-      return extract(await this.call(localPath));
-    }
-  },
-
-  /** Initial load of all critical data (single request). */
-  async init() {
-    try {
-      V2State.initData = await this.call('/api/v2/init');
-      syncAllDropdowns();
-    } catch (err) {
-      console.error('V2 Init failed:', err.message);
-    }
-  },
-};
+const api = window.v2ApiClient;
+if (!api) {
+  throw new Error('v2ApiClient is not loaded');
+}
 
 // ─── DOM Helpers ─────────────────────────────────────────────────
 

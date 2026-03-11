@@ -3,8 +3,8 @@ id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: fa9be7ba
-last_change: "#for-pre-handoff-transport-smoke — direct/proxy transport smoke formalized"
+reasoning_checksum: c71e883e
+last_change: "#for-provider-health-tracking — shared provider health tracking linked to adapter registry"
 
 ---
 
@@ -20,6 +20,7 @@ last_change: "#for-pre-handoff-transport-smoke — direct/proxy transport smoke 
 - **#for-readonly-fallbacks** Fallbacks must be Read-Only / Local-Only. Do not write fallback data back to the central SSOT database (e.g. no browser upserts to PostgreSQL) to avoid polluting chronologies and cron data.
 - **#for-rate-limiting** Free-tier APIs have strict rate limits. Proactive waiting and adaptive throttling avoid persistent 429 failures.
 - **#for-validation-at-edge** Validate provider data before calculation to fail fast on malformed responses.
+- **#for-provider-health-tracking** Provider health (failures, latency, degraded state) must be tracked in the orchestration layer so fallback order is observable and deterministic.
 
 ## Core Rules
 
@@ -111,6 +112,7 @@ For large top-list loads (100–250 coins) that often hit 429 and CORS:
 - **Fallback logic**: Sort providers by health and priority; use recovery window (e.g. 5 min) to re-test degraded providers.
 - **Graceful degradation**: If all providers fail, serve cached data or minimal response.
 - **Validation criteria**: API uptime >99.5%; avg response time under thresholds (e.g. 1s); fallback must trigger within 1 retry of failed call.
+- **Implementation**: Cross-domain policy lives in `core/config/adapter-registry-config.js`; shared health state lives in `core/observability/adapter-health-tracker.js`; ordering facade lives in `core/api/adapter-registry.js`.
 
 ### Data Validation
 
@@ -148,6 +150,9 @@ When using managed PostgreSQL for heavy data:
 | #JS-oX451njh | Token bucket, adaptive throttling |
 | #JS-iH26jSeT | Call-frequency guard (localStorage) |
 | #JS-2436XKxE | Dual-channel orchestration |
+| `core/config/adapter-registry-config.js` | Cross-domain provider order, allowlists, health policy |
+| `core/observability/adapter-health-tracker.js` | Shared success/failure/latency state |
+| `core/api/adapter-registry.js` | Shared ordering facade over config + health |
 | `core/api/data-providers/*` | Provider implementations |
 | #JS-siMJxsfA | Limits definition |
 | #JS-qP2fyDmZ | Schema validation |

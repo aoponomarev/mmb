@@ -27,6 +27,17 @@ async function sleep(ms) {
     await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function resolveFetchFn(fetchFn) {
+    const candidate = typeof fetchFn === "function" ? fetchFn : globalThis.fetch;
+    if (typeof candidate !== "function") {
+        throw new Error("fetch is unavailable");
+    }
+    if (typeof window !== "undefined" && typeof window.fetch === "function" && candidate === window.fetch) {
+        return window.fetch.bind(window);
+    }
+    return (...args) => candidate(...args);
+}
+
 function mapCoin(coin) {
     const safe = (v) => {
         const n = Number(v);
@@ -78,7 +89,7 @@ export class CoinGeckoProvider {
     constructor(params = {}) {
         this.name = "coingecko";
         this.requiresApiKey = false; // We can use pro api later via env
-        this.fetchFn = typeof params.fetchFn === "function" ? params.fetchFn : fetch;
+        this.fetchFn = resolveFetchFn(params.fetchFn);
         this.baseUrl = (params.baseUrl || "https://api.coingecko.com/api/v3").replace(/\/+$/, "");
         this.timeoutMs = params.timeoutMs || 10_000;
         this.minIntervalMs = params.minIntervalMs || 1_000;

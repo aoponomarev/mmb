@@ -13,9 +13,21 @@
 
     const FALLBACK_BASE_URL = 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net';
 
+    function resolveFetchFn(fetchFn) {
+        const candidate = typeof fetchFn === 'function' ? fetchFn : globalThis.fetch;
+        if (typeof candidate !== 'function') {
+            throw new Error('fetch is unavailable');
+        }
+        if (typeof window !== 'undefined' && typeof window.fetch === 'function' && candidate === window.fetch) {
+            return window.fetch.bind(window);
+        }
+        return (...args) => candidate(...args);
+    }
+
     class YandexApiGatewayProvider {
         constructor(options = {}) {
-            this.fetchFn = typeof options.fetchFn === 'function' ? options.fetchFn : fetch;
+            this.fetchFn = resolveFetchFn(options.fetchFn);
+            this.registry = window.adapterRegistry || null;
         }
 
         getBaseUrl() {
@@ -34,18 +46,32 @@
         }
 
         async requestJson(path, init = {}) {
-            const response = await this.fetchFn(
-                `${this.getBaseUrl()}${path}`,
-                this.buildRequestInit(init)
-            );
+            const startedAt = Date.now();
+            try {
+                const response = await this.fetchFn(
+                    `${this.getBaseUrl()}${path}`,
+                    this.buildRequestInit(init)
+                );
 
-            if (!response.ok) {
-                const error = new Error(`HTTP ${response.status}`);
-                error.status = response.status;
+                if (!response.ok) {
+                    const error = new Error(`HTTP ${response.status}`);
+                    error.status = response.status;
+                    throw error;
+                }
+
+                this.registry?.recordSuccess?.('yandex-api-gateway', 'yandex-api-gateway', {
+                    path,
+                    latencyMs: Date.now() - startedAt
+                });
+                return response.json();
+            } catch (error) {
+                this.registry?.recordFailure?.('yandex-api-gateway', 'yandex-api-gateway', {
+                    path,
+                    latencyMs: Date.now() - startedAt,
+                    errorMessage: error?.message || 'unknown'
+                });
                 throw error;
             }
-
-            return response.json();
         }
 
         formatDateTime(value) {

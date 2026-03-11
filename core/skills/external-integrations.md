@@ -3,8 +3,8 @@ id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 039ac17a
-last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
+reasoning_checksum: 09d3d3c7
+last_change: "#for-adapter-registry — cross-domain adapter registry formalized"
 
 ---
 
@@ -18,6 +18,8 @@ last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
 - **#for-integration-fallbacks** Relying on a single external provider creates a single point of failure. Implementing fallback chains (e.g., Active-Passive or Fallback Chain) ensures that if a primary provider (like an AI API or a proxy) goes down, the system automatically switches to a secondary provider without breaking the user experience.
 - **#for-geo-optimization** Different cloud providers have different regional strengths. Routing requests based on geography (e.g., Yandex Cloud for RU/CIS users, Cloudflare for the rest of the world) minimizes latency and complies with regional data localization policies.
 - **#for-endpoint-coherence** Authentication and user settings/workspace APIs must use the same backend domain contract for a given feature. Mixed origins (e.g., auth via one worker and settings via another) can produce false-positive writes and missing readback.
+- **#for-adapter-registry** When multiple domains (`coin-data`, `market-metrics`, `ai`, `cloudflare-workspace`) all use adapters, provider order and allowlists must live in one trusted registry instead of drifting across facades.
+- **#for-provider-health-tracking** Fallback order should react to recent failures and latency. Shared health tracking lets the orchestration layer demote degraded providers without teaching each provider how to self-manage cluster health.
 
 ## Core Rules
 
@@ -28,11 +30,13 @@ last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
     - If the primary provider is unavailable, automatically switch to the secondary.
     - If the secondary is unavailable, fallback to a tertiary or local mock.
 3.  **Centralized Integration Management:**
-    Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (#JS-tn3fo2px) to define the active provider and fallback chain.
+    Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager`, `AdapterRegistry`, or configuration (#JS-tn3fo2px) to define provider order, allowlists, and fallback chain.
 4.  **Geographic Optimization:**
     When configuring endpoints, prefer Yandex Cloud (Cloud Functions, API Gateway) for low-latency access within RU/CIS, and Cloudflare (Workers, Pages) for global edge-computing distribution.
 5.  **Endpoint Coherence for Stateful APIs:**
     For stateful user data (settings/workspace/session-bound data), read/write/readback must target the same worker origin and namespace contract. Always verify with immediate readback after save in debugging scenarios.
+6.  **Shared Provider Health Tracking:**
+    Cross-domain adapter orchestration must record success/failure/latency per provider and may demote degraded providers at the facade level. Individual adapters remain fail-fast and stateless.
 
 ### API Proxy (CORS Bypass & Caching)
 
@@ -65,3 +69,4 @@ last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
 
 - **Single Source of Truth**: All integration keys, URLs, and feature flags must be stored in core/config/ (#JS-tn3fo2px, integration-config при наличии).
 - **Monitoring**: The integration layer must log when a fallback occurs so the system health can be monitored without disrupting the user.
+- **Registry Policy SSOT**: Cross-domain adapter order, allowlists, and health thresholds must live in `core/config/adapter-registry-config.js` and be consumed via `core/api/adapter-registry.js`.

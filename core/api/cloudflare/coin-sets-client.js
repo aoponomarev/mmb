@@ -4,6 +4,7 @@
  * @skill id:sk-02d3ea
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
+ * @skill-anchor id:sk-7b4ee5 #for-endpoint-coherence
  *
  * METHODS: getCoinSets(activeOnly), getCoinSet(id), createCoinSet(data), updateCoinSet(id, data), deleteCoinSet(id), toggleCoinSet(id, isActive).
  *
@@ -21,6 +22,7 @@
     class CoinSetsClient {
         constructor() {
             this.baseUrl = null;
+            this.registry = window.adapterRegistry || null;
             this.init();
         }
 
@@ -76,6 +78,55 @@
             return tokenData.access_token;
         }
 
+        recordSuccess(operation, latencyMs) {
+            this.registry?.recordSuccess?.('coin-sets', 'cloudflare-coin-sets', { operation, latencyMs });
+        }
+
+        recordFailure(operation, error, latencyMs) {
+            this.registry?.recordFailure?.('coin-sets', 'cloudflare-coin-sets', {
+                operation,
+                latencyMs,
+                errorMessage: error?.message || 'unknown'
+            });
+        }
+
+        async requestJson(path, init = {}, options = {}) {
+            const startedAt = Date.now();
+            try {
+                const token = await this.getAuthToken();
+                const baseUrl = this.resolveBaseUrl();
+                const response = await fetch(`${baseUrl}${path}`, {
+                    ...init,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        ...(init.headers || {})
+                    }
+                });
+
+                if (!response.ok) {
+                    let errorPayload = null;
+                    try {
+                        errorPayload = await response.json();
+                    } catch (_) {
+                        // no-op
+                    }
+                    const error = new Error(errorPayload?.error || options.errorMessage || `Failed request: ${path}`);
+                    error.status = response.status;
+                    throw error;
+                }
+
+                this.recordSuccess(options.operation || path, Date.now() - startedAt);
+                if (response.status === 204) {
+                    return null;
+                }
+                return response.json();
+            } catch (error) {
+                this.recordFailure(options.operation || path, error, Date.now() - startedAt);
+                throw error;
+            }
+        }
+
         /**
          * Get user coin sets list
          * @param {Object} options - Filter params { activeOnly, type }
@@ -84,9 +135,7 @@
         async getCoinSets(options = {}) {
             const { activeOnly = false, type = null } = options;
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-                const url = new URL(`${baseUrl}/api/coin-sets`);
+                const url = new URL('/api/coin-sets', 'https://coin-sets.local');
                 if (activeOnly) {
                     url.searchParams.append('active_only', 'true');
                 }
@@ -94,20 +143,10 @@
                     url.searchParams.append('type', type);
                 }
 
-                const response = await fetch(url.toString(), {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const data = await this.requestJson(`${url.pathname}${url.search}`, { method: 'GET' }, {
+                    operation: 'getCoinSets',
+                    errorMessage: 'Failed to fetch coin sets'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to fetch coin sets');
-                }
-
-                const data = await response.json();
                 return data.coin_sets || [];
             } catch (error) {
                 console.error('coin-sets-client.getCoinSets error:', error);
@@ -122,23 +161,10 @@
          */
         async getCoinSet(id) {
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-
-                const response = await fetch(`${baseUrl}/api/coin-sets/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const data = await this.requestJson(`/api/coin-sets/${id}`, { method: 'GET' }, {
+                    operation: 'getCoinSet',
+                    errorMessage: 'Failed to fetch coin set'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to fetch coin set');
-                }
-
-                const data = await response.json();
                 return data.coin_set;
             } catch (error) {
                 console.error('coin-sets-client.getCoinSet error:', error);
@@ -153,24 +179,13 @@
          */
         async createCoinSet(coinSetData) {
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-
-                const response = await fetch(`${baseUrl}/api/coin-sets`, {
+                const data = await this.requestJson('/api/coin-sets', {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify(coinSetData)
+                }, {
+                    operation: 'createCoinSet',
+                    errorMessage: 'Failed to create coin set'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to create coin set');
-                }
-
-                const data = await response.json();
                 return data.coin_set;
             } catch (error) {
                 console.error('coin-sets-client.createCoinSet error:', error);
@@ -186,24 +201,13 @@
          */
         async updateCoinSet(id, updates) {
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-
-                const response = await fetch(`${baseUrl}/api/coin-sets/${id}`, {
+                const data = await this.requestJson(`/api/coin-sets/${id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify(updates)
+                }, {
+                    operation: 'updateCoinSet',
+                    errorMessage: 'Failed to update coin set'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to update coin set');
-                }
-
-                const data = await response.json();
                 return data.coin_set;
             } catch (error) {
                 console.error('coin-sets-client.updateCoinSet error:', error);
@@ -218,22 +222,10 @@
          */
         async deleteCoinSet(id) {
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-
-                const response = await fetch(`${baseUrl}/api/coin-sets/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                await this.requestJson(`/api/coin-sets/${id}`, { method: 'DELETE' }, {
+                    operation: 'deleteCoinSet',
+                    errorMessage: 'Failed to delete coin set'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to delete coin set');
-                }
-
                 return true;
             } catch (error) {
                 console.error('coin-sets-client.deleteCoinSet error:', error);
@@ -249,24 +241,13 @@
          */
         async toggleCoinSet(id, isActive) {
             try {
-                const token = await this.getAuthToken();
-                const baseUrl = this.resolveBaseUrl();
-
-                const response = await fetch(`${baseUrl}/api/coin-sets/${id}/toggle`, {
+                const data = await this.requestJson(`/api/coin-sets/${id}/toggle`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({ is_active: isActive })
+                }, {
+                    operation: 'toggleCoinSet',
+                    errorMessage: 'Failed to toggle coin set'
                 });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to toggle coin set');
-                }
-
-                const data = await response.json();
                 return data.coin_set;
             } catch (error) {
                 console.error('coin-sets-client.toggleCoinSet error:', error);

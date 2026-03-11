@@ -12,6 +12,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { GitHubReleasesProvider } from './github-releases-provider.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '../../../');
@@ -40,38 +41,15 @@ function saveState(state) {
   writeFileSync(STATE_PATH, JSON.stringify(state, null, 2), 'utf-8');
 }
 
-function parseGitHubRepo(url) {
-  const m = url.match(/github\.com\/([^/]+)\/([^/]+)(?:\/|$)/);
-  return m ? { owner: m[1], repo: m[2].replace(/\.git$/, '') } : null;
-}
-
-async function fetchGitHubLatest(owner, repo) {
-  const url = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
-  const res = await fetch(url, {
-    headers: { Accept: 'application/vnd.github.v3+json' },
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return {
-    tag: data.tag_name,
-    name: data.name || data.tag_name,
-    published: data.published_at,
-    body: data.body || '',
-    url: data.html_url,
-  };
-}
-
 async function main() {
   const sources = loadSources();
   const state = loadState();
   const githubSources = sources.filter((s) => s.type === 'github');
   const items = [];
+  const githubProvider = new GitHubReleasesProvider();
 
   for (const src of githubSources) {
-    const repo = parseGitHubRepo(src.url);
-    if (!repo) continue;
-
-    const release = await fetchGitHubLatest(repo.owner, repo.repo);
+    const release = await githubProvider.fetchLatestFromUrl(src.url);
     if (!release) continue;
 
     const isNew = state[src.id] !== release.tag;

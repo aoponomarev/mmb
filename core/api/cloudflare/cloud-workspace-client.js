@@ -1,7 +1,8 @@
 /**
  * #JS-Uq3gNwR1
  * @description Cloudflare KV client for user workspace: load/save via /api/settings (workspace field). Stateless, user-scoped via OAuth JWT.
- * // @skill-anchor id:sk-02d3ea #for-data-provider-interface
+ * @skill-anchor id:sk-02d3ea #for-data-provider-interface
+ * @skill-anchor id:sk-7b4ee5 #for-endpoint-coherence
  *
  * METHODS: load(), save(workspaceObj).
  *
@@ -16,6 +17,7 @@
     class CloudWorkspaceClient {
         constructor() {
             this.baseUrl = null;
+            this.registry = window.adapterRegistry || null;
             this._init();
         }
 
@@ -53,30 +55,59 @@
             return tokenData.access_token;
         }
 
+        _recordSuccess(operation, latencyMs) {
+            this.registry?.recordSuccess?.('cloudflare-workspace', 'cloudflare-workspace', { operation, latencyMs });
+        }
+
+        _recordFailure(operation, error, latencyMs) {
+            this.registry?.recordFailure?.('cloudflare-workspace', 'cloudflare-workspace', {
+                operation,
+                latencyMs,
+                errorMessage: error?.message || 'unknown'
+            });
+        }
+
+        async _requestJson(path, init = {}, options = {}) {
+            const startedAt = Date.now();
+            try {
+                const token = await this._getAuthToken();
+                const resolvedBaseUrl = this._resolveBaseUrl();
+                const response = await fetch(`${resolvedBaseUrl}${path}`, {
+                    ...init,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        ...(init.headers || {})
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = new Error(options.errorMessage || `Workspace request failed: ${response.status}`);
+                    error.status = response.status;
+                    throw error;
+                }
+
+                this._recordSuccess(options.operation || path, Date.now() - startedAt);
+                if (response.status === 204) {
+                    return null;
+                }
+                return response.json();
+            } catch (error) {
+                this._recordFailure(options.operation || path, error, Date.now() - startedAt);
+                throw error;
+            }
+        }
+
         /**
          * Load workspace from Cloudflare KV (GET /api/settings → data.workspace)
          * @returns {Promise<Object|null>} workspace object or null
          */
         async load() {
             try {
-                const token = await this._getAuthToken();
-                const resolvedBaseUrl = this._resolveBaseUrl();
-                const url = `${resolvedBaseUrl}/api/settings`;
-
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                const json = await this._requestJson('/api/settings', { method: 'GET' }, {
+                    operation: 'loadWorkspace',
+                    errorMessage: 'Failed to load workspace'
                 });
-
-                if (!response.ok) {
-                    console.warn('cloud-workspace-client: load failed, status', response.status);
-                    return null;
-                }
-
-                const json = await response.json();
                 const workspace = json?.data?.workspace;
                 return (workspace && typeof workspace === 'object') ? workspace : null;
             } catch (error) {
@@ -92,23 +123,13 @@
          */
         async save(workspaceObj) {
             try {
-                const token = await this._getAuthToken();
-                const resolvedBaseUrl = this._resolveBaseUrl();
-                const url = `${resolvedBaseUrl}/api/settings/workspace`;
-
-                const response = await fetch(url, {
+                await this._requestJson('/api/settings/workspace', {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({ value: workspaceObj })
+                }, {
+                    operation: 'saveWorkspace',
+                    errorMessage: 'Failed to save workspace'
                 });
-
-                if (!response.ok) {
-                    console.warn('cloud-workspace-client: save failed, status', response.status);
-                    return false;
-                }
                 return true;
             } catch (error) {
                 console.warn('cloud-workspace-client: save error:', error.message);

@@ -20,6 +20,17 @@ function buildRequestId() {
   return `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function resolveFetchFn(fetchFn) {
+  const candidate = typeof fetchFn === "function" ? fetchFn : globalThis.fetch;
+  if (typeof candidate !== "function") {
+    throw new Error("fetch is unavailable");
+  }
+  if (typeof window !== "undefined" && typeof window.fetch === "function" && candidate === window.fetch) {
+    return window.fetch.bind(window);
+  }
+  return (...args) => candidate(...args);
+}
+
 function assertResponseJson(raw) {
   if (raw && typeof raw === "object") return raw;
   return {};
@@ -39,7 +50,7 @@ export class MarketSnapshotClientError extends Error {
 export class MarketSnapshotApiClient {
   constructor(params = {}) {
     this.baseUrl = typeof params.baseUrl === "string" && params.baseUrl.trim() ? params.baseUrl.trim() : "http://127.0.0.1:18082";
-    this.fetchFn = typeof params.fetchFn === "function" ? params.fetchFn : fetch;
+    this.fetchFn = resolveFetchFn(params.fetchFn);
     this.defaultRequestId = params.defaultRequestId || null;
   }
 

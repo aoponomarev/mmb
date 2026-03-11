@@ -219,6 +219,13 @@
                 category: 'core'
             },
             {
+                id: 'adapter-registry-config',
+                src: 'core/config/adapter-registry-config.js',
+                type: 'local',
+                deps: [],
+                category: 'core'
+            },
+            {
                 id: 'market-metrics-providers-config',
                 src: 'core/config/market-metrics-providers-config.js',
                 type: 'local',
@@ -287,7 +294,8 @@
                     'binance-metrics-provider',
                     'coingecko-btc-dom-provider',
                     'cache-manager',
-                    'request-registry'
+                    'request-registry',
+                    'adapter-registry'
                 ],
                 category: 'core'
             },
@@ -345,7 +353,14 @@
                 id: 'ai-provider-manager',
                 src: 'core/api/ai-provider-manager.js',
                 type: 'local',
-                deps: ['yandex-provider'],
+                deps: ['yandex-provider', 'adapter-registry'],
+                category: 'core'
+            },
+            {
+                id: 'adapter-registry',
+                src: 'core/api/adapter-registry.js',
+                type: 'local',
+                deps: ['adapter-registry-config', 'adapter-health-tracker'],
                 category: 'core'
             },
             {
@@ -395,7 +410,7 @@
                 id: 'yandex-api-gateway-provider',
                 src: 'core/api/yandex-api-gateway-provider.js',
                 type: 'local',
-                deps: ['data-providers-config'],
+                deps: ['data-providers-config', 'adapter-registry'],
                 category: 'core'
             },
             {
@@ -409,7 +424,7 @@
                 id: 'data-provider-manager',
                 src: 'core/api/data-provider-manager.js',
                 type: 'local',
-                deps: ['coingecko-provider', 'yandex-cache-provider', 'cache-manager', 'request-registry'],
+                deps: ['coingecko-provider', 'yandex-cache-provider', 'cache-manager', 'request-registry', 'adapter-registry'],
                 category: 'core'
             },
             // Config
@@ -519,7 +534,7 @@
                 id: 'coin-sets-client',
                 src: 'core/api/cloudflare/coin-sets-client.js',
                 type: 'local',
-                deps: ['cloudflare-config', 'auth-client'],
+                deps: ['cloudflare-config', 'auth-client', 'adapter-registry'],
                 category: 'core',
                 condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
             },
@@ -527,7 +542,7 @@
                 id: 'cloud-workspace-client',
                 src: 'core/api/cloudflare/cloud-workspace-client.js',
                 type: 'local',
-                deps: ['cloudflare-config', 'auth-client'],
+                deps: ['cloudflare-config', 'auth-client', 'adapter-registry'],
                 category: 'core',
                 condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
             },
@@ -642,6 +657,13 @@
             {
                 id: 'fallback-monitor',
                 src: 'core/observability/fallback-monitor.js',
+                type: 'local',
+                deps: ['event-bus'],
+                category: 'core'
+            },
+            {
+                id: 'adapter-health-tracker',
+                src: 'core/observability/adapter-health-tracker.js',
                 type: 'local',
                 deps: ['event-bus'],
                 category: 'core'

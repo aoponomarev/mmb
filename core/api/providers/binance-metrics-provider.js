@@ -10,9 +10,20 @@ function toNumber(value, fallback = null) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function resolveFetchFn(fetchFn) {
+  const candidate = typeof fetchFn === "function" ? fetchFn : globalThis.fetch;
+  if (typeof candidate !== "function") {
+    throw new Error("fetch is unavailable");
+  }
+  if (typeof window !== "undefined" && typeof window.fetch === "function" && candidate === window.fetch) {
+    return window.fetch.bind(window);
+  }
+  return (...args) => candidate(...args);
+}
+
 export class BinanceMetricsProvider {
   constructor(params = {}) {
-    this.fetchFn = typeof params.fetchFn === "function" ? params.fetchFn : fetch;
+    this.fetchFn = resolveFetchFn(params.fetchFn);
     this.timeoutMs = Number.isFinite(params.timeoutMs) ? Math.max(1, Math.floor(params.timeoutMs)) : 10_000;
   }
 

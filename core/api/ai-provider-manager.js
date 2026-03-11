@@ -21,6 +21,7 @@
         constructor() {
             this.providers = {};
             this.defaultProvider = 'yandex'; // Yandex by default
+            this.registry = window.adapterRegistry || null;
             /** Only these IDs are valid AI providers; e.g. "github" is for token/metadata upload, not AI. */
             this.validProviderIds = ['yandex'];
             // Flag: KV request already executed this session (success or not).
@@ -132,6 +133,7 @@
         async sendRequest(messages, options = {}) {
             const provider = await this.getCurrentProvider();
             const providerName = await this.getCurrentProviderName();
+            const startedAt = Date.now();
 
             // Get API key and model for current provider
             const apiKey = await this.getApiKey(providerName);
@@ -141,9 +143,21 @@
                 throw new Error(`API key for ${providerName} not configured`);
             }
 
-            const result = await provider.sendRequest(apiKey, model, messages, options);
-
-            return result;
+            try {
+                const result = await provider.sendRequest(apiKey, model, messages, options);
+                this.registry?.recordSuccess?.('ai', providerName, {
+                    model,
+                    latencyMs: Date.now() - startedAt
+                });
+                return result;
+            } catch (error) {
+                this.registry?.recordFailure?.('ai', providerName, {
+                    model,
+                    latencyMs: Date.now() - startedAt,
+                    errorMessage: error?.message || 'unknown'
+                });
+                throw error;
+            }
         }
 
         /**

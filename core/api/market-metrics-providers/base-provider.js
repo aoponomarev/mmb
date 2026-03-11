@@ -11,6 +11,17 @@
 (function() {
     'use strict';
 
+    function resolveFetchFn(fetchFn) {
+        const candidate = typeof fetchFn === 'function' ? fetchFn : globalThis.fetch;
+        if (typeof candidate !== 'function') {
+            throw new Error('fetch is unavailable');
+        }
+        if (typeof window !== 'undefined' && typeof window.fetch === 'function' && candidate === window.fetch) {
+            return window.fetch.bind(window);
+        }
+        return (...args) => candidate(...args);
+    }
+
     class BaseMarketMetricsProvider {
         constructor(providerName, options = {}) {
             if (this.constructor === BaseMarketMetricsProvider) {
@@ -19,7 +30,7 @@
 
             this.providerName = providerName;
             this.config = window.marketMetricsProvidersConfig?.getProviderConfig(providerName) || {};
-            this.fetchFn = typeof options.fetchFn === 'function' ? options.fetchFn : fetch;
+            this.fetchFn = resolveFetchFn(options.fetchFn);
             this.timeoutMs = Number.isFinite(options.timeoutMs)
                 ? Math.max(1, Math.floor(options.timeoutMs))
                 : (Number.isFinite(this.config.timeout) ? this.config.timeout : 10000);

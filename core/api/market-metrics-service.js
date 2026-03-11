@@ -17,9 +17,20 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function resolveFetchFn(fetchFn) {
+  const candidate = typeof fetchFn === "function" ? fetchFn : globalThis.fetch;
+  if (typeof candidate !== "function") {
+    throw new Error("fetch is unavailable");
+  }
+  if (typeof window !== "undefined" && typeof window.fetch === "function" && candidate === window.fetch) {
+    return window.fetch.bind(window);
+  }
+  return (...args) => candidate(...args);
+}
+
 export class MarketMetricsService {
   constructor(params = {}) {
-    this.fetchFn = typeof params.fetchFn === "function" ? params.fetchFn : fetch;
+    this.fetchFn = resolveFetchFn(params.fetchFn);
     this.cache = params.cache || createDataCacheManager({ namespace: "market-metrics" });
     this.timeoutMs = Number.isFinite(params.timeoutMs) ? Math.max(1, Math.floor(params.timeoutMs)) : 10_000;
     this.binanceProvider = params.binanceProvider || createBinanceMetricsProvider({
