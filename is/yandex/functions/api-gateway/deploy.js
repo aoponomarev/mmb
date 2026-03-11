@@ -10,6 +10,7 @@ const FUNCTION_NAME = "coins-db-gateway";
 const API_GATEWAY_NAME = "mbb-api-gw";
 const DOWNSTREAM_FUNCTION_NAME = "coingecko-fetcher";
 const FUNCTION_DIR = __dirname;
+const FUNCTIONS_ROOT = path.resolve(__dirname, "..");
 const REPO_ROOT = path.resolve(__dirname, "..", "..", "..", "..");
 
 function fail(message) {
@@ -121,13 +122,15 @@ function main() {
       "--runtime",
       runtime,
       "--entrypoint",
-      entrypoint,
+      entrypoint.includes("/")
+        ? entrypoint
+        : "api-gateway/index.handler",
       "--memory",
       memory,
       "--execution-timeout",
       timeout,
       "--source-path",
-      ".",
+      FUNCTIONS_ROOT,
       "--environment",
       envArg,
     ],
@@ -148,11 +151,14 @@ function main() {
     { cwd: FUNCTION_DIR },
   );
 
+  console.log("[deploy:api-gateway] Running post-deploy verification...");
+  run(["is/scripts/infrastructure/verify-deployment-target.js", "--target", "yandex-api-gateway"], {
+    cwd: REPO_ROOT,
+    capture: false,
+    runAsNode: true,
+  });
+
   console.log("[deploy:api-gateway] Creating mandatory deployment snapshot...");
-  // @causality #for-ais-rollout-gap-marking
-  // Transitional deviation from AIS target lifecycle: this wrapper still archives
-  // immediately after deploy. The target state is verify-before-archive once the
-  // health/smoke gate is wired into all deploy wrappers.
   run(["is/scripts/infrastructure/archive-deployment-snapshot.js", "--target", "yandex-api-gateway"], {
     cwd: REPO_ROOT,
     capture: false,

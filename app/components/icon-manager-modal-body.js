@@ -77,6 +77,13 @@
         },
 
         methods: {
+            getIconAssetsClient() {
+                if (!window.iconAssetsClient) {
+                    throw new Error('iconAssetsClient is not loaded');
+                }
+                return window.iconAssetsClient;
+            },
+
             /**
              * Register buttons in modal footer
              */
@@ -163,16 +170,7 @@
                 if (!targetUrl) return;
 
                 try {
-                    // @causality #for-ais-rollout-gap-marking
-                    // Transitional deviation from AIS target state: icon loading still
-                    // calls the generic proxy directly from the component until this
-                    // transport is extracted into a dedicated facade/client.
-                    const proxyUrl = window.cloudflareConfig?.getGenericProxyUrl(targetUrl);
-                    const response = await fetch(proxyUrl);
-
-                    if (!response.ok) throw new Error('Ошибка загрузки через прокси');
-
-                    const blob = await response.blob();
+                    const blob = await this.getIconAssetsClient().loadExternalBlob(targetUrl);
                     this.processImage(blob);
 
                     if (!skipInputUpdate && url) {
@@ -265,52 +263,15 @@
                 this.isUploading = true;
 
                 try {
-                    // @causality #for-ais-rollout-gap-marking
-                    // Transitional deviation from AIS target state: GitHub Contents API
-                    // transport is still owned by this component for backward-compatible
-                    // icon publishing until a dedicated integration facade is introduced.
-                    // Convert Blob to Base64 for GitHub API
-                    const reader = new FileReader();
-                    const base64Promise = new Promise((resolve) => {
-                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                        reader.readAsDataURL(this.imageBlob);
-                    });
-
-                    const content = await base64Promise;
                     const repo = 'aoponomarev/a'; // Asset repository
                     const path = `coins/${this.targetFilename}`;
-                    const url = `https://api.github.com/repos/${repo}/contents/${path}`;
-
-                    // 1. First try to get file SHA if it already exists
-                    let sha = null;
-                    try {
-                        const checkRes = await fetch(url, {
-                            headers: { 'Authorization': `token ${this.githubToken}` }
-                        });
-                        if (checkRes.ok) {
-                            const fileData = await checkRes.json();
-                            sha = fileData.sha;
-                        }
-                    } catch (e) {}
-
-                    // 2. Upload file
-                    const res = await fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${this.githubToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Update icon for ${this.coinData.id} (automated via app)`,
-                            content: content,
-                            sha: sha
-                        })
+                    await this.getIconAssetsClient().publishToGitHub({
+                        token: this.githubToken,
+                        repo,
+                        path,
+                        blob: this.imageBlob,
+                        message: `Update icon for ${this.coinData.id} (automated via app)`
                     });
-
-                    if (!res.ok) {
-                        const errorData = await res.json();
-                        throw new Error(errorData.message || 'Ошибка API GitHub');
-                    }
 
                     if (window.messagesStore) {
                         window.messagesStore.addMessage({

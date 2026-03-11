@@ -1,0 +1,33 @@
+{
+  "snapshot_date": "2026-03-11",
+  "target": "yandex-market-fetcher",
+  "comparison_baseline": {
+    "type": "previous_active_function_version",
+    "notes": "No prior dated snapshot is required for baseline; previous state is derived from cloud function version history."
+  },
+  "function_previous_version": {
+    "id": "d4emhv3ro654rvleiggo",
+    "created_at": "2026-03-11T11:55:40.259Z",
+    "runtime": "nodejs18",
+    "entrypoint": "index.handler",
+    "memory_bytes": "268435456",
+    "execution_timeout": "600s",
+    "concurrency": "1",
+    "image_size": "679936",
+    "log_options": {
+      "folder_id": "b1gv03a122le5a934cqj"
+    },
+    "env_contract": {
+      "required_names": [
+        "DB_HOST",
+        "DB_NAME",
+        "DB_PASSWORD",
+        "DB_PORT",
+        "DB_USER"
+      ],
+      "secret_names": [
+        "DB_PASSWORD"
+      ]
+    }
+  }
+}

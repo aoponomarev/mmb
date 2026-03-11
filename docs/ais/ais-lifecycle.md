@@ -95,15 +95,12 @@ stateDiagram-v2
 ```mermaid
 stateDiagram-v2
     [*] --> planned: Plan created
-    planned --> snapshot_taken: archive-deployment-snapshot.js
-    snapshot_taken --> deployed: wrangler deploy / yc deploy
-    deployed --> verified: Health check + smoke test
-    verified --> archived: Снимок зафиксирован в is/deployments/
+    planned --> deployed: wrangler deploy / yc deploy
+    deployed --> verified: verify-deployment-target.js
+    verified --> archived: archive-deployment-snapshot.js
     archived --> rollback_target: Используется для restore
     rollback_target --> deployed: Rollback executed
 ```
-
-Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): диаграмма выше фиксирует target lifecycle. В текущем Arch-Scan deploy wrappers для active infrastructure targets ещё вызывают `archive-deployment-snapshot.js` сразу после deploy, то есть фактический путь местами ближе к `deployed -> snapshot_taken`, а не к полному `deployed -> verified -> archived`. Это допустимый переходный зазор только потому, что он явно помечен в соответствующем `AIS` и inline-комментариях в коде.
 
 Управляется через id:sk-e8f2a1 (arch-infrastructure-snapshots) и id:sk-6eeb9a (arch-rollback).
 
@@ -132,7 +129,7 @@ stateDiagram-v2
 1. **No use before lifecycle stage:** AIS в статусе `draft` не может быть referenced как SSOT другими спецификациями. Skill в статусе `created` без reasoning — informational only.
 2. **Stale data warning:** данные из stale_fallback **обязаны** сопровождаться warn-логом для visibility.
 3. **Deletion requires log:** удаление любого артефакта (AIS, skill, plan) **обязано** быть записано в `docs/deletion-log.md` с причиной и датой.
-4. **Snapshot before deploy:** деплой без предварительного snapshot запрещён (`#for-deploy-snapshot-diff`).
+4. **Verify before archive:** деплой считается завершённым только после `verify-deployment-target.js` и последующего `archive-deployment-snapshot.js`; архив без verification запрещён (`#for-post-deploy-auto-archive`).
 
 ## Компоненты и Контракты (Components & Contracts)
 

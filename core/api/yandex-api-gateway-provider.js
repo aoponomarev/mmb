@@ -1,5 +1,5 @@
 /**
- * @description Adapter for Yandex API Gateway cycles history and manual market-cache trigger endpoints.
+ * @description Adapter for Yandex API Gateway cycles history and market-cache trigger/write endpoints.
  * @skill id:sk-bb7c8e
  * @skill id:sk-224210
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
@@ -139,6 +139,24 @@
                     Accept: 'application/json'
                 },
                 body: JSON.stringify({ order })
+            });
+        }
+
+        // @causality #for-readonly-fallbacks
+        // Browser-originated market-cache writes stay behind a provider boundary so the
+        // UI does not own transport even when the gateway intentionally rejects writes.
+        async pushMarketCacheCoins(coins) {
+            if (!Array.isArray(coins) || coins.length === 0) {
+                return null;
+            }
+
+            return this.requestJson('/api/coins/market-cache', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify({ coins })
             });
         }
     }

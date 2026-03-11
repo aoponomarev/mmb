@@ -6,9 +6,11 @@
 
 const https = require('https');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { execSync } = require('child_process');
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+const FUNCTIONS_ROOT = path.resolve(__dirname, '..');
 
 // ─── Configuration ──────────────────────────────────────────────────────────────
 const FOLDER_ID       = 'b1gv03a122le5a934cqj';
@@ -19,7 +21,7 @@ const API_KEY_SECRET  = process.env.YC_API_KEY_SECRET;
 
 const FUNCTION_NAME   = 'coingecko-fetcher';
 const RUNTIME         = 'nodejs18';
-const ENTRYPOINT      = 'index.handler';
+const ENTRYPOINT      = 'market-fetcher/index.handler';
 const MEMORY_MB       = 256;
 const TIMEOUT_SEC     = 600; // 10 min (5 pages × 2 × 21s = ~210s + buffer)
 
@@ -80,9 +82,12 @@ async function getIamToken() {
 
 // ─── Create function ZIP archive ─────────────────────────────────────────────────
 function createZip() {
-    const zipPath = path.join(__dirname, 'function.zip');
-    // Create zip from index.js + package.json + node_modules
-    execSync(`powershell -Command "Compress-Archive -Force -Path '${__dirname}\\index.js','${__dirname}\\package.json','${__dirname}\\node_modules' -DestinationPath '${zipPath}'"`, { stdio: 'inherit' });
+    const zipPath = path.join(os.tmpdir(), 'coingecko-fetcher-function.zip');
+    if (fs.existsSync(zipPath)) {
+        fs.unlinkSync(zipPath);
+    }
+    // Package both function sources and sibling shared/ adapter modules.
+    execSync(`powershell -Command "Compress-Archive -Force -Path '${FUNCTIONS_ROOT}\\market-fetcher','${FUNCTIONS_ROOT}\\shared' -DestinationPath '${zipPath}'"`, { stdio: 'inherit' });
     const zipContent = fs.readFileSync(zipPath);
     const base64 = zipContent.toString('base64');
     console.log(`ZIP created: ${zipPath} (${Math.round(zipContent.length / 1024)}KB)`);
@@ -223,15 +228,20 @@ async function createCronTriggers(token, functionId) {
 
 function createDeploymentSnapshot() {
     console.log('Creating deployment snapshot...');
-    // @causality #for-ais-rollout-gap-marking
-    // Transitional deviation from AIS target lifecycle: this wrapper still archives
-    // immediately after deploy. The target state is verify-before-archive once the
-    // health/smoke gate is wired into all deploy wrappers.
     execSync('node is/scripts/infrastructure/archive-deployment-snapshot.js --target yandex-market-fetcher', {
         cwd: REPO_ROOT,
         stdio: 'inherit'
     });
     console.log('Deployment snapshot created');
+}
+
+function verifyDeployment() {
+    console.log('Running post-deploy verification...');
+    execSync('node is/scripts/infrastructure/verify-deployment-target.js --target yandex-market-fetcher', {
+        cwd: REPO_ROOT,
+        stdio: 'inherit'
+    });
+    console.log('Post-deploy verification passed');
 }
 
 // ─── Main ──────────────────────────────────────────────────────────────────────
@@ -244,6 +254,7 @@ async function main() {
         const functionId = await getOrCreateFunction(token);
         await createVersion(token, functionId, zipBase64);
         await createCronTriggers(token, functionId);
+        verifyDeployment();
         createDeploymentSnapshot();
 
         console.log('\n=== Deploy complete ===');

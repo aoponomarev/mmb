@@ -2,9 +2,9 @@
 id: sk-5cd3c9
 title: "Cloudflare Infrastructure"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 61fc2879
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: c1b8fbbe
+last_change: "#for-deploy-verification-window-bypass — deploy verification for time-windowed functions needs explicit bypass path"
 
 ---
 
@@ -18,6 +18,7 @@ last_change: ""
 - **#for-oauth-postmessage** Browsers strictly block automatic redirects from HTTPS (Google OAuth) to `file://` URIs for security reasons. To bypass this, the OAuth flow must be opened in a popup (`window.open`), and the Worker must return an HTML page that uses `window.opener.postMessage` to send the token back to the local static app.
 - **#for-cloudflare-kv-proxy** External APIs (CoinGecko, Yahoo) block `file://` origins via CORS. A Cloudflare Worker acts as a proxy to inject correct CORS headers. Backing this proxy with KV storage prevents rapid rate-limit exhaustion from multiple clients.
 - **#for-d1-schema-migrations** D1 is a serverless SQLite database. Manual schema mutations in production are forbidden. All changes must be tracked in SQL migration files and applied deterministically via Wrangler.
+- **#for-deploy-verification-window-bypass** Time-windowed ingest functions cannot rely on wall-clock schedule during deploy verification. A dedicated verification path must bypass runtime window checks so archive gating stays deterministic.
 
 ## Core Rules
 
@@ -99,11 +100,11 @@ last_change: ""
 
 ### Yandex coins-db-gateway Function (PostgreSQL Gateway)
 
-**Context**: Deploying `coins-db-gateway` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; build ZIP; run `yc serverless function version create` with `--source-path`; preserve DB credentials from the active version. Do not trust stale repo defaults for production DB selection. If an optional env value is empty, omit it from the deploy command instead of sending an empty string. Verification for HTTP behavior must be performed through the real API Gateway URL, because direct `yc serverless function invoke` can produce false-negative 404 results when the event shape does not match API Gateway transport. **Critical rule:** The function MUST be made public via `yc serverless function allow-unauthenticated-invoke`, otherwise API Gateway will return silent 502 Bad Gateway errors. Related causalities: `#for-cloud-env-readback`, `#for-no-empty-cloud-env`, `#for-transport-shape-verification`, `#for-yc-public-invoke`.
+**Context**: Deploying `coins-db-gateway` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; build ZIP; run `yc serverless function version create` with `--source-path`; preserve DB credentials from the active version. Do not trust stale repo defaults for production DB selection. If an optional env value is empty, omit it from the deploy command instead of sending an empty string. Verification for HTTP behavior must be performed through the real API Gateway URL, because direct `yc serverless function invoke` can produce false-negative 404 results when the event shape does not match API Gateway transport. Reference implementation: `verify-deployment-target.js --target yandex-api-gateway` before snapshot archiving. **Critical rule:** The function MUST be made public via `yc serverless function allow-unauthenticated-invoke`, otherwise API Gateway will return silent 502 Bad Gateway errors. Related causalities: `#for-cloud-env-readback`, `#for-no-empty-cloud-env`, `#for-transport-shape-verification`, `#for-yc-public-invoke`.
 
 ### Yandex coingecko-fetcher Function (Coin Market Ingest)
 
-**Context**: `coingecko-fetcher` is a timer-driven ingest function. Current deployment model: two independent timer triggers (`:00` for `market_cap`, `:30` for `volume`), one top-250 request per invocation, no long internal sleep chain. Preserve the production DB env contract from the live Yandex function version. Post-deploy verification: manual invoke should return `coins_fetched: 250`; downstream `GET /api/coins/market-cache?count_only=true` should expose fresh `fetched_at`. Related causalities: `#for-serverless-short-runs`, `#for-trigger-minute-routing`, `#for-cloud-env-readback`.
+**Context**: `coingecko-fetcher` is a timer-driven ingest function. Current deployment model: two independent timer triggers (`:00` for `market_cap`, `:30` for `volume`), one top-250 request per invocation, no long internal sleep chain. Preserve the production DB env contract from the live Yandex function version. Post-deploy verification: manual invoke should return `coins_fetched: 250`; downstream `GET /api/coins/market-cache?count_only=true` should expose fresh `fetched_at`. Verification must not depend on the active MSK runtime window, so deploy-time smoke uses an explicit bypass path (`deploy_verification` / `bypass_window`) before snapshot archiving. Related causalities: `#for-serverless-short-runs`, `#for-trigger-minute-routing`, `#for-cloud-env-readback`, `#for-deploy-verification-window-bypass`.
 
 ## Contracts
 

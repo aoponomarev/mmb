@@ -303,27 +303,8 @@ window.aiApiSettings = {
          * Called automatically when keys are missing in local cache.
          */
         async _restoreFromCloudflareKV() {
-            // @causality #for-ais-rollout-gap-marking
-            // Transitional deviation from AIS target state: this component still owns
-            // direct /api/settings transport for restore/list/export/import flows until
-            // the settings transport is extracted into a dedicated facade/client layer.
-            const token = await this.resolveSettingsToken();
-            if (!token) {
-                this.warnMissingSettingsToken('auto-restore from KV');
-                return;
-            }
             try {
-                const cfUrl = this.getSettingsUrl();
-                const resp = await fetch(cfUrl, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    signal: AbortSignal.timeout(5000)
-                });
-                if (!resp.ok) {
-                    console.warn('ai-api-settings: KV returned', resp.status, '— auto-restore skipped');
-                    return;
-                }
-                const json = await resp.json();
-                const d = json.data;
+                const d = await this.getCloudSettingsClient().loadAll(this.buildSettingsAuthOptions());
                 if (!d || typeof d !== 'object') return;
 
                 // Apply fields from KV only if missing locally
@@ -378,6 +359,10 @@ window.aiApiSettings = {
                 });
                 console.log('ai-api-settings: ✅ settings restored from Cloudflare KV');
             } catch (err) {
+                if (err?.code === 'SETTINGS_AUTH_MISSING') {
+                    this.warnMissingSettingsToken('auto-restore from KV');
+                    return;
+                }
                 console.warn('ai-api-settings: KV auto-restore error:', err.message);
             }
         },
@@ -455,51 +440,19 @@ window.aiApiSettings = {
             }
         },
 
-        /**
-         * Get auth header for Cloudflare /api/settings.
-         * Priority:
-         * 1) service token (githubToken / app_github_token)
-         * 2) OAuth JWT of current user
-         */
-        async getSettingsAuthHeader() {
-            const token = await this.resolveSettingsToken();
-            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        getCloudSettingsClient() {
+            if (!window.cloudSettingsClient) {
+                throw new Error('cloudSettingsClient is not loaded');
+            }
+            return window.cloudSettingsClient;
         },
 
-        async resolveSettingsToken() {
-            // OAuth JWT has priority: it matches current user session.
-            try {
-                if (window.authClient && typeof window.authClient.getAccessToken === 'function') {
-                    const authTokenData = await window.authClient.getAccessToken();
-                    const jwt = (authTokenData?.access_token || '').trim();
-                    if (jwt) {
-                        return jwt;
-                    }
-                }
-            } catch (_) {
-                // ignore auth token read errors
-            }
-
-            const directToken = (this.githubToken || localStorage.getItem('app_github_token') || '').trim();
-            if (directToken) {
-                return directToken;
-            }
-
-            try {
-                const backupRaw = localStorage.getItem(this.getPersistentSettingsKey());
-                if (backupRaw) {
-                    const backup = JSON.parse(backupRaw);
-                    const backupToken = (backup?.githubToken || '').trim();
-                    if (backupToken) {
-                        localStorage.setItem('app_github_token', backupToken);
-                        return backupToken;
-                    }
-                }
-            } catch (_) {
-                // ignore parse/storage errors
-            }
-
-            return '';
+        buildSettingsAuthOptions() {
+            const backup = this.loadPersistentSettingsBackup();
+            return {
+                serviceToken: this.githubToken,
+                backupServiceToken: backup?.githubToken || ''
+            };
         },
 
         warnMissingSettingsToken(context = '') {
@@ -515,16 +468,6 @@ window.aiApiSettings = {
         },
 
         /**
-         * Get URL Cloudflare Worker for /api/settings.
-         */
-        getSettingsUrl() {
-            const base = window.cloudflareConfig
-                ? (window.cloudflareConfig.getAuthBaseUrl?.() || window.cloudflareConfig.getWorkersBaseUrl())
-                : 'https://app-api.ponomarev-ux.workers.dev';
-            return `${base}/api/settings`;
-        },
-
-        /**
          * Update snapshot list: Cloudflare KV.
          * KV stores one current snapshot — show it as "cloud".
          */
@@ -534,28 +477,17 @@ window.aiApiSettings = {
             try {
                 const snapshotFiles = [];
                 try {
-                    const cfUrl = this.getSettingsUrl();
-                    const token = await this.resolveSettingsToken();
-                    if (!token) {
+                    const settings = await this.getCloudSettingsClient().loadAll(this.buildSettingsAuthOptions());
+                    const hasData = settings && Object.keys(settings).length > 0;
+                    if (hasData) {
+                        snapshotFiles.push('☁ Cloudflare KV (актуальный)');
+                    }
+                } catch (cfError) {
+                    if (cfError?.code === 'SETTINGS_AUTH_MISSING') {
                         this.warnMissingSettingsToken('snapshot list refresh');
                         this.snapshotFiles = snapshotFiles;
                         return;
                     }
-                    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                    const cfResp = await fetch(cfUrl, {
-                        headers,
-                        signal: AbortSignal.timeout(5000)
-                    });
-                    if (cfResp.ok) {
-                        const cfData = await cfResp.json();
-                        const hasData = cfData.data && Object.keys(cfData.data).length > 0;
-                        if (hasData) {
-                            snapshotFiles.push('☁ Cloudflare KV (актуальный)');
-                        }
-                    } else {
-                        console.warn('ai-api-settings: Cloudflare KV returned', cfResp.status);
-                    }
-                } catch (cfError) {
                     console.warn('ai-api-settings: Cloudflare KV unavailable:', cfError.message);
                 }
 
@@ -576,24 +508,12 @@ window.aiApiSettings = {
 
                 // Primary: Cloudflare KV
                 try {
-                    const cfUrl = this.getSettingsUrl();
-                    const token = await this.resolveSettingsToken();
-                    const cfResp = await fetch(cfUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-                        },
-                        body: JSON.stringify(payload),
-                        signal: AbortSignal.timeout(8000)
-                    });
-                    if (cfResp.ok) {
-                        console.log('ai-api-settings: settings saved to Cloudflare KV');
-                    } else {
-                        const err = await cfResp.text();
-                        console.warn('ai-api-settings: Cloudflare KV export error:', cfResp.status, err);
-                    }
+                    await this.getCloudSettingsClient().saveAll(payload, this.buildSettingsAuthOptions());
+                    console.log('ai-api-settings: settings saved to Cloudflare KV');
                 } catch (cfError) {
+                    if (cfError?.code === 'SETTINGS_AUTH_MISSING') {
+                        this.warnMissingSettingsToken('snapshot export');
+                    }
                     console.warn('ai-api-settings: Cloudflare KV unavailable on export:', cfError.message);
                 }
 
@@ -613,23 +533,17 @@ window.aiApiSettings = {
         async importSnapshot(filename) {
             if (!filename) return;
             try {
-                let payload = null;
-
-                const cfUrl = this.getSettingsUrl();
-                const token = await this.resolveSettingsToken();
-                const cfResp = await fetch(cfUrl, {
-                    headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-                    signal: AbortSignal.timeout(8000)
-                });
-                if (!cfResp.ok) throw new Error(`Cloudflare KV error: ${cfResp.status}`);
-                const cfData = await cfResp.json();
-                payload = cfData.data || null;
+                const payload = await this.getCloudSettingsClient().loadAll(this.buildSettingsAuthOptions());
 
                 if (!payload || typeof payload !== 'object') {
                     throw new Error('Invalid snapshot payload');
                 }
                 await this.applyImportedPayload(payload);
             } catch (error) {
+                if (error?.code === 'SETTINGS_AUTH_MISSING') {
+                    this.warnMissingSettingsToken('snapshot import');
+                    return;
+                }
                 console.error('ai-api-settings: snapshot import error:', error);
             }
         },
@@ -769,22 +683,11 @@ window.aiApiSettings = {
             this.healthStatus = null;
 
             try {
-                if (window.postgresClient?.checkHealth) {
-                    await window.postgresClient.checkHealth();
-                    this.healthStatus = 'OK';
-                } else {
-                    const response = await fetch(this.healthEndpoint, {
-                        method: 'GET',
-                        mode: 'cors',
-                        cache: 'no-cache'
-                    });
-
-                    if (response.ok) {
-                        this.healthStatus = 'OK';
-                    } else {
-                        this.healthStatus = `Error: ${response.status}`;
-                    }
+                if (!window.postgresClient?.checkHealth) {
+                    throw new Error('postgresClient.checkHealth is unavailable');
                 }
+                await window.postgresClient.checkHealth();
+                this.healthStatus = 'OK';
             } catch (error) {
                 // Skill anchor: health-check on file:// may give false CORS errors, not a provider bug.
                 // See id:sk-7cf3f7

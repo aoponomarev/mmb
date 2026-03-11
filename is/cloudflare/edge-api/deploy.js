@@ -31,11 +31,14 @@ function main() {
   console.log("[deploy:cloudflare-edge-api] Deploying worker...");
   run("npx", ["wrangler", "deploy"], __dirname);
 
+  console.log("[deploy:cloudflare-edge-api] Running post-deploy verification...");
+  run(
+    "node",
+    ["is/scripts/infrastructure/verify-deployment-target.js", "--target", "cloudflare-edge-api"],
+    REPO_ROOT,
+  );
+
   console.log("[deploy:cloudflare-edge-api] Creating mandatory deployment snapshot...");
-  // @causality #for-ais-rollout-gap-marking
-  // Transitional deviation from AIS target lifecycle: this wrapper still archives
-  // immediately after deploy. The target state is verify-before-archive once the
-  // health/smoke gate is wired into all deploy wrappers.
   run(
     "node",
     ["is/scripts/infrastructure/archive-deployment-snapshot.js", "--target", "cloudflare-edge-api"],

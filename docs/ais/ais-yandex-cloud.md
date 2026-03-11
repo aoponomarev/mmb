@@ -1,7 +1,7 @@
 ---
 id: ais-e41384
 status: active
-last_updated: "2026-03-10"
+last_updated: "2026-03-11"
 related_skills:
   - sk-224210
   - sk-bb7c8e
@@ -107,7 +107,7 @@ flowchart TD
 
 **Operational notes:**
 - Пустой optional env не должен передаваться в `yc serverless function version create`; если ключ не заполнен, его нужно omit, а не передавать как пустую строку.
-- Верификация функции после deploy делается либо через `yc serverless function invoke` для non-HTTP handler shape, либо через downstream API-проверку по реальному transport.
+- Верификация функции после deploy делается через target-specific gate (`verify-deployment-target.js`): для HTTP-gateway targets проверка идёт по реальному transport, а для time-windowed ingest-функций используется явный manual verification override, не зависящий от текущего MSK окна.
 
 ### api-gateway (PostgreSQL → HTTP)
 
@@ -160,7 +160,7 @@ flowchart TD
 1. Redeploy `coins-db-gateway` и `coingecko-fetcher` должен сохранять env-контракт активной production-версии, если migration базы не задокументирована отдельно.
 2. Для HTTP-gateway функций прямой `yc serverless function invoke` не является полным эквивалентом API Gateway traffic; проверка чтения/запрета записи должна выполняться через реальный base URL.
 3. После deploy ingest-контура нужно проверить:
-   - ручной invoke `coingecko-fetcher` возвращает `coins_fetched: 250`;
+   - manual invoke `coingecko-fetcher` (через deploy verification path с `deploy_verification` / `bypass_window`) возвращает `coins_fetched: 250`;
    - `GET /api/coins/market-cache?count_only=true` показывает свежий `fetched_at`;
    - `POST /api/coins/market-cache` возвращает `403`.
 4. **Public Invocation:** Функция, обслуживающая Yandex API Gateway через интеграцию `cloud_functions`, обязана быть публичной (`yc serverless function allow-unauthenticated-invoke`). Иначе API Gateway будет возвращать 502 Bad Gateway без явных ошибок в логах функции.

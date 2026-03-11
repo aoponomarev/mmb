@@ -132,6 +132,8 @@
     "readme-e9debb": "is/deployments/yandex-api-gateway/2026-03-09/README.md",
     "doc-af4e50": "is/deployments/yandex-market-fetcher/2026-03-09/changes-vs-previous.md",
     "readme-fbd0bf": "is/deployments/yandex-market-fetcher/2026-03-09/README.md",
+    "doc-7b3d21": "is/deployments/yandex-market-fetcher/2026-03-11/changes-vs-previous.md",
+    "readme-96e7c2": "is/deployments/yandex-market-fetcher/2026-03-11/README.md",
     "readme-b4bf98": "is/README.md",
     "readme-c15d55": "is/scripts/README.md",
     "readme-9e335c": "is/yandex/functions/api-gateway/README.md",
@@ -146,5 +148,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-11T11:09:46.086Z"
+  "generated_at": "2026-03-11T12:03:45.350Z"
 }

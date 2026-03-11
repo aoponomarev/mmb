@@ -1,7 +1,7 @@
 ---
 id: readme-7c67c3
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-11"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -60,7 +60,7 @@ COINGECKO_API_KEY=<опционально, Demo/Pro ключ>
 .\deploy-with-token.ps1 -OAuthToken "y0_AgAAAA..."
 ```
 
-Альтернатива через Node-скрипт (service-account API key): `node is/yandex/functions/market-fetcher/deploy.js` — также включает обязательный post-deploy snapshot.
+Альтернатива через Node-скрипт (service-account API key): `node is/yandex/functions/market-fetcher/deploy.js` — включает post-deploy verification gate и обязательный snapshot.
 
 ## Локальный тест
 
@@ -75,7 +75,7 @@ node test-local.js
 - Для redeploy production-функции нельзя слепо брать legacy defaults из локальных примеров. Operational SSOT для БД — env активной версии cloud function.
 - Если `COINGECKO_API_KEY` не задан, не передавайте пустое значение в `yc serverless function version create`; Yandex Cloud может отклонить deploy.
 - После deploy проверьте:
-  - ручной invoke `coingecko-fetcher` возвращает `coins_fetched: 250`;
+  - manual invoke `coingecko-fetcher` через deploy verification path (`deploy_verification` / `bypass_window`) возвращает `coins_fetched: 250`;
   - `GET /api/coins/market-cache?count_only=true` показывает свежий `fetched_at`.
 
 ## Структура таблицы coin_market_cache

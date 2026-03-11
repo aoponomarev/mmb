@@ -69,7 +69,9 @@ flowchart TD
         MMPM[MarketMetricsProviderManager]
         AIPM[AIProviderManager]
         CWC[CloudWorkspaceClient]
+        CST[CloudSettingsClient]
         CSC[CoinSetsClient]
+        IAC[IconAssetsClient]
         V2[V2ApiClient + N8nApiClient]
         GHR[GitHubReleasesProvider]
         YAG[YandexApiGatewayProvider]
@@ -108,7 +110,9 @@ flowchart TD
     APP --> MMPM
     APP --> AIPM
     APP --> CWC
+    APP --> CST
     APP --> CSC
+    APP --> IAC
     APP --> YAG
     LEGACY --> V2
     AUTO --> GHR
@@ -117,7 +121,9 @@ flowchart TD
     MMPM --> AR
     AIPM --> AR
     CWC --> AR
+    CST --> AR
     CSC --> AR
+    IAC --> AR
     YAG --> AR
     AR --> ARC
     AR --> AHT
@@ -132,7 +138,10 @@ flowchart TD
     MMPM --> CBD
     AIPM --> YP
     CWC --> CFGW
+    CST --> CFGW
     CSC --> CFGW
+    IAC --> CFGW
+    IAC --> GHAPI
     YAG --> YAPIGW
     V2 --> N8N
     V2 --> LOCAL
@@ -155,17 +164,17 @@ flowchart TD
 |-------|----------------|------------------------|--------|
 | Coin data | `DataProviderManager` | `YandexCacheProvider`, `CoinGeckoProvider` | Реализовано |
 | Market metrics | `MarketMetricsProviderManager` | `AlternativeMeProvider`, `YahooVixProvider`, `StooqVixProvider`, `AlphaVantageVixProvider`, `BinanceMetricsProvider`, `CoinGeckoBtcDomProvider` | Реализовано |
-| AI | `AIProviderManager` | `YandexProvider`; Cloudflare only restores settings/keys and не является вторым AI provider | Реализовано |
-| Stateful Cloudflare APIs | `CloudWorkspaceClient`, `CoinSetsClient` | Cloudflare Workers `/api/settings`, `/api/coin-sets` | Реализовано |
-| Yandex API Gateway | `YandexApiGatewayProvider` | `cycles`, `market-cache/trigger` endpoints | Реализовано |
+| AI | `AIProviderManager` | `YandexProvider`; Cloudflare settings restore path is outside AI provider set | Реализовано |
+| Cloud settings | `CloudSettingsClient` | Cloudflare Workers `/api/settings` | Реализовано |
+| Stateful Cloudflare APIs | `CloudWorkspaceClient`, `CoinSetsClient` | Cloudflare Workers `/api/settings/workspace`, `/api/coin-sets` | Реализовано |
+| Icon assets | `IconAssetsClient` | Cloudflare generic proxy, GitHub Contents API | Реализовано |
+| Yandex API Gateway | `YandexApiGatewayProvider` | `cycles`, `market-cache/trigger`, `market-cache` endpoints | Реализовано |
 | Legacy IS | `V2ApiClient`, `N8nApiClient` | local `/api/*`, n8n webhooks | Реализовано |
 | Automation / backlog | `GitHubReleasesProvider` | GitHub Releases API + tag fallback | Реализовано |
 | PostgreSQL serverless | `PostgresAdapter` | `pg.Client` inside Yandex Functions | Реализовано |
 | Cross-domain policy | `AdapterRegistry` | policy config + health tracker | Реализовано |
 
 Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): домен `Coin data` уже использует `AdapterRegistry` как shared policy/health plane, но provider ordering в `DataProviderManager` пока частично удерживается локально через `preferYandexFirst` / `allowCoinGeckoFallback` ради обратной совместимости startup-path на `file://`. Это не отменяет стратегию AIS; это явно отмечённый переходный зазор до полного выноса order policy в registry.
-
-Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): часть presentation-layer admin/settings flows всё ещё держит прямой transport в компонентах вместо вынесенного facade/client слоя. Это касается Cloudflare settings sync, icon-management proxy/GitHub upload и chunk push в market-cache. Для этой временной совместимости target-state policy `No direct transport in components` не отменяется; отклоняющиеся ветки обязаны быть помечены inline-комментариями в коде до завершения выноса transport в adapters/facades.
 
 ## Политики модуля
 
@@ -191,8 +200,10 @@ flowchart TD
 | `MarketMetricsProviderManager` | `core/api/market-metrics-provider-manager.js` | Multi-provider metrics facade, cache, fallback, request registry |
 | `AIProviderManager` | `core/api/ai-provider-manager.js` | AI facade, provider selection, settings restore integration |
 | `YandexApiGatewayProvider` | `core/api/yandex-api-gateway-provider.js` | Cycles history + manual trigger adapter |
+| `CloudSettingsClient` | `core/api/cloudflare/cloud-settings-client.js` | Cloudflare settings facade for restore/export/import flows |
 | `CloudWorkspaceClient` | `core/api/cloudflare/cloud-workspace-client.js` | Stateful workspace gateway to Cloudflare Workers |
 | `CoinSetsClient` | `core/api/cloudflare/coin-sets-client.js` | Stateful coin-set gateway to Cloudflare Workers |
+| `IconAssetsClient` | `core/api/icon-assets-client.js` | Proxy-backed icon load + GitHub asset publish facade |
 | `V2ApiClient` / `N8nApiClient` | `is/v2-api-client.js` | Legacy IS facade over local API and n8n webhook layer |
 | `GitHubReleasesProvider` | `is/scripts/infrastructure/github-releases-provider.js` | GitHub release/tag adapter for backlog automation |
 | `PostgresAdapter` | `is/yandex/functions/shared/postgres-adapter.js` | Shared `pg.Client` adapter for Yandex Functions |
@@ -225,5 +236,6 @@ flowchart TD
 
 - Все этапы внедрения закрыты; historical execution artifact removed after distillation and logged in id:doc-del-log.
 - Архитектурный разрыв между активным `app/` и legacy `IS.html` устранён: оба пути теперь используют adapter/facade pattern.
+- Прежний presentation-layer transport gap закрыт: active `app/` components больше не держат raw `fetch` для external integrations; settings, icon assets и Yandex gateway writes вынесены в dedicated clients/providers.
 - Семантический разрыв между proxy-only и direct-first transport формализован в skills: proxy обязателен на `file://`, direct-first допускается только после transport smoke и только для safe public read-only endpoints.
 - Дополнительная эксплуатационная политика из практики внедрения: browser transport injection должен сохранять receiver semantics у host API, а handoff по transport-refactor считается завершённым только после реального browser/file runtime smoke.

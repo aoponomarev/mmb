@@ -210,6 +210,13 @@
                 deps: ['app-config'],
                 category: 'core'
             },
+            {
+                id: 'icon-assets-client',
+                src: 'core/api/icon-assets-client.js',
+                type: 'local',
+                deps: ['cloudflare-config', 'adapter-registry'],
+                category: 'core'
+            },
             // API
             {
                 id: 'rate-limiter',
@@ -545,6 +552,13 @@
                 deps: ['cloudflare-config', 'auth-client', 'adapter-registry'],
                 category: 'core',
                 condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
+            },
+            {
+                id: 'cloud-settings-client',
+                src: 'core/api/cloudflare/cloud-settings-client.js',
+                type: 'local',
+                deps: ['cloudflare-config', 'adapter-registry'],
+                category: 'core'
             },
             {
                 id: 'datasets-client',
@@ -984,7 +998,7 @@
                 id: 'ai-api-settings',
                 src: 'app/components/ai-api-settings.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'ai-api-settings-template', 'ai-provider-manager'],
+                deps: ['vue', 'modal', 'ai-api-settings-template', 'ai-provider-manager', 'postgres-client', 'cloud-settings-client'],
                 category: 'components'
             },
             {
@@ -1072,7 +1086,7 @@
                 id: 'coin-set-load-modal-body',
                 src: 'app/components/coin-set-load-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'dropdown', 'button', 'event-bus', 'auth-state', 'coin-sets-client', 'cache-manager', 'data-provider-manager'],
+                deps: ['vue', 'modal', 'dropdown', 'button', 'event-bus', 'auth-state', 'coin-sets-client', 'cache-manager', 'data-provider-manager', 'yandex-api-gateway-provider'],
                 category: 'components'
             },
             {
@@ -1095,7 +1109,7 @@
                 id: 'icon-manager-modal-body',
                 src: 'app/components/icon-manager-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'icon-manager-modal-body-template', 'icon-manager'],
+                deps: ['vue', 'modal', 'icon-manager-modal-body-template', 'icon-manager', 'icon-assets-client'],
                 category: 'components'
             },
             {

@@ -1545,23 +1545,12 @@ window.coinSetLoadModalBody = {
          */
         pushChunkToDb(coins) {
             if (!Array.isArray(coins) || coins.length === 0) return;
-            const base = window.cloudflareConfig
-                ? (window.cloudflareConfig.getAuthBaseUrl?.() || window.cloudflareConfig.getWorkersBaseUrl?.())
-                : null;
-            // Use Yandex API Gateway directly (not via Cloudflare)
-            const API_GATEWAY = 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net';
-            const url = `${API_GATEWAY}/api/coins/market-cache`;
+            const provider = window.yandexApiGatewayProvider;
+            if (!provider || typeof provider.pushMarketCacheCoins !== 'function') {
+                return;
+            }
 
-            // @causality #for-ais-rollout-gap-marking
-            // Transitional deviation from AIS target state: this bulk upsert path still
-            // posts to market-cache directly from the component until the write transport
-            // is extracted into a dedicated facade/client layer.
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ coins })
-            })
-            .then(r => r.json())
+            provider.pushMarketCacheCoins(coins)
             .then(data => {
                 if (data.upserted > 0) {
                     // Signal root component to refresh DB counter

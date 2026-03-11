@@ -1,7 +1,7 @@
 ---
 id: readme-c15d55
 status: active
-last_updated: "2026-03-04"
+last_updated: "2026-03-11"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -21,6 +21,6 @@ Contains all executable Node.js and PowerShell scripts used to validate, build, 
 
 ## Subfolders
 - `architecture/`: Scripts that validate skills, readmes, reasoning, and layout contracts (e.g., `validate-skills.js`).
-- `infrastructure/`: Control plane scripts, health-checks, monitoring snapshots, and server bootstrap.
+- `infrastructure/`: Control plane scripts, health-checks, deployment verification gates, monitoring snapshots, and server bootstrap.
 - `secrets/`: Scripts for encrypting, decrypting, and verifying the local secret archive.
 - `tests/`: Project-wide test runners and linter entrypoints.

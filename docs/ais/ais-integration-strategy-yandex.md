@@ -1,7 +1,7 @@
 ---
 id: ais-f6b9e2
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-11"
 related_skills:
   - sk-bb7c8e
   - sk-7b4ee5
@@ -15,7 +15,7 @@ related_ais:
 
 # AIS: Стратегия интеграций для Yandex Cloud и API Gateway
 
-<!-- @causality #for-docs-ids-gate #for-causality-harvesting #for-integration-legacy-remediation #for-atomic-remediation #for-readonly-fallbacks #for-cloud-env-readback #for-no-empty-cloud-env #for-serverless-short-runs #for-transport-shape-verification #for-trigger-minute-routing #for-yc-public-invoke -->
+<!-- @causality #for-docs-ids-gate #for-causality-harvesting #for-integration-legacy-remediation #for-atomic-remediation #for-readonly-fallbacks #for-cloud-env-readback #for-no-empty-cloud-env #for-serverless-short-runs #for-transport-shape-verification #for-trigger-minute-routing #for-yc-public-invoke #for-deploy-verification-window-bypass -->
 
 ## Концепция (High-Level Concept)
 
@@ -227,7 +227,7 @@ Yandex Cloud deploy API может отклонять пустые optional env 
 
 ### После redeploy `coingecko-fetcher`
 
-1. Выполнить manual invoke.
+1. Выполнить manual invoke через deploy verification path (`deploy_verification` / `bypass_window`), чтобы проверка не зависела от текущего MSK окна.
 2. Проверить, что ответ содержит `coins_fetched: 250`.
 3. Проверить `order_fetched`.
 4. Проверить `GET /api/coins/market-cache?count_only=true` на свежий `fetched_at`.

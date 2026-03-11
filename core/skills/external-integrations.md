@@ -3,8 +3,8 @@ id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 09d3d3c7
-last_change: "#for-adapter-registry — cross-domain adapter registry formalized"
+reasoning_checksum: 1cdadbaf
+last_change: "#for-adapter-mandatory — UI-owned settings/icon transports moved behind dedicated clients"
 
 ---
 
@@ -18,13 +18,14 @@ last_change: "#for-adapter-registry — cross-domain adapter registry formalized
 - **#for-integration-fallbacks** Relying on a single external provider creates a single point of failure. Implementing fallback chains (e.g., Active-Passive or Fallback Chain) ensures that if a primary provider (like an AI API or a proxy) goes down, the system automatically switches to a secondary provider without breaking the user experience.
 - **#for-geo-optimization** Different cloud providers have different regional strengths. Routing requests based on geography (e.g., Yandex Cloud for RU/CIS users, Cloudflare for the rest of the world) minimizes latency and complies with regional data localization policies.
 - **#for-endpoint-coherence** Authentication and user settings/workspace APIs must use the same backend domain contract for a given feature. Mixed origins (e.g., auth via one worker and settings via another) can produce false-positive writes and missing readback.
-- **#for-adapter-registry** When multiple domains (`coin-data`, `market-metrics`, `ai`, `cloudflare-workspace`) all use adapters, provider order and allowlists must live in one trusted registry instead of drifting across facades.
+- **#for-adapter-registry** When multiple domains (`coin-data`, `market-metrics`, `ai`, `cloudflare-workspace`, `cloudflare-settings`, `icon-assets`) all use adapters, provider order and allowlists must live in one trusted registry instead of drifting across facades.
 - **#for-provider-health-tracking** Fallback order should react to recent failures and latency. Shared health tracking lets the orchestration layer demote degraded providers without teaching each provider how to self-manage cluster health.
 
 ## Core Rules
 
 1.  **Adapter Mandatory for New Integrations:**
     Every new external service (API, DB, webhook) MUST have a dedicated Adapter/Provider. Direct `fetch` or raw client calls in services or components are forbidden. `@causality #for-adapter-mandatory` | id:ais-d8e7f6.
+    - Presentation-layer settings restore/export, icon proxying/publish, and market-cache transport belong in dedicated clients/providers, not in Vue components.
 2.  **Fault Tolerance by Default:**
     All new features relying on external services must implement a seamless fallback mechanism.
     - If the primary provider is unavailable, automatically switch to the secondary.

@@ -8,10 +8,14 @@ param(
 )
 
 $YC = "$env:TEMP\yc.exe"
+if (-not (Test-Path $YC)) {
+    $YC = "yc"
+}
 $FOLDER_ID = "b1gv03a122le5a934cqj"
 $SERVICE_ACCOUNT_ID = "ajeudqscq65r5d5u7ras"
 $FUNCTION_NAME = "coingecko-fetcher"
 $FUNCTION_DIR = $PSScriptRoot
+$FUNCTIONS_ROOT = (Resolve-Path (Join-Path $FUNCTION_DIR "..")).Path
 
 Write-Host "=== Deploy $FUNCTION_NAME ===" -ForegroundColor Cyan
 
@@ -28,19 +32,17 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "IAM token is valid" -ForegroundColor Green
 
-# 2. Build zip payload exactly from runtime sources.
-Write-Host "`n[2] Build function ZIP..."
+# 2. Use shared source root so sibling shared/ modules are included in runtime artifact.
+Write-Host "`n[2] Prepare function source root..."
 $zipPath = "$FUNCTION_DIR\function.zip"
 if (Test-Path $zipPath) { Remove-Item $zipPath }
-Compress-Archive -Path "$FUNCTION_DIR\index.js", "$FUNCTION_DIR\package.json", "$FUNCTION_DIR\node_modules" -DestinationPath $zipPath
-$zipSize = [math]::Round((Get-Item $zipPath).Length / 1KB)
-Write-Host "ZIP created: $zipSize KB" -ForegroundColor Green
+Write-Host "Source root: $FUNCTIONS_ROOT" -ForegroundColor Green
 
 # 3. Reuse existing function id to avoid accidental duplicates.
 Write-Host "`n[3] Resolve function $FUNCTION_NAME..."
-$existingFunc = & $YC serverless function list --format json 2>&1 | ConvertFrom-Json | Where-Object { $_.name -eq $FUNCTION_NAME }
-
-if ($existingFunc) {
+$existingFuncRaw = & $YC serverless function get $FUNCTION_NAME --format json 2>&1
+if ($LASTEXITCODE -eq 0) {
+    $existingFunc = $existingFuncRaw | ConvertFrom-Json
     $FUNCTION_ID = $existingFunc.id
     Write-Host "Function found: $FUNCTION_ID" -ForegroundColor Green
 } else {
@@ -53,7 +55,7 @@ if ($existingFunc) {
 # 4. Read live env contract so deploy does not drift from working runtime.
 Write-Host "`n[4] Read live env contract..."
 $latestVersion = $null
-$versionListRaw = & $YC serverless function version list --function-id $FUNCTION_ID --limit 1 --format json 2>&1
+$versionListRaw = & $YC serverless function version list --function-name $FUNCTION_NAME --limit 1 --format json 2>&1
 if ($LASTEXITCODE -eq 0) {
     $parsed = $versionListRaw | ConvertFrom-Json
     if ($parsed -and $parsed.Count -gt 0) {
@@ -95,10 +97,10 @@ Write-Host "`n[5] Publish function version..."
 & $YC serverless function version create `
     --function-id $FUNCTION_ID `
     --runtime nodejs18 `
-    --entrypoint "index.handler" `
+    --entrypoint "market-fetcher/index.handler" `
     --memory 256MB `
     --execution-timeout 600s `
-    --source-path $zipPath `
+    --source-path $FUNCTIONS_ROOT `
     --environment $envPairs
 
 if ($LASTEXITCODE -ne 0) {
@@ -137,8 +139,18 @@ foreach ($t in $triggers) {
     }
 }
 
-# 7. Archive snapshot is mandatory to preserve rollback-grade state.
-Write-Host "`n[7] Create deployment snapshot..."
+# 7. Post-deploy verification must pass before archive.
+Write-Host "`n[7] Run post-deploy verification..."
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..\..")).Path
+node "$repoRoot\is\scripts\infrastructure\verify-deployment-target.js" --target yandex-market-fetcher
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Post-deploy verification failed"
+    exit 1
+}
+Write-Host "Post-deploy verification passed" -ForegroundColor Green
+
+# 8. Archive snapshot is mandatory to preserve rollback-grade state.
+Write-Host "`n[8] Create deployment snapshot..."
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..\..")).Path
 node "$repoRoot\is\scripts\infrastructure\archive-deployment-snapshot.js" --target yandex-market-fetcher
 if ($LASTEXITCODE -ne 0) {

@@ -60,9 +60,25 @@
                     recoveryWindowMs: 5 * 60 * 1000
                 }
             },
+            'cloudflare-settings': {
+                allowlist: ['cloudflare-settings'],
+                providers: ['cloudflare-settings'],
+                health: {
+                    degradeAfterFailures: 2,
+                    recoveryWindowMs: 5 * 60 * 1000
+                }
+            },
             'coin-sets': {
                 allowlist: ['cloudflare-coin-sets'],
                 providers: ['cloudflare-coin-sets'],
+                health: {
+                    degradeAfterFailures: 2,
+                    recoveryWindowMs: 5 * 60 * 1000
+                }
+            },
+            'icon-assets': {
+                allowlist: ['cloudflare-generic-proxy', 'github-contents'],
+                providers: ['cloudflare-generic-proxy', 'github-contents'],
                 health: {
                     degradeAfterFailures: 2,
                     recoveryWindowMs: 5 * 60 * 1000

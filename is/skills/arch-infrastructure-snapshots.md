@@ -4,9 +4,9 @@ title: "Infrastructure Snapshots (Rollback-Safe Deployments)"
 tags: "[#architecture, #deploy, #rollback, #cloud]"
 status: active
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: e17cef3a
-last_change: "#for-deploy-snapshot-diff — every snapshot must include current settings and explicit diff vs previous state"
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 442f9188
+last_change: "#for-deploy-verification-window-bypass — verify-before-archive for time-windowed functions must not depend on wall-clock schedule"
 
 ---
 
@@ -26,6 +26,7 @@ last_change: "#for-deploy-snapshot-diff — every snapshot must include current 
 - **#for-snapshot-console-settings** Non-secret settings that an agent or user can change in the console of **any** service or cloud (Cloudflare, Yandex Cloud, N8N, external datasets, etc.) — memory, timeout, runtime, trigger schedule, access flags, binding names and types — MUST be stored in the snapshot (README or dedicated file). Rollback then restores full configuration, not just code.
 - **#for-deploy-snapshot-diff** Snapshot value is incomplete without explicit change tracking. Each snapshot must include both full current settings and a structured diff against the previous stable state, including console settings and access bindings.
 - **#for-post-deploy-auto-archive** If archive creation depends on memory or manual reminders, snapshots are skipped under time pressure. Agent workflow must trigger archive generation immediately after successful deploy + verification.
+- **#for-deploy-verification-window-bypass** Some serverless handlers are intentionally gated by runtime windows or schedule-shaped routing. Deploy verification needs an explicit bypass path for those checks, otherwise verify-before-archive fails outside the allowed window even when the deploy is healthy.
 - **#for-provider-readback-fallback** Provider CLIs can expose partial metadata depending on platform/version. Snapshot generation must store every reachable setting and transparently mark partial readback instead of failing the entire archive.
 
 ### Unified contract: path and structure (all targets)
@@ -82,7 +83,8 @@ When a deploy command succeeds (exit code 0) and minimal verification succeeds:
 
 Reference implementation in this repository:
 - `is/scripts/infrastructure/archive-deployment-snapshot.js` (CLI: `node ... --target yandex-api-gateway|yandex-market-fetcher|cloudflare-edge-api`).
-- Deploy wrappers must call this script as a mandatory post-deploy step.
+- `is/scripts/infrastructure/verify-deployment-target.js` (target-specific verify-before-archive gate).
+- Deploy wrappers must call verification first and snapshot archiving second as mandatory post-deploy steps.
 
 ### Relation to rollback and AIS
 

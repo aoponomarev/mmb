@@ -156,23 +156,11 @@ window.postgresSettings = {
             this.healthStatus = null;
 
             try {
-                if (window.postgresClient?.checkHealth) {
-                    await window.postgresClient.checkHealth();
-                    this.healthStatus = 'OK';
-                } else {
-                    // Fallback if client not yet loaded
-                    const response = await fetch(this.healthEndpoint, {
-                        method: 'GET',
-                        mode: 'cors',
-                        cache: 'no-cache'
-                    });
-
-                    if (response.ok) {
-                        this.healthStatus = 'OK';
-                    } else {
-                        this.healthStatus = `Error: ${response.status}`;
-                    }
+                if (!window.postgresClient?.checkHealth) {
+                    throw new Error('postgresClient.checkHealth is unavailable');
                 }
+                await window.postgresClient.checkHealth();
+                this.healthStatus = 'OK';
             } catch (error) {
                 // If error contains "Failed to fetch" and we're on file://, likely CORS
                 const isLocal = window.location.protocol === 'file:' || window.location.hostname.includes('github.io') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
