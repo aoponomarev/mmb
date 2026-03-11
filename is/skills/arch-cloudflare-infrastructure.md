@@ -3,8 +3,8 @@ id: sk-5cd3c9
 title: "Cloudflare Infrastructure"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: c1b8fbbe
-last_change: "#for-deploy-verification-window-bypass — deploy verification for time-windowed functions needs explicit bypass path"
+reasoning_checksum: e150084c
+last_change: "#for-shared-runtime-packaging — serverless source-path must include sibling shared modules imported by the entrypoint"
 
 ---
 
@@ -19,6 +19,7 @@ last_change: "#for-deploy-verification-window-bypass — deploy verification for
 - **#for-cloudflare-kv-proxy** External APIs (CoinGecko, Yahoo) block `file://` origins via CORS. A Cloudflare Worker acts as a proxy to inject correct CORS headers. Backing this proxy with KV storage prevents rapid rate-limit exhaustion from multiple clients.
 - **#for-d1-schema-migrations** D1 is a serverless SQLite database. Manual schema mutations in production are forbidden. All changes must be tracked in SQL migration files and applied deterministically via Wrangler.
 - **#for-deploy-verification-window-bypass** Time-windowed ingest functions cannot rely on wall-clock schedule during deploy verification. A dedicated verification path must bypass runtime window checks so archive gating stays deterministic.
+- **#for-shared-runtime-packaging** Yandex Cloud Functions often import sibling modules from a shared runtime directory. Deploying only the leaf folder can pass CLI upload but fail immediately after release with `Cannot find module '../shared/...'`. The deploy source root and entrypoint must therefore be aligned to the actual runtime import graph.
 
 ## Core Rules
 
@@ -100,11 +101,11 @@ last_change: "#for-deploy-verification-window-bypass — deploy verification for
 
 ### Yandex coins-db-gateway Function (PostgreSQL Gateway)
 
-**Context**: Deploying `coins-db-gateway` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; build ZIP; run `yc serverless function version create` with `--source-path`; preserve DB credentials from the active version. Do not trust stale repo defaults for production DB selection. If an optional env value is empty, omit it from the deploy command instead of sending an empty string. Verification for HTTP behavior must be performed through the real API Gateway URL, because direct `yc serverless function invoke` can produce false-negative 404 results when the event shape does not match API Gateway transport. Reference implementation: `verify-deployment-target.js --target yandex-api-gateway` before snapshot archiving. **Critical rule:** The function MUST be made public via `yc serverless function allow-unauthenticated-invoke`, otherwise API Gateway will return silent 502 Bad Gateway errors. Related causalities: `#for-cloud-env-readback`, `#for-no-empty-cloud-env`, `#for-transport-shape-verification`, `#for-yc-public-invoke`.
+**Context**: Deploying `coins-db-gateway` Cloud Function requires YC CLI with OAuth. Deploy: authenticate via OAuth token; build ZIP; run `yc serverless function version create` with `--source-path`; preserve DB credentials from the active version. Do not trust stale repo defaults for production DB selection. If an optional env value is empty, omit it from the deploy command instead of sending an empty string. If the function imports sibling modules from `is/yandex/functions/shared/`, `--source-path` must target the shared parent root and `--entrypoint` must include the function subdirectory (`api-gateway/index.handler`), otherwise the runtime artifact is incomplete. Verification for HTTP behavior must be performed through the real API Gateway URL, because direct `yc serverless function invoke` can produce false-negative 404 results when the event shape does not match API Gateway transport. Reference implementation: `verify-deployment-target.js --target yandex-api-gateway` before snapshot archiving. **Critical rule:** The function MUST be made public via `yc serverless function allow-unauthenticated-invoke`, otherwise API Gateway will return silent 502 Bad Gateway errors. Related causalities: `#for-cloud-env-readback`, `#for-no-empty-cloud-env`, `#for-transport-shape-verification`, `#for-yc-public-invoke`, `#for-shared-runtime-packaging`.
 
 ### Yandex coingecko-fetcher Function (Coin Market Ingest)
 
-**Context**: `coingecko-fetcher` is a timer-driven ingest function. Current deployment model: two independent timer triggers (`:00` for `market_cap`, `:30` for `volume`), one top-250 request per invocation, no long internal sleep chain. Preserve the production DB env contract from the live Yandex function version. Post-deploy verification: manual invoke should return `coins_fetched: 250`; downstream `GET /api/coins/market-cache?count_only=true` should expose fresh `fetched_at`. Verification must not depend on the active MSK runtime window, so deploy-time smoke uses an explicit bypass path (`deploy_verification` / `bypass_window`) before snapshot archiving. Related causalities: `#for-serverless-short-runs`, `#for-trigger-minute-routing`, `#for-cloud-env-readback`, `#for-deploy-verification-window-bypass`.
+**Context**: `coingecko-fetcher` is a timer-driven ingest function. Current deployment model: two independent timer triggers (`:00` for `market_cap`, `:30` for `volume`), one top-250 request per invocation, no long internal sleep chain. Preserve the production DB env contract from the live Yandex function version. Because the handler imports `../shared/postgres-adapter`, packaging must use the shared parent root (`is/yandex/functions/`) with `--entrypoint market-fetcher/index.handler`, not only the leaf folder. Post-deploy verification: manual invoke should return `coins_fetched: 250`; downstream `GET /api/coins/market-cache?count_only=true` should expose fresh `fetched_at`. Verification must not depend on the active MSK runtime window, so deploy-time smoke uses an explicit bypass path (`deploy_verification` / `bypass_window`) before snapshot archiving. Related causalities: `#for-serverless-short-runs`, `#for-trigger-minute-routing`, `#for-cloud-env-readback`, `#for-deploy-verification-window-bypass`, `#for-shared-runtime-packaging`.
 
 ## Contracts
 

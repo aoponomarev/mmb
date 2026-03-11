@@ -16,6 +16,22 @@
             'coin-data': {
                 allowlist: ['yandex-cache', 'coingecko'],
                 providers: ['yandex-cache', 'coingecko'],
+                defaultExternalProvider: 'coingecko',
+                runtimePolicies: {
+                    file: 'pg-primary-only',
+                    network: 'pg-primary-then-selected-external'
+                },
+                policies: {
+                    'pg-primary-only': {
+                        providers: ['yandex-cache']
+                    },
+                    'pg-primary-then-selected-external': {
+                        mode: 'pg-primary-then-selected-external'
+                    },
+                    'selected-external-only': {
+                        mode: 'selected-external-only'
+                    }
+                },
                 health: {
                     degradeAfterFailures: 3,
                     recoveryWindowMs: 5 * 60 * 1000
@@ -100,15 +116,80 @@
         return Array.isArray(config?.allowlist) ? [...config.allowlist] : [];
     }
 
-    function getProviderOrder(domainKey, options = {}) {
+    function uniqueProviders(providers) {
+        return providers.filter((provider, index) => provider && providers.indexOf(provider) === index);
+    }
+
+    function resolveSelectedExternalProvider(config, options = {}) {
+        const allowlist = Array.isArray(config?.allowlist) ? config.allowlist : [];
+        const selectedProvider = typeof options.selectedProvider === 'string'
+            ? options.selectedProvider.trim()
+            : '';
+        if (selectedProvider && selectedProvider !== 'yandex-cache' && allowlist.includes(selectedProvider)) {
+            return selectedProvider;
+        }
+        if (config?.defaultExternalProvider && allowlist.includes(config.defaultExternalProvider)) {
+            return config.defaultExternalProvider;
+        }
+        return allowlist.find((provider) => provider !== 'yandex-cache') || null;
+    }
+
+    function getDomainPolicy(domainKey, options = {}) {
         const config = getDomainConfig(domainKey);
-        if (!config) return [];
+        if (!config) return null;
 
         if (options.metricKey && Array.isArray(config.metrics?.[options.metricKey])) {
-            return [...config.metrics[options.metricKey]];
+            return {
+                policyKey: options.metricKey,
+                providers: [...config.metrics[options.metricKey]]
+            };
         }
 
-        return Array.isArray(config.providers) ? [...config.providers] : [];
+        const explicitPolicyKey = typeof options.policyKey === 'string' && options.policyKey.trim()
+            ? options.policyKey.trim()
+            : '';
+        const runtimePolicyKey = !explicitPolicyKey && typeof options.runtimeProfile === 'string'
+            ? config.runtimePolicies?.[options.runtimeProfile] || ''
+            : '';
+        const resolvedPolicyKey = explicitPolicyKey || runtimePolicyKey || 'default';
+
+        if (domainKey === 'coin-data') {
+            const selectedExternalProvider = resolveSelectedExternalProvider(config, options);
+            if (resolvedPolicyKey === 'pg-primary-only') {
+                return {
+                    policyKey: resolvedPolicyKey,
+                    providers: ['yandex-cache']
+                };
+            }
+            if (resolvedPolicyKey === 'selected-external-only') {
+                return {
+                    policyKey: resolvedPolicyKey,
+                    providers: uniqueProviders([selectedExternalProvider])
+                };
+            }
+            if (resolvedPolicyKey === 'pg-primary-then-selected-external') {
+                return {
+                    policyKey: resolvedPolicyKey,
+                    providers: uniqueProviders(['yandex-cache', selectedExternalProvider])
+                };
+            }
+        }
+
+        if (explicitPolicyKey && Array.isArray(config.policies?.[explicitPolicyKey]?.providers)) {
+            return {
+                policyKey: explicitPolicyKey,
+                providers: [...config.policies[explicitPolicyKey].providers]
+            };
+        }
+
+        return {
+            policyKey: resolvedPolicyKey,
+            providers: Array.isArray(config.providers) ? [...config.providers] : []
+        };
+    }
+
+    function getProviderOrder(domainKey, options = {}) {
+        return getDomainPolicy(domainKey, options)?.providers || [];
     }
 
     window.adapterRegistryConfig = {
@@ -116,6 +197,7 @@
         getDomainConfig,
         getHealthConfig,
         getAllowedProviders,
+        getDomainPolicy,
         getProviderOrder
     };
 

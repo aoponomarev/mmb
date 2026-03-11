@@ -108,6 +108,7 @@ flowchart TD
 **Operational notes:**
 - Пустой optional env не должен передаваться в `yc serverless function version create`; если ключ не заполнен, его нужно omit, а не передавать как пустую строку.
 - Верификация функции после deploy делается через target-specific gate (`verify-deployment-target.js`): для HTTP-gateway targets проверка идёт по реальному transport, а для time-windowed ingest-функций используется явный manual verification override, не зависящий от текущего MSK окна.
+- Если entrypoint функции импортирует sibling-модули из `is/yandex/functions/shared/`, packaging обязан идти от общего root `is/yandex/functions/`, а `entrypoint` должен включать имя поддиректории функции (`market-fetcher/index.handler`, `api-gateway/index.handler`). Упаковка только leaf-папки не соответствует runtime graph и даёт post-deploy import errors.
 
 ### api-gateway (PostgreSQL → HTTP)
 

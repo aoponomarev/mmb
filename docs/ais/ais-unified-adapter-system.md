@@ -174,14 +174,12 @@ flowchart TD
 | PostgreSQL serverless | `PostgresAdapter` | `pg.Client` inside Yandex Functions | Реализовано |
 | Cross-domain policy | `AdapterRegistry` | policy config + health tracker | Реализовано |
 
-Примечание по rollout-gap (`#for-ais-rollout-gap-marking`): домен `Coin data` уже использует `AdapterRegistry` как shared policy/health plane, но provider ordering в `DataProviderManager` пока частично удерживается локально через `preferYandexFirst` / `allowCoinGeckoFallback` ради обратной совместимости startup-path на `file://`. Это не отменяет стратегию AIS; это явно отмечённый переходный зазор до полного выноса order policy в registry.
-
 ## Политики модуля
 
 1. **No direct transport in components** — UI-компоненты и orchestration-скрипты не держат raw `fetch`/`client.query` для внешнего мира.
 2. **Normalization in adapter** — преобразование внешнего payload в внутренний контракт выполняется в адаптере/провайдере, не в компоненте и не в фасаде.
 3. **Fallback stays in facade** — multi-source fallback и downgrade-order принадлежат фасаду (`DataProviderManager`, `MarketMetricsProviderManager`, `V2ApiClient`), не отдельному провайдеру.
-4. **Registry policies are SSOT** — order, allowlist и health thresholds живут в `core/config/adapter-registry-config.js`, а не рассеиваются по отдельным модулям.
+4. **Registry policies are SSOT** — order, allowlist и health thresholds живут в `core/config/adapter-registry-config.js`, а не рассеиваются по отдельным модулям. Для `Coin data` это включает runtime-aware named policies (`pg-primary-only`, `pg-primary-then-selected-external`, `selected-external-only`); фасад может принять legacy flags только как compatibility selector этих registry policies, но не как локальный источник истины для provider order.
 5. **Provider health is shared state** — success/failure/latency считаются в `core/observability/adapter-health-tracker.js`; сами провайдеры остаются fail-fast и stateless.
 6. **Endpoint coherence for stateful APIs** — `CloudWorkspaceClient` и `CoinSetsClient` обязаны читать/писать в тот же origin contract, что и auth flow.
 7. **Connection injection for tests** — провайдеры принимают fetch/client injection там, где это снижает стоимость тестирования без build-time DI.

@@ -16,20 +16,48 @@
             return window.adapterRegistryConfig?.getDomainConfig?.(domainKey) || null;
         }
 
-        getProviderOrder(domainKey, fallbackProviders = [], options = {}) {
+        getDomainPolicy(domainKey, fallbackProviders = [], options = {}) {
             const config = this.getDomainConfig(domainKey);
-            const preferred = window.adapterRegistryConfig?.getProviderOrder?.(domainKey, options) || [];
+            const policy = window.adapterRegistryConfig?.getDomainPolicy?.(domainKey, options) || {};
+            const preferred = Array.isArray(policy.providers)
+                ? [...policy.providers]
+                : (window.adapterRegistryConfig?.getProviderOrder?.(domainKey, options) || []);
             const baseOrder = preferred.length > 0 ? preferred : [...fallbackProviders];
             const allowlist = window.adapterRegistryConfig?.getAllowedProviders?.(domainKey) || [];
             const filtered = baseOrder.filter((provider) => allowlist.length === 0 || allowlist.includes(provider));
             const candidates = filtered.length > 0 ? filtered : [...fallbackProviders];
 
             const healthConfig = config?.health || {};
-            if (window.adapterHealthTracker?.sortProviders) {
-                return window.adapterHealthTracker.sortProviders(domainKey, candidates, healthConfig);
+            const providers = window.adapterHealthTracker?.sortProviders
+                ? window.adapterHealthTracker.sortProviders(domainKey, candidates, healthConfig)
+                : candidates;
+
+            return {
+                ...policy,
+                domainKey,
+                allowlist,
+                health: healthConfig,
+                providers
+            };
+        }
+
+        getProviderOrder(domainKey, fallbackProviders = [], options = {}) {
+            const policy = this.getDomainPolicy(domainKey, fallbackProviders, options);
+            if (!policy) {
+                return [...fallbackProviders];
             }
 
-            return candidates;
+            const candidates = Array.isArray(policy.providers) ? policy.providers : [];
+            if (candidates.length > 0) {
+                return candidates;
+            }
+
+            const healthConfig = policy.health || {};
+            if (window.adapterHealthTracker?.sortProviders) {
+                return window.adapterHealthTracker.sortProviders(domainKey, fallbackProviders, healthConfig);
+            }
+
+            return [...fallbackProviders];
         }
 
         recordSuccess(domainKey, providerName, meta = {}) {

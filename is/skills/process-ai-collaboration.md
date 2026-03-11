@@ -3,8 +3,8 @@ id: sk-cecbcc
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 17e5d237
-last_change: "#for-multifactor-heuristics — weigh implementation paths under uncertainty"
+reasoning_checksum: a855b238
+last_change: "#for-causality-rebinding — before writing a causality exception, audit whether the old hash was superseded and migrate remaining anchors"
 related_skills:
   - sk-0e193a
   - sk-3b1519
@@ -24,6 +24,7 @@ related_ais:
 - **#for-micro-steps** Unverified large changes hide regressions. Execute tasks atomically with fail-fast validation.
 - **#for-skills-before-code** AI agents lack persistent memory across chats. You must use `read_skill` to understand the domain before acting.
 - **#for-active-causality** To prevent future agents from repeating mistakes, you must record rejected paths and nuances using `@causality` or `docs/audits/causality-exceptions.jsonl`.
+- **#for-causality-rebinding** A disappearing hash can mean more than a local deletion: it may signal a renamed, generalized, or strategically replaced causality. Agents must check for the replacement hash and rebind remaining anchors before normalizing the situation with exceptions.
 - **#for-no-implicit-commit** You must never commit without explicit user instruction. Nagging the user to commit adds noise.
 - **#for-memory-to-skills** Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. The Memory → Skills protocol ensures knowledge lives in files, not only in ephemeral chat history.
 - **#for-multifactor-heuristics** When the codebase leaves multiple plausible implementation paths, agents must weigh benefit, harm, reversibility, contract alignment, user impact, and existing causalities instead of optimizing for a single convenience factor.
@@ -67,9 +68,13 @@ When the Memory MCP (`is/memory/memory.jsonl`) contains entries that describe ar
 4. **Cleanup:** After formalization, the memory entry may remain as historical context; the canonical source is now the skill/AIS file.
 5. **Id references:** When adding `related_skills` or `related_ais` to AIS, use short hash ids (`sk-xxxxxx`, `ais-xxxxxx`). Resolve via `is/contracts/docs/id-registry.json` or `docs/index-skills.md` / `docs/index-ais.md`.
 - **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/backlog/` (см. id:sk-0e193a (is/skills/process-docs-lifecycle.md)), and map this question path in id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A1.
-- **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from id:sk-3b1519: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
+- **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from `sk-3b1519`: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
 - **New/Changed Code Requires Anchors:** Any non-trivial new code or risky edited branch must receive `@skill-anchor` or `@causality` markers in the relevant place, not only in the file header. Rewriting code without preserving its rationale is a protocol violation.
-- **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.
+- **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere.
+- **Mandatory rebinding check (`#for-causality-rebinding`)**: before adding an exception, audit the remaining anchors and ask whether the old hash was replaced by a broader/newer one. If yes, migrate the remaining files to the replacement hash and update the code/comments so the new rationale is true there as well.
+- **Alias table is SSOT for renames:** if the change is a true rename/supersession, register the mapping in `sk-3b1519` under `Aliases / Deprecated`, so future agents understand the lineage.
+- **Exceptions mean intentional coexistence only:** use `docs/audits/causality-exceptions.jsonl` only when the old hash must remain active in some files for a still-valid reason. Do not use exceptions as a shortcut for unfinished rebinding.
+- **Gate stderr stays authoritative for JSONL shape:** if, after the rebinding audit, coexistence is still intentional, copy the exact JSON template from stderr into `docs/audits/causality-exceptions.jsonl`. Do not invent another format.
 
 ### Skills Curation (Before Creating Any Skill)
 Before creating a new skill file:

@@ -81,6 +81,79 @@
             });
         }
 
+        getCoinDataFallbackProviders() {
+            return ['yandex-cache', 'coingecko'];
+        }
+
+        getProgressSource(providerName) {
+            return providerName === 'yandex-cache' ? 'postgres' : providerName;
+        }
+
+        resolveCoinDataPolicyKey(options = {}) {
+            if (typeof options.policyKey === 'string' && options.policyKey.trim()) {
+                return options.policyKey.trim();
+            }
+            if (options.preferYandexFirst === false) {
+                return 'selected-external-only';
+            }
+            if (options.allowCoinGeckoFallback === false) {
+                return 'pg-primary-only';
+            }
+            return null;
+        }
+
+        async getCoinDataPolicy(options = {}) {
+            // @skill-anchor id:sk-bb7c8e #for-adapter-registry
+            // Coin-data routing policy lives in AdapterRegistry; local boolean flags
+            // are reduced to compatibility selectors for already-existing call sites.
+            const runtimeProfile = this.isFileProtocol() ? 'file' : 'network';
+            const policyKey = this.resolveCoinDataPolicyKey(options);
+            const selectedProvider = await this.getCurrentProviderName();
+
+            if (this.registry?.getDomainPolicy) {
+                const registryPolicy = this.registry.getDomainPolicy('coin-data', this.getCoinDataFallbackProviders(), {
+                    policyKey,
+                    runtimeProfile,
+                    selectedProvider
+                });
+                if (registryPolicy && Array.isArray(registryPolicy.providers)) {
+                    return registryPolicy;
+                }
+            }
+
+            const fallbackPolicyKey = policyKey || (
+                runtimeProfile === 'file'
+                    ? 'pg-primary-only'
+                    : 'pg-primary-then-selected-external'
+            );
+            const externalProvider = selectedProvider && selectedProvider !== 'yandex-cache'
+                ? selectedProvider
+                : this.defaultProvider;
+            const providers = fallbackPolicyKey === 'selected-external-only'
+                ? [externalProvider]
+                : fallbackPolicyKey === 'pg-primary-only'
+                    ? ['yandex-cache']
+                    : ['yandex-cache', externalProvider];
+
+            return {
+                policyKey: fallbackPolicyKey,
+                providers: providers.filter((providerName, index) => (
+                    providerName &&
+                    this.providers[providerName] &&
+                    providers.indexOf(providerName) === index
+                ))
+            };
+        }
+
+        getOrderedCoinDataProviders(policy) {
+            const rawProviders = Array.isArray(policy?.providers) ? policy.providers : [];
+            return rawProviders.filter((providerName, index) => (
+                providerName &&
+                this.providers[providerName] &&
+                rawProviders.indexOf(providerName) === index
+            ));
+        }
+
         /**
          * Initialize providers.
          * Called after all providers are loaded.
@@ -146,14 +219,8 @@
          * @returns {Promise<Array>} Normalized coin data array
          */
         async getTopCoins(count = 100, sortBy = 'market_cap', options = {}) {
-            // @causality #for-ais-rollout-gap-marking
-            // Transitional deviation from AIS target state: coin-data health is already centralized
-            // in adapterRegistry, but provider ordering is still kept locally here to preserve
-            // backward-compatible file:// startup behavior until registry-driven ordering is rolled out.
-            const preferYandexFirst = options.preferYandexFirst !== false;
-            const allowCoinGeckoFallback = typeof options.allowCoinGeckoFallback === 'boolean'
-                ? options.allowCoinGeckoFallback
-                : !this.isFileProtocol(); // On file:// do not hit CoinGecko on startup by default
+            const policy = await this.getCoinDataPolicy(options);
+            const providerOrder = this.getOrderedCoinDataProviders(policy);
             const emitProgress = (payload) => {
                 if (!options || typeof options.onProgress !== 'function') return;
                 try {
@@ -163,133 +230,99 @@
                 }
             };
 
-            // 1) PostgreSQL primary
-            if (preferYandexFirst && this.providers['yandex-cache']) {
-                const startedAt = Date.now();
-                try {
-                    emitProgress({ source: 'postgres', phase: 'start', total: count, loaded: 0 });
-                    const pgOptions = {
-                        ...options,
-                        onProgress: (payload) => {
-                            emitProgress({ ...(payload || {}), source: 'postgres' });
-                        }
-                    };
-                    const result = await this.providers['yandex-cache'].getTopCoins(count, sortBy, pgOptions);
-                    const filtered = this.filterCoinsByBan(result);
-                    emitProgress({
-                        source: 'postgres',
-                        phase: 'done',
-                        total: count,
-                        loaded: Math.min(count, filtered.length)
-                    });
-                    if (window.requestRegistry) {
-                        window.requestRegistry.recordCall('yandex-cache', 'getTopCoins', { count, sortBy }, 200, true);
-                    }
-                    this.recordAdapterSuccess('yandex-cache', 'getTopCoins', Date.now() - startedAt);
-                    return filtered;
-                } catch (pgError) {
-                    this.recordAdapterFailure('yandex-cache', 'getTopCoins', pgError, Date.now() - startedAt);
-                    emitProgress({
-                        source: 'postgres',
-                        phase: 'error',
-                        total: count,
-                        loaded: 0,
-                        error: pgError.message || 'unknown'
-                    });
-                    if (window.requestRegistry) {
-                        window.requestRegistry.recordCall('yandex-cache', 'getTopCoins', { count, sortBy }, 500, false);
-                    }
-                    if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
-                        window.fallbackMonitor.notify({
-                            component: 'data-provider-manager',
-                            event: 'top-coins-pg-primary-failed',
-                            reason: pgError.message || 'unknown',
-                            timestamp: Date.now()
-                        });
-                    }
-                    if (!allowCoinGeckoFallback) {
-                        throw pgError;
-                    }
-                }
-            }
-
-            // 2) CoinGecko secondary (or selected provider if not file://)
-            let providerName = await this.getCurrentProviderName();
-            let provider = this.providers[providerName] || this.providers[this.defaultProvider];
-
-            if (providerName === 'yandex-cache' && this.providers['coingecko']) {
-                providerName = 'coingecko';
-                provider = this.providers['coingecko'];
-            }
-
-            if (!provider) {
+            if (providerOrder.length === 0) {
                 throw new Error('Нет доступного провайдера данных for getTopCoins');
             }
 
-            // REQUEST REGISTRY CHECK
-            if (window.requestRegistry) {
-                // Min interval from ssot (2h), fallback 2h
-                const minInterval = window.ssot && typeof window.ssot.getTopCoinsRequestIntervalMs === 'function'
-                    ? window.ssot.getTopCoinsRequestIntervalMs()
-                    : 2 * 60 * 60 * 1000;
-                if (!window.requestRegistry.isAllowed(providerName, 'getTopCoins', { count, sortBy }, minInterval)) {
-                    console.log(`data-provider-manager: запрос ${providerName}:getTopCoins заблокирован журналом (слишком часто)`);
-                    // Try return cache
-                    if (window.cacheManager) {
-                        const cacheKey = sortBy === 'volume' ? 'top-coins-by-volume' : 'top-coins-by-market-cap';
-                        const cached = await window.cacheManager.get(cacheKey);
-                        if (cached && cached.length > 0) return cached;
+            for (let index = 0; index < providerOrder.length; index++) {
+                const providerName = providerOrder[index];
+                const provider = this.providers[providerName];
+                const source = this.getProgressSource(providerName);
+                const startedAt = Date.now();
+                try {
+                    const providerOptions = { ...options };
+
+                    if (providerName === 'yandex-cache') {
+                        emitProgress({ source, phase: 'start', total: count, loaded: 0 });
+                    } else if (window.requestRegistry) {
+                        const minInterval = window.ssot && typeof window.ssot.getTopCoinsRequestIntervalMs === 'function'
+                            ? window.ssot.getTopCoinsRequestIntervalMs()
+                            : 2 * 60 * 60 * 1000;
+                        if (!window.requestRegistry.isAllowed(providerName, 'getTopCoins', { count, sortBy }, minInterval)) {
+                            console.log(`data-provider-manager: запрос ${providerName}:getTopCoins заблокирован журналом (слишком часто)`);
+                            if (window.cacheManager) {
+                                const cacheKey = sortBy === 'volume' ? 'top-coins-by-volume' : 'top-coins-by-market-cap';
+                                const cached = await window.cacheManager.get(cacheKey);
+                                if (cached && cached.length > 0) return cached;
+                            }
+                            const timeUntilNext = window.requestRegistry.getTimeUntilNext(providerName, 'getTopCoins', { count, sortBy }, minInterval);
+                            const waitMinutes = Math.ceil(timeUntilNext / 60000);
+                            console.warn(`data-provider-manager: кэш пуст, registry заблокирован ещё ${waitMinutes} мин. Запрос отклонён.`);
+                            throw new Error(`Rate limit: API недоступен, повторите через ${waitMinutes} мин.`);
+                        }
                     }
-                    // Skill anchor: on empty cache and blocked registry (after 429) — throw error
-                    // Instead of immediate retry. Prevents infinite 429→write→429 cycle.
-                    // UI will show error, user can wait and retry via Refresh button.
-                    const timeUntilNext = window.requestRegistry.getTimeUntilNext(providerName, 'getTopCoins', { count, sortBy }, minInterval);
-                    const waitMinutes = Math.ceil(timeUntilNext / 60000);
-                    console.warn(`data-provider-manager: кэш пуст, registry заблокирован ещё ${waitMinutes} мин. Запрос отклонён.`);
-                    throw new Error(`Rate limit: API недоступен, повторите через ${waitMinutes} мин.`);
-                }
-            }
 
-            // Get API key if required
-            const apiKey = await this.getApiKey(providerName);
-            if (provider.requiresApiKey() && !apiKey) {
-                const error = `API ключ for ${provider.getDisplayName()} not configured`;
-                provider.logError(error);
-                throw new Error(error);
-            }
+                    if (provider.requiresApiKey && provider.requiresApiKey()) {
+                        const apiKey = await this.getApiKey(providerName);
+                        if (!apiKey) {
+                            const error = `API ключ for ${provider.getDisplayName()} not configured`;
+                            provider.logError(error);
+                            throw new Error(error);
+                        }
+                        providerOptions.apiKey = apiKey;
+                    }
 
-            // Add API key to options if present
-            if (apiKey) {
-                options.apiKey = apiKey;
-            }
-
-            const startedAt = Date.now();
-            try {
-                const providerOptions = { ...options };
-                if (providerName === 'coingecko') {
                     providerOptions.onProgress = (payload) => {
-                        emitProgress({ ...(payload || {}), source: 'coingecko' });
+                        emitProgress({ ...(payload || {}), source });
                     };
+
+                    const result = await provider.getTopCoins(count, sortBy, providerOptions);
+                    const filtered = this.filterCoinsByBan(result);
+                    if (providerName === 'yandex-cache') {
+                        emitProgress({
+                            source,
+                            phase: 'done',
+                            total: count,
+                            loaded: Math.min(count, filtered.length)
+                        });
+                    }
+                    if (window.requestRegistry) {
+                        window.requestRegistry.recordCall(providerName, 'getTopCoins', { count, sortBy }, 200, true);
+                    }
+                    this.recordAdapterSuccess(providerName, 'getTopCoins', Date.now() - startedAt);
+                    return filtered;
+                } catch (error) {
+                    this.recordAdapterFailure(providerName, 'getTopCoins', error, Date.now() - startedAt);
+                    if (providerName === 'yandex-cache') {
+                        emitProgress({
+                            source,
+                            phase: 'error',
+                            total: count,
+                            loaded: 0,
+                            error: error.message || 'unknown'
+                        });
+                        if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
+                            window.fallbackMonitor.notify({
+                                component: 'data-provider-manager',
+                                event: 'top-coins-pg-primary-failed',
+                                reason: error.message || 'unknown',
+                                timestamp: Date.now()
+                            });
+                        }
+                    }
+                    if (window.requestRegistry) {
+                        const status = Number.isFinite(error.status)
+                            ? error.status
+                            : (String(error.message || '').toLowerCase().includes('rate limit') ? 429 : 500);
+                        window.requestRegistry.recordCall(providerName, 'getTopCoins', { count, sortBy }, status, false);
+                    }
+                    if (index === providerOrder.length - 1) {
+                        throw error;
+                    }
                 }
-                const result = await provider.getTopCoins(count, sortBy, providerOptions);
-                const filtered = this.filterCoinsByBan(result);
-                if (window.requestRegistry) {
-                    window.requestRegistry.recordCall(providerName, 'getTopCoins', { count, sortBy }, 200, true);
-                }
-                this.recordAdapterSuccess(providerName, 'getTopCoins', Date.now() - startedAt);
-                return filtered;
-            } catch (error) {
-                this.recordAdapterFailure(providerName, 'getTopCoins', error, 0);
-                if (window.requestRegistry) {
-                    // Skill anchor: real HTTP status must be logged, else 429 cycle masked as "generic error".
-                    // See id:sk-bb7c8e
-                    const status = Number.isFinite(error.status)
-                        ? error.status
-                        : (String(error.message || '').toLowerCase().includes('rate limit') ? 429 : 500);
-                    window.requestRegistry.recordCall(providerName, 'getTopCoins', { count, sortBy }, status, false);
-                }
-                throw error;
             }
+
+            throw new Error('Нет доступного провайдера данных for getTopCoins');
         }
 
         /**
@@ -300,8 +333,8 @@
          */
         async searchCoins(query, options = {}) {
             const limit = this.normalizeLimit(options.limit, 10);
-            const preferYandexFirst = options.preferYandexFirst !== false;
-            const allowCoinGeckoFallback = options.allowCoinGeckoFallback !== false;
+            const policy = await this.getCoinDataPolicy(options);
+            const providerOrder = this.getOrderedCoinDataProviders(policy);
             const merged = [];
             const seenIds = new Set();
 
@@ -314,47 +347,40 @@
                 });
             };
 
-            // 1) PostgreSQL search
-            if (preferYandexFirst && this.providers['yandex-cache']) {
+            for (let index = 0; index < providerOrder.length; index++) {
+                const providerName = providerOrder[index];
+                const provider = this.providers[providerName];
+                const providerOptions = { ...options };
                 const startedAt = Date.now();
                 try {
-                    const fromPg = await this.providers['yandex-cache'].searchCoins(query, options);
-                    appendUnique(this.filterCoinsByBan(fromPg));
-                    this.recordAdapterSuccess('yandex-cache', 'searchCoins', Date.now() - startedAt);
+                    if (provider.requiresApiKey && provider.requiresApiKey()) {
+                        const apiKey = await this.getApiKey(providerName);
+                        if (!apiKey) {
+                            const error = `API ключ for ${provider.getDisplayName()} not configured`;
+                            provider.logError(error);
+                            throw new Error(error);
+                        }
+                        providerOptions.apiKey = apiKey;
+                    }
+
+                    const fromProvider = await provider.searchCoins(query, providerOptions);
+                    appendUnique(this.filterCoinsByBan(fromProvider));
+                    this.recordAdapterSuccess(providerName, 'searchCoins', Date.now() - startedAt);
                     if (merged.length >= limit) {
                         return merged.slice(0, limit);
                     }
-                } catch (pgError) {
-                    this.recordAdapterFailure('yandex-cache', 'searchCoins', pgError, Date.now() - startedAt);
-                    if (window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
+                } catch (error) {
+                    this.recordAdapterFailure(providerName, 'searchCoins', error, Date.now() - startedAt);
+                    if (providerName === 'yandex-cache' && window.fallbackMonitor && typeof window.fallbackMonitor.notify === 'function') {
                         window.fallbackMonitor.notify({
                             component: 'data-provider-manager',
                             event: 'search-pg-failed',
-                            reason: pgError.message || 'unknown',
+                            reason: error.message || 'unknown',
                             timestamp: Date.now()
                         });
                     }
-                }
-            }
-
-            // 2) CoinGecko fallback
-            if (allowCoinGeckoFallback && this.providers['coingecko']) {
-                const provider = this.providers['coingecko'];
-                const apiKey = await this.getApiKey('coingecko');
-                const cgOptions = { ...options };
-                if (apiKey) {
-                    cgOptions.apiKey = apiKey;
-                }
-
-                const startedAt = Date.now();
-                try {
-                    const fromCg = await provider.searchCoins(query, cgOptions);
-                    appendUnique(this.filterCoinsByBan(fromCg));
-                    this.recordAdapterSuccess('coingecko', 'searchCoins', Date.now() - startedAt);
-                } catch (cgError) {
-                    this.recordAdapterFailure('coingecko', 'searchCoins', cgError, 0);
-                    if (merged.length === 0) {
-                        throw cgError;
+                    if (index === providerOrder.length - 1 && merged.length === 0 && providerName !== 'yandex-cache') {
+                        throw error;
                     }
                 }
             }
@@ -410,143 +436,161 @@
 
         /**
          * @skill-anchor id:sk-7b4ee5 #for-integration-fallbacks
-         * Dual-channel coin data fetch: PostgreSQL primary, CoinGecko fallback.
-         * Phase 1: resolve as many IDs as possible from YandexCacheProvider (PG).
-         * Phase 2: fetch remaining missing IDs from active provider (CoinGecko).
+         * Dual-channel coin data fetch: registry-selected primary provider plus secondary fallback.
+         * Phase 1: resolve as many IDs as possible from the primary provider selected by AdapterRegistry.
+         * Phase 2: fetch remaining missing IDs from the secondary provider when the selected policy includes one.
          * @param {string[]} coinIds
          * @param {Object} options - { onProgress, signal, chunkDelayMs, forceChunking }
-         *   onProgress receives events with `source: 'postgres' | 'coingecko'`
+         *   onProgress receives events with provider-tagged `source`
          * @returns {Promise<Array>} merged coin data
          */
         async getCoinDataDualChannel(coinIds, options = {}) {
             if (!Array.isArray(coinIds) || coinIds.length === 0) return [];
 
-            const pgProvider = this.providers['yandex-cache'];
-            const cgProvider = this.providers['coingecko'];
-            const allowCoinGeckoFallback = options.allowCoinGeckoFallback !== false;
+            const policy = await this.getCoinDataPolicy(options);
+            const providerOrder = this.getOrderedCoinDataProviders(policy);
+            const primaryProviderName = providerOrder[0] || null;
+            const secondaryProviderName = providerOrder[1] || null;
+            const primaryProvider = primaryProviderName ? this.providers[primaryProviderName] : null;
+            const secondaryProvider = secondaryProviderName ? this.providers[secondaryProviderName] : null;
             const { bannedIds } = this.getBanContext();
             const filteredIds = coinIds.filter(id => !bannedIds.has(id));
             if (filteredIds.length === 0) return [];
 
             const resolvedMap = new Map();
 
-            // ── Phase 1: PostgreSQL ────────────────────────────────────────
-            if (pgProvider) {
+            const buildProviderOptions = async (providerName, provider) => {
+                const source = this.getProgressSource(providerName);
+                const providerOptions = {
+                    signal: options.signal,
+                    onProgress: (payload) => {
+                        if (options.onProgress) {
+                            options.onProgress({ ...payload, source });
+                        }
+                    }
+                };
+                if (providerName !== 'yandex-cache') {
+                    providerOptions.forceChunking = options.forceChunking ?? true;
+                    providerOptions.chunkDelayMs = options.chunkDelayMs;
+                    const apiKey = await this.getApiKey(providerName);
+                    if (provider?.requiresApiKey && provider.requiresApiKey() && !apiKey) {
+                        const error = `API ключ for ${provider.getDisplayName()} not configured`;
+                        provider.logError(error);
+                        throw new Error(error);
+                    }
+                    if (apiKey) {
+                        providerOptions.apiKey = apiKey;
+                    }
+                }
+                return providerOptions;
+            };
+
+            if (primaryProvider) {
+                const source = this.getProgressSource(primaryProviderName);
                 const startedAt = Date.now();
                 try {
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'postgres', phase: 'start',
+                            source,
+                            phase: 'start',
                             total: filteredIds.length, loaded: 0
                         });
                     }
-                    const pgCoins = await pgProvider.getCoinData(filteredIds, {
-                        signal: options.signal,
-                        onProgress: (payload) => {
-                            if (options.onProgress) {
-                                options.onProgress({ ...payload, source: 'postgres' });
-                            }
-                        }
-                    });
-                    if (Array.isArray(pgCoins)) {
-                        pgCoins.forEach(coin => {
+                    const providerOptions = await buildProviderOptions(primaryProviderName, primaryProvider);
+                    const primaryCoins = await primaryProvider.getCoinData(filteredIds, providerOptions);
+                    if (Array.isArray(primaryCoins)) {
+                        primaryCoins.forEach(coin => {
                             if (coin && coin.id) resolvedMap.set(coin.id, coin);
                         });
                     }
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'postgres', phase: 'done',
+                            source,
+                            phase: 'done',
                             total: filteredIds.length, loaded: resolvedMap.size
                         });
                     }
-                    this.recordAdapterSuccess('yandex-cache', 'getCoinDataDualChannel', Date.now() - startedAt);
-                } catch (pgErr) {
-                    this.recordAdapterFailure('yandex-cache', 'getCoinDataDualChannel', pgErr, Date.now() - startedAt);
-                    console.warn('dual-channel: PG phase failed, falling through to CoinGecko', pgErr.message);
+                    this.recordAdapterSuccess(primaryProviderName, 'getCoinDataDualChannel', Date.now() - startedAt);
+                } catch (error) {
+                    this.recordAdapterFailure(primaryProviderName, 'getCoinDataDualChannel', error, Date.now() - startedAt);
+                    console.warn(`dual-channel: ${source} phase failed`, error.message);
                     if (window.fallbackMonitor) {
                         window.fallbackMonitor.notify({
                             component: 'data-provider-manager',
-                            event: 'pg-phase-failed',
-                            reason: pgErr.message,
+                            event: source === 'postgres' ? 'pg-phase-failed' : `${source}-phase-failed`,
+                            reason: error.message,
                             timestamp: Date.now()
                         });
                     }
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'postgres', phase: 'error',
-                            error: pgErr.message
+                            source,
+                            phase: 'error',
+                            error: error.message
                         });
                     }
                 }
             }
 
-            // ── Phase 2: CoinGecko for missing IDs ─────────────────────────
             const missingIds = filteredIds.filter(id => !resolvedMap.has(id));
 
-            if (missingIds.length > 0 && cgProvider && allowCoinGeckoFallback) {
+            if (missingIds.length > 0 && secondaryProvider) {
+                const source = this.getProgressSource(secondaryProviderName);
                 const startedAt = Date.now();
                 try {
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'coingecko', phase: 'start',
+                            source,
+                            phase: 'start',
                             total: missingIds.length, loaded: 0
                         });
                     }
-
-                    const apiKey = await this.getApiKey('coingecko');
-                    const cgOptions = {
-                        signal: options.signal,
-                        forceChunking: options.forceChunking ?? true,
-                        chunkDelayMs: options.chunkDelayMs,
-                        onProgress: (payload) => {
-                            if (options.onProgress) {
-                                options.onProgress({ ...payload, source: 'coingecko' });
-                            }
-                        }
-                    };
-                    if (apiKey) cgOptions.apiKey = apiKey;
-
-                    const cgCoins = await cgProvider.getCoinData(missingIds, cgOptions);
-                    if (Array.isArray(cgCoins)) {
-                        cgCoins.forEach(coin => {
+                    const providerOptions = await buildProviderOptions(secondaryProviderName, secondaryProvider);
+                    const secondaryCoins = await secondaryProvider.getCoinData(missingIds, providerOptions);
+                    if (Array.isArray(secondaryCoins)) {
+                        secondaryCoins.forEach(coin => {
                             if (coin && coin.id) resolvedMap.set(coin.id, coin);
                         });
                     }
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'coingecko', phase: 'done',
+                            source,
+                            phase: 'done',
                             total: missingIds.length,
                             loaded: missingIds.filter(id => resolvedMap.has(id)).length
                         });
                     }
-                    this.recordAdapterSuccess('coingecko', 'getCoinDataDualChannel', Date.now() - startedAt);
-                } catch (cgErr) {
-                    this.recordAdapterFailure('coingecko', 'getCoinDataDualChannel', cgErr, Date.now() - startedAt);
-                    console.warn('dual-channel: CoinGecko phase failed', cgErr.message);
+                    this.recordAdapterSuccess(secondaryProviderName, 'getCoinDataDualChannel', Date.now() - startedAt);
+                } catch (error) {
+                    this.recordAdapterFailure(secondaryProviderName, 'getCoinDataDualChannel', error, Date.now() - startedAt);
+                    console.warn(`dual-channel: ${source} phase failed`, error.message);
                     if (window.fallbackMonitor) {
                         window.fallbackMonitor.notify({
                             component: 'data-provider-manager',
-                            event: 'cg-phase-failed',
-                            reason: cgErr.message,
+                            event: source === 'coingecko' ? 'cg-phase-failed' : `${source}-phase-failed`,
+                            reason: error.message,
                             timestamp: Date.now()
                         });
                     }
                     if (options.onProgress) {
                         options.onProgress({
-                            source: 'coingecko', phase: 'error',
-                            error: cgErr.message
+                            source,
+                            phase: 'error',
+                            error: error.message
                         });
                     }
                 }
-            } else if (missingIds.length > 0 && !allowCoinGeckoFallback && options.onProgress) {
+            } else if (missingIds.length > 0 && options.onProgress) {
                 options.onProgress({
-                    source: 'coingecko', phase: 'skip',
-                    reason: 'CoinGecko fallback disabled by options'
+                    source: secondaryProviderName ? this.getProgressSource(secondaryProviderName) : 'fallback',
+                    phase: 'skip',
+                    reason: 'No secondary provider in selected registry policy'
                 });
-            } else if (missingIds.length === 0 && options.onProgress) {
+            } else if (missingIds.length === 0 && options.onProgress && secondaryProviderName) {
                 options.onProgress({
-                    source: 'coingecko', phase: 'skip',
-                    reason: 'All coins resolved from PostgreSQL'
+                    source: this.getProgressSource(secondaryProviderName),
+                    phase: 'skip',
+                    reason: 'All coins resolved from primary provider'
                 });
             }
 
@@ -562,27 +606,36 @@
          * @returns {Promise<string|null>} Coin ID or null
          */
         async getCoinIdBySymbol(symbol, options = {}) {
-            const preferYandexFirst = options.preferYandexFirst !== false;
-            const allowCoinGeckoFallback = options.allowCoinGeckoFallback !== false;
+            const policy = await this.getCoinDataPolicy(options);
+            const providerOrder = this.getOrderedCoinDataProviders(policy);
+            let lastExternalError = null;
 
-            if (preferYandexFirst && this.providers['yandex-cache']) {
+            for (const providerName of providerOrder) {
+                const provider = this.providers[providerName];
+                const providerOptions = { ...options };
                 try {
-                    const fromPg = await this.providers['yandex-cache'].getCoinIdBySymbol(symbol, options);
-                    if (fromPg) {
-                        return fromPg;
+                    if (provider?.requiresApiKey && provider.requiresApiKey()) {
+                        const apiKey = await this.getApiKey(providerName);
+                        if (!apiKey) {
+                            const error = `API ключ for ${provider.getDisplayName()} not configured`;
+                            provider.logError(error);
+                            throw new Error(error);
+                        }
+                        providerOptions.apiKey = apiKey;
                     }
-                } catch (_) {
-                    // no-op: fallback below
+                    const resolvedId = await provider.getCoinIdBySymbol(symbol, providerOptions);
+                    if (resolvedId) {
+                        return resolvedId;
+                    }
+                } catch (error) {
+                    if (providerName !== 'yandex-cache') {
+                        lastExternalError = error;
+                    }
                 }
             }
 
-            if (allowCoinGeckoFallback && this.providers['coingecko']) {
-                const apiKey = await this.getApiKey('coingecko');
-                const cgOptions = { ...options };
-                if (apiKey) {
-                    cgOptions.apiKey = apiKey;
-                }
-                return await this.providers['coingecko'].getCoinIdBySymbol(symbol, cgOptions);
+            if (lastExternalError) {
+                throw lastExternalError;
             }
 
             return null;

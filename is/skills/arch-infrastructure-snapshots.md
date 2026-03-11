@@ -5,8 +5,8 @@ tags: "[#architecture, #deploy, #rollback, #cloud]"
 status: active
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 442f9188
-last_change: "#for-deploy-verification-window-bypass — verify-before-archive for time-windowed functions must not depend on wall-clock schedule"
+reasoning_checksum: 00cdeac6
+last_change: "#for-docs-ids-gate — generated snapshot markdown must carry deterministic id frontmatter"
 
 ---
 
@@ -28,6 +28,7 @@ last_change: "#for-deploy-verification-window-bypass — verify-before-archive f
 - **#for-post-deploy-auto-archive** If archive creation depends on memory or manual reminders, snapshots are skipped under time pressure. Agent workflow must trigger archive generation immediately after successful deploy + verification.
 - **#for-deploy-verification-window-bypass** Some serverless handlers are intentionally gated by runtime windows or schedule-shaped routing. Deploy verification needs an explicit bypass path for those checks, otherwise verify-before-archive fails outside the allowed window even when the deploy is healthy.
 - **#for-provider-readback-fallback** Provider CLIs can expose partial metadata depending on platform/version. Snapshot generation must store every reachable setting and transparently mark partial readback instead of failing the entire archive.
+- **#for-docs-ids-gate** Snapshot `README.md` and `changes-vs-previous.md` are not disposable temp notes; they are project markdown artifacts consumed by global id tooling. Generated snapshot markdown must therefore include deterministic `id:` frontmatter and `last_updated`.
 
 ### Unified contract: path and structure (all targets)
 
@@ -60,7 +61,7 @@ Future targets: same pattern under `is/deployments/<target>/`.
 1. **Unified format only** — every new deployment target uses `is/deployments/<target>/YYYY-MM-DD/` with the same README and content rules. No target-specific layout.
 2. **Create a snapshot via an explicit pipeline step** that runs automatically only after (a) successful deploy and (b) minimal verification. Do not store failed attempts; if a working snapshot exists for a failed deploy, the step MUST delete it and record the defect reason (e.g., link to ticket/commit and a short description) instead of keeping the snapshot.
 3. **Snapshot step MUST be explicit and observable** (dedicated script or CI job), not an implicit side-effect. Humans should not need to trigger it manually in the happy path, but they MUST be able to re-run it intentionally if automation fails.
-4. **Every snapshot MUST include README.md** with: date; Version ID if applicable; env names (no secret values); **service/cloud settings values** (memory, timeout, triggers, runtime, access flags, bindings — all non-secret console configuration); restore steps; **involved skills**; **causalities** (reasons for changes); **functional goals**.
+4. **Every snapshot MUST include README.md** with: date; Version ID if applicable; env names (no secret values); **service/cloud settings values** (memory, timeout, triggers, runtime, access flags, bindings — all non-secret console configuration); restore steps; **involved skills**; **causalities** (reasons for changes); **functional goals**. Both `README.md` and `changes-vs-previous.md` must carry deterministic markdown frontmatter (`id`, `status`, `last_updated`).
 5. **Never put secrets or env values** (passwords, API keys) into snapshots. **Do** store non-secret console settings (values) so rollback can restore full configuration.
 6. **One date, one logical release** — if multiple components are deployed as one stable set, use the same date for all; each target still has its own `YYYY-MM-DD/` folder and README.
 7. **Archive completeness is mandatory** — every snapshot must pass all three checks:

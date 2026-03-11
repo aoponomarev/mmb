@@ -134,9 +134,10 @@ function main() {
           console.error(`Hash: ${hash}`);
           console.error(`You removed this causality hash from: '${removedFile}'`);
           console.error(`But it is still active in: ${currentFiles.map(f => `'${f}'`).join(', ')}`);
-          console.error(`\nACTION REQUIRED (choose one):`);
-          console.error(`1. Remove/update the hash in the remaining files as well.`);
-          console.error(`2. Add the following exact line to causality-exceptions.jsonl (docs/audits/causality-exceptions.jsonl):`);
+          console.error(`\nACTION REQUIRED (in this order):`);
+          console.error(`1. Audit the remaining files and check whether '${hash}' was superseded by a broader/renamed replacement hash. If yes, rebind those anchors first.`);
+          console.error(`2. If the old reason is obsolete everywhere, remove/update the hash in the remaining files as well.`);
+          console.error(`3. Only if the old reason is intentionally still valid elsewhere, add the following exact line to causality-exceptions.jsonl (docs/audits/causality-exceptions.jsonl):`);
           console.error(`   {"hash":"${hash}", "removed_from":"${removedFile}", "reason":"YOUR_REASON_HERE"}`);
         }
       }

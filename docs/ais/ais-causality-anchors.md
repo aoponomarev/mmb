@@ -1,7 +1,7 @@
 ---
 id: ais-b6c7d8
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-11"
 related_skills:
   - sk-d599bd
   - sk-802f3b
@@ -133,7 +133,7 @@ flowchart TD
 1. **Hash uniqueness:** каждый хеш в реестре уникален семантически. Перед добавлением нового — обязательная проверка на дубль.
 2. **No orphan hashes:** хеш в реестре **обязан** иметь хотя бы один якорь в коде или документации. Orphan hashes подлежат cleanup.
 3. **No naked @causality:** `@causality` без хеша и без `QUESTION:` — невалиден. Гейт блокирует.
-4. **Causality deletion protocol:** удаление хеша из кода требует либо зачистки всех остатков, либо записи исключения в `docs/audits/causality-exceptions.jsonl`. Без этого invariant gate (#JS-eG4BUXaS) блокирует.
+4. **Causality deletion protocol:** удаление хеша из кода сначала требует проверки на supersession/rebinding: не был ли старый hash заменён более общей или переименованной казуальностью. Если да, остатки мигрируются на replacement hash и lineage фиксируется в alias-table id:sk-3b1519. Только если старый hash осознанно остаётся валиден в других местах, добавляется запись в `docs/audits/causality-exceptions.jsonl`. Без этого invariant gate (#JS-eG4BUXaS) блокирует.
 5. **Skill-anchor bidirectionality:** `@skill-anchor` с указанием skill ID и hash означает, что target skill **обязан** содержать описание referenced hash. Гейт #JS-QxwSQxtt проверяет.
 
 ## Компоненты и Контракты (Components & Contracts)

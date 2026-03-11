@@ -1667,8 +1667,7 @@ window.coinSetLoadModalBody = {
                         // Skill anchor: forced chunking + progress callback protects UX and reduces 429 risk.
                         // See id:sk-bb7c8e
                         coinsFullSet = await window.dataProviderManager.getTopCoins(250, this.defaultSortBy, {
-                            preferYandexFirst: true,
-                            allowCoinGeckoFallback: true,
+                            policyKey: 'pg-primary-then-selected-external',
                             forceChunking: true,
                             chunkSize: 25,
                             chunkDelayMs: 21000,

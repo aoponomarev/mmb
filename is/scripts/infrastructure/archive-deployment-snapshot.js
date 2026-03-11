@@ -127,6 +127,42 @@ function hashFile(relPath) {
   return createHash("sha256").update(buf).digest("hex").toUpperCase();
 }
 
+function chooseMarkdownIdPrefix(relPath) {
+  if (relPath.startsWith("docs/ais/")) return "ais";
+  if (relPath.startsWith("is/skills/") || relPath.startsWith("core/skills/") || relPath.startsWith("app/skills/")) return "sk";
+  if (relPath.startsWith("docs/plans/")) return "plan";
+  if (relPath.startsWith("docs/runbooks/")) return "runbook";
+  if (relPath.startsWith("docs/cheatsheets/")) return "cheat";
+  if (relPath.startsWith("docs/backlog/skills/")) return "bskill";
+  if (relPath.startsWith("docs/backlog/")) return "backlog";
+  if (relPath.startsWith("docs/done/")) return "done";
+  if (relPath.startsWith("docs/index-")) return "docidx";
+  if (relPath === "docs/README.md") return "docs";
+  if (relPath.endsWith("/README.md")) return "readme";
+  return "doc";
+}
+
+function makeMarkdownId(relPath) {
+  const normalized = relPath.split("\\").join("/");
+  const hash = createHash("md5").update(normalized).digest("hex").slice(0, 6);
+  return `${chooseMarkdownIdPrefix(normalized)}-${hash}`;
+}
+
+function renderSnapshotMarkdown(relPath, body, date) {
+  // @causality #for-docs-ids-gate
+  // Generated deployment artifacts are normal markdown documents and must
+  // carry deterministic frontmatter ids, otherwise preflight rejects them.
+  const content = body.endsWith("\n") ? body : `${body}\n`;
+  return `---
+id: ${makeMarkdownId(relPath)}
+status: active
+last_updated: "${date}"
+
+---
+
+${content}`;
+}
+
 function secretName(name) {
   return /(PASSWORD|SECRET|TOKEN|KEY)/i.test(name);
 }
@@ -675,10 +711,22 @@ function main() {
 
   writeJson(join(snapshotDir, "settings.current.json"), current);
   writeJson(join(snapshotDir, "settings.previous.json"), previous);
-  writeFileSync(join(snapshotDir, "changes-vs-previous.md"), renderDiffMarkdown(target, baselineId, diff), "utf8");
+  writeFileSync(
+    join(snapshotDir, "changes-vs-previous.md"),
+    renderSnapshotMarkdown(
+      `${targetConfig.snapshotDir}/${date}/changes-vs-previous.md`,
+      renderDiffMarkdown(target, baselineId, diff),
+      date
+    ),
+    "utf8"
+  );
   writeFileSync(
     join(snapshotDir, "README.md"),
-    `${renderReadme(target, date, targetConfig, current, sourceHashes)}\n`,
+    renderSnapshotMarkdown(
+      `${targetConfig.snapshotDir}/${date}/README.md`,
+      `${renderReadme(target, date, targetConfig, current, sourceHashes)}\n`,
+      date
+    ),
     "utf8",
   );
 

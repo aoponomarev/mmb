@@ -2,9 +2,9 @@
 id: sk-d7bf67
 title: "Process: Reasoning Audit Protocol"
 reasoning_confidence: 0.85
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 0be57c17
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 18249cd5
+last_change: "#for-causality-rebinding — replacement-hash audit must happen before causality exceptions"
 
 ---
 
@@ -111,9 +111,12 @@ When you remove or change a causality hash (`#for-X`) from code (`@causality` or
 
 The **Causality Invariant Gate** (`is/scripts/architecture/validate-causality-invariant.js`) runs during preflight and will fail if a hash is removed from one file but remains in others.
 
-If the gate fails, you have two options:
-1. **Clean wipe**: Audit the remaining files and remove/update the hash there as well if the reason no longer applies.
-2. **Acknowledge divergence**: If the hash removal applies *only* to the first file (e.g., you added a cache to service A, so it no longer needs fail-fast, but provider B still needs it), you MUST add an exception.
+If the gate fails, use this order:
+1. **Rebinding audit (`#for-causality-rebinding`)**: Check whether the old hash was superseded by a broader, renamed, or more accurate causality. Audit all remaining anchors; if semantics still match the new rationale, migrate those files to the replacement hash and update the nearby code/comments accordingly.
+2. **Clean wipe**: If the old reason is simply obsolete everywhere, remove/update the hash in the remaining files as well.
+3. **Acknowledge intentional coexistence**: Only if the old hash is still semantically correct in some files, add an exception for the file where it was removed.
+
+If step 1 is a true rename/supersession, register the mapping in id:sk-3b1519 (is/skills/causality-registry.md) under `Aliases / Deprecated` so the replacement lineage is explicit.
 
 **Exception format (JSONL):**
 Add a line to `docs/audits/causality-exceptions.jsonl`:

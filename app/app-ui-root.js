@@ -3302,7 +3302,13 @@
                                 signal: options.signal,
                                 chunkDelayMs: options.chunkDelayMs ?? 21000,
                                 useDualChannel: options.useDualChannel !== false,
-                                allowCoinGeckoFallback: options.allowCoinGeckoFallback !== false,
+                                policyKey: options.policyKey || (
+                                    options.preferYandexFirst === false
+                                        ? 'selected-external-only'
+                                        : options.allowCoinGeckoFallback === false
+                                            ? 'pg-primary-only'
+                                            : 'pg-primary-then-selected-external'
+                                ),
                                 onProgress: progressHandler
                             };
 
@@ -4077,7 +4083,7 @@
                             onProgress: options.onProgress,
                             forceChunking: true,
                             useDualChannel: true,
-                            allowCoinGeckoFallback: true
+                            policyKey: 'pg-primary-then-selected-external'
                         });
 
                         if (loadedMissing && Array.isArray(loadedMissing.coins)) {
@@ -4821,8 +4827,7 @@
                                     try {
                                         console.log('app-ui-root: фоновое обновление топа coins (data stale)...');
                                         const fresh = await window.dataProviderManager.getTopCoins(250, 'market_cap', {
-                                            preferYandexFirst: true,
-                                            allowCoinGeckoFallback: false
+                                            policyKey: 'pg-primary-only'
                                         });
                                         if (fresh && fresh.length > 0) {
                                             await window.cacheManager.set(cacheKey, fresh);
@@ -4843,8 +4848,7 @@
                         // Only if cache completely empty - go to API and wait
                         console.log('app-ui-root: кэш пуст, загружаем топ из PostgreSQL...');
                         coinsFullSet = await window.dataProviderManager.getTopCoins(250, 'market_cap', {
-                            preferYandexFirst: true,
-                            allowCoinGeckoFallback: false
+                            policyKey: 'pg-primary-only'
                         });
                         if (window.cacheManager && coinsFullSet) {
                             await window.cacheManager.set(cacheKey, coinsFullSet);
