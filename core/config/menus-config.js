@@ -173,7 +173,7 @@
         },
         {
             id: 'select-stablecoins-other',
-            title: 'Валюты, металлы, фиат',
+            title: 'Фиат, металлы, сырьё',
             handler: 'handleSelectStablecoinsOther',
             icon: window.coinsConfig.getCoinTypeIcon('stable')
         },
