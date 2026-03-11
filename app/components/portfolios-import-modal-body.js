@@ -25,6 +25,7 @@ window.portfoliosImportModalBody = {
                 <div class="row g-3 mb-3">
                     <div class="col-md-4">
                         <label class="form-label">Режим</label>
+                        <!-- EXCEPTION: bare Bootstrap form-check-input type="radio" — id:sk-318305 § Legacy Exceptions; migration deferred. -->
                         <div class="form-check">
                             <input class="form-check-input" type="radio" :id="formIdPrefix + '-mode-merge'" value="merge" v-model="mode">
                             <label class="form-check-label" :for="formIdPrefix + '-mode-merge'">Merge</label>

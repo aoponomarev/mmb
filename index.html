@@ -378,22 +378,50 @@
                                             @click="selectedCoinIds.length === 0 ? openCoinSetLoadModal() : openCoinSetSaveModal()">
                                             <i :class="[selectedCoinIds.length === 0 ? 'fas fa-folder-open' : 'fas fa-save', 'fa-fw', 'text-secondary']"></i>
                                         </button>
-                                        <button
-                                            type="button"
-                                            :class="[
-                                                'btn',
-                                                'btn-link',
-                                                'p-0',
-                                                'text-decoration-none',
-                                                isCoinsCacheStale ? 'text-primary' : 'text-secondary',
-                                                !isCoinsCacheStale ? (headerActionHover === 'refresh' ? 'opacity-100' : 'opacity-50') : null
-                                            ]"
-                                            :title="getRefreshTitle"
+                                        <cmp-dropdown
+                                            dropdown-id="dropdown-refresh-header"
+                                            button-variant="link"
+                                            button-icon="fas fa-sync-alt"
+                                            button-text=""
+                                            :tooltip="getRefreshTitle"
+                                            :classes-add="{
+                                                root: 'd-inline-flex',
+                                                button: [
+                                                    'p-0',
+                                                    'border-0',
+                                                    'text-decoration-none',
+                                                    isCoinsCacheStale ? 'text-primary opacity-100' : 'text-secondary',
+                                                    !isCoinsCacheStale ? (headerActionHover === 'refresh' ? 'opacity-100' : 'opacity-50') : null
+                                                ].filter(Boolean).join(' '),
+                                                menu: 'shadow-sm'
+                                            }"
+                                            :classes-remove="{ button: 'dropdown-toggle' }"
+                                            :close-on-outside-click="true"
                                             @mouseenter="headerActionHover = 'refresh'"
-                                            @mouseleave="headerActionHover = null"
-                                            @click="refreshCoinsCache()">
-                                            <i :class="['fas', 'fa-sync-alt', 'fa-fw', isCoinsCacheStale ? 'text-primary' : 'text-secondary']"></i>
-                                        </button>
+                                            @mouseleave="headerActionHover = null">
+                                            <template #items>
+                                                <li>
+                                                    <dropdown-menu-item
+                                                        title="Force Refresh"
+                                                        subtitle="медленно, но свежее"
+                                                        icon="fas fa-bolt"
+                                                        tooltip-text="Принудительно обновить через внешние API (медленнее, но самые свежие данные)"
+                                                        highlight-class="bg-hover-secondary-soft"
+                                                        @click="refreshCoinsCache()">
+                                                    </dropdown-menu-item>
+                                                </li>
+                                                <li>
+                                                    <dropdown-menu-item
+                                                        title="Обновить из снимков"
+                                                        subtitle="быстро из облака"
+                                                        icon="fas fa-database"
+                                                        tooltip-text="Быстро подставить монеты из облачного снимка PostgreSQL"
+                                                        highlight-class="bg-hover-secondary-soft"
+                                                        @click="refreshCoinsFromSnapshots()">
+                                                    </dropdown-menu-item>
+                                                </li>
+                                            </template>
+                                        </cmp-dropdown>
                                         <cmp-dropdown
                                             dropdown-id="dropdown-favorites-header"
                                             button-variant="link"

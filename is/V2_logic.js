@@ -612,6 +612,7 @@ async function showModelFailedModal(failedModel, newReleases) {
   }
 
   // Build modal HTML
+  // EXCEPTION: bare Bootstrap form-check-input type="radio" — id:sk-318305 § Legacy Exceptions; migration deferred.
   const radioItems = topModels.length > 0
     ? topModels.map((m, i) => `
         <div class="form-check mb-1">

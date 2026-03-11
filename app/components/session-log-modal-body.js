@@ -18,6 +18,7 @@ window.sessionLogModalBody = {
                             Скрыть некритичные логи в браузерной консоли
                         </label>
                     </div>
+                    <!-- EXCEPTION: bare Bootstrap btn-check — id:sk-318305 § Legacy Exceptions; migration deferred. -->
                     <div class="btn-group btn-group-sm" role="group">
                         <input type="radio" class="btn-check" id="filter-all" value="all" v-model="logFilter" @change="updateFilter">
                         <label class="btn btn-outline-secondary" for="filter-all">Все</label>

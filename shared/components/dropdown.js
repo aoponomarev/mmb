@@ -45,7 +45,7 @@ window.cmpDropdown = {
         },
         closeOnOutsideClick: {
             type: Boolean,
-            default: false
+            default: true
         },
         searchPlaceholder: {
             type: String,

@@ -10,6 +10,7 @@
 
     const TEMPLATE = `<div class="modal-body-fixed-size">
     <!-- Duplicate toggle in modal header -->
+    <!-- EXCEPTION: bare Bootstrap btn-check — id:sk-318305 § Legacy Exceptions; migration deferred. -->
     <Teleport to="#aiApiModal-header-extra" v-if="isMounted">
         <div class="btn-group btn-group-sm modal-header-tabs-group" role="group" aria-label="Выбор sourceа API ключа (заголовок)">
             <input

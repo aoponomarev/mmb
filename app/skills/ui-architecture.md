@@ -99,6 +99,14 @@ When UI shows an action-oriented counter (for example "coins to apply into table
 - **Layout**: Cancel footer left; Save/Action footer right; Close header right
 - **Constraints**: Buttons MUST be removed in `beforeUnmount()`; check `modalApi` exists before calling
 
+### Modal Shell Contract
+
+Use one modal shell shape across the app (`#for-modal-shell-uniformity`):
+- `<cmp-modal ...>` with explicit header slot: `modal-title` + `*-header-extra` container + `btn-close`.
+- Body contains one focused body component with explicit props contract.
+- Footer actions are managed by `modalApi` (register/update/remove), not by ad-hoc inline footer buttons.
+- If modal is generated from registry (`registeredModals`), its shell must stay structurally identical to hand-written modals.
+
 ### Modal Open Reliability Checklist
 
 Before adding a new modal trigger from `shared/components/*`, verify all four links:
@@ -110,6 +118,44 @@ Before adding a new modal trigger from `shared/components/*`, verify all four li
 ### Composition Boundaries
 
 Use **raw Bootstrap** (HTML + classes) for static layout. Create **Vue wrappers** only when dynamic logic is required (search/filter, async lists, complex state, 3+ reuse). Wrap items/logic, not necessarily the outer container — container should remain accessible to Bootstrap's native JS.
+
+### Slot Contract Discipline
+
+For wrapper components with defined slot contracts, follow those contracts strictly (`#for-component-slot-contracts`):
+- For `cmp-dropdown`, menu items in `#items` should use `dropdown-menu-item` to keep consistent hover, auto-close behavior, touch tooltip support, and class policy.
+- Avoid replacing slot items with ad-hoc raw Bootstrap nodes (`button.dropdown-item`) unless there is an explicit documented exception in AIS/skill.
+- `cmp-dropdown` closes on outside click by default (`closeOnOutsideClick=true`); set `closeOnOutsideClick=false` only when the menu must stay open (e.g. multi-step flows).
+
+### Header Selection Controls Contract
+
+Header selectors are standardized through `cmp-button-group` radio mode (`#for-header-radio-group-contract`):
+- MDN timeframe (`4h/8h/12h`), AGR method (`DCS/TSI/MPS`), and table display tabs must use one button-group contract.
+- Responsive collapse to dropdown is part of this contract (`collapse-breakpoint`, dynamic label/labelShort).
+- Color/active state logic should live in the button descriptors, not in scattered DOM conditionals.
+
+### System Messages Contract
+
+All system notifications are rendered via `cmp-system-messages` and scope filtering (`#for-message-scope-consistency`):
+- Global splash lane uses `scope="global"` and horizontal scroll mode.
+- Feature/test lanes use dedicated scopes (for example `test-messages`) instead of custom ad-hoc blocks.
+- Message actions and lifecycle (dismiss, TTL, action handlers) must flow through `AppMessages`/`messagesConfig` contract.
+
+### Legacy Reference Usage
+
+`test.html` is a historical pattern source, not a strict runtime SSOT. Use it as a reference for intent and interaction archetypes, then map implementations to current wrapper contracts (`cmp-*`) before reusing fragments.
+
+### Legacy Exceptions (Bare Bootstrap Radio/Checkbox)
+
+The following files use bare Bootstrap radio/checkbox (`btn-check`, `form-check-input type="radio"`) instead of `cmp-button-group` radio mode. Migration deferred — risk mitigation; documented here as explicit exceptions.
+
+| File | Control | Reason |
+|------|---------|--------|
+| #JS-kb2TGxgm (ai-api-settings-template.js) | Header tabs (github/yandex/postgres) via `btn-check` | Modal header icon tabs; Teleport + v-model; low traffic. |
+| #JS-VNDFUVK2 (session-log-modal-body.js) | Filter (all/log/warn/error/info) via `btn-check` | Debug modal; level-specific colors; low risk. |
+| #JS-Ri3c3bMt (portfolios-import-modal-body.js) | Mode (merge/replace) via `form-check-input type="radio"` | Form-style vertical layout; 2 options only. |
+| #JS-ry3942o9 (V2_logic.js) | `model-pick` radio in showModelFailedModal | Vanilla JS modal; dynamically built HTML; legacy is/ layer. |
+
+**Contract**: Each exception has an inline `// EXCEPTION:` comment referencing this section. Do not add new bare radio/checkbox without documenting here and adding the same comment.
 
 ### Column Visibility (CSS-Driven)
 

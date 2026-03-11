@@ -4574,6 +4574,89 @@
                 },
 
                 /**
+                 * Refresh working table from cloud PostgreSQL snapshots (yandex-cache provider).
+                 * Uses same effective-count semantics as DB apply action.
+                 */
+                async refreshCoinsFromSnapshots() {
+                    if (!window.dataProviderManager || !window.cacheManager) {
+                        console.error('app-ui-root: dataProviderManager или cacheManager not loadedы');
+                        return;
+                    }
+
+                    if (window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'info',
+                            text: 'Обновление таблицы из облачных снимков...',
+                            scope: 'global',
+                            duration: 2500
+                        });
+                    }
+
+                    try {
+                        const provider = window.dataProviderManager.providers?.['yandex-cache'];
+                        if (!provider || typeof provider.checkCacheStatus !== 'function' || typeof provider.getTopCoins !== 'function') {
+                            throw new Error('Yandex cache provider недоступен');
+                        }
+
+                        const status = await provider.checkCacheStatus();
+                        if (!status?.available) {
+                            throw new Error('Облачные снимки недоступны');
+                        }
+
+                        const rawCount = Number(status.count ?? 0);
+                        const targetCount = rawCount > 0 ? Math.min(rawCount, 1000) : 250;
+                        const fromDb = await provider.getTopCoins(targetCount, 'market_cap');
+                        const effectiveCoins = this.applyBanFilterToCoins(fromDb);
+
+                        if (!Array.isArray(effectiveCoins) || effectiveCoins.length === 0) {
+                            throw new Error('Нет монет для подстановки из снимков');
+                        }
+
+                        this.coins = effectiveCoins;
+                        this.selectedCoinIds = [];
+                        effectiveCoins.forEach(coin => {
+                            if (coin && coin.id) this.coinsDataCache.set(coin.id, coin);
+                        });
+
+                        if (window.autoCoinSets && typeof window.autoCoinSets.classifyAndUpdateAutoSets === 'function') {
+                            window.autoCoinSets.classifyAndUpdateAutoSets(effectiveCoins);
+                        }
+
+                        if (typeof this.recalculateAllMetrics === 'function') {
+                            this.recalculateAllMetrics();
+                        }
+
+                        if (typeof this.saveActiveCoinSetIds === 'function') {
+                            await this.saveActiveCoinSetIds(effectiveCoins.map(c => c.id));
+                        }
+
+                        await window.cacheManager.set('top-coins-by-market-cap', fromDb);
+                        await window.cacheManager.set('top-coins-by-market-cap-meta', { timestamp: Date.now() });
+                        await this.updateCoinsCacheMeta();
+                        await this.fetchDbStatus();
+
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'success',
+                                text: `Таблица обновлена из снимков (${effectiveCoins.length})`,
+                                scope: 'global',
+                                duration: 3500
+                            });
+                        }
+                    } catch (error) {
+                        console.error('app-ui-root: ошибка update из снимков:', error);
+                        if (window.messagesStore) {
+                            window.messagesStore.addMessage({
+                                type: 'danger',
+                                text: `Ошибка обновления из снимков: ${error.message || 'Unknown error'}`,
+                                scope: 'global',
+                                duration: 5000
+                            });
+                        }
+                    }
+                },
+
+                /**
                  * Update top-coins cache metadata (expiresAt/timestamp)
                  */
                 /**

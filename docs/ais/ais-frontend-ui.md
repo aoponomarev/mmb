@@ -1,7 +1,7 @@
 ---
 id: ais-c6c35b
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-10"
 related_skills:
   - sk-318305
   - sk-cb75ec
@@ -39,6 +39,33 @@ related_ais:
 - **Управление CSS-классами:** Запрещено хардкодить стили, которые могут потребовать переопределения извне. Используется универсальный механизм пропсов `classesAdd` и `classesRemove` для точечной модификации классов из родительских компонентов.
 - **Интеграция Bootstrap:** Прямое использование jQuery-подобных вызовов внутри Vue запрещено. Все Bootstrap-компоненты (Модалки, Тултипы, Дропдауны) инициализируются в хуке `mounted` (или `$nextTick`) и **обязательно** уничтожаются (`.dispose()`) в хуке `beforeUnmount` во избежание утечек памяти.
 - **События:** Нативные события Bootstrap (например, `show.bs.modal`) должны проксироваться в стандартные события Vue (`@show`).
+- **Slot-контракты компонентов:** если wrapper-компонент задаёт проектный контракт слота, содержимое должно собираться из project-компонентов, а не из ad-hoc raw Bootstrap узлов. Пример: внутри `cmp-dropdown` меню нужно строить через `dropdown-menu-item`, чтобы не терять единый hover-стиль, auto-close и touch-tooltip поведение.
+- **Outside-click для dropdown:** `cmp-dropdown` по умолчанию закрывается по клику вне меню; для редких сценариев (многошаговые потоки) можно отключить через `closeOnOutsideClick=false`.
+
+## UI Pattern Contracts (Generalized)
+
+### 1) Модальные окна
+- Единая оболочка: `cmp-modal` + унифицированный header (title, `*-header-extra`, `btn-close`) + body component.
+- Действия в footer управляются через `modalApi` (register/update/remove); ручные ad-hoc footer-кнопки считаются исключением.
+- Автогенерируемые модалки из `registeredModals` обязаны сохранять ту же структуру shell, что и вручную объявленные.
+
+### 2) Радиокнопки и селекторы в header
+- Все ключевые переключатели (MDN, AGR, display tabs) реализуются через `cmp-button-group` в radio-режиме.
+- Responsive-collapse логика (`collapse-breakpoint`, dropdown dynamic label) является частью контракта и не должна дублироваться вручную.
+- Визуальная семантика active/inactive задается descriptor-объектами button-group, а не разрозненными DOM-условиями.
+
+### 3) Системные сообщения
+- Локальная и глобальная плоскости сообщений рендерятся только через `cmp-system-messages` со `scope`.
+- Global splash использует горизонтальную ленту (`horizontalScroll=true`), feature/test-потоки — отдельные scope.
+- Lifecycle сообщения (dismiss/action/translation/update) остается в контуре `AppMessages` + `messagesConfig`.
+
+### 4) Наследие test.html
+- `test.html` — источник исторических паттернов и сценариев проверки, но не runtime-SSOT.
+- Переиспользование фрагментов из `test.html` требует адаптации к актуальным wrapper-контрактам `cmp-*` и текущим AIS/skills.
+
+### 5) Legacy Exceptions (bare Bootstrap radio/checkbox)
+- Исключения из контракта `cmp-button-group` radio: см. id:sk-318305 § Legacy Exceptions.
+- Каждое исключение: inline `// EXCEPTION:` + запись в таблице skill. Миграция отложена (#for-legacy-exceptions-contract).
 
 ## Компоненты и Контракты (Components & Contracts)
 - #JS-xj43kftu — загрузчик внешних и внутренних зависимостей.
