@@ -171,6 +171,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-app-backup-restore-pair` | advisory | backup-app.ps1 and restore-app.ps1 must be edited in sync. Any change to backup (archive structure, exclusions, paths) requires matching restore logic; otherwise restore cannot unpack or sync correctly. |
 | `#for-anchor-causality-type` | advisory | At anchor level, agent can specify `constraint` (из-за) or `goal` (для) to disambiguate reason type. Applies to both #for- and #not-. SSOT: id:sk-7f3e2b (process-anchor-causality-type). |
 | `#for-legacy-exceptions-contract` | advisory | Exceptions to UI pattern contracts (bare Bootstrap radio/checkbox) must be documented in id:sk-318305 § Legacy Exceptions with inline `// EXCEPTION:` comment. Migration deferred by explicit risk mitigation; no new bare usage without registry entry. |
+| `#for-adapter-mandatory` | advisory | Every new integration with an external system (API, DB) MUST have a dedicated Adapter/Provider. Direct `fetch` or `client.query` in services or components is forbidden. Ensures consistent structure, testability, and AI-agent navigability. SSOT: id:ais-d8e7f6. |
 
 ## Aliases / Deprecated
 

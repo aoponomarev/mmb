@@ -2,9 +2,9 @@
 id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: e845c465
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 300f7a9d
+last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
 
 ---
 
@@ -21,15 +21,17 @@ last_change: ""
 
 ## Core Rules
 
-1.  **Fault Tolerance by Default:**
+1.  **Adapter Mandatory for New Integrations:**
+    Every new external service (API, DB, webhook) MUST have a dedicated Adapter/Provider. Direct `fetch` or raw client calls in services or components are forbidden. `@causality #for-adapter-mandatory` | id:ais-d8e7f6.
+2.  **Fault Tolerance by Default:**
     All new features relying on external services must implement a seamless fallback mechanism.
     - If the primary provider is unavailable, automatically switch to the secondary.
     - If the secondary is unavailable, fallback to a tertiary or local mock.
-2.  **Centralized Integration Management:**
+3.  **Centralized Integration Management:**
     Do not hardcode fallback logic in individual components. Use a centralized `IntegrationManager` or configuration (#JS-tn3fo2px) to define the active provider and fallback chain.
-3.  **Geographic Optimization:**
+4.  **Geographic Optimization:**
     When configuring endpoints, prefer Yandex Cloud (Cloud Functions, API Gateway) for low-latency access within RU/CIS, and Cloudflare (Workers, Pages) for global edge-computing distribution.
-4.  **Endpoint Coherence for Stateful APIs:**
+5.  **Endpoint Coherence for Stateful APIs:**
     For stateful user data (settings/workspace/session-bound data), read/write/readback must target the same worker origin and namespace contract. Always verify with immediate readback after save in debugging scenarios.
 
 ### API Proxy (CORS Bypass & Caching)

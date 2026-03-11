@@ -2,9 +2,9 @@
 id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 0a8d82f9
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: caf2c945
+last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
 
 ---
 
@@ -39,6 +39,8 @@ last_change: ""
 ### Provider Add/Register/Config Workflow
 
 When adding a new provider: (1) Create `core/api/data-providers/{name}-provider.js` extending `BaseDataProvider`; (2) Register in #JS-2436XKxE (data-provider-manager.js); (3) Define limits and URLs in #JS-siMJxsfA (data-providers-config.js).
+
+**#for-adapter-mandatory** Every new external integration (API, DB) MUST get a dedicated adapter. No direct `fetch` in services or components. Applies to all domains (market data, AI, N8N, PostgreSQL). See id:ais-d8e7f6.
 
 ### Additional Provider API
 

@@ -86,6 +86,7 @@
     "ais-775420": "docs/ais/ais-infrastructure-integrations.md",
     "ais-8b2f1c": "docs/ais/ais-infrastructure-snapshots.md",
     "ais-f6b9e2": "docs/ais/ais-integration-strategy-yandex.md",
+    "ais-kline-ohlc": "docs/ais/ais-kline-ohlc.md",
     "ais-a1b2c3": "docs/ais/ais-layers-topology.md",
     "ais-e3f4a5": "docs/ais/ais-lifecycle.md",
     "ais-8d3c2a": "docs/ais/ais-mcp-data-flow.md",
@@ -93,6 +94,7 @@
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
     "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
     "ais-7f8e9d": "docs/ais/ais-ssot-contract-plane.md",
+    "ais-d8e7f6": "docs/ais/ais-unified-adapter-system.md",
     "ais-91b7f4": "docs/ais/ais-workspace-storage.md",
     "ais-e41384": "docs/ais/ais-yandex-cloud.md",
     "ais-1c4d92": "docs/ais/TEMPLATE.md",
@@ -115,6 +117,7 @@
     "docidx-3022eb": "docs/index-ais.md",
     "docidx-0b048e": "docs/index-skills.md",
     "doc-f8d4af": "docs/migration-roadmap.md",
+    "plan-a9b2c4": "docs/plans/plan-unified-adapter-system.md",
     "doc-f1a4d3": "docs/project-evolution.md",
     "docs-6a2d1f": "docs/README.md",
     "runbook-ce96aa": "docs/runbooks/data-pipeline-troubleshooting.md",
@@ -145,5 +148,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-10T14:34:28.500Z"
+  "generated_at": "2026-03-11T08:48:39.632Z"
 }

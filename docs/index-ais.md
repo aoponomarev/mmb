@@ -1,7 +1,7 @@
 ---
 id: docidx-3022eb
 status: active
-last_updated: "2026-03-10"
+last_updated: "2026-03-11"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -11,7 +11,7 @@ last_updated: "2026-03-10"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 30
+> Auto-generated. Total: 32
 
 ---
 
@@ -36,6 +36,7 @@ last_updated: "2026-03-10"
 - [id:ais-775420](ais/ais-infrastructure-integrations.md) — AIS: Инфраструктура и Внешние Интеграции (Cloudflare, Yandex Cloud, AI, N8N)
 - [id:ais-8b2f1c](ais/ais-infrastructure-snapshots.md) — AIS: Инфраструктурные снимки (Rollback-Safe Deployments)
 - [id:ais-f6b9e2](ais/ais-integration-strategy-yandex.md) — AIS: Стратегия интеграций для Yandex Cloud и API Gateway
+- [id:ais-kline-ohlc](ais/ais-kline-ohlc.md) — AIS: Свечи и OHLC данные (Klines & OHLC Data)
 - [id:ais-a1b2c3](ais/ais-layers-topology.md) — AIS: Топология слоёв, сегментов, границ и пространств имён (Layers, Segments, Boundaries, Namespaces)
 - [id:ais-e3f4a5](ais/ais-lifecycle.md) — AIS: Жизненные циклы сущностей (Entity Lifecycles)
 - [id:ais-8d3c2a](ais/ais-mcp-data-flow.md) — AIS: Поток данных MCP (MCP Data Flow)
@@ -43,5 +44,6 @@ last_updated: "2026-03-10"
 - [id:ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [id:ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
 - [id:ais-7f8e9d](ais/ais-ssot-contract-plane.md) — AIS: Плоскость контрактов SSOT (SSOT Contract Plane)
+- [id:ais-d8e7f6](ais/ais-unified-adapter-system.md) — AIS: Единая система адаптеров (Unified Adapter System)
 - [id:ais-91b7f4](ais/ais-workspace-storage.md) — AIS: Система хранения workspace-настроек (auth/non-auth)
 - [id:ais-e41384](ais/ais-yandex-cloud.md) — AIS: Yandex Cloud — Ingest и Read контуры данных монет
