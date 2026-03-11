@@ -12,6 +12,8 @@ data/secret-archives/
 data/*.json
 data/*.jsonl
 data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
 
 # Infrastructure runtime artifacts
 is/secrets/archives/

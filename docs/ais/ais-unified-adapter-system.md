@@ -1,6 +1,6 @@
 ---
 id: ais-d8e7f6
-status: draft
+status: incomplete
 last_updated: "2026-03-11"
 related_skills:
   - sk-224210
@@ -34,7 +34,7 @@ related_ais:
   - ais-e41384
 ```
 
-**Статус:** `draft` — план id:plan-a9b2c4 в обсуждении. Спецификация будет доработана после утверждения этапов и ответов на уточняющие вопросы.
+**Статус:** `incomplete` — план id:plan-a9b2c4 утверждён и выполняется; спецификация обновляется по шагам реализации.
 
 ## Концепция (High-Level Concept)
 
@@ -110,11 +110,11 @@ flowchart TD
 | Домен | Фасад | Провайдеры | Статус |
 |-------|-------|------------|--------|
 | Coin data | DataProviderManager | CoinGecko, YandexCache | Реализовано |
-| Market metrics | — | AlternativeMe, Vix, Binance, CoinGecko (BTC dom) | **Требует адаптеров** |
-| Yandex API Gateway | — | cycles, trigger | **Требует YandexApiGatewayProvider** |
+| Market metrics | MarketMetricsProviderManager | AlternativeMe, YahooVix, StooqVix, AlphaVantageVix, Binance, CoinGecko (BTC dom) | **Этап 1 реализован** |
+| Yandex API Gateway | YandexApiGatewayProvider | cycles, trigger | **Этап 2 реализован** |
 | AI | AIProviderManager | Yandex, OpenRouter, Groq, … | Реализовано |
 | N8N | — | webhooks | **Требует N8nProvider** |
-| PostgreSQL | — | Yandex Functions | **Требует PostgresAdapter** |
+| PostgreSQL | PostgresAdapter | Yandex Functions (`api-gateway`, `market-fetcher`) | **Этап 4 реализован** |
 
 ## Локальные Политики (Module Policies)
 
@@ -124,17 +124,26 @@ flowchart TD
 4. **Circuit breaker per provider** — сбой одного провайдера не влияет на health-статус других.
 5. **Registry policies** — rate limit, timeout, allowlist хранятся в конфиге реестра, не в коде провайдера.
 6. **Adapter mandatory for new integrations** — каждая новая интеграция с внешней системой (API, БД) MUST иметь выделенный адаптер. Прямой `fetch`/`client.query` в сервисах или компонентах запрещён. `@causality #for-adapter-mandatory`
+7. **Fallback stays in facade** — multi-source fallback (пример: VIX через Yahoo/Stooq/Alpha Vantage) оркестрируется `MarketMetricsProviderManager`, а не скрывается внутри одного провайдера.
 
 ## Компоненты и Контракты (Components & Contracts)
 
 | Компонент | Путь | Ответственность |
 |-----------|------|-----------------|
 | DataProviderManager | core/api/data-provider-manager.js | Фасад coin data |
-| BaseDataProvider | core/api/data-providers/base-provider.js | Базовый контракт |
-| CoinGeckoProvider | core/api/data-providers/coingecko-provider.js | CoinGecko API |
-| YandexCacheProvider | core/api/data-providers/yandex-cache-provider.js | Yandex market cache |
-| market-metrics.js | core/api/market-metrics.js | **Рефакторинг:** делегирование провайдерам |
-| data-providers-config.js | core/api/data-providers-config.js | Лимиты, URL |
+| BaseDataProvider | core/api/data-providers/base-provider.js | Базовый контракт coin data |
+| BaseMarketMetricsProvider | core/api/market-metrics-providers/base-provider.js | Базовый контракт market metrics |
+| MarketMetricsProviderManager | core/api/market-metrics-provider-manager.js | Фасад market metrics, fallback, cache, request registry |
+| AlternativeMeProvider | core/api/market-metrics-providers/alternative-me-provider.js | FGI adapter |
+| YahooVixProvider | core/api/market-metrics-providers/yahoo-vix-provider.js | Primary VIX adapter |
+| StooqVixProvider | core/api/market-metrics-providers/stooq-vix-provider.js | Secondary VIX adapter |
+| AlphaVantageVixProvider | core/api/market-metrics-providers/alpha-vantage-vix-provider.js | Tertiary VIX adapter |
+| BinanceMetricsProvider | core/api/market-metrics-providers/binance-metrics-provider.js | OI / FR / LSR adapter |
+| CoinGeckoBtcDomProvider | core/api/market-metrics-providers/coingecko-btc-dom-provider.js | BTC dominance adapter |
+| YandexApiGatewayProvider | core/api/yandex-api-gateway-provider.js | cycles history + manual trigger adapter |
+| PostgresAdapter | is/yandex/functions/shared/postgres-adapter.js | Shared pg.Client adapter for Yandex Functions |
+| market-metrics.js | core/api/market-metrics.js | Совместимый browser facade над `MarketMetricsProviderManager` |
+| market-metrics-providers-config.js | core/config/market-metrics-providers-config.js | SSOT для metric routing, timeout и endpoint order |
 | causality-registry | is/skills/causality-registry.md | #for-data-provider-interface, #for-dual-channel-fallback |
 
 ## Казуальности (Causality Links)
@@ -150,6 +159,7 @@ flowchart TD
 | `#for-partial-failure-tolerance` | Частичный успех при сбоях |
 | `#for-composition-root` | Сборка в app-ui-root |
 | `#for-adapter-mandatory` | Каждая новая внешняя интеграция — свой адаптер |
+| `#for-local-runtime-disposable` | `data/mcp.sqlite*` не блокирует unrelated implementation work |
 
 ## Контракты и гейты
 
@@ -162,5 +172,5 @@ flowchart TD
 
 ## Завершение / completeness
 
-- После утверждения плана: обновить status на `incomplete`, добавить детали по MarketMetricsProviderManager.
-- После реализации: status `complete`, дистилляция в skills.
+- Этапы 1, 2 и 4 реализованы; далее остаются N8N/GitHub-адаптеры и доведение cross-domain registry/health-policy до полного unified state.
+- После полной реализации: status `complete`, дистилляция в skills.

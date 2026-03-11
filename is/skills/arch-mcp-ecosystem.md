@@ -2,9 +2,9 @@
 id: sk-3225b2
 title: "MCP Ecosystem (LLMOps)"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 2caa86cd
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: d789bcf8
+last_change: "#for-local-runtime-disposable — ignore local MCP runtime sqlite churn"
 
 ---
 
@@ -18,6 +18,7 @@ last_change: ""
 - **#for-mcp-telemetry** A static codebase cannot measure the "usefulness" of its own documentation. By proxying all tool executions and file reads through a local MCP server, we can write telemetry to SQLite and definitively know which skills are relied upon and which are dead weight.
 - **#for-ai-tooling-abstraction** Forcing agents to remember and perfectly type CLI commands (like `node is/scripts/infrastructure/health-check.js` or `wrangler d1 execute`) is error-prone. Exposing these as strict JSON-schema MCP Tools guarantees safer, more predictable execution.
 - **#for-context-injection** Dynamically injecting telemetry data (e.g., "This skill has 42 anchors") into the top of Markdown files *as they are being read by the agent* dynamically influences agent behavior without mutating the actual markdown file on disk.
+- **#for-local-runtime-disposable** MCP telemetry DB and WAL/SHM sidecars are volatile runtime state. They are useful locally but harmful in git because they create constant noise unrelated to architectural changes.
 
 ## Core Rules
 
@@ -25,12 +26,20 @@ last_change: ""
 
 1.  **SQLite Isolation:**
     The MCP database (`data/mcp.sqlite`) must remain completely outside the `is/` codebase and MUST NOT be synced to git. It is local, disposable state.
+    Its sidecars (`data/mcp.sqlite-wal`, `data/mcp.sqlite-shm`) are equally disposable and must stay ignored and unstaged.
 
 2.  **Tool Priority:**
     If an MCP Tool exists for an operation (e.g., `run_preflight`, `create_skill`), AI agents MUST use the tool rather than falling back to raw shell execution. Tools ensure telemetry is logged.
 
 3.  **Invariant Graph Sync:**
     The `validate-causality-invariant.js` script acts as the bridge between static code and the MCP server. Upon successful validation, it dumps the entire anchor dependency graph into the SQLite `dependency_graph` table. This powers the `causality_graph://` resource.
+
+### Runtime Churn Handling
+
+If `git status` shows changes only in `data/mcp.sqlite*` during an unrelated task:
+- treat them as expected MCP runtime churn, not as a blocking codebase mutation;
+- do not stage or commit them;
+- if they ever become tracked, remove them from the git index while keeping the local files intact.
 
 ### Agent Synergy Chain
 

@@ -3,7 +3,7 @@ id: sk-7b4ee5
 title: "External Integrations"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: 300f7a9d
+reasoning_checksum: 039ac17a
 last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
 
 ---

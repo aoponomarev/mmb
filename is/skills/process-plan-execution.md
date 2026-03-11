@@ -4,9 +4,9 @@ title: "Plan Execution Protocol"
 tags: "[#process, #plan, #execution, #verification]"
 status: active
 reasoning_confidence: 0.95
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: cdc7091c
-last_change: "#for-plan-execution-protocol — новый скилл"
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 5506c44d
+last_change: "#for-plan-iterative-improvement — recursive plan refinement during execution"
 
 ---
 
@@ -17,6 +17,7 @@ last_change: "#for-plan-execution-protocol — новый скилл"
 ## Reasoning
 
 - **#for-plan-execution-protocol** Without a strict step-by-step protocol, agents skip verification, leave stale docs, and accumulate tech debt. Each plan execution must follow the same checklist: verify → update AIS → fix bugs → add artifacts as discovered.
+- **#for-plan-iterative-improvement** Plans are living documents. If execution reveals a better sequence, a missing guard, or a hidden risk, the plan must be improved immediately as long as prior completed work remains valid.
 
 ## Core Rules
 
@@ -26,6 +27,7 @@ last_change: "#for-plan-execution-protocol — новый скилл"
 4. **Add artifacts as discovered** — If execution reveals need for skills, causalities, contracts, or gates: create them immediately.
 5. **Fix bugs along the way** — Any bug discovered during execution must be fixed before moving on. The path behind must be clean of tech debt.
 6. **Plan backlog** — Per id:sk-0e193a (#for-plan-backlog): record deferred fixes in `docs/backlog/fix-<plan-slug>.md`.
+7. **Refine the plan recursively** — If execution reveals a missing step, a better ordering, or a required safeguard, update the current file in `docs/plans/` before proceeding. Improvements must be backward-compatible and must not invalidate already completed results.
 
 ## Contracts
 

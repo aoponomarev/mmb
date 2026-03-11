@@ -2,9 +2,9 @@
 id: sk-cecbcc
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 2966c9bc
-last_change: ""
+reasoning_audited_at: 2026-03-11
+reasoning_checksum: 17e5d237
+last_change: "#for-multifactor-heuristics — weigh implementation paths under uncertainty"
 related_skills:
   - sk-0e193a
   - sk-3b1519
@@ -26,6 +26,7 @@ related_ais:
 - **#for-active-causality** To prevent future agents from repeating mistakes, you must record rejected paths and nuances using `@causality` or `docs/audits/causality-exceptions.jsonl`.
 - **#for-no-implicit-commit** You must never commit without explicit user instruction. Nagging the user to commit adds noise.
 - **#for-memory-to-skills** Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. The Memory → Skills protocol ensures knowledge lives in files, not only in ephemeral chat history.
+- **#for-multifactor-heuristics** When the codebase leaves multiple plausible implementation paths, agents must weigh benefit, harm, reversibility, contract alignment, user impact, and existing causalities instead of optimizing for a single convenience factor.
 
 ---
 
@@ -33,6 +34,7 @@ related_ais:
 - **DO NOT try to please:** Never agree with a user's (developer's) proposal just out of politeness.
 - **Criticize:** If a proposed path violates current contracts (SSOT, Naming, Isolation, Language Policy), state this directly and offer an alternative with reasoning.
 - **Weigh old plans:** What was captured in legacy AI migration plans is not dogma. Legacy paths skip in #JS-cMCNbcJ1 (path-contracts.js); adapt guidance to current architecture.
+- **Weigh ambiguity heuristically:** Under uncertainty, prefer the option with the best combined score across benefit, risk, reversibility, protocol alignment, and causality fit. Do not guess from a single signal.
 - **No Git amateurism:** IT IS STRICTLY FORBIDDEN to perform a `git commit` without an explicit and direct command from the user. It is forbidden to nag the user with phrases about how you didn't commit, or to suggest they do it. Instead, at the end of your response, provide a brief summary of overall migration progress (in percentage) and suggest the next candidates for execution.
 
 ## Contracts
@@ -66,6 +68,7 @@ When the Memory MCP (`is/memory/memory.jsonl`) contains entries that describe ar
 5. **Id references:** When adding `related_skills` or `related_ais` to AIS, use short hash ids (`sk-xxxxxx`, `ais-xxxxxx`). Resolve via `is/contracts/docs/id-registry.json` or `docs/index-skills.md` / `docs/index-ais.md`.
 - **Legacy Causality Workflow:** It is forbidden to write comments in code with "guesses" about old business logic. If the reason is unclear, document the question in `docs/backlog/` (см. id:sk-0e193a (is/skills/process-docs-lifecycle.md)), and map this question path in id:ais-8982e7 (docs/ais/ais-docs-governance.md)#LIR-009.A1.
 - **Active Causality Recording:** If, during the process of writing new code, an agent explores multiple paths and chooses one for specific reasons (a found bug, API limitation, performance nuance), the agent **MUST** record this "causality" (why it is done this way and not another). Use hashes from id:sk-3b1519: `// @causality #for-X` or `// @skill-anchor skill-id #for-X`. If no hash fits — check the registry carefully to avoid semantic duplicates (reuse and expand existing ones if possible). If truly new, add it to the registry first, then use it. **Reporting Requirement:** If you added or modified any causality hashes during your task, you MUST explicitly mention them in your final response to the user. Goal: so future agents don't "step on the same rake" trying to rewrite the code back.
+- **New/Changed Code Requires Anchors:** Any non-trivial new code or risky edited branch must receive `@skill-anchor` or `@causality` markers in the relevant place, not only in the file header. Rewriting code without preserving its rationale is a protocol violation.
 - **Causality Invalidation:** If you remove or change a hash in one file, the Causality Invariant Gate will check if that hash is still used elsewhere. If the gate fails, read its stderr. It will give you an exact JSON template. You MUST either update the remaining files, or copy-paste that JSON template into `docs/audits/causality-exceptions.jsonl` with an explanation. DO NOT try to write YAML exceptions or guess the format.
 
 ### Skills Curation (Before Creating Any Skill)

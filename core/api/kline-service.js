@@ -1,5 +1,5 @@
 /**
- * #JS-KlineService
+ * #JS-DR2eBm9b
  * @description Service for managing kline (candlestick) data; caching, provider orchestration, and rate limiting.
  * @skill id:sk-224210
  *

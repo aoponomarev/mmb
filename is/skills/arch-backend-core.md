@@ -72,7 +72,7 @@ last_change: ""
 - `Implemented`: Full backend core v1.
   - #JS-2436XKxE (data-provider-manager.js) — single entry point for data providers with rate-limit journal.
   - #JS-DvQtSDsD (core/api/providers/coingecko-provider.js) — CoinGecko market data with query validation.
-  - #JS-RRC5aRN1 (binance-metrics-provider.js) — Binance OI/Funding Rate/LSR.
+  - #JS-RRC5aRN1 (core/api/providers/binance-metrics-provider.js) — Binance OI/Funding Rate/LSR.
   - #JS-iH26jSeT (request-registry.js) — rate-limit request tracking.
   - #JS-Lw3YqzH7 (market-data-service.js) — orchestration of raw market data fetching.
   - #JS-Xa3QAdTk (market-metrics-service.js) — FGI/VIX/BTC dominance with cache + live strategy.

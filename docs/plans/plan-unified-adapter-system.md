@@ -1,6 +1,6 @@
 ---
 id: plan-a9b2c4
-status: draft
+status: active
 last_updated: "2026-03-11"
 related_skills:
   - sk-224210
@@ -17,7 +17,7 @@ related_ais:
 
 # План: Единая система адаптеров (Unified Adapter System)
 
-> Агрегация практик из веб-исследования и аудита приложения. Связь с существующими скиллами и казуальностями. **Статус: draft** — требует обсуждения перед реализацией.
+> Агрегация практик из веб-исследования и аудита приложения. Связь с существующими скиллами и казуальностями. **Статус: active** — решения приняты, идёт пошаговое выполнение.
 
 ## Цель
 
@@ -71,20 +71,35 @@ related_ais:
 
 ## Этапы плана (чекбоксы)
 
+## Исполнительные уточнения, открытые во время ВЗП
+
+- [x] **Q1 принято:** отдельный фасад `MarketMetricsProviderManager`, не расширение `DataProviderManager`
+- [x] **Q2 принято:** connection injection через опциональный параметр конструктора (`fetchFn`)
+- [x] **Q3 принято:** `PostgresAdapter` как отдельный адаптер, не набор разрозненных query-функций
+- [x] **Q4 принято:** приоритет этапов `1 -> 2 -> 4 -> 3 -> 5`
+- [x] **Runtime telemetry policy:** `data/mcp.sqlite*` считается disposable runtime-state и не входит в рабочий анализ изменений по этому плану, если задача не про MCP
+- [x] **План улучшен рекурсивно:** multi-source VIX должен оркестрироваться фасадом, а не скрываться внутри одного провайдера. Поэтому вместо одного `VixProvider` вводится цепочка `YahooVixProvider` -> `StooqVixProvider` -> `AlphaVantageVixProvider`
+- [x] **План улучшен рекурсивно:** для домена market-metrics требуется собственный базовый контракт `BaseMarketMetricsProvider` и отдельный config/registry
+
 ### Этап 1: Market Metrics — адаптеры вместо inline fetch
 
-- [ ] Создать `AlternativeMeProvider` (FGI)
-- [ ] Создать `VixProvider` (Yahoo, Stooq, Alpha Vantage — fallback chain)
-- [ ] Создать/переиспользовать `BinanceMetricsProvider` для frontend (OI, FR, LSR)
-- [ ] Создать `CoinGeckoBtcDomProvider` или интегрировать в существующий CoinGecko
-- [ ] Рефакторинг `market-metrics.js` — делегирование провайдерам, убрать inline `fetch` и парсинг
-- [ ] Добавить `@skill-anchor` и `@causality` в новые провайдеры
+- [x] Создать `BaseMarketMetricsProvider`
+- [x] Создать `market-metrics-providers-config.js` или эквивалентный registry-config
+- [x] Создать `AlternativeMeProvider` (FGI)
+- [x] Создать `YahooVixProvider`
+- [x] Создать `StooqVixProvider`
+- [x] Создать `AlphaVantageVixProvider`
+- [x] Создать/переиспользовать `BinanceMetricsProvider` для frontend (OI, FR, LSR)
+- [x] Создать `CoinGeckoBtcDomProvider` или интегрировать в существующий CoinGecko
+- [x] Создать `MarketMetricsProviderManager`
+- [x] Рефакторинг `market-metrics.js` — делегирование провайдерам, убрать inline `fetch` и парсинг
+- [x] Добавить `@skill-anchor` и `@causality` в новые провайдеры
 
 ### Этап 2: Yandex API Gateway — единый адаптер
 
-- [ ] Создать `YandexApiGatewayProvider` (cycles, trigger)
-- [ ] Рефакторинг `coingecko-cron-history-modal-body.js` — использовать провайдер вместо raw fetch
-- [ ] Вынести `normalizeRows` в провайдер или shared-модуль
+- [x] Создать `YandexApiGatewayProvider` (cycles, trigger)
+- [x] Рефакторинг `coingecko-cron-history-modal-body.js` — использовать провайдер вместо raw fetch
+- [x] Вынести `normalizeRows` в провайдер или shared-модуль
 
 ### Этап 3: N8N, Cloudflare, GitHub — низкоприоритетные
 
@@ -94,16 +109,16 @@ related_ais:
 
 ### Этап 4: PostgreSQL — адаптер в Yandex Functions
 
-- [ ] Создать `PostgresAdapter` (или `PgConnection`) — обёртка над `pg.Client`
-- [ ] Рефакторинг `api-gateway/index.js`, `market-fetcher/index.js` — использовать адаптер
-- [ ] Connection-инъекция для тестов (если применимо в serverless)
+- [x] Создать `PostgresAdapter` (или `PgConnection`) — обёртка над `pg.Client`
+- [x] Рефакторинг `api-gateway/index.js`, `market-fetcher/index.js` — использовать адаптер
+- [x] Connection-инъекция для тестов (если применимо в serverless)
 
 ### Этап 5: Registry и единая система
 
-- [ ] Расширить `DataProviderManager` или создать `AdapterRegistry` — домен market-metrics
+- [x] Расширить `DataProviderManager` или создать `AdapterRegistry` — домен market-metrics
 - [ ] Конфиг политик (rate limit, timeout, allowlist) в `data-providers-config.js` или отдельном реестре
 - [ ] Health tracking per provider (уже частично в id:sk-224210)
-- [ ] Документировать в AIS id:ais-d8e7f6
+- [x] Документировать в AIS id:ais-d8e7f6 (docs/ais/ais-unified-adapter-system.md)
 
 ---
 
@@ -161,7 +176,7 @@ Serverless functions — короткие инвайки. `pg.Client` созда
 
 | Документ | Связь |
 |----------|-------|
-| id:ais-d8e7f6 (ais-unified-adapter-system.md) | Черновик AIS — макро-спецификация |
+| id:ais-d8e7f6 | Черновик AIS — макро-спецификация |
 | id:sk-224210 | Data providers architecture — расширяется |
 | id:ais-71a8b9 | Executable units — провайдер/адаптер |
 | id:ais-3732ce | Data pipeline — dual-channel, fallback |

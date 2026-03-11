@@ -4,14 +4,11 @@
  * @skill-anchor id:sk-add9a6 #for-classes-add-remove
  * @skill-anchor id:sk-eeb23d #for-bootstrap-event-proxying
  * @skill-anchor id:sk-cb75ec #for-utility-availability-check
+ * @skill-anchor id:sk-224210 #for-adapter-mandatory
  */
 
 (function() {
     'use strict';
-
-    const API_GATEWAY_BASE = 'https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net';
-    const CYCLES_ENDPOINT = `${API_GATEWAY_BASE}/api/coins/cycles`;
-    const TRIGGER_ENDPOINT = `${API_GATEWAY_BASE}/api/coins/market-cache/trigger`;
 
     window.coingeckoCronHistoryModalBody = {
         template: `
@@ -91,44 +88,12 @@
                 return '...';
             },
 
-            formatDateTime(value) {
-                if (!value) return { date: '—', time: '—' };
-                const dt = new Date(value);
-                if (Number.isNaN(dt.getTime())) return { date: '—', time: '—' };
-
-                const date = dt.toLocaleDateString('ru-RU');
-                const time = dt.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                return { date, time };
-            },
-
-            normalizeRows(cycles) {
-                return (Array.isArray(cycles) ? cycles : []).map((cycle, index) => {
-                    const count = Number.parseInt(cycle.coin_count, 10) || 0;
-                    const finished = this.formatDateTime(cycle.finished_at || cycle.started_at);
-                    const sortType = typeof cycle.sort_type === 'string' ? cycle.sort_type : '';
-                    let typeLabel = '';
-                    if (sortType === 'market_cap') {
-                        typeLabel = 'Cap';
-                    } else if (sortType === 'volume') {
-                        typeLabel = 'Vol';
-                    } else if (cycle.finished_at || cycle.started_at) {
-                        // Fallback: derive label from minute, mirroring server cron routing.
-                        const dt = new Date(cycle.finished_at || cycle.started_at);
-                        if (!Number.isNaN(dt.getTime())) {
-                            const minute = dt.getMinutes();
-                            typeLabel = minute < 15 ? 'Cap' : 'Vol';
-                        }
-                    }
-
-                    return {
-                        cycleId: cycle.cycle_id || `cycle-${index}`,
-                        date: finished.date,
-                        time: finished.time,
-                        coinCount: count,
-                        typeLabel,
-                        status: count > 0 ? 'Успех' : 'Отказ'
-                    };
-                });
+            getGatewayProvider() {
+                const provider = window.yandexApiGatewayProvider;
+                if (!provider || typeof provider.getCycles !== 'function' || typeof provider.triggerMarketCache !== 'function') {
+                    throw new Error('Yandex API Gateway provider недоступен');
+                }
+                return provider;
             },
 
             async loadHistory() {
@@ -136,12 +101,8 @@
                 this.error = '';
                 this.updateButtons();
                 try {
-                    const res = await fetch(CYCLES_ENDPOINT, { headers: { 'Accept': 'application/json' } });
-                    if (!res.ok) {
-                        throw new Error(`HTTP ${res.status}`);
-                    }
-                    const data = await res.json();
-                    this.rows = this.normalizeRows(data?.cycles);
+                    const provider = this.getGatewayProvider();
+                    this.rows = await provider.getCycles();
                 } catch (err) {
                     this.rows = [];
                     this.error = err?.message || 'Unknown error';
@@ -322,18 +283,8 @@
                 this.updateButtons();
 
                 try {
-                    const res = await fetch(TRIGGER_ENDPOINT, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({ order })
-                    });
-
-                    if (!res.ok) {
-                        throw new Error(`HTTP ${res.status}`);
-                    }
+                    const provider = this.getGatewayProvider();
+                    await provider.triggerMarketCache(order);
                 } catch (err) {
                     this.error = err?.message || 'Unknown error';
                 } finally {

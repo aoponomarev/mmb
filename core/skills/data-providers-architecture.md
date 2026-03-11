@@ -3,8 +3,8 @@ id: sk-224210
 title: "Data Providers Architecture"
 reasoning_confidence: 1.0
 reasoning_audited_at: 2026-03-11
-reasoning_checksum: caf2c945
-last_change: "#for-adapter-mandatory — adapter mandatory for new integrations"
+reasoning_checksum: fa9be7ba
+last_change: "#for-pre-handoff-transport-smoke — direct/proxy transport smoke formalized"
 
 ---
 
@@ -56,6 +56,8 @@ For any service wrapping providers (example: kline service), initialization must
 - For public read-only market endpoints, prefer direct transport first and use proxy as fallback when proxy policy returns 403 for that domain.
 
 ### Pre-Handoff Transport Smoke (Mandatory)
+
+**#for-pre-handoff-transport-smoke** Before handing off provider-based features, verify both direct and proxy paths with real requests instead of assuming proxy policy/allowlists are correct.
 
 Before handing off provider-based features, run a quick transport smoke:
 - Check direct endpoint response (status + minimal payload shape).

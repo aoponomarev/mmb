@@ -219,10 +219,83 @@
                 category: 'core'
             },
             {
+                id: 'market-metrics-providers-config',
+                src: 'core/config/market-metrics-providers-config.js',
+                type: 'local',
+                deps: [],
+                category: 'core'
+            },
+            {
+                id: 'base-market-metrics-provider',
+                src: 'core/api/market-metrics-providers/base-provider.js',
+                type: 'local',
+                deps: ['market-metrics-providers-config'],
+                category: 'core'
+            },
+            {
+                id: 'alternative-me-provider',
+                src: 'core/api/market-metrics-providers/alternative-me-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider'],
+                category: 'core'
+            },
+            {
+                id: 'yahoo-vix-provider',
+                src: 'core/api/market-metrics-providers/yahoo-vix-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider', 'cloudflare-config'],
+                category: 'core'
+            },
+            {
+                id: 'stooq-vix-provider',
+                src: 'core/api/market-metrics-providers/stooq-vix-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider', 'cloudflare-config'],
+                category: 'core'
+            },
+            {
+                id: 'alpha-vantage-vix-provider',
+                src: 'core/api/market-metrics-providers/alpha-vantage-vix-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider'],
+                category: 'core'
+            },
+            {
+                id: 'binance-metrics-provider',
+                src: 'core/api/market-metrics-providers/binance-metrics-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider'],
+                category: 'core'
+            },
+            {
+                id: 'coingecko-btc-dom-provider',
+                src: 'core/api/market-metrics-providers/coingecko-btc-dom-provider.js',
+                type: 'local',
+                deps: ['base-market-metrics-provider', 'cloudflare-config'],
+                category: 'core'
+            },
+            {
+                id: 'market-metrics-provider-manager',
+                src: 'core/api/market-metrics-provider-manager.js',
+                type: 'local',
+                deps: [
+                    'market-metrics-providers-config',
+                    'alternative-me-provider',
+                    'yahoo-vix-provider',
+                    'stooq-vix-provider',
+                    'alpha-vantage-vix-provider',
+                    'binance-metrics-provider',
+                    'coingecko-btc-dom-provider',
+                    'cache-manager',
+                    'request-registry'
+                ],
+                category: 'core'
+            },
+            {
                 id: 'market-metrics',
                 src: 'core/api/market-metrics.js',
                 type: 'local',
-                deps: [],
+                deps: ['market-metrics-provider-manager'],
                 category: 'core'
             },
             {
@@ -316,6 +389,13 @@
                 src: 'core/api/data-providers/yandex-cache-provider.js',
                 type: 'local',
                 deps: ['base-data-provider'],
+                category: 'core'
+            },
+            {
+                id: 'yandex-api-gateway-provider',
+                src: 'core/api/yandex-api-gateway-provider.js',
+                type: 'local',
+                deps: ['data-providers-config'],
                 category: 'core'
             },
             {
@@ -1000,7 +1080,7 @@
                 id: 'coingecko-cron-history-modal-body',
                 src: 'app/components/coingecko-cron-history-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal'],
+                deps: ['vue', 'modal', 'yandex-api-gateway-provider'],
                 category: 'components'
             }
         ],

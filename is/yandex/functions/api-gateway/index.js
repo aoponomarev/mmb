@@ -12,6 +12,7 @@
  */
 const { Client } = require('pg');
 const https = require('https');
+const { PostgresAdapter } = require('../shared/postgres-adapter');
 
 const dbConfig = {
     host: process.env.DB_HOST,
@@ -146,7 +147,7 @@ module.exports.handler = async function (event, context) {
         return { statusCode: 204, headers: CORS_HEADERS, body: '' };
     }
 
-    const client = new Client(dbConfig);
+    const client = new PostgresAdapter(dbConfig, { ClientClass: Client });
 
         try {
             await client.connect();
@@ -238,8 +239,7 @@ module.exports.handler = async function (event, context) {
                 return { statusCode: 400, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Missing portfolio_id' }) };
             }
 
-            await client.query('BEGIN');
-            try {
+            return client.transaction(async (tx) => {
                 // 1. Market Snapshot
                 let marketSnapshotId = null;
                 if (market) {
@@ -250,13 +250,13 @@ module.exports.handler = async function (event, context) {
                         ON CONFLICT (id) DO UPDATE SET fgi = EXCLUDED.fgi, btc_dom = EXCLUDED.btc_dom
                         RETURNING id
                     `;
-                    await client.query(marketQuery, [
+                    await tx.query(marketQuery, [
                         marketSnapshotId, market.fgi, market.btc_dom,
                         market.oi, market.fr, market.lsr, market.vix, market.vix_available
                     ]);
 
                     // Update portfolio reference
-                    await client.query('UPDATE portfolios SET market_snapshot_id = $1 WHERE id = $2', [marketSnapshotId, portfolio_id]);
+                    await tx.query('UPDATE portfolios SET market_snapshot_id = $1 WHERE id = $2', [marketSnapshotId, portfolio_id]);
                 }
 
                 // 2. Asset Snapshots
@@ -267,7 +267,7 @@ module.exports.handler = async function (event, context) {
                             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
                             ON CONFLICT (id) DO NOTHING
                         `;
-                        await client.query(assetQuery, [
+                        await tx.query(assetQuery, [
                             asset.id, asset.coin_id, asset.ticker, asset.name,
                             asset.price, asset.market_cap, asset.volume_24h,
                             asset.pv_1h, asset.pv_24h, asset.pv_7d, asset.pv_14d, asset.pv_30d, asset.pv_200d,
@@ -284,7 +284,7 @@ module.exports.handler = async function (event, context) {
                             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
                             ON CONFLICT (id) DO NOTHING
                         `;
-                        await client.query(metricQuery, [
+                        await tx.query(metricQuery, [
                             metric.id, metric.model_version_id, metric.agr_final, metric.agr_long, metric.agr_short,
                             metric.a_metric, metric.i_metric, metric.r_metric, metric.din, metric.cgr, metric.cpt,
                             metric.cdh, metric.cmd, metric.median_din, metric.agr_method_used
@@ -295,7 +295,7 @@ module.exports.handler = async function (event, context) {
                 // 4. Portfolio Assets (Links)
                 if (Array.isArray(assets) && Array.isArray(metrics)) {
                     // Clear old links for this portfolio before update
-                    await client.query('DELETE FROM portfolio_assets WHERE portfolio_id = $1', [portfolio_id]);
+                    await tx.query('DELETE FROM portfolio_assets WHERE portfolio_id = $1', [portfolio_id]);
 
                     for (let i = 0; i < assets.length; i++) {
                         const asset = assets[i];
@@ -305,22 +305,18 @@ module.exports.handler = async function (event, context) {
                             INSERT INTO portfolio_assets (portfolio_id, coin_id, ticker, asset_snapshot_id, metric_snapshot_id, weight, delegated_model_id)
                             VALUES ($1, $2, $3, $4, $5, $6, $7)
                         `;
-                        await client.query(linkQuery, [
+                        await tx.query(linkQuery, [
                             portfolio_id, asset.coin_id, asset.ticker, asset.id, metric.id, asset.weight || 0, metric.model_version_id
                         ]);
                     }
                 }
 
-                await client.query('COMMIT');
                 return {
                     statusCode: 200,
                     headers: CORS_HEADERS,
                     body: JSON.stringify({ status: 'OK', portfolio_id })
                 };
-            } catch (err) {
-                await client.query('ROLLBACK');
-                throw err;
-            }
+            });
         }
 
         // 5. Coin Market Cache (CoinGecko cron data)
@@ -494,6 +490,6 @@ module.exports.handler = async function (event, context) {
             body: JSON.stringify({ error: 'Internal Server Error', message: error.message })
         };
     } finally {
-        await client.end().catch(() => {});
+        await client.close();
     }
 };

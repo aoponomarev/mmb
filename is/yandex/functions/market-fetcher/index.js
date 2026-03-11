@@ -11,6 +11,7 @@
 
 const https = require('https');
 const { Client } = require('pg');
+const { PostgresAdapter } = require('../shared/postgres-adapter');
 
 // ─── Configuration ──────────────────────────────────────────────────────────────
 
@@ -344,7 +345,7 @@ module.exports.handler = async function (event, context) {
     const cycleId = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
     console.log(`[fetcher] Cycle ID: ${cycleId}`);
 
-    const client = new Client(DB_CONFIG);
+    const client = new PostgresAdapter(DB_CONFIG, { ClientClass: Client });
 
     try {
         await client.connect();
@@ -394,6 +395,6 @@ module.exports.handler = async function (event, context) {
             body: JSON.stringify({ status: 'ERROR', cycle_id: cycleId, error: err.message })
         };
     } finally {
-        await client.end().catch(() => {});
+        await client.close();
     }
 };
