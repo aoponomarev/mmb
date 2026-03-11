@@ -166,9 +166,15 @@
             icon: 'fas fa-star'
         },
         {
-            id: 'select-stablecoins',
-            title: 'Стейблкоины',
-            handler: 'handleSelectStablecoins',
+            id: 'select-stablecoins-usd',
+            title: 'Стейблкоины USD',
+            handler: 'handleSelectStablecoinsUsd',
+            icon: '💲'
+        },
+        {
+            id: 'select-stablecoins-other',
+            title: 'Валюты, металлы, фиат',
+            handler: 'handleSelectStablecoinsOther',
             icon: window.coinsConfig.getCoinTypeIcon('stable')
         },
         {

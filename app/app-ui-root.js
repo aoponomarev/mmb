@@ -2388,51 +2388,61 @@
                 },
 
                 /**
-                 * Select stablecoins (deselect all and select stablecoins)
+                 * Select USD stablecoins only (deselect all and select).
                  */
-                handleSelectStablecoins() {
+                handleSelectStablecoinsUsd() {
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
 
-                    // Load stablecoins on-demand when menu selected
-                    const loadStablecoins = async () => {
-                        if (window.coingeckoStablecoinsLoader && typeof window.coingeckoStablecoinsLoader.load === 'function') {
-                            try {
-                                await window.coingeckoStablecoinsLoader.load({ forceRefresh: true, ttl: 24 * 60 * 60 * 1000 });
-                            } catch (error) {
-                                console.warn('handleSelectStablecoins: ошибка loading стейблкоинов по запросу', error);
-                            }
-                        }
-                    };
+                    const set = window.coinsConfig && typeof window.coinsConfig.getUsdStablecoinSymbolsSet === 'function'
+                        ? window.coinsConfig.getUsdStablecoinSymbolsSet()
+                        : new Set();
 
-                    // Load synchronously before selection
-                    // eslint-disable-next-line consistent-return
-                    return loadStablecoins().then(() => {
-                        // Stablecoins list from single source of truth
-                        const stablecoins = window.coinsConfig && typeof window.coinsConfig.getStablecoinSymbolsSet === 'function'
-                            ? window.coinsConfig.getStablecoinSymbolsSet()
-                            : new Set();
-
-
-                    // Deselect all and select only stablecoins
                     this.selectedCoinIds = visibleCoins
-                            .filter(coin => {
-                                const symbol = coin.symbol ? coin.symbol.toLowerCase() : '';
-                                return stablecoins.has(symbol);
-                            })
+                        .filter(coin => {
+                            const symbol = coin.symbol ? coin.symbol.toLowerCase() : '';
+                            return set.has(symbol);
+                        })
                         .map(coin => coin.id);
-                        this.saveTableSettings();
+                    this.saveTableSettings();
 
+                    if (this.selectedCoinIds.length === 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'Список стейблкоинов USD пуст',
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
+                },
 
-                        if (this.selectedCoinIds.length === 0 && window.messagesStore) {
-                            window.messagesStore.addMessage({
-                                type: 'warning',
-                                text: 'Список стейблкоинов пуст или not loaded',
-                                scope: 'global',
-                                duration: 3000
-                            });
-                        }
-                    });
+                /**
+                 * Select non-USD (currencies, metals, other fiat).
+                 */
+                handleSelectStablecoinsOther() {
+                    const visibleCoins = this.sortedCoins;
+                    if (!visibleCoins) return;
+
+                    const set = window.coinsConfig && typeof window.coinsConfig.getNonUsdStablecoinSymbolsSet === 'function'
+                        ? window.coinsConfig.getNonUsdStablecoinSymbolsSet()
+                        : new Set();
+
+                    this.selectedCoinIds = visibleCoins
+                        .filter(coin => {
+                            const symbol = coin.symbol ? coin.symbol.toLowerCase() : '';
+                            return set.has(symbol);
+                        })
+                        .map(coin => coin.id);
+                    this.saveTableSettings();
+
+                    if (this.selectedCoinIds.length === 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'Список валют/металлов/фиат пуст',
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
                 },
 
                 /**

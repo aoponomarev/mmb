@@ -181,7 +181,7 @@
 
             coinTypeTitle() {
                 if (!window.coinsConfig || !window.coinsConfig.getCoinTypeTitle) return null;
-                return window.coinsConfig.getCoinTypeTitle(this.coinType);
+                return window.coinsConfig.getCoinTypeTitle(this.coinType, this.coinId, this.symbol, this.name);
             }
         },
 

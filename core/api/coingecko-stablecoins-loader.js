@@ -10,7 +10,7 @@
  * USAGE:
  * await window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24*60*60*1000 });
  *
- * SOURCE: CoinGecko /coins/markets?vs_currency={currency}&category=stablecoins&per_page=250; base currency from ['usd','eur','gbp'] closest to 1 (±8%).
+ * SOURCE: CoinGecko /coins/markets — categories: stablecoins, tokenized-gold, tokenized-silver, commodity-backed-stablecoin.
  *
  * FILE PROTOCOL: On file:// all requests proxied via Cloudflare Worker; buildUrl() auto-selects proxy or direct; details id:sk-7cf3f7.
  *
@@ -73,8 +73,15 @@
         return window.rateLimiter; // fallback to legacy API
     }
 
-    async function fetchStablecoinsForCurrency(vsCurrency, page = 1) {
-        const url = buildUrl(`/coins/markets?vs_currency=${vsCurrency}&category=stablecoins&per_page=${MAX_PER_PAGE}&page=${page}&sparkline=false&locale=en&include_rehypothecated=true`);
+    const STABLECOIN_CATEGORIES = [
+        'stablecoins',
+        'tokenized-gold',
+        'tokenized-silver',
+        'commodity-backed-stablecoin'
+    ];
+
+    async function fetchCategoryForCurrency(vsCurrency, category, page = 1) {
+        const url = buildUrl(`/coins/markets?vs_currency=${vsCurrency}&category=${category}&per_page=${MAX_PER_PAGE}&page=${page}&sparkline=false&locale=en&include_rehypothecated=true`);
         const limiter = getRateLimiter();
 
         let attempts = 0;
@@ -117,7 +124,7 @@
                             continue;
                         }
                     }
-                    throw new Error(`CoinGecko stablecoins (${vsCurrency}) HTTP ${response.status}`);
+                    throw new Error(`CoinGecko ${category} (${vsCurrency}) HTTP ${response.status}`);
                 }
                 const data = await response.json();
                 return Array.isArray(data) ? data : [];
@@ -198,16 +205,17 @@
         }
 
         try {
-            // Minimal fetch: USD only, first page
             const byId = new Map();
-            for (const vsCurrency of BASE_CURRENCIES) {
-                const chunk = await fetchStablecoinsForCurrency(vsCurrency, 1);
-                chunk.forEach(coin => {
-                    if (!byId.has(coin.id)) {
-                        byId.set(coin.id, {});
-                    }
-                    byId.get(coin.id)[vsCurrency] = coin;
-                });
+            for (const category of STABLECOIN_CATEGORIES) {
+                for (const vsCurrency of BASE_CURRENCIES) {
+                    const chunk = await fetchCategoryForCurrency(vsCurrency, category, 1);
+                    chunk.forEach(coin => {
+                        if (!byId.has(coin.id)) {
+                            byId.set(coin.id, {});
+                        }
+                        byId.get(coin.id)[vsCurrency] = coin;
+                    });
+                }
             }
 
             const normalized = [];
