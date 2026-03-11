@@ -3302,13 +3302,7 @@
                                 signal: options.signal,
                                 chunkDelayMs: options.chunkDelayMs ?? 21000,
                                 useDualChannel: options.useDualChannel !== false,
-                                policyKey: options.policyKey || (
-                                    options.preferYandexFirst === false
-                                        ? 'selected-external-only'
-                                        : options.allowCoinGeckoFallback === false
-                                            ? 'pg-primary-only'
-                                            : 'pg-primary-then-selected-external'
-                                ),
+                                policyKey: options.policyKey || 'pg-primary-then-selected-external',
                                 onProgress: progressHandler
                             };
 

@@ -89,25 +89,14 @@
             return providerName === 'yandex-cache' ? 'postgres' : providerName;
         }
 
-        resolveCoinDataPolicyKey(options = {}) {
-            if (typeof options.policyKey === 'string' && options.policyKey.trim()) {
-                return options.policyKey.trim();
-            }
-            if (options.preferYandexFirst === false) {
-                return 'selected-external-only';
-            }
-            if (options.allowCoinGeckoFallback === false) {
-                return 'pg-primary-only';
-            }
-            return null;
-        }
-
         async getCoinDataPolicy(options = {}) {
             // @skill-anchor id:sk-bb7c8e #for-adapter-registry
-            // Coin-data routing policy lives in AdapterRegistry; local boolean flags
-            // are reduced to compatibility selectors for already-existing call sites.
+            // Coin-data routing policy lives in AdapterRegistry; callers override
+            // runtime defaults via explicit named policy keys only.
             const runtimeProfile = this.isFileProtocol() ? 'file' : 'network';
-            const policyKey = this.resolveCoinDataPolicyKey(options);
+            const policyKey = typeof options.policyKey === 'string' && options.policyKey.trim()
+                ? options.policyKey.trim()
+                : '';
             const selectedProvider = await this.getCurrentProviderName();
 
             if (this.registry?.getDomainPolicy) {
