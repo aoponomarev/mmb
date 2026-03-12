@@ -6,7 +6,7 @@
  * PURPOSE: One place for modal config; title change syncs everywhere; modal title must match menu/button text.
  *
  * STRUCTURE:
- * - modalId: { title, icon?, description?, bodyComponent?, centered?, condition? }
+ * - modalId: { title, icon?, description?, helpText?, bodyComponent?, centered?, condition? }
  *
  * REFERENCES:
  * - Modal component: #JS-HF48eDDR (modal.js)
@@ -33,21 +33,21 @@
             centered: true,
             autoRegister: true // Does not require props
         },
-        'portfolioModal': {
-            title: 'Портфель',
-            icon: 'fas fa-briefcase',
-            description: 'Создание или редактирование портфеля',
-            bodyComponent: 'portfolio-modal-body',
-            centered: true,
-            autoRegister: false, // Requires props
-            condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
-        },
         'portfolioFormModal': {
             title: 'Формирование портфеля',
             description: 'Автоматическое формирование портфеля на основе математической модели',
+            helpText: 'Соберите новый портфель из текущего набора выбранных монет, проверьте ключевые метрики и сохраните новый снимок.',
             bodyComponent: 'portfolio-form-modal-body',
             centered: true,
             autoRegister: false // Requires props (allCoins, onSave)
+        },
+        'portfolioRebalanceModal': {
+            title: 'Ребалансировка портфеля',
+            description: 'Корректировка существующего портфеля на основе актуального снимка',
+            helpText: 'Проверьте текущий состав, скорректируйте веса и сохраните обновление уже существующего портфеля.',
+            bodyComponent: 'portfolio-form-modal-body',
+            centered: true,
+            autoRegister: false // Uses the same body component as portfolioFormModal
         },
         'portfolioViewModal': {
             title: 'Просмотр портфеля',
@@ -74,9 +74,9 @@
             autoRegister: true // Does not require props
         },
         'portfoliosImportModal': {
-            title: 'Импорт portfolios',
+            title: 'Импорт портфелей',
             icon: 'fas fa-file-import',
-            description: 'Выборочный импорт portfolios из JSON',
+            description: 'Выборочный импорт локальных копий портфелей из JSON',
             bodyComponent: 'portfolios-import-modal-body',
             centered: true,
             autoRegister: true
@@ -152,6 +152,26 @@
     }
 
     /**
+     * Get modal window description
+     * @param {string} modalId - Modal window ID
+     * @returns {string|null} - Description or null
+     */
+    function getModalDescription(modalId) {
+        const config = getModalConfig(modalId);
+        return config ? (config.description || null) : null;
+    }
+
+    /**
+     * Get modal window help text
+     * @param {string} modalId - Modal window ID
+     * @returns {string|null} - Help text or null
+     */
+    function getModalHelpText(modalId) {
+        const config = getModalConfig(modalId);
+        return config ? (config.helpText || null) : null;
+    }
+
+    /**
      * Get modal window icon
      * @param {string} modalId - Modal window ID
      * @returns {string|null} - Icon or null
@@ -199,6 +219,8 @@
         MODALS_CONFIG,
         getModalConfig,
         getModalTitle,
+        getModalDescription,
+        getModalHelpText,
         getModalIcon,
         getRegisteredModals
     };

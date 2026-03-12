@@ -1,6 +1,6 @@
 /**
  * #JS-9oNFE9kB
- * @description Portfolio view modal body (D.3); display portfolio metadata and assets.
+ * @description Portfolio view modal body (D.3); display portfolio metadata and assets using the shared portfolio-segment-table shell.
  * @skill id:sk-c3d639
  */
 
@@ -13,6 +13,12 @@
                 <!-- Header with metadata -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-8">
+                        <div v-if="isConflictPortfolio" class="portfolio-conflict-banner mb-2">
+                            <span class="badge portfolio-conflict-badge" :title="conflictTooltip">
+                                <i class="fas fa-triangle-exclamation me-1"></i>{{ conflictLabel }}
+                            </span>
+                            <span class="portfolio-conflict-note small">{{ conflictNote }}</span>
+                        </div>
                         <h4 class="mb-1">{{ portfolio?.name }}</h4>
                         <div class="text-muted small">
                             <i class="far fa-calendar-alt me-1"></i> Сформирован: {{ formatDate(portfolio?.createdAt) }}
@@ -72,86 +78,56 @@
 
                 <!-- Long/Short tables -->
                 <div class="row g-3 mb-4">
-                    <!-- Long -->
                     <div class="col-md-6">
-                        <div class="border rounded h-100 overflow-hidden d-flex flex-column bg-white dark-bg-black">
-                            <div class="bg-success bg-opacity-10 py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
-                                <span class="small fw-bold text-success"><i class="fas fa-arrow-up me-1"></i> Long сегмент</span>
-                                <span class="badge bg-success text-white" style="font-size: 0.7rem;">{{ longCoins.length }}</span>
-                            </div>
-                            <div class="table-responsive flex-grow-1">
-                                <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem;">
-                                    <thead class="modal-table-header-themed sticky-top">
-                                        <tr>
-                                            <th class="ps-3 py-2">Актив</th>
-                                            <th class="text-end py-2">AGR</th>
-                                            <th class="text-end py-2 pe-3">Доля</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="coin in longCoins" :key="coin.coinId">
-                                            <td class="ps-3 py-2">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <strong>{{ coin.ticker }}</strong>
-                                                </div>
-                                            </td>
-                                            <td class="text-end py-2">
-                                                <cmp-cell-num :value="coin.metrics?.agr" :precision="2" :colored="true"></cmp-cell-num>
-                                            </td>
-                                            <td class="text-end py-2 pe-3 fw-bold">{{ coin.portfolioPercent }}%</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="bg-segment-highlight border-top">
-                                        <tr>
-                                            <td class="ps-3 py-1 small text-muted">Итого Long:</td>
-                                            <td></td>
-                                            <td class="text-end py-1 pe-3 fw-bold text-success" style="font-size: 0.85rem;">{{ longTotal }}%</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+                        <portfolio-segment-table
+                            side="long"
+                            title="Long"
+                            :count="longCoins.length"
+                            :columns="buildSegmentColumns()"
+                        >
+                            <template #rows>
+                                <tr v-for="coin in longCoins" :key="coin.coinId">
+                                    <td class="align-middle">
+                                        <cmp-cell-num :value="coin.metrics?.agr" :precision="2" :colored="true"></cmp-cell-num>
+                                    </td>
+                                    <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
+                                    <td class="align-middle">
+                                        {{ coin.ticker }}
+                                    </td>
+                                    <td class="align-middle">{{ coin.portfolioPercent }}%</td>
+                                </tr>
+                            </template>
+                            <template #summary>
+                                <span class="text-muted">Long:</span>
+                                <span class="fw-bold text-success">{{ longTotal }}%</span>
+                            </template>
+                        </portfolio-segment-table>
                     </div>
 
-                    <!-- Short -->
                     <div class="col-md-6">
-                        <div class="border rounded h-100 overflow-hidden d-flex flex-column bg-white dark-bg-black">
-                            <div class="bg-danger bg-opacity-10 py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
-                                <span class="small fw-bold text-danger"><i class="fas fa-arrow-down me-1"></i> Short сегмент</span>
-                                <span class="badge bg-danger text-white" style="font-size: 0.7rem;">{{ shortCoins.length }}</span>
-                            </div>
-                            <div class="table-responsive flex-grow-1">
-                                <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem;">
-                                    <thead class="modal-table-header-themed sticky-top">
-                                        <tr>
-                                            <th class="ps-3 py-2">Актив</th>
-                                            <th class="text-end py-2">AGR</th>
-                                            <th class="text-end py-2 pe-3">Доля</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="coin in shortCoins" :key="coin.coinId">
-                                            <td class="ps-3 py-2">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <strong>{{ coin.ticker }}</strong>
-                                                </div>
-                                            </td>
-                                            <td class="text-end py-2">
-                                                <cmp-cell-num :value="coin.metrics?.agr" :precision="2" :colored="true"></cmp-cell-num>
-                                            </td>
-                                            <td class="text-end py-2 pe-3 fw-bold">{{ coin.portfolioPercent }}%</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="bg-segment-highlight border-top">
-                                        <tr>
-                                            <td class="ps-3 py-1 small text-muted">Итого Short:</td>
-                                            <td></td>
-                                            <td class="text-end py-1 pe-3 fw-bold text-danger" style="font-size: 0.85rem;">{{ shortTotal }}%</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+                        <portfolio-segment-table
+                            side="short"
+                            title="Short"
+                            :count="shortCoins.length"
+                            :columns="buildSegmentColumns()"
+                        >
+                            <template #rows>
+                                <tr v-for="coin in shortCoins" :key="coin.coinId">
+                                    <td class="align-middle">
+                                        <cmp-cell-num :value="coin.metrics?.agr" :precision="2" :colored="true"></cmp-cell-num>
+                                    </td>
+                                    <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
+                                    <td class="align-middle">
+                                        {{ coin.ticker }}
+                                    </td>
+                                    <td class="align-middle">{{ coin.portfolioPercent }}%</td>
+                                </tr>
+                            </template>
+                            <template #summary>
+                                <span class="text-muted">Short:</span>
+                                <span class="fw-bold text-danger">{{ shortTotal }}%</span>
+                            </template>
+                        </portfolio-segment-table>
                     </div>
                 </div>
 
@@ -177,7 +153,8 @@
 
         components: {
             'cmp-button': window.cmpButton,
-            'cmp-cell-num': window.cmpCellNum
+            'cmp-cell-num': window.cmpCellNum,
+            'portfolio-segment-table': window.portfolioSegmentTable
         },
 
         props: {
@@ -217,6 +194,20 @@
             shortTotal() {
                 const sum = this.shortCoins.reduce((acc, c) => acc + (Number(c.portfolioPercent) || 0), 0);
                 return Math.round(sum * 100) / 100;
+            },
+            isConflictPortfolio() {
+                return this.portfolio?.syncState === 'conflict';
+            },
+            conflictLabel() {
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge') || 'Конфликт';
+            },
+            conflictTooltip() {
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip')
+                    || 'Конфликт между устройствами';
+            },
+            conflictNote() {
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.note')
+                    || 'Локальная конфликтная копия после расхождения с облачной версией.';
             }
         },
 
@@ -264,6 +255,36 @@
                 });
             },
 
+            getCoinKeyMetricLabel(coin) {
+                return coin?.keyMetric?.label || coin?.keyBuyer || '—';
+            },
+
+            buildSegmentColumns() {
+                return [
+                    {
+                        key: 'agr',
+                        label: 'AGR',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'keyMetric',
+                        icon: 'fas fa-crosshairs opacity-50',
+                        title: 'Ключевая метрика',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'asset',
+                        label: 'Актив',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'weight',
+                        label: '%',
+                        headerClass: 'text-center'
+                    }
+                ];
+            },
+
             async handleDelete() {
                 await this.onDelete(this.portfolio.id);
                 this.modalApi.hide();
@@ -289,6 +310,12 @@
                 }
 
                 const mode = portfolio?.settings?.mode === 'agr' ? 'agr' : 'equal';
+                const normalizeKeyMetric = (coin) => {
+                    const normalized = window.portfolioConfig?.normalizeKeyMetric
+                        ? window.portfolioConfig.normalizeKeyMetric(coin.keyMetric || { field: coin.keyMetricField || null, label: coin.keyBuyer || null })
+                        : (coin.keyMetric || null);
+                    return normalized?.field ? normalized : null;
+                };
                 const assets = portfolio.coins.map((coin, index) => ({
                     coinId: coin.coinId || coin.id || `${coin.ticker || coin.symbol || 'coin'}-${index}`,
                     ticker: (coin.ticker || coin.symbol || '').toUpperCase(),
@@ -297,6 +324,7 @@
                     weight: Number(coin.portfolioPercent) || 0,
                     isLocked: !!coin.isLocked,
                     isDisabledInRebalance: !!coin.isDisabledInRebalance,
+                    keyMetric: normalizeKeyMetric(coin),
                     delegatedBy: {
                         modelId: coin.delegatedBy?.modelId || portfolio?.settings?.modelId || 'unknown',
                         modelName: coin.delegatedBy?.modelName || ''

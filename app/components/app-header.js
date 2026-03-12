@@ -90,6 +90,24 @@ window.appHeader = {
         handleViewPortfolio(portfolioId) {
             this.$emit('view-portfolio', portfolioId);
         },
+        isConflictPortfolio(portfolio) {
+            return portfolio?.syncState === 'conflict';
+        },
+        // @causality #for-conflict-state-marker
+        // Conflict forks must stay visually distinct from ordinary unsynced copies.
+        getPortfolioItemClasses(portfolio) {
+            return {
+                'opacity-50': !!portfolio?.syncState && portfolio.syncState !== 'synced' && portfolio.syncState !== 'conflict',
+                'app-portfolio-item-conflict': this.isConflictPortfolio(portfolio)
+            };
+        },
+        getPortfolioConflictLabel() {
+            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge') || 'Конфликт';
+        },
+        getPortfolioConflictTooltip() {
+            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip')
+                || 'Конфликт между устройствами';
+        },
         // Method to get tooltip for column visibility button by id
         getTabTooltip(tabId) {
             const tooltipMap = {

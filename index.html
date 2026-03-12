@@ -58,6 +58,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
     <!-- Component styles (load order matters) -->
+    <link rel="stylesheet" href="styles/custom/colors.css">
     <!-- 1. Base Bootstrap wrappers (independent) -->
     <link rel="stylesheet" href="styles/wrappers/button.css">
     <link rel="stylesheet" href="styles/wrappers/dropdown-menu-item.css">
@@ -98,31 +99,42 @@
             flex-shrink: 0;
         }
         .cg-counter-ring-bg {
-            color: var(--bs-body-color);
+            color: var(--app-color-body-fg);
         }
         .cg-counter-ring-progress {
-            color: var(--bs-primary);
+            color: var(--app-color-primary);
         }
         /* Numeric cell coloring via data-value-sign (Bootstrap classes) */
         [data-value-sign="positive"] > span {
-            color: var(--bs-success) !important;
+            color: var(--app-color-success) !important;
         }
         [data-value-sign="negative"] > span {
-            color: var(--bs-danger) !important;
+            color: var(--app-color-danger) !important;
         }
         [data-value-sign="zero"] > span {
-            color: var(--bs-secondary) !important;
+            color: var(--app-color-secondary) !important;
         }
-        /* Selected table row highlight (theme-aware) */
-        /* Selected rows: neutral gray 50% with opacity 0.25 */
-        .coin-row-selected,
+        /* Selected row owns the base gray highlight through cells only. */
         .coin-row-selected > td {
-            background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
-            transition: background-color 150ms ease;
+            background-color: var(--app-soft-highlight-bg) !important;
+            transition: none !important;
         }
-        [data-bs-theme="dark"] .coin-row-selected,
-        [data-bs-theme="dark"] .coin-row-selected > td {
-            background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
+        .coin-metric-cell {
+            transition: none !important;
+        }
+        .coin-metric-cell-selectable {
+            cursor: pointer;
+        }
+        .coin-metric-cell-hover {
+            background-color: var(--app-soft-highlight-bg) !important;
+            transition: none !important;
+        }
+        .coin-row-selected > td.coin-metric-cell-key {
+            background-color: var(--app-soft-highlight-bg) !important;
+            background-image: linear-gradient(var(--app-key-metric-overlay-bg), var(--app-key-metric-overlay-bg));
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            transition: none !important;
         }
         /* Universal soft hover highlight (similar to selected row) */
         /* More specific selector to override Bootstrap */
@@ -130,9 +142,9 @@
         .dropdown-item.bg-hover-secondary-soft:focus,
         .dropdown-item.bg-hover-secondary-soft.active:hover,
         .bg-hover-secondary-soft:hover {
-            background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+            background-color: var(--app-soft-highlight-bg) !important;
             color: inherit !important;
-            transition: background-color 150ms ease;
+            transition: none !important;
         }
         /* Row move animation on sort */
         .coin-row-item {
@@ -143,7 +155,7 @@
             z-index: 10;
             transform: translateZ(0);
             will-change: transform, opacity;
-            background-color: var(--bs-body-bg) !important;
+            background-color: var(--app-color-body-bg) !important;
             display: table-row;
         }
         .coin-row-enter-active,
@@ -152,7 +164,7 @@
             z-index: 10;
             transform: translateZ(0);
             will-change: transform, opacity;
-            background-color: var(--bs-body-bg) !important;
+            background-color: var(--app-color-body-bg) !important;
             display: table-row;
         }
         .coin-row-enter-from,
@@ -175,12 +187,12 @@
                 /* IconManager styles */
                 .icon-drop-zone {
                     transition: all 0.2s ease;
-                    background-color: var(--bs-body-bg);
+                    background-color: var(--app-color-body-bg);
                     min-height: 120px;
                 }
                 .icon-drop-zone:hover {
-                    border-color: var(--bs-primary) !important;
-                    background-color: rgba(var(--bs-primary-rgb), 0.05);
+                    border-color: var(--app-color-primary) !important;
+                    background-color: var(--app-color-primary-soft);
                 }
                 .uppercase {
                     text-transform: uppercase;
@@ -266,41 +278,11 @@
                             <col style="width: 1%;">
                             <col style="width: 7em;">
                             <col :style="priceColumnStyle">
-                            <!-- Percent columns -->
-                            <col :class="columnVisibilityClasses['col-percent-1h']">
-                            <col :class="columnVisibilityClasses['col-percent-24h']">
-                            <col :class="columnVisibilityClasses['col-percent-7d']">
-                            <col :class="columnVisibilityClasses['col-percent-14d']">
-                            <col :class="columnVisibilityClasses['col-percent-30d']">
-                            <col :class="columnVisibilityClasses['col-percent-200d']">
-                            <!-- Complex Deltas columns -->
-                            <col :class="columnVisibilityClasses['col-cd-1w']">
-                            <col :class="columnVisibilityClasses['col-cd-2w']">
-                            <col :class="columnVisibilityClasses['col-cd-3w']">
-                            <col :class="columnVisibilityClasses['col-cd-4w']">
-                            <col :class="columnVisibilityClasses['col-cd-5w']">
-                            <col :class="columnVisibilityClasses['col-cd-6w']">
-                            <col :class="columnVisibilityClasses['col-cd-h']">
-                            <!-- Gradients columns -->
-                            <col :class="columnVisibilityClasses['col-cgr-2']">
-                            <col :class="columnVisibilityClasses['col-cgr-3']">
-                            <col :class="columnVisibilityClasses['col-cgr-4']">
-                            <col :class="columnVisibilityClasses['col-cgr-5']">
-                            <col :class="columnVisibilityClasses['col-cgr-6']">
-                            <col :class="columnVisibilityClasses['col-cgr-sum']">
-                            <!-- Balance AGR column (moved to front) -->
-                            <col :class="columnVisibilityClasses['col-balance-agr']">
-                            <!-- MAX PV column -->
-                            <col :class="columnVisibilityClasses['col-max-pv']">
-                            <!-- min PV column -->
-                            <col :class="columnVisibilityClasses['col-min-pv']">
-                            <!-- Stability methods columns -->
-                            <col :class="columnVisibilityClasses['col-stability-dcs']">
-                            <col :class="columnVisibilityClasses['col-stability-tsi']">
-                            <col :class="columnVisibilityClasses['col-stability-mp']">
-                            <!-- Balance CPT/DIN columns -->
-                            <col :class="columnVisibilityClasses['col-balance-cpt']">
-                            <col :class="columnVisibilityClasses['col-balance-din']">
+                            <col
+                                v-for="column in coinMetricColumns"
+                                :key="`col-${column.id}`"
+                                :class="columnVisibilityClasses[column.columnClass]"
+                            >
                         </colgroup>
                         <thead>
                             <tr>
@@ -609,41 +591,20 @@
                                 <th v-if="showPriceColumn" class="text-end">
                                     <sortable-header field="current_price" label="Price" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header>
                                 </th>
-                                <!-- Percent columns -->
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-1h']]"><sortable-header field="price_change_percentage_1h" label="1h%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-24h']]"><sortable-header field="price_change_percentage_24h" label="24h%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-7d']]"><sortable-header field="price_change_percentage_7d" label="7d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-14d']]"><sortable-header field="price_change_percentage_14d" label="14d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-30d']]"><sortable-header field="price_change_percentage_30d" label="30d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-percent-200d']]"><sortable-header field="price_change_percentage_200d" label="200d%" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <!-- Complex Deltas columns -->
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-1w']]"><sortable-header field="metrics.cdWeighted.0" label="CD1w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-2w']]"><sortable-header field="metrics.cdWeighted.1" label="CD2w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-3w']]"><sortable-header field="metrics.cdWeighted.2" label="CD3w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-4w']]"><sortable-header field="metrics.cdWeighted.3" label="CD4w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-5w']]"><sortable-header field="metrics.cdWeighted.4" label="CD5w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-6w']]"><sortable-header field="metrics.cdWeighted.5" label="CD6w" :sort-by="sortBy" :sort-order="sortOrder" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cd-h']]"><sortable-header field="metrics.cdh" label="CDH" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cdh')" @sort="handleSort"></sortable-header></th>
-                                <!-- Gradients columns -->
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-2']]"><sortable-header field="metrics.cgrDeg.0" label="CGR2" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-3']]"><sortable-header field="metrics.cgrDeg.1" label="CGR3" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-4']]"><sortable-header field="metrics.cgrDeg.2" label="CGR4" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-5']]"><sortable-header field="metrics.cgrDeg.3" label="CGR5" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-6']]"><sortable-header field="metrics.cgrDeg.4" label="CGR6" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgrDeg')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-cgr-sum']]"><sortable-header field="metrics.cgr" label="CGR Σ" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cgr')" @sort="handleSort"></sortable-header></th>
-                                <!-- Balance AGR column (moved to front) -->
-                                <th :class="['text-end', columnVisibilityClasses['col-balance-agr']]"><sortable-header field="metrics.agr" label="AGR" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('agr')" @sort="handleSort"></sortable-header></th>
-                                <!-- MAX PV column -->
-                                <th :class="['text-end', columnVisibilityClasses['col-max-pv']]"><sortable-header field="metrics.maxPV" label="MAX PV" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('maxPV')" @sort="handleSort"></sortable-header></th>
-                                <!-- min PV column -->
-                                <th :class="['text-end', columnVisibilityClasses['col-min-pv']]"><sortable-header field="metrics.minPV" label="min PV" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('minPV')" @sort="handleSort"></sortable-header></th>
-                                <!-- Stability methods columns -->
-                                <th :class="['text-end', columnVisibilityClasses['col-stability-dcs']]"><sortable-header field="metrics.dcs" label="DCS" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('dcs')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-stability-tsi']]"><sortable-header field="metrics.tsi" label="TSI" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('tsi')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-stability-mp']]"><sortable-header field="metrics.mp" label="MPS" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('mp')" @sort="handleSort"></sortable-header></th>
-                                <!-- Balance CPT/DIN columns -->
-                                <th :class="['text-end', columnVisibilityClasses['col-balance-cpt']]"><sortable-header field="metrics.cpt" label="CPT" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('cpt')" @sort="handleSort"></sortable-header></th>
-                                <th :class="['text-end', columnVisibilityClasses['col-balance-din']]"><sortable-header field="metrics.din" label="DIN" :sort-by="sortBy" :sort-order="sortOrder" :tooltip="getMetricTooltip('din')" @sort="handleSort"></sortable-header></th>
+                                <th
+                                    v-for="column in coinMetricColumns"
+                                    :key="`head-${column.id}`"
+                                    :class="['text-end', columnVisibilityClasses[column.columnClass]]"
+                                >
+                                    <sortable-header
+                                        :field="column.field"
+                                        :label="column.label"
+                                        :sort-by="sortBy"
+                                        :sort-order="sortOrder"
+                                        :tooltip="column.tooltipKey ? getMetricTooltip(column.tooltipKey) : ''"
+                                        @sort="handleSort"
+                                    ></sortable-header>
+                                </th>
                             </tr>
                         </thead>
                         <transition-group name="coin-row" tag="tbody">
@@ -679,41 +640,23 @@
                                 <td v-if="showPriceColumn" class="text-end">
                                     <cell-num :value="coin.current_price" prefix="$" :precision="2" :hide-positive-sign="true" type="price"></cell-num>
                                 </td>
-                                <!-- Percent columns -->
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-1h']]"><cell-num :value="coin.price_change_percentage_1h" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-24h']]"><cell-num :value="coin.price_change_percentage_24h" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-7d']]"><cell-num :value="coin.price_change_percentage_7d" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-14d']]"><cell-num :value="coin.price_change_percentage_14d" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-30d']]"><cell-num :value="coin.price_change_percentage_30d" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-percent-200d']]"><cell-num :value="coin.price_change_percentage_200d" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <!-- Complex Deltas columns -->
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-1w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.0')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-2w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.1')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-3w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.2')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-4w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.3')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-5w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.4')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-6w']]"><cell-num :value="getCellValue(coin, 'metrics.cdWeighted.5')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cd-h']]"><cell-num :value="getCellValue(coin, 'metrics.cdh')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
-                                <!-- Gradients columns -->
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-2']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.0')" :precision="1" unit="°" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-3']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.1')" :precision="1" unit="°" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-4']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.2')" :precision="1" unit="°" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-5']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.3')" :precision="1" unit="°" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-6']]"><cell-num :value="getCellValue(coin, 'metrics.cgrDeg.4')" :precision="1" unit="°" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-cgr-sum']]"><cell-num :value="getCellValue(coin, 'metrics.cgr')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
-                                <!-- Balance AGR column (moved to front) -->
-                                <td :class="['text-end', columnVisibilityClasses['col-balance-agr']]"><cell-num :value="getCellValue(coin, 'metrics.agr')" :precision="2" :colorize="true" :arrow="true"></cell-num></td>
-                                <!-- MAX PV column -->
-                                <td :class="['text-end', columnVisibilityClasses['col-max-pv']]"><cell-num :value="getCellValue(coin, 'metrics.maxPV')" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <!-- min PV column -->
-                                <td :class="['text-end', columnVisibilityClasses['col-min-pv']]"><cell-num :value="getCellValue(coin, 'metrics.minPV')" :precision="2" :colorize="true" unit="%"></cell-num></td>
-                                <!-- Stability methods columns -->
-                                <td :class="['text-end', columnVisibilityClasses['col-stability-dcs']]"><cell-num :value="getCellValue(coin, 'metrics.dcs')" :precision="2" :colorize="true" unit=""></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-stability-tsi']]"><cell-num :value="getCellValue(coin, 'metrics.tsi')" :precision="2" :colorize="true" unit=""></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-stability-mp']]"><cell-num :value="getCellValue(coin, 'metrics.mp')" :precision="2" :colorize="true" unit=""></cell-num></td>
-                                <!-- Balance CPT/DIN columns -->
-                                <td :class="['text-end', columnVisibilityClasses['col-balance-cpt']]"><cell-num :value="getCellValue(coin, 'metrics.cpt')" :precision="2" :colorize="true"></cell-num></td>
-                                <td :class="['text-end', columnVisibilityClasses['col-balance-din']]"><cell-num :value="getCellValue(coin, 'metrics.din')" :precision="2" :colorize="true"></cell-num></td>
+                                <td
+                                    v-for="column in coinMetricColumns"
+                                    :key="`${coin.id}-${column.id}`"
+                                    :class="[
+                                        'text-end',
+                                        columnVisibilityClasses[column.columnClass],
+                                        getMetricCellClasses(coin.id, column)
+                                    ]"
+                                    @mouseenter="handleMetricCellMouseEnter(coin.id, column)"
+                                    @mouseleave="handleMetricCellMouseLeave(coin.id, column)"
+                                    @click.stop="handleMetricCellClick(coin, column)"
+                                >
+                                    <cell-num
+                                        :value="getCellValue(coin, column.field)"
+                                        v-bind="column.cellProps"
+                                    ></cell-num>
+                                </td>
                             </tr>
                         </transition-group>
                         </table>
@@ -877,23 +820,32 @@
         <cmp-modal
             ref="portfolioFormModal"
             modal-id="portfolioFormModal"
-            :title="modalsConfig?.getModalTitle('portfolioFormModal') || tooltipsConfig?.getTooltip('ui.modal.portfolioForm.title')"
+            :title="portfolioFormModalTitle"
             :centered="true"
             size="lg"
         >
             <template #header>
                 <h5 class="modal-title">
-                    {{ modalsConfig?.getModalTitle('portfolioFormModal') }}
+                    {{ portfolioFormModalTitle }}
                 </h5>
                 <div id="portfolioFormModal-header-extra" class="ms-auto me-2"></div>
                 <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
             </template>
             <template #body>
+                <div v-if="portfolioFormModalDescription || portfolioFormModalHelpText" class="small text-muted mb-3">
+                    <div v-if="portfolioFormModalDescription" class="mb-1">
+                        {{ portfolioFormModalDescription }}
+                    </div>
+                    <div v-if="portfolioFormModalHelpText">
+                        {{ portfolioFormModalHelpText }}
+                    </div>
+                </div>
                 <portfolio-form-modal-body
                     v-if="coins && coins.length > 0"
                     :key="portfolioFormKey"
                     :all-coins="coins"
                     :preselected-coin-ids="selectedCoinIds"
+                    :preselected-coin-key-metrics="selectedCoinKeyMetrics"
                     :initial-data="currentViewingPortfolio"
                     :on-save="handleSaveCreatedPortfolio"
                 ></portfolio-form-modal-body>

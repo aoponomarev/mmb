@@ -6,28 +6,141 @@
 /* Themed header/footer similar to the main app header */
 .modal-header-themed,
 .modal-footer-themed {
-    background-color: var(--bs-dark) !important;
+    background-color: var(--app-color-dark) !important;
     /* Lighten background with large inner white inset like app-header */
     box-shadow: 
-        0 0 0 1000px rgba(255, 255, 255, 0.1) inset !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+        0 0 0 1000px var(--app-color-light-soft-10) inset !important;
+    border-color: var(--app-color-light-soft-10) !important;
 }
 
 .modal-header-themed .modal-title {
-    color: #fff !important;
+    color: var(--app-color-light) !important;
+}
+
+.portfolio-conflict-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.portfolio-conflict-badge {
+    background-color: var(--app-color-warning-soft-10) !important;
+    color: var(--app-color-warning) !important;
+    border: 1px solid var(--app-color-warning-border-soft) !important;
+}
+
+.portfolio-conflict-note {
+    color: var(--app-color-warning) !important;
 }
 
 /* Highlight background for segment summary rows */
 .bg-segment-highlight {
-    background-color: rgba(var(--bs-secondary-rgb), 0.05) !important;
-    transition: background-color 150ms ease;
-}
-
-[data-bs-theme="dark"] .bg-segment-highlight {
-    background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+    background-color: var(--app-soft-highlight-bg) !important;
+    transition: none !important;
 }
 
 /* Themed table headers inside modals */
 .modal-table-header-themed {
-    background-color: rgba(var(--bs-secondary-rgb), 0.1) !important;
+    background-color: var(--app-modal-table-header-bg) !important;
+}
+
+.portfolio-segment-card {
+    background-color: var(--app-color-body-bg) !important;
+    border: 1px solid transparent;
+}
+
+.portfolio-segment-card-long {
+    border-color: var(--app-color-success-border-soft) !important;
+}
+
+.portfolio-segment-card-short {
+    border-color: var(--app-color-danger-border-soft) !important;
+}
+
+.portfolio-segment-card-header-long,
+.portfolio-segment-card-summary-long {
+    background-color: var(--app-color-success-soft-10) !important;
+}
+
+.portfolio-segment-card-header-short,
+.portfolio-segment-card-summary-short {
+    background-color: var(--app-color-danger-soft-10) !important;
+}
+
+.portfolio-segment-card-count {
+    border: 1px solid transparent;
+}
+
+.portfolio-segment-card-count-long {
+    background-color: var(--app-color-success-soft-25) !important;
+    color: var(--app-color-success) !important;
+    border-color: var(--app-color-success-border-soft) !important;
+}
+
+.portfolio-segment-card-count-short {
+    background-color: var(--app-color-danger-soft-25) !important;
+    color: var(--app-color-danger) !important;
+    border-color: var(--app-color-danger-border-soft) !important;
+}
+
+.portfolio-segment-table {
+    font-size: 0.8rem;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.portfolio-segment-table th,
+.portfolio-segment-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.portfolio-segment-table-col-shrink {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    max-width: 2.5rem;
+    white-space: nowrap;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+}
+
+.portfolio-segment-table-col-shrink .form-check-input {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.portfolio-segment-table-long {
+    --bs-table-border-color: var(--app-color-success-border-soft);
+}
+
+.portfolio-segment-table-short {
+    --bs-table-border-color: var(--app-color-danger-border-soft);
+}
+
+.portfolio-segment-action-menu {
+    z-index: 1085;
+}
+
+.portfolio-segment-action-menu .dropdown-item {
+    transition: none !important;
+}
+
+.portfolio-segment-action-menu .dropdown-item:hover,
+.portfolio-segment-action-menu .dropdown-item:focus,
+.portfolio-segment-action-menu .dropdown-item.active:hover {
+    background-color: var(--app-soft-highlight-bg) !important;
+    color: inherit !important;
+    transition: none !important;
+}
+
+.portfolio-segment-card:has(.portfolio-segment-action-menu.show) {
+    overflow: visible !important;
+    position: relative;
+    z-index: 20;
+}
+
+.portfolio-segment-card:has(.portfolio-segment-action-menu.show) .portfolio-segment-table-scroll {
+    max-height: none !important;
+    overflow: visible !important;
 }

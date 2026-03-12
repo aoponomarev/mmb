@@ -15,16 +15,16 @@
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 0.875rem;
-    color: var(--bs-secondary);
+    color: var(--app-color-secondary);
     transition: color 0.15s ease-in-out;
 }
 
 .combobox-clear:hover::before {
-    color: var(--bs-danger);
+    color: var(--app-color-danger);
 }
 
 .combobox-clear:active::before {
-    color: var(--bs-danger);
+    color: var(--app-color-danger);
     opacity: 0.75;
 }
 

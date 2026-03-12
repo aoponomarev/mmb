@@ -140,7 +140,7 @@
                                 <button class="nav-link" id="step5-tab" data-bs-toggle="tab" data-bs-target="#step5-pane" type="button" role="tab" aria-controls="step5-pane" aria-selected="false" title="Инициация входа через Google">5</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="step6-tab" data-bs-toggle="tab" data-bs-target="#step6-pane" type="button" role="tab" aria-controls="step6-pane" aria-selected="false" title="Компонент управления портфелями">6</button>
+                                <button class="nav-link" id="step6-tab" data-bs-toggle="tab" data-bs-target="#step6-pane" type="button" role="tab" aria-controls="step6-pane" aria-selected="false" title="Primary portfolio flow">6</button>
                             </li>
                         </ul>
 
@@ -276,16 +276,16 @@
                             </div>
                         </div>
 
-                        <!-- Шаг 6: Компонент управления портфелями -->
+                        <!-- Шаг 6: Primary portfolio flow -->
                             <div class="tab-pane fade" id="step6-pane" role="tabpanel" aria-labelledby="step6-tab" style="overflow-x: hidden; max-width: 100%;">
-                            <h5 class="mb-2">Шаг 6: Компонент управления портфелями</h5>
-                            <p class="text-muted small mb-2">Проверяем загрузку и доступность компонента portfolios-manager.</p>
+                            <h5 class="mb-2">Шаг 6: Primary portfolio flow</h5>
+                            <p class="text-muted small mb-2">Проверяем primary runtime path: header dropdown -> portfolio-form-modal-body -> portfolio-view-modal-body.</p>
                             <div class="d-flex gap-2 mb-2">
                                 <cmp-button
-                                    label="Проверить portfolios-manager"
+                                    label="Проверить portfolio flow"
                                     variant="outline-primary"
                                     size="sm"
-                                    @click="testStep6_CheckPortfoliosManager">
+                                    @click="testStep6_CheckPortfolioFlow">
                                 </cmp-button>
                             </div>
                             <div v-if="testStep6Result" class="mt-2">
@@ -297,19 +297,13 @@
                             </div>
                         </div>
 
-                        <!-- Компонент управления портфелями (условно) -->
+                        <!-- Legacy note -->
                                 <div class="mt-3" style="overflow-x: hidden; max-width: 100%;">
-                        <portfolios-manager
-                            v-if="isPortfoliosEnabled"
-                            @portfolio-created="handlePortfolioCreated"
-                            @portfolio-updated="handlePortfolioUpdated"
-                            @portfolio-deleted="handlePortfolioDeleted"
-                        ></portfolios-manager>
-                        <div v-else class="alert alert-info">
+                        <div class="alert alert-info mb-0">
                             <small>
-                                <strong>Информация:</strong> Управление портфелями доступно только после авторизации и включения синхронизации с облаком.
+                                <strong>Информация:</strong> Проверка портфелей выполняется только через dropdown в header и модалки `portfolio-form-modal-body` / `portfolio-view-modal-body`.
                             </small>
-                                    </div>
+                        </div>
                                 </div>
                             </div>
                         </div>

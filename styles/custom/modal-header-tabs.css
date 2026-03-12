@@ -18,8 +18,8 @@
 }
 
 .modal-header-tabs-group .btn-check:checked + .btn-outline-primary {
-    background-color: rgba(var(--bs-primary-rgb));
-    border-color: rgba(var(--bs-primary-rgb), 0.15);
+    background-color: var(--app-color-primary);
+    border-color: var(--app-color-primary-border-soft);
 }
 
 .modal-header-tabs-group.ms-auto.me-2 {

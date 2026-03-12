@@ -181,9 +181,19 @@
                             <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
                                href="#"
                                @click.prevent="handleViewPortfolio(p.id)"
-                               :class="p.syncState && p.syncState !== 'synced' ? 'opacity-50' : ''">
+                               :class="getPortfolioItemClasses(p)">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold small">{{ p.name }}</span>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="fw-bold small">{{ p.name }}</span>
+                                        <span
+                                            v-if="isConflictPortfolio(p)"
+                                            class="app-portfolio-sync-marker app-portfolio-sync-marker-conflict"
+                                            :title="getPortfolioConflictTooltip()"
+                                        >
+                                            <i class="fas fa-triangle-exclamation"></i>
+                                            <span>{{ getPortfolioConflictLabel() }}</span>
+                                        </span>
+                                    </div>
                                     <span class="text-white-50" style="font-size: 0.65rem;">{{ p.id }}</span>
                                 </div>
                                 <span :class="['badge ms-3', (p.marketMetrics?.pl || 0) >= 0 ? 'bg-success' : 'bg-danger']" style="font-size: 0.65rem;">

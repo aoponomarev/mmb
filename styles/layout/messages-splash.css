@@ -16,7 +16,7 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
     /* Semi-transparent dark backdrop under messages */
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: var(--app-color-dark-soft-75);
     /* Allow vertical and horizontal scrolling inside container */
     overflow-y: auto;
     overflow-x: auto;

@@ -1,0 +1,53 @@
+/**
+ * #CSS-Qp8wN4Ls
+ * @description App color tokens derived from Bootstrap root colors; single SSOT for custom CSS surfaces and highlights.
+ * @causality #for-unified-highlight-token
+ */
+
+:root {
+    --app-color-transparent: hsla(0, 0%, 0%, 0);
+    --app-color-white: hsla(0, 0%, 100%, 1);
+
+    --app-color-body-fg: hsl(from var(--bs-body-color) h s l / 1);
+    --app-color-body-bg: hsl(from var(--bs-body-bg) h s l / 1);
+    --app-color-dark: hsl(from var(--bs-dark) h s l / 1);
+    --app-color-light: hsl(from var(--bs-light) h s l / 1);
+    --app-color-primary: hsl(from var(--bs-primary) h s l / 1);
+    --app-color-primary-soft: hsl(from var(--bs-primary) h s l / 0.05);
+    --app-color-primary-border-soft: hsl(from var(--bs-primary) h s l / 0.15);
+    --app-color-success: hsl(from var(--bs-success) h s l / 1);
+    --app-color-success-soft-10: hsl(from var(--bs-success) h s l / 0.1);
+    --app-color-success-soft-25: hsl(from var(--bs-success) h s l / 0.25);
+    --app-color-success-border-soft: hsl(from var(--bs-success) h s l / 0.18);
+    --app-color-danger: hsl(from var(--bs-danger) h s l / 1);
+    --app-color-danger-soft-10: hsl(from var(--bs-danger) h s l / 0.1);
+    --app-color-danger-soft-25: hsl(from var(--bs-danger) h s l / 0.25);
+    --app-color-danger-border-soft: hsl(from var(--bs-danger) h s l / 0.18);
+    --app-color-warning: hsl(from var(--bs-warning) h s l / 1);
+    --app-color-warning-soft-10: hsl(from var(--bs-warning) h s l / 0.1);
+    --app-color-warning-soft-20: hsl(from var(--bs-warning) h s l / 0.2);
+    --app-color-warning-border-soft: hsl(from var(--bs-warning) h s l / 0.22);
+    --app-color-secondary: hsl(from var(--bs-secondary) h s l / 1);
+    --app-color-secondary-soft: hsl(from var(--bs-secondary) h s l / 0.1);
+    --app-color-dark-soft-05: hsl(from var(--bs-dark) h s l / 0.05);
+    --app-color-dark-soft-10: hsl(from var(--bs-dark) h s l / 0.1);
+    --app-color-dark-soft-20: hsl(from var(--bs-dark) h s l / 0.2);
+    --app-color-dark-soft-75: hsl(from var(--bs-dark) h s l / 0.75);
+    --app-color-light-soft-05: hsl(from var(--bs-light) h s l / 0.05);
+    --app-color-light-soft-10: hsl(from var(--bs-light) h s l / 0.1);
+    --app-color-light-soft-35: hsl(from var(--bs-light) h s l / 0.35);
+    --app-color-light-soft-40: hsl(from var(--bs-light) h s l / 0.4);
+    --app-color-light-soft-80: hsl(from var(--bs-light) h s l / 0.8);
+
+    --app-soft-highlight-bg: hsla(210, 50%, 50%, 0.1);
+    --app-key-metric-overlay-bg: hsl(from var(--bs-primary) h s l / 0.16);
+    --app-modal-table-header-bg: var(--app-color-secondary-soft);
+
+    --app-scrollbar-track-light: hsl(from var(--bs-light) h s l / 1);
+    --app-scrollbar-thumb-light: hsl(from var(--bs-secondary) h s l / 0.75);
+    --app-scrollbar-thumb-light-hover: hsl(from var(--bs-secondary) h s l / 0.95);
+    --app-scrollbar-track-dark: hsl(from var(--bs-dark) h s l / 0.85);
+    --app-scrollbar-thumb-dark: hsl(from var(--bs-secondary) h s l / 0.85);
+    --app-scrollbar-thumb-dark-hover: hsl(from var(--bs-secondary) h s l / 1);
+}
+

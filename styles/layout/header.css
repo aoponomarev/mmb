@@ -6,15 +6,15 @@
 .app-header {
     /* Layered downward shadow with inner white inset to lighten background */
     box-shadow:
-        0 2px 4px rgba(30, 35, 45, 0.05),
-        0 4px 8px rgba(0, 0, 0, 0.2),
-        0 8px 24px rgba(25, 30, 40, 0.1),
-        0 0 0 1000px rgba(255, 255, 255, 0.1) inset;
+        0 2px 4px var(--app-color-dark-soft-05),
+        0 4px 8px var(--app-color-dark-soft-20),
+        0 8px 24px var(--app-color-dark-soft-10),
+        0 0 0 1000px var(--app-color-light-soft-10) inset;
 }
 
 .header-info-row {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--app-color-light-soft-05);
+    background: var(--app-color-dark-soft-20);
     font-size: 0.8rem;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -28,7 +28,7 @@
 }
 
 .info-section {
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid var(--app-color-light-soft-05);
     padding: 4px 12px;
 }
 
@@ -37,27 +37,49 @@
 }
 
 .info-label {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--app-color-light-soft-40);
     font-size: 0.7rem;
     text-transform: uppercase;
     margin-right: 8px;
 }
 
 .info-value {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--app-color-light-soft-80);
     font-weight: 500;
 }
 
 .info-value.positive {
-    color: #2ecc71;
+    color: var(--app-color-success);
 }
 
 .info-value.negative {
-    color: #e74c3c;
+    color: var(--app-color-danger);
 }
 
 .app-header .header-inset-1 {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 0 0 1px var(--app-color-light-soft-35);
+}
+
+.app-header .app-portfolio-item-conflict {
+    opacity: 1 !important;
+}
+
+.app-header .app-portfolio-sync-marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.app-header .app-portfolio-sync-marker-conflict {
+    background-color: var(--app-color-warning-soft-10);
+    border: 1px solid var(--app-color-warning-border-soft);
+    color: var(--app-color-warning);
 }
 
 @media (max-width: 768px) {
@@ -66,7 +88,7 @@
     }
     .info-section {
         width: 50%;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid var(--app-color-light-soft-05);
     }
     .info-section:nth-child(even) {
         border-right: none;

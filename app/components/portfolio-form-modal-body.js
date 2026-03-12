@@ -1,6 +1,6 @@
 /**
  * #JS-dc3EKYZn
- * @description Portfolio form modal body (D.2); create/edit form.
+ * @description Portfolio form modal body (D.2); create/edit form built on the shared portfolio-segment-table shell.
  * @skill id:sk-c3d639
  */
 
@@ -61,87 +61,74 @@
 
                 <!-- Coin list (Long/Short) -->
                 <div class="row g-3 mb-2">
-                    <!-- Long segment -->
                     <div class="col-md-6">
-                        <div class="border border-success border-opacity-25 rounded h-100 overflow-hidden d-flex flex-column">
-                            <div class="bg-success bg-opacity-10 py-1 px-2 border-bottom d-flex justify-content-between align-items-center">
-                                <span class="small fw-bold text-success"><i class="fas fa-arrow-up me-1"></i> Long</span>
-                                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">
-                                    {{ selectedCoins.filter(c => (c.metrics?.agr || 0) >= 0).length }}
-                                </span>
-                            </div>
-                            <div class="table-responsive flex-grow-1" style="max-height: 250px;">
-                                <table class="table table-sm mb-0" style="font-size: 0.8rem; --bs-table-border-color: rgba(25, 135, 84, 0.18);">
-                                    <thead class="modal-table-header-themed sticky-top opacity-50 fw-normal">
-                                        <tr>
-                                            <th class="text-end fw-normal" style="width: 60px;">AGR</th>
-                                            <th class="text-end pe-2 fw-normal">Актив</th>
-                                            <th class="text-center fw-normal" style="width: 70px;">%</th>
-                                            <th class="pe-2 text-end"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="coin in selectedCoins.filter(c => (c.metrics?.agr || 0) >= 0)" :key="coin.coinId">
-                                            <td class="text-end align-middle">
-                                                <cmp-cell-num :value="coin.metrics?.agr" :precision="1" :colored="true" :class="{'fw-bold': coin.isLocked}"></cmp-cell-num>
-                                            </td>
-                                            <td class="align-middle text-end pe-2">
-                                                <div 
-                                                    :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-success' : '']"
-                                                    :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
-                                                    @click="coin.isLocked ? resetCoinWeight(coin) : null"
-                                                >{{ coin.ticker }}</div>
-                                            </td>
-                                            <td class="text-end align-middle">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm text-end p-1"
-                                                    :class="[
-                                                        coin.isLocked ? 'fw-bold text-success' : '',
-                                                        isLastUnlockedInSegment(coin) ? 'bg-body-secondary text-muted border-dashed' : ''
-                                                    ]"
-                                                    v-model.number="coin.portfolioPercent"
-                                                    :readonly="coin.isDisabledInRebalance || isLastUnlockedInSegment(coin)"
-                                                    :min="1"
-                                                    :max="100"
-                                                    @input="handleWeightInput(coin)">
-                                            </td>
-                                            <td class="text-end align-middle pe-3">
-                                                <div v-if="!initialData" class="dropdown">
-                                                    <i
-                                                        class="fas fa-times text-body-secondary opacity-50 cursor-pointer"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"></i>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
-                                                        <li>
-                                                            <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Удалить из портфеля
-                                                            </button>
-                                                        </li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" type="button" @click="banCoin(coin)">
-                                                                Поместить в бан
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <input
-                                                    v-else
-                                                    type="checkbox"
-                                                    class="form-check-input"
-                                                    :checked="!coin.isDisabledInRebalance"
-                                                    :title="coin.isDisabledInRebalance ? 'Включить монету в ребаланс' : 'Отключить (вес 1%)'"
-                                                    @change="toggleCoinRebalance(coin, $event.target.checked)">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="bg-success bg-opacity-10 py-1 px-2 text-center small d-flex align-items-center justify-content-center gap-2">
+                        <portfolio-segment-table
+                            side="long"
+                            title="Long"
+                            :count="longCoins.length"
+                            :columns="buildSegmentColumns(true)"
+                        >
+                            <template #rows>
+                                <tr v-for="coin in longCoins" :key="coin.coinId">
+                                    <td class="align-middle">
+                                        <cmp-cell-num :value="coin.metrics?.agr" :precision="1" :colored="true" :class="{'fw-bold': coin.isLocked}"></cmp-cell-num>
+                                    </td>
+                                    <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
+                                    <td class="align-middle">
+                                        <div
+                                            :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-success' : '']"
+                                            :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
+                                            @click="coin.isLocked ? resetCoinWeight(coin) : null"
+                                        >{{ coin.ticker }}</div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm text-center p-1"
+                                            :class="[
+                                                coin.isLocked ? 'fw-bold text-success' : '',
+                                                isLastUnlockedInSegment(coin) ? 'bg-body-secondary text-muted border-dashed' : ''
+                                            ]"
+                                            v-model.number="coin.portfolioPercent"
+                                            :readonly="coin.isDisabledInRebalance || isLastUnlockedInSegment(coin)"
+                                            :min="1"
+                                            :max="100"
+                                            @input="handleWeightInput(coin)">
+                                    </td>
+                                    <td class="align-middle portfolio-segment-table-col-shrink">
+                                        <div v-if="!initialData" class="portfolio-segment-action-dropdown dropdown">
+                                            <i
+                                                class="fas fa-times text-body-secondary opacity-50 cursor-pointer"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"></i>
+                                            <ul class="portfolio-segment-action-menu dropdown-menu dropdown-menu-end dropdown-menu-sm">
+                                                <li>
+                                                    <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
+                                                        Удалить из портфеля
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger" type="button" @click="banCoin(coin)">
+                                                        Поместить в бан
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <input
+                                            v-else
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            :checked="!coin.isDisabledInRebalance"
+                                            :title="coin.isDisabledInRebalance ? 'Включить монету в ребаланс' : 'Отключить (вес 1%)'"
+                                            @change="toggleCoinRebalance(coin, $event.target.checked)">
+                                    </td>
+                                </tr>
+                            </template>
+                            <template #summary>
                                 <span class="text-muted">Long:</span>
                                 <div style="width: 60px;">
-                                    <input 
-                                        type="number" 
+                                    <input
+                                        type="number"
                                         class="form-control form-control-xs text-center p-0 fw-bold text-success border-success border-opacity-25"
                                         :class="balanceMode !== 'custom' ? 'border-transparent bg-transparent shadow-none pe-none' : ''"
                                         v-model.number="customLongPercent"
@@ -152,91 +139,78 @@
                                         @input="handleSegmentWeightInput(true)"
                                     >
                                 </div>
-                            </div>
-                        </div>
+                            </template>
+                        </portfolio-segment-table>
                     </div>
 
-                    <!-- Short segment -->
                     <div class="col-md-6">
-                        <div class="border border-danger border-opacity-25 rounded h-100 overflow-hidden d-flex flex-column">
-                            <div class="bg-danger bg-opacity-10 py-1 px-2 border-bottom d-flex justify-content-between align-items-center">
-                                <span class="small fw-bold text-danger"><i class="fas fa-arrow-down me-1"></i> Short</span>
-                                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25">
-                                    {{ selectedCoins.filter(c => (c.metrics?.agr || 0) < 0).length }}
-                                </span>
-                            </div>
-                            <div class="table-responsive flex-grow-1" style="max-height: 250px;">
-                                <table class="table table-sm mb-0" style="font-size: 0.8rem; --bs-table-border-color: rgba(220, 53, 69, 0.18);">
-                                    <thead class="modal-table-header-themed sticky-top opacity-50 fw-normal">
-                                        <tr>
-                                            <th class="text-end fw-normal" style="width: 60px;">AGR</th>
-                                            <th class="text-end pe-2 fw-normal">Актив</th>
-                                            <th class="text-center fw-normal" style="width: 70px;">%</th>
-                                            <th class="pe-2 text-end"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="coin in selectedCoins.filter(c => (c.metrics?.agr || 0) < 0)" :key="coin.coinId">
-                                            <td class="text-end align-middle">
-                                                <cmp-cell-num :value="coin.metrics?.agr" :precision="1" :colored="true" :class="{'fw-bold': coin.isLocked}"></cmp-cell-num>
-                                            </td>
-                                            <td class="align-middle text-end pe-2">
-                                                <div 
-                                                    :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-danger' : '']"
-                                                    :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
-                                                    @click="coin.isLocked ? resetCoinWeight(coin) : null"
-                                                >{{ coin.ticker }}</div>
-                                            </td>
-                                            <td class="text-end align-middle">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm text-end p-1"
-                                                    :class="[
-                                                        coin.isLocked ? 'fw-bold text-danger' : '',
-                                                        isLastUnlockedInSegment(coin) ? 'bg-body-secondary text-muted border-dashed' : ''
-                                                    ]"
-                                                    v-model.number="coin.portfolioPercent"
-                                                    :readonly="coin.isDisabledInRebalance || isLastUnlockedInSegment(coin)"
-                                                    :min="1"
-                                                    :max="100"
-                                                    @input="handleWeightInput(coin)">
-                                            </td>
-                                            <td class="text-end align-middle pe-3">
-                                                <div v-if="!initialData" class="dropdown">
-                                                    <i
-                                                        class="fas fa-times text-body-secondary opacity-50 cursor-pointer"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"></i>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
-                                                        <li>
-                                                            <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
-                                                                Удалить из портфеля
-                                                            </button>
-                                                        </li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" type="button" @click="banCoin(coin)">
-                                                                Поместить в бан
-                                                            </button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <input
-                                                    v-else
-                                                    type="checkbox"
-                                                    class="form-check-input"
-                                                    :checked="!coin.isDisabledInRebalance"
-                                                    :title="coin.isDisabledInRebalance ? 'Включить монету в ребаланс' : 'Отключить (вес 1%)'"
-                                                    @change="toggleCoinRebalance(coin, $event.target.checked)">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="bg-danger bg-opacity-10 py-1 px-2 text-center small d-flex align-items-center justify-content-center gap-2">
+                        <portfolio-segment-table
+                            side="short"
+                            title="Short"
+                            :count="shortCoins.length"
+                            :columns="buildSegmentColumns(true)"
+                        >
+                            <template #rows>
+                                <tr v-for="coin in shortCoins" :key="coin.coinId">
+                                    <td class="align-middle">
+                                        <cmp-cell-num :value="coin.metrics?.agr" :precision="1" :colored="true" :class="{'fw-bold': coin.isLocked}"></cmp-cell-num>
+                                    </td>
+                                    <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
+                                    <td class="align-middle">
+                                        <div
+                                            :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-danger' : '']"
+                                            :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
+                                            @click="coin.isLocked ? resetCoinWeight(coin) : null"
+                                        >{{ coin.ticker }}</div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm text-center p-1"
+                                            :class="[
+                                                coin.isLocked ? 'fw-bold text-danger' : '',
+                                                isLastUnlockedInSegment(coin) ? 'bg-body-secondary text-muted border-dashed' : ''
+                                            ]"
+                                            v-model.number="coin.portfolioPercent"
+                                            :readonly="coin.isDisabledInRebalance || isLastUnlockedInSegment(coin)"
+                                            :min="1"
+                                            :max="100"
+                                            @input="handleWeightInput(coin)">
+                                    </td>
+                                    <td class="align-middle portfolio-segment-table-col-shrink">
+                                        <div v-if="!initialData" class="portfolio-segment-action-dropdown dropdown">
+                                            <i
+                                                class="fas fa-times text-body-secondary opacity-50 cursor-pointer"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"></i>
+                                            <ul class="portfolio-segment-action-menu dropdown-menu dropdown-menu-end dropdown-menu-sm">
+                                                <li>
+                                                    <button class="dropdown-item" type="button" @click="removeCoin(coin.coinId)">
+                                                        Удалить из портфеля
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger" type="button" @click="banCoin(coin)">
+                                                        Поместить в бан
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <input
+                                            v-else
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            :checked="!coin.isDisabledInRebalance"
+                                            :title="coin.isDisabledInRebalance ? 'Включить монету в ребаланс' : 'Отключить (вес 1%)'"
+                                            @change="toggleCoinRebalance(coin, $event.target.checked)">
+                                    </td>
+                                </tr>
+                            </template>
+                            <template #summary>
                                 <span class="text-muted">Short:</span>
                                 <div style="width: 60px;">
-                                    <input 
-                                        type="number" 
+                                    <input
+                                        type="number"
                                         class="form-control form-control-xs text-center p-0 fw-bold text-danger border-danger border-opacity-25"
                                         :class="balanceMode !== 'custom' ? 'border-transparent bg-transparent shadow-none pe-none' : ''"
                                         v-model.number="customShortPercent"
@@ -247,8 +221,8 @@
                                         @input="handleSegmentWeightInput(false)"
                                     >
                                 </div>
-                            </div>
-                        </div>
+                            </template>
+                        </portfolio-segment-table>
                     </div>
                 </div>
 
@@ -264,7 +238,8 @@
         components: {
             'cmp-button': window.cmpButton,
             'cmp-button-group': window.cmpButtonGroup,
-            'cmp-cell-num': window.cmpCellNum
+            'cmp-cell-num': window.cmpCellNum,
+            'portfolio-segment-table': window.portfolioSegmentTable
         },
 
         props: {
@@ -278,6 +253,11 @@
                 type: Array,
                 required: false,
                 default: () => []
+            },
+            preselectedCoinKeyMetrics: {
+                type: Object,
+                required: false,
+                default: () => ({})
             },
             onSave: {
                 type: Function,
@@ -312,6 +292,12 @@
         computed: {
             totalPercent() {
                 return this.selectedCoins.reduce((sum, c) => sum + (Number(c.portfolioPercent) || 0), 0);
+            },
+            longCoins() {
+                return (this.selectedCoins || []).filter(c => (c.metrics?.agr || 0) >= 0);
+            },
+            shortCoins() {
+                return (this.selectedCoins || []).filter(c => (c.metrics?.agr || 0) < 0);
             },
             isValid() {
                 return this.portfolioName.trim().length > 0 && this.selectedCoins.length > 0;
@@ -482,18 +468,78 @@
                 this.updateSaveButton();
             },
 
+            getCoinKeyMetricLabel(coin) {
+                return coin?.keyMetric?.label || coin?.keyBuyer || '—';
+            },
+
+            buildSegmentColumns(includeActionColumn = false) {
+                const columns = [
+                    {
+                        key: 'agr',
+                        label: 'AGR',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'keyMetric',
+                        icon: 'fas fa-crosshairs opacity-50',
+                        title: 'Ключевая метрика',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'asset',
+                        label: 'Актив',
+                        headerClass: 'text-center'
+                    },
+                    {
+                        key: 'weight',
+                        label: '%',
+                        headerClass: 'text-center'
+                    }
+                ];
+                if (includeActionColumn) {
+                    columns.push({
+                        key: 'actions',
+                        label: '',
+                        headerClass: 'text-center portfolio-segment-table-col-shrink',
+                        width: '2.5rem'
+                    });
+                }
+                return columns;
+            },
+
+            getPreselectedKeyMetric(coinId) {
+                if (!coinId || !this.preselectedCoinKeyMetrics || typeof this.preselectedCoinKeyMetrics !== 'object') {
+                    return null;
+                }
+                const selection = this.preselectedCoinKeyMetrics[coinId];
+                return window.portfolioConfig?.normalizeKeyMetric
+                    ? window.portfolioConfig.normalizeKeyMetric(selection)
+                    : selection;
+            },
+
             normalizeSelectedCoinsForDomain() {
-                this.selectedCoins = (this.selectedCoins || []).map((coin, index) => ({
-                    ...coin,
-                    coinId: coin.coinId || coin.id || `${coin.symbol || coin.ticker || 'coin'}-${index}`,
-                    ticker: (coin.ticker || coin.symbol || '').toUpperCase(),
-                    portfolioPercent: Number.isFinite(Number(coin.portfolioPercent)) ? Number(coin.portfolioPercent) : 0,
-                    isLocked: !!coin.isLocked,
-                    isDisabledInRebalance: !!coin.isDisabledInRebalance
-                }));
+                this.selectedCoins = (this.selectedCoins || []).map((coin, index) => {
+                    if (window.portfolioConfig?.normalizePortfolioCoin) {
+                        return window.portfolioConfig.normalizePortfolioCoin(coin, this.$root?.activeModelId);
+                    }
+                    return {
+                        ...coin,
+                        coinId: coin.coinId || coin.id || `${coin.symbol || coin.ticker || 'coin'}-${index}`,
+                        ticker: (coin.ticker || coin.symbol || '').toUpperCase(),
+                        portfolioPercent: Number.isFinite(Number(coin.portfolioPercent)) ? Number(coin.portfolioPercent) : 0,
+                        isLocked: !!coin.isLocked,
+                        isDisabledInRebalance: !!coin.isDisabledInRebalance
+                    };
+                });
             },
 
             buildDraftFromSelected() {
+                const normalizeKeyMetric = (coin) => {
+                    const normalized = window.portfolioConfig?.normalizeKeyMetric
+                        ? window.portfolioConfig.normalizeKeyMetric(coin.keyMetric || { field: coin.keyMetricField || null, label: coin.keyBuyer || null })
+                        : (coin.keyMetric || null);
+                    return normalized?.field ? normalized : null;
+                };
                 return {
                     id: this.initialData?.id,
                     name: this.portfolioName,
@@ -506,6 +552,7 @@
                         weight: Number(coin.portfolioPercent) || 0,
                         isLocked: !!coin.isLocked,
                         isDisabledInRebalance: !!coin.isDisabledInRebalance,
+                        keyMetric: normalizeKeyMetric(coin),
                         delegatedBy: {
                             modelId: coin.delegatedBy?.modelId || this.$root.activeModelId || 'unknown',
                             modelName: coin.delegatedBy?.modelName || ''
@@ -535,7 +582,14 @@
 
                 // Convert to PortfolioCoin structure
                 this.selectedCoins = preselected.map(coin => {
-                    return window.portfolioConfig.createPortfolioCoin(coin, activeModelId);
+                    const created = window.portfolioConfig.createPortfolioCoin(coin, activeModelId);
+                    const keyMetric = this.getPreselectedKeyMetric(created.coinId);
+                    if (keyMetric) {
+                        created.keyMetric = keyMetric;
+                    }
+                    return window.portfolioConfig.normalizePortfolioCoin
+                        ? window.portfolioConfig.normalizePortfolioCoin(created, activeModelId)
+                        : created;
                 });
 
                 if (!this.portfolioName) {

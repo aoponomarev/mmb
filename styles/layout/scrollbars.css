@@ -35,50 +35,50 @@ body::-webkit-scrollbar:vertical {
 
 html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--app-scrollbar-track-light);
 }
 
 html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--app-scrollbar-thumb-light);
     border-radius: 6px;
 }
 
 html::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--app-scrollbar-thumb-light-hover);
 }
 
 [data-bs-theme="dark"] html::-webkit-scrollbar-track,
 [data-bs-theme="dark"] body::-webkit-scrollbar-track {
-    background: #2d2d2d;
+    background: var(--app-scrollbar-track-dark);
 }
 
 [data-bs-theme="dark"] html::-webkit-scrollbar-thumb,
 [data-bs-theme="dark"] body::-webkit-scrollbar-thumb {
-    background: #666;
+    background: var(--app-scrollbar-thumb-dark);
 }
 
 [data-bs-theme="dark"] html::-webkit-scrollbar-thumb:hover,
 [data-bs-theme="dark"] body::-webkit-scrollbar-thumb:hover {
-    background: #888;
+    background: var(--app-scrollbar-thumb-dark-hover);
 }
 
 /* Firefox: visible vertical scrollbar for page */
 html {
     scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
+    scrollbar-color: var(--app-scrollbar-thumb-light) var(--app-scrollbar-track-light);
 }
 
 [data-bs-theme="dark"] html {
-    scrollbar-color: #666 #2d2d2d;
+    scrollbar-color: var(--app-scrollbar-thumb-dark) var(--app-scrollbar-track-dark);
 }
 
 /* Globally hide horizontal scrollbars on all containers except html/body */
 *:not(html):not(body) {
     /* Firefox: hide horizontal bar but keep vertical one */
     scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
+    scrollbar-color: var(--app-color-transparent) var(--app-color-transparent);
 }
 
 /* WebKit (Chrome, Safari, Edge): tune scrollbars for all containers except html/body */
@@ -96,11 +96,11 @@ html {
 }
 
 *:not(html):not(body)::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 *:not(html):not(body)::-webkit-scrollbar-thumb {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 /* Restore vertical scrollbar width (transparent) for all elements except html/body */
@@ -109,19 +109,19 @@ html {
 }
 
 *:not(html):not(body)::-webkit-scrollbar-thumb:vertical {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 *:not(html):not(body)::-webkit-scrollbar-thumb:vertical:hover {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 [data-bs-theme="dark"] *:not(html):not(body)::-webkit-scrollbar-thumb:vertical {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 [data-bs-theme="dark"] *:not(html):not(body)::-webkit-scrollbar-thumb:vertical:hover {
-    background: transparent;
+    background: var(--app-color-transparent);
 }
 
 /* Containers with horizontal overflow: hide bar while keeping scrolling */
@@ -133,7 +133,7 @@ html {
     /* Hide horizontal scrollbar */
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-    scrollbar-color: transparent transparent !important;
+    scrollbar-color: var(--app-color-transparent) var(--app-color-transparent) !important;
 }
 
 .table-responsive::-webkit-scrollbar,
