@@ -46,7 +46,7 @@
 }
 
 .portfolio-segment-card {
-    background-color: var(--app-color-body-bg) !important;
+    /* Transparent so themed parent (modal-body) shows through; avoids theme mismatch. #for-theme-inheritance-over-redundant-surfaces */
     border: 1px solid transparent;
 }
 
@@ -61,11 +61,13 @@
 .portfolio-segment-card-header-long,
 .portfolio-segment-card-summary-long {
     background-color: var(--app-color-success-soft-10) !important;
+    border-bottom: 1px solid var(--app-color-success-border-soft) !important;
 }
 
 .portfolio-segment-card-header-short,
 .portfolio-segment-card-summary-short {
     background-color: var(--app-color-danger-soft-10) !important;
+    border-bottom: 1px solid var(--app-color-danger-border-soft) !important;
 }
 
 .portfolio-segment-card-count {

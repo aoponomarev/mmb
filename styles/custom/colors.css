@@ -2,6 +2,7 @@
  * #CSS-Qp8wN4Ls
  * @description App color tokens derived from Bootstrap root colors; single SSOT for custom CSS surfaces and highlights.
  * @causality #for-unified-highlight-token
+ * Theme-dependent tokens (e.g. --app-color-body-bg): for nested surfaces inside modals, prefer transparent inheritance over re-declaring background (#for-theme-inheritance-over-redundant-surfaces).
  */
 
 :root {
@@ -40,7 +41,7 @@
     --app-color-light-soft-80: hsl(from var(--bs-light) h s l / 0.8);
 
     --app-soft-highlight-bg: hsla(210, 50%, 50%, 0.1);
-    --app-key-metric-overlay-bg: hsl(from var(--bs-primary) h s l / 0.16);
+    --app-key-metric-overlay-bg: hsl(from var(--bs-secondary) h s l / 0.12);
     --app-modal-table-header-bg: var(--app-color-secondary-soft);
 
     --app-scrollbar-track-light: hsl(from var(--bs-light) h s l / 1);

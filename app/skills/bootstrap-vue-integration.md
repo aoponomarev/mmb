@@ -55,6 +55,8 @@ last_change: ""
     Preserve `data-bs-*` attributes for native Bootstrap functionality.
 6.  **Styling:**
     Use Bootstrap utility classes first; use CSS variables (`--bs-body-bg`) for Light/Dark mode; no inline styles unless dynamically calculated (e.g. progress bars).
+7.  **Theme inheritance over redundant surfaces (#for-theme-inheritance-over-redundant-surfaces):**
+    Do not assign background to nested elements inside modals or themed containers via theme-dependent variables (e.g. `--app-color-body-bg`, `--bs-body-bg`) when the parent already provides a themed surface. Prefer transparent inheritance so the parent's themed background shows through. Override only when a distinct surface is explicitly needed; then use variables defined in a theme-aware scope.
 
 ## Contracts
 
