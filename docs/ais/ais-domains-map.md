@@ -1,7 +1,7 @@
 ---
 id: ais-d4e5f6
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-12"
 related_skills:
   - sk-c3d639
   - sk-bb7c8e
@@ -13,6 +13,7 @@ related_ais:
   - ais-a1b2c3
   - ais-3732ce
   - ais-3f4e5c
+  - ais-6f2b1d
 
 ---
 
@@ -31,7 +32,7 @@ related_ais:
 | Домен | Ключевые модули | Ubiquitous Language | Ответственность |
 |-------|----------------|---------------------|-----------------|
 | **Market Data** | `dataProviderManager`, `CoinGeckoProvider`, `YandexCacheProvider`, `coingeckoStablecoinsLoader`, `coinsMetadataLoader`, `marketMetrics` | coin, market_cap, volume, price, stablecoin, provider, top-N | Получение, нормализация и кэширование рыночных данных из внешних API |
-| **Portfolio** | `portfolioEngine`, `portfolioValidation`, `portfolioAdapters`, `portfoliosClient` | portfolio, holding, allocation, rebalance, coin-set, draft-set, ban-set | Управление портфелями пользователя, валидация, адаптация форматов |
+| **Portfolio** | `portfolioEngine`, `portfolioValidation`, `portfolioAdapters`, `portfoliosClient`, `portfolioConfig`, `app-ui-root` | portfolio, holding, allocation, rebalance, snapshot, key-metric, sync-state | Управление каноническим портфелем пользователя, локальными scope-хранилищами и Cloudflare replica. Полная спецификация: id:ais-6f2b1d |
 | **Metrics & Models** | `modelManager`, `MedianAir260101Calculator`, `MedianAir260115Calculator` | model, metric, AIR, median, score, percentile | Расчёт метрик и моделей оценки монет |
 | **Authentication** | `authState`, `authClient`, `authConfig` | user, token, session, OAuth, provider | Аутентификация и управление сессиями через Cloudflare Worker |
 | **Workspace** | `workspaceConfig`, `cloudWorkspaceClient` | workspace, active-model, active-coin-set, cloud-sync | Персистентное хранение пользовательских настроек (локально + облако) |

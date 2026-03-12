@@ -1,7 +1,7 @@
 ---
 id: ais-a1b2c3
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-12"
 related_skills:
   - sk-483943
   - sk-c62fb6
@@ -12,6 +12,7 @@ related_ais:
   - ais-c6c35b
   - ais-7f8e9d
   - ais-b3c4d5
+  - ais-6f2b1d
 
 ---
 
@@ -68,7 +69,7 @@ is/ ──→ (external systems, не зависит от app/core/shared runtim
 | Errors | `core/errors/` | error-types, error-handler |
 | Runtime policies | `core/config/` | runtime-policies.js (TTL, intervals) |
 | Logging | `core/logging/` | logger |
-| Observability | `core/observability/` | fallback-monitor |
+| Observability | `core/observability/` | fallback-monitor, portfolio-observability |
 | Utils | `core/utils/` | draft-coin-set, ban-coin-set, favorites-manager, и др. |
 
 **app/ сегменты:**
@@ -172,6 +173,7 @@ flowchart TD
 3. **Template-logic separation:** Vue templates live in `*/templates/`, component logic in `*/components/`. `#for-template-logic-separation`.
 4. **Infrastructure is build-time-only:** `is/scripts/` runs in Node.js at preflight/CI, never loaded by browser runtime.
 5. **Namespace uniqueness:** each `window.*` global must map to exactly one source file; enforced by code-file-registry and module-loader dedup.
+6. **Portfolio runtime singularity:** в active module graph допускается только один primary portfolio UI path. Legacy portfolio CRUD modules могут оставаться в repo как donors, но не должны одновременно загружаться рядом с `app-ui-root` portfolio flow. См. id:ais-6f2b1d.
 
 ## Компоненты и Контракты (Components & Contracts)
 

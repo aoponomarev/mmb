@@ -1,7 +1,7 @@
 ---
 id: docidx-3022eb
 status: active
-last_updated: "2026-03-11"
+last_updated: "2026-03-12"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -11,7 +11,7 @@ last_updated: "2026-03-11"
 # Index: AIS Specifications
 
 > Master index of Architecture & Infrastructure Specifications.
-> Auto-generated. Total: 32
+> Auto-generated. Total: 33
 
 ---
 
@@ -42,6 +42,7 @@ last_updated: "2026-03-11"
 - [id:ais-8d3c2a](ais/ais-mcp-data-flow.md) — AIS: Поток данных MCP (MCP Data Flow)
 - [id:ais-f5a6b7](ais/ais-policies-schemas.md) — AIS: Политики и схемы валидации (Policies & Schemas)
 - [id:ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
+- [id:ais-6f2b1d](ais/ais-portfolio-system.md) — AIS: Портфельная система, локальные области хранения и Cloudflare sync-flow
 - [id:ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
 - [id:ais-7f8e9d](ais/ais-ssot-contract-plane.md) — AIS: Плоскость контрактов SSOT (SSOT Contract Plane)
 - [id:ais-d8e7f6](ais/ais-unified-adapter-system.md) — AIS: Единая система адаптеров (Unified Adapter System)

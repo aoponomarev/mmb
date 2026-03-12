@@ -1,7 +1,7 @@
 ---
 id: ais-c6c35b
 status: active
-last_updated: "2026-03-10"
+last_updated: "2026-03-12"
 related_skills:
   - sk-318305
   - sk-cb75ec
@@ -12,6 +12,7 @@ related_ais:
   - ais-a1b2c3
   - ais-c2d3e4
   - ais-71a8b9
+  - ais-6f2b1d
 
 ---
 
@@ -41,11 +42,15 @@ related_ais:
 - **События:** Нативные события Bootstrap (например, `show.bs.modal`) должны проксироваться в стандартные события Vue (`@show`).
 - **Slot-контракты компонентов:** если wrapper-компонент задаёт проектный контракт слота, содержимое должно собираться из project-компонентов, а не из ad-hoc raw Bootstrap узлов. Пример: внутри `cmp-dropdown` меню нужно строить через `dropdown-menu-item`, чтобы не терять единый hover-стиль, auto-close и touch-tooltip поведение.
 - **Outside-click для dropdown:** `cmp-dropdown` по умолчанию закрывается по клику вне меню; для редких сценариев (многошаговые потоки) можно отключить через `closeOnOutsideClick=false`.
+- Portfolio-specific modal flow (`portfolio-form-modal-body`, `portfolio-view-modal-body`, header dropdown semantics) вынесен в отдельный SSOT: id:ais-6f2b1d. Этот AIS оставляет только generic UI/wrapper contracts.
+- Если одна и та же visual shell используется в нескольких modal flows, она должна быть вынесена в отдельный project component. Пример: portfolio segment tables now share `#JS-Ah6d2Adu (portfolio-segment-table.js)` instead of duplicating shell markup in form/view modal bodies.
+- Detached portfolio conflict copies не должны теряться среди обычных non-synced строк: shared selector обязан давать им явный warning-marker + native tooltip, а modal view повторяет этот marker возле title.
 
 ## UI Pattern Contracts (Generalized)
 
 ### 1) Модальные окна
 - Единая оболочка: `cmp-modal` + унифицированный header (title, `*-header-extra`, `btn-close`) + body component.
+- Если один и тот же body component обслуживает несколько сценариев, modal shell обязан различать их через config-driven `title` / `description` / `helpText`, а не через дублирование body component.
 - Действия в footer управляются через `modalApi` (register/update/remove); ручные ad-hoc footer-кнопки считаются исключением.
 - Автогенерируемые модалки из `registeredModals` обязаны сохранять ту же структуру shell, что и вручную объявленные.
 

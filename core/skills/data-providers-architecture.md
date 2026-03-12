@@ -161,7 +161,7 @@ When using managed PostgreSQL for heavy data:
 
 **Schema Migration Pattern**: (1) Write migration SQL (YYYY-MM-DD-description.sql); (2) Update schema file; (3) Update Function code if INSERT/SELECT change; (4) Deploy with temporary admin endpoint; (5) Execute migration; (6) Remove admin endpoint, redeploy; (7) Use `IF EXISTS`/`IF NOT EXISTS` in DDL.
 
-**Guard Layers**: Feature toggle `isFeatureEnabled('postgresSync')`; UI toggle `isUiToggleEnabled()`; `classifySyncSkipReason()` for expected skips; EventBus `auth-state-changed` triggers `syncUser()` and `syncPortfoliosFromCloud()`.
+**Guard Layers**: Feature toggle `isFeatureEnabled('postgresSync')`; UI toggle `isUiToggleEnabled()`; `classifySyncSkipReason()` for expected skips. Portfolio hydrate is orchestrated by `app-ui-root` auth lifecycle, not by a mandatory EventBus `auth-state-changed` consumer.
 
 ### File Map
 

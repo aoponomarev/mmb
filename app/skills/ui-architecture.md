@@ -26,6 +26,7 @@ last_change: ""
 - **#for-file-protocol** The frontend must run purely as static files; no local Node backend.
 - **#not-bundler-ui** We avoid UI bundlers to maintain absolute zero-config portability with `file://`.
 - **#for-tooltip-reactivity** Tooltips must be re-initialized or titles reactively bound so that language switches affect hover text immediately.
+- **#for-conflict-state-marker** Detached conflict copies must look different from ordinary unsynced items, otherwise users reopen or publish the wrong branch by mistake.
 
 ---
 
@@ -104,6 +105,7 @@ When UI shows an action-oriented counter (for example "coins to apply into table
 Use one modal shell shape across the app (`#for-modal-shell-uniformity`):
 - `<cmp-modal ...>` with explicit header slot: `modal-title` + `*-header-extra` container + `btn-close`.
 - Body contains one focused body component with explicit props contract.
+- If one body component serves several user scenarios, semantic differences must live in shell-level config (`title`, `description`, `helpText`) rather than in duplicated body components.
 - Footer actions are managed by `modalApi` (register/update/remove), not by ad-hoc inline footer buttons.
 - If modal is generated from registry (`registeredModals`), its shell must stay structurally identical to hand-written modals.
 
@@ -132,6 +134,12 @@ Header selectors are standardized through `cmp-button-group` radio mode (`#for-h
 - MDN timeframe (`4h/8h/12h`), AGR method (`DCS/TSI/MPS`), and table display tabs must use one button-group contract.
 - Responsive collapse to dropdown is part of this contract (`collapse-breakpoint`, dynamic label/labelShort).
 - Color/active state logic should live in the button descriptors, not in scattered DOM conditionals.
+
+### Portfolio Sync State Marker Contract
+
+Conflict forks in shared portfolio selectors must use an explicit warning marker, not only the generic non-synced dimming (`#for-conflict-state-marker`).
+- Minimum contract: visible badge/icon in the selector row plus a native tooltip explaining that the local copy was detached after multi-device divergence.
+- If the user opens such a portfolio, the view modal should repeat the same state marker near the title so support/debug flows do not confuse it with the primary cloud-bound version.
 
 ### System Messages Contract
 

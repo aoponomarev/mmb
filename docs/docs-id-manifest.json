@@ -16,6 +16,7 @@
     "sk-c62fb6": "is/skills/arch-layout-governance.md",
     "sk-3225b2": "is/skills/arch-mcp-ecosystem.md",
     "sk-92384e": "is/skills/arch-monitoring.md",
+    "sk-6ac4d2": "is/skills/arch-portfolio-sync-cloud.md",
     "sk-6eeb9a": "is/skills/arch-rollback.md",
     "sk-7d810a": "is/skills/arch-skills-mcp.md",
     "sk-d6777d": "is/skills/arch-testing-ci.md",
@@ -92,6 +93,7 @@
     "ais-8d3c2a": "docs/ais/ais-mcp-data-flow.md",
     "ais-f5a6b7": "docs/ais/ais-policies-schemas.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
+    "ais-6f2b1d": "docs/ais/ais-portfolio-system.md",
     "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
     "ais-7f8e9d": "docs/ais/ais-ssot-contract-plane.md",
     "ais-d8e7f6": "docs/ais/ais-unified-adapter-system.md",
@@ -148,5 +150,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-11T12:34:15.062Z"
+  "generated_at": "2026-03-12T13:14:24.296Z"
 }

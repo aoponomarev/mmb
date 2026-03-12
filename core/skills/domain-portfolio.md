@@ -4,7 +4,7 @@ title: "Domain: Portfolio Engine"
 reasoning_confidence: 0.85
 reasoning_audited_at: 2026-03-09
 reasoning_checksum: a2b1b94b
-last_change: ""
+last_change: "2026-03-12"
 
 ---
 
@@ -17,6 +17,8 @@ last_change: ""
 
 - **#for-domain-invariants** Portfolio math breaks silently if weights don't sum to 100. Enforcing this as a strict domain invariant prevents invalid state from persisting.
 - **#for-compatibility-facade** Direct cutover to pure functions is risky. A facade translates imperative calls to pure domain operations, enabling incremental migration.
+- **#for-key-metric-locking** Если актив был выбран кликом по конкретной metric-ячейке, `keyMetric` остаётся привязан к asset до явного снятия чекбокса. Это защищает snapshot от случайного переопределения в плотной таблице показателей.
+- **#for-auth-scoped-portfolio-storage** Guest-local и authenticated-local portfolio contexts cannot share one storage key without cross-contaminating login/logout behavior.
 
 ---
 
@@ -64,7 +66,20 @@ The domain engine has **no knowledge of storage** (localStorage, Cloudflare, Pos
 
 ### Portfolio Schema & Storage
 
-**Schema**: `{ id: "YYMMDD-hhmm", name: string, coins: [{ coinId, ticker, portfolioPercent, delegatedBy: { modelId } }], settings: { horizon } }`. **Invariant**: Every coin MUST have `delegatedBy` pointing to a valid Model ID. **Storage**: Local `localStorage` key (e.g. `mbb-portfolios`); Cloud Cloudflare D1 table `portfolios`. File Map: #JS-TnWsDTjK (portfolios-client.js).
+**Primary SSOT**: id:ais-6f2b1d (`docs/ais/ais-portfolio-system.md`).
+
+**Schema**: canonical `portfolio` keeps `id`, `name`, `description`, `createdAt`, `updatedAt`, `schemaVersion >= 2`, optional `cloudflareId`, `syncState`, `cloudSyncMode`, `cloudUpdatedAt`, optional `conflictMeta`, `coins[]`, `snapshots`, `settings`, `modelMix`, `modelVersion`, `marketMetrics`, and `marketAnalysis`. Each canonical `coin` keeps `coinId`, `ticker`, `name`, `currentPrice`, `pvs`, `metrics`, `portfolioPercent`, `isLocked`, `isDisabledInRebalance`, `delegatedBy`, and optional `keyMetric`.
+
+**Invariant**: every coin MUST have `delegatedBy` pointing to a valid Model ID; if `keyMetric` exists it MUST contain both `field` and `label`.
+
+**Storage**: guest local scope uses `localStorage['app-portfolios']`; authenticated local scope uses `localStorage['app-portfolios::<user-email>']`; Cloudflare D1 acts as auth-scoped replica and recovery source. Import/export works against the current local scope only; imported archives are forced into `syncState='local-only'` + `cloudSyncMode='explicit'`, so remote sync still goes through the explicit save/sync flow. Multi-device divergence is resolved by keeping the cloud-bound canonical copy and forking the local divergent version into a detached `syncState='conflict'` copy. The cloud envelope must preserve canonical local `portfolio.id` for hydrate dedupe. File Map: #JS-TnWsDTjK (portfolios-client.js).
+
+### Snapshot Contract
+
+- `buildSnapshots(...)` writes `keyMetric` into asset snapshots and writes `keyMetricField` + `keyBuyer` into metrics snapshots.
+- Workspace-level table selection keeps a transient map `selectedCoinKeyMetrics: { coinId -> { field, label } }`; on portfolio creation this map is copied into canonical `coin.keyMetric`.
+- Rebalance domain logic keeps unknown asset fields intact; therefore `keyMetric` survives `allocateWeights`, `lockAssetWeight`, `unlockAsset`, and `setRebalanceEnabled` flows as long as callers pass canonical assets.
+- Canonical `portfolio.id` must survive Cloudflare roundtrip through the description envelope; hydrate may use it as a secondary merge key when `cloudflareId` is not yet linked locally.
 
 ### Coin Set Management
 

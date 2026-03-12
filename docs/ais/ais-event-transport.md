@@ -1,7 +1,7 @@
 ---
 id: ais-c2d3e4
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-12"
 related_skills:
   - sk-a17d41
   - sk-7cf3f7
@@ -14,6 +14,7 @@ related_ais:
   - ais-775420
   - ais-8d3c2a
   - ais-b7a9ba
+  - ais-6f2b1d
 
 ---
 
@@ -42,15 +43,15 @@ related_ais:
 
 | Событие | Источник | Потребители | Данные |
 |---------|----------|-------------|--------|
-| `auth-state-changed` | authState | app-ui-root, cloud-workspace-client | `{ authenticated, user }` |
+| `auth-state-changed` | authState | favorites-manager, coin-set-save-modal-body, coin-set-load-modal-body | `{ isAuthenticated, user, timestamp }` |
 | `cache-reset` | storage-reset-modal-body | app-ui-root | `void` |
 | `coins-added-from-search` | app-ui-root (search) | app-ui-root (table) | `string[]` (coin IDs) |
 | `draft-set-updated` | draft-coin-set | app-ui-root | draft set data |
 | `ban-set-updated` | ban-coin-set | app-ui-root | ban set data |
 | `favorites-updated` | favorites-manager | app-ui-root | favorites array |
 | `coin-set-saved` | coin-set-save-modal-body | app-ui-root | saved set data |
-| `portfolios-imported` | portfolios-import-modal-body | app-ui-root | import result |
-| `portfolio-saved` | portfolio-form-modal-body | portfolios-manager | portfolio data |
+| `portfolios-imported` | portfolios-import-modal-body / app-ui-root | app-ui-root | `{ count, mode, scope, explicitCloudSyncRequired }` |
+| `portfolio-observed` | portfolio-observability | optional observers | typed portfolio observability envelope incl. conflict/fork counters |
 | `metrics-recalculated` | app-ui-root | (internal) | metrics data |
 | `db-coins-upserted` | postgres-sync-manager | app-ui-root | `{ count }` |
 | `session-log` | console-interceptor | session-log-modal-body | log entry |
@@ -63,6 +64,8 @@ related_ais:
 - EventBus — единственный механизм loose coupling. Прямые callback-цепочки между несвязанными модулями запрещены.
 - Подписки, созданные в `mounted()`, **обязаны** отписаться в `beforeUnmount()` (leak prevention).
 - EventBus **не** гарантирует порядок доставки; подписчики не должны полагаться на sequence.
+- Primary portfolio flow не обязан публиковать обязательное EventBus-событие на каждое сохранение. В active runtime orchestration `portfolio-form/view-modal-body` взаимодействуют с `app-ui-root` через props/callback contracts; подробности см. id:ais-6f2b1d.
+- Optional diagnostics may publish additional typed observability events (`portfolio-observed`) without becoming the owner-channel of the business flow. This channel is where multi-device conflict resolution reports `conflicted`, `refreshed`, and `forked` counts.
 
 ### 2. Транспорт (Transport)
 
@@ -101,6 +104,7 @@ related_ais:
 | **Error Handler** | `core/errors/error-handler.js` | Глобальный обработчик | Нормализация и маршрутизация ошибок |
 | **CORS Proxy** | `is/cloudflare/edge-api/src/api-proxy.js` | Cloudflare Worker | CORS bypass + кэширование |
 | **Fallback Monitor** | `core/observability/fallback-monitor.js` | Provider fallback events | Отслеживание переключений на fallback |
+| **Portfolio Observability** | `core/observability/portfolio-observability.js` | Portfolio runtime save/import/sync/hydrate | Typed optional envelope for support/debug |
 | **Request Registry** | `core/api/request-registry.js` | Перед повторным API-запросом | Дедупликация и 24h-блокировка по журналу |
 
 **Инварианты:**
@@ -153,6 +157,7 @@ flowchart TD
 2. **No direct cross-module callbacks:** модули из разных доменов общаются только через EventBus или `window.*` globals. Прямая передача callback-функций запрещена.
 3. **Transport fallback chain:** `file://` → Worker proxy → direct (если http://). Порядок жёстко зафиксирован в `buildUrl()`.
 4. **Bridge security:** OAuth postMessage валидирует origin. Worker proxy валидирует allowed API paths.
+5. **Optional observability envelope:** если событие создаётся для support/debug, а не для business orchestration, оно должно публиковаться в typed envelope вместо ad-hoc payload.
 
 ## Компоненты и Контракты (Components & Contracts)
 
@@ -161,6 +166,7 @@ flowchart TD
 - `core/utils/console-interceptor.js` — перехватчик консоли
 - `core/errors/error-handler.js` — глобальный обработчик ошибок
 - `core/api/request-registry.js` — дедупликация запросов
+- `core/observability/portfolio-observability.js` — typed optional observability envelope for portfolio runtime
 - `is/cloudflare/edge-api/src/api-proxy.js` — CORS proxy bridge
 - `is/mcp/index.js` — MCP bridge entry point
 - id:sk-a17d41 (state-events) — контракт событийной модели
@@ -177,4 +183,4 @@ flowchart TD
 - `@causality #for-oauth-postmessage` — origin validation для OAuth.
 - `@causality #for-mcp-stdio-protocol` — stdio-транспорт для MCP.
 - `@causality #for-rate-limiting` — адаптивный interceptor.
-- Status: `incomplete` — pending формализация EventBus event schema (сейчас untyped payloads).
+- Status: `incomplete` — portfolio observability envelope уже typed, но широкий EventBus всё ещё содержит много untyped payloads вне этого канала.

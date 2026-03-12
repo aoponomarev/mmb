@@ -1,7 +1,7 @@
 ---
 id: ais-c4e9b2
 status: incomplete
-last_updated: "2026-03-05"
+last_updated: "2026-03-12"
 related_skills:
   - sk-318305
   - sk-a17d41
@@ -9,6 +9,7 @@ related_ais:
   - ais-c6c35b
   - ais-f7e2a1
   - ais-f5a6b7
+  - ais-6f2b1d
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -96,10 +97,9 @@ flowchart TB
 | #JS-Jd4ASwEo | auth-button.js | window.authButton |
 | #JS-u72ZSLqH | ai-api-settings.js | window.aiApiSettings |
 | #JS-xNN9FxKB | postgres-settings.js | window.postgresSettings |
-| #JS-8j2Hez4u | portfolios-manager.js | window.portfoliosManager |
 | #JS-uD33Z1qP | modal-example-body.js | window.modalExampleBody |
 | #JS-nr238Xj2 | timezone-modal-body.js | window.timezoneModalBody |
-| #JS-BX21fe7h | portfolio-modal-body.js | window.portfolioModalBody |
+| #JS-Ah6d2Adu | portfolio-segment-table.js | window.portfolioSegmentTable |
 | #JS-dc3EKYZn | portfolio-form-modal-body.js | window.portfolioFormModalBody |
 | #JS-9oNFE9kB | portfolio-view-modal-body.js | window.portfolioViewModalBody |
 | #JS-Vz2p3xSA | storage-reset-modal-body.js | window.storageResetModalBody |
@@ -193,6 +193,8 @@ flowchart TB
 | Index AIS | id:docidx-3022eb (docs/index-ais.md) | Генерируется в preflight (generate-index-ais.js) из docs/ais/; id:ais-c4e9b2 входит в индекс |
 | Module loader | #JS-xj43kftu (module-loader.js) | Порядок загрузки, window.modulesConfig |
 | Modules config | #JS-os34Gxk3 (modules-config.js) | Зависимости и порядок скриптов |
+
+Portfolio note: legacy `portfolios-manager` / `portfolio-modal-body` path removed from repo after migration; RRG должен проверять только primary flow из id:ais-6f2b1d.
 
 ## Ссылки
 

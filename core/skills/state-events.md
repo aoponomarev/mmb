@@ -4,7 +4,7 @@ title: "State, Events & Module Loading"
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-09
 reasoning_checksum: aea9aebd
-last_change: ""
+last_change: "2026-03-12"
 
 ---
 
@@ -62,6 +62,8 @@ The event bus handles **cross-component communication** that is not suitable for
 
 **Anti-pattern**: Do not use the event bus as a state substitute — emitting an event and expecting consumers to hold the value is a disguised global variable.
 
+**Typed diagnostics exception**: optional support/debug channels may publish typed envelopes on the event bus as long as they do not become the owner of business semantics. Example: #JS-Vw45KZS7 (portfolio-observability.js) emits `portfolio-observed` with stable `action`, `stage`, `status`, and `counts` fields for portfolio save/import/sync/hydrate tracing, including multi-device `conflicted`, `refreshed`, and `forked` counters.
+
 ### Module Loading (No-Build Architecture)
 
 #JS-xj43kftu reads the ordered module registry from #JS-os34Gxk3 and dynamically injects `<script>` tags into `<head>` in dependency order.
@@ -86,3 +88,5 @@ The event bus handles **cross-component communication** that is not suitable for
 #JS-tWuXPtTi (error-handler.js) and #JS-Sq2CfSP1 (error-types.js) define the shared error taxonomy. All service-level errors must use these types — never throw raw `new Error('string')` from domain or service code.
 
 #JS-fW36ebbg (fallback-monitor.js) tracks provider fallback events (e.g., when primary data provider fails and secondary activates) for debugging and health monitoring.
+
+#JS-Vw45KZS7 (portfolio-observability.js) complements this plane for the portfolio domain only: it stores recent typed events in memory and republishes them through the Event Bus without introducing any runtime dependency from the business flow to its observers.

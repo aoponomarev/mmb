@@ -1,7 +1,7 @@
 ---
 id: ssotidx-7f8e9d
 status: active
-last_updated: "2026-03-08"
+last_updated: "2026-03-12"
 
 ---
 <!-- SSOT Index: single entry point for finding canonical truth. AIS: id:ais-7f8e9d -->
@@ -19,7 +19,7 @@ last_updated: "2026-03-08"
 | Префиксы | is/contracts/prefixes.js | Naming prefixes (skills, modules) |
 | Doc ids | is/contracts/docs/id-registry.json | id → path для markdown (skills, AIS, docs) |
 | Code hashes | is/contracts/docs/code-file-registry.json | #JS-xxx → path |
-| Resolve | is/contracts/docs/resolve-id.js | SSOT resolver для id: и #hash |
+| Resolve | #JS-op2rXujz (is/contracts/docs/resolve-id.js) | SSOT resolver для id: и #hash |
 | Размещение папок | docs/ais/ais-folder-placement.md | id:ais-b3c4d5 — полная карта папок, логика размещения |
 | Казуальность | is/skills/causality-registry.md | #for-X / #not-Y формулировки |
 | Конфигурация UI | core/config/* | app-config, tooltips, modals, messages, workspace и др. |
@@ -30,6 +30,7 @@ last_updated: "2026-03-08"
 | Домен | SSOT-файл | Описание |
 |-------|-----------|----------|
 | Cache/Request policies | core/config/runtime-policies.js | TTL, intervals для topCoins, marketMetrics |
+| Portfolio system | docs/ais/ais-portfolio-system.md | id:ais-6f2b1d — канонический portfolio domain, local scopes и Cloudflare sync-flow |
 
 ## Инфраструктура (когда развёрнута)
 
@@ -48,4 +49,4 @@ last_updated: "2026-03-08"
 
 - `id:xxx` → is/contracts/docs/id-registry.json
 - `#JS-xxx` → is/contracts/docs/code-file-registry.json
-- MCP tool `resolve_id` — использует resolve-id.js
+- MCP tool `resolve_id` (#JS-v1JRkux7) — использует #JS-op2rXujz
