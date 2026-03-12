@@ -8,13 +8,23 @@
 (function() {
     'use strict';
 
-    let currentLanguage = 'ru';
+    /** Centralized fallbacks when config not loaded or key missing */
+    const FALLBACKS = {
+        'ui.portfolio.syncConflict.badge': 'Конфликт',
+        'ui.portfolio.syncConflict.tooltip': 'Конфликт между устройствами',
+        'ui.portfolio.syncConflict.note': 'Локальная конфликтная копия после расхождения с облачной версией.',
+        'ui.coinBlock.favorite.remove': 'Убрать',
+        'ui.coinBlock.favorite.add': 'Добавить',
+        'ui.coinBlock.open': 'Открыть',
+        'ui.coinBlock.delete': 'Удалить',
+        'ui.combobox.clear': 'Очистить'
+    };
 
     const TOOLTIPS_RU = {
         'button.save.icon': 'Иконка: Сохранить',
         'button.save.text': 'Основной текст: Сохранить изменения',
         'button.delete.icon': 'Иконка: Удалить',
-        'button.delete.text': 'Основной текст: Delete элемент',
+        'button.delete.text': 'Основной текст: Удалить элемент',
         'button.load.icon': 'Иконка: Загрузить',
         'button.load.text': 'Основной текст: Загрузить файл',
         'button.settings.icon': 'Иконка: Настройки',
@@ -43,7 +53,7 @@
         'dropdown.notifications.icon': 'Иконка: Уведомления',
         'dropdown.notifications.text': 'Основной текст: Просмотр уведомлений',
         'dropdown.system-settings.icon': 'Иконка: Настройки системы',
-        'dropdown.system-settings.text': 'Основной текст: Configuration системы',
+        'dropdown.system-settings.text': 'Основной текст: Конфигурация системы',
         'dropdown.export.suffix.icon': 'Открыть в новой вкладке',
         'dropdown.export.icon': 'Иконка: Экспорт',
         'dropdown.export.text': 'Основной текст: Экспорт данных',
@@ -69,12 +79,12 @@
         'ui.coinSort.selected': 'выбранные',
         'ui.coinSet.load': 'Загрузить набор монет',
         'ui.coinSet.save': 'Сохранить набор монет',
-        'ui.refresh.soft': 'Update интерфейс (кэш актуален)',
-        'ui.refresh.full': 'Update данные монет и metrics рынка',
-        'ui.coinTable.showPrice': 'Показать Price',
-        'ui.coinTable.hidePrice': 'Скрыть Price',
-        'ui.vix.sourcePrefix': 'VIX source:',
-        'ui.vix.default': 'VIX Volatility Index',
+        'ui.refresh.soft': 'Обновить интерфейс (кэш актуален)',
+        'ui.refresh.full': 'Обновить данные монет и метрик рынка',
+        'ui.coinTable.showPrice': 'Показать цену',
+        'ui.coinTable.hidePrice': 'Скрыть цену',
+        'ui.vix.sourcePrefix': 'VIX источник:',
+        'ui.vix.default': 'VIX (индекс волатильности)',
         'ui.search.alreadyInTable': 'Уже в таблице',
         'ui.modal.missingCoins.title': 'Не найдены монеты',
         'ui.modal.portfolioForm.title': 'Формирование портфеля',
@@ -86,15 +96,15 @@
         'ui.coinBlock.open': 'Открыть',
         'ui.coinBlock.delete': 'Удалить',
         'ui.coinSet.draft.save': 'Сохранить черновик',
-        'metric.horizonDays.description': 'ГП (Горизонт прогноза)\nВременной горизонт for расчета всех metrics.\nОпределяет, на какой период строится\nпрогноз изменения цены актива.',
+        'metric.horizonDays.description': 'ГП (Горизонт прогноза)\nВременной горизонт для расчёта всех метрик.\nОпределяет, на какой период строится\nпрогноз изменения цены актива.',
         'metric.mdnHours.description': 'MDN Hours (Часы)\nГоризонт расчета индикатора\nрыночного направления (MDN).\nКраткосрочный сигнал "здесь и сейчас".',
-        'metric.agrMethod.description': 'AGR Method (Метод)\nМетод расчета устойчивости тренда for AGR:\nDCS (направление), TSI (сила), MP (моментум).',
+        'metric.agrMethod.description': 'AGR Method (Метод)\nМетод расчёта устойчивости тренда для AGR:\nDCS (направление), TSI (сила), MP (моментум).',
         'metric.columnVisibility.description': 'Видимость колонок\nУправление отображением групп колонок\nв таблице: основные показатели,\nволатильность, устойчивость и т.д.',
         'metric.columnVisibility.result.description': 'AGR: Adaptive Growth Rate\nMAX: Maximum Potential Value\nmin: Minimum Potential Value\nDCS: Direction Change Stability\nTSI: Trend Strength Indicator\nMPS: Momentum Preservation Stability\nCPT: Composite Performance\nDIN: Dynamic Impact',
         'metric.columnVisibility.percent.description': '% (Процентные изменения)\nПоказывает процентные изменения цены\nза различные периоды: 1h, 24h, 7d, 14d, 30d, 200d.\nПомогает оценить краткосрочную\nи долгосрочную динамику актива.',
         'metric.columnVisibility.complexDeltas.description': 'Компл. дельты (CD)\nНакопленные взвешенные изменения цены\nпо неделям (CD1w–CD6w) и на горизонте\nпрогноза (CDH). Показывают интегральную\nдинамику актива с учетом временных весов.',
         'metric.columnVisibility.gradients.description': 'Градиенты (CGR)\nВзвешенные градиенты изменения цены\nмежду временными узлами (CGR2–CGR6)\nи их сумма (CGR Σ). Показывают скорость\nи направление движения цены.',
-        'metric.portfolioAccess.description': 'Мои портфели\nБыстрый доступ к созданным портфелям,\nпросмотр их текущей доходности\nи создание новых sets монет.',
+        'metric.portfolioAccess.description': 'Мои портфели\nБыстрый доступ к созданным портфелям,\nпросмотр их текущей доходности\nи создание новых наборов монет.',
         'metric.portfolioAccess.lsHeader': 'Счетчик L/S:',
         'metric.portfolioAccess.lsLong': 'Long (AGR ≥ 0)',
         'metric.portfolioAccess.lsShort': 'Short (AGR < 0)',
@@ -110,15 +120,15 @@
         'metric.cdhRatio.description': 'CDH P/N Ratio\nСоотношение положительных и отрицательных\nзначений CDH. Показывает баланс между бычьими\nи медвежьими сигналами по накопленной дельте.\n>1 — бычий баланс, <1 — медвежий.',
         'metric.cgrRatio.description': 'CGR P/N Ratio\nСоотношение положительных и отрицательных\nзначений CGR. Показывает баланс между\nускорением роста и падения.\n>1 — преобладает рост, <1 — преобладает падение.',
         'metric.agrRatio.description': 'AGR P/N Ratio\nСоотношение положительных и отрицательных\nзначений AGR. Показывает баланс между бычьими\nи медвежьими сигналами по адаптивной доходности.\n>1 — бычий баланс, <1 — медвежий.',
-        'metric.dcs.description': 'DCS (Direction Change Stability)\nМетод расчета устойчивости тренда AGR\nна основе анализа изменения направления цены.\nПодходит for волатильных рынков.',
-        'metric.tsi.description': 'TSI (Trend Strength Indicator)\nМетод расчета устойчивости тренда AGR\nна основе силы тренда. Подходит for\nстабильных трендовых движений.',
+        'metric.dcs.description': 'DCS (Direction Change Stability)\nМетод расчёта устойчивости тренда AGR\nна основе анализа изменения направления цены.\nПодходит для волатильных рынков.',
+        'metric.tsi.description': 'TSI (Trend Strength Indicator)\nМетод расчёта устойчивости тренда AGR\nна основе силы тренда. Подходит для\nстабильных трендовых движений.',
         'metric.mp.description': 'MPS (Momentum Preservation Stability)\nМетод расчета устойчивости тренда AGR\nна основе сохранения импульса.\nПодходит for импульсных рынков.',
         'metric.cdh.description': 'CDH (Complex Delta Horizon)\nНакопленная дельта цены на горизонте прогноза.\nПоказывает интегральное изменение цены\nс учетом всех временных периодов.',
         'metric.cgr.description': 'CGR (Complex Gradient Rate)\nКомплексный градиент изменения цены.\nПоказывает скорость и направление\nдвижения цены по всем узлам.',
         'metric.cgrDeg.description': 'CGR Degree (Степень градиента)\nСтепень изменения комплексного градиента.\nПоказывает интенсивность ускорения\nили замедления движения цены.',
         'metric.maxPV.description': 'Max PV (Maximum Potential Value)\nМаксимальное потенциальное изменение цены.\nПоказывает исторический максимум роста актива.',
         'metric.minPV.description': 'Min PV (Minimum Potential Value)\nМинимальное потенциальное изменение цены.\nПоказывает исторический максимум падения актива.',
-        'metric.agr.description': 'AGR (Adaptive Growth Rate)\nГодовая доходность с учетом корреляции\nтрендов, роста, импульса и устойчивости.\nОсновной сигнал for выбора направления торговли.',
+        'metric.agr.description': 'AGR (Adaptive Growth Rate)\nГодовая доходность с учётом корреляции\nтрендов, роста, импульса и устойчивости.\nОсновной сигнал для выбора направления торговли.',
         'metric.din.description': 'DIN (Dynamic Impact)\nВзвешенное изменение цены с учетом\nрыночного фактора (FGI, BTC Dom, OI, FR, LSR)\nи импульса (CPT).',
         'metric.cpt.description': 'CPT (Composite Performance)\nКомпозитный импульс: взвешенное среднее\nизменений цены по всем временным узлам\nс учетом горизонта прогноза.',
         'metric.fgi.description': 'Fear & Greed Index (FGI)\nИндикатор страха и жадности на рынке\nкриптовалют. Помогает определить\nперекупленность или перепроданность рынка.\n\n© Alternative.me',
@@ -485,35 +495,36 @@
         'metric.vix.description': 'VIX（Volatility Index）\n美国股市波动率指数。\nVIX 上升通常意味着恐慌\n和风险偏好下降。'
     };
 
-    function getTooltip(key) {
-        if (currentLanguage === 'ru') return TOOLTIPS_RU[key] || key;
-        if (currentLanguage === 'en') return TOOLTIPS_EN[key] || TOOLTIPS_RU[key] || key;
-        if (currentLanguage === 'de') return TOOLTIPS_DE[key] || TOOLTIPS_EN[key] || TOOLTIPS_RU[key] || key;
-        if (currentLanguage === 'zh') return TOOLTIPS_ZH[key] || TOOLTIPS_EN[key] || TOOLTIPS_RU[key] || key;
-        return TOOLTIPS_EN[key] || TOOLTIPS_RU[key] || key;
+    /**
+     * Get tooltip by key and language (stateless).
+     * @param {string} key - tooltip key
+     * @param {string|{lang?: string}} [langOrOptions] - language code or { lang } (default 'ru')
+     * @returns {string}
+     */
+    function getTooltip(key, langOrOptions) {
+        const lang = typeof langOrOptions === 'string'
+            ? langOrOptions
+            : (langOrOptions?.lang ?? 'ru');
+        let text;
+        if (lang === 'ru') text = TOOLTIPS_RU[key];
+        else if (lang === 'en') text = TOOLTIPS_EN[key] || TOOLTIPS_RU[key];
+        else if (lang === 'de') text = TOOLTIPS_DE[key] || TOOLTIPS_EN[key] || TOOLTIPS_RU[key];
+        else if (lang === 'zh') text = TOOLTIPS_ZH[key] || TOOLTIPS_EN[key] || TOOLTIPS_RU[key];
+        else text = TOOLTIPS_EN[key] || TOOLTIPS_RU[key];
+        return text || FALLBACKS[key] || key;
     }
 
-    async function init(language) {
-        if (!language) language = 'ru';
-
-        // Always set currentLanguage first
-        currentLanguage = language;
-
-        if (language === 'ru' || language === 'en' || language === 'de' || language === 'zh') {
-            return;
-        }
-        // Fallback to English for unsupported languages
-        currentLanguage = 'en';
-    }
+    /** No-op for backward compat; language is now passed per getTooltip call */
+    async function init() {}
 
     window.tooltipsConfig = {
         TOOLTIPS: TOOLTIPS_RU,
         TOOLTIPS_EN: TOOLTIPS_EN,
         TOOLTIPS_DE: TOOLTIPS_DE,
         TOOLTIPS_ZH: TOOLTIPS_ZH,
+        FALLBACKS,
         getTooltip,
-        init,
-        getCurrentLanguage: () => currentLanguage
+        init
     };
     console.log('tooltips-config.js: initialized with en support');
 })();

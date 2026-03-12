@@ -37,7 +37,8 @@ const TOOLTIP_TEXT = 'Click to refresh data';
 ```javascript
 // GOOD — always read from centralized SSOT
 const title = window.modalsConfig.getModalTitle('portfolio-edit');
-const text = window.tooltipsConfig.get('refresh-data');
+const lang = window.uiState?.getState()?.tooltips?.currentLanguage || 'ru';
+const text = window.tooltipsConfig.getTooltip('ui.refresh.full', lang);
 ```
 
 ### Config File Responsibilities

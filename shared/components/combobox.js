@@ -381,8 +381,12 @@ window.cmpCombobox = {
             return window.tooltipsConfig || null;
         },
 
+        currentLanguage() {
+            return window.uiState?.getState()?.tooltips?.currentLanguage || 'ru';
+        },
         clearTitle() {
-            return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.combobox.clear') : 'Clear';
+            const lang = this.currentLanguage;
+            return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.combobox.clear', lang) : 'Очистить';
         }
     },
 

@@ -542,9 +542,13 @@ window.coinSetLoadModalBody = {
             return false; // Sets identical
         },
 
+        currentLanguage() {
+            return window.uiState?.getState()?.tooltips?.currentLanguage || 'ru';
+        },
         saveDraftTitle() {
+            const lang = this.currentLanguage;
             if (!window.tooltipsConfig) return 'Сохранить черновик';
-            return window.tooltipsConfig.getTooltip('ui.coinSet.draft.save');
+            return window.tooltipsConfig.getTooltip('ui.coinSet.draft.save', lang);
         }
     },
 

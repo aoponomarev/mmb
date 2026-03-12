@@ -102,11 +102,10 @@ window.appHeader = {
             };
         },
         getPortfolioConflictLabel() {
-            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge') || 'Конфликт';
+            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge', this.currentLanguage);
         },
         getPortfolioConflictTooltip() {
-            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip')
-                || 'Конфликт между устройствами';
+            return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip', this.currentLanguage);
         },
         // Method to get tooltip for column visibility button by id
         getTabTooltip(tabId) {
@@ -145,7 +144,7 @@ window.appHeader = {
         // Individual tooltips for hours buttons (4h, 8h, 12h) tied to current MDN value
         tooltipMdnHours4h() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description', this.currentLanguage);
             const mdnValue = this.marketDirection?.mdn4h;
             if (mdnValue !== undefined && mdnValue !== null) {
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(mdnValue), this.currentLanguage);
@@ -155,7 +154,7 @@ window.appHeader = {
         },
         tooltipMdnHours8h() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description', this.currentLanguage);
             const mdnValue = this.marketDirection?.mdn8h;
             if (mdnValue !== undefined && mdnValue !== null) {
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(mdnValue), this.currentLanguage);
@@ -165,7 +164,7 @@ window.appHeader = {
         },
         tooltipMdnHours12h() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.mdnHours.description', this.currentLanguage);
             const mdnValue = this.marketDirection?.mdn12h;
             if (mdnValue !== undefined && mdnValue !== null) {
                 const interpretation = window.tooltipInterpreter.getInterpretation('mdn', Number(mdnValue), this.currentLanguage);
@@ -177,23 +176,23 @@ window.appHeader = {
         tooltipAgrLabel() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.agrMethod.description');
+            return window.tooltipsConfig.getTooltip('metric.agrMethod.description', this.currentLanguage);
         },
         // Individual tooltips for AGR buttons (DCS, TSI, MP)
         tooltipAgrDcs() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.dcs.description');
+            return window.tooltipsConfig.getTooltip('metric.dcs.description', this.currentLanguage);
         },
         tooltipAgrTsi() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.tsi.description');
+            return window.tooltipsConfig.getTooltip('metric.tsi.description', this.currentLanguage);
         },
         tooltipAgrMp() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.mp.description');
+            return window.tooltipsConfig.getTooltip('metric.mp.description', this.currentLanguage);
         },
         tooltipMdn() {
             if (!window.tooltipInterpreter) return '';
@@ -212,33 +211,33 @@ window.appHeader = {
         tooltipTabPercent() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.columnVisibility.percent.description');
+            return window.tooltipsConfig.getTooltip('metric.columnVisibility.percent.description', this.currentLanguage);
         },
         tooltipTabComplexDeltas() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.columnVisibility.complexDeltas.description');
+            return window.tooltipsConfig.getTooltip('metric.columnVisibility.complexDeltas.description', this.currentLanguage);
         },
         tooltipTabGradients() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.columnVisibility.gradients.description');
+            return window.tooltipsConfig.getTooltip('metric.columnVisibility.gradients.description', this.currentLanguage);
         },
         tooltipTabResult() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.columnVisibility.result.description');
+            return window.tooltipsConfig.getTooltip('metric.columnVisibility.result.description', this.currentLanguage);
         },
         tooltipPortfolio() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            const baseText = window.tooltipsConfig.getTooltip('metric.portfolioAccess.description');
+            const baseText = window.tooltipsConfig.getTooltip('metric.portfolioAccess.description', this.currentLanguage);
             const longCount = this.portfolio?.longCount || 0;
             const shortCount = this.portfolio?.shortCount || 0;
             if (longCount > 0 || shortCount > 0) {
-                const lsHeader = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsHeader');
-                const lsLong = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsLong');
-                const lsShort = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsShort');
+                const lsHeader = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsHeader', this.currentLanguage);
+                const lsLong = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsLong', this.currentLanguage);
+                const lsShort = window.tooltipsConfig.getTooltip('metric.portfolioAccess.lsShort', this.currentLanguage);
                 return `${baseText}\n\n${lsHeader}\n${lsLong}: ${longCount}\n${lsShort}: ${shortCount}`;
             }
             return baseText;
@@ -247,32 +246,32 @@ window.appHeader = {
         tooltipLongShort() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.longShort.description');
+            return window.tooltipsConfig.getTooltip('metric.longShort.description', this.currentLanguage);
         },
         tooltipBullishPercent() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.bullishPercent.description');
+            return window.tooltipsConfig.getTooltip('metric.bullishPercent.description', this.currentLanguage);
         },
         tooltipCdhRatio() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.cdhRatio.description');
+            return window.tooltipsConfig.getTooltip('metric.cdhRatio.description', this.currentLanguage);
         },
         tooltipCgrRatio() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.cgrRatio.description');
+            return window.tooltipsConfig.getTooltip('metric.cgrRatio.description', this.currentLanguage);
         },
         tooltipAgrRatio() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            return window.tooltipsConfig.getTooltip('metric.agrRatio.description');
+            return window.tooltipsConfig.getTooltip('metric.agrRatio.description', this.currentLanguage);
         },
         // Per-metric tooltips for medians depending on values
         tooltipMedianCdh() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.medianCdh.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.medianCdh.description', this.currentLanguage);
             const cdhValue = this.medians?.cdh;
             if (cdhValue !== undefined && cdhValue !== null) {
                 // Use mdn interpretation as CDH has similar logic
@@ -283,7 +282,7 @@ window.appHeader = {
         },
         tooltipMedianCgr() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.medianCgr.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.medianCgr.description', this.currentLanguage);
             const cgrValue = this.medians?.cgr;
             if (cgrValue !== undefined && cgrValue !== null) {
                 // Use mdn interpretation as CGR has similar logic
@@ -294,7 +293,7 @@ window.appHeader = {
         },
         tooltipMedianAgr() {
             if (!window.tooltipInterpreter || !window.tooltipsConfig) return '';
-            const staticText = window.tooltipsConfig.getTooltip('metric.medianAgr.description');
+            const staticText = window.tooltipsConfig.getTooltip('metric.medianAgr.description', this.currentLanguage);
             const agrValue = this.medians?.agr;
             if (agrValue !== undefined && agrValue !== null) {
                 // Use agr interpretation

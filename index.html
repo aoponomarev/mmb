@@ -488,7 +488,7 @@
                                                 </li>
                                                 <li v-if="searchInTableTickers.length" class="px-3 py-2 text-success small">
                                                     <i class="fa-solid fa-check me-1"></i>
-                                                    <span :title="tooltipsConfig?.getTooltip('ui.search.alreadyInTable')">
+                                                    <span :title="tooltipsConfig?.getTooltip('ui.search.alreadyInTable', currentTranslationLanguage)">
                                                         <span
                                                             v-for="entry in searchInTableTickers"
                                                             :key="`in-table-${entry.id}`"
@@ -779,11 +779,11 @@
         <cmp-modal
             ref="missingCoinsModal"
             modal-id="missingCoinsModal"
-            :title="modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title')"
+            :title="modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title', currentTranslationLanguage)"
             :centered="true"
         >
             <template #header>
-                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title') }}</h5>
+                <h5 class="modal-title">{{ modalsConfig?.getModalTitle('missingCoinsModal') || tooltipsConfig?.getTooltip('ui.modal.missingCoins.title', currentTranslationLanguage) }}</h5>
                 <div id="missingCoinsModal-header-extra" class="ms-auto me-2"></div>
                 <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
             </template>
@@ -856,7 +856,7 @@
         <cmp-modal
             ref="portfolioViewModal"
             modal-id="portfolioViewModal"
-            :title="modalsConfig?.getModalTitle('portfolioViewModal') || tooltipsConfig?.getTooltip('ui.modal.portfolioView.title')"
+            :title="modalsConfig?.getModalTitle('portfolioViewModal') || tooltipsConfig?.getTooltip('ui.modal.portfolioView.title', currentTranslationLanguage)"
             :centered="true"
             size="lg"
         >

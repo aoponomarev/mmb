@@ -33,6 +33,20 @@
                     '— Neutral zone.\nMarket without clear trend.',
                     '↗ Bullish dynamics.\nLong positions preferred.',
                     '🚀 Extremely bullish signal.\nStrong Long opportunity.'
+                ],
+                de: [
+                    '⚠ Extrem bärisches Signal.\nShort-Positionen bevorzugt.',
+                    '↘ Bärische Dynamik.\nVorsicht bei Long-Positionen.',
+                    '— Neutrale Zone.\nMarkt ohne klaren Trend.',
+                    '↗ Bullische Dynamik.\nLong-Positionen bevorzugt.',
+                    '🚀 Extrem bullisches Signal.\nStarke Long-Möglichkeit.'
+                ],
+                zh: [
+                    '⚠ 极度看跌信号。空头优先。',
+                    '↘ 看跌走势。做多需谨慎。',
+                    '— 中性区。市场无明确趋势。',
+                    '↗ 看涨走势。多头优先。',
+                    '🚀 极度看涨信号。强烈做多机会。'
                 ]
             }
         },
@@ -52,6 +66,20 @@
                     '— Balance of forces.\nSideways movement likely.',
                     '↗ Bullish pressure dominates.',
                     '🚀 Market euphoria.\nOverheating risk.'
+                ],
+                de: [
+                    '⚠ Marktpanik.\nShort-Korrektur möglich.',
+                    '↘ Bärischer Druck dominiert.',
+                    '— Kräftegleichgewicht.\nSeitwärtsbewegung wahrscheinlich.',
+                    '↗ Bullischer Druck dominiert.',
+                    '🚀 Markteuphorie.\nÜberhitzungsrisiko.'
+                ],
+                zh: [
+                    '⚠ 市场恐慌。可能空头回补。',
+                    '↘ 看跌压力主导。',
+                    '— 力量平衡。可能横盘。',
+                    '↗ 看涨压力主导。',
+                    '🚀 市场亢奋。过热风险。'
                 ]
             }
         },
@@ -71,6 +99,20 @@
                     '— Moderate volatility.',
                     '↗ Elevated upside potential.',
                     '🚀 High upside volatility.'
+                ],
+                de: [
+                    '⚠ Hohe Abwärtsvolatilität.',
+                    '↘ Erhöhtes Abwärtsrisiko.',
+                    '— Moderate Volatilität.',
+                    '↗ Erhöhtes Aufwärtspotenzial.',
+                    '🚀 Hohe Aufwärtsvolatilität.'
+                ],
+                zh: [
+                    '⚠ 下行波动剧烈。',
+                    '↘ 下行风险升高。',
+                    '— 波动适中。',
+                    '↗ 上行潜力升高。',
+                    '🚀 上行波动剧烈。'
                 ]
             }
         },
@@ -88,6 +130,18 @@
                     '↘ Moderate persistence.\nConfirmation required.',
                     '↗ Good persistence.\nTrend likely.',
                     '✓ High persistence.\nTrend is stable.'
+                ],
+                de: [
+                    '⚠ Geringe Persistenz.\nTrend kann sich umkehren.',
+                    '↘ Mäßige Persistenz.\nBestätigung erforderlich.',
+                    '↗ Gute Persistenz.\nTrend wahrscheinlich.',
+                    '✓ Hohe Persistenz.\nTrend ist stabil.'
+                ],
+                zh: [
+                    '⚠ 持续性低。趋势可能反转。',
+                    '↘ 持续性中等。需确认。',
+                    '↗ 持续性良好。趋势可能。',
+                    '✓ 持续性高。趋势稳定。'
                 ]
             }
         },
@@ -105,6 +159,18 @@
                     '↘ Moderate trend.\nMomentum forming.',
                     '↗ Strong trend.\nMomentum confirmed.',
                     '✓ Extreme trend.\nMaximum momentum.'
+                ],
+                de: [
+                    '⚠ Schwacher Trend.\nKein Momentum.',
+                    '↘ Mäßiger Trend.\nMomentum bildet sich.',
+                    '↗ Starker Trend.\nMomentum bestätigt.',
+                    '✓ Extremer Trend.\nMaximales Momentum.'
+                ],
+                zh: [
+                    '⚠ 趋势弱。无动能。',
+                    '↘ 趋势中等。动能形成中。',
+                    '↗ 趋势强。动能确认。',
+                    '✓ 趋势极端。动能最大。'
                 ]
             }
         },
@@ -122,6 +188,18 @@
                     '↘ Moderate momentum.\nSupport required.',
                     '↗ Strong momentum.\nMovement is stable.',
                     '✓ Extreme momentum.\nMovement is inertial.'
+                ],
+                de: [
+                    '⚠ Schwaches Momentum.\nBewegung kann abflauen.',
+                    '↘ Mäßiges Momentum.\nUnterstützung erforderlich.',
+                    '↗ Starkes Momentum.\nBewegung ist stabil.',
+                    '✓ Extremes Momentum.\nBewegung ist träge.'
+                ],
+                zh: [
+                    '⚠ 动能弱。走势可能消退。',
+                    '↘ 动能中等。需支撑。',
+                    '↗ 动能强。走势稳定。',
+                    '✓ 动能极端。走势惯性。'
                 ]
             }
         },
@@ -141,6 +219,20 @@
                     '— Neutral market.\nBalanced emotions.',
                     '↗ Greed dominates.\n🤘 Bullish sentiment.',
                     '🚀 Extreme greed.\nCorrection risk.'
+                ],
+                de: [
+                    '⚠ Extreme Angst.\nAufwärtstrend möglich.',
+                    '↘ Angst dominiert.\nBärische Stimmung.',
+                    '— Neutraler Markt.\nAusgewogene Emotionen.',
+                    '↗ Gier dominiert.\n🤘 Bullische Stimmung.',
+                    '🚀 Extreme Gier.\nKorrekturrisiko.'
+                ],
+                zh: [
+                    '⚠ 极度恐惧。可能反转向上。',
+                    '↘ 恐惧主导。看跌情绪。',
+                    '— 中性市场。情绪平衡。',
+                    '↗ 贪婪主导。🤘 看涨情绪。',
+                    '🚀 极度贪婪。回调风险。'
                 ]
             }
         },
@@ -160,6 +252,20 @@
                     '📆 Medium-term: 4-7 days.\nWeekly swings.',
                     '📊 Long-term: 8-30 days.\nMonthly trend.',
                     '🌍 Long-term: >30 days.\nInvestments.'
+                ],
+                de: [
+                    '⏱ Ultrakurz: 1 Tag.\nScalping.',
+                    '📅 Kurzfristig: 2-3 Tage.\nDaytrading.',
+                    '📆 Mittelfristig: 4-7 Tage.\nWochenschwünge.',
+                    '📊 Langfristig: 8-30 Tage.\nMonatstrend.',
+                    '🌍 Langfristig: >30 Tage.\nInvestitionen.'
+                ],
+                zh: [
+                    '⏱ 超短期：1天。剥头皮。',
+                    '📅 短期：2-3天。日内交易。',
+                    '📆 中期：4-7天。周线波动。',
+                    '📊 长期：8-30天。月线趋势。',
+                    '🌍 长期：>30天。投资。'
                 ]
             }
         },
@@ -175,6 +281,16 @@
                     '⏱ 4 hours:\nshort-term market pulse.',
                     '📅 8 hours:\nmedium-term movement context.',
                     '📆 12 hours:\nlong-term direction indicator.'
+                ],
+                de: [
+                    '⏱ 4 Stunden:\nkurzfristiger Marktpuls.',
+                    '📅 8 Stunden:\nmittelfristiger Bewegungs-Kontext.',
+                    '📆 12 Stunden:\nlangfristiger Richtungsindikator.'
+                ],
+                zh: [
+                    '⏱ 4小时：短期市场脉搏。',
+                    '📅 8小时：中期走势背景。',
+                    '📆 12小时：长期方向指标。'
                 ]
             }
         }
@@ -192,7 +308,9 @@
         if (!threshold) return '';
 
         const levels = threshold.levels;
-        const interpretations = threshold.interpretations[lang] || threshold.interpretations['ru'];
+        const interpretations = threshold.interpretations[lang]
+            || threshold.interpretations['en']
+            || threshold.interpretations['ru'];
 
         // Determine interpretation index from value
         let index = 0;
@@ -219,7 +337,7 @@
         // Static part (from tooltipsConfig)
         if (!skipStatic && window.tooltipsConfig) {
             const staticKey = `metric.${key}.description`;
-            const staticText = window.tooltipsConfig.getTooltip(staticKey);
+            const staticText = window.tooltipsConfig.getTooltip(staticKey, { lang });
             if (staticText) {
                 tooltip = staticText;
             }

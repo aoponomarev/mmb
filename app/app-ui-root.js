@@ -383,11 +383,13 @@
                     return this.modalsConfig?.getModalConfig?.(this.portfolioFormModalId) || null;
                 },
                 portfolioFormModalTitle() {
+                    const lang = this.currentTranslationLanguage || 'ru';
                     return this.modalsConfig?.getModalTitle(this.portfolioFormModalId)
                         || this.tooltipsConfig?.getTooltip?.(
                             this.portfolioFormMode === 'rebalance'
                                 ? 'ui.modal.portfolioRebalance.title'
-                                : 'ui.modal.portfolioForm.title'
+                                : 'ui.modal.portfolioForm.title',
+                            lang
                         )
                         || (this.portfolioFormMode === 'rebalance'
                             ? 'Ребалансировка портфеля'
@@ -890,19 +892,10 @@
                     if (!window.tooltipsConfig || typeof window.tooltipsConfig.getTooltip !== 'function') {
                         return;
                     }
-
-                    // Sync currentTranslationLanguage with currentLanguage from tooltipsConfig
-                    if (typeof window.tooltipsConfig.getCurrentLanguage === 'function') {
-                        const tooltipsLanguage = window.tooltipsConfig.getCurrentLanguage();
-                        if (tooltipsLanguage && tooltipsLanguage !== this.currentTranslationLanguage) {
-                            this.currentTranslationLanguage = tooltipsLanguage;
-                        }
-                    }
-
-                    // Update all tooltips from config
+                    const lang = this.currentTranslationLanguage || 'ru';
                     const keys = Object.keys(this.tooltips);
                     keys.forEach(key => {
-                        const value = window.tooltipsConfig.getTooltip(key);
+                        const value = window.tooltipsConfig.getTooltip(key, lang);
                         this.tooltips[key] = value || '';
                     });
                 },
@@ -4484,30 +4477,33 @@
                         const item = items.find(i => i.sortType === sortType);
                         return item ? item.title : '';
                     })();
-                    const title = window.tooltipsConfig ? (window.tooltipsConfig.getTooltip(key) || fallback) : fallback;
+                    const lang = this.currentTranslationLanguage || 'ru';
+                    const title = window.tooltipsConfig ? (window.tooltipsConfig.getTooltip(key, lang) || fallback) : fallback;
                     return title;
                 },
                 /**
                  * Tooltip for coin set load/save button
                  */
                 getCoinSetActionTitle() {
+                    const lang = this.currentTranslationLanguage || 'ru';
                     if (!window.tooltipsConfig) {
-                        return this.selectedCoinIds.length === 0 ? 'Загрузить набор coins' : 'Сохранить набор coins';
+                        return this.selectedCoinIds.length === 0 ? 'Загрузить набор монет' : 'Сохранить набор монет';
                     }
                     return this.selectedCoinIds.length === 0
-                        ? window.tooltipsConfig.getTooltip('ui.coinSet.load')
-                        : window.tooltipsConfig.getTooltip('ui.coinSet.save');
+                        ? window.tooltipsConfig.getTooltip('ui.coinSet.load', lang)
+                        : window.tooltipsConfig.getTooltip('ui.coinSet.save', lang);
                 },
                 /**
                  * Tooltip for Price show/hide button
                  */
                 getPriceColumnTitle() {
+                    const lang = this.currentTranslationLanguage || 'ru';
                     if (!window.tooltipsConfig) {
-                        return this.showPriceColumn ? 'Скрыть Price' : 'Показать Price';
+                        return this.showPriceColumn ? 'Скрыть цену' : 'Показать цену';
                     }
                     return this.showPriceColumn
-                        ? window.tooltipsConfig.getTooltip('ui.coinTable.hidePrice')
-                        : window.tooltipsConfig.getTooltip('ui.coinTable.showPrice');
+                        ? window.tooltipsConfig.getTooltip('ui.coinTable.hidePrice', lang)
+                        : window.tooltipsConfig.getTooltip('ui.coinTable.showPrice', lang);
                 },
 
                 /**
@@ -5768,13 +5764,6 @@
                             }
 
                             // Update reactive tooltips after init
-                            // Sync currentTranslationLanguage with currentLanguage from tooltipsConfig
-                            if (window.tooltipsConfig && typeof window.tooltipsConfig.getCurrentLanguage === 'function') {
-                                const tooltipsLanguage = window.tooltipsConfig.getCurrentLanguage();
-                                if (tooltipsLanguage !== this.currentTranslationLanguage) {
-                                    this.currentTranslationLanguage = tooltipsLanguage;
-                                }
-                            }
                             this.updateTooltips();
                         } catch (error) {
                             console.error('app-ui-root: ошибка инициализации tooltips при монтировании:', error);

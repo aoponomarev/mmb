@@ -85,7 +85,7 @@ In both modes, external API calls subject to CORS should use Cloudflare Worker p
 - **SSOT**: #JS-DR3gZC9b (tooltips-config.js)
 - **Principle**: Use native browser tooltips (`title` attribute). HTML-based tooltips are forbidden.
 - **Structure**: Static part from config + newline + dynamic part from #JS-Kg2tEBFr (tooltip-interpreter.js)
-- **Usage**: `tooltipsConfig.getTooltip(key)` or `tooltipInterpreter.getTooltip(key, { value, lang })`
+- **Usage**: `tooltipsConfig.getTooltip(key, lang)` or `tooltipInterpreter.getTooltip(key, { value, lang })`. Language is passed per call (stateless).
 - **Constraints**: UTF-8 only, under 2000 chars, no HTML
 
 ### Counter Consistency Contract

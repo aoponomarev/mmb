@@ -198,16 +198,17 @@
             isConflictPortfolio() {
                 return this.portfolio?.syncState === 'conflict';
             },
+            currentLanguage() {
+                return window.uiState?.getState()?.tooltips?.currentLanguage || 'ru';
+            },
             conflictLabel() {
-                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge') || 'Конфликт';
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.badge', this.currentLanguage);
             },
             conflictTooltip() {
-                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip')
-                    || 'Конфликт между устройствами';
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.tooltip', this.currentLanguage);
             },
             conflictNote() {
-                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.note')
-                    || 'Локальная конфликтная копия после расхождения с облачной версией.';
+                return window.tooltipsConfig?.getTooltip('ui.portfolio.syncConflict.note', this.currentLanguage);
             }
         },
 

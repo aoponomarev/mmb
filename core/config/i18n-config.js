@@ -89,7 +89,7 @@
         normalizeLanguage
     };
 
-    console.log('i18n-config: конфигурация loadedа', {
+    console.log('i18n-config: конфигурация loaded', {
         baseLanguage: BASE_LANGUAGE,
         supportedLanguages: SUPPORTED_LANGUAGES
     });

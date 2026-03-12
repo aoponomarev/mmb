@@ -128,21 +128,21 @@
             },
 
             favoriteTitle() {
-                const lang = this.currentLanguage; // Establish dependency
+                const lang = this.currentLanguage;
                 if (!this.tooltipsConfig) return this.isFavorite ? 'Убрать' : 'Добавить';
                 return this.isFavorite
-                    ? this.tooltipsConfig.getTooltip('ui.coinBlock.favorite.remove')
-                    : this.tooltipsConfig.getTooltip('ui.coinBlock.favorite.add');
+                    ? this.tooltipsConfig.getTooltip('ui.coinBlock.favorite.remove', lang)
+                    : this.tooltipsConfig.getTooltip('ui.coinBlock.favorite.add', lang);
             },
 
             openTitle() {
-                const lang = this.currentLanguage; // Establish dependency
-                return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.coinBlock.open') : 'Открыть';
+                const lang = this.currentLanguage;
+                return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.coinBlock.open', lang) : 'Открыть';
             },
 
             deleteTitle() {
-                const lang = this.currentLanguage; // Establish dependency
-                return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.coinBlock.delete') : 'Удалить';
+                const lang = this.currentLanguage;
+                return this.tooltipsConfig ? this.tooltipsConfig.getTooltip('ui.coinBlock.delete', lang) : 'Удалить';
             },
 
             /**

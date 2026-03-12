@@ -662,8 +662,8 @@ IMPORTANT: Always include the markers ---NEWS---, ---TRANSLATION---, and ---END-
         tooltipVix() {
             if (!window.tooltipsConfig) return '';
             const lang = this.currentLanguage;
-            const description = window.tooltipsConfig.getTooltip('metric.vix.description');
-            const prefix = window.tooltipsConfig.getTooltip('ui.vix.sourcePrefix');
+            const description = window.tooltipsConfig.getTooltip('metric.vix.description', lang);
+            const prefix = window.tooltipsConfig.getTooltip('ui.vix.sourcePrefix', lang);
             if (this.vixSource) {
                 return `${description}\n\n${prefix} ${this.vixSource}`;
             }
