@@ -8,8 +8,8 @@
  * FUNCTIONS: allocateWeights, normalizeWeights, lockAssetWeight, unlockAsset, setRebalanceEnabled, buildDraftAssets, autoSelectCandidates.
  *
  * REFERENCES:
- * - docs/A_PORTFOLIO_SYSTEM.md
- * - Legacy donor recipe-portfolio-engine-mvp-hardening (LIR-005.A2, LIR-005.A3)
+ * - id:ais-6f2b1d (docs/ais/ais-portfolio-system.md)
+ * - Legacy donor recipe-portfolio-engine-mvp-hardening (id:ais-3f4e5c, LIR-005.A2, LIR-005.A3)
  */
 (function() {
     'use strict';

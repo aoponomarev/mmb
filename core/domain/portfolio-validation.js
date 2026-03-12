@@ -4,8 +4,8 @@
  * @skill id:sk-c3d639
  *
  * REFERENCES:
- * - docs/A_PORTFOLIO_SYSTEM.md
- * - Legacy donor recipe-portfolio-engine-mvp-hardening (ais-portfolio-controls.md#LIR-005.A4)
+ * - id:ais-6f2b1d (docs/ais/ais-portfolio-system.md)
+ * - Legacy donor recipe-portfolio-engine-mvp-hardening (id:ais-3f4e5c, LIR-005.A4)
  */
 (function() {
     'use strict';
@@ -87,6 +87,25 @@
                         code: 'DISABLED_ASSET_WEIGHT_NOT_MIN',
                         message: `Disabled rebalance asset must have weight ${minWeight}.`,
                         path: `assets[${index}].weight`
+                    });
+                }
+            }
+
+            if (asset.keyMetric !== undefined && asset.keyMetric !== null) {
+                const field = typeof asset.keyMetric.field === 'string' ? asset.keyMetric.field.trim() : '';
+                const label = typeof asset.keyMetric.label === 'string' ? asset.keyMetric.label.trim() : '';
+                if (!field) {
+                    issues.push({
+                        code: 'ASSET_KEY_METRIC_FIELD_REQUIRED',
+                        message: 'Asset keyMetric.field must be a non-empty string.',
+                        path: `assets[${index}].keyMetric.field`
+                    });
+                }
+                if (!label) {
+                    issues.push({
+                        code: 'ASSET_KEY_METRIC_LABEL_REQUIRED',
+                        message: 'Asset keyMetric.label must be a non-empty string.',
+                        path: `assets[${index}].keyMetric.label`
                     });
                 }
             }

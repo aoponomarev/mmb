@@ -676,6 +676,13 @@
                 category: 'core'
             },
             {
+                id: 'portfolio-observability',
+                src: 'core/observability/portfolio-observability.js',
+                type: 'local',
+                deps: ['event-bus'],
+                category: 'core'
+            },
+            {
                 id: 'adapter-health-tracker',
                 src: 'core/observability/adapter-health-tracker.js',
                 type: 'local',
@@ -828,14 +835,6 @@
                 deps: [],
                 category: 'templates',
                 condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
-            },
-            {
-                id: 'portfolios-manager-template',
-                src: 'app/templates/portfolios-manager-template.js',
-                type: 'local',
-                deps: [],
-                category: 'templates',
-                condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
             },
             {
                 id: 'auth-footer-template', // Placeholder for missing template if any, wait
@@ -1026,7 +1025,7 @@
                 id: 'portfolios-import-modal-body',
                 src: 'app/components/portfolios-import-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'portfolio-config', 'event-bus'],
+                deps: ['vue', 'modal', 'portfolio-config', 'event-bus', 'portfolio-observability'],
                 category: 'components'
             },
             {
@@ -1046,22 +1045,6 @@
                 condition: () => window.appConfig && window.appConfig.isFeatureEnabled('auth')
             },
             {
-                id: 'portfolio-modal-body',
-                src: 'app/components/portfolio-modal-body.js',
-                type: 'local',
-                deps: ['vue', 'button'],
-                category: 'components',
-                condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
-            },
-            {
-                id: 'portfolios-manager',
-                src: 'app/components/portfolios-manager.js',
-                type: 'local',
-                deps: ['vue', 'button', 'modal', 'portfolio-modal-body', 'portfolios-client'],
-                category: 'components',
-                condition: () => window.appConfig && window.appConfig.isFeatureEnabled('portfolios') && window.appConfig.isFeatureEnabled('cloudSync')
-            },
-            {
                 id: 'coin-set-save-modal-body',
                 src: 'app/components/coin-set-save-modal-body.js',
                 type: 'local',
@@ -1069,17 +1052,24 @@
                 category: 'components'
             },
             {
+                id: 'portfolio-segment-table',
+                src: 'app/components/portfolio-segment-table.js',
+                type: 'local',
+                deps: ['vue'],
+                category: 'components'
+            },
+            {
                 id: 'portfolio-form-modal-body',
                 src: 'app/components/portfolio-form-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'portfolio-config', 'cell-num'],
+                deps: ['vue', 'modal', 'portfolio-config', 'cell-num', 'portfolio-segment-table'],
                 category: 'components'
             },
             {
                 id: 'portfolio-view-modal-body',
                 src: 'app/components/portfolio-view-modal-body.js',
                 type: 'local',
-                deps: ['vue', 'modal', 'portfolio-config', 'cell-num'],
+                deps: ['vue', 'modal', 'portfolio-config', 'cell-num', 'portfolio-segment-table'],
                 category: 'components'
             },
             {
@@ -1127,7 +1117,7 @@
                 id: 'app-ui-root',
                 src: 'app/app-ui-root.js',
                 type: 'local',
-                deps: ['dropdown-menu-item', 'button', 'dropdown', 'combobox', 'button-group', 'app-header', 'app-footer', 'modal', 'modal-buttons', 'modal-example-body', 'ai-api-settings', 'postgres-settings', 'timezone-modal-body', 'auth-modal-body', 'storage-reset-modal-body', 'portfolios-import-modal-body', 'icon-manager-modal-body', 'coin-set-save-modal-body', 'coin-set-load-modal-body', 'missing-coins-modal-body', 'session-log-modal-body', 'coingecko-cron-history-modal-body', 'menus-config', 'workspace-config', 'models-config', 'portfolio-config', 'portfolio-form-modal-body', 'portfolio-view-modal-body', 'coins-config', 'coingecko-stablecoins-loader', 'coins-metadata-loader', 'coins-metadata-generator', 'cloudflare-config', 'cloud-workspace-client', 'auth-state', 'column-visibility-mixin', 'ui-state'],
+                deps: ['dropdown-menu-item', 'button', 'dropdown', 'combobox', 'button-group', 'app-header', 'app-footer', 'modal', 'modal-buttons', 'modal-example-body', 'ai-api-settings', 'postgres-settings', 'timezone-modal-body', 'auth-modal-body', 'storage-reset-modal-body', 'portfolios-import-modal-body', 'icon-manager-modal-body', 'coin-set-save-modal-body', 'coin-set-load-modal-body', 'missing-coins-modal-body', 'session-log-modal-body', 'coingecko-cron-history-modal-body', 'menus-config', 'workspace-config', 'models-config', 'portfolio-config', 'portfolio-form-modal-body', 'portfolio-view-modal-body', 'portfolio-observability', 'coins-config', 'coingecko-stablecoins-loader', 'coins-metadata-loader', 'coins-metadata-generator', 'cloudflare-config', 'cloud-workspace-client', 'auth-state', 'column-visibility-mixin', 'ui-state'],
                 category: 'app'
             }
         ]

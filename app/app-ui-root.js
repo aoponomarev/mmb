@@ -9,6 +9,43 @@
 (function() {
     'use strict';
 
+    const DEFAULT_COIN_TABLE_METRIC_COLUMNS = Object.freeze([
+        Object.freeze({ id: 'percent-1h', field: 'price_change_percentage_1h', label: '1h%', columnClass: 'col-percent-1h', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'percent-24h', field: 'price_change_percentage_24h', label: '24h%', columnClass: 'col-percent-24h', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'percent-7d', field: 'price_change_percentage_7d', label: '7d%', columnClass: 'col-percent-7d', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'percent-14d', field: 'price_change_percentage_14d', label: '14d%', columnClass: 'col-percent-14d', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'percent-30d', field: 'price_change_percentage_30d', label: '30d%', columnClass: 'col-percent-30d', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'percent-200d', field: 'price_change_percentage_200d', label: '200d%', columnClass: 'col-percent-200d', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'cd-1w', field: 'metrics.cdWeighted.0', label: 'CD1w', columnClass: 'col-cd-1w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-2w', field: 'metrics.cdWeighted.1', label: 'CD2w', columnClass: 'col-cd-2w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-3w', field: 'metrics.cdWeighted.2', label: 'CD3w', columnClass: 'col-cd-3w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-4w', field: 'metrics.cdWeighted.3', label: 'CD4w', columnClass: 'col-cd-4w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-5w', field: 'metrics.cdWeighted.4', label: 'CD5w', columnClass: 'col-cd-5w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-6w', field: 'metrics.cdWeighted.5', label: 'CD6w', columnClass: 'col-cd-6w', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cd-h', field: 'metrics.cdh', label: 'CDH', columnClass: 'col-cd-h', tooltipKey: 'cdh', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, arrow: true }) }),
+        Object.freeze({ id: 'cgr-2', field: 'metrics.cgrDeg.0', label: 'CGR2', columnClass: 'col-cgr-2', tooltipKey: 'cgrDeg', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 1, colorize: true, unit: '°' }) }),
+        Object.freeze({ id: 'cgr-3', field: 'metrics.cgrDeg.1', label: 'CGR3', columnClass: 'col-cgr-3', tooltipKey: 'cgrDeg', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 1, colorize: true, unit: '°' }) }),
+        Object.freeze({ id: 'cgr-4', field: 'metrics.cgrDeg.2', label: 'CGR4', columnClass: 'col-cgr-4', tooltipKey: 'cgrDeg', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 1, colorize: true, unit: '°' }) }),
+        Object.freeze({ id: 'cgr-5', field: 'metrics.cgrDeg.3', label: 'CGR5', columnClass: 'col-cgr-5', tooltipKey: 'cgrDeg', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 1, colorize: true, unit: '°' }) }),
+        Object.freeze({ id: 'cgr-6', field: 'metrics.cgrDeg.4', label: 'CGR6', columnClass: 'col-cgr-6', tooltipKey: 'cgrDeg', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 1, colorize: true, unit: '°' }) }),
+        Object.freeze({ id: 'cgr-sum', field: 'metrics.cgr', label: 'CGR Σ', columnClass: 'col-cgr-sum', tooltipKey: 'cgr', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, arrow: true }) }),
+        Object.freeze({ id: 'agr', field: 'metrics.agr', label: 'AGR', columnClass: 'col-balance-agr', tooltipKey: 'agr', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, arrow: true }) }),
+        Object.freeze({ id: 'max-pv', field: 'metrics.maxPV', label: 'MAX PV', columnClass: 'col-max-pv', tooltipKey: 'maxPV', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'min-pv', field: 'metrics.minPV', label: 'min PV', columnClass: 'col-min-pv', tooltipKey: 'minPV', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true, unit: '%' }) }),
+        Object.freeze({ id: 'dcs', field: 'metrics.dcs', label: 'DCS', columnClass: 'col-stability-dcs', tooltipKey: 'dcs', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'tsi', field: 'metrics.tsi', label: 'TSI', columnClass: 'col-stability-tsi', tooltipKey: 'tsi', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'mp', field: 'metrics.mp', label: 'MPS', columnClass: 'col-stability-mp', tooltipKey: 'mp', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'cpt', field: 'metrics.cpt', label: 'CPT', columnClass: 'col-balance-cpt', tooltipKey: 'cpt', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) }),
+        Object.freeze({ id: 'din', field: 'metrics.din', label: 'DIN', columnClass: 'col-balance-din', tooltipKey: 'din', selectableAsKeyMetric: true, cellProps: Object.freeze({ precision: 2, colorize: true }) })
+    ]);
+
+    function cloneCoinTableMetricColumns(columns) {
+        return (columns || []).map(column => ({
+            ...column,
+            cellProps: { ...(column.cellProps || {}) }
+        }));
+    }
+
     /**
      * Initialize Vue app
      * Called after all modules loaded via module system
@@ -49,10 +86,6 @@
 
         // auth-button no longer used in header, auth via modal.
 
-        if (portfoliosEnabled && !window.portfoliosManager) {
-            console.warn('app-ui-root: portfolios-manager not loaded, though portfolios and cloudSync flags enabled');
-        }
-
         const { createApp } = Vue;
 
         const app = createApp({
@@ -78,8 +111,6 @@
                 ...(window.sessionLogModalBody ? { 'session-log-modal-body': window.sessionLogModalBody } : {}),
                 // Conditional registration of auth and portfolio components
                 ...(window.authModalBody ? { 'auth-modal-body': window.authModalBody } : {}),
-                ...(window.portfolioModalBody ? { 'portfolio-modal-body': window.portfolioModalBody } : {}),
-                ...(window.portfoliosManager ? { 'portfolios-manager': window.portfoliosManager } : {}),
                 ...(window.coinSetSaveModalBody ? { 'coin-set-save-modal-body': window.coinSetSaveModalBody } : {}),
                 ...(window.portfolioFormModalBody ? { 'portfolio-form-modal-body': window.portfolioFormModalBody } : {}),
                 ...(window.portfolioViewModalBody ? { 'portfolio-view-modal-body': window.portfolioViewModalBody } : {}),
@@ -167,6 +198,7 @@
                     currentCandlesCoin: null,
                     // Portfolio form state
                     currentViewingPortfolio: null,
+                    portfolioFormMode: 'create',
                     portfolioFormKey: 0,
                     userPortfolios: [],
                     // Tooltip config (for template access)
@@ -274,6 +306,8 @@
                     headerActionHover: null, // Hover state for header action buttons (load/save, refresh, favorites)
                     coinsCacheCheckTimer: null, // Timer for top-coins cache expiry check
                     selectedCoinIds: [], // Selected coins (stub)
+                    selectedCoinKeyMetrics: {}, // CoinId -> { field, label } for portfolio snapshot selection
+                    hoveredMetricCell: null, // { coinId, field } while pointer is over selectable metric cell
                     favoriteCoinIds: [], // Favorite coin IDs (for reactivity)
                     favoriteCoinsMeta: [], // Full favorite coin data from favoritesManager (id, symbol)
                     favoriteActionHoverId: null, // Coin ID hovered in favorites list action icon
@@ -339,6 +373,39 @@
                             window.uiState.setTooltipsLanguage(value);
                         }
                     }
+                },
+                portfolioFormModalId() {
+                    return this.portfolioFormMode === 'rebalance'
+                        ? 'portfolioRebalanceModal'
+                        : 'portfolioFormModal';
+                },
+                portfolioFormModalConfig() {
+                    return this.modalsConfig?.getModalConfig?.(this.portfolioFormModalId) || null;
+                },
+                portfolioFormModalTitle() {
+                    return this.modalsConfig?.getModalTitle(this.portfolioFormModalId)
+                        || this.tooltipsConfig?.getTooltip?.(
+                            this.portfolioFormMode === 'rebalance'
+                                ? 'ui.modal.portfolioRebalance.title'
+                                : 'ui.modal.portfolioForm.title'
+                        )
+                        || (this.portfolioFormMode === 'rebalance'
+                            ? 'Ребалансировка портфеля'
+                            : 'Формирование портфеля');
+                },
+                portfolioFormModalDescription() {
+                    return this.modalsConfig?.getModalDescription?.(this.portfolioFormModalId)
+                        || this.portfolioFormModalConfig?.description
+                        || (this.portfolioFormMode === 'rebalance'
+                            ? 'Корректировка существующего портфеля на основе актуального снимка'
+                            : 'Автоматическое формирование портфеля на основе математической модели');
+                },
+                portfolioFormModalHelpText() {
+                    return this.modalsConfig?.getModalHelpText?.(this.portfolioFormModalId)
+                        || this.portfolioFormModalConfig?.helpText
+                        || (this.portfolioFormMode === 'rebalance'
+                            ? 'Проверьте текущий состав, скорректируйте веса и сохраните обновление уже существующего портфеля.'
+                            : 'Соберите новый портфель из текущего набора выбранных монет, проверьте ключевые метрики и сохраните новый снимок.');
                 },
                 /**
                  * Top-coins cache stale (for dual-mode refresh)
@@ -518,6 +585,13 @@
                  */
                 priceColumnStyle() {
                     return this.showPriceColumn ? '' : 'display: none;';
+                },
+                coinMetricColumns() {
+                    const modelMeta = window.modelsConfig?.getModelMeta?.(this.activeModelId) || null;
+                    const modelColumns = Array.isArray(modelMeta?.tableMetricColumns) && modelMeta.tableMetricColumns.length > 0
+                        ? modelMeta.tableMetricColumns
+                        : DEFAULT_COIN_TABLE_METRIC_COLUMNS;
+                    return cloneCoinTableMetricColumns(modelColumns);
                 },
                 /**
                  * Coin sort menu items (from single source of truth)
@@ -731,6 +805,10 @@
                  */
                 selectedCoinIds: {
                     handler() {
+                        const sanitizedKeyMetrics = this.sanitizeSelectedCoinKeyMetrics(this.selectedCoinKeyMetrics);
+                        if (!this.areSelectedCoinKeyMetricsEqual(sanitizedKeyMetrics, this.selectedCoinKeyMetrics)) {
+                            this.selectedCoinKeyMetrics = sanitizedKeyMetrics;
+                        }
                         if (this.infoBoxPortfolio) {
                             // Find selected coins for L/S segment calc (D.2)
                             const selected = this.coins.filter(c => this.selectedCoinIds.includes(c.id));
@@ -933,14 +1011,53 @@
                         reader.onload = () => {
                             try {
                                 const payload = JSON.parse(String(reader.result || ''));
-                                const ok = window.portfolioConfig.importPortfolios(payload, { mode });
-                                if (!ok) {
+                                const result = window.portfolioConfig.importPortfolios(payload, { mode });
+                                if (!result?.ok) {
                                     console.warn('app-ui-root: importPortfolios завершился с ошибкой');
+                                    this.observePortfolioEvent({
+                                        action: 'import',
+                                        stage: 'local',
+                                        status: 'failed',
+                                        mode,
+                                        reason: result?.reason || 'import-failed'
+                                    });
                                 } else {
-                                    this.userPortfolios = window.portfolioConfig.getLocalPortfolios();
+                                    if (window.eventBus) {
+                                        window.eventBus.emit('portfolios-imported', result);
+                                    } else {
+                                        this.loadScopedPortfolios('current');
+                                    }
+                                    this.observePortfolioEvent({
+                                        action: 'import',
+                                        stage: 'local',
+                                        status: 'succeeded',
+                                        scope: result.scope,
+                                        mode: result.mode,
+                                        reason: result.explicitCloudSyncRequired ? 'explicit-cloud-sync-required' : null,
+                                        counts: {
+                                            total: result.count,
+                                            imported: result.count,
+                                            detached: result.detachedCount
+                                        }
+                                    });
+                                    if (window.messagesStore) {
+                                        window.messagesStore.addMessage({
+                                            type: 'success',
+                                            text: `Импортировано портфелей: ${result.count}. Для облака потребуется явное сохранение.`,
+                                            duration: 3000
+                                        });
+                                    }
                                 }
                             } catch (error) {
-                                console.error('app-ui-root: ошибка импорта portfolios', error);
+                                this.observePortfolioEvent({
+                                    action: 'import',
+                                    stage: 'local',
+                                    status: 'failed',
+                                    mode,
+                                    reason: 'invalid-json',
+                                    details: error?.message || null
+                                });
+                                console.error('app-ui-root: ошибка импорта портфелей', error);
                             }
                         };
                         reader.readAsText(file);
@@ -1004,6 +1121,7 @@
                  * Open portfolio form modal handler (D.2)
                  */
                 handleCreatePortfolio() {
+                    this.portfolioFormMode = 'create';
                     this.currentViewingPortfolio = null; // Reset to avoid entering edit mode
                     this.portfolioFormKey++;
                     if (this.$refs.portfolioFormModal) {
@@ -1031,6 +1149,7 @@
                     console.log('app-ui-root: ребалансировка портфеля', portfolio.id);
 
                     // Ensure rebalance opens form with prepared/normalized portfolio snapshot.
+                    this.portfolioFormMode = 'rebalance';
                     this.currentViewingPortfolio = portfolio;
 
                     // 1. Close view window
@@ -1053,69 +1172,99 @@
                     console.log('app-ui-root: сохранение портфеля', portfolio);
                     const existingIndex = this.userPortfolios.findIndex(p => p.id === portfolio.id);
                     const previousPortfolio = existingIndex !== -1 ? this.userPortfolios[existingIndex] : null;
+                    const saveMode = this.portfolioFormMode === 'rebalance' ? 'rebalance' : 'create';
 
-                    // 1. First close form window (D.3)
                     if (this.$refs.portfolioFormModal) {
                         this.$refs.portfolioFormModal.hide();
                     }
+                    this.portfolioFormMode = 'create';
 
-                    // 2. Save/update in local storage (D.4, D.5)
+                    // @causality #for-portfolio-lifecycle-preservation
+                    // Preserve lifecycle and replica metadata so edit/rebalance does not erase
+                    // the version lineage needed for multi-device comparison.
+                    if (window.portfolioConfig?.preparePortfolioForPersistence) {
+                        window.portfolioConfig.preparePortfolioForPersistence(portfolio, previousPortfolio);
+                    }
+
                     if (existingIndex !== -1) {
-                        // Update existing (D.4)
                         this.userPortfolios.splice(existingIndex, 1, portfolio);
                     } else {
-                        // Add new (D.2)
                         this.userPortfolios.unshift(portfolio);
                     }
 
-                    // Mark portfolio as pending sync before touching cloud.
-                    if (!portfolio.syncState) {
-                        portfolio.syncState = portfolio.cloudflareId ? 'synced' : 'local-only';
-                    }
-                    // Persist local-first view immediately.
+                    // Local-first persistence prevents a failed cloud write from discarding
+                    // the user's latest version on the current device.
                     window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    this.observePortfolioEvent({
+                        action: 'save',
+                        stage: 'local',
+                        status: 'succeeded',
+                        portfolioId: portfolio.id,
+                        cloudflareId: portfolio.cloudflareId ?? null,
+                        syncState: portfolio.syncState,
+                        cloudSyncMode: portfolio.cloudSyncMode,
+                        mode: saveMode
+                    });
 
-                    // 2.5 Cloudflare - auth-scoped replica sync.
-                    // Result controls syncState to keep list consistent with cloud when available.
-                    const cloudSynced = await this.syncPortfolioToCloudflare(portfolio, previousPortfolio);
-                    if (cloudSynced) {
+                    let portfolioForView = portfolio;
+                    let messageType = 'success';
+                    let messageText = existingIndex !== -1
+                        ? `Портфель "${portfolio.name}" обновлен`
+                        : `Портфель "${portfolio.name}" создан`;
+
+                    const syncResult = await this.syncPortfolioToCloudflare(portfolio, previousPortfolio);
+                    if (syncResult.ok) {
                         portfolio.syncState = 'synced';
-                    } else if (!portfolio.syncState || portfolio.syncState === 'synced') {
-                        // Degrade explicitly to avoid silent mismatch.
+                        portfolio.cloudUpdatedAt = syncResult.cloudUpdatedAt || portfolio.cloudUpdatedAt || portfolio.updatedAt;
+                        portfolio.conflictMeta = null;
+                    } else if (syncResult.reason === 'conflict-detected' && syncResult.resolution) {
+                        this.applyPortfolioConflictResolution(portfolio.id, syncResult.resolution);
+                        portfolioForView = syncResult.resolution.localConflictPortfolio;
+                        messageType = 'warning';
+                        messageText = 'Обнаружен конфликт между устройствами: облачная версия сохранена как основная, локальные изменения оставлены отдельной копией.';
+                    } else if (syncResult.status === 'failed') {
                         portfolio.syncState = 'error';
                     }
-                    window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
 
-                    // 2.6 PostgreSQL - optional secondary sync (best effort).
-                    if (window.postgresSyncManager) {
-                        window.postgresSyncManager.savePortfolio(portfolio).catch(err => {
+                    window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    this.observePortfolioEvent({
+                        action: 'sync',
+                        stage: 'cloud',
+                        status: syncResult.status,
+                        portfolioId: portfolioForView.id,
+                        cloudflareId: portfolioForView.cloudflareId ?? syncResult.cloudflareId ?? null,
+                        syncState: portfolioForView.syncState,
+                        cloudSyncMode: portfolioForView.cloudSyncMode,
+                        mode: saveMode,
+                        reason: syncResult.reason,
+                        details: syncResult.details,
+                        counts: syncResult.counts || null
+                    });
+
+                    // This compatibility hook must stay best-effort so the active Cloudflare
+                    // contract remains the only source of remote truth.
+                    if (window.postgresSyncManager && syncResult.reason !== 'conflict-detected') {
+                        window.postgresSyncManager.savePortfolio(portfolioForView).catch(err => {
                             console.warn('app-ui-root: фоновая синхронизация портфеля не удалась', err);
                         });
                     }
 
-                    // 3. Set current portfolio for viewing
-                    this.currentViewingPortfolio = portfolio;
+                    this.currentViewingPortfolio = portfolioForView;
 
-                    // 4. Show message
                     if (window.messagesStore) {
                         window.messagesStore.addMessage({
-                            type: 'success',
-                            text: existingIndex !== -1 ? `Портфель "${portfolio.name}" обновлен` : `Портфель "${portfolio.name}" создан`,
-                            duration: 3000
+                            type: messageType,
+                            text: messageText,
+                            duration: messageType === 'warning' ? 4500 : 3000
                         });
                     }
 
-                    // 5. Open view window (updated)
                     this.$nextTick(() => {
                         if (this.$refs.portfolioViewModal) {
                             this.$refs.portfolioViewModal.show();
                         }
                     });
 
-                    // Emit event
-                    if (window.eventBus) {
-                        window.eventBus.emit('portfolio-saved', portfolio);
-                    }
                 },
                 /**
                  * Delete portfolio
@@ -1127,15 +1276,48 @@
                     // 1. Remove from local list (D.5)
                     this.userPortfolios = this.userPortfolios.filter(p => p.id !== portfolioId);
                     window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    this.observePortfolioEvent({
+                        action: 'delete',
+                        stage: 'local',
+                        status: 'succeeded',
+                        portfolioId,
+                        cloudflareId: removed?.cloudflareId ?? null,
+                        syncState: removed?.syncState ?? null,
+                        cloudSyncMode: removed?.cloudSyncMode ?? null
+                    });
 
                     // 1.5 Try to delete online record in Cloudflare (if was linked).
+                    let deleteCloudStatus = {
+                        status: 'skipped',
+                        reason: removed?.cloudflareId ? 'missing-delete-client' : 'no-cloud-link',
+                        details: null
+                    };
                     if (removed?.cloudflareId && window.portfoliosClient?.deletePortfolio) {
                         try {
                             await window.portfoliosClient.deletePortfolio(removed.cloudflareId);
+                            deleteCloudStatus = {
+                                status: 'succeeded',
+                                reason: null,
+                                details: null
+                            };
                         } catch (error) {
                             console.warn('app-ui-root: удаление портфеля в Cloudflare не удалось', error);
+                            deleteCloudStatus = {
+                                status: 'failed',
+                                reason: 'request-failed',
+                                details: error?.message || null
+                            };
                         }
                     }
+                    this.observePortfolioEvent({
+                        action: 'delete',
+                        stage: 'cloud',
+                        status: deleteCloudStatus.status,
+                        portfolioId,
+                        cloudflareId: removed?.cloudflareId ?? null,
+                        reason: deleteCloudStatus.reason,
+                        details: deleteCloudStatus.details
+                    });
 
                     // 2. Clear current view if needed
                     if (this.currentViewingPortfolio?.id === portfolioId) {
@@ -1150,55 +1332,198 @@
                         });
                     }
                 },
+                loadScopedPortfolios(scope = 'current') {
+                    if (!window.portfolioConfig || typeof window.portfolioConfig.getLocalPortfolios !== 'function') {
+                        return [];
+                    }
+                    const portfolios = window.portfolioConfig.getLocalPortfolios(scope);
+                    this.userPortfolios = Array.isArray(portfolios) ? portfolios : [];
+                    return this.userPortfolios;
+                },
+                bootstrapAuthenticatedPortfolioScope() {
+                    if (!window.portfolioConfig) {
+                        return [];
+                    }
+                    if (typeof window.portfolioConfig.bootstrapAuthPortfoliosFromGuest === 'function') {
+                        window.portfolioConfig.bootstrapAuthPortfoliosFromGuest();
+                    }
+                    return this.loadScopedPortfolios('current');
+                },
+                observePortfolioEvent(payload = {}) {
+                    if (!window.portfolioObservability || typeof window.portfolioObservability.notify !== 'function') {
+                        return null;
+                    }
+                    return window.portfolioObservability.notify({
+                        source: 'app-ui-root',
+                        scope: window.portfolioConfig?.getCurrentPortfolioStorageScope?.() || 'guest',
+                        ...payload
+                    });
+                },
+                isPortfolioNotFoundError(error) {
+                    const message = String(error?.message || '').toLowerCase();
+                    return message.includes('404') || message.includes('not found') || message.includes('не найден');
+                },
+                buildHydratedCloudPortfolio(record) {
+                    if (!window.portfolioAdapters || typeof window.portfolioAdapters.fromCloudflareRecord !== 'function') {
+                        return null;
+                    }
+                    const converted = window.portfolioAdapters.fromCloudflareRecord(record);
+                    if (!converted) {
+                        return null;
+                    }
+                    converted.cloudflareId = record?.id ?? converted.cloudflareId ?? null;
+                    converted.cloudUpdatedAt = record?.updated_at || record?.created_at || converted.updatedAt || null;
+                    converted.cloudSyncMode = 'auto';
+                    converted.syncState = 'synced';
+                    converted.conflictMeta = null;
+                    return converted;
+                },
+                buildPortfolioConflictResolution(localPortfolio, remoteRecord) {
+                    const remotePortfolio = this.buildHydratedCloudPortfolio(remoteRecord);
+                    if (!remotePortfolio || !window.portfolioConfig?.buildConflictPortfolio) {
+                        return null;
+                    }
+                    const detectedAt = new Date().toISOString();
+                    const localConflictPortfolio = window.portfolioConfig.buildConflictPortfolio(localPortfolio, {
+                        detectedAt,
+                        localUpdatedAt: localPortfolio?.updatedAt || detectedAt,
+                        remoteUpdatedAt: remoteRecord?.updated_at || remoteRecord?.created_at || null,
+                        originPortfolioId: localPortfolio?.id || null,
+                        originCloudflareId: localPortfolio?.cloudflareId || remoteRecord?.id || null
+                    });
+                    return {
+                        remotePortfolio,
+                        localConflictPortfolio,
+                        detectedAt
+                    };
+                },
+                applyPortfolioConflictResolution(basePortfolioId, resolution) {
+                    if (!resolution?.remotePortfolio || !resolution?.localConflictPortfolio) {
+                        return false;
+                    }
+                    const replaceIndex = this.userPortfolios.findIndex(p => p?.id === basePortfolioId);
+                    if (replaceIndex !== -1) {
+                        this.userPortfolios.splice(replaceIndex, 1, resolution.remotePortfolio);
+                    } else {
+                        this.userPortfolios.unshift(resolution.remotePortfolio);
+                    }
+                    this.userPortfolios.unshift(resolution.localConflictPortfolio);
+                    return true;
+                },
                 /**
                  * Sync portfolio to Cloudflare (primary online persistence).
                  * Does not interrupt UX on network/Auth unavailable.
                  */
                 async syncPortfolioToCloudflare(portfolio, previousPortfolio) {
-                    if (!window.portfoliosClient || !window.authClient) return false;
+                    const cloudflareId = portfolio.cloudflareId || previousPortfolio?.cloudflareId || null;
+                    const cloudUpdatedAt = portfolio.cloudUpdatedAt || previousPortfolio?.cloudUpdatedAt || null;
+                    if (!window.portfoliosClient || !window.authClient || !window.portfolioConfig?.toCloudflarePayload) {
+                        return {
+                            ok: false,
+                            status: 'skipped',
+                            reason: 'missing-clients',
+                            details: null,
+                            cloudflareId,
+                            cloudUpdatedAt
+                        };
+                    }
                     const cloudSyncEnabled = window.appConfig?.isFeatureEnabled?.('cloudSync') !== false;
-                    if (!cloudSyncEnabled) return false;
+                    if (!cloudSyncEnabled) {
+                        return {
+                            ok: false,
+                            status: 'skipped',
+                            reason: 'cloud-sync-disabled',
+                            details: null,
+                            cloudflareId,
+                            cloudUpdatedAt
+                        };
+                    }
 
                     let authenticated = false;
                     try {
                         authenticated = await window.authClient.isAuthenticated();
                     } catch (error) {
                         console.warn('app-ui-root: failed to проверить auth for Cloudflare sync', error);
-                        return false;
+                        return {
+                            ok: false,
+                            status: 'skipped',
+                            reason: 'auth-check-failed',
+                            details: error?.message || null,
+                            cloudflareId,
+                            cloudUpdatedAt
+                        };
                     }
-                    if (!authenticated) return false;
+                    if (!authenticated) {
+                        return {
+                            ok: false,
+                            status: 'skipped',
+                            reason: 'not-authenticated',
+                            details: null,
+                            cloudflareId,
+                            cloudUpdatedAt
+                        };
+                    }
 
-                    const cloudflareId = portfolio.cloudflareId || previousPortfolio?.cloudflareId || null;
-                    const assets = Array.isArray(portfolio.coins)
-                        ? portfolio.coins.map((coin, index) => ({
-                            coinId: coin.coinId || coin.id || `${coin.symbol || 'coin'}-${index}`,
-                            ticker: (coin.ticker || coin.symbol || '').toUpperCase(),
-                            weight: Number.isFinite(Number(coin.portfolioPercent)) ? Number(coin.portfolioPercent) : 0,
-                            side: (coin.metrics?.agr || 0) >= 0 ? 'long' : 'short',
-                            delegatedBy: {
-                                modelId: coin.delegatedBy?.modelId || portfolio?.settings?.modelId || 'unknown',
-                                modelName: coin.delegatedBy?.modelName || ''
-                            },
-                            agr: Number(coin.metrics?.agr || 0)
-                        }))
-                        : [];
+                    let resolvedCloudflareId = cloudflareId;
+                    if (resolvedCloudflareId && window.portfoliosClient?.getPortfolio) {
+                        try {
+                            // @causality #for-multi-device-conflict-forking
+                            // Read the current remote revision first so a stale device cannot
+                            // silently overwrite a newer cloud replica with last-writer-wins.
+                            const remotePortfolio = await window.portfoliosClient.getPortfolio(resolvedCloudflareId);
+                            const remoteUpdatedAt = remotePortfolio?.updated_at || remotePortfolio?.created_at || null;
+                            if (window.portfolioConfig?.detectMultiDeviceConflict?.(portfolio, remoteUpdatedAt)) {
+                                const resolution = this.buildPortfolioConflictResolution(portfolio, remotePortfolio);
+                                return {
+                                    ok: false,
+                                    status: 'skipped',
+                                    reason: 'conflict-detected',
+                                    details: null,
+                                    cloudflareId: resolvedCloudflareId,
+                                    cloudUpdatedAt,
+                                    counts: { conflicted: 1, forked: 1 },
+                                    resolution
+                                };
+                            }
+                        } catch (error) {
+                            if (this.isPortfolioNotFoundError(error)) {
+                                resolvedCloudflareId = null;
+                            } else {
+                                console.warn('app-ui-root: failed to read Cloudflare portfolio before sync', error);
+                                return {
+                                    ok: false,
+                                    status: 'failed',
+                                    reason: 'cloud-read-before-sync-failed',
+                                    details: error?.message || null,
+                                    cloudflareId: resolvedCloudflareId,
+                                    cloudUpdatedAt
+                                };
+                            }
+                        }
+                    }
 
-                    const payload = {
-                        name: portfolio.name || 'Portfolio',
-                        description: portfolio.description || null,
-                        assets
-                    };
+                    const payload = window.portfolioConfig.toCloudflarePayload(portfolio);
 
                     try {
-                        const saved = cloudflareId
-                            ? await window.portfoliosClient.updatePortfolio(cloudflareId, payload)
+                        const saved = resolvedCloudflareId
+                            ? await window.portfoliosClient.updatePortfolio(resolvedCloudflareId, payload)
                             : await window.portfoliosClient.createPortfolio(payload);
-                        const savedId = saved?.id ?? cloudflareId;
+                        const savedId = saved?.id ?? resolvedCloudflareId;
+                        const nextCloudUpdatedAt = saved?.updated_at || saved?.created_at || new Date().toISOString();
                         if (savedId) {
                             portfolio.cloudflareId = savedId;
+                            portfolio.cloudUpdatedAt = nextCloudUpdatedAt;
+                            portfolio.conflictMeta = null;
                             window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
                         }
-                        return true;
+                        return {
+                            ok: true,
+                            status: 'succeeded',
+                            reason: null,
+                            details: null,
+                            cloudflareId: savedId ?? null,
+                            cloudUpdatedAt: nextCloudUpdatedAt
+                        };
                     } catch (error) {
                         console.warn('app-ui-root: Cloudflare sync skipped (local save kept)', error);
                         if (window.messagesStore) {
@@ -1209,38 +1534,101 @@
                                 duration: 2500
                             });
                         }
+                        return {
+                            ok: false,
+                            status: 'failed',
+                            reason: 'request-failed',
+                            details: error?.message || null,
+                            cloudflareId: resolvedCloudflareId ?? cloudflareId,
+                            cloudUpdatedAt
+                        };
                     }
-                    return false;
                 },
                 /**
                  * Hydrate portfolios list from Cloudflare D1 on authenticated devices.
                  * Local list remains SSOT; cloud acts as auth-scoped replica and recovery source.
                  */
                 async hydratePortfoliosFromCloud() {
-                    if (!window.portfoliosClient || !window.authClient) return;
-                    if (!window.portfolioAdapters || typeof window.portfolioAdapters.fromCloudflareRecord !== 'function') return;
+                    const buildResult = (overrides = {}) => ({
+                        ok: false,
+                        status: 'skipped',
+                        reason: null,
+                        details: null,
+                        counts: {
+                            total: 0,
+                            hydrated: 0,
+                            rebound: 0,
+                            stale: 0,
+                            shadowed: 0,
+                            conflicted: 0,
+                            refreshed: 0,
+                            forked: 0
+                        },
+                        ...overrides,
+                        counts: {
+                            total: 0,
+                            hydrated: 0,
+                            rebound: 0,
+                            stale: 0,
+                            shadowed: 0,
+                            conflicted: 0,
+                            refreshed: 0,
+                            forked: 0,
+                            ...(overrides.counts || {})
+                        }
+                    });
+                    const finish = (overrides = {}) => {
+                        const result = buildResult(overrides);
+                        this.observePortfolioEvent({
+                            action: 'hydrate',
+                            stage: 'cloud',
+                            status: result.status,
+                            reason: result.reason,
+                            details: result.details,
+                            counts: result.counts
+                        });
+                        return result;
+                    };
+
+                    if (!window.portfoliosClient || !window.authClient) {
+                        return finish({ reason: 'missing-clients' });
+                    }
+                    if (!window.portfolioAdapters || typeof window.portfolioAdapters.fromCloudflareRecord !== 'function') {
+                        return finish({ reason: 'missing-adapter' });
+                    }
                     const cloudSyncEnabled = window.appConfig?.isFeatureEnabled?.('cloudSync') !== false;
-                    if (!cloudSyncEnabled) return;
+                    if (!cloudSyncEnabled) {
+                        return finish({ reason: 'cloud-sync-disabled' });
+                    }
 
                     let authenticated = false;
                     try {
                         authenticated = await window.authClient.isAuthenticated();
                     } catch (error) {
                         console.warn('app-ui-root: failed to проверить auth for Cloudflare hydrate', error);
-                        return;
+                        return finish({
+                            status: 'failed',
+                            reason: 'auth-check-failed',
+                            details: error?.message || null
+                        });
                     }
-                    if (!authenticated) return;
+                    if (!authenticated) {
+                        return finish({ reason: 'not-authenticated' });
+                    }
 
                     let cloudPortfolios = [];
                     try {
                         cloudPortfolios = await window.portfoliosClient.getPortfolios();
                     } catch (error) {
                         console.warn('app-ui-root: hydratePortfoliosFromCloud getPortfolios error', error);
-                        return;
+                        return finish({
+                            status: 'failed',
+                            reason: 'cloud-read-failed',
+                            details: error?.message || null
+                        });
                     }
                     const localList = Array.isArray(this.userPortfolios) ? this.userPortfolios : [];
 
-                    // Index cloud portfolios by id for merge decisions.
                     const cloudById = new Map();
                     if (Array.isArray(cloudPortfolios)) {
                         cloudPortfolios.forEach(record => {
@@ -1249,49 +1637,145 @@
                         });
                     }
 
-                    // 1) Mark local portfolios that used to be synced but now отсутствуют в D1 как устаревшие (stale).
+                    // Missing remote records must stay visible locally so a second device cannot
+                    // silently erase the only recoverable copy from this session.
+                    let staleCount = 0;
+                    let didMutateLocal = false;
                     localList.forEach(p => {
                         if (!p) return;
                         const cfId = p.cloudflareId;
                         if (cfId === undefined || cfId === null) return;
                         if (!cloudById.has(cfId)) {
-                            // Не перезаписываем явные ошибки/локальные-only, только "synced"-ветку.
                             if (!p.syncState || p.syncState === 'synced') {
                                 p.syncState = 'stale';
+                                staleCount++;
+                                didMutateLocal = true;
                             }
                         }
                     });
 
-                    // 2) Добавить cloud-портфели, которых ещё нет локально.
                     const byCloudIdLocal = new Map();
+                    const byLocalId = new Map();
                     localList.forEach(p => {
+                        if (p && p.id) {
+                            byLocalId.set(p.id, p);
+                        }
                         if (p && p.cloudflareId !== undefined && p.cloudflareId !== null) {
                             byCloudIdLocal.set(p.cloudflareId, p);
                         }
                     });
 
                     const hydrated = [];
+                    let reboundCount = 0;
+                    let shadowedCount = 0;
+                    let conflictCount = 0;
+                    let refreshedCount = 0;
+                    const conflictForks = [];
                     for (const record of cloudPortfolios || []) {
                         const cfId = record && record.id;
-                        if (cfId != null && byCloudIdLocal.has(cfId)) {
+                        const remotePortfolio = this.buildHydratedCloudPortfolio(record);
+                        if (!remotePortfolio) {
                             continue;
                         }
-                        const converted = window.portfolioAdapters.fromCloudflareRecord(record);
-                        if (!converted) continue;
-                        converted.cloudflareId = cfId ?? converted.cloudflareId ?? null;
-                        converted.syncState = 'synced';
-                        hydrated.push(converted);
+                        const remoteUpdatedAt = record?.updated_at || record?.created_at || remotePortfolio.updatedAt || null;
+                        const linkedLocal = cfId != null ? byCloudIdLocal.get(cfId) : null;
+                        if (linkedLocal) {
+                            const localHasPendingChanges = window.portfolioConfig?.hasLocalChangesSinceCloudSync?.(linkedLocal) || false;
+                            const remoteIsNewer = window.portfolioConfig?.hasTimestampDrift?.(remoteUpdatedAt, linkedLocal.cloudUpdatedAt)
+                                || linkedLocal.syncState === 'stale';
+
+                            if (remoteIsNewer && window.portfolioConfig?.detectMultiDeviceConflict?.(linkedLocal, remoteUpdatedAt)) {
+                                const resolution = this.buildPortfolioConflictResolution(linkedLocal, record);
+                                if (resolution) {
+                                    const localIndex = localList.indexOf(linkedLocal);
+                                    if (localIndex !== -1) {
+                                        localList.splice(localIndex, 1, resolution.remotePortfolio);
+                                    }
+                                    byLocalId.set(resolution.remotePortfolio.id, resolution.remotePortfolio);
+                                    byCloudIdLocal.set(cfId, resolution.remotePortfolio);
+                                    conflictForks.push(resolution.localConflictPortfolio);
+                                    didMutateLocal = true;
+                                    conflictCount++;
+                                }
+                                continue;
+                            }
+
+                            if (remoteIsNewer || (!localHasPendingChanges && linkedLocal.syncState !== 'synced')) {
+                                const localIndex = localList.indexOf(linkedLocal);
+                                if (localIndex !== -1) {
+                                    localList.splice(localIndex, 1, remotePortfolio);
+                                }
+                                byLocalId.set(remotePortfolio.id, remotePortfolio);
+                                byCloudIdLocal.set(cfId, remotePortfolio);
+                                didMutateLocal = true;
+                                if (remoteIsNewer) {
+                                    refreshedCount++;
+                                }
+                            }
+                            continue;
+                        }
+
+                        const existingLocal = remotePortfolio.id ? byLocalId.get(remotePortfolio.id) : null;
+                        if (existingLocal && (existingLocal.cloudflareId === undefined || existingLocal.cloudflareId === null)) {
+                            if (window.portfolioConfig?.normalizeCloudSyncMode?.(existingLocal.cloudSyncMode) === 'explicit') {
+                                shadowedCount++;
+                                continue;
+                            }
+                            existingLocal.cloudflareId = cfId ?? null;
+                            existingLocal.cloudUpdatedAt = remoteUpdatedAt;
+                            existingLocal.conflictMeta = null;
+                            existingLocal.cloudSyncMode = 'auto';
+                            existingLocal.syncState = 'synced';
+                            didMutateLocal = true;
+                            reboundCount++;
+                            continue;
+                        }
+                        hydrated.push(remotePortfolio);
                     }
 
-                    if (hydrated.length === 0 && localList === this.userPortfolios) {
-                        // Нечего обновлять.
-                        return;
+                    if (hydrated.length === 0 && !didMutateLocal && conflictForks.length === 0) {
+                        return finish({
+                            ok: true,
+                            status: 'succeeded',
+                            reason: shadowedCount > 0 ? 'shadowed-local-imports' : 'noop',
+                            counts: {
+                                total: cloudPortfolios.length,
+                                hydrated: 0,
+                                rebound: 0,
+                                stale: 0,
+                                shadowed: shadowedCount,
+                                conflicted: 0,
+                                refreshed: 0,
+                                forked: 0
+                            }
+                        });
                     }
 
-                    this.userPortfolios = [...localList, ...hydrated];
+                    this.userPortfolios = [...conflictForks, ...localList, ...hydrated];
                     if (window.portfolioConfig && typeof window.portfolioConfig.saveLocalPortfolios === 'function') {
                         window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
                     }
+                    if (conflictCount > 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'Обнаружены конфликты портфелей между устройствами: локальные изменения сохранены отдельными копиями.',
+                            duration: 4500
+                        });
+                    }
+                    return finish({
+                        ok: true,
+                        status: 'succeeded',
+                        counts: {
+                            total: cloudPortfolios.length,
+                            hydrated: hydrated.length,
+                            rebound: reboundCount,
+                            stale: staleCount,
+                            shadowed: shadowedCount,
+                            conflicted: conflictCount,
+                            refreshed: refreshedCount,
+                            forked: conflictForks.length
+                        }
+                    });
                 },
                 /**
                  * Handle successful login via Google OAuth
@@ -1322,6 +1806,7 @@
                         }
                     }
 
+                    this.bootstrapAuthenticatedPortfolioScope();
                     await this._loadCloudWorkspace();
                     await this.hydratePortfoliosFromCloud();
                 },
@@ -1350,6 +1835,9 @@
                             console.warn('app-ui-root: failed to restore pre-auth workspace', e);
                         }
                     }
+
+                    const guestPortfolios = this.loadScopedPortfolios('guest');
+                    this.currentViewingPortfolio = guestPortfolios.find(p => p.id === this.currentViewingPortfolio?.id) || null;
                 },
                 /**
                  * Load workspace from Cloudflare KV and apply to local state
@@ -1746,10 +2234,12 @@
                     else checks.push('✗ auth-client НЕ loaded');
                     if (window.portfoliosClient) checks.push('✓ portfolios-client loaded');
                     else checks.push('✗ portfolios-client НЕ loaded');
-                    if (window.portfoliosManager) checks.push('✓ portfolios-manager loaded');
-                    else checks.push('✗ portfolios-manager НЕ loaded');
+                    if (window.portfolioFormModalBody) checks.push('✓ portfolio-form-modal-body loaded');
+                    else checks.push('✗ portfolio-form-modal-body НЕ loaded');
+                    if (window.portfolioViewModalBody) checks.push('✓ portfolio-view-modal-body loaded');
+                    else checks.push('✗ portfolio-view-modal-body НЕ loaded');
 
-                    const allLoaded = window.authClient && window.portfoliosClient && window.portfoliosManager;
+                    const allLoaded = window.authClient && window.portfoliosClient && window.portfolioFormModalBody && window.portfolioViewModalBody;
                     this.testStep1Result = {
                         success: allLoaded,
                         message: checks.join(' | ')
@@ -1869,33 +2359,30 @@
                 },
 
                 /**
-                 * Step 6: Check portfolios-manager component
+                 * Step 6: Check primary portfolio runtime path
                  */
-                testStep6_CheckPortfoliosManager() {
-                    if (!window.portfoliosManager) {
+                testStep6_CheckPortfolioFlow() {
+                    const hasPrimaryModules = !!window.portfolioFormModalBody
+                        && !!window.portfolioViewModalBody
+                        && !!window.portfolioConfig
+                        && !!window.portfoliosClient;
+                    if (!hasPrimaryModules) {
                         this.testStep6Result = {
                             success: false,
-                            message: '✗ portfolios-manager not loaded. Проверьте консоль на наличие ошибок loading модулей.'
-                        };
-                        return;
-                    }
-                    if (!window.portfoliosClient) {
-                        this.testStep6Result = {
-                            success: false,
-                            message: '⚠ portfolios-manager loaded, но portfolios-client отсутствует'
+                            message: '✗ Primary portfolio flow modules not loaded. Проверьте portfolio-form/view-modal-body, portfolio-config и portfolios-client.'
                         };
                         return;
                     }
                     if (!this.isPortfoliosEnabled) {
                         this.testStep6Result = {
                             success: false,
-                            message: '⚠ portfolios-manager loaded, но feature flags не включены или пользователь not authenticated'
+                            message: '⚠ Primary portfolio flow modules loaded, но feature flags не включены или пользователь не авторизован.'
                         };
                         return;
                     }
                     this.testStep6Result = {
                         success: true,
-                        message: '✓ portfolios-manager loaded и доступен. Компонент должен отображаться ниже.'
+                        message: '✓ Primary portfolio flow loaded: header dropdown -> portfolio-form-modal-body -> portfolio-view-modal-body.'
                     };
                 },
 
@@ -2439,6 +2926,165 @@
                     return this.selectedCoinIds.includes(coinId);
                 },
 
+                getSelectedCoinKeyMetric(coinId) {
+                    if (!coinId || !this.selectedCoinKeyMetrics || typeof this.selectedCoinKeyMetrics !== 'object') {
+                        return null;
+                    }
+                    const selection = this.selectedCoinKeyMetrics[coinId];
+                    if (!selection || typeof selection !== 'object') {
+                        return null;
+                    }
+                    const field = typeof selection.field === 'string' ? selection.field.trim() : '';
+                    const label = typeof selection.label === 'string' ? selection.label.trim() : '';
+                    if (!field) {
+                        return null;
+                    }
+                    return {
+                        field,
+                        label: label || field
+                    };
+                },
+
+                getSelectableMetricFieldsSet() {
+                    return new Set(
+                        (this.coinMetricColumns || [])
+                            .filter(column => column.selectableAsKeyMetric)
+                            .map(column => column.field)
+                    );
+                },
+
+                sanitizeSelectedCoinKeyMetrics(value) {
+                    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+                        return {};
+                    }
+
+                    const selectedIds = new Set(Array.isArray(this.selectedCoinIds) ? this.selectedCoinIds : []);
+                    const allowedFields = this.getSelectableMetricFieldsSet();
+                    const sanitized = {};
+
+                    Object.entries(value).forEach(([coinId, selection]) => {
+                        if (!selectedIds.has(coinId) || !selection || typeof selection !== 'object' || Array.isArray(selection)) {
+                            return;
+                        }
+
+                        const field = typeof selection.field === 'string' ? selection.field.trim() : '';
+                        const label = typeof selection.label === 'string' ? selection.label.trim() : '';
+                        if (!field || !allowedFields.has(field)) {
+                            return;
+                        }
+
+                        sanitized[coinId] = {
+                            field,
+                            label: label || field
+                        };
+                    });
+
+                    return sanitized;
+                },
+
+                areSelectedCoinKeyMetricsEqual(a, b) {
+                    const aKeys = Object.keys(a || {}).sort();
+                    const bKeys = Object.keys(b || {}).sort();
+                    if (aKeys.length !== bKeys.length) {
+                        return false;
+                    }
+
+                    for (let i = 0; i < aKeys.length; i++) {
+                        const key = aKeys[i];
+                        if (key !== bKeys[i]) {
+                            return false;
+                        }
+                        const aSelection = a[key] || {};
+                        const bSelection = b[key] || {};
+                        if (aSelection.field !== bSelection.field || aSelection.label !== bSelection.label) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                },
+
+                canAssignKeyMetricToCoin(coinId, column) {
+                    if (!coinId || !column?.selectableAsKeyMetric) {
+                        return false;
+                    }
+
+                    const currentSelection = this.getSelectedCoinKeyMetric(coinId);
+                    if (!this.isCoinSelected(coinId)) {
+                        return true;
+                    }
+                    if (!currentSelection) {
+                        return true;
+                    }
+                    return currentSelection.field === column.field;
+                },
+
+                isMetricCellHovered(coinId, column) {
+                    return !!column?.field
+                        && this.hoveredMetricCell?.coinId === coinId
+                        && this.hoveredMetricCell?.field === column.field;
+                },
+
+                isMetricCellKeySelected(coinId, column) {
+                    const currentSelection = this.getSelectedCoinKeyMetric(coinId);
+                    return !!currentSelection && currentSelection.field === column?.field;
+                },
+
+                getMetricCellClasses(coinId, column) {
+                    return {
+                        'coin-metric-cell': true,
+                        'coin-metric-cell-selectable': !!column?.selectableAsKeyMetric && this.canAssignKeyMetricToCoin(coinId, column),
+                        'coin-metric-cell-hover': this.isMetricCellHovered(coinId, column),
+                        'coin-metric-cell-key': this.isMetricCellKeySelected(coinId, column)
+                    };
+                },
+
+                handleMetricCellMouseEnter(coinId, column) {
+                    if (!this.canAssignKeyMetricToCoin(coinId, column)) {
+                        return;
+                    }
+                    this.hoveredMetricCell = { coinId, field: column.field };
+                },
+
+                handleMetricCellMouseLeave(coinId, column) {
+                    if (this.isMetricCellHovered(coinId, column)) {
+                        this.hoveredMetricCell = null;
+                    }
+                },
+
+                handleMetricCellClick(coin, column) {
+                    const coinId = coin?.id || coin?.coinId;
+                    if (!coinId || !column?.selectableAsKeyMetric) {
+                        return;
+                    }
+
+                    if (!this.canAssignKeyMetricToCoin(coinId, column)) {
+                        if (window.messagesStore?.addMessage) {
+                            window.messagesStore.addMessage({
+                                type: 'info',
+                                text: 'Чтобы сменить ключевой показатель, снимите чекбокс у монеты.',
+                                scope: 'global',
+                                duration: 2200
+                            });
+                        }
+                        return;
+                    }
+
+                    if (!this.selectedCoinIds.includes(coinId)) {
+                        this.selectedCoinIds = [...this.selectedCoinIds, coinId];
+                    }
+
+                    this.selectedCoinKeyMetrics = {
+                        ...this.sanitizeSelectedCoinKeyMetrics(this.selectedCoinKeyMetrics),
+                        [coinId]: {
+                            field: column.field,
+                            label: column.label
+                        }
+                    };
+                    this.hoveredMetricCell = { coinId, field: column.field };
+                    this.saveTableSettings();
+                },
+
                 /**
                  * Coin checkbox toggle handler (stub)
                  */
@@ -2911,19 +3557,19 @@
                  */
                 handleSort(field) {
                     if (this.sortBy === field) {
-                        // Order toggle: null -> asc -> desc -> null
+                        // Order toggle: null -> desc -> asc -> null
                         if (this.sortOrder === null) {
-                            this.sortOrder = 'asc';
-                        } else if (this.sortOrder === 'asc') {
                             this.sortOrder = 'desc';
+                        } else if (this.sortOrder === 'desc') {
+                            this.sortOrder = 'asc';
                         } else {
                             this.sortBy = null;
                             this.sortOrder = null;
                         }
                     } else {
-                        // New field - start with asc
+                        // First click: positive values up, descending.
                         this.sortBy = field;
-                        this.sortOrder = 'asc';
+                        this.sortOrder = 'desc';
                     }
 
                     // Reset coinSortType when setting column sort
@@ -3133,6 +3779,10 @@
 
                     // Update coins array (Vue 3 tracks changes inside objects)
                     this.coins = [...finalCoinsFiltered];
+                    const sanitizedKeyMetrics = this.sanitizeSelectedCoinKeyMetrics(this.selectedCoinKeyMetrics);
+                    if (!this.areSelectedCoinKeyMetricsEqual(sanitizedKeyMetrics, this.selectedCoinKeyMetrics)) {
+                        this.selectedCoinKeyMetrics = sanitizedKeyMetrics;
+                    }
 
                     if (window.eventBus) {
                         window.eventBus.emit('metrics-recalculated', { count: this.coins.length, mdn: this.mdnValue });
@@ -3144,6 +3794,7 @@
                  *
      * Main table settings saved:
      * - selectedCoinIds: selected rows (checkboxes)
+     * - selectedCoinKeyMetrics: delegated key metric per selected coin
      * - sortBy, sortOrder: column sort
      * - coinSortType: coin sort type (alphabet, market_cap, total_volume, favorite, selected)
      * - showPriceColumn: Price column visibility
@@ -3154,8 +3805,14 @@
                         return;
                     }
 
+                    const sanitizedKeyMetrics = this.sanitizeSelectedCoinKeyMetrics(this.selectedCoinKeyMetrics);
+                    if (!this.areSelectedCoinKeyMetricsEqual(sanitizedKeyMetrics, this.selectedCoinKeyMetrics)) {
+                        this.selectedCoinKeyMetrics = sanitizedKeyMetrics;
+                    }
+
                     const mainTable = {
                         selectedCoinIds: this.selectedCoinIds,
+                        selectedCoinKeyMetrics: sanitizedKeyMetrics,
                         sortBy: this.sortBy,
                         sortOrder: this.sortOrder,
                         coinSortType: this.coinSortType,
@@ -3182,6 +3839,7 @@
                 /**
                  * Load workspace settings (main table) via workspaceConfig (SSOT)
                  * Validation: selectedCoinIds filtered - only IDs present in current table are saved
+                 * and key metric selections survive only for currently selected, supported fields.
                  */
                 async loadTableSettings() {
                     if (!window.workspaceConfig) {
@@ -3196,6 +3854,9 @@
                         if (Array.isArray(settings.selectedCoinIds)) {
                             const validCoinIds = new Set((this.coins || []).map(coin => coin.id));
                             this.selectedCoinIds = settings.selectedCoinIds.filter(id => validCoinIds.has(id));
+                        }
+                        if (settings.selectedCoinKeyMetrics !== undefined) {
+                            this.selectedCoinKeyMetrics = this.sanitizeSelectedCoinKeyMetrics(settings.selectedCoinKeyMetrics);
                         }
                         if (settings.sortBy !== undefined) {
                             this.sortBy = settings.sortBy;
@@ -3524,35 +4185,9 @@
                  * Return list of all column CSS classes for columnVisibilityMixin
                  */
                 getColumnClasses() {
-                    return [
-                        'col-percent-1h',
-                        'col-percent-24h',
-                        'col-percent-7d',
-                        'col-percent-14d',
-                        'col-percent-30d',
-                        'col-percent-200d',
-                        'col-cd-1w',
-                        'col-cd-2w',
-                        'col-cd-3w',
-                        'col-cd-4w',
-                        'col-cd-5w',
-                        'col-cd-6w',
-                        'col-cd-h',
-                        'col-cgr-2',
-                        'col-cgr-3',
-                        'col-cgr-4',
-                        'col-cgr-5',
-                        'col-cgr-6',
-                        'col-cgr-sum',
-                        'col-max-pv',
-                        'col-min-pv',
-                        'col-stability-dcs',
-                        'col-stability-tsi',
-                        'col-stability-mp',
-                        'col-balance-cpt',
-                        'col-balance-din',
-                        'col-balance-agr'
-                    ];
+                    return (this.coinMetricColumns || [])
+                        .map(column => column.columnClass)
+                        .filter(Boolean);
                 },
 
                 formatMarketCap(val) {
@@ -5078,16 +5713,9 @@
             },
 
             async mounted() {
-                // Load saved portfolios (D.5)
-                if (window.portfolioConfig && typeof window.portfolioConfig.getLocalPortfolios === 'function') {
-                    this.userPortfolios = window.portfolioConfig.getLocalPortfolios();
-                }
-
                 if (window.eventBus) {
                     window.eventBus.on('portfolios-imported', () => {
-                        if (window.portfolioConfig && typeof window.portfolioConfig.getLocalPortfolios === 'function') {
-                            this.userPortfolios = window.portfolioConfig.getLocalPortfolios();
-                        }
+                        this.loadScopedPortfolios('current');
                     });
                 }
 
@@ -5170,6 +5798,12 @@
                         } catch (error) {
                             console.error('app-ui-root: ошибка проверки авторизации при монтировании:', error);
                         }
+                    }
+
+                    if (isAuthenticatedOnMount) {
+                        this.bootstrapAuthenticatedPortfolioScope();
+                    } else {
+                        this.loadScopedPortfolios('guest');
                     }
 
                     // Init test messages

@@ -14,7 +14,8 @@
      * PURPOSE: Single workspace structure; all read/write via workspaceConfig.
      *
      * STRUCTURE:
-     * - activeModelId, activeCoinSetIds, mainTable: { selectedCoinIds, sortBy, sortOrder, coinSortType, showPriceColumn }
+     * - activeModelId, activeCoinSetIds, mainTable:
+     *   { selectedCoinIds, selectedCoinKeyMetrics, sortBy, sortOrder, coinSortType, showPriceColumn }
      *
      * PRINCIPLES:
      * - SSOT: all workspace settings read/write only via workspaceConfig
@@ -58,6 +59,7 @@
         activeCoinSetIds: [],
         mainTable: {
             selectedCoinIds: [],
+            selectedCoinKeyMetrics: {},
             sortBy: null,
             sortOrder: null,
             coinSortType: null,
@@ -76,6 +78,32 @@
 
     function validateArray(value, fallback) {
         return Array.isArray(value) ? value : fallback;
+    }
+
+    function normalizeSelectedCoinKeyMetrics(value) {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) {
+            return {};
+        }
+
+        const normalized = {};
+        Object.entries(value).forEach(([coinId, selection]) => {
+            if (!coinId || !selection || typeof selection !== 'object' || Array.isArray(selection)) {
+                return;
+            }
+
+            const field = typeof selection.field === 'string' ? selection.field.trim() : '';
+            const label = typeof selection.label === 'string' ? selection.label.trim() : '';
+            if (!field) {
+                return;
+            }
+
+            normalized[coinId] = {
+                field,
+                label: label || field
+            };
+        });
+
+        return normalized;
     }
 
     function normalizeAgrMethod(value, fallback) {
@@ -106,6 +134,9 @@
             };
             if (partial.mainTable.selectedCoinIds !== undefined) {
                 result.mainTable.selectedCoinIds = validateArray(partial.mainTable.selectedCoinIds, result.mainTable.selectedCoinIds);
+            }
+            if (partial.mainTable.selectedCoinKeyMetrics !== undefined) {
+                result.mainTable.selectedCoinKeyMetrics = normalizeSelectedCoinKeyMetrics(partial.mainTable.selectedCoinKeyMetrics);
             }
         }
 

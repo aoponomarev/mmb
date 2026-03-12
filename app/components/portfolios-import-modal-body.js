@@ -239,19 +239,45 @@ window.portfoliosImportModalBody = {
                 portfolios: filtered
             };
 
-            const ok = window.portfolioConfig.importPortfolios(payload, { mode: this.mode });
-            if (ok) {
+            const result = window.portfolioConfig.importPortfolios(payload, { mode: this.mode });
+            if (result?.ok) {
                 if (window.eventBus) {
-                    window.eventBus.emit('portfolios-imported', { count: filtered.length });
+                    window.eventBus.emit('portfolios-imported', result);
+                }
+                if (window.portfolioObservability && typeof window.portfolioObservability.notify === 'function') {
+                    window.portfolioObservability.notify({
+                        source: 'portfolios-import-modal-body',
+                        action: 'import',
+                        stage: 'local',
+                        status: 'succeeded',
+                        scope: result.scope,
+                        mode: result.mode,
+                        reason: result.explicitCloudSyncRequired ? 'explicit-cloud-sync-required' : null,
+                        counts: {
+                            total: result.count,
+                            imported: result.count,
+                            detached: result.detachedCount
+                        }
+                    });
                 }
                 if (window.messagesStore) {
                     window.messagesStore.addMessage({
                         type: 'success',
-                        text: `Импортировано portfolios: ${filtered.length}`,
-                        duration: 2500
+                        text: `Импортировано портфелей: ${result.count}. Для облака потребуется явное сохранение.`,
+                        duration: 3000
                     });
                 }
             } else {
+                if (window.portfolioObservability && typeof window.portfolioObservability.notify === 'function') {
+                    window.portfolioObservability.notify({
+                        source: 'portfolios-import-modal-body',
+                        action: 'import',
+                        stage: 'local',
+                        status: 'failed',
+                        mode: this.mode,
+                        reason: result?.reason || 'import-failed'
+                    });
+                }
                 this.errors = ['Импорт завершился с ошибкой.'];
             }
 

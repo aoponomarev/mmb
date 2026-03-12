@@ -46,6 +46,12 @@
             id: { type: 'string', required: true },
             name: { type: 'string', required: true },
             createdAt: { type: 'string', required: true },
+            updatedAt: { type: 'string', required: false },
+            cloudflareId: { type: 'number', required: false },
+            syncState: { type: 'string', required: false },
+            cloudSyncMode: { type: 'string', required: false },
+            cloudUpdatedAt: { type: 'string', required: false },
+            conflictMeta: { type: 'object', required: false },
             coins: {
                 type: 'array',
                 required: true,
@@ -60,6 +66,14 @@
                             modelId: { type: 'string', required: true },
                             modelName: { type: 'string', required: true },
                             agrAtDelegation: { type: 'number', required: true }
+                        }
+                    },
+                    keyMetric: {
+                        type: 'object',
+                        required: false,
+                        properties: {
+                            field: { type: 'string', required: true },
+                            label: { type: 'string', required: true }
                         }
                     }
                 }
