@@ -57,7 +57,10 @@ related_ais:
 | `session-log` | console-interceptor | session-log-modal-body | log entry |
 | `fallback:used` | fallback-monitor | (observers) | fallback info |
 | `fallback:cleared` | fallback-monitor | (observers) | cleared info |
-| `error-occurred` | error-handler | system-messages | error data |
+| `error-occurred` | error-handler | observability-only (future: Sentry, session-log); UI via AppMessages.push | `{ type, severity, message, userMessage, context }` |
+| `message-shown` | AppMessages (messages-store) | observability | normalized message |
+| `message-dismissed` | AppMessages | observability | `{ id, message }` |
+| `messages-cleared` | AppMessages | observability | `{ scope }` |
 | `loading-state-changed` | loading-state | (observers) | `{ key, value }` |
 
 **Инварианты:**

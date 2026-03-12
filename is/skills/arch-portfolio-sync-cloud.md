@@ -2,11 +2,10 @@
 id: sk-6ac4d2
 title: "Arch: Portfolio Cloud Sync (Local-First)"
 status: draft
-type: arch
 reasoning_confidence: 0.78
-reasoning_audited_at: ""
-reasoning_checksum: ""
-last_change: "2026-03-12"
+reasoning_audited_at: 2026-03-12
+reasoning_checksum: 5f90f0a9
+last_change: 2026-03-12
 related_skills:
   - sk-c3d639
   - sk-a17d41
@@ -15,6 +14,8 @@ related_ais:
   - ais-6f2b1d
   - ais-54c2aa
   - ais-c2d3e4
+type: arch
+
 ---
 
 # Arch: Portfolio Cloud Sync (Local-First)

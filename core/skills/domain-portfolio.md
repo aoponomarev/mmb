@@ -2,9 +2,9 @@
 id: sk-c3d639
 title: "Domain: Portfolio Engine"
 reasoning_confidence: 0.85
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: a2b1b94b
-last_change: "2026-03-12"
+reasoning_audited_at: 2026-03-12
+reasoning_checksum: 68d4212d
+last_change: 2026-03-12
 
 ---
 

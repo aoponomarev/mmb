@@ -75,25 +75,25 @@
     }
 
     /**
-     * Get message key from messagesConfig by error type
+     * Get message key (short format per id:sk-f2bc48) for messagesConfig
      * @param {string} errorType - error type from errorTypes.ERROR_TYPES
-     * @returns {string} - message key for messagesConfig
+     * @returns {string} - message key (e.net, e.rate, etc.)
      */
     function getMessageKey(errorType) {
         const keyMap = {
-            [window.errorTypes.ERROR_TYPES.API_ERROR]: 'error.api.error',
-            [window.errorTypes.ERROR_TYPES.API_TIMEOUT]: 'error.api.timeout',
-            [window.errorTypes.ERROR_TYPES.API_RATE_LIMIT]: 'error.api.rate-limit',
-            [window.errorTypes.ERROR_TYPES.API_NETWORK]: 'error.api.network',
-            [window.errorTypes.ERROR_TYPES.VALIDATION_ERROR]: 'error.validation.error',
-            [window.errorTypes.ERROR_TYPES.SCHEMA_ERROR]: 'error.validation.schema',
-            [window.errorTypes.ERROR_TYPES.CALCULATION_ERROR]: 'error.calculation.error',
-            [window.errorTypes.ERROR_TYPES.MATH_ERROR]: 'error.calculation.math',
-            [window.errorTypes.ERROR_TYPES.STORAGE_ERROR]: 'error.storage.error',
-            [window.errorTypes.ERROR_TYPES.STORAGE_QUOTA]: 'error.storage.quota',
-            [window.errorTypes.ERROR_TYPES.UNKNOWN_ERROR]: 'error.unknown'
+            [window.errorTypes.ERROR_TYPES.API_ERROR]: 'e.load',
+            [window.errorTypes.ERROR_TYPES.API_TIMEOUT]: 'e.time',
+            [window.errorTypes.ERROR_TYPES.API_RATE_LIMIT]: 'e.rate',
+            [window.errorTypes.ERROR_TYPES.API_NETWORK]: 'e.net',
+            [window.errorTypes.ERROR_TYPES.VALIDATION_ERROR]: 'e.valid',
+            [window.errorTypes.ERROR_TYPES.SCHEMA_ERROR]: 'e.schema',
+            [window.errorTypes.ERROR_TYPES.CALCULATION_ERROR]: 'e.calc',
+            [window.errorTypes.ERROR_TYPES.MATH_ERROR]: 'e.math',
+            [window.errorTypes.ERROR_TYPES.STORAGE_ERROR]: 'e.save',
+            [window.errorTypes.ERROR_TYPES.STORAGE_QUOTA]: 'e.quota',
+            [window.errorTypes.ERROR_TYPES.UNKNOWN_ERROR]: 'e.unknown'
         };
-        return keyMap[errorType] || 'error.unknown';
+        return keyMap[errorType] || 'e.unknown';
     }
 
     /**
@@ -129,7 +129,7 @@
             console.error('Error:', processedError);
         }
 
-        // Emit event via eventBus (if available)
+        // @causality #for-observability-reserved: channel reserved for future Sentry/session-log; UI path is AppMessages.push below
         if (window.eventBus) {
             window.eventBus.emit('error-occurred', processedError);
         }
@@ -139,7 +139,7 @@
         const showMessage = context.showMessage !== false;
         if (showMessage && window.AppMessages && window.messagesConfig) {
             const messageKey = getMessageKey(errorType);
-            const messageData = window.messagesConfig.getMessage(messageKey);
+            const messageData = window.messagesConfig.get(messageKey, {});
 
             // Derive scope from context or use 'global'
             const scope = context.scope || 'global';

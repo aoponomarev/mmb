@@ -194,6 +194,8 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-adapter-mandatory` | advisory | Every new integration with an external system (API, DB) MUST have a dedicated Adapter/Provider. Direct `fetch` or `client.query` in services or components is forbidden. Ensures consistent structure, testability, and AI-agent navigability. SSOT: id:ais-d8e7f6. |
 | `#for-causality-rebinding` | advisory | If a hash is superseded by a broader, renamed, or more accurate causality, agents must audit remaining anchors and migrate them to the replacement hash where semantics still match. `docs/audits/causality-exceptions.jsonl` is only for intentional coexistence, not for unfinished rebinding. |
 | `#for-shared-runtime-packaging` | advisory | Serverless deploy packaging must include every sibling/shared runtime module imported by the entrypoint. Packaging only the leaf function folder can succeed in CLI deploy but fail immediately at runtime with missing-module errors. |
+| `#for-message-display-vs-observability` | advisory | UI display flows through AppMessages (state store); Event Bus carries observability events only. Prevents confusion between display path and optional observers (Sentry, session-log). |
+| `#for-observability-reserved` | advisory | Event Bus channels like `error-occurred` are reserved for observability consumers (Sentry, session-log). UI display uses AppMessages.push directly; emit is for future integration. |
 
 ## Aliases / Deprecated
 
