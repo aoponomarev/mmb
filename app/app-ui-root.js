@@ -114,6 +114,7 @@
                 ...(window.coinSetSaveModalBody ? { 'coin-set-save-modal-body': window.coinSetSaveModalBody } : {}),
                 ...(window.portfolioFormModalBody ? { 'portfolio-form-modal-body': window.portfolioFormModalBody } : {}),
                 ...(window.portfolioViewModalBody ? { 'portfolio-view-modal-body': window.portfolioViewModalBody } : {}),
+                ...(window.portfolioCloudArchiveModalBody ? { 'portfolio-cloud-archive-modal-body': window.portfolioCloudArchiveModalBody } : {}),
                 ...(window.coinSetLoadModalBody ? { 'coin-set-load-modal-body': window.coinSetLoadModalBody } : {}),
                 ...(window.cmpIconManagerModalBody ? { 'icon-manager-modal-body': window.cmpIconManagerModalBody } : {}),
                 ...(window.coingeckoCronHistoryModalBody ? { 'coingecko-cron-history-modal-body': window.coingeckoCronHistoryModalBody } : {}),
@@ -635,6 +636,7 @@
                     const actionIds = new Set([
                         'export-portfolios-light',
                         'export-portfolios-full',
+                        'cloud-archive',
                         'import-portfolios'
                     ]);
                     return window.menusConfig.getSettingsMenuItems()
@@ -645,6 +647,8 @@
                                 ? 'fas fa-save'
                                 : item.id === 'export-portfolios-full'
                                     ? 'fas fa-database'
+                                    : item.id === 'cloud-archive'
+                                        ? 'fas fa-cloud'
                                     : 'fas fa-briefcase'
                         }));
                 },
@@ -983,6 +987,35 @@
                     document.body.removeChild(link);
                     URL.revokeObjectURL(url);
                 },
+                handleExportSinglePortfolioLight(portfolioId) {
+                    if (!window.portfolioConfig || typeof window.portfolioConfig.exportPortfolios !== 'function') {
+                        console.warn('app-ui-root: exportPortfolios недоступен');
+                        return;
+                    }
+                    const allPayload = window.portfolioConfig.exportPortfolios('light');
+                    const portfolios = Array.isArray(allPayload?.portfolios) ? allPayload.portfolios : [];
+                    const filtered = portfolios.filter(p => p && p.id === portfolioId);
+                    if (filtered.length === 0) {
+                        console.warn('app-ui-root: портфель для экспорта не найден', portfolioId);
+                        return;
+                    }
+                    const payload = {
+                        ...allPayload,
+                        portfolios: filtered
+                    };
+                    const json = JSON.stringify(payload, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+                    const safeId = String(portfolioId || 'portfolio').replace(/[^a-zA-Z0-9_-]/g, '_');
+                    link.download = `app-portfolio-${safeId}-light-${timestamp}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
                 handleImportPortfoliosMerge() {
                     this.handleImportPortfolios('merge');
                 },
@@ -1134,6 +1167,12 @@
                             }
                         });
                     }
+                },
+                handleViewArchivedPortfolio(portfolioId) {
+                    if (this.$refs.portfolioCloudArchiveModal) {
+                        this.$refs.portfolioCloudArchiveModal.hide();
+                    }
+                    this.handleViewPortfolio(portfolioId);
                 },
                 /**
                  * Enter rebalance mode (D.4)
@@ -1321,6 +1360,123 @@
                         window.messagesStore.addMessage({
                             type: 'info',
                             text: 'Портфель удален',
+                            duration: 2000
+                        });
+                    }
+                },
+                /**
+                 * Archive portfolio (hide from header list; keep in storage and cloud replica).
+                 */
+                async handleArchivePortfolio(portfolioId) {
+                    const portfolio = this.userPortfolios.find(p => p.id === portfolioId) || null;
+                    if (!portfolio) return;
+
+                    portfolio.archived = true;
+                    portfolio.updatedAt = new Date().toISOString();
+                    portfolio.syncState = 'local-only';
+                    window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    this.observePortfolioEvent({
+                        action: 'archive',
+                        stage: 'local',
+                        status: 'succeeded',
+                        portfolioId,
+                        cloudflareId: portfolio?.cloudflareId ?? null,
+                        syncState: portfolio?.syncState ?? null,
+                        cloudSyncMode: portfolio?.cloudSyncMode ?? null
+                    });
+
+                    let cloudStatus = {
+                        status: 'skipped',
+                        reason: portfolio?.cloudflareId ? 'missing-update-client' : 'no-cloud-link',
+                        details: null
+                    };
+                    if (portfolio?.cloudflareId && window.portfoliosClient?.updatePortfolio) {
+                        try {
+                            const updated = await window.portfoliosClient.updatePortfolio(portfolio.cloudflareId, { archived: 1 });
+                            portfolio.cloudUpdatedAt = updated?.updated_at || portfolio.cloudUpdatedAt || portfolio.updatedAt;
+                            portfolio.syncState = 'synced';
+                            cloudStatus = { status: 'succeeded', reason: null, details: null };
+                            window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                        } catch (error) {
+                            console.warn('app-ui-root: archive cloud update failed', error);
+                            cloudStatus = {
+                                status: 'failed',
+                                reason: 'request-failed',
+                                details: error?.message || null
+                            };
+                        }
+                    }
+                    this.observePortfolioEvent({
+                        action: 'archive',
+                        stage: 'cloud',
+                        status: cloudStatus.status,
+                        portfolioId,
+                        cloudflareId: portfolio?.cloudflareId ?? null,
+                        reason: cloudStatus.reason,
+                        details: cloudStatus.details
+                    });
+
+                    if (window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'info',
+                            text: 'Портфель перемещен в архив',
+                            duration: 2000
+                        });
+                    }
+                },
+                async handleRestorePortfolio(portfolioId) {
+                    const portfolio = this.userPortfolios.find(p => p.id === portfolioId) || null;
+                    if (!portfolio) return;
+
+                    portfolio.archived = false;
+                    portfolio.updatedAt = new Date().toISOString();
+                    portfolio.syncState = 'local-only';
+                    window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                    this.observePortfolioEvent({
+                        action: 'restore',
+                        stage: 'local',
+                        status: 'succeeded',
+                        portfolioId,
+                        cloudflareId: portfolio?.cloudflareId ?? null,
+                        syncState: portfolio?.syncState ?? null,
+                        cloudSyncMode: portfolio?.cloudSyncMode ?? null
+                    });
+
+                    let cloudStatus = {
+                        status: 'skipped',
+                        reason: portfolio?.cloudflareId ? 'missing-update-client' : 'no-cloud-link',
+                        details: null
+                    };
+                    if (portfolio?.cloudflareId && window.portfoliosClient?.updatePortfolio) {
+                        try {
+                            const updated = await window.portfoliosClient.updatePortfolio(portfolio.cloudflareId, { archived: 0 });
+                            portfolio.cloudUpdatedAt = updated?.updated_at || portfolio.cloudUpdatedAt || portfolio.updatedAt;
+                            portfolio.syncState = 'synced';
+                            cloudStatus = { status: 'succeeded', reason: null, details: null };
+                            window.portfolioConfig.saveLocalPortfolios(this.userPortfolios);
+                        } catch (error) {
+                            console.warn('app-ui-root: restore cloud update failed', error);
+                            cloudStatus = {
+                                status: 'failed',
+                                reason: 'request-failed',
+                                details: error?.message || null
+                            };
+                        }
+                    }
+                    this.observePortfolioEvent({
+                        action: 'restore',
+                        stage: 'cloud',
+                        status: cloudStatus.status,
+                        portfolioId,
+                        cloudflareId: portfolio?.cloudflareId ?? null,
+                        reason: cloudStatus.reason,
+                        details: cloudStatus.details
+                    });
+
+                    if (window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'info',
+                            text: 'Портфель возвращен из архива',
                             duration: 2000
                         });
                     }
@@ -2156,6 +2312,11 @@
                         modalRef.show();
                     } else {
                         console.warn('app-ui-root: portfoliosImportModal ref не найден');
+                    }
+                },
+                openPortfolioCloudArchiveModal() {
+                    if (this.$refs.portfolioCloudArchiveModal) {
+                        this.$refs.portfolioCloudArchiveModal.show();
                     }
                 },
                 openSessionLogModal() {

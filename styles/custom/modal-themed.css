@@ -138,6 +138,24 @@
     z-index: 1085;
 }
 
+/* Cloud archive modal: dropdown menu must not be clipped by table wrappers. */
+.portfolio-cloud-archive-modal,
+.portfolio-cloud-archive-modal .table,
+.portfolio-cloud-archive-modal tbody,
+.portfolio-cloud-archive-modal tr,
+.portfolio-cloud-archive-modal td {
+    overflow: visible !important;
+}
+
+.portfolio-cloud-archive-action-menu {
+    z-index: 1085;
+}
+
+/* Cloud archive table: remove bottom border on last row. */
+.portfolio-cloud-archive-modal .table > :not(caption) > *:last-child > * {
+    border-bottom: 0 !important;
+}
+
 .portfolio-segment-action-menu .dropdown-item {
     transition: none !important;
 }

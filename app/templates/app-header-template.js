@@ -154,8 +154,9 @@
                 :menu-offset="-8"
                 :classes-add="{
                     button: 'text-white text-decoration-none hide-suffix border border-secondary bg-transparent px-0 btn-sm',
-                    menu: 'dropdown-menu-dark shadow-lg border-secondary text-start'
+                    menu: 'dropdown-menu-dark dropdown-menu-end shadow-lg border-secondary text-start app-portfolio-dropdown-menu'
                 }"
+                :menu-style="{ maxHeight: portfolioMenuMaxHeight, right: '0', left: 'auto' }"
                 :tooltip="tooltipPortfolio"
             >
                 <template #items>
@@ -171,36 +172,69 @@
                     <!-- Portfolio action items (slot) -->
                     <slot name="portfolio-items"></slot>
 
-                    <template v-if="userPortfolios && userPortfolios.length > 0">
+                    <template v-if="visibleUserPortfolios && visibleUserPortfolios.length > 0">
                         <div class="dropdown-divider border-secondary opacity-25"></div>
                         <h6 class="dropdown-header d-flex justify-content-between align-items-center py-2 px-3">
                             <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px;">Мои портфели</span>
-                            <span class="badge bg-secondary ms-2" style="font-size: 0.6rem;">{{ userPortfolios.length }}</span>
+                            <span class="badge bg-secondary ms-2" style="font-size: 0.6rem;">{{ visibleUserPortfolios.length }}</span>
                         </h6>
-                        <li v-for="p in userPortfolios" :key="p.id">
-                            <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
-                               href="#"
-                               @click.prevent="handleViewPortfolio(p.id)"
-                               :class="getPortfolioItemClasses(p)">
-                                <div class="d-flex flex-column">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="small" v-html="getPortfolioDisplayName(p)"></span>
-                                        <span
-                                            v-if="isConflictPortfolio(p)"
-                                            class="app-portfolio-sync-marker app-portfolio-sync-marker-conflict"
-                                            :title="getPortfolioConflictTooltip()"
-                                        >
-                                            <i class="fas fa-triangle-exclamation"></i>
-                                            <span>{{ getPortfolioConflictLabel() }}</span>
-                                        </span>
+                        <div class="flex-grow-1 overflow-auto">
+                            <li v-for="p in visibleUserPortfolios" :key="p.id">
+                                <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
+                                   href="#"
+                                   @click.prevent="handleViewPortfolio(p.id)"
+                                   :class="getPortfolioItemClasses(p)">
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <span class="small" v-html="getPortfolioDisplayName(p)"></span>
+                                            <span
+                                                v-if="isConflictPortfolio(p)"
+                                                class="app-portfolio-sync-marker app-portfolio-sync-marker-conflict"
+                                                :title="getPortfolioConflictTooltip()"
+                                            >
+                                                <i class="fas fa-triangle-exclamation"></i>
+                                                <span>{{ getPortfolioConflictLabel() }}</span>
+                                            </span>
+                                        </div>
+                                        <span class="text-white-50" style="font-size: 0.65rem;">{{ p.id }}</span>
                                     </div>
-                                    <span class="text-white-50" style="font-size: 0.65rem;">{{ p.id }}</span>
-                                </div>
-                                <span :class="['badge ms-3', (p.marketMetrics?.pl || 0) >= 0 ? 'bg-success' : 'bg-danger']" style="font-size: 0.65rem;">
-                                    {{ (p.marketMetrics?.pl || 0) >= 0 ? '+' : '' }}{{ (p.marketMetrics?.pl || 0).toFixed(1) }}%
-                                </span>
-                            </a>
-                        </li>
+                                    <div v-if="onPortfolioDelete || onPortfolioArchive || onPortfolioExport" class="dropdown ms-3" @mouseleave="hideBadgeDropdownOnMouseLeave">
+                                        <span
+                                            :class="['badge', (p.marketMetrics?.pl || 0) >= 0 ? 'bg-success' : 'bg-danger']"
+                                            style="font-size: 0.65rem; cursor: default;"
+                                            role="button"
+                                            tabindex="0"
+                                            data-bs-toggle="dropdown"
+                                            data-role="badge-dropdown-toggle"
+                                            aria-expanded="false"
+                                            @click.stop.prevent
+                                        >
+                                            {{ (p.marketMetrics?.pl || 0) >= 0 ? '+' : '' }}{{ (p.marketMetrics?.pl || 0).toFixed(1) }}%
+                                        </span>
+                                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg border-secondary">
+                                            <li v-if="onPortfolioExport">
+                                                <a class="dropdown-item" href="#" @click.stop.prevent="handlePortfolioExport(p, $event)">
+                                                    Сохранить
+                                                </a>
+                                            </li>
+                                            <li v-if="onPortfolioArchive">
+                                                <a class="dropdown-item" href="#" @click.stop.prevent="handlePortfolioArchive(p, $event)">
+                                                    Архив
+                                                </a>
+                                            </li>
+                                            <li v-if="onPortfolioDelete">
+                                                <a class="dropdown-item text-danger" href="#" @click.stop.prevent="handlePortfolioDelete(p, $event)">
+                                                    Удалить
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <span v-else :class="['badge ms-3', (p.marketMetrics?.pl || 0) >= 0 ? 'bg-success' : 'bg-danger']" style="font-size: 0.65rem;">
+                                        {{ (p.marketMetrics?.pl || 0) >= 0 ? '+' : '' }}{{ (p.marketMetrics?.pl || 0).toFixed(1) }}%
+                                    </span>
+                                </a>
+                            </li>
+                        </div>
                     </template>
                 </template>
             </cmp-dropdown>

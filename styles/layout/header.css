@@ -82,6 +82,16 @@
     color: var(--app-color-warning);
 }
 
+/* Portfolio dropdown: keep hidden until .show, but use flex layout when open. */
+.app-portfolio-dropdown-menu {
+    overflow: hidden;
+}
+
+.app-portfolio-dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
 @media (max-width: 768px) {
     .header-info-row {
         flex-wrap: wrap;

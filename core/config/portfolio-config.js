@@ -152,6 +152,7 @@
         return {
             id: id || generatePortfolioId(),
             name: name || 'New Portfolio',
+            archived: false,
             createdAt: nowIso,
             updatedAt: nowIso,
             schemaVersion: 2,
@@ -516,6 +517,7 @@
         if (!portfolio.updatedAt) {
             portfolio.updatedAt = portfolio.createdAt || new Date().toISOString();
         }
+        portfolio.archived = !!portfolio.archived;
         portfolio.description = typeof portfolio.description === 'string' ? portfolio.description : null;
         portfolio.cloudSyncMode = normalizeCloudSyncMode(portfolio.cloudSyncMode);
         portfolio.cloudUpdatedAt = normalizeIsoTimestamp(

@@ -183,6 +183,7 @@
         return {
             id: localId,
             name: record.name || 'New Portfolio',
+            archived: !!record.archived,
             description: userDescription,
             coins,
             createdAt,

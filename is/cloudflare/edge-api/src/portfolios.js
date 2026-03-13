@@ -173,12 +173,13 @@ async function handleUpdate(request, env, portfolioId) {
 
   try {
     const body = await request.json();
-    const { name, description, assets } = body;
+    const { name, description, assets, archived } = body;
 
     const portfolio = await updatePortfolio(env.DB, portfolioId, userId, {
       name,
       description,
       assets,
+      archived,
     });
 
     if (!portfolio) {

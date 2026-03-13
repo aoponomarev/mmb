@@ -140,7 +140,7 @@ export async function updateUser(db, userId, updates) {
  */
 export async function createPortfolio(db, userId, portfolioData) {
   try {
-    const { name, description = null, assets = [] } = portfolioData;
+    const { name, description = null, assets = [], archived = 0 } = portfolioData;
 
     if (!name) {
       throw new Error('Название портфеля обязательно');
@@ -148,14 +148,15 @@ export async function createPortfolio(db, userId, portfolioData) {
 
     const result = await db
       .prepare(
-        `INSERT INTO portfolios (user_id, name, description, assets, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?)`
+        `INSERT INTO portfolios (user_id, name, description, assets, archived, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         userId,
         name,
         description,
         JSON.stringify(assets),
+        Number(archived) ? 1 : 0,
         new Date().toISOString(),
         new Date().toISOString()
       )
@@ -193,6 +194,7 @@ export async function getPortfolio(db, portfolioId) {
     if (result.assets) {
       result.assets = JSON.parse(result.assets);
     }
+    result.archived = Number(result.archived) ? 1 : 0;
 
     return result;
   } catch (error) {
@@ -223,6 +225,7 @@ export async function getUserPortfolios(db, userId) {
       if (portfolio.assets) {
         portfolio.assets = JSON.parse(portfolio.assets);
       }
+      portfolio.archived = Number(portfolio.archived) ? 1 : 0;
       return portfolio;
     });
   } catch (error) {
@@ -261,6 +264,10 @@ export async function updatePortfolio(db, portfolioId, userId, updates) {
     if (updates.assets !== undefined) {
       fields.push('assets = ?');
       values.push(JSON.stringify(updates.assets));
+    }
+    if (updates.archived !== undefined) {
+      fields.push('archived = ?');
+      values.push(Number(updates.archived) ? 1 : 0);
     }
 
     if (fields.length === 0) {

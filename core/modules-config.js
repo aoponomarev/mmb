@@ -1073,6 +1073,13 @@
                 category: 'components'
             },
             {
+                id: 'portfolio-cloud-archive-modal-body',
+                src: 'app/components/portfolio-cloud-archive-modal-body.js',
+                type: 'local',
+                deps: ['vue', 'modal'],
+                category: 'components'
+            },
+            {
                 id: 'coin-set-load-modal-body',
                 src: 'app/components/coin-set-load-modal-body.js',
                 type: 'local',
@@ -1117,7 +1124,7 @@
                 id: 'app-ui-root',
                 src: 'app/app-ui-root.js',
                 type: 'local',
-                deps: ['dropdown-menu-item', 'button', 'dropdown', 'combobox', 'button-group', 'app-header', 'app-footer', 'modal', 'modal-buttons', 'modal-example-body', 'ai-api-settings', 'postgres-settings', 'timezone-modal-body', 'auth-modal-body', 'storage-reset-modal-body', 'portfolios-import-modal-body', 'icon-manager-modal-body', 'coin-set-save-modal-body', 'coin-set-load-modal-body', 'missing-coins-modal-body', 'session-log-modal-body', 'coingecko-cron-history-modal-body', 'menus-config', 'workspace-config', 'models-config', 'portfolio-config', 'portfolio-form-modal-body', 'portfolio-view-modal-body', 'portfolio-observability', 'coins-config', 'coingecko-stablecoins-loader', 'coins-metadata-loader', 'coins-metadata-generator', 'cloudflare-config', 'cloud-workspace-client', 'auth-state', 'column-visibility-mixin', 'ui-state'],
+                deps: ['dropdown-menu-item', 'button', 'dropdown', 'combobox', 'button-group', 'app-header', 'app-footer', 'modal', 'modal-buttons', 'modal-example-body', 'ai-api-settings', 'postgres-settings', 'timezone-modal-body', 'auth-modal-body', 'storage-reset-modal-body', 'portfolios-import-modal-body', 'icon-manager-modal-body', 'coin-set-save-modal-body', 'coin-set-load-modal-body', 'missing-coins-modal-body', 'session-log-modal-body', 'coingecko-cron-history-modal-body', 'menus-config', 'workspace-config', 'models-config', 'portfolio-config', 'portfolio-form-modal-body', 'portfolio-view-modal-body', 'portfolio-cloud-archive-modal-body', 'portfolio-observability', 'coins-config', 'coingecko-stablecoins-loader', 'coins-metadata-loader', 'coins-metadata-generator', 'cloudflare-config', 'cloud-workspace-client', 'auth-state', 'column-visibility-mixin', 'ui-state'],
                 category: 'app'
             }
         ]

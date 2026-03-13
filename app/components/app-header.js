@@ -73,6 +73,22 @@ window.appHeader = {
             type: Array,
             default: () => []
         },
+        portfolioMenuMaxHeight: {
+            type: String,
+            default: '70vh'
+        },
+        onPortfolioDelete: {
+            type: Function,
+            default: null
+        },
+        onPortfolioArchive: {
+            type: Function,
+            default: null
+        },
+        onPortfolioExport: {
+            type: Function,
+            default: null
+        }
     },
     methods: {
         escapeHtml(value) {
@@ -98,6 +114,44 @@ window.appHeader = {
         },
         handleViewPortfolio(portfolioId) {
             this.$emit('view-portfolio', portfolioId);
+        },
+        handlePortfolioArchive(portfolio, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (typeof this.onPortfolioArchive === 'function') {
+                this.onPortfolioArchive(portfolio?.id);
+            }
+        },
+        handlePortfolioDelete(portfolio, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (typeof this.onPortfolioDelete === 'function') {
+                this.onPortfolioDelete(portfolio?.id);
+            }
+        },
+        handlePortfolioExport(portfolio, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (typeof this.onPortfolioExport === 'function') {
+                this.onPortfolioExport(portfolio?.id);
+            }
+        },
+        hideBadgeDropdownOnMouseLeave(event) {
+            const root = event?.currentTarget;
+            const toggle = root?.querySelector?.('[data-role="badge-dropdown-toggle"]');
+            if (!toggle || !window.bootstrap?.Dropdown) return;
+            try {
+                const instance = window.bootstrap.Dropdown.getInstance(toggle);
+                if (instance) instance.hide();
+            } catch (_) {
+                // best-effort
+            }
         },
         getPortfolioDisplayName(portfolio) {
             const name = (portfolio && typeof portfolio.name === 'string') ? portfolio.name : '';
@@ -174,6 +228,9 @@ window.appHeader = {
         }
     },
     computed: {
+        visibleUserPortfolios() {
+            return (this.userPortfolios || []).filter(p => !p?.archived);
+        },
         // Centralized language for tooltips
         currentLanguage() {
             return this.uiState?.tooltips?.currentLanguage || 'ru';

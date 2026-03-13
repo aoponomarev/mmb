@@ -31,18 +31,23 @@
             handler: 'toggleTheme'
         },
         {
-            id: 'export-portfolios-light',
-            title: 'Экспорт portfolios',
-            handler: 'handleExportPortfoliosLight'
-        },
-        {
             id: 'export-portfolios-full',
-            title: 'Полный архив',
+            title: 'Архивировать на диск',
             handler: 'handleExportPortfoliosFull'
         },
         {
+            id: 'cloud-archive',
+            title: { modalId: 'portfolioCloudArchiveModal' },
+            handler: 'openPortfolioCloudArchiveModal'
+        },
+        {
+            id: 'export-portfolios-light',
+            title: 'Экспорт портфелей',
+            handler: 'handleExportPortfoliosLight'
+        },
+        {
             id: 'import-portfolios',
-            title: 'Импорт portfolios',
+            title: 'Импорт портфелей',
             handler: 'openPortfoliosImportModal'
         },
         {

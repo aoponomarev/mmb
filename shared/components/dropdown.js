@@ -596,6 +596,9 @@ window.cmpDropdown = {
                 }
 
                 if (toggleElement) {
+                    // Store own toggle to ignore nested dropdown events.
+                    this.__ownToggleElement = toggleElement;
+
                     // Bootstrap Dropdown options
                     const dropdownOptions = {};
 
@@ -617,7 +620,8 @@ window.cmpDropdown = {
 
 
                     // Subscribe to Bootstrap events for state sync
-                    this.$refs.dropdownContainer.addEventListener('show.bs.dropdown', () => {
+                    this.$refs.dropdownContainer.addEventListener('show.bs.dropdown', (e) => {
+                        if (e?.target !== this.__ownToggleElement) return;
                         this.isOpen = true;
                         this.$emit('show');
 
@@ -629,17 +633,19 @@ window.cmpDropdown = {
                         }
                     });
 
-                    this.$refs.dropdownContainer.addEventListener('shown.bs.dropdown', () => {
+                    this.$refs.dropdownContainer.addEventListener('shown.bs.dropdown', (e) => {
                         // Post-open actions
                     });
 
-                    this.$refs.dropdownContainer.addEventListener('hide.bs.dropdown', () => {
+                    this.$refs.dropdownContainer.addEventListener('hide.bs.dropdown', (e) => {
+                        if (e?.target !== this.__ownToggleElement) return;
                         this.isOpen = false;
                         this.$emit('hide');
                     });
 
-                    this.$refs.dropdownContainer.addEventListener('hidden.bs.dropdown', () => {
+                    this.$refs.dropdownContainer.addEventListener('hidden.bs.dropdown', (e) => {
                         // Clear search on close
+                        if (e?.target !== this.__ownToggleElement) return;
                         if (this.searchable) {
                             this.searchQuery = '';
                         }

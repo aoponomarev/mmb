@@ -56,6 +56,15 @@
             centered: true,
             autoRegister: false // Requires props (portfolio, onDelete)
         },
+        'portfolioCloudArchiveModal': {
+            title: 'Архив в облаке',
+            icon: 'fas fa-cloud',
+            description: 'Архивные портфели (скрытые из меню)',
+            bodyComponent: 'portfolio-cloud-archive-modal-body',
+            centered: true,
+            autoRegister: false,
+            size: 'lg'
+        },
         'authModal': {
             title: 'Авторизация',
             icon: 'fas fa-sign-in-alt',

@@ -217,6 +217,9 @@
             :market-direction="infoBoxDirection"
             :portfolio="infoBoxPortfolio"
             :user-portfolios="userPortfolios"
+            :on-portfolio-delete="handleDeletePortfolio"
+            :on-portfolio-archive="handleArchivePortfolio"
+            :on-portfolio-export="handleExportSinglePortfolioLight"
             :current-language="currentTranslationLanguage"
             @tab-toggle="handleTabToggle"
             @horizon-change="handleHorizonChange"
@@ -875,6 +878,32 @@
                     :on-rebalance="handleRebalancePortfolio"
                     :on-delete="handleDeletePortfolio"
                 ></portfolio-view-modal-body>
+            </template>
+        </cmp-modal>
+
+        <!-- Модальное окно архива портфелей (в облаке) -->
+        <cmp-modal
+            ref="portfolioCloudArchiveModal"
+            modal-id="portfolioCloudArchiveModal"
+            :title="modalsConfig?.getModalTitle('portfolioCloudArchiveModal')"
+            :centered="true"
+            size="lg"
+        >
+            <template #header>
+                <h5 class="modal-title">
+                    {{ modalsConfig?.getModalTitle('portfolioCloudArchiveModal') }}
+                </h5>
+                <div id="portfolioCloudArchiveModal-header-extra" class="ms-auto me-2"></div>
+                <button type="button" class="btn-close" aria-label="Закрыть" data-bs-dismiss="modal"></button>
+            </template>
+            <template #body>
+                <portfolio-cloud-archive-modal-body
+                    :archived-portfolios="(userPortfolios || []).filter(p => p && p.archived)"
+                    :on-restore="handleRestorePortfolio"
+                    :on-delete="handleDeletePortfolio"
+                    :on-view="handleViewArchivedPortfolio"
+                    :on-export="handleExportSinglePortfolioLight"
+                ></portfolio-cloud-archive-modal-body>
             </template>
         </cmp-modal>
 
