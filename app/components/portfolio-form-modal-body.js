@@ -76,12 +76,12 @@
                                     <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
                                     <td class="align-middle">
                                         <div
-                                            :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-success' : '']"
+                                            :class="['cursor-pointer', 'portfolio-segment-table-asset', coin.isLocked ? 'fw-bold text-success' : '']"
                                             :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
                                             @click="coin.isLocked ? resetCoinWeight(coin) : null"
                                         >{{ coin.ticker }}</div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle portfolio-segment-table-col-percent">
                                         <input
                                             type="number"
                                             class="form-control form-control-sm text-center p-1"
@@ -158,12 +158,12 @@
                                     <td class="text-center align-middle text-muted">{{ getCoinKeyMetricLabel(coin) }}</td>
                                     <td class="align-middle">
                                         <div
-                                            :class="['cursor-pointer', coin.isLocked ? 'fw-bold text-danger' : '']"
+                                            :class="['cursor-pointer', 'portfolio-segment-table-asset', coin.isLocked ? 'fw-bold text-danger' : '']"
                                             :title="coin.isLocked ? 'Сбросить к весу по умолчанию' : (isLastUnlockedInSegment(coin) ? 'Этот тикер балансирует сумму сегмента' : '')"
                                             @click="coin.isLocked ? resetCoinWeight(coin) : null"
                                         >{{ coin.ticker }}</div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle portfolio-segment-table-col-percent">
                                         <input
                                             type="number"
                                             class="form-control form-control-sm text-center p-1"
@@ -493,7 +493,7 @@
                     {
                         key: 'weight',
                         label: '%',
-                        headerClass: 'text-center'
+                        headerClass: 'text-center portfolio-segment-table-col-percent'
                     }
                 ];
                 if (includeActionColumn) {

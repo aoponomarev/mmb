@@ -75,6 +75,15 @@ window.appHeader = {
         },
     },
     methods: {
+        escapeHtml(value) {
+            const text = value == null ? '' : String(value);
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        },
         handleTabToggle(data) {
             this.$emit('tab-toggle', data);
         },
@@ -89,6 +98,45 @@ window.appHeader = {
         },
         handleViewPortfolio(portfolioId) {
             this.$emit('view-portfolio', portfolioId);
+        },
+        getPortfolioDisplayName(portfolio) {
+            const name = (portfolio && typeof portfolio.name === 'string') ? portfolio.name : '';
+            if (!name) return '';
+
+            const parts = name.split('|');
+            if (parts.length >= 2 && parts[0].startsWith('L:') && parts[1].startsWith('S:')) {
+                const left = parts[0];
+                const right = parts[1];
+
+                const formatSegment = (segment) => {
+                    const idx = segment.indexOf(':');
+                    if (idx === -1) {
+                        return this.escapeHtml(segment);
+                    }
+                    const rawMarker = segment.slice(0, idx); // "L" / "S"
+                    const rest = segment.slice(idx + 1);
+                    const marker = rawMarker.trim().toUpperCase();
+                    const colorClass = marker === 'L' ? 'text-success' : (marker === 'S' ? 'text-danger' : '');
+                    const markerHtml = `<span class="fw-bold ${colorClass}">${this.escapeHtml(marker)}</span>`;
+                    const colonHtml = `<span class="${colorClass}">:</span>`;
+                    return `${markerHtml}${colonHtml}&nbsp;${this.escapeHtml(rest)}`;
+                };
+
+                const hasThreeOrMoreTickers = (segment) => {
+                    const idx = segment.indexOf(':');
+                    const tickersPart = idx >= 0 ? segment.slice(idx + 1) : segment;
+                    const tickers = tickersPart.split('-').filter(Boolean);
+                    return tickers.length >= 3;
+                };
+
+                if (hasThreeOrMoreTickers(left) && hasThreeOrMoreTickers(right)) {
+                    return `${formatSegment(left)}<br>${formatSegment(right)}`;
+                }
+
+                return `${formatSegment(left)}&nbsp;|&nbsp;${formatSegment(right)}`;
+            }
+
+            return this.escapeHtml(name);
         },
         isConflictPortfolio(portfolio) {
             return portfolio?.syncState === 'conflict';

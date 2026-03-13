@@ -92,6 +92,20 @@
     table-layout: fixed;
 }
 
+.portfolio-segment-table-asset {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.portfolio-segment-table-col-percent {
+    width: 3rem;
+    min-width: 3rem;
+    max-width: 3rem;
+    padding-left: 0.125rem !important;
+    padding-right: 0.125rem !important;
+}
+
 .portfolio-segment-table th,
 .portfolio-segment-table td {
     text-align: center;

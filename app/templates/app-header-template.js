@@ -184,7 +184,7 @@
                                :class="getPortfolioItemClasses(p)">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="fw-bold small">{{ p.name }}</span>
+                                        <span class="small" v-html="getPortfolioDisplayName(p)"></span>
                                         <span
                                             v-if="isConflictPortfolio(p)"
                                             class="app-portfolio-sync-marker app-portfolio-sync-marker-conflict"
