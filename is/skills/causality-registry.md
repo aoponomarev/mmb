@@ -199,6 +199,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-message-display-vs-observability` | advisory | UI display flows through AppMessages (state store); Event Bus carries observability events only. Prevents confusion between display path and optional observers (Sentry, session-log). |
 | `#for-observability-reserved` | advisory | Event Bus channels like `error-occurred` are reserved for observability consumers (Sentry, session-log). UI display uses AppMessages.push directly; emit is for future integration. |
 | `#for-skill-refinement-on-application-failure` | advisory | When applying a skill leads to repeated rewrites, contradictions, or the pitfalls from Problematic Coding Situation, the Agentic Self-Correction Protocol (id:sk-cecbcc) applies: propose skill update via `propose_skill` with `action=update` instead of silently working around the rule. |
+| `#for-no-duplicate-h3-in-skill` | gate | Duplicate H3 sections within a single skill file indicate agent copy-paste or merge errors. validate-skills.js fails preflight when the same `### Title` appears more than once. SSOT: id:sk-d763e7 (process-skill-governance). |
 
 ## Aliases / Deprecated
 

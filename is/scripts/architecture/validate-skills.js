@@ -156,6 +156,31 @@ function validateSkillFormat(file, text, rel, errors) {
     }
 }
 
+/** Check for duplicate H3 sections within a skill. Gate: #for-no-duplicate-h3-in-skill */
+function validateDuplicateH3Sections(text, rel, errors) {
+    if (rel.endsWith("README.md") || rel.endsWith("causality-registry.md")) return;
+    if (rel.includes("docs/backlog/skills/")) return;
+
+    const seen = new Map();
+    const lines = text.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.startsWith("### ") && !line.startsWith("#### ")) {
+            const h3Text = line.trim();
+            if (seen.has(h3Text)) {
+                seen.set(h3Text, [...(seen.get(h3Text) || []), i + 1]);
+            } else {
+                seen.set(h3Text, [i + 1]);
+            }
+        }
+    }
+    for (const [h3, lineNums] of seen) {
+        if (lineNums.length > 1) {
+            errors.push(`${rel}: Duplicate H3 section '${h3}' at lines ${lineNums.join(", ")} (#for-no-duplicate-h3-in-skill)`);
+        }
+    }
+}
+
 function validateImplementationStatusPaths(file, text, rel, errors, warnings) {
     if (rel.endsWith("README.md") || rel.endsWith("causality-registry.md")) return;
     if (rel.includes("docs/backlog/skills/")) return;
@@ -236,6 +261,7 @@ function main() {
 
             // Detailed format validation
             validateSkillFormat(file, text, rel, errors);
+            validateDuplicateH3Sections(text, rel, errors);
             validateSkillPrefixGate(rel, errors);
             validateImplementationStatusPaths(file, text, rel, errors, warnings);
 

@@ -40,7 +40,8 @@ To reduce hallucinations and ensure AI agents can reliably parse skills, all `.m
    - `## Implementation Status` (or `## Implementation Status in PF`)
    - `## Migration Strategy`
    - `## Examples`
-4. **Scaffolding Tool**: Always use `npm run skills:create "Skill Title" --type=[...]` to generate the correct boilerplate. See `is/contracts/prefixes.js` for available types.
+4. **No duplicate H3 sections** (#for-no-duplicate-h3-in-skill): The same `### Title` may not appear more than once in a skill file. Gate: validate-skills.js fails preflight on violation. Prevents agent copy-paste/merge errors.
+5. **Scaffolding Tool**: Always use `npm run skills:create "Skill Title" --type=[...]` to generate the correct boilerplate. See `is/contracts/prefixes.js` for available types.
 
 ## Contracts
 
@@ -191,3 +192,4 @@ Before creating or placing a skill file, answer these in order:
 | Placing a Windows PowerShell rule in `core/skills/` | Belongs in `is/skills/process-windows-shell.md` |
 | One monolithic `everything` file in `core/skills/` | Split by subdomain — one file per coherent domain area |
 | Skills folder in `is/` growing beyond 30 files without a review | Trigger a profiling review using this skill |
+| Duplicate H3 sections in one skill (same `### Title` >1×) | Remove duplicates; keep single section. Gate: validate-skills.js (#for-no-duplicate-h3-in-skill) |
