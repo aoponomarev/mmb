@@ -12,6 +12,8 @@ related_ais:
   - ais-82c9d0
   - ais-d4e5f6
   - ais-71a8b9
+  - ais-d8e7f6
+  - ais-kline-ohlc
 
 ---
 

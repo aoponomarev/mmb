@@ -12,6 +12,7 @@ related_skills:
 related_ais:
   - ais-b7a9ba
   - ais-bfd150
+  - ais-e9a5c2
 
 ---
 
