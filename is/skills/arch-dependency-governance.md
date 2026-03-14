@@ -22,6 +22,7 @@ last_change: ""
 - **#not-adhoc-deps** Ad-hoc updates risk regressions; all upgrades require intent.
 - **#not-deps-freeze** Full freeze accumulates security debt.
 - **#not-heavy-test-frameworks** Heavy frameworks (Jest/Mocha) add unnecessary bloat.
+- **#for-benefit-overhead-kpi** New dependencies: B/O ≥ 1.5 (clear runtime ROI). Avoid adding deps without proportional benefit.
 
 ---
 

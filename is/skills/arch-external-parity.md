@@ -22,6 +22,7 @@ last_change: ""
 - **#not-simultaneous-read-write** Prevents rate limit conflicts and overlapping writes.
 - **#not-infra-duplication** Keeps cloud costs down and avoids migrating data across separate Cloudflare buckets.
 - **#not-no-parity-checks** Unchecked drift leads to silent production handoff failures.
+- **#for-benefit-overhead-kpi** Phase 2 Discovery ROI filter >1.5x; zero-cost policy. Integrations evaluated by B/O before adoption.
 
 ---
 

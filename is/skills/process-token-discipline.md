@@ -19,6 +19,7 @@ last_change: ""
 - **#for-front-load** Putting all relevant context in the first message avoids 3x token waste from incremental context building.
 - **#for-fresh-chats** After 6–8 exchanges or when switching domains, start a new chat — condensation loses detail.
 - **#for-minimum-viable-at** Attach only files the agent actually needs; agent can explore more if needed.
+- **#for-benefit-overhead-kpi** Token efficiency: B = quality + cost savings; O = context bloat. Index-first, chunked reads yield B/O ≥ 1.5.
 
 ## Core Rules
 

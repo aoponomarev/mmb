@@ -24,6 +24,7 @@ last_change: ""
 - **#not-central-vault** Obsidian vaults are deferred until 50+ skills.
 - **#not-skill-submodule** High sync overhead for single-project scope.
 - **#for-token-budget** alwaysApply rules consume tokens before every conversation. Budget <1,000 lines; prefer glob-scoped or agent-decided for domain-specific rules.
+- **#for-benefit-overhead-kpi** Selection heuristics, commit analysis worthiness, token budget: B/O ≥ 1.5. #not-skill-submodule is a B/O decision (sync overhead vs scope).
 
 ---
 

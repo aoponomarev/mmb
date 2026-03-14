@@ -19,6 +19,7 @@ last_change: "#for-causality-impact-before-change — §1a Causality Hash Pre-Ch
 
 - **#for-arch-change-during-plan** Architecture changes mid-plan cascade to code, causalities, skills, and gates. Without a strict protocol (impact analysis → docs → code → full verify), agents leave orphan references, stale contracts, and broken invariants. Full verification before proceeding prevents tech debt accumulation.
 - **#for-multifactor-heuristics** Before committing to an inline architecture change, agents must weigh benefit, harm, reversibility, contract alignment, user impact, and existing causalities. When uncertain, prefer Defer over Inline.
+- **#for-benefit-overhead-kpi** §1a conditional trigger (only when hash has anchors): B = impact visibility; O = full reverse lookup always. Conditional yields B/O ≥ 1.5.
 
 ## Risk Tiers for Plan Amendments
 

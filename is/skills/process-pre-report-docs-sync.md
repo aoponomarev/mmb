@@ -23,6 +23,7 @@ last_change: ""
 - **#for-pre-report-docs-sync** Before forming the task report, the AI agent MUST update docs, causalities, and create skills if needed. Report without live documentation violates the contract. Ensures docs and causalities stay live-actual.
 - **#for-memory-to-skills** Chat agreements and discovered patterns must be formalized into skills or AIS when they describe rules or constraints. Knowledge lives in files, not only in ephemeral chat history.
 - **#for-plan-execution-protocol** Add artifacts as discovered — skills, causalities, contracts. Do not defer to "later".
+- **#for-benefit-overhead-kpi** Full checklist vs lightweight: B = live docs; O = time before report. Mandatory for architecturally significant tasks (B/O ≥ 1.5).
 
 ## Core Rules
 

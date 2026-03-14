@@ -24,6 +24,7 @@ last_change: ""
 - **#for-fundamentality-first** Blocking dependencies like SSOT contracts and security are weighed heavily (0.5), as they block further progress.
 - **#for-gap-closure** Leaving half-transferred modules creates context-switching debt. We weigh finishing an active logical piece at 0.3.
 - **#for-debt-risk-weight** Missing tests or broken CI gates carry a 0.2 weight, tracking "what rots if we wait."
+- **#for-benefit-overhead-kpi** Step selection: B = fundamentality + gap closure + risk reduction; O = effort to execute. Prefer candidates with B/O ≥ 1.5.
 
 ---
 

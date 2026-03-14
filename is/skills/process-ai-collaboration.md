@@ -28,6 +28,7 @@ related_ais:
 - **#for-no-implicit-commit** You must never commit without explicit user instruction. Nagging the user to commit adds noise.
 - **#for-memory-to-skills** Memory MCP stores chat agreements; they must be formalized into skills or AIS when they describe rules or constraints. The Memory → Skills protocol ensures knowledge lives in files, not only in ephemeral chat history.
 - **#for-multifactor-heuristics** When the codebase leaves multiple plausible implementation paths, agents must weigh benefit, harm, reversibility, contract alignment, user impact, and existing causalities instead of optimizing for a single convenience factor.
+- **#for-benefit-overhead-kpi** When deciding whether to add automation, a gate, or a skill: B/O ≥ 1.5. Apply only if invoking this lens in this skill yields tangible KPI ≥ 1.5.
 
 ---
 

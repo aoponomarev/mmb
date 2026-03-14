@@ -36,6 +36,7 @@ updated_at: "2026-03-01T00:00:00.000Z"
 - **#not-central-docs** Monolithic docs have low discoverability; distributed skills work better for MCP.
 - **#not-hardcoded-paths** Hardcoded relative paths in scripts fail randomly depending on execution context.
 - **#not-bundler-ui** Requiring a bundler for the UI breaks our `file://` constraint.
+- **#for-benefit-overhead-kpi** Commit template, Git workflow metadata: avoid friction without clear ROI (B/O ≥ 1.5).
 
 ---
 

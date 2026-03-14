@@ -19,6 +19,7 @@ last_change: ""
 - **#for-two-layer-model** Commits state *what* changed, but the agent adds the *why* (trade-offs, blocked items) that Git cannot easily store.
 - **#for-tier-classification** Grouping by tiers (A: Critical, B: Structural, C: Operational) ensures major decisions stand out and housekeeping doesn't add noise.
 - **#for-hand-maintained** Automation adds overhead; when the log exceeds 500 lines, older entries are manually extracted.
+- **#for-benefit-overhead-kpi** Automation vs manual: B = avoided drift, O = maintenance cost; prefer manual extraction when B/O < 1.5.
 
 ---
 

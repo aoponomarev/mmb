@@ -17,6 +17,7 @@ last_change: "#for- vs #not- — use #not- when formalizing prohibition/rejectio
 
 - **#for-causality-harvesting** Enforcing immediate registry updates for every minor architectural decision breaks developer flow. Using explicit candidate markers keeps backlog capture fast while preserving machine-readability.
 - **#for-causality-question-marker** The candidate format must be unambiguous (`@causality QUESTION:`). Otherwise agents cannot distinguish intentional backlog items from accidental unfinished annotations.
+- **#for-benefit-overhead-kpi** Immediate registry vs candidates: B = capture speed, O = flow break; candidates win when B/O of immediate updates < 1.5.
 
 ## Core Rules
 

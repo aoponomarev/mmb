@@ -24,6 +24,7 @@ related_ais:
 - **#for-token-saving** L3/Discovery tasks consume many tokens when run locally; Copilot (free tier) produces plans; execution stays local.
 - **#for-right-tool** Point edits (L1/L2) are faster locally; broad analysis benefits from Copilot's repo-wide context.
 - **#for-no-surprise-delegation** User must not be surprised by async handoff; agent must apply strict criteria before delegating.
+- **#for-benefit-overhead-kpi** L1/L2 local vs L3 Copilot: B = repo-wide context (L3), O = switching overhead; delegate when B/O ≥ 1.5.
 
 ## Core Rules
 

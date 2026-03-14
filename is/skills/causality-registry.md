@@ -202,6 +202,7 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-skill-refinement-on-application-failure` | advisory | When applying a skill leads to repeated rewrites, contradictions, or the pitfalls from Problematic Coding Situation, the Agentic Self-Correction Protocol (id:sk-cecbcc) applies: propose skill update via `propose_skill` with `action=update` instead of silently working around the rule. |
 | `#for-no-duplicate-h3-in-skill` | gate | Duplicate H3 sections within a single skill file indicate agent copy-paste or merge errors. validate-skills.js fails preflight when the same `### Title` appears more than once. SSOT: id:sk-d763e7 (process-skill-governance). |
 | `#for-causality-impact-before-change` | advisory | When changing a hash in causality-registry (T3), run reverse lookup first if the hash has anchors or exceptions. Minimal output: one line in Impact Analysis. If exceptions ≥3, consider rebinding. Conditional trigger; skip for new hashes. SSOT: id:sk-a8c3e1 §1a. |
+| `#for-benefit-overhead-kpi` | advisory | When contemplating any structural addition (automation, gate, protocol step, skill, rule): (1) Identify benefit B and overhead O as relevant to this decision — context-defined; (2) Prefer options where B/O ≥ 1.5 (project threshold). Apply this meta-causality to a skill only when invoking it there yields B/O ≥ 1.5; otherwise omit. Prevents disproportionate overhead for marginal gain. |
 
 ## Aliases / Deprecated
 
