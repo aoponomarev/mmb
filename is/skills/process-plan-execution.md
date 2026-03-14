@@ -6,7 +6,7 @@ status: active
 reasoning_confidence: 0.95
 reasoning_audited_at: 2026-03-11
 reasoning_checksum: c2c37cca
-last_change: "#for-browser-runtime-smoke — browser transport changes require real runtime verification before handoff"
+last_change: "#for-continuous-ais-during-plan — mandatory AIS update after architecturally significant steps; distillation stays final cleanup"
 
 ---
 
@@ -20,6 +20,7 @@ last_change: "#for-browser-runtime-smoke — browser transport changes require r
 - **#for-plan-iterative-improvement** Plans are living documents. If execution reveals a better sequence, a missing guard, or a hidden risk, the plan must be improved immediately as long as prior completed work remains valid.
 - **#for-browser-runtime-smoke** Some regressions are invisible to Node tests and static inspection because they emerge only in real browser runtime (`file://`, host API binding, transport policy). Plan execution must include that environment when browser transport is touched.
 - **#for-arch-change-during-plan** Architecture changes mid-execution (AIS, contracts, schema, gates) create cascade risk. Full impact analysis and verification must complete before proceeding. Prefer slower execution over accumulating hidden tech debt.
+- **#for-continuous-ais-during-plan** AIS must not lag until distillation. Update it after each architecturally significant step; tactical steps skip. Keeps AIS current, reduces loss on interrupted sessions; distillation remains final cleanup.
 
 ## Risk Tiers for Plan Amendments
 
@@ -34,7 +35,7 @@ Apply **#for-multifactor-heuristics** when deciding Inline vs Defer for T3: weig
 ## Core Rules
 
 1. **Verify each step** — After every atomic change, run relevant checks (console: `npm run <check>`, preflight, lints). Do not proceed to the next step until verification passes.
-2. **Update AIS after each step** — If nuances arise during implementation, update the related AIS immediately. Do not defer documentation updates to the end.
+2. **Update AIS after each architecturally significant step** (#for-continuous-ais-during-plan) — For steps that touch contracts, schema, gates, layers, or architectural contracts: update the related AIS immediately before proceeding. Tactical steps (run script, fix typo, lint) do not require AIS update. Do not defer documentation updates to the end. Distillation (id:sk-0e193a Phase 3) remains the final cleanup pass; continuous updates keep AIS current during execution.
 3. **Detail AIS maximally** — Merge implementation specifics into the spec: component paths, gate order, exclusion rules, edge cases.
 4. **Add artifacts as discovered** — If execution reveals need for skills, causalities, contracts, or gates: create them immediately.
 5. **Fix bugs along the way** — Any bug discovered during execution must be fixed before moving on. The path behind must be clean of tech debt.
