@@ -6,7 +6,7 @@ status: active
 reasoning_confidence: 0.95
 reasoning_audited_at: "2026-03-14"
 reasoning_checksum: ""
-last_change: "#for-arch-change-during-plan — initial protocol to prevent tech debt from mid-plan architecture changes"
+last_change: "#for-causality-impact-before-change — §1a Causality Hash Pre-Check: conditional reverse lookup before hash change, minimal output, E≥3→rebind"
 
 ---
 
@@ -41,8 +41,17 @@ Document in the plan or `docs/backlog/fix-<plan-slug>.md`:
 - **AIS/contracts changed:** Which files (paths).
 - **Skills affected:** Skills referencing changed AIS (`related_ais`, `id:ais-xxx`).
 - **Code affected:** Files depending on changed contracts (paths, imports, `dependency_graph` when available).
-- **Causalities affected:** Hashes in changed contracts; anchors in affected code.
+- **Causalities affected:** Hashes in changed contracts; anchors in affected code. For causality-registry hash changes: §1a.
 - **Gates affected:** Preflight scripts, `validate-*.js` that consume changed contracts.
+
+### 1a. Causality Hash Pre-Check (#for-causality-impact-before-change)
+
+**Trigger:** Only when modifying or removing an *existing* hash that has anchors or exceptions. New hashes: skip.
+
+**Steps:**
+1. Obtain anchor count and exception count for the hash (via `get_causality_files` + `docs/audits/causality-exceptions.jsonl`, or grep if MCP tools unavailable).
+2. In Impact Analysis, add one line: `Hash #for-X: A anchors, E exceptions → [rebind|supersede|defer|keep]`.
+3. If exceptions ≥ 3, consider rebinding or supersession before proceeding.
 
 ### 2. Update Plan
 
