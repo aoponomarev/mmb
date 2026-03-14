@@ -35,6 +35,7 @@
     "sk-883639": "is/skills/process-language-policy.md",
     "sk-3df9f9": "is/skills/process-legacy-unknowns-causality.md",
     "sk-130fa2": "is/skills/process-lib-governance.md",
+    "sk-dcc232": "is/skills/process-meta-causality-discovery.md",
     "sk-b77a8d": "is/skills/process-migration-prioritization.md",
     "sk-8f9e0d": "is/skills/process-plan-execution.md",
     "sk-9e4f2a": "is/skills/process-pre-report-docs-sync.md",
@@ -74,7 +75,7 @@
     "ais-54c2aa": "docs/ais/ais-auth-lifecycle.md",
     "ais-5db77e": "docs/ais/ais-bootstrap-lifecycle.md",
     "ais-82c9d0": "docs/ais/ais-cache-architecture.md",
-    "ais-b6c7d8": "docs/ais/ais-causality-anchors.md",
+    "ais-b6c7d8": "docs/ais/ais-causality-traceability.md",
     "ais-b7a9ba": "docs/ais/ais-control-plane-llmops.md",
     "ais-c8f2a1": "docs/ais/ais-copilot.md",
     "ais-3732ce": "docs/ais/ais-data-pipeline.md",
@@ -152,5 +153,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-14T09:58:30.818Z"
+  "generated_at": "2026-03-14T15:21:49.811Z"
 }

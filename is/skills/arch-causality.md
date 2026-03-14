@@ -1,56 +1,50 @@
 ---
 id: sk-d599bd
-title: "Architecture: Causality & Rationale Tracking"
-reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 8d65409b
-last_change: ""
+title: "Architecture: Causality Traceability System"
+reasoning_confidence: 0.92
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: ""
+last_change: "#for-explicit-over-implicit — align skill with current registry-backed causality traceability system"
+related_ais:
+  - ais-b6c7d8
 
 ---
 
-# Architecture: Causality & Rationale Tracking
+# Architecture: Causality Traceability System
 
-> **Context**: Defines how architectural "why" decisions are captured and preserved in the PF, preventing context loss over time.
+> **Context**: Defines how architectural rationale is captured, linked, validated, and kept live-actual across code, skills, AIS, and gates.
 
 ## Reasoning
 
-- **#for-skill-anchors** Skill anchors in code (`@skill-anchor`) connect directly to the Reasoning section without a separate ID namespace.
-- **#for-textual-over-registry** A heavyweight causality registry with boolean formulas is overkill. Textual reasoning in these markdown files provides enough value.
-- **#for-skill-anchors-code** We use `/** @skill ... */` to link entire files to these architecture documents.
-- **#for-plan-finalization-trigger** Reasoning is extracted from migration plans into these skills at a natural checkpoint — when a plan is completed.
-- **#not-causality-registry-day-one** Full causality registry (GC.*) maintenance cost exceeds value at the current scale.
-- **#not-no-causality** Complete lack of causality tracking risks context loss, the #1 risk in long-running projects.
-- **#not-causality-in-comments-only** Causality in scattered code comments is not discoverable by AI agents without a centralized anchor.
-- **#not-causality-database** Using a database for causality violates the zero-dependency, local-first portability rule.
+- **#for-skill-anchors** Skill anchors in code (`@skill-anchor`) connect code to the rationale that governs it.
+- **#for-gate-enforcement** Causality only stays trustworthy when registry existence, anchor integrity, and deletion lineage are validated by gates.
+- **#for-explicit-over-implicit** Non-obvious rationale must be explicit via hashes, anchors, and docs; implicit reasoning silently rots.
+- **#for-document-the-choice** Chosen and rejected paths must stay recoverable after the chat or plan is gone.
+- **#not-causality-database** Canonical rationale should stay local-first and reviewable in markdown files, not hidden in runtime storage.
 
 ---
 
 ## Implementation Status in PF
 
-- `Implemented (Simplified)`: Causality captured as textual reasoning within `is/skills/arch-*.md` files under "Architectural Reasoning (Why this way)" sections. Each finalized migration plan has its key decisions extracted into a dedicated skill.
-- `Implemented`: Active Causality Recording pattern — every plan finalization extracts decisions into new `arch-*.md` skill files.
-- `Out of scope`: Full causality registry, machine-readable IDs (GC.*), and code-level causality anchors. Textual reasoning and skill anchors are the canonical mechanism.
+- `Implemented`: Registry-backed hash namespace in id:sk-3b1519 (`is/skills/causality-registry.md`) for code, skills, and AIS.
+- `Implemented`: Code/document anchors (`@causality`, `@skill-anchor`) plus validation gates and invariant checks.
+- `Implemented`: Question markers, harvesting, supersession / rebinding, alias mapping, and exception ledger.
+- `Implemented`: Meta-causalities as second-order hashes in the same canonical namespace.
+- `Current limitation`: Dedicated causality graph visualization/tooling is still pending; current navigation remains registry, grep, validators, and indices.
+- `SSOT`: id:ais-b6c7d8 (`docs/ais/ais-causality-traceability.md`) is the full high-level specification.
 
-### Migration Strategy for Causality
+## Core Rules
 
-When finalizing any migration plan:
-1. Read the plan thoroughly (not just checkboxes).
-2. Identify non-obvious decisions, rejected alternatives, and constraints.
-3. Create or update `is/skills/arch-*.md` with "Architectural Reasoning" section.
-4. Mark the plan complete and move to `docs/done/`.
+- Use registry hashes for non-obvious rationale; no naked `@causality`.
+- Keep code, skill, AIS, and exception lineage aligned when rationale changes.
+- When a hash is renamed or generalized, prefer rebinding over silent coexistence.
+- Treat meta-causalities as the same registry namespace, but second-order in meaning: they govern how agents decide about protocols and structural additions.
 
-### Reasoning Confidence & Audit Gate
+## Contracts
 
-Every skill with Reasoning MUST include a confidence score (assigned by AI agent during audit):
-
-```yaml
----
-reasoning_confidence: 0.85   # 0–1: how well Reasoning matches the codebase
-reasoning_audited_at: "2026-03-01"
----
-```
-
-- **Scale**: 0.9–1.0 = fully aligned; 0.5–0.69 = notable gaps; below 0.5 = fails gate.
-- **Gate**: `npm run skills:reasoning:check` enforces presence and threshold.
-- **Protocol**: See id:sk-d7bf67 (process-reasoning-audit) for the mandatory audit order (Review → Add → Score → Gate). Recommended: set `last_change` when modifying Reasoning hashes.
+- id:ais-b6c7d8 (`docs/ais/ais-causality-traceability.md`) — high-level causality traceability specification.
+- id:sk-3b1519 (`is/skills/causality-registry.md`) — canonical hash registry.
+- id:sk-802f3b (`is/skills/process-causality-harvesting.md`) — harvesting and promotion flow.
+- id:sk-8991cd (`is/skills/process-code-anchors.md`) — anchor placement rules.
+- id:sk-dcc232 (`is/skills/process-meta-causality-discovery.md`) — meta-causality portrait and application algorithm.
 

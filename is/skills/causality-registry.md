@@ -203,6 +203,12 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-no-duplicate-h3-in-skill` | gate | Duplicate H3 sections within a single skill file indicate agent copy-paste or merge errors. validate-skills.js fails preflight when the same `### Title` appears more than once. SSOT: id:sk-d763e7 (process-skill-governance). |
 | `#for-causality-impact-before-change` | advisory | When changing a hash in causality-registry (T3), run reverse lookup first if the hash has anchors or exceptions. Minimal output: one line in Impact Analysis. If exceptions ≥3, consider rebinding. Conditional trigger; skip for new hashes. SSOT: id:sk-a8c3e1 §1a. |
 | `#for-benefit-overhead-kpi` | advisory | When contemplating any structural addition (automation, gate, protocol step, skill, rule): (1) Identify benefit B and overhead O as relevant to this decision — context-defined; (2) Prefer options where B/O ≥ 1.5 (project threshold). Apply this meta-causality to a skill only when invoking it there yields B/O ≥ 1.5; otherwise omit. Prevents disproportionate overhead for marginal gain. |
+| `#for-explicit-over-implicit` | advisory | When an action could be forgotten or assumed implicitly, prefer explicit protocol, marker, or checklist. Applies to commit, review, contract sync, rationale capture. Prevents "works on my machine" and lost context. |
+| `#for-defer-over-incomplete` | advisory | When uncertain or blast radius is high, prefer Defer (record in backlog) over Inline incomplete. Prevents hidden tech debt and half-done cascades. SSOT: id:sk-a8c3e1 Inline vs Defer. |
+| `#for-conditional-trigger` | advisory | Run heavy protocols only when conditions hold; skip when not applicable. Reduces unnecessary overhead. E.g. §1a reverse lookup only when hash has anchors; B/O lens only when B/O ≥ 1.5. |
+| `#for-flow-preservation` | advisory | Protocols must not break the primary developer/agent flow. If a rule adds friction without proportional gain, seek a lighter alternative. Applies to automation vs manual, candidate markers vs immediate registry. |
+| `#for-weighted-explicit` | advisory | When intuition fails (many options, many factors), use explicit weighting instead of a single criterion. Reproducible, auditable decisions. Complements #for-multifactor-heuristics. |
+| `#for-document-the-choice` | advisory | When choosing A over B (Inline vs Defer, path X vs Y), record the rationale in plan or backlog. Ensures traceability and handoff clarity. |
 
 ## Aliases / Deprecated
 

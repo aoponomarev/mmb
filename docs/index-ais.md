@@ -1,7 +1,7 @@
 ---
 id: docidx-3022eb
 status: active
-last_updated: "2026-03-12"
+last_updated: "2026-03-14"
 
 ---
 <!-- Важно: оставлять пустую строку перед "---" ! -->
@@ -22,7 +22,7 @@ last_updated: "2026-03-12"
 - [id:ais-54c2aa](ais/ais-auth-lifecycle.md) — AIS: Жизненный цикл аутентификации (Authentication Lifecycle)
 - [id:ais-5db77e](ais/ais-bootstrap-lifecycle.md) — AIS: Жизненный цикл bootstrap модулей (Bootstrap Lifecycle)
 - [id:ais-82c9d0](ais/ais-cache-architecture.md) — AIS: Архитектура кэша и реестров (Cache Architecture & Registries)
-- [id:ais-b6c7d8](ais/ais-causality-anchors.md) — AIS: Казуальность и якоря (Causality & Anchors)
+- [id:ais-b6c7d8](ais/ais-causality-traceability.md) — AIS: Система казуальности и трассируемости (Causality Traceability System)
 - [id:ais-b7a9ba](ais/ais-control-plane-llmops.md) — AIS: Control Plane & LLMOps (Управление, Казуальность и ИИ-Агенты)
 - [id:ais-c8f2a1](ais/ais-copilot.md) — AIS: GitHub Copilot — интеграция и постановщик задач
 - [id:ais-3732ce](ais/ais-data-pipeline.md) — AIS: Data Pipeline & Backend Core (Потоки Данных и Модели)
