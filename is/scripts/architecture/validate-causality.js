@@ -6,26 +6,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT } from "../../contracts/path-contracts.js";
+import {
+  CAUSALITY_SCAN_DIRS,
+  CAUSALITY_CODE_ANCHOR_TYPES,
+  HASH_REGEX,
+  walkFiles,
+  isExcludedFile,
+} from "../../contracts/causality-scan-contracts.js";
 
 const REGISTRY_PATH = path.join(ROOT, "is", "skills", "causality-registry.md");
-const CODE_DIRS = [
-  path.join(ROOT, "is"),
-  path.join(ROOT, "core"),
-  path.join(ROOT, "app"),
-];
 
-const EXTRA_MD_DIRS = [
-  path.join(ROOT, "docs"),
-];
+const CODE_DIRS = CAUSALITY_SCAN_DIRS
+  .filter((d) => CAUSALITY_CODE_ANCHOR_TYPES.has(d.anchorType))
+  .map((d) => path.join(ROOT, d.dir));
 
-const EXCLUDE_FILES = [
-  "is/mcp/skills/server.js",
-  "is/scripts/architecture/validate-causality.js",
-  "is/scripts/architecture/validate-causality-invariant.js",
-  "is/scripts/architecture/validate-affected-skills.js",
-];
-
-const HASH_REGEX = /#(?:for|not)-[\w-]+/g;
+const EXTRA_MD_DIRS = [path.join(ROOT, "docs")];
 
 function parseCausalityMarker(line) {
   // Only parse actual comment lines to avoid false positives from regex/string literals.
@@ -81,6 +76,18 @@ function extractHashesFromLine(line) {
   return (parsed.rest.match(HASH_REGEX) || []).map((h) => h);
 }
 
+function collectUsageFromFiles(files, usedHashes) {
+  for (const filePath of files) {
+    const relPath = path.relative(ROOT, filePath).split(path.sep).join("/");
+    if (isExcludedFile(relPath)) continue;
+    const content = fs.readFileSync(filePath, "utf8");
+    const hashes = content.match(HASH_REGEX) || [];
+    for (const h of hashes) {
+      usedHashes.add(h);
+    }
+  }
+}
+
 function main() {
   const registryHashes = loadRegistryHashes();
   const usedHashes = new Set();
@@ -92,7 +99,7 @@ function main() {
     const files = walkJsFiles(dir);
     for (const filePath of files) {
       const relPath = path.relative(ROOT, filePath).split(path.sep).join("/");
-      if (EXCLUDE_FILES.some((ex) => relPath === ex || relPath.endsWith(ex))) continue;
+      if (isExcludedFile(relPath)) continue;
       const content = fs.readFileSync(filePath, "utf8");
       const lines = content.split("\n");
 
@@ -117,33 +124,19 @@ function main() {
         }
       }
     }
-    
+
     const mdFiles = walkMarkdownFiles(dir);
-    for (const filePath of mdFiles) {
-      const relPath = path.relative(ROOT, filePath).split(path.sep).join("/");
-      if (EXCLUDE_FILES.some((ex) => relPath === ex || relPath.endsWith(ex))) continue;
-      // Skip causality-registry.md itself
-      if (relPath.endsWith("causality-registry.md")) continue;
-      
-      const content = fs.readFileSync(filePath, "utf8");
-      const hashes = content.match(HASH_REGEX) || [];
-      for (const h of hashes) {
-        usedHashes.add(h);
-      }
-    }
+    collectUsageFromFiles(mdFiles, usedHashes);
   }
 
   for (const dir of EXTRA_MD_DIRS) {
     const mdFiles = walkMarkdownFiles(dir);
-    for (const filePath of mdFiles) {
-      const relPath = path.relative(ROOT, filePath).split(path.sep).join("/");
-      const content = fs.readFileSync(filePath, "utf8");
-      const hashes = content.match(HASH_REGEX) || [];
-      for (const h of hashes) {
-        usedHashes.add(h);
-      }
-    }
+    collectUsageFromFiles(mdFiles, usedHashes);
   }
+
+  // .cursor/rules MDC files — ghost detection coverage
+  const ruleFiles = walkFiles(path.join(ROOT, ".cursor", "rules"), ".mdc");
+  collectUsageFromFiles(ruleFiles, usedHashes);
 
   let failed = false;
 

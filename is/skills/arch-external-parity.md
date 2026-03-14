@@ -2,8 +2,8 @@
 id: sk-73dcca
 title: "Architecture: External Infrastructure Parity"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 2e1079c9
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 5160c416
 last_change: ""
 
 ---

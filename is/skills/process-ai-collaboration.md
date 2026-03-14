@@ -2,8 +2,8 @@
 id: sk-cecbcc
 title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-11
-reasoning_checksum: a855b238
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: f601496e
 last_change: "Problematic Coding Situation multifactor heuristic; Agentic Self-Correction + skill-application-failure trigger"
 related_skills:
   - sk-0e193a

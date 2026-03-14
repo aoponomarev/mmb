@@ -37,7 +37,7 @@
         'dai', 'usds', 'ethena-usde', 'usd1-wlfi', 'paypal-usd', 'dai', 'paxos-standard'
     ];
 
-    /** Symbol/id -> peg label for tooltip "Стейблкоин {peg}" */
+    /** Symbol/id -> peg label for tooltip "Stablecoin {peg}" */
     const STABLECOIN_PEG_MAP = {
         xaut: 'ЗОЛОТО', paxg: 'ЗОЛОТО', kau: 'ЗОЛОТО', pgold: 'ЗОЛОТО', xaut0: 'ЗОЛОТО', xaum: 'ЗОЛОТО',
         ggbr: 'ЗОЛОТО', dgld: 'ЗОЛОТО', cgo: 'ЗОЛОТО', vnxau: 'ЗОЛОТО', xnk: 'ЗОЛОТО', gldt: 'ЗОЛОТО',
@@ -46,7 +46,7 @@
         tgbp: 'GBP', zchf: 'CHF', jpyc: 'JPY', brz: 'BRL', brla: 'BRL', xsgd: 'SGD'
     };
 
-    /** Symbol/id -> base asset for tooltip "Обертка {base}" */
+    /** Symbol/id -> base asset for tooltip "Wrapped {base}" */
     const WRAPPED_BASE_MAP = {
         wbtc: 'BTC', weth: 'ETH', wbnb: 'BNB', wbt: 'BTC', wmatic: 'MATIC', wavax: 'AVAX',
         'wrapped-bitcoin': 'Bitcoin', 'wrapped-ether': 'Ethereum', 'wrapped-bnb': 'BNB',
@@ -105,7 +105,7 @@
         return new Set([...DEFAULT_STABLECOIN_SYMBOLS, ...fromLoader]);
     }
 
-    /** USD-pegged only (for menu "Стейблкоины USD") */
+    /** USD-pegged only (for menu "USD stablecoins") */
     function getUsdStablecoinSymbolsSet() {
         const all = getStablecoinSymbolsSet();
         const usd = new Set();
@@ -118,7 +118,7 @@
         return usd;
     }
 
-    /** Non-USD: metals, other fiat (for menu "Валюты, металлы, фиат") */
+    /** Non-USD: metals and other fiat (for menu "Currencies, metals, fiat") */
     function getNonUsdStablecoinSymbolsSet() {
         const all = getStablecoinSymbolsSet();
         const nonUsd = new Set();
@@ -218,7 +218,7 @@
     }
 
     /**
-     * Base asset label for wrapped tooltip ("Обертка {base}")
+     * Base asset label for wrapped tooltip ("Wrapped {base}")
      * @param {string} id - Coin ID
      * @param {string} symbol - Coin symbol
      * @param {string} name - Coin name
@@ -261,7 +261,7 @@
     }
 
     /**
-     * Peg label for stablecoin tooltip (ЗОЛОТО, СЕРЕБРО, USD, EUR, etc.)
+     * Peg label for stablecoin tooltip (GOLD, SILVER, USD, EUR, etc.)
      * @param {string} id - Coin ID
      * @param {string} symbol - Coin symbol
      * @returns {string}

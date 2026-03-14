@@ -2,8 +2,8 @@
 id: sk-7e4d2b
 title: "AI Copilot Delegation Rules"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: f476f231
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 541d46a0
 last_change: ""
 related_skills:
   - sk-3225b2

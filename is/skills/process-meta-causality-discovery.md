@@ -7,8 +7,8 @@ tags:
   - "#meta"
   - "#agent-behavior"
 reasoning_confidence: 0.9
-reasoning_audited_at: "2026-03-14"
-reasoning_checksum: ""
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: c32e4320
 last_change: "Initial: portrait for agents to recognize, evaluate, and apply meta-causalities"
 related_skills:
   - sk-3b1519

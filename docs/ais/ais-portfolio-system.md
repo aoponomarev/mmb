@@ -59,7 +59,7 @@ flowchart LR
   - `#JS-Ah6d2Adu (portfolio-segment-table.js)`
   - `#JS-dc3EKYZn (portfolio-form-modal-body.js)`
   - `#JS-9oNFE9kB (portfolio-view-modal-body.js)`
-- Secondary operational flow: settings menu export handlers in `#JS-yx22mAv8 (app-ui-root.js)` and import modal `#JS-Ri3c3bMt (portfolios-import-modal-body.js)` mutate the current local scope, but do not become a second CRUD owner.
+- Secondary operational flow: settings menu export handlers in `#JS-yx22mAv8` and import modal `#JS-Ri3c3bMt (portfolios-import-modal-body.js)` mutate the current local scope, but do not become a second CRUD owner.
 - Historical note: legacy CRUD donor path removed from repo after migration; active runtime now keeps only the header dropdown plus form/view modal flows.
 
 ### Module boundaries
@@ -157,7 +157,7 @@ Cloudflare является единственной активной remote rea
 ### Local import/export operations
 
 - `portfolioConfig.exportPortfolios('light' | 'full')` сериализует только текущую local scope копию портфелей.
-- `#JS-Ri3c3bMt (portfolios-import-modal-body.js)` использует `portfolioConfig.importPortfolios(payload, { mode })`, пишет только в текущую local scope и затем сообщает о результате через `portfolios-imported` с payload `{ count, mode, scope, explicitCloudSyncRequired }`.
+- `#JS-Ri3c3bMt` использует `portfolioConfig.importPortfolios(payload, { mode })`, пишет только в текущую local scope и затем сообщает о результате через `portfolios-imported` с payload `{ count, mode, scope, explicitCloudSyncRequired }`.
 - Import сбрасывает старую remote binding meta (`cloudflareId`) и переводит архивный объект в `syncState='local-only'` + `cloudSyncMode='explicit'`.
 - Import не запускает implicit Cloudflare/Postgres sync. Remote replica обновляется только через явный save/update flow портфеля, который переводит `cloudSyncMode` обратно в `auto`.
 
@@ -209,7 +209,7 @@ Cloudflare является единственной активной remote rea
 
 ### Optional observability hooks
 
-- `#JS-Vw45KZS7 (portfolio-observability.js)` публикует non-blocking событие `portfolio-observed`.
+- `#JS-Vw45KZS7` публикует non-blocking событие `portfolio-observed`.
 - Typed envelope содержит `source`, `action`, `stage`, `status`, `timestamp`, optional `portfolioId`, `cloudflareId`, `syncState`, `cloudSyncMode`, `scope`, `mode`, `reason`, `details` и typed `counts`.
 - Разрешённые `action`: `save | delete | import | sync | hydrate`.
 - Разрешённые `stage`: `local | cloud`.
@@ -237,16 +237,16 @@ Cloudflare является единственной активной remote rea
 
 ## Компоненты и Контракты (Components & Contracts)
 
-- `#JS-yx22mAv8 (app-ui-root.js)` — portfolio orchestration, auth coupling, hydrate/save/delete.
-- `#JS-aNzHSaKo (portfolio-config.js)` — canonical schema, scope-aware local storage, facade over domain logic.
-- `#JS-fJ68ZfEu (portfolio-adapters.js)` — Cloudflare payload adaptation и dormant Postgres export adapter.
-- `#JS-TnWsDTjK (portfolios-client.js)` — auth-scoped Cloudflare CRUD transport.
-- `#JS-Ri3c3bMt (portfolios-import-modal-body.js)` — local-only import flow for portfolio archives.
-- `#JS-Vw45KZS7 (portfolio-observability.js)` — typed optional observability envelope for save/import/sync/hydrate diagnostics.
-- `#JS-Ah6d2Adu (portfolio-segment-table.js)` — shared segment table shell for portfolio modal flows.
-- `#JS-dc3EKYZn (portfolio-form-modal-body.js)` — create/edit/rebalance form body.
-- `#JS-9oNFE9kB (portfolio-view-modal-body.js)` — read-only portfolio view body.
-- `#JS-fW2M5Jbg (workspace-config.js)` — transient table state used by portfolio formation.
+- `#JS-yx22mAv8` — portfolio orchestration, auth coupling, hydrate/save/delete.
+- `#JS-aNzHSaKo` — canonical schema, scope-aware local storage, facade over domain logic.
+- `#JS-fJ68ZfEu` — Cloudflare payload adaptation и dormant Postgres export adapter.
+- `#JS-TnWsDTjK` — auth-scoped Cloudflare CRUD transport.
+- `#JS-Ri3c3bMt` — local-only import flow for portfolio archives.
+- `#JS-Vw45KZS7` — typed optional observability envelope for save/import/sync/hydrate diagnostics.
+- `#JS-Ah6d2Adu` — shared segment table shell for portfolio modal flows.
+- `#JS-dc3EKYZn` — create/edit/rebalance form body.
+- `#JS-9oNFE9kB` — read-only portfolio view body.
+- `#JS-fW2M5Jbg` — transient table state used by portfolio formation.
 
 ## Контракты и гейты
 
@@ -258,5 +258,5 @@ Cloudflare является единственной активной remote rea
 ## Завершение / completeness
 
 - Этот AIS является primary SSOT для portfolio system.
-- `id:ais-3f4e5c` остаётся рядом как historical/legacy-oriented companion doc, а не как primary portfolio spec.
+- `id:ais-3f4e5c` остаётся рядом как historical companion doc с legacy-oriented notes, а не как primary portfolio spec.
 - Status: `complete` — import explicit-sync policy, typed observability envelope и multi-device conflict resolution входят в active runtime contract.

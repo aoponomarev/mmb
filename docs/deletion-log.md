@@ -27,3 +27,4 @@ last_updated: "2026-03-11"
 | `docs/backlog/mcp-ecosystem-roadmap.md` | — | roadmap реализован; оставшееся сомнительно; удаление по запросу пользователя |
 | `docs/plans/plan-unified-adapter-system.md` | — | дистиллирован в id:ais-d8e7f6 (docs/ais/ais-unified-adapter-system.md) и связанные skills; удаление по запросу пользователя |
 | `docs/done/plan-infrastructure-snapshots-contract.md` | — | дистиллирован в id:ais-8b2f1c (docs/ais/ais-infrastructure-snapshots.md) и id:sk-e8f2a1; удаление по запросу пользователя |
+| `docs/plans/plan-causality-graph-tools-modernization.md` | — | дистиллирован в id:ais-8d3c2a (docs/ais/ais-mcp-data-flow.md), id:ais-b6c7d8 (docs/ais/ais-causality-traceability.md) и id:sk-f4a2c8 (is/skills/mcp-causality-graph-tools.md); удаление по протоколу #for-distillation-cleanup |

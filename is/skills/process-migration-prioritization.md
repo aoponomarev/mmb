@@ -7,8 +7,8 @@ tags:
   - "#prioritization"
   - "#heuristics"
 reasoning_confidence: 0.85
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: d59b0f77
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 247b618b
 last_change: ""
 
 ---

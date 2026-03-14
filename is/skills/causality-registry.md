@@ -209,6 +209,8 @@ Add new hashes here before using in code. Skills and code share the same namespa
 | `#for-flow-preservation` | advisory | Protocols must not break the primary developer/agent flow. If a rule adds friction without proportional gain, seek a lighter alternative. Applies to automation vs manual, candidate markers vs immediate registry. |
 | `#for-weighted-explicit` | advisory | When intuition fails (many options, many factors), use explicit weighting instead of a single criterion. Reproducible, auditable decisions. Complements #for-multifactor-heuristics. |
 | `#for-document-the-choice` | advisory | When choosing A over B (Inline vs Defer, path X vs Y), record the rationale in plan or backlog. Ensures traceability and handoff clarity. |
+| `#for-causality-graph-tools` | advisory | MCP graph tools (`get_causality_files`, `get_causality_reverse`, `resolve_causality_context`) provide structured graph queries with anchor_type and line_number. Agents should prefer these tools over manual grep or `causality_graph://` resource for impact analysis and context resolution. |
+| `#for-causality-scan-contract` | advisory | Causality scanning scope is centralized in `causality-scan-contracts.js`. Both validators and MCP graph consume this shared contract to prevent dir/ext coverage drift between the invariant gate and existence validator. |
 
 ## Aliases / Deprecated
 

@@ -3,7 +3,7 @@ id: sk-d599bd
 title: "Architecture: Causality Traceability System"
 reasoning_confidence: 0.92
 reasoning_audited_at: 2026-03-14
-reasoning_checksum: ""
+reasoning_checksum: 1db1e884
 last_change: "#for-explicit-over-implicit — align skill with current registry-backed causality traceability system"
 related_ais:
   - ais-b6c7d8

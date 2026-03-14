@@ -73,6 +73,12 @@ function initSchema() {
 
 initSchema();
 
-// console.log(`Database initialized successfully at ${DB_PATH}`); // Commented out to prevent breaking MCP JSON-RPC stdout
+// Migration: add line_number to dependency_graph if absent
+try {
+    const cols = db.pragma('table_info(dependency_graph)');
+    if (!cols.some(c => c.name === 'line_number')) {
+        db.exec('ALTER TABLE dependency_graph ADD COLUMN line_number INTEGER');
+    }
+} catch { /* table might not exist yet on first run */ }
 
 export { db };

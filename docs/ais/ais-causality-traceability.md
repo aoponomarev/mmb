@@ -1,6 +1,6 @@
 ---
 id: ais-b6c7d8
-status: incomplete
+status: active
 last_updated: "2026-03-14"
 related_skills:
   - sk-d599bd
@@ -173,12 +173,15 @@ flowchart LR
 
 - #JS-69pjw66d (validate-causality.js) — все `#for-*` / `#not-*` в коде существуют в registry.
 - #JS-QxwSQxtt (validate-skill-anchors.js) — `@skill-anchor` ссылается на существующий skill с корректным hash.
-- #JS-eG4BUXaS (validate-causality-invariant.js) — удаление hash требует exceptions или полной зачистки.
+- #JS-eG4BUXaS (validate-causality-invariant.js) — удаление hash требует exceptions или полной зачистки; syncs full dependency_graph (code + skills + AIS + rules) with line_number.
+- `causality-scan-contracts.js` — shared scan contract (dirs, exts, anchor types) consumed by both validators and MCP graph.
+- `parse-causality-registry.js` — structured parser for id:sk-3b1519 (enforcement + formulation).
+- MCP tools: `get_causality_files`, `get_causality_reverse`, `resolve_causality_context` — structured graph queries.
 - id:ais-9f4e2d (docs/ais/ais-anti-staleness.md) — stale rationale detection и re-audit loop.
 
 ## Завершение / completeness
 
 - `Implemented`: registry-backed causality system, code/document anchors, harvesting, rebinding protocol, exception ledger, gates.
 - `Implemented`: meta-causalities are now part of the same canonical registry namespace and have a dedicated agent portrait in id:sk-dcc232.
-- `Rollout gap`: dedicated causality graph visualization/tooling is still pending; current navigation remains registry + grep + validators + indices.
-- Status: `incomplete` until graph tooling from causality modernization plan is implemented.
+- `Implemented`: structured MCP graph tools (`get_causality_files`, `get_causality_reverse`, `resolve_causality_context`) backed by dependency_graph with anchor_type + line_number. Shared scan contract (`causality-scan-contracts.js`) ensures coverage parity across validators and graph. Registry parser provides formulation lookups.
+- Status: `active`.

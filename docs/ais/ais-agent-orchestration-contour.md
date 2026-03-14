@@ -166,7 +166,7 @@ flowchart TB
   - `get_skill_context(skill_ids[])` — агрегирует skill:// + telemetry + dependency_graph для контекста.
   - `propose_workflow({ trigger, steps })` — регистрирует предложенный воркфлоу в SKILL_CANDIDATES (как в id:bskill-2cab14 n8n flow, но без n8n).
 
-- **Существующие tools остаются:** run_preflight, harvest_causalities, query_telemetry, skill://, causality_graph://.
+- **Существующие tools остаются:** run_preflight, harvest_causalities, query_telemetry, skill://, causality_graph://, get_causality_files, get_causality_reverse, resolve_causality_context.
 
 ### 3. Единое поле скиллов (Unified Skill Plane)
 
@@ -180,9 +180,9 @@ MCP resource `skill://[id]` инжектирует telemetry (использов
 
 ### 4. Казуальность и инварианты (Causality Plane)
 
-- **dependency_graph** — source_hash → target_file. Заполняется #JS-eG4BUXaS (validate-causality-invariant.js).
+- **dependency_graph** — source_hash → target_file + anchor_type + line_number. Заполняется #JS-eG4BUXaS (validate-causality-invariant.js) из всех scan dirs (code, skills, AIS, rules).
 - **raw_causalities** — backlog для harvest. Агент не может удалить #for-X в одном месте без обновления графа.
-- **causality_graph://** — MCP resource для «какие файлы завязаны на этот hash».
+- **causality_graph://** — legacy MCP resource (backward-compatible); предпочитайте structured tools: `get_causality_files`, `get_causality_reverse`, `resolve_causality_context`.
 
 Контур гарантирует: любой агентский рефакторинг проходит через preflight → invariant check.
 

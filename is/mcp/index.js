@@ -18,6 +18,11 @@ import { harvestCausalitiesToolDef, harvestCausalitiesHandler } from "./tools/ha
 import { cfD1QueryToolDef, cfD1QueryHandler, cfKvGetToolDef, cfKvGetHandler } from "./tools/cloudflare.js";
 import { distillPlanToolDef, distillPlanHandler } from "./tools/distill-plan.js";
 import { resolveIdToolDef, resolveIdHandler } from "./tools/resolve-id.js";
+import {
+    getCausalityFilesToolDef, getCausalityFilesHandler,
+    getCausalityReverseToolDef, getCausalityReverseHandler,
+    resolveCausalityContextToolDef, resolveCausalityContextHandler,
+} from "./tools/causality-graph-tools.js";
 import { handleSkillResource, handleCausalityGraphResource, handleCausalityBacklogResource } from "./resources.js";
 
 const server = new Server({
@@ -46,6 +51,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             cfKvGetToolDef,
             distillPlanToolDef,
             resolveIdToolDef,
+            getCausalityFilesToolDef,
+            getCausalityReverseToolDef,
+            resolveCausalityContextToolDef,
             {
                 name: "ping",
                 description: "Test the MCP server connection",
@@ -101,6 +109,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (name === "resolve_id") {
         return await resolveIdHandler(args);
+    }
+
+    if (name === "get_causality_files") {
+        return await getCausalityFilesHandler(args);
+    }
+
+    if (name === "get_causality_reverse") {
+        return await getCausalityReverseHandler(args);
+    }
+
+    if (name === "resolve_causality_context") {
+        return await resolveCausalityContextHandler(args);
     }
 
     throw new Error(`Tool not found: ${name}`);

@@ -14,7 +14,8 @@ Before forming any task completion report (summary, "выполнено", ито
 2. Add new causality hashes to causality-registry.md.
 3. Create skills if explicit automation fragments or specific approaches were discovered.
 4. Update contracts if new gates/config were introduced.
-5. Only then form the report.
+5. If the task touched code with `@causality` — verify impact via `get_causality_reverse` before the report.
+6. Only then form the report.
 
 ## Violation
 Report without completing the checklist = contract violation. Docs and causalities must stay live-actual.

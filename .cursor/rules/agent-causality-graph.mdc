@@ -1,0 +1,29 @@
+---
+description: Use MCP causality graph tools for impact analysis when refactoring code with @causality anchors, modifying #for-X hashes, or assessing blast radius of architectural changes.
+globs:
+  - "**/*.js"
+  - "**/*.md"
+  - "**/*.mdc"
+alwaysApply: false
+---
+
+# Causality Graph Tools Protocol
+
+When the task involves refactoring, causality hashes (#for-X), or impact analysis, prefer these MCP tools over manual grep:
+
+## Tools
+
+1. **`get_causality_files(hash)`** — files anchored to a hash, with anchor_type and line_number.
+2. **`get_causality_reverse(file)`** — all hashes referencing a file. Use before modifying a file to understand its rationale constraints.
+3. **`resolve_causality_context(hash)`** — full context: files, registry formulation, enforcement level, co-occurring hashes. Use before modifying or removing a hash.
+
+## When to Use
+
+- Before removing or renaming a `@causality` / `@skill-anchor` hash
+- Before refactoring a file that has causality anchors
+- When assessing blast radius of an architectural change
+- When the pre-report checklist requires impact verification
+
+## Reference
+
+Full skill: id:sk-f4a2c8 (is/skills/mcp-causality-graph-tools.md).

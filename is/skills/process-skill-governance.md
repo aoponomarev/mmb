@@ -2,8 +2,8 @@
 id: sk-d763e7
 title: "Process: Skill Placement & Profiling"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: d0185ad5
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 7e126e5d
 last_change: ""
 
 ---

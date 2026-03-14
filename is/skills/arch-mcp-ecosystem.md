@@ -32,7 +32,7 @@ last_change: "#for-local-runtime-disposable — ignore local MCP runtime sqlite 
     If an MCP Tool exists for an operation (e.g., `run_preflight`, `create_skill`), AI agents MUST use the tool rather than falling back to raw shell execution. Tools ensure telemetry is logged.
 
 3.  **Invariant Graph Sync:**
-    The `validate-causality-invariant.js` script acts as the bridge between static code and the MCP server. Upon successful validation, it dumps the entire anchor dependency graph into the SQLite `dependency_graph` table. This powers the `causality_graph://` resource.
+    The `validate-causality-invariant.js` script acts as the bridge between static code and the MCP server. Upon successful validation, it syncs the full dependency graph (code anchors + skills + AIS + rules) into `dependency_graph` with `anchor_type` and `line_number`. This powers the `causality_graph://` resource and the structured graph tools (`get_causality_files`, `get_causality_reverse`, `resolve_causality_context`).
 
 ### Runtime Churn Handling
 

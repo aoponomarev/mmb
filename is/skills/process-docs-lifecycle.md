@@ -2,8 +2,8 @@
 id: sk-0e193a
 title: "Docs Lifecycle Pipeline"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-11
-reasoning_checksum: 3a76958c
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 0f1afaf7
 last_change: "#for-ais-rollout-gap-marking — AIS задает target state; rollout-gap обязан быть отмечен в AIS и рядом с временной веткой кода"
 
 ---

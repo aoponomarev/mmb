@@ -89,4 +89,4 @@ The event bus handles **cross-component communication** that is not suitable for
 
 #JS-fW36ebbg (fallback-monitor.js) tracks provider fallback events (e.g., when primary data provider fails and secondary activates) for debugging and health monitoring.
 
-#JS-Vw45KZS7 (portfolio-observability.js) complements this plane for the portfolio domain only: it stores recent typed events in memory and republishes them through the Event Bus without introducing any runtime dependency from the business flow to its observers.
+#JS-Vw45KZS7 complements this plane for the portfolio domain only: it stores recent typed events in memory and republishes them through the Event Bus without introducing any runtime dependency from the business flow to its observers.

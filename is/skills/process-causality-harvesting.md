@@ -2,8 +2,8 @@
 id: sk-802f3b
 title: "Causality Harvesting"
 reasoning_confidence: 1.0
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 5b219aeb
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: 6e678c74
 last_change: "#for- vs #not- — use #not- when formalizing prohibition/rejection"
 
 ---

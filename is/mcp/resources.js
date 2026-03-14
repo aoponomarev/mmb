@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../contracts/path-contracts.js';
 import { db } from './db.js';
+import { queryFilesByHash } from './tools/causality-graph-tools.js';
 
 /**
  * Handle skill:// requests.
@@ -80,11 +81,8 @@ export function handleCausalityBacklogResource(uri) {
     };
 }
 export function handleCausalityGraphResource(uri) {
-    // uri format: causality_graph://#for-classes-add-remove
     const hash = uri.replace('causality_graph://', '');
-    
-    const stmt = db.prepare(`SELECT target_file FROM dependency_graph WHERE source_hash = ?`);
-    const rows = stmt.all(hash);
+    const rows = queryFilesByHash(hash);
 
     let text = `# Causality Graph for ${hash}\n\n`;
     if (rows.length === 0) {
@@ -92,7 +90,7 @@ export function handleCausalityGraphResource(uri) {
     } else {
         text += `Found ${rows.length} files:\n`;
         for (const row of rows) {
-            text += `- ${row.target_file}\n`;
+            text += `- ${row.target_file} (${row.anchor_type}${row.line_number ? `:${row.line_number}` : ''})\n`;
         }
     }
 

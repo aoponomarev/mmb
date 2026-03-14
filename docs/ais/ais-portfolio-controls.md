@@ -36,7 +36,7 @@ related_ais:
 - #JS-fJ68ZfEu (portfolio-adapters.js) — transport/adaptation layer для local <-> Cloudflare <-> external payloads.
 - #JS-fW2M5Jbg (workspace-config.js) — workspace SSOT для `selectedCoinIds` и `selectedCoinKeyMetrics`.
 - #JS-Ri3c3bMt (portfolios-import-modal-body.js) — secondary import flow for local portfolio archives.
-- #CSS-UB45FeQM (styles/wrappers/button.css), #CSS-bo3B2GXy (styles/wrappers/button-group.css), #CSS-sA2KcKoL (styles/wrappers/dropdown.css), #CSS-1bKCV1Y8 (styles/wrappers/dropdown-menu-item.css) — UI-правила отображения.
+- #CSS-UB45FeQM (button.css), #CSS-bo3B2GXy (button-group.css), #CSS-sA2KcKoL (dropdown.css), #CSS-1bKCV1Y8 (dropdown-menu-item.css) — UI-правила отображения.
 
 ## Актуальные runtime-контракты
 

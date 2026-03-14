@@ -4,8 +4,8 @@ title: "Architecture Change During Plan Execution"
 tags: "[#process, #plan, #architecture, #risk, #verification]"
 status: active
 reasoning_confidence: 0.95
-reasoning_audited_at: "2026-03-14"
-reasoning_checksum: ""
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: bb27c68d
 last_change: "#for-causality-impact-before-change — §1a Causality Hash Pre-Check: conditional reverse lookup before hash change, minimal output, E≥3→rebind"
 
 ---

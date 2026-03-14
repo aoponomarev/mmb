@@ -7,8 +7,8 @@ tags:
   - "#naming"
   - "#mcp"
 reasoning_confidence: 0.9
-reasoning_audited_at: 2026-03-09
-reasoning_checksum: 4ea7622a
+reasoning_audited_at: 2026-03-14
+reasoning_checksum: c8ae1e67
 last_change: "#for-app-backup-restore-no-purge — app backup archive structure and restore flow"
 related_skills:
   - sk-0e193a
