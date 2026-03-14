@@ -19,6 +19,17 @@ last_change: "#for-browser-runtime-smoke — browser transport changes require r
 - **#for-plan-execution-protocol** Without a strict step-by-step protocol, agents skip verification, leave stale docs, and accumulate tech debt. Each plan execution must follow the same checklist: verify → update AIS → fix bugs → add artifacts as discovered.
 - **#for-plan-iterative-improvement** Plans are living documents. If execution reveals a better sequence, a missing guard, or a hidden risk, the plan must be improved immediately as long as prior completed work remains valid.
 - **#for-browser-runtime-smoke** Some regressions are invisible to Node tests and static inspection because they emerge only in real browser runtime (`file://`, host API binding, transport policy). Plan execution must include that environment when browser transport is touched.
+- **#for-arch-change-during-plan** Architecture changes mid-execution (AIS, contracts, schema, gates) create cascade risk. Full impact analysis and verification must complete before proceeding. Prefer slower execution over accumulating hidden tech debt.
+
+## Risk Tiers for Plan Amendments
+
+| Tier | Change type | Blast radius | Verification | Action |
+|------|-------------|--------------|--------------|--------|
+| **T1** | Add step, clarification, anti-pattern | Minimal | Standard preflight | Inline, no extra checks |
+| **T2** | Reorder steps, add guard | Medium | Preflight + dependency check | Inline if backward-compatible |
+| **T3** | Change AIS, contracts, path-contracts, DB schema, gates | High | Architecture-Change Protocol (id:sk-a8c3e1) | Inline only after full protocol completion |
+
+Apply **#for-multifactor-heuristics** when deciding Inline vs Defer for T3: weigh benefit, harm, reversibility, contract alignment, user impact. Prefer Defer when uncertain.
 
 ## Core Rules
 
@@ -30,6 +41,7 @@ last_change: "#for-browser-runtime-smoke — browser transport changes require r
 6. **Plan backlog** — Per id:sk-0e193a (#for-plan-backlog): record deferred fixes in `docs/backlog/fix-<plan-slug>.md`.
 7. **Refine the plan recursively** — If execution reveals a missing step, a better ordering, or a required safeguard, update the current file in `docs/plans/` before proceeding. Improvements must be backward-compatible and must not invalidate already completed results.
 8. **Verify browser runtime when transport changes** — If the task changes browser adapters, proxy routing, or fetch injection, run a real browser smoke on the active entrypoint before handoff. A green Node suite is necessary but not sufficient.
+9. **T3 Architecture Change** — When an amendment crosses into T3 (AIS, contracts, schema, gates), STOP linear execution. Follow id:sk-a8c3e1 (process-arch-change-during-plan) in full. Do not proceed to the next plan step until the Architecture-Change Protocol completes and all gates pass. Do not leave docs/code out of sync.
 
 ## Contracts
 

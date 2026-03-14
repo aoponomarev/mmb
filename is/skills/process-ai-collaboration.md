@@ -4,7 +4,7 @@ title: "AI Collaboration Protocol"
 reasoning_confidence: 0.9
 reasoning_audited_at: 2026-03-11
 reasoning_checksum: a855b238
-last_change: "#for-causality-rebinding — before writing a causality exception, audit whether the old hash was superseded and migrate remaining anchors"
+last_change: "Problematic Coding Situation multifactor heuristic; Agentic Self-Correction + skill-application-failure trigger"
 related_skills:
   - sk-0e193a
   - sk-3b1519
@@ -86,6 +86,20 @@ Before creating a new skill file:
    - Genuinely unique content → **Create** new file.
 3. State **why** you chose Update vs Create in your response.
 
+### Problematic Coding Situation → Formalization (#for-multifactor-heuristics)
+
+**Context**: Not every difficult moment warrants a new skill. A multifactor heuristic prevents skill inflation while capturing meaningful pitfalls.
+
+**Factors to weigh** (see #for-multifactor-heuristics): complexity of logic; discovery cost (obvious vs non-obvious cause); repeatability (single case vs cross-domain pattern); scope of impact; documentation gaps; causality churn.
+
+**Minimum**: Always record `@causality` in code when the rationale is non-obvious.
+
+**Skill creation**: Create when **multiple factors align** (e.g., complex logic + non-obvious cause + high repeatability or impact). Simple cases (a few rewrites of trivial logic with no gotchas) → causality only, no skill.
+
+**When in doubt**: Prefer causality-only; formalize into skill when the pattern repeats or impact is high.
+
+**If applying a skill causes these problems**: See Agentic Self-Correction Protocol below — use `propose_skill` with `action=update` (#for-skill-refinement-on-application-failure).
+
 ### Agent Command Dictionary
 
 **Full reference:** id:sk-87700e (is/skills/references/commands.md) (read on demand for ВЗП, КАИ, АИС, ЕИП, ФИН, ФИНС, ОМК).
@@ -98,7 +112,7 @@ Before creating a new skill file:
 
 **The loop**: (1) Detect — agent encounters a rule that contradicts reality or causes failure; (2) Propose — agent uses `propose_skill` with `action=update` to flag discrepancy; (3) Halt — if error is critical, agent stops and asks for clarification.
 
-**Triggers**: Broken links (relative paths leading to 404s); stale configs (rules referencing renamed/deleted files); logic gaps (missing edge cases in documented workflow).
+**Triggers**: Broken links (relative paths leading to 404s); stale configs (rules referencing renamed/deleted files); logic gaps (missing edge cases in documented workflow); **skill application failure** (#for-skill-refinement-on-application-failure) — applying a skill leads to repeated rewrites, contradictions, or the pitfalls described in Problematic Coding Situation above.
 
 **Hard constraints**: No silent fixes — do NOT edit a Skill file directly to fix logic error without notifying the user; all corrections logged via V2 Dashboard or proposed as new tasks в `docs/backlog/` (см. id:ais-8982e7#LIR-009.A4).
 
