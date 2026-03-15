@@ -1,7 +1,7 @@
 ---
 id: docs-glossary
 status: active
-last_updated: "2026-03-07"
+last_updated: "2026-03-15"
 
 ---
 
@@ -55,4 +55,4 @@ last_updated: "2026-03-07"
 
 ## Domain Terms (Market Data)
 
-- **Стейблкоин (Stablecoin / Pegged Asset)** — Токен, привязанный к базовому активу: фиат (USD, EUR), металлы (золото, серебро), нефть и т.п. В проекте: coins.json (GitHub CDN) с разделением по peg; генератор — market-cache + stablecoin-filter (по цене). Выбор стейблов — без сетевого вызова при загруженном coins.json.
+- **Стейблкоин (Stablecoin / Pegged Asset)** — Токен, привязанный к базовому активу: фиат (USD, EUR), металлы (золото, серебро, платина, палладий), сырьё (нефть) и т.п. В проекте: `coins.json` (GitHub CDN) хранит реестр в виде `stable.fiat.{peg}` и `stable.commodity.{peg}`; генератор опирается на market-cache + stablecoin-filter (по цене), а metal/raw split внутри `commodity` вычисляется программно по peg.

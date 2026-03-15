@@ -1,7 +1,7 @@
 ---
 id: ais-82c9d0
 status: incomplete
-last_updated: "2026-03-09"
+last_updated: "2026-03-15"
 related_skills:
   - sk-3c832d
   - sk-02d3ea
@@ -47,7 +47,7 @@ related_ais:
 - `coins-list` — список монет
 - `api-cache` — ответы API
 - `market-metrics` — рыночные метрики
-- `coins-metadata` — стейблкоины по peg (usd, gold, eur, …) из coins.json (GitHub CDN); генератор — market-cache + stablecoin-filter
+- `coins-metadata` — реестр `coins.json` (GitHub CDN): `stable.fiat.{peg}` + `stable.commodity.{peg}` + `wrapped` + `lst`; runtime loader разворачивает peg-группы в единый список для `coinsConfig`, а UI-выбор сверяет и `id`, и `symbol`, чтобы не зависеть от формы хранения в JSON
 - `crypto-news-state` — состояние новостей
 
 #### Cache Manager API

@@ -3285,22 +3285,41 @@
                     this.saveTableSettings();
                 },
 
+                async loadCoinsMetadataOnDemand(forceRefresh = false) {
+                    if (!window.coinsMetadataLoader || typeof window.coinsMetadataLoader.load !== 'function') {
+                        return;
+                    }
+
+                    try {
+                        await window.coinsMetadataLoader.load({ forceRefresh, ttl: 24 * 60 * 60 * 1000 });
+                    } catch (error) {
+                        console.warn('app-ui-root: on-demand coins metadata load failed', error);
+                    }
+                },
+
+                coinMatchesReferenceSet(coin, refs) {
+                    if (!coin || !(refs instanceof Set)) return false;
+
+                    const coinId = String(coin.id || '').toLowerCase();
+                    const symbol = String(coin.symbol || '').toLowerCase();
+                    return refs.has(coinId) || refs.has(symbol);
+                },
+
                 /**
                  * Select USD stablecoins only (deselect all and select).
                  */
-                handleSelectStablecoinsUsd() {
+                async handleSelectStablecoinsUsd() {
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
+
+                    await this.loadCoinsMetadataOnDemand(false);
 
                     const set = window.coinsConfig && typeof window.coinsConfig.getUsdStablecoinSymbolsSet === 'function'
                         ? window.coinsConfig.getUsdStablecoinSymbolsSet()
                         : new Set();
 
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => {
-                            const symbol = coin.symbol ? coin.symbol.toLowerCase() : '';
-                            return set.has(symbol);
-                        })
+                        .filter(coin => this.coinMatchesReferenceSet(coin, set))
                         .map(coin => coin.id);
                     this.saveTableSettings();
 
@@ -3315,21 +3334,20 @@
                 },
 
                 /**
-                 * Select non-USD (currencies, metals, other fiat).
+                 * Select non-USD stablecoins (fiat + commodity-backed).
                  */
-                handleSelectStablecoinsOther() {
+                async handleSelectStablecoinsOther() {
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
+
+                    await this.loadCoinsMetadataOnDemand(false);
 
                     const set = window.coinsConfig && typeof window.coinsConfig.getNonUsdStablecoinSymbolsSet === 'function'
                         ? window.coinsConfig.getNonUsdStablecoinSymbolsSet()
                         : new Set();
 
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => {
-                            const symbol = coin.symbol ? coin.symbol.toLowerCase() : '';
-                            return set.has(symbol);
-                        })
+                        .filter(coin => this.coinMatchesReferenceSet(coin, set))
                         .map(coin => coin.id);
                     this.saveTableSettings();
 
@@ -3344,84 +3362,61 @@
                 },
 
                 /**
-                 * Select wrapped (deselect all and select wrapped)
+                 * Select wrapped assets (deselect all and select wrapped).
                  */
-                handleSelectWrapped() {
+                async handleSelectWrapped() {
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
 
-                    // Load metadata on-demand when menu selected
-                    const loadMetadata = async () => {
-                        if (window.coinsMetadataLoader && typeof window.coinsMetadataLoader.load === 'function') {
-                            try {
-                                await window.coinsMetadataLoader.load({ forceRefresh: true, ttl: 24 * 60 * 60 * 1000 });
-                            } catch (error) {
-                                console.warn('handleSelectWrapped: ошибка loading метаdata по запросу', error);
-                            }
-                        }
-                    };
+                    await this.loadCoinsMetadataOnDemand(true);
 
-                    // Load synchronously before selection
-                    return loadMetadata().then(() => {
-                        const wrappedIds = window.coinsConfig && typeof window.coinsConfig.getWrappedCoins === 'function'
-                            ? new Set(window.coinsConfig.getWrappedCoins())
-                            : new Set();
+                    const wrappedIds = window.coinsConfig && typeof window.coinsConfig.getWrappedCoins === 'function'
+                        ? new Set(window.coinsConfig.getWrappedCoins())
+                        : new Set();
 
-                        // Deselect all and select only wrappers
-                        this.selectedCoinIds = visibleCoins
-                            .filter(coin => wrappedIds.has(coin.id))
-                            .map(coin => coin.id);
+                    this.selectedCoinIds = visibleCoins
+                        .filter(coin => wrappedIds.has(String(coin.id || '').toLowerCase()))
+                        .map(coin => coin.id);
 
-                        this.saveTableSettings();
+                    this.saveTableSettings();
 
-                        if (this.selectedCoinIds.length === 0 && window.messagesStore) {
-                            window.messagesStore.addMessage({
-                                type: 'warning',
-                                text: 'Обертки не найдены в текущем списке',
-                                scope: 'global',
-                                duration: 3000
-                            });
-                        }
-                    });
+                    if (this.selectedCoinIds.length === 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'Обертки не найдены в текущем списке',
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
                 },
 
                 /**
-                 * Select LST (deselect all and select LST)
+                 * Select LST assets (deselect all and select LST).
                  */
-                handleSelectLst() {
+                async handleSelectLst() {
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
 
-                    const loadMetadata = async () => {
-                        if (window.coinsMetadataLoader && typeof window.coinsMetadataLoader.load === 'function') {
-                            try {
-                                await window.coinsMetadataLoader.load({ forceRefresh: true, ttl: 24 * 60 * 60 * 1000 });
-                            } catch (error) {
-                                console.warn('handleSelectLst: ошибка loading метаdata по запросу', error);
-                            }
-                        }
-                    };
+                    await this.loadCoinsMetadataOnDemand(true);
 
-                    return loadMetadata().then(() => {
-                        const lstIds = window.coinsConfig && typeof window.coinsConfig.getLstCoins === 'function'
-                            ? new Set(window.coinsConfig.getLstCoins())
-                            : new Set();
+                    const lstIds = window.coinsConfig && typeof window.coinsConfig.getLstCoins === 'function'
+                        ? new Set(window.coinsConfig.getLstCoins())
+                        : new Set();
 
-                        this.selectedCoinIds = visibleCoins
-                            .filter(coin => lstIds.has(coin.id))
-                            .map(coin => coin.id);
+                    this.selectedCoinIds = visibleCoins
+                        .filter(coin => lstIds.has(String(coin.id || '').toLowerCase()))
+                        .map(coin => coin.id);
 
-                        this.saveTableSettings();
+                    this.saveTableSettings();
 
-                        if (this.selectedCoinIds.length === 0 && window.messagesStore) {
-                            window.messagesStore.addMessage({
-                                type: 'warning',
-                                text: 'LST не найдены в текущем списке',
-                                scope: 'global',
-                                duration: 3000
-                            });
-                        }
-                    });
+                    if (this.selectedCoinIds.length === 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'LST не найдены в текущем списке',
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
                 },
 
                 /**

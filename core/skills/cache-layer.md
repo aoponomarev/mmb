@@ -38,6 +38,8 @@ Cache keys fall into two categories:
 **Versioned** (auto-invalidated on app version change) — keys whose data structure depends on an external API's response format:
 - `icons-cache`, `coins-list`, `api-cache`, `market-metrics`, `crypto-news-state`, `coins-metadata`
 
+`coins-metadata` caches the published `coins.json` registry: `stable.fiat.{peg}`, `stable.commodity.{peg}`, `wrapped`, `lst`. The runtime loader flattens stable peg groups into one list for `coinsConfig`, but the cached payload must keep the nested registry shape intact.
+
 **Unversioned** (persisted across updates) — user-owned data and UI state:
 - `settings`, `portfolios`, `strategies`, `time-series`, `history`, `theme`, `timezone`, `favorites`, `yandex-api-key`
 

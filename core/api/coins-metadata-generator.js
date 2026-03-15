@@ -17,6 +17,8 @@
         branch: 'main'
     };
 
+    const COMMODITY_PEGS = new Set(['gold', 'silver', 'platinum', 'palladium', 'oil']);
+
     /**
      * Run generation and update process
      */
@@ -34,7 +36,7 @@
         }
 
         try {
-            // 1. Fetch top coins from market-cache (cap + vol 250)
+            // The generator derives its base list from market-cache so runtime and published metadata follow the same source.
             console.log('📡 Загрузка монет из market-cache (cap|vol 250)...');
             const coinsMarketCap = await getTopCoinsFromMarket(500, 'market_cap');
             const coinsVolume = await getTopCoinsFromMarket(250, 'volume');
@@ -42,14 +44,16 @@
             coinsVolume.forEach(c => { if (!byId.has(c.id)) byId.set(c.id, c); });
             const topCoins = Array.from(byId.values());
 
-            // 2. Extract stablecoins by price peg
+            // Stablecoin grouping must be derived from peg detection, not from a hand-maintained id mapping.
             console.log('📡 Сбор стейблкоинов из market-cache...');
             let stableList = [];
             if (window.stablecoinFilter && typeof window.stablecoinFilter.extractFromCoins === 'function') {
                 stableList = window.stablecoinFilter.extractFromCoins(topCoins);
             }
 
-            // 3. Detect Wrapped/LST (heuristics)
+            const existingMetadata = await loadCurrentMetadata(token);
+
+            // Wrapped and LST still use heuristics because the source payload does not carry first-class flags for these types.
             console.log('📡 Поиск Wrapped и LST монет...');
             const wrappedIds = [];
             const lstIds = [];
@@ -68,24 +72,23 @@
                 }
             });
 
-            // 4. Build stable by peg (usd, eur, gold, silver, oil, etc.)
-            const stableByPeg = {};
-            stableList.forEach(s => {
-                const peg = s.baseCurrency || 'other';
-                if (!stableByPeg[peg]) stableByPeg[peg] = [];
-                stableByPeg[peg].push(s.id);
-            });
-            Object.keys(stableByPeg).forEach(k => stableByPeg[k].sort());
+            const stable = buildStableMetadata(stableList, existingMetadata?.stable);
 
             const result = {
-                stable: stableByPeg,
+                stable,
                 wrapped: Array.from(new Set(wrappedIds)).sort(),
                 lst: Array.from(new Set(lstIds)).sort(),
                 updatedAt: Date.now()
             };
 
-            const totalStable = stableList.length;
-            const pegSummary = Object.entries(stableByPeg).map(([k, v]) => `${k}:${v.length}`).join(', ');
+            const totalStable = [
+                ...Object.values(stable.fiat),
+                ...Object.values(stable.commodity)
+            ].reduce((sum, ids) => sum + ids.length, 0);
+            const pegSummary = [
+                ...Object.entries(stable.fiat).map(([k, v]) => `fiat.${k}:${v.length}`),
+                ...Object.entries(stable.commodity).map(([k, v]) => `commodity.${k}:${v.length}`)
+            ].join(', ');
             console.log(`✅ Сформировано: ${totalStable} стейблов (${pegSummary}), ${result.wrapped.length} оберток, ${result.lst.length} LST`);
 
             await uploadToGithub(result, token);
@@ -108,16 +111,110 @@
         throw new Error('dataProviderManager недоступен');
     }
 
+    function buildStableMetadata(stableList, currentStable) {
+        const detectedIds = new Set();
+        const stable = {
+            fiat: {},
+            commodity: {}
+        };
+
+        stableList.forEach(item => {
+            const id = String(item?.id || '').toLowerCase();
+            const peg = normalizePeg(item?.baseCurrency);
+            if (!id || !peg) return;
+
+            detectedIds.add(id);
+            addStableId(stable, peg, id);
+        });
+
+        // Preserve curated ids that the price detector cannot reliably regenerate from market-cache alone.
+        if (currentStable && typeof currentStable === 'object') {
+            ['fiat', 'commodity'].forEach(section => {
+                const groups = currentStable[section];
+                if (!groups || typeof groups !== 'object' || Array.isArray(groups)) return;
+
+                Object.entries(groups).forEach(([peg, ids]) => {
+                    if (!Array.isArray(ids)) return;
+
+                    ids.forEach(rawId => {
+                        const id = String(rawId || '').toLowerCase();
+                        if (!id || detectedIds.has(id)) return;
+                        addStableId(stable, normalizePeg(peg), id);
+                    });
+                });
+            });
+        }
+
+        return {
+            fiat: sortStableGroups(stable.fiat),
+            commodity: sortStableGroups(stable.commodity)
+        };
+    }
+
+    function addStableId(stable, peg, id) {
+        const section = isCommodityPeg(peg) ? 'commodity' : 'fiat';
+        if (!stable[section][peg]) {
+            stable[section][peg] = [];
+        }
+        if (!stable[section][peg].includes(id)) {
+            stable[section][peg].push(id);
+        }
+    }
+
+    function isCommodityPeg(peg) {
+        return COMMODITY_PEGS.has(normalizePeg(peg));
+    }
+
+    function normalizePeg(peg) {
+        const normalized = String(peg || '').toLowerCase();
+        if (!normalized) return '';
+        return normalized === 'gold_small' ? 'gold' : normalized;
+    }
+
+    function sortStableGroups(groups) {
+        return Object.fromEntries(
+            Object.entries(groups)
+                .sort(([left], [right]) => left.localeCompare(right))
+                .map(([peg, ids]) => [peg, [...ids].sort()])
+        );
+    }
+
+    async function loadCurrentMetadata(token) {
+        try {
+            const response = await fetch(getGithubContentsUrl(), {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (!response.ok) {
+                return null;
+            }
+
+            const fileData = await response.json();
+            if (!fileData.content) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(atob(String(fileData.content).replace(/\n/g, '')));
+            } catch (error) {
+                console.warn('coinsMetadataGenerator: current metadata parse failed', error);
+                return null;
+            }
+        } catch (error) {
+            console.warn('coinsMetadataGenerator: current metadata fetch failed', error);
+            return null;
+        }
+    }
+
     /**
      * Upload to GitHub API
      */
     async function uploadToGithub(data, token) {
-        const url = `https://api.github.com/repos/${CONFIG.repo}/contents/${CONFIG.path}`;
+        const url = getGithubContentsUrl();
         const content = btoa(JSON.stringify(data, null, 2));
 
         console.log(`📤 Загрузка в GitHub: ${CONFIG.repo}/${CONFIG.path}...`);
 
-        // 1. Get current file SHA
         let sha = null;
         try {
             const checkRes = await fetch(url, {
@@ -129,7 +226,6 @@
             }
         } catch (e) {}
 
-        // 2. PUT request
         const res = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -157,6 +253,10 @@
                 scope: 'global'
             });
         }
+    }
+
+    function getGithubContentsUrl() {
+        return `https://api.github.com/repos/${CONFIG.repo}/contents/${CONFIG.path}`;
     }
 
     window.coinsMetadataGenerator = {

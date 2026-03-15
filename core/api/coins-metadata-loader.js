@@ -6,7 +6,7 @@
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
  * ARCHITECTURE:
- * - Load on startup or on demand; cache via cacheManager (TTL 24h); populates window.coinsConfig (SSOT)
+ * - Load on startup or on demand; cache via cacheManager (TTL 24h); populate window.coinsConfig from one SSOT
  */
 
 (function() {
@@ -16,8 +16,10 @@
         baseUrl: 'https://aoponomarev.github.io/a/data/',
         filename: 'coins.json',
         cacheKey: 'coins-metadata',
-        defaultTtl: 24 * 60 * 60 * 1000 // 24 часа
+        defaultTtl: 24 * 60 * 60 * 1000 // 24h
     };
+
+    const STABLE_SECTIONS = ['fiat', 'commodity'];
 
     /**
      * Build load URL (with cache-busting via app version)
@@ -32,37 +34,38 @@
      */
     async function load({ forceRefresh = false, ttl = CONFIG.defaultTtl } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
-            console.warn('coinsMetadataLoader: cacheManager или coinsConfig not loaded');
+            console.warn('coinsMetadataLoader: cacheManager or coinsConfig not loaded');
             return null;
         }
 
-        // 1. Try load from cache
+        // Cache reads must validate the schema because older payloads can survive until the next versioned refresh.
         if (!forceRefresh) {
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
-            if (cached && cached.data && cached.expiresAt && cached.expiresAt > Date.now()) {
+            if (cached && cached.data && isStableMetadataShape(cached.data) && cached.expiresAt && cached.expiresAt > Date.now()) {
                 applyMetadata(cached.data);
-                console.log('coinsMetadataLoader: метаданные loaded из кэша');
+                console.log('coinsMetadataLoader: metadata loaded from cache');
                 return cached.data;
             }
         }
 
-        // 2. Load from network
         try {
             const url = buildUrl();
             const response = await fetch(url);
 
             if (!response.ok) {
-                // If file not found (404), not an error but valid state (use heuristics)
+                // A missing registry is a valid state because the app can still fall back to built-in references.
                 if (response.status === 404) {
-                    console.info(`coinsMetadataLoader: файл ${CONFIG.filename} не найден на сервере. Используется встроенная эвристика.`);
+                    console.info(`coinsMetadataLoader: ${CONFIG.filename} is not available on the server, using built-in fallback references`);
                     return null;
                 }
-                throw new Error(`HTTP ${response.status} при загрузке ${url}`);
+                throw new Error(`HTTP ${response.status} while loading ${url}`);
             }
 
             const data = await response.json();
+            if (!isStableMetadataShape(data)) {
+                throw new Error('coinsMetadataLoader: invalid stable metadata schema');
+            }
 
-            // Save to cache
             const payload = {
                 data: data,
                 expiresAt: Date.now() + ttl,
@@ -70,19 +73,18 @@
             };
             await window.cacheManager.set(CONFIG.cacheKey, payload, { useVersioning: true, ttl });
 
-            // Apply data
             applyMetadata(data);
-            console.log('coinsMetadataLoader: метаданные успешно loaded из сети');
+            console.log('coinsMetadataLoader: metadata loaded from network');
 
             return data;
         } catch (error) {
-            console.error('coinsMetadataLoader: ошибка загрузки метаданных:', error);
+            console.error('coinsMetadataLoader: metadata load failed:', error);
 
-            // Fallback to stale cache if exists
+            // Stale cache is safer than dropping curated runtime references during a transient network or schema mismatch.
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
-            if (cached && cached.data) {
+            if (cached && cached.data && isStableMetadataShape(cached.data)) {
                 applyMetadata(cached.data);
-                console.warn('coinsMetadataLoader: использованы устаревшие метаданные из кэша');
+                console.warn('coinsMetadataLoader: using stale cached metadata');
                 return cached.data;
             }
 
@@ -92,7 +94,11 @@
 
     /**
      * Pass data to coinsConfig
-     * Expected format: data.stable = { usd: [id,...], eur: [...], gold: [...], ... } (by peg)
+     * Expected format:
+     * data.stable = {
+     *   fiat: { usd: [id, ...], eur: [...], ... },
+     *   commodity: { gold: [id, ...], silver: [...], oil: [...], ... }
+     * }
      */
     function applyMetadata(data) {
         if (!data || !window.coinsConfig) return;
@@ -114,28 +120,50 @@
     }
 
     /**
-     * Normalize stable to array of { id, symbol, name, baseCurrency }
-     * @param {Object} stable - { usd: [ids], eur: [ids], gold: [ids], ... }
+     * Flatten grouped metadata into runtime entries so the UI keeps one stable list contract.
+     * @param {Object} stable - { fiat: {...}, commodity: {...} }
      * @returns {Array<{id, symbol, name, baseCurrency}>}
      */
     function normalizeStablecoinsList(stable) {
-        if (typeof stable !== 'object' || stable === null || Array.isArray(stable)) {
+        if (!isStableMetadataShape({ stable })) {
             return [];
         }
+
         const result = [];
-        for (const [peg, ids] of Object.entries(stable)) {
-            if (!Array.isArray(ids)) continue;
-            const baseCurrency = peg === 'gold_small' ? 'gold' : peg;
-            for (const id of ids) {
+        STABLE_SECTIONS.forEach(section => appendStableSectionEntries(result, stable[section]));
+        return result;
+    }
+
+    function appendStableSectionEntries(result, groups) {
+        if (!isGroupMap(groups)) return;
+
+        Object.entries(groups).forEach(([peg, ids]) => {
+            if (!Array.isArray(ids)) return;
+
+            const baseCurrency = normalizeBaseCurrency(peg);
+            ids.forEach(id => {
                 result.push({
                     id: String(id).toLowerCase(),
                     symbol: '',
                     name: '',
-                    baseCurrency
+                    baseCurrency,
+                    source: 'coins-metadata'
                 });
-            }
-        }
-        return result;
+            });
+        });
+    }
+
+    function normalizeBaseCurrency(peg) {
+        return peg === 'gold_small' ? 'gold' : String(peg || '').toLowerCase();
+    }
+
+    function isStableMetadataShape(data) {
+        if (!data || !isGroupMap(data.stable)) return false;
+        return STABLE_SECTIONS.every(section => isGroupMap(data.stable[section]));
+    }
+
+    function isGroupMap(value) {
+        return typeof value === 'object' && value !== null && !Array.isArray(value);
     }
 
     window.coinsMetadataLoader = {

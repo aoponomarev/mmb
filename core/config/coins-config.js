@@ -37,9 +37,13 @@
         'dai', 'usds', 'ethena-usde', 'usd1-wlfi', 'paypal-usd', 'dai', 'paxos-standard'
     ];
 
+    const COMMODITY_BASE_CURRENCIES = new Set(['gold', 'silver', 'platinum', 'palladium', 'oil']);
+    const METAL_BASE_CURRENCIES = new Set(['gold', 'silver', 'platinum', 'palladium']);
+    const RAW_MATERIAL_BASE_CURRENCIES = new Set(['oil']);
+
     /** baseCurrency from loader -> display label (commodities, metals, fiat) */
     const BASE_CURRENCY_LABEL = {
-        gold: 'ЗОЛОТО', silver: 'СЕРЕБРО', oil: 'НЕФТЬ',
+        gold: 'ЗОЛОТО', silver: 'СЕРЕБРО', platinum: 'ПЛАТИНА', palladium: 'ПАЛЛАДИЙ', oil: 'НЕФТЬ',
         usd: 'USD', eur: 'EUR', gbp: 'GBP', chf: 'CHF', jpy: 'JPY',
         cad: 'CAD', aud: 'AUD', sgd: 'SGD', brl: 'BRL', cnh: 'CNH', mxn: 'MXN',
         idr: 'IDR', ars: 'ARS', ngn: 'NGN', krw: 'KRW', try: 'TRY'
@@ -78,10 +82,10 @@
     function setStablecoins(list) {
         if (!Array.isArray(list)) return;
         stablecoins = list.map(item => ({
-            id: item.id,
+            id: String(item.id || '').toLowerCase(),
             symbol: (item.symbol || '').toLowerCase(),
             name: item.name || '',
-            baseCurrency: item.baseCurrency || 'unknown',
+            baseCurrency: normalizeBaseCurrency(item.baseCurrency),
             source: item.source || 'coingecko',
             updatedAt: item.updatedAt || Date.now()
         }));
@@ -110,16 +114,16 @@
     }
 
     function getStablecoinSymbolsSet() {
-        const fromLoader = stablecoins.map(s => s.symbol || s.id).filter(Boolean);
-        return new Set([...DEFAULT_STABLECOIN_SYMBOLS, ...fromLoader]);
+        const refs = new Set(DEFAULT_STABLECOIN_SYMBOLS);
+        stablecoins.forEach(item => addCoinRefsToSet(refs, item));
+        return refs;
     }
 
-    /** USD-pegged only (for menu "USD stablecoins"). Loader baseCurrency overrides PEG_MAP. */
+    /** USD selection must match both ids and symbols because coins.json stores ids while visible rows expose symbols. */
     function getUsdStablecoinSymbolsSet() {
         const usd = new Set();
         stablecoins.filter(s => s.baseCurrency === 'usd').forEach(s => {
-            const v = (s.symbol || s.id).toLowerCase();
-            if (v) usd.add(v);
+            addCoinRefsToSet(usd, s);
         });
         DEFAULT_STABLECOIN_SYMBOLS.forEach(sym => {
             const lower = sym.toLowerCase();
@@ -130,12 +134,11 @@
         return usd;
     }
 
-    /** Non-USD: metals, commodities, fiat (for menu "Currencies, metals, fiat"). Loader baseCurrency overrides PEG_MAP. */
+    /** Non-USD selection must match both ids and symbols for the same reason as the USD path above. */
     function getNonUsdStablecoinSymbolsSet() {
         const nonUsd = new Set();
         stablecoins.filter(s => s.baseCurrency && s.baseCurrency !== 'usd' && s.baseCurrency !== 'unknown').forEach(s => {
-            const v = (s.symbol || s.id).toLowerCase();
-            if (v) nonUsd.add(v);
+            addCoinRefsToSet(nonUsd, s);
         });
         DEFAULT_STABLECOIN_SYMBOLS.forEach(sym => {
             const lower = sym.toLowerCase();
@@ -157,6 +160,18 @@
         return stablecoins.some(s => s.id === lower || s.symbol === lower)
             || DEFAULT_STABLECOIN_IDS.includes(lower)
             || DEFAULT_STABLECOIN_SYMBOLS.includes(lower);
+    }
+
+    function isCommodityBaseCurrency(baseCurrency) {
+        return COMMODITY_BASE_CURRENCIES.has(normalizeBaseCurrency(baseCurrency));
+    }
+
+    function isMetalBaseCurrency(baseCurrency) {
+        return METAL_BASE_CURRENCIES.has(normalizeBaseCurrency(baseCurrency));
+    }
+
+    function isRawMaterialBaseCurrency(baseCurrency) {
+        return RAW_MATERIAL_BASE_CURRENCIES.has(normalizeBaseCurrency(baseCurrency));
     }
 
     /**
@@ -293,6 +308,22 @@
         return 'USD';
     }
 
+    function addCoinRefsToSet(set, coin) {
+        if (!coin) return;
+
+        const refs = [coin.id, coin.symbol];
+        refs.forEach(value => {
+            const normalized = String(value || '').toLowerCase();
+            if (normalized) set.add(normalized);
+        });
+    }
+
+    function normalizeBaseCurrency(baseCurrency) {
+        const normalized = String(baseCurrency || '').toLowerCase();
+        if (!normalized) return 'unknown';
+        return normalized === 'gold_small' ? 'gold' : normalized;
+    }
+
     /**
      * Coin type tooltip (SSOT for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
@@ -328,6 +359,9 @@
         getStablecoinSymbolsSet,
         getUsdStablecoinSymbolsSet,
         getNonUsdStablecoinSymbolsSet,
+        isCommodityBaseCurrency,
+        isMetalBaseCurrency,
+        isRawMaterialBaseCurrency,
         isStablecoinSymbol,
         isStablecoinId,
         isWrappedOrLst,
