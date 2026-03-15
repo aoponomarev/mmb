@@ -91,7 +91,8 @@
 
         // @causality #for-validation-at-edge
         normalizeCycles(cycles) {
-            return (Array.isArray(cycles) ? cycles : []).map((cycle, index) => {
+            const inputCycles = (Array.isArray(cycles) ? cycles : []);
+            return inputCycles.map((cycle, index) => {
                 const count = Number.parseInt(cycle?.coin_count, 10) || 0;
                 const finished = this.formatDateTime(cycle?.finished_at || cycle?.started_at);
                 const sortType = typeof cycle?.sort_type === 'string' ? cycle.sort_type : '';
@@ -101,10 +102,20 @@
                     typeLabel = 'Cap';
                 } else if (sortType === 'volume') {
                     typeLabel = 'Vol';
+                } else if (sortType === 'registry_wlc') {
+                    typeLabel = 'WLC';
+                } else if (sortType === 'registry_fiat') {
+                    typeLabel = 'Fiat';
                 } else if (cycle?.finished_at || cycle?.started_at) {
                     const dt = new Date(cycle.finished_at || cycle.started_at);
                     if (!Number.isNaN(dt.getTime())) {
-                        typeLabel = dt.getMinutes() < 15 ? 'Cap' : 'Vol';
+                        if (dt.getMinutes() === 15) {
+                            typeLabel = 'WLC';
+                        } else if (dt.getMinutes() === 45) {
+                            typeLabel = 'Fiat';
+                        } else {
+                            typeLabel = dt.getMinutes() < 30 ? 'Cap' : 'Vol';
+                        }
                     }
                 }
 

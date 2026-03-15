@@ -1,12 +1,13 @@
 /**
  * #JS-882U8X4J
- * @description Load coin metadata (stablecoins, wrapped, LST) from GitHub CDN a/data/coins.json; cache 24h, populates window.coinsConfig.
+ * @description Load coin metadata (stablecoins, wrapped, LST). Primary: Yandex API /api/coins/registry; fallback: GitHub CDN a/data/coins.json.
  * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * ARCHITECTURE:
- * - Load on startup or on demand; cache via cacheManager (TTL 24h); populate window.coinsConfig from one SSOT
+ * ARCHITECTURE (plan-coins-registry-cloud):
+ * - Primary: GET /api/coins/registry from Yandex API Gateway
+ * - Fallback: GitHub CDN a/data/coins.json
  */
 
 (function() {
@@ -15,7 +16,7 @@
     const CONFIG = {
         baseUrl: 'https://aoponomarev.github.io/a/data/',
         filename: 'coins.json',
-        cacheKey: 'coins-metadata',
+        cacheKey: 'coins-metadata-v2',
         defaultTtl: 24 * 60 * 60 * 1000 // 24h
     };
 
@@ -50,33 +51,51 @@
         }
 
         try {
-            const url = buildUrl();
-            const response = await fetch(url);
+            let data = null;
+            let source = 'network';
 
-            if (!response.ok) {
-                // A missing registry is a valid state because the app can still fall back to built-in references.
-                if (response.status === 404) {
-                    console.info(`coinsMetadataLoader: ${CONFIG.filename} is not available on the server, using built-in fallback references`);
-                    return null;
+            const yandexProvider = window.yandexApiGatewayProvider;
+            if (yandexProvider && typeof yandexProvider.requestJson === 'function') {
+                try {
+                    data = await yandexProvider.requestJson('/api/coins/registry', { headers: { Accept: 'application/json' } });
+                    if (data && isStableMetadataShape(data)) {
+                        source = 'yandex-api';
+                    } else {
+                        data = null;
+                    }
+                } catch (yandexErr) {
+                    console.info('coinsMetadataLoader: Yandex registry unavailable, falling back to GitHub:', yandexErr?.message || 'unknown');
                 }
-                throw new Error(`HTTP ${response.status} while loading ${url}`);
             }
 
-            const data = await response.json();
-            if (!isStableMetadataShape(data)) {
-                throw new Error('coinsMetadataLoader: invalid stable metadata schema');
+            if (!data) {
+                const url = buildUrl();
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.info(`coinsMetadataLoader: ${CONFIG.filename} not available, using built-in fallback`);
+                        return null;
+                    }
+                    throw new Error(`HTTP ${response.status} while loading ${url}`);
+                }
+
+                data = await response.json();
+                if (!isStableMetadataShape(data)) {
+                    throw new Error('coinsMetadataLoader: invalid stable metadata schema');
+                }
             }
 
             const payload = {
-                data: data,
+                data,
                 expiresAt: Date.now() + ttl,
                 updatedAt: Date.now()
             };
             await window.cacheManager.set(CONFIG.cacheKey, payload, { useVersioning: true, ttl });
 
             applyMetadata(data);
-            emitMetadataUpdated(data, 'network');
-            console.log('coinsMetadataLoader: metadata loaded from network');
+            emitMetadataUpdated(data, source);
+            console.log(`coinsMetadataLoader: metadata loaded from ${source}`);
 
             return data;
         } catch (error) {

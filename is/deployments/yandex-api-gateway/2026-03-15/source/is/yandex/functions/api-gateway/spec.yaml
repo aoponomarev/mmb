@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  title: MBB API Gateway
+  version: 1.0.0
+
+servers:
+- url: https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net
+paths:
+  /health:
+    get:
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4eb8mf98rc3k6p3ef7g
+      responses:
+        '200':
+          description: OK
+    options:
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4eb8mf98rc3k6p3ef7g
+      responses:
+        '204':
+          description: CORS preflight
+
+  /{proxy+}:
+    parameters:
+      - name: proxy
+        in: path
+        required: true
+        schema:
+          type: string
+    x-yc-apigateway-any-method:
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4eb8mf98rc3k6p3ef7g
+      responses:
+        '200':
+          description: OK

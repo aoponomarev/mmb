@@ -3319,6 +3319,19 @@
                     return String(window.coinsConfig.getStablecoinPegLabel(coin.id, coin.symbol) || 'USD').toUpperCase();
                 },
 
+                getVisibleStablecoinBaseCurrency(coin) {
+                    if (this.getVisibleCoinType(coin) !== 'stable') {
+                        return null;
+                    }
+
+                    if (!window.coinsConfig || typeof window.coinsConfig.getStablecoinBaseCurrency !== 'function') {
+                        const pegLabel = this.getVisibleStablecoinPegLabel(coin);
+                        return pegLabel ? String(pegLabel).toLowerCase() : null;
+                    }
+
+                    return String(window.coinsConfig.getStablecoinBaseCurrency(coin.id, coin.symbol) || '').toLowerCase();
+                },
+
                 handleCoinsMetadataUpdated(eventData = {}) {
                     this.coinsMetadataRevision += 1;
 
@@ -3357,7 +3370,7 @@
                 },
 
                 /**
-                 * Select non-USD stablecoins (fiat + commodity-backed).
+                 * Select non-USD stablecoins excluding commodity-backed.
                  */
                 async handleSelectStablecoinsOther() {
                     const visibleCoins = this.sortedCoins;
@@ -3367,8 +3380,16 @@
 
                     this.selectedCoinIds = visibleCoins
                         .filter(coin => {
-                            const pegLabel = this.getVisibleStablecoinPegLabel(coin);
-                            return pegLabel && pegLabel !== 'USD';
+                            const baseCurrency = this.getVisibleStablecoinBaseCurrency(coin);
+                            if (!baseCurrency || baseCurrency === 'usd') {
+                                return false;
+                            }
+
+                            if (window.coinsConfig && typeof window.coinsConfig.isCommodityBaseCurrency === 'function') {
+                                return !window.coinsConfig.isCommodityBaseCurrency(baseCurrency);
+                            }
+
+                            return !['gold', 'silver', 'platinum', 'palladium', 'oil'].includes(baseCurrency);
                         })
                         .map(coin => coin.id);
                     this.saveTableSettings();
@@ -3376,7 +3397,44 @@
                     if (this.selectedCoinIds.length === 0 && window.messagesStore) {
                         window.messagesStore.addMessage({
                             type: 'warning',
-                            text: 'Список валют/металлов/фиат пуст',
+                            text: 'Список других фиатов пуст',
+                            scope: 'global',
+                            duration: 3000
+                        });
+                    }
+                },
+
+                /**
+                 * Select commodity-backed stablecoins (metals + raw materials).
+                 */
+                async handleSelectStablecoinsCommodities() {
+                    const visibleCoins = this.sortedCoins;
+                    if (!visibleCoins) return;
+
+                    await this.loadCoinsMetadataOnDemand(false);
+
+                    this.selectedCoinIds = visibleCoins
+                        .filter(coin => {
+                            const baseCurrency = this.getVisibleStablecoinBaseCurrency(coin);
+                            if (!baseCurrency) {
+                                return false;
+                            }
+
+                            const hasMetalCheck = window.coinsConfig && typeof window.coinsConfig.isMetalBaseCurrency === 'function';
+                            const hasRawMaterialCheck = window.coinsConfig && typeof window.coinsConfig.isRawMaterialBaseCurrency === 'function';
+                            if (hasMetalCheck && hasRawMaterialCheck) {
+                                return window.coinsConfig.isMetalBaseCurrency(baseCurrency) || window.coinsConfig.isRawMaterialBaseCurrency(baseCurrency);
+                            }
+
+                            return ['gold', 'silver', 'platinum', 'palladium', 'oil'].includes(baseCurrency);
+                        })
+                        .map(coin => coin.id);
+                    this.saveTableSettings();
+
+                    if (this.selectedCoinIds.length === 0 && window.messagesStore) {
+                        window.messagesStore.addMessage({
+                            type: 'warning',
+                            text: 'Список металлов и сырья пуст',
                             scope: 'global',
                             duration: 3000
                         });

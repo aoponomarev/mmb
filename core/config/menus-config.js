@@ -178,9 +178,15 @@
         },
         {
             id: 'select-stablecoins-other',
-            title: 'Фиат, металлы, сырьё',
+            title: 'Другие фиаты',
             handler: 'handleSelectStablecoinsOther',
             icon: window.coinsConfig.getCoinTypeIcon('stable')
+        },
+        {
+            id: 'select-stablecoins-commodities',
+            title: 'Металлы и сырьё',
+            handler: 'handleSelectStablecoinsCommodities',
+            icon: '⛏️'
         },
         {
             id: 'select-wrapped',

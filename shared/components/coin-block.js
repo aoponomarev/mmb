@@ -176,7 +176,7 @@
 
             coinTypeIcon() {
                 if (!window.coinsConfig || !window.coinsConfig.getCoinTypeIcon) return null;
-                return window.coinsConfig.getCoinTypeIcon(this.coinType);
+                return window.coinsConfig.getCoinTypeIcon(this.coinType, this.coinId, this.symbol);
             },
 
             coinTypeTitle() {

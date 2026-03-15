@@ -174,11 +174,10 @@ async function createVersion(token, functionId, zipBase64) {
     return versionId;
 }
 
-// ─── Create cron triggers (every hour at :00 and :30) ────────────────────────
+// ─── Create cron triggers (:00 cap, :15 registry_wlc, :30 vol, :45 registry_fiat) ─
 async function createCronTriggers(token, functionId) {
-    console.log('Creating cron triggers (every hour at :00 and :30)...');
+    console.log('Creating cron triggers (:00, :15, :30, :45)...');
 
-    // Check existing triggers
     const list = await apiRequest({
         hostname: 'serverless-triggers.api.cloud.yandex.net',
         path: `/triggers/v1/triggers?folderId=${FOLDER_ID}`,
@@ -187,8 +186,10 @@ async function createCronTriggers(token, functionId) {
     });
 
     const triggers = [
-        { name: `${FUNCTION_NAME}-cron-cap`, cron: '0 * * * ? *', desc: 'Every hour at :00: CoinGecko (market_cap) -> PostgreSQL' },
-        { name: `${FUNCTION_NAME}-cron-vol`, cron: '30 * * * ? *', desc: 'Every hour at :30: CoinGecko (volume) -> PostgreSQL' }
+        { name: `${FUNCTION_NAME}-cron-cap`, cron: '0 * * * ? *', desc: ':00 CoinGecko market_cap -> PostgreSQL' },
+        { name: `${FUNCTION_NAME}-cron-registry-wlc`, cron: '15 * * * ? *', desc: ':15 registry wrapped/lst/commodity -> coin_registry' },
+        { name: `${FUNCTION_NAME}-cron-vol`, cron: '30 * * * ? *', desc: ':30 CoinGecko volume -> PostgreSQL' },
+        { name: `${FUNCTION_NAME}-cron-registry-fiat`, cron: '45 * * * ? *', desc: ':45 registry stablecoins -> coin_registry' }
     ];
 
     for (const t of triggers) {
@@ -259,8 +260,8 @@ async function main() {
 
         console.log('\n=== Deploy complete ===');
         console.log('Function ID:', functionId);
-        console.log('Triggers: every hour at :00 and :30');
-        console.log('Table: coin_market_cache in app_db');
+        console.log('Triggers: :00 cap, :15 registry_wlc, :30 vol, :45 registry_fiat');
+        console.log('Tables: coin_market_cache, coin_registry');
     } catch (err) {
         console.error('\nDEPLOY ERROR:', err.message);
         if (err.body) console.error('Details:', JSON.stringify(err.body, null, 2));

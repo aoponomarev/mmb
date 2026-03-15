@@ -1,0 +1,80 @@
+{
+  "snapshot_date": "2026-03-15",
+  "target": "yandex-api-gateway",
+  "api_gateway": {
+    "id": "d5dl2ia43kck6aqb1el5",
+    "name": "mbb-api-gw",
+    "status": "ACTIVE",
+    "domain": "d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net",
+    "execution_timeout": "300s",
+    "log_options": {
+      "folder_id": "b1gv03a122le5a934cqj"
+    },
+    "connectivity": {},
+    "openapi_routes": {
+      "/health": [
+        "GET",
+        "OPTIONS"
+      ],
+      "/{proxy+}": [
+        "ANY"
+      ],
+      "integration_function_id": "d4eb8mf98rc3k6p3ef7g"
+    }
+  },
+  "api_gateway_access_bindings": [],
+  "integrated_function": {
+    "id": "d4eb8mf98rc3k6p3ef7g",
+    "name": "coins-db-gateway",
+    "http_invoke_url": "https://functions.yandexcloud.net/d4eb8mf98rc3k6p3ef7g",
+    "active_version": {
+      "id": "d4e8h5kvf8ksvnfsu0nd",
+      "created_at": "2026-03-15T13:54:28.708Z",
+      "runtime": "nodejs18",
+      "entrypoint": "api-gateway/index.handler",
+      "memory_bytes": "268435456",
+      "execution_timeout": "30s",
+      "concurrency": "1",
+      "image_size": "266240",
+      "log_options": {
+        "folder_id": "b1gv03a122le5a934cqj"
+      },
+      "env_contract": {
+        "required_names": [
+          "COINGECKO_FETCHER_URL",
+          "DB_HOST",
+          "DB_NAME",
+          "DB_PASSWORD",
+          "DB_PORT",
+          "DB_USER"
+        ],
+        "secret_names": [
+          "DB_PASSWORD"
+        ]
+      }
+    }
+  },
+  "integrated_function_access_bindings": [
+    {
+      "role_id": "functions.functionInvoker",
+      "subject": {
+        "type": "system",
+        "id": "allUsers"
+      }
+    }
+  ],
+  "downstream_function_reference": {
+    "id": "d4elqjuhiem6mavs9v0e",
+    "name": "coingecko-fetcher",
+    "http_invoke_url": "https://functions.yandexcloud.net/d4elqjuhiem6mavs9v0e"
+  },
+  "downstream_function_access_bindings": [
+    {
+      "role_id": "serverless.functions.invoker",
+      "subject": {
+        "type": "system",
+        "id": "allUsers"
+      }
+    }
+  ]
+}

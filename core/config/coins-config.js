@@ -195,29 +195,33 @@
     function getCoinType(id, symbol = '', name = '') {
         if (!id) return null;
         const lowerId = String(id).toLowerCase();
-
         if (isStablecoinId(lowerId)) {
             return 'stable';
         }
-
         if (wrappedCoins.includes(lowerId)) {
             return 'wrapped';
         }
-
         if (lstCoins.includes(lowerId)) {
             return 'lst';
         }
-
         return null;
     }
 
     /**
      * Coin type icon (SSOT for UI)
      * @param {'stable'|'wrapped'|'lst'|null} type
+     * @param {string} [id] - Coin ID (for stable subtype icon)
+     * @param {string} [symbol] - Coin symbol (for stable subtype icon)
      * @returns {string|null}
      */
-    function getCoinTypeIcon(type) {
-        if (type === 'stable') return '🪙';
+    function getCoinTypeIcon(type, id = '', symbol = '') {
+        if (type === 'stable') {
+            const baseCurrency = getStablecoinBaseCurrency(id, symbol);
+            if (isMetalBaseCurrency(baseCurrency) || isRawMaterialBaseCurrency(baseCurrency)) {
+                return '⛏️';
+            }
+            return '🪙';
+        }
         if (type === 'wrapped') return '🔁';
         if (type === 'lst') return '🔥';
         return null;
@@ -284,6 +288,35 @@
         return 'USD';
     }
 
+    /**
+     * Base currency key for stablecoin routing (usd, eur, gold, oil, ...)
+     * @param {string} id - Coin ID
+     * @param {string} symbol - Coin symbol
+     * @returns {string}
+     */
+    function getStablecoinBaseCurrency(id, symbol) {
+        const lowerId = String(id || '').toLowerCase();
+        const lowerSym = String(symbol || '').toLowerCase();
+        const fromLoader = stablecoins.find(s => s.id === lowerId || s.symbol === lowerSym);
+        if (fromLoader && fromLoader.baseCurrency && fromLoader.baseCurrency !== 'other') {
+            return fromLoader.baseCurrency;
+        }
+
+        const pegLabel = STABLECOIN_PEG_MAP[lowerSym] || STABLECOIN_PEG_MAP[lowerId];
+        if (!pegLabel) {
+            return 'usd';
+        }
+
+        const normalizedPeg = String(pegLabel || '').trim().toUpperCase();
+        if (normalizedPeg === 'ЗОЛОТО') return 'gold';
+        if (normalizedPeg === 'СЕРЕБРО') return 'silver';
+        if (normalizedPeg === 'ПЛАТИНА') return 'platinum';
+        if (normalizedPeg === 'ПАЛЛАДИЙ') return 'palladium';
+        if (normalizedPeg === 'НЕФТЬ') return 'oil';
+
+        return normalizeBaseCurrency(String(pegLabel || '').toLowerCase());
+    }
+
     function addCoinRefsToSet(set, coin) {
         if (!coin) return;
 
@@ -338,6 +371,7 @@
         isCommodityBaseCurrency,
         isMetalBaseCurrency,
         isRawMaterialBaseCurrency,
+        getStablecoinBaseCurrency,
         isStablecoinSymbol,
         isStablecoinId,
         isWrappedOrLst,

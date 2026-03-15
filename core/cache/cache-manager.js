@@ -83,7 +83,8 @@
                 'api-cache',          // API response cache (external API structure)
                 'market-metrics',     // Market metrics (external API structure)
                 'crypto-news-state',  // News state (structure depends on AI provider prompt)
-                'coins-metadata'      // Stablecoins by peg from coins.json (GitHub CDN)
+                'coins-metadata',     // Legacy metadata cache key
+                'coins-metadata-v2'   // Stablecoins by peg from registry/GitHub fallback
             ];
             useVersioning = versionedKeys.includes(key);
         }
