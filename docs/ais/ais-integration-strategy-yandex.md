@@ -1,7 +1,7 @@
 ---
 id: ais-f6b9e2
 status: active
-last_updated: "2026-03-11"
+last_updated: "2026-03-15"
 related_skills:
   - sk-bb7c8e
   - sk-7b4ee5
@@ -50,7 +50,9 @@ flowchart TD
     MBB --> DB[(PostgreSQL mbb_db)]
 
     T1[Trigger :00] --> FETCH[coingecko-fetcher]
-    T2[Trigger :30] --> FETCH
+    T2[Trigger :15] --> FETCH
+    T3[Trigger :30] --> FETCH
+    T4[Trigger :45] --> FETCH
     FETCH --> CG
     FETCH --> DB
 
@@ -86,25 +88,29 @@ flowchart TD
 
 Именно поэтому `POST /api/coins/market-cache` в #JS-HS3kQFDc теперь возвращает `403`.
 
-#### 3. Cron-логика вынесена в два timer-trigger'а
+#### 3. Cron-логика вынесена в четыре timer-trigger'а
 
 Изначальная модель с несколькими чанками и паузами внутри одного запуска делала serverless job слишком длинной и хрупкой по timeout/runtime. Текущая стратегия:
 
 - `coingecko-fetcher-cron-cap` в `:00`,
+- `coingecko-fetcher-cron-registry-wlc` в `:15`,
 - `coingecko-fetcher-cron-vol` в `:30`,
-- один top-250 запрос на запуск,
+- `coingecko-fetcher-cron-registry-fiat` в `:45`,
+- один режим на запуск (`market_cap` / `registry_wlc` / `volume` / `registry_fiat`),
 - короткий deterministic runtime.
 
 Это делает ingest прозрачным для логов, retry и сопровождения.
 
-#### 4. Один function package обслуживает два режима ingest
+#### 4. Один function package обслуживает четыре режима ingest
 
-Текущая функция `coingecko-fetcher` не получает явный `order` через payload trigger'а. Поэтому тип выборки кодируется временем старта:
+Текущая функция `coingecko-fetcher` принимает явный mode-payload от trigger'ов и manual invoke, а minute-routing сохраняется как compatibility fallback:
 
 - `minute < 15` -> `market_cap`
-- `minute >= 15` -> `volume`
+- `minute < 30` -> `registry_wlc`
+- `minute < 45` -> `volume`
+- `minute >= 45` -> `registry_fiat`
 
-Это уменьшает дублирование serverless-кода и позволяет держать один deploy-artifact для двух timer-сценариев.
+Это уменьшает дублирование serverless-кода и позволяет держать один deploy-artifact для четырех timer-сценариев.
 
 ## Текущее Production-состояние
 
@@ -115,7 +121,9 @@ flowchart TD
 | Cloud Function | `coins-db-gateway` | PostgreSQL gateway / HTTP transport |
 | Cloud Function | `coingecko-fetcher` | Timer-driven ingest top-250 lists |
 | Timer Trigger | `coingecko-fetcher-cron-cap` | Запуск ingest по `market_cap` в `:00` |
+| Timer Trigger | `coingecko-fetcher-cron-registry-wlc` | Запуск ingest реестра wrapped/lst/commodity в `:15` |
 | Timer Trigger | `coingecko-fetcher-cron-vol` | Запуск ingest по `volume` в `:30` |
+| Timer Trigger | `coingecko-fetcher-cron-registry-fiat` | Запуск ingest реестра stablecoins (fiat/commodity peg) в `:45` |
 | Database | `mbb_db` | Operational SSOT для server-side coin cache |
 | API Base URL | `https://d5dl2ia43kck6aqb1el5.k1mxzkh0.apigw.yandexcloud.net` | Реальный HTTP transport до `coins-db-gateway` |
 

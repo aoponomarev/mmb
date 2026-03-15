@@ -193,7 +193,7 @@ async function fetchTop250(order) {
     return allCoins;
 }
 
-// ─── CoinGecko: fetch by category (plan-coins-registry-cloud) ──────────────────
+// ─── CoinGecko: fetch by category (id:ais-82c9d0, id:ais-e41384) ───────────────
 
 async function fetchCategoryCoins(category, page = 1) {
     const params = new URLSearchParams({
@@ -379,10 +379,12 @@ async function upsertCoinsToMarketCache(client, coins) {
     return coins.length;
 }
 
-// ─── Registry modes (plan-coins-registry-cloud) ─────────────────────────────────
+// ─── Registry modes (id:ais-82c9d0, id:ais-e41384) ──────────────────────────────
 
+// @causality #for-coingecko-category-wrapped
 // Process order: lst first (highest priority), wrapped, then commodities (gold/silver specific, then general).
 // First occurrence wins (seenIds) → dedup priority: lst > wrapped > commodity.
+// Use wrapped-tokens (NOT asset-backed-tokens); asset-backed = crypto-backed stablecoins.
 const REGISTRY_WLC_CATEGORIES = [
     { category: 'liquid-staking', type: 'lst', peg: null },
     { category: 'wrapped-tokens', type: 'wrapped', peg: null },
@@ -460,6 +462,7 @@ async function runRegistryWlc(client) {
         await sleep(delayMs);
     }
 
+    // @causality #for-registry-safety-threshold
     const minimumAllowed = existingCount > 0 ? Math.max(20, Math.floor(existingCount * 0.5)) : 20;
     if (toInsert.length < minimumAllowed) {
         console.warn(`[fetcher] registry_wlc: collected ${toInsert.length}, below safety threshold ${minimumAllowed}; keep previous registry data`);
@@ -524,6 +527,7 @@ async function runRegistryFiat(client) {
         await sleep(delayMs);
     }
 
+    // @causality #for-registry-safety-threshold
     const minimumAllowed = existingCount > 0 ? Math.max(50, Math.floor(existingCount * 0.5)) : 50;
     if (toInsert.length < minimumAllowed) {
         console.warn(`[fetcher] registry_fiat: collected ${toInsert.length}, below safety threshold ${minimumAllowed}; keep previous registry data`);
@@ -531,6 +535,7 @@ async function runRegistryFiat(client) {
         await client.transaction(async (tx) => {
             await tx.query(`DELETE FROM coin_registry WHERE type = 'stable'`);
             for (const row of toInsert) {
+                // @causality #for-registry-cross-mode-preservation
                 // DO NOTHING protects existing non-stable entries (e.g. PAXG as commodity from registry_wlc)
                 await tx.query(`
                     INSERT INTO coin_registry (coin_id, type, peg, source_category, updated_at)

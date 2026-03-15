@@ -5,7 +5,7 @@
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * ARCHITECTURE (plan-coins-registry-cloud):
+ * ARCHITECTURE (id:ais-82c9d0):
  * - Primary: GET /api/coins/registry from Yandex API Gateway
  * - Fallback: GitHub CDN a/data/coins.json
  */

@@ -160,61 +160,46 @@ window.coinSetLoadModalBody = {
                         </div>
                     </div>
                     <!-- Reference sets (registry ids present in cloud market-cache) -->
-                    <div v-if="autoStablecoins && autoStablecoins.coins && autoStablecoins.coins.length > 0" class="list-group-item d-flex align-items-start">
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="checkbox"
-                                :id="'auto-set-' + autoStablecoins.id"
-                                :value="autoStablecoins.id"
-                                v-model="selectedSetIds"
-                                @change="updateButtonsState">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="fw-semibold d-flex align-items-center gap-2">
-                                <span aria-hidden="true">{{ stablecoinIcon }}</span>
-                                Stablecoins
+                    <div class="list-group-item py-2" v-if="hasAutoStablecoins || hasAutoWrapped || hasAutoLst">
+                        <div class="d-flex align-items-center w-100">
+                            <div class="flex-fill d-flex justify-content-start">
+                                <label v-if="hasAutoStablecoins" class="d-inline-flex align-items-center mb-0 text-nowrap">
+                                    <input
+                                        class="form-check-input mt-0 me-1"
+                                        type="checkbox"
+                                        :id="'auto-set-' + autoStablecoins.id"
+                                        :value="autoStablecoins.id"
+                                        v-model="selectedSetIds"
+                                        @change="updateButtonsState">
+                                    <span aria-hidden="true">{{ stableSetIcons }}</span>
+                                    <span class="badge bg-primary rounded-pill ms-1 opacity-75 align-self-center" :style="countBadgeStyle">{{ autoStablecoins.coins.length }}</span>
+                                </label>
                             </div>
-                        </div>
-                        <span class="badge bg-primary rounded-pill ms-2 opacity-75 align-self-center" :style="countBadgeStyle">{{ autoStablecoins.coins.length }}</span>
-                    </div>
-                    <div class="list-group-item" v-if="hasAutoWrapped || hasAutoLst">
-                        <div class="row g-2">
-                            <div :class="hasAutoWrapped && hasAutoLst ? 'col-12 col-sm-6' : 'col-12'" v-if="hasAutoWrapped">
-                                <div class="d-flex align-items-start w-100">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            :id="'auto-set-' + autoWrapped.id"
-                                            :value="autoWrapped.id"
-                                            v-model="selectedSetIds"
-                                            @change="updateButtonsState">
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                        <span aria-hidden="true">{{ wrappedIcon }}</span>
-                                        Wrapped
-                                    </div>
-                                    <span class="badge bg-primary rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">{{ autoWrapped.coins.length }}</span>
-                                </div>
+                            <div class="flex-fill d-flex justify-content-center">
+                                <label v-if="hasAutoWrapped" class="d-inline-flex align-items-center mb-0 text-nowrap">
+                                    <input
+                                        class="form-check-input mt-0 me-1"
+                                        type="checkbox"
+                                        :id="'auto-set-' + autoWrapped.id"
+                                        :value="autoWrapped.id"
+                                        v-model="selectedSetIds"
+                                        @change="updateButtonsState">
+                                    <span aria-hidden="true">{{ wrappedIcon }}</span>
+                                    <span class="badge bg-primary rounded-pill ms-1 opacity-75 align-self-center" :style="countBadgeStyle">{{ autoWrapped.coins.length }}</span>
+                                </label>
                             </div>
-                            <div :class="hasAutoWrapped && hasAutoLst ? 'col-12 col-sm-6' : 'col-12'" v-if="hasAutoLst">
-                                <div class="d-flex align-items-start w-100">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            :id="'auto-set-' + autoLst.id"
-                                            :value="autoLst.id"
-                                            v-model="selectedSetIds"
-                                            @change="updateButtonsState">
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 flex-grow-1 text-nowrap">
-                                        <span aria-hidden="true">{{ lstIcon }}</span>
-                                        LST (Liquid Staking)
-                                    </div>
-                                    <span class="badge bg-primary rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">{{ autoLst.coins.length }}</span>
-                                </div>
+                            <div class="flex-fill d-flex justify-content-end">
+                                <label v-if="hasAutoLst" class="d-inline-flex align-items-center mb-0 text-nowrap">
+                                    <input
+                                        class="form-check-input mt-0 me-1"
+                                        type="checkbox"
+                                        :id="'auto-set-' + autoLst.id"
+                                        :value="autoLst.id"
+                                        v-model="selectedSetIds"
+                                        @change="updateButtonsState">
+                                    <span aria-hidden="true">{{ lstIcon }}</span>
+                                    <span class="badge bg-primary rounded-pill ms-1 opacity-75 align-self-center" :style="countBadgeStyle">{{ autoLst.coins.length }}</span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -416,14 +401,17 @@ window.coinSetLoadModalBody = {
         autoLst() {
             return this.autoSets.find(set => set.id === 'auto-lst');
         },
+        hasAutoStablecoins() {
+            return Boolean(this.autoStablecoins && this.autoStablecoins.coins && this.autoStablecoins.coins.length > 0);
+        },
         hasAutoWrapped() {
             return Boolean(this.autoWrapped && this.autoWrapped.coins && this.autoWrapped.coins.length > 0);
         },
         hasAutoLst() {
             return Boolean(this.autoLst && this.autoLst.coins && this.autoLst.coins.length > 0);
         },
-        stablecoinIcon() {
-            return window.coinsConfig.getCoinTypeIcon('stable');
+        stableSetIcons() {
+            return '💲🪙\u2006⛏️';
         },
         wrappedIcon() {
             return window.coinsConfig.getCoinTypeIcon('wrapped');

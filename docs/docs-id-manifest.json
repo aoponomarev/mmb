@@ -97,6 +97,7 @@
     "ais-f5a6b7": "docs/ais/ais-policies-schemas.md",
     "ais-3f4e5c": "docs/ais/ais-portfolio-controls.md",
     "ais-db8c3e": "docs/ais/ais-portfolio-db-strategy.md",
+    "ais-6f2b1d": "docs/ais/ais-portfolio-system.md",
     "ais-c4e9b2": "docs/ais/ais-rrg-contour.md",
     "ais-7f8e9d": "docs/ais/ais-ssot-contract-plane.md",
     "ais-d8e7f6": "docs/ais/ais-unified-adapter-system.md",
@@ -135,6 +136,8 @@
     "readme-022440": "is/deployments/cloudflare-edge-api/2026-03-09/README.md",
     "doc-6abdf1": "is/deployments/yandex-api-gateway/2026-03-09/changes-vs-previous.md",
     "readme-e9debb": "is/deployments/yandex-api-gateway/2026-03-09/README.md",
+    "doc-33b33e": "is/deployments/yandex-api-gateway/2026-03-15/changes-vs-previous.md",
+    "readme-f71052": "is/deployments/yandex-api-gateway/2026-03-15/README.md",
     "doc-af4e50": "is/deployments/yandex-market-fetcher/2026-03-09/changes-vs-previous.md",
     "readme-fbd0bf": "is/deployments/yandex-market-fetcher/2026-03-09/README.md",
     "doc-7b3d21": "is/deployments/yandex-market-fetcher/2026-03-11/changes-vs-previous.md",
@@ -153,5 +156,5 @@
     "docs/index-skills.md",
     "docs/index-ais.md"
   ],
-  "generated_at": "2026-03-15T08:51:33.275Z"
+  "generated_at": "2026-03-15T15:10:31.950Z"
 }

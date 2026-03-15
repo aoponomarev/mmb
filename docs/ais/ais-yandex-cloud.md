@@ -1,7 +1,7 @@
 ---
 id: ais-e41384
 status: active
-last_updated: "2026-03-11"
+last_updated: "2026-03-15"
 related_skills:
   - sk-224210
   - sk-bb7c8e
@@ -9,6 +9,7 @@ related_skills:
   - sk-7b4ee5
 related_ais:
   - ais-3732ce
+  - ais-82c9d0
 
 ---
 
@@ -18,10 +19,10 @@ related_ais:
 
 ## Концепция (High-Level Concept)
 
-Yandex Cloud обеспечивает два контура работы с рыночными данными криптовалют:
+Yandex Cloud обеспечивает ingest/read поток данных монет с server-side SSOT:
 
-1. **Ingest-контур (запись):** Серверные timer-trigger'ы запускают `coingecko-fetcher`, который опрашивает CoinGecko API и записывает результаты в PostgreSQL.
-2. **Read-контур (чтение):** Пользователь запрашивает данные через API Gateway / веб-интерфейс; данные читаются из PostgreSQL-кэша через функцию `coins-db-gateway`.
+1. **Ingest Pipeline (запись):** timer-trigger'ы запускают `coingecko-fetcher` в режимах `market_cap`, `registry_wlc`, `volume`, `registry_fiat`; функция обновляет `coin_market_cache`, `coin_market_cache_history` и `coin_registry`.
+2. **Read Pipeline (чтение):** пользователь запрашивает данные через API Gateway; `coins-db-gateway` читает из PostgreSQL (`coin_market_cache`, `coin_registry`) и отдает normalized JSON.
 3. **Fallback-политика:** браузерный fallback допускается только для локального чтения/отрисовки. Он не имеет права записывать данные обратно в серверный SSOT.
 
 Это устраняет давление rate-limit на CoinGecko для типичного случая (~350 кэшированных монет) и обеспечивает быструю отдачу для пользователей из РФ/СНГ.
@@ -33,7 +34,9 @@ Yandex Cloud обеспечивает два контура работы с ры
 ```mermaid
 flowchart TD
     A1[Timer Trigger :00 cap] --> B
-    A2[Timer Trigger :30 vol] --> B
+    A2[Timer Trigger :15 registry_wlc] --> B
+    A3[Timer Trigger :30 vol] --> B
+    A4[Timer Trigger :45 registry_fiat] --> B
     subgraph B[Yandex Cloud]
         direction LR
         B1[coingecko-fetcher #JS-3w3f6pz7] --> B2[(PostgreSQL mbb_db)]
@@ -51,9 +54,9 @@ flowchart TD
 
 | Этап | Компонент | Описание |
 |------|-----------|----------|
-| 1 | Yandex Cloud Triggers | `coingecko-fetcher-cron-cap` (`0 * * * ? *`) и `coingecko-fetcher-cron-vol` (`30 * * * ? *`) |
-| 2 | #JS-3w3f6pz7 (is/yandex/functions/market-fetcher/index.js) | Один запуск = один запрос top-250: либо `market_cap`, либо `volume` |
-| 3 | PostgreSQL (`mbb_db`) | Запись в `coin_market_cache_history` с уникальным `cycle_id`, обновление `coin_market_cache` |
+| 1 | Yandex Cloud Triggers | `coingecko-fetcher-cron-cap` (`0 * * * ? *`), `coingecko-fetcher-cron-registry-wlc` (`15 * * * ? *`), `coingecko-fetcher-cron-vol` (`30 * * * ? *`), `coingecko-fetcher-cron-registry-fiat` (`45 * * * ? *`) |
+| 2 | #JS-3w3f6pz7 (is/yandex/functions/market-fetcher/index.js) | Один запуск = один режим: `market_cap` / `registry_wlc` / `volume` / `registry_fiat` |
+| 3 | PostgreSQL (`mbb_db`) | Обновление `coin_market_cache`, запись в `coin_market_cache_history` и обновление `coin_registry` |
 
 ### Read-контур (api-gateway)
 
@@ -75,7 +78,7 @@ flowchart TD
 ### Ротация циклов
 
 - Каждый запуск создаёт уникальный `cycle_id = YYYYMMDDHHMMSS`.
-- Так как `market_cap` и `volume` теперь собираются разными trigger'ами, в истории хранятся **4 последних** цикла, чтобы сохранялась короткая видимость по двум последним парам запусков.
+- В истории хранятся **8 последних** cycle_id (`MAX_CYCLES_KEPT = 8`), а endpoint `/api/coins/cycles` дополнительно показывает aggregated snapshots для `registry_wlc` и `registry_fiat`.
 
 ### Секреты
 
@@ -97,7 +100,7 @@ flowchart TD
 | Runtime | nodejs18 |
 | Memory | 256 MB |
 | Timeout | 600s (10 мин) |
-| Trigger model | 2 независимых timer-trigger'а: `:00` для `market_cap`, `:30` для `volume` |
+| Trigger model | 4 независимых timer-trigger'а: `:00` market_cap, `:15` registry_wlc, `:30` volume, `:45` registry_fiat |
 | Chunk | 250 монет × 1 страница = 250 |
 | Задержка внутри запуска | отсутствует |
 
@@ -121,7 +124,9 @@ flowchart TD
 **Эндпоинты:**
 - `GET /health` — проверка доступности БД
 - `GET /api/coins/market-cache` — кэш монет (params: `ids`, `sort`, `limit`, `include_prev`)
-- `GET /api/coins/cycles` — метаданные циклов
+- `GET /api/coins/registry` — runtime registry (`stable.fiat`, `stable.commodity`, `wrapped`, `lst`)
+- `GET /api/coins/cycles` — метаданные циклов + registry snapshots (`registry_wlc`/`registry_fiat`)
+- `POST /api/coins/market-cache/trigger` — manual trigger только для `order = market_cap|volume`
 - `POST /api/coins/market-cache` — запрещён для браузера (`403`), потому что browser fallback не должен записывать в центральный SSOT
 
 ### Схема таблиц
@@ -130,6 +135,7 @@ flowchart TD
 |---------|------------|
 | `coin_market_cache` | Текущий снимок (latest view) |
 | `coin_market_cache_history` | История циклов (с `cycle_id`, `sort_type`, `sort_rank`) |
+| `coin_registry` | Реестр типов/peg (`wrapped`, `lst`, `commodity`, `stable`) для UI-классификации |
 
 Ключевые поля `coin_market_cache_history`: `cycle_id`, `coin_id`, `symbol`, `name`, `image`, `current_price`, `market_cap`, `market_cap_rank`, `total_volume`, `pv_1h`..`pv_200d`, `sort_type`, `sort_rank`, `fetched_at`.
 
@@ -154,15 +160,17 @@ flowchart TD
 
 ### GET /api/coins/cycles
 
-Возвращает метаданные сохранённых циклов (`cycle_id`, `row_count`, `coin_count`, `started_at`, `finished_at`).
+Возвращает метаданные сохранённых циклов (`cycle_id`, `row_count`, `coin_count`, `sort_type`, `started_at`, `finished_at`), где `sort_type` включает `market_cap`, `volume`, `registry_wlc`, `registry_fiat`.
 
 ## Deployment & Verification Policy
 
 1. Redeploy `coins-db-gateway` и `coingecko-fetcher` должен сохранять env-контракт активной production-версии, если migration базы не задокументирована отдельно.
 2. Для HTTP-gateway функций прямой `yc serverless function invoke` не является полным эквивалентом API Gateway traffic; проверка чтения/запрета записи должна выполняться через реальный base URL.
 3. После deploy ingest-контура нужно проверить:
-   - manual invoke `coingecko-fetcher` (через deploy verification path с `deploy_verification` / `bypass_window`) возвращает `coins_fetched: 250`;
+   - manual invoke `coingecko-fetcher` (через deploy verification path с `deploy_verification` / `bypass_window`) возвращает валидный payload для `market_cap`/`volume` и count > 0 для `registry_wlc`/`registry_fiat`;
    - `GET /api/coins/market-cache?count_only=true` показывает свежий `fetched_at`;
+   - `GET /api/coins/registry` возвращает валидную схему (`stable`, `wrapped`, `lst`, `updatedAt`);
+   - `GET /api/coins/cycles` содержит entries с `sort_type=registry_wlc|registry_fiat`;
    - `POST /api/coins/market-cache` возвращает `403`.
 4. **Public Invocation:** Функция, обслуживающая Yandex API Gateway через интеграцию `cloud_functions`, обязана быть публичной (`yc serverless function allow-unauthenticated-invoke`). Иначе API Gateway будет возвращать 502 Bad Gateway без явных ошибок в логах функции.
 
@@ -170,6 +178,21 @@ flowchart TD
 
 - #JS-qz3WnWnA (yandex-cache-provider.js) — провайдер для DataProviderManager.
 - `getCoinDataDualChannel()` — сначала PG, затем CoinGecko для недостающих монет.
+
+## Acceptance Snapshot (2026-03-15)
+
+Дистиллированный результат verification-checklist для cloud-registry rollout:
+
+- [x] `coin_registry` создается/поддерживается server-side (`ensureCoinRegistryTable` в ingest/read функциях).
+- [x] `GET /api/coins/registry` возвращает runtime-валидный JSON.
+- [x] Режимы `registry_wlc` и `registry_fiat` в `coingecko-fetcher` реализованы и активны.
+- [x] Triggers `:15` и `:45` добавлены в deploy-контракт ingest функции.
+- [x] `coins-metadata-loader` работает в primary/fallback режиме (Yandex -> GitHub).
+- [x] Modal Load использует registry∩cloud для Stable/Wrapped/LST.
+- [x] Dropdown selection разделен на USD / другие фиаты / металлы и сырье / wrapped / lst.
+- [x] Row badges работают по runtime-классификации; commodity-backed stablecoins отображаются отдельно от fiat stablecoins.
+- [x] Fallback на GitHub при недоступности Yandex сохранен.
+- [x] AIS синхронизирован с реализацией; удаление plan-артефакта отражается через `docs/deletion-log.md`.
 
 ---
 

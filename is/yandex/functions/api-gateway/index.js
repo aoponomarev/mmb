@@ -440,7 +440,7 @@ module.exports.handler = async function (event, context) {
             };
         }
 
-        // 7. Coin registry endpoint (plan-coins-registry-cloud)
+        // 7. Coin registry endpoint (id:ais-82c9d0, id:ais-e41384)
         // GET /api/coins/registry
         if (path.endsWith('/api/coins/registry') && method === 'GET') {
             await ensureCoinRegistryTable(client);

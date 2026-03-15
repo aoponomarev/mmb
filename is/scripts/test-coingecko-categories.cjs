@@ -70,7 +70,7 @@ async function testCategory(category, label) {
 }
 
 async function main() {
-    console.log('=== CoinGecko Category Test (plan-coins-registry-cloud) ===');
+    console.log('=== CoinGecko Category Test (id:ais-82c9d0) ===');
     console.log('API Key:', API_KEY ? 'set' : 'not set (free tier)');
 
     // registry_wlc categories
