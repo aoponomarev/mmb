@@ -43,6 +43,7 @@ last_updated: "2026-03-14"
 - [id:ais-f5a6b7](ais/ais-policies-schemas.md) — AIS: Политики и схемы валидации (Policies & Schemas)
 - [id:ais-3f4e5c](ais/ais-portfolio-controls.md) — AIS: Портфель и компонентные правила отображения
 - [id:ais-6f2b1d](ais/ais-portfolio-system.md) — AIS: Портфельная система, локальные области хранения и Cloudflare sync-flow
+- [id:ais-db8c3e](ais/ais-portfolio-db-strategy.md) — AIS: Стратегия хранения портфелей в Cloudflare D1 (schema, envelope, migrations, CHECK)
 - [id:ais-c4e9b2](ais/ais-rrg-contour.md) — AIS: Контур Reactive Reliability Gate (RRG)
 - [id:ais-7f8e9d](ais/ais-ssot-contract-plane.md) — AIS: Плоскость контрактов SSOT (SSOT Contract Plane)
 - [id:ais-d8e7f6](ais/ais-unified-adapter-system.md) — AIS: Единая система адаптеров (Unified Adapter System)

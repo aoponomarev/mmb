@@ -31,6 +31,7 @@ last_updated: "2026-03-12"
 |-------|-----------|----------|
 | Cache/Request policies | core/config/runtime-policies.js | TTL, intervals для topCoins, marketMetrics |
 | Portfolio system | docs/ais/ais-portfolio-system.md | id:ais-6f2b1d — канонический portfolio domain, local scopes и Cloudflare sync-flow |
+| Portfolio D1 storage | docs/ais/ais-portfolio-db-strategy.md | id:ais-db8c3e — schema layout, description envelope, migrations, CHECK constraints |
 
 ## Инфраструктура (когда развёрнута)
 

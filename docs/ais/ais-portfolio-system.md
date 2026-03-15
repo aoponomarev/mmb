@@ -1,4 +1,4 @@
----
+﻿---
 id: ais-6f2b1d
 status: complete
 last_updated: "2026-03-12"
@@ -80,7 +80,8 @@ flowchart LR
 Канонический `portfolio` обязан сохранять:
 
 - `id` — локальный канонический идентификатор портфеля.
-- `name`
+- 
+ame`
 - `description`
 - `createdAt`
 - `updatedAt`
@@ -104,7 +105,8 @@ flowchart LR
 
 - `coinId`
 - `ticker`
-- `name`
+- 
+ame`
 - `currentPrice`
 - `pvs`
 - `metrics`
@@ -118,11 +120,14 @@ flowchart LR
 
 - `snapshots.assets[*].keyMetric` и `keyBuyer` обязаны переживать roundtrip.
 - `snapshots.metrics[*].keyMetricField` и `keyBuyer` обязаны переживать roundtrip.
-- `normalizePortfolio(...)` обязан достраивать `snapshots.assets` и `snapshots.metrics`, если cloud transport вернул только market-level snapshot meta.
+- 
+ormalizePortfolio(...)` обязан достраивать `snapshots.assets` и `snapshots.metrics`, если cloud transport вернул только market-level snapshot meta.
 
 ## Локальные области хранения и auth scope
 
 ### Storage scopes
+
+Database schema, migrations, and D1 storage strategy: id:ais-db8c3e (docs/ais/ais-portfolio-db-strategy.md).
 
 - Guest scope: `localStorage['app-portfolios']`
 - Auth scope: `localStorage['app-portfolios::<user-email>']`

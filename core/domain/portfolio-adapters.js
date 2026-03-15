@@ -67,8 +67,9 @@
             || !!envelope.snapshots
             || !!envelope.userDescription;
 
+        // Always return JSON envelope for cloud writes; CHECK in D1 requires json_valid(description). #for-portfolio-d1-json-invariants
         if (!hasMeta) {
-            return description;
+            return JSON.stringify({ userDescription: description, __appPortfolioMeta: 1 });
         }
 
         return JSON.stringify(envelope);
