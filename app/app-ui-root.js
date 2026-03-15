@@ -5410,7 +5410,7 @@
                         await window.cacheManager.delete('top-coins-by-market-cap-meta');
                         await window.cacheManager.delete('top-coins-by-volume');
                         await window.cacheManager.delete('top-coins-by-volume-meta');
-                        await window.cacheManager.delete('stablecoins-list');
+                        await window.cacheManager.delete('coins-metadata');
 
                         console.log('app-ui-root: кэш coins очищен, загружаем новые данные...');
 
@@ -5425,10 +5425,14 @@
                         await window.cacheManager.set('top-coins-by-volume-meta', { timestamp: Date.now() });
                         console.log(`✅ Топ-250 по объему обновлены (${coinsVolume.length} coins)`);
 
-                        // 3. Update CoinGecko stablecoins list (forceRefresh)
-                        if (window.coingeckoStablecoinsLoader && typeof window.coingeckoStablecoinsLoader.load === 'function') {
-                            await window.coingeckoStablecoinsLoader.load({ forceRefresh: true, ttl: 24 * 60 * 60 * 1000 });
-                            console.log('✅ Список стейблкоинов обновлен');
+                        // 3. Extract stablecoins from market-cache (cap|vol 250)
+                        if (window.stablecoinFilter && typeof window.stablecoinFilter.extractFromCoins === 'function' && window.coinsConfig) {
+                            const byId = new Map(coinsMarketCap.map(c => [c.id, c]));
+                            coinsVolume.forEach(c => { if (!byId.has(c.id)) byId.set(c.id, c); });
+                            const unique = Array.from(byId.values());
+                            const stables = window.stablecoinFilter.extractFromCoins(unique);
+                            window.coinsConfig.setStablecoins(stables);
+                            console.log(`✅ Список стейблкоинов обновлен (${stables.length} из market-cache)`);
                         }
 
                         // 4. Remove market metrics cache (VIX, FGI, Dom, OI, FR, LSR)
@@ -6040,16 +6044,8 @@
                         }
                     }
 
-                    // Load stablecoins list from CoinGecko (once, no UI)
-                    // No 5s delay, do not await - let it load fully in background
-                    if (window.coingeckoStablecoinsLoader && typeof window.coingeckoStablecoinsLoader.load === 'function') {
-                        // Start without await 15 sec after start
-                        setTimeout(() => {
-                            window.coingeckoStablecoinsLoader.load({ forceRefresh: false, ttl: 24 * 60 * 60 * 1000 }).catch(err => {
-                                console.warn('app-ui-root: фоновая загрузка стейблкоинов не удалась (rate limit)', err.message);
-                            });
-                        }, 15000);
-                    }
+                    // Stablecoins: coins-metadata-loader loads from coins.json (GitHub). No separate fetch.
+                    // coins.json populated from market-cache (cap|vol 250) via coins-metadata-generator.
 
                     // Load workspace (active model, active coin set)
                     // If already authenticated on page load — pull workspace from Cloudflare KV

@@ -36,7 +36,7 @@ The `cacheManager` abstracts all three layers behind a single API. Callers use a
 Cache keys fall into two categories:
 
 **Versioned** (auto-invalidated on app version change) — keys whose data structure depends on an external API's response format:
-- `icons-cache`, `coins-list`, `api-cache`, `market-metrics`, `crypto-news-state`, `stablecoins-list`
+- `icons-cache`, `coins-list`, `api-cache`, `market-metrics`, `crypto-news-state`, `coins-metadata`
 
 **Unversioned** (persisted across updates) — user-owned data and UI state:
 - `settings`, `portfolios`, `strategies`, `time-series`, `history`, `theme`, `timezone`, `favorites`, `yandex-api-key`

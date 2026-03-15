@@ -47,7 +47,7 @@ related_ais:
 - `coins-list` — список монет
 - `api-cache` — ответы API
 - `market-metrics` — рыночные метрики
-- `stablecoins-list` — список стейблкоинов (CoinGecko supplement). Selection uses curated default in coinsConfig — no network on click; loader fetches stablecoins + tokenized-gold + tokenized-silver + commodity-backed on "Update metadata"
+- `coins-metadata` — стейблкоины по peg (usd, gold, eur, …) из coins.json (GitHub CDN); генератор — market-cache + stablecoin-filter
 - `crypto-news-state` — состояние новостей
 
 #### Cache Manager API

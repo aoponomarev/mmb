@@ -32,7 +32,7 @@
      */
     async function load({ forceRefresh = false, ttl = CONFIG.defaultTtl } = {}) {
         if (!window.cacheManager || !window.coinsConfig) {
-            console.warn('coinsMetadataLoader: cacheManager или coinsConfig not loadedы');
+            console.warn('coinsMetadataLoader: cacheManager или coinsConfig not loaded');
             return null;
         }
 
@@ -41,7 +41,7 @@
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data && cached.expiresAt && cached.expiresAt > Date.now()) {
                 applyMetadata(cached.data);
-                console.log('coinsMetadataLoader: метаданные loadedы из кэша');
+                console.log('coinsMetadataLoader: метаданные loaded из кэша');
                 return cached.data;
             }
         }
@@ -72,7 +72,7 @@
 
             // Apply data
             applyMetadata(data);
-            console.log('coinsMetadataLoader: метаданные успешно loadedы из сети');
+            console.log('coinsMetadataLoader: метаданные успешно loaded из сети');
 
             return data;
         } catch (error) {
@@ -92,15 +92,16 @@
 
     /**
      * Pass data to coinsConfig
+     * Expected format: data.stable = { usd: [id,...], eur: [...], gold: [...], ... } (by peg)
      */
     function applyMetadata(data) {
         if (!data || !window.coinsConfig) return;
 
-        // data structure: { stable: [...], wrapped: [...], lst: [...] }
         if (data.stable) {
-            // Format for setStablecoins (expects objects with id)
-            const stableList = data.stable.map(id => ({ id: id, symbol: '', name: '' }));
-            window.coinsConfig.setStablecoins(stableList);
+            const stableList = normalizeStablecoinsList(data.stable);
+            if (stableList.length > 0) {
+                window.coinsConfig.setStablecoins(stableList);
+            }
         }
 
         if (data.wrapped) {
@@ -110,6 +111,31 @@
         if (data.lst) {
             window.coinsConfig.setLstCoins(data.lst);
         }
+    }
+
+    /**
+     * Normalize stable to array of { id, symbol, name, baseCurrency }
+     * @param {Object} stable - { usd: [ids], eur: [ids], gold: [ids], ... }
+     * @returns {Array<{id, symbol, name, baseCurrency}>}
+     */
+    function normalizeStablecoinsList(stable) {
+        if (typeof stable !== 'object' || stable === null || Array.isArray(stable)) {
+            return [];
+        }
+        const result = [];
+        for (const [peg, ids] of Object.entries(stable)) {
+            if (!Array.isArray(ids)) continue;
+            const baseCurrency = peg === 'gold_small' ? 'gold' : peg;
+            for (const id of ids) {
+                result.push({
+                    id: String(id).toLowerCase(),
+                    symbol: '',
+                    name: '',
+                    baseCurrency
+                });
+            }
+        }
+        return result;
     }
 
     window.coinsMetadataLoader = {

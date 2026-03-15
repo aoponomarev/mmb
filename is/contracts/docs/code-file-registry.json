@@ -210,6 +210,7 @@
   "#JS-aNzHSaKo": "core/config/portfolio-config.js",
   "#JS-aW2fugWg": "core/api/providers/backend-provider-e2e.test.js",
   "#JS-ax34MBX8": "core/api/coingecko-stablecoins-loader.js",
+  "#JS-St4bF1t3": "core/utils/stablecoin-filter.js",
   "#JS-bH2XmFXT": "is/scripts/architecture/generate-index-ais.js",
   "#JS-bU2BihXe": "core/api/market-metrics.js",
   "#JS-bUp3ebRd": "is/deployments/cloudflare-edge-api/2026-03-09/source/is/cloudflare/edge-api/src/settings.js",

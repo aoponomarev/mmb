@@ -37,13 +37,22 @@
         'dai', 'usds', 'ethena-usde', 'usd1-wlfi', 'paypal-usd', 'dai', 'paxos-standard'
     ];
 
+    /** baseCurrency from loader -> display label (commodities, metals, fiat) */
+    const BASE_CURRENCY_LABEL = {
+        gold: 'ЗОЛОТО', silver: 'СЕРЕБРО', oil: 'НЕФТЬ',
+        usd: 'USD', eur: 'EUR', gbp: 'GBP', chf: 'CHF', jpy: 'JPY',
+        cad: 'CAD', aud: 'AUD', sgd: 'SGD', brl: 'BRL', cnh: 'CNH', mxn: 'MXN',
+        idr: 'IDR', ars: 'ARS', ngn: 'NGN', krw: 'KRW', try: 'TRY'
+    };
+
     /** Symbol/id -> peg label for tooltip "Stablecoin {peg}" */
     const STABLECOIN_PEG_MAP = {
         xaut: 'ЗОЛОТО', paxg: 'ЗОЛОТО', kau: 'ЗОЛОТО', pgold: 'ЗОЛОТО', xaut0: 'ЗОЛОТО', xaum: 'ЗОЛОТО',
         ggbr: 'ЗОЛОТО', dgld: 'ЗОЛОТО', cgo: 'ЗОЛОТО', vnxau: 'ЗОЛОТО', xnk: 'ЗОЛОТО', gldt: 'ЗОЛОТО',
         kag: 'СЕРЕБРО', slvon: 'СЕРЕБРО', slvr: 'СЕРЕБРО', onss: 'СЕРЕБРО', grams: 'СЕРЕБРО',
         eurc: 'EUR', eurs: 'EUR', eurcv: 'EUR', eure: 'EUR', euri: 'EUR', aeur: 'EUR', eurr: 'EUR',
-        tgbp: 'GBP', zchf: 'CHF', jpyc: 'JPY', brz: 'BRL', brla: 'BRL', xsgd: 'SGD'
+        tgbp: 'GBP', zchf: 'CHF', jpyc: 'JPY', brz: 'BRL', brla: 'BRL', xsgd: 'SGD',
+        idrx: 'IDR', usdcnh: 'CNH'
     };
 
     /** Symbol/id -> base asset for tooltip "Wrapped {base}" */
@@ -101,33 +110,39 @@
     }
 
     function getStablecoinSymbolsSet() {
-        const fromLoader = stablecoins.map(s => s.symbol);
+        const fromLoader = stablecoins.map(s => s.symbol || s.id).filter(Boolean);
         return new Set([...DEFAULT_STABLECOIN_SYMBOLS, ...fromLoader]);
     }
 
-    /** USD-pegged only (for menu "USD stablecoins") */
+    /** USD-pegged only (for menu "USD stablecoins"). Loader baseCurrency overrides PEG_MAP. */
     function getUsdStablecoinSymbolsSet() {
-        const all = getStablecoinSymbolsSet();
         const usd = new Set();
-        all.forEach(sym => {
-            const lower = sym.toLowerCase();
-            if (!STABLECOIN_PEG_MAP[lower]) usd.add(lower);
-            else if (STABLECOIN_PEG_MAP[lower] === 'USD') usd.add(lower);
+        stablecoins.filter(s => s.baseCurrency === 'usd').forEach(s => {
+            const v = (s.symbol || s.id).toLowerCase();
+            if (v) usd.add(v);
         });
-        stablecoins.filter(s => s.baseCurrency === 'usd').forEach(s => usd.add(s.symbol));
+        DEFAULT_STABLECOIN_SYMBOLS.forEach(sym => {
+            const lower = sym.toLowerCase();
+            if (usd.has(lower)) return;
+            const peg = STABLECOIN_PEG_MAP[lower];
+            if (!peg || peg === 'USD') usd.add(lower);
+        });
         return usd;
     }
 
-    /** Non-USD: metals and other fiat (for menu "Currencies, metals, fiat") */
+    /** Non-USD: metals, commodities, fiat (for menu "Currencies, metals, fiat"). Loader baseCurrency overrides PEG_MAP. */
     function getNonUsdStablecoinSymbolsSet() {
-        const all = getStablecoinSymbolsSet();
         const nonUsd = new Set();
-        all.forEach(sym => {
+        stablecoins.filter(s => s.baseCurrency && s.baseCurrency !== 'usd' && s.baseCurrency !== 'unknown').forEach(s => {
+            const v = (s.symbol || s.id).toLowerCase();
+            if (v) nonUsd.add(v);
+        });
+        DEFAULT_STABLECOIN_SYMBOLS.forEach(sym => {
             const lower = sym.toLowerCase();
-            const peg = STABLECOIN_PEG_MAP[lower] || (stablecoins.find(s => s.symbol === lower)?.baseCurrency?.toUpperCase());
+            if (nonUsd.has(lower)) return;
+            const peg = STABLECOIN_PEG_MAP[lower];
             if (peg && peg !== 'USD') nonUsd.add(lower);
         });
-        stablecoins.filter(s => s.baseCurrency && s.baseCurrency !== 'usd' && s.baseCurrency !== 'unknown').forEach(s => nonUsd.add(s.symbol));
         return nonUsd;
     }
 
@@ -273,7 +288,7 @@
         if (fromMap) return fromMap;
         const fromLoader = stablecoins.find(s => s.id === lowerId || s.symbol === lowerSym);
         if (fromLoader && fromLoader.baseCurrency && fromLoader.baseCurrency !== 'other') {
-            return fromLoader.baseCurrency.toUpperCase();
+            return BASE_CURRENCY_LABEL[fromLoader.baseCurrency] || fromLoader.baseCurrency.toUpperCase();
         }
         return 'USD';
     }

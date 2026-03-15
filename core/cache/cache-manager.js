@@ -83,7 +83,7 @@
                 'api-cache',          // API response cache (external API structure)
                 'market-metrics',     // Market metrics (external API structure)
                 'crypto-news-state',  // News state (structure depends on AI provider prompt)
-                'stablecoins-list'    // Stablecoins list (CoinGecko API structure)
+                'coins-metadata'      // Stablecoins by peg from coins.json (GitHub CDN)
             ];
             useVersioning = versionedKeys.includes(key);
         }

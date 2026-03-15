@@ -202,7 +202,7 @@ window.storageResetModalBody = {
                         'top-coins-by-market-cap-meta',
                         'top-coins-by-volume',
                         'top-coins-by-volume-meta',
-                        'stablecoins-list',
+                        'coins-metadata',
                         'vix-index',
                         'fear-greed-index',
                         'time-series',

@@ -1,11 +1,11 @@
 /**
  * #JS-mi2ffpht
- * @description Auto-generate and upload coins.json to GitHub: collect stablecoins, detect Wrapped/LST, build JSON, upload via API (app_github_token).
+ * @description Auto-generate and upload coins.json to GitHub: collect stablecoins from market-cache, detect Wrapped/LST, build JSON, upload via API (app_github_token).
  * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * HOW: 1) coingecko-stablecoins-loader 2) detect Wrapped/LST (heuristics + API) 3) build JSON 4) upload to GitHub.
+ * HOW: 1) dataProviderManager.getTopCoins (cap+vol) 2) stablecoinFilter.extractFromCoins 3) detect Wrapped/LST (heuristics) 4) upload to GitHub.
  */
 
 (function() {
@@ -34,16 +34,23 @@
         }
 
         try {
-            // 1. Collect stablecoins
-            console.log('📡 Сбор стейблкоинов...');
+            // 1. Fetch top coins from market-cache (cap + vol 250)
+            console.log('📡 Загрузка монет из market-cache (cap|vol 250)...');
+            const coinsMarketCap = await getTopCoinsFromMarket(500, 'market_cap');
+            const coinsVolume = await getTopCoinsFromMarket(250, 'volume');
+            const byId = new Map(coinsMarketCap.map(c => [c.id, c]));
+            coinsVolume.forEach(c => { if (!byId.has(c.id)) byId.set(c.id, c); });
+            const topCoins = Array.from(byId.values());
+
+            // 2. Extract stablecoins by price peg
+            console.log('📡 Сбор стейблкоинов из market-cache...');
             let stableList = [];
-            if (window.coingeckoStablecoinsLoader) {
-                stableList = await window.coingeckoStablecoinsLoader.load({ forceRefresh: true });
+            if (window.stablecoinFilter && typeof window.stablecoinFilter.extractFromCoins === 'function') {
+                stableList = window.stablecoinFilter.extractFromCoins(topCoins);
             }
 
-            // 2. Fetch top-250 coins for wrapped/lst detection (heuristics)
+            // 3. Detect Wrapped/LST (heuristics)
             console.log('📡 Поиск Wrapped и LST монет...');
-            const topCoins = await fetchTopCoins();
             const wrappedIds = [];
             const lstIds = [];
 
@@ -52,30 +59,35 @@
                 const name = (coin.name || '').toLowerCase();
                 const symbol = (coin.symbol || '').toLowerCase();
 
-                // Exclude stablecoins from wrapped search
                 if (stableList.some(s => s.id === id)) return;
 
-                // Heuristic for Wrapped
                 if (id.includes('wrapped-') || name.includes('wrapped ') || (symbol.startsWith('w') && symbol.length > 2 && id !== 'waves')) {
                     wrappedIds.push(id);
-                }
-                // Heuristic for LST (Liquid Staking Tokens)
-                else if (id.includes('staked-') || name.includes('staked ') || name.includes('liquid staking') || id.endsWith('-steth')) {
+                } else if (id.includes('staked-') || name.includes('staked ') || name.includes('liquid staking') || id.endsWith('-steth')) {
                     lstIds.push(id);
                 }
             });
 
-            // 3. Build final object
+            // 4. Build stable by peg (usd, eur, gold, silver, oil, etc.)
+            const stableByPeg = {};
+            stableList.forEach(s => {
+                const peg = s.baseCurrency || 'other';
+                if (!stableByPeg[peg]) stableByPeg[peg] = [];
+                stableByPeg[peg].push(s.id);
+            });
+            Object.keys(stableByPeg).forEach(k => stableByPeg[k].sort());
+
             const result = {
-                stable: stableList.map(s => s.id),
+                stable: stableByPeg,
                 wrapped: Array.from(new Set(wrappedIds)).sort(),
                 lst: Array.from(new Set(lstIds)).sort(),
                 updatedAt: Date.now()
             };
 
-            console.log(`✅ Сформировано: ${result.stable.length} стейблов, ${result.wrapped.length} оберток, ${result.lst.length} LST`);
+            const totalStable = stableList.length;
+            const pegSummary = Object.entries(stableByPeg).map(([k, v]) => `${k}:${v.length}`).join(', ');
+            console.log(`✅ Сформировано: ${totalStable} стейблов (${pegSummary}), ${result.wrapped.length} оберток, ${result.lst.length} LST`);
 
-            // 4. Upload to GitHub
             await uploadToGithub(result, token);
 
         } catch (error) {
@@ -87,21 +99,13 @@
     }
 
     /**
-     * Fetch top-250 coins list for analysis
+     * Fetch top coins from market-cache (dataProviderManager → Yandex when available)
      */
-    async function fetchTopCoins() {
-        const url = window.cloudflareConfig?.getApiProxyEndpoint('coingecko', '/coins/markets', {
-            vs_currency: 'usd',
-            order: 'market_cap_desc',
-            per_page: 250,
-            page: 1,
-            sparkline: false,
-            include_rehypothecated: true
-        }) || 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&include_rehypothecated=true';
-
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Ошибка загрузки топ монет');
-        return await response.json();
+    async function getTopCoinsFromMarket(count, sortBy) {
+        if (window.dataProviderManager && typeof window.dataProviderManager.getTopCoins === 'function') {
+            return await window.dataProviderManager.getTopCoins(count, sortBy);
+        }
+        throw new Error('dataProviderManager недоступен');
     }
 
     /**

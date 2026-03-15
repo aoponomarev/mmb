@@ -55,4 +55,4 @@ last_updated: "2026-03-07"
 
 ## Domain Terms (Market Data)
 
-- **Стейблкоин (Stablecoin / Pegged Asset)** — Токен, привязанный к базовому активу: фиат (USD, EUR), металлы (золото, серебро), нефть и т.п. В проекте: curated-список в coinsConfig + дополнение из CoinGecko при "Update metadata". Выбор стейблов — без сетевого вызова.
+- **Стейблкоин (Stablecoin / Pegged Asset)** — Токен, привязанный к базовому активу: фиат (USD, EUR), металлы (золото, серебро), нефть и т.п. В проекте: coins.json (GitHub CDN) с разделением по peg; генератор — market-cache + stablecoin-filter (по цене). Выбор стейблов — без сетевого вызова при загруженном coins.json.
