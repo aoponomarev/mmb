@@ -47,7 +47,7 @@ related_ais:
 - `coins-list` — список монет
 - `api-cache` — ответы API
 - `market-metrics` — рыночные метрики
-- `coins-metadata` — реестр `coins.json` (GitHub CDN): `stable.fiat.{peg}` + `stable.commodity.{peg}` + `wrapped` + `lst`; runtime loader разворачивает peg-группы в единый список для `coinsConfig`, а UI-выбор сверяет и `id`, и `symbol`, чтобы не зависеть от формы хранения в JSON
+- `coins-metadata` — реестр `coins.json` (GitHub CDN): `stable.fiat.{peg}` + `stable.commodity.{peg}` + `wrapped` + `lst`; runtime loader разворачивает peg-группы в единый список для `coinsConfig`, эмитит `coins-metadata-updated`, а UI-выбор сверяет и `id`, и `symbol`, чтобы не зависеть от формы хранения в JSON. В `#JS-W23K9iSC (coin-set-load-modal-body.js)` checkbox-наборы `Stablecoins`, `Wrapped` и `LST` строятся как пересечение registry ids из `coins.json` с фактическим наличием тех же ids в cloud `market-cache`, чтобы badge/count и load-path работали только по реально доступным cloud-объектам и не будили CoinGecko fallback. В `app/app-ui-root.js` dropdown-выбор на счётчике монет использует тот же runtime-classifier `coinsConfig.getCoinType()` и тот же stable peg label, что и row badges, иначе registry-only выбор расходится с визуальной классификацией в текущей таблице.
 - `crypto-news-state` — состояние новостей
 
 #### Cache Manager API
@@ -133,8 +133,10 @@ flowchart TD
 1. **TTL is mandatory:** каждая запись в кэше **обязана** иметь TTL. Бессрочные записи запрещены (`#for-distinct-ttls`).
 2. **Version key for volatile data:** данные, меняющиеся между версиями приложения (иконки, конфигурация), используют versioned keys.
 3. **Cache ≠ truth:** кэш — fallback. При ошибке загрузки свежих данных кэш используется с warn-логом, но **не** выдаётся за актуальные данные.
-4. **Registry immutability at runtime:** build-time реестры (id-registry, code-file-registry) **никогда** не модифицируются runtime-кодом. Обновление — только через генераторы в `is/scripts/`.
-5. **Migration before use:** `cacheMigrations` выполняется **до** первого `cacheManager.get()` в app lifecycle.
+   Для `coins-metadata`: path `Update cache` сначала пытается пере-загрузить curated registry через loader и только при полном отсутствии registry уходит в heuristic fallback из market-cache.
+4. **coins.json flow (#for-curated-wrapped-lst-preservation):** Облачный крон (market-fetcher) заполняет только PostgreSQL `coin_market_cache`; он **не** трогает `coins.json`. Файл `a/data/coins.json` обновляется только через `coins-metadata-generator` (браузер) при нажатии «Update metadata». Генератор: stablecoins — из market-cache + peg-детекции; wrapped и lst — **только** сохраняет curated из существующего metadata (никаких эвристик). Классификация в UI — строго registry-only (`coinsConfig.getCoinType` без fallback на эвристики).
+5. **Registry immutability at runtime:** build-time реестры (id-registry, code-file-registry) **никогда** не модифицируются runtime-кодом. Обновление — только через генераторы в `is/scripts/`.
+6. **Migration before use:** `cacheMigrations` выполняется **до** первого `cacheManager.get()` в app lifecycle.
 
 ## Компоненты и Контракты (Components & Contracts)
 

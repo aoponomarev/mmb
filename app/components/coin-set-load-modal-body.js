@@ -64,7 +64,7 @@ window.coinSetLoadModalBody = {
                                 </div>
                             </div>
                         </div>
-                        <span class="badge bg-secondary rounded-pill ms-2 opacity-75">~{{ defaultCount }}</span>
+                        <span class="badge bg-secondary rounded-pill ms-2 opacity-75 align-self-center" :style="countBadgeStyle">~{{ defaultCount }}</span>
                     </div>
                     <!-- Local "Draft" set (localStorage only) -->
                     <div class="list-group-item">
@@ -84,7 +84,7 @@ window.coinSetLoadModalBody = {
                                 <span class="material-symbols-sharp me-2" style="font-size: 1rem; opacity: 0.7;">edit</span>
                                 Draft (черновик)
                                 <!-- Coin count indicator (blue pill badge with white digits) -->
-                                <span v-if="draftSet?.coin_ids?.length > 0" class="badge bg-primary text-white rounded-pill ms-auto opacity-75">
+                                <span v-if="draftSet?.coin_ids?.length > 0" class="badge bg-primary text-white rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">
                                     {{ draftSet.coin_ids.length }}
                                 </span>
                             </div>
@@ -129,7 +129,7 @@ window.coinSetLoadModalBody = {
                                 <div class="fw-semibold d-flex align-items-center mb-2">
                                     <span class="material-symbols-sharp me-2" style="font-size: 1rem; opacity: 0.7;">block</span>
                                     Ban (служебный список)
-                                    <span v-if="banSet?.coin_ids?.length > 0" class="badge bg-danger text-white rounded-pill ms-auto opacity-75">
+                                    <span v-if="banSet?.coin_ids?.length > 0" class="badge bg-danger text-white rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">
                                         {{ banSet.coin_ids.length }}
                                     </span>
                                 </div>
@@ -159,7 +159,7 @@ window.coinSetLoadModalBody = {
                             </div>
                         </div>
                     </div>
-                    <!-- Auto-sets (Stablecoins, Wrapped, LST) -->
+                    <!-- Reference sets (registry ids present in cloud market-cache) -->
                     <div v-if="autoStablecoins && autoStablecoins.coins && autoStablecoins.coins.length > 0" class="list-group-item d-flex align-items-start">
                         <div class="form-check">
                             <input
@@ -176,12 +176,12 @@ window.coinSetLoadModalBody = {
                                 Stablecoins
                             </div>
                         </div>
-                        <span class="badge bg-primary rounded-pill ms-2 opacity-75">{{ autoStablecoins.coins.length }}</span>
+                        <span class="badge bg-primary rounded-pill ms-2 opacity-75 align-self-center" :style="countBadgeStyle">{{ autoStablecoins.coins.length }}</span>
                     </div>
-                    <div class="list-group-item" v-if="(autoWrapped && autoWrapped.coins && autoWrapped.coins.length > 0) || (autoLst && autoLst.coins && autoLst.coins.length > 0)">
+                    <div class="list-group-item" v-if="hasAutoWrapped || hasAutoLst">
                         <div class="row g-2">
-                            <div class="col-12 col-sm-6" v-if="autoWrapped && autoWrapped.coins && autoWrapped.coins.length > 0">
-                                <div class="d-flex align-items-start">
+                            <div :class="hasAutoWrapped && hasAutoLst ? 'col-12 col-sm-6' : 'col-12'" v-if="hasAutoWrapped">
+                                <div class="d-flex align-items-start w-100">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
@@ -191,15 +191,15 @@ window.coinSetLoadModalBody = {
                                             v-model="selectedSetIds"
                                             @change="updateButtonsState">
                                     </div>
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-grow-1">
                                         <span aria-hidden="true">{{ wrappedIcon }}</span>
                                         Wrapped
                                     </div>
-                                    <span class="badge bg-primary rounded-pill ms-2 opacity-75">{{ autoWrapped.coins.length }}</span>
+                                    <span class="badge bg-primary rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">{{ autoWrapped.coins.length }}</span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6 ms-auto" v-if="autoLst && autoLst.coins && autoLst.coins.length > 0">
-                                <div class="d-flex align-items-start justify-content-end">
+                            <div :class="hasAutoWrapped && hasAutoLst ? 'col-12 col-sm-6' : 'col-12'" v-if="hasAutoLst">
+                                <div class="d-flex align-items-start w-100">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
@@ -209,11 +209,11 @@ window.coinSetLoadModalBody = {
                                             v-model="selectedSetIds"
                                             @change="updateButtonsState">
                                     </div>
-                                    <div class="d-flex align-items-center gap-2 text-nowrap">
+                                    <div class="d-flex align-items-center gap-2 flex-grow-1 text-nowrap">
                                         <span aria-hidden="true">{{ lstIcon }}</span>
                                         LST (Liquid Staking)
                                     </div>
-                                    <span class="badge bg-primary rounded-pill ms-2 opacity-75">{{ autoLst.coins.length }}</span>
+                                    <span class="badge bg-primary rounded-pill ms-auto opacity-75 align-self-center" :style="countBadgeStyle">{{ autoLst.coins.length }}</span>
                                 </div>
                             </div>
                         </div>
@@ -224,7 +224,7 @@ window.coinSetLoadModalBody = {
                     <div
                         v-for="coinSet in coinSets"
                         :key="coinSet.id"
-                        class="list-group-item d-flex align-items-start">
+                        class="list-group-item d-flex align-items-center gap-2">
                         <div class="form-check">
                             <input
                                 class="form-check-input"
@@ -234,12 +234,14 @@ window.coinSetLoadModalBody = {
                                 v-model="selectedSetIds"
                                 @change="updateButtonsState">
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="fw-semibold">{{ coinSet.name }}</div>
-                            <small v-if="coinSet.description" class="text-muted d-block">{{ coinSet.description }}</small>
-                            <small v-else class="text-muted d-block">Без описания</small>
+                        <div class="flex-grow-1 d-flex align-items-baseline gap-2 overflow-hidden" style="min-width: 0;">
+                            <span class="fw-semibold d-inline-block text-nowrap flex-shrink-0">{{ coinSet.name }}</span>
+                            <span v-if="coinSet.description" class="text-muted d-inline-block text-truncate flex-grow-1" style="min-width: 0;">
+                                {{ coinSet.description }}
+                            </span>
+                            <span v-else class="text-muted d-inline-block text-truncate flex-grow-1" style="min-width: 0;">Без описания</span>
                         </div>
-                        <span class="badge bg-primary rounded-pill ms-2 opacity-75">{{ coinSet.coin_ids?.length || 0 }}</span>
+                        <span class="badge bg-primary rounded-pill ms-2 opacity-75 align-self-center" :style="countBadgeStyle">{{ coinSet.coin_ids?.length || 0 }}</span>
                     </div>
                     <!-- Message for unauthenticated users -->
                     <div v-if="!isAuthenticated && coinSets.length === 0 && !loading && !error" class="list-group-item text-center text-muted py-4">
@@ -368,7 +370,7 @@ window.coinSetLoadModalBody = {
             isCancelling: false, // Flag: user clicked Stop
             loadAbortController: null, // AbortController for cancelling current load
             validationTimeout: null, // Timer for validation debounce
-            autoSets: [], // Auto sets (stablecoins, wrapped, LST)
+            autoSets: [], // Reference sets shown in modal (registry ids that are present in cloud market-cache)
             draftSet: {
                 id: 'draft',
                 name: 'Draft (черновик)',
@@ -414,6 +416,12 @@ window.coinSetLoadModalBody = {
         autoLst() {
             return this.autoSets.find(set => set.id === 'auto-lst');
         },
+        hasAutoWrapped() {
+            return Boolean(this.autoWrapped && this.autoWrapped.coins && this.autoWrapped.coins.length > 0);
+        },
+        hasAutoLst() {
+            return Boolean(this.autoLst && this.autoLst.coins && this.autoLst.coins.length > 0);
+        },
         stablecoinIcon() {
             return window.coinsConfig.getCoinTypeIcon('stable');
         },
@@ -422,6 +430,10 @@ window.coinSetLoadModalBody = {
         },
         lstIcon() {
             return window.coinsConfig.getCoinTypeIcon('lst');
+        },
+        countBadgeStyle() {
+            // Optical correction: these Bootstrap badges sit slightly high relative to the row baseline.
+            return { marginBottom: '-1px' };
         },
         showDefaultSetProgress() {
             return Boolean(this.defaultSetProgress.active || this.defaultSetProgress.text);
@@ -589,8 +601,27 @@ window.coinSetLoadModalBody = {
         // Load local "Ban" set from localStorage
         this.loadBanSet();
 
-        // Load auto sets (stablecoins, wrapped, LST)
-        this.loadAutoSets();
+        // Load reference sets for modal checkboxes.
+        this.loadAutoSets().finally(() => {
+            this.$nextTick(() => {
+                this.updateButtonsState();
+            });
+        });
+
+        const hasStableRegistry = window.coinsConfig && typeof window.coinsConfig.getStablecoins === 'function'
+            ? window.coinsConfig.getStablecoins().length > 0
+            : false;
+        const hasWrappedRegistry = window.coinsConfig && typeof window.coinsConfig.getWrappedCoins === 'function'
+            ? window.coinsConfig.getWrappedCoins().length > 0
+            : false;
+
+        if ((!hasStableRegistry || !hasWrappedRegistry)
+            && window.coinsMetadataLoader
+            && typeof window.coinsMetadataLoader.load === 'function') {
+            window.coinsMetadataLoader.load({ forceRefresh: false, ttl: 24 * 60 * 60 * 1000 }).catch(error => {
+                console.warn('coin-set-load-modal-body: failed to preload metadata for cloud-backed reference sets', error);
+            });
+        }
 
         // Load coin sets only if already authenticated (e.g. after F5 with valid token)
         if (this.authState && this.authState.isAuthenticated === true) {
@@ -632,6 +663,14 @@ window.coinSetLoadModalBody = {
                     this.updateButtonsState();
                 });
             });
+
+            this.coinsMetadataUpdatedUnsubscribe = window.eventBus.on('coins-metadata-updated', async () => {
+                console.log('coin-set-load-modal-body: coins-metadata-updated event, refreshing cloud-backed reference sets');
+                await this.loadAutoSets();
+                this.$nextTick(() => {
+                    this.updateButtonsState();
+                });
+            });
         }
     },
 
@@ -655,6 +694,9 @@ window.coinSetLoadModalBody = {
             }
             if (this.banSetUpdatedUnsubscribe) {
                 window.eventBus.off('ban-set-updated', this.banSetUpdatedUnsubscribe);
+            }
+            if (this.coinsMetadataUpdatedUnsubscribe) {
+                window.eventBus.off('coins-metadata-updated', this.coinsMetadataUpdatedUnsubscribe);
             }
         }
     },
@@ -931,45 +973,144 @@ window.coinSetLoadModalBody = {
             }
         },
 
-        /**
-         * Load auto-sets (stablecoins, wrapped, LST) from localStorage
-         */
-        loadAutoSets() {
-            if (!window.autoCoinSets) {
-                console.warn('coin-set-load-modal-body: autoCoinSets not loaded');
-                return;
+        normalizeCoinId(id) {
+            return String(id || '').toLowerCase();
+        },
+
+        buildCloudReferenceCoin(coin, extra = {}) {
+            const normalizedId = this.normalizeCoinId(extra.id || coin?.id);
+            if (!normalizedId || !coin) return null;
+
+            return {
+                ...coin,
+                id: normalizedId,
+                symbol: String(extra.symbol || coin.symbol || ''),
+                name: String(extra.name || coin.name || ''),
+                ...(extra.baseCurrency ? { baseCurrency: extra.baseCurrency } : {})
+            };
+        },
+
+        async loadCloudReferenceCoinMap(referenceIds) {
+            const ids = Array.from(new Set(
+                (Array.isArray(referenceIds) ? referenceIds : [])
+                    .map(id => this.normalizeCoinId(id))
+                    .filter(Boolean)
+            ));
+            if (ids.length === 0) {
+                return new Map();
             }
 
-            const autoSetsData = window.autoCoinSets.getAllAutoSets();
+            const yandexCacheProvider = window.dataProviderManager?.providers?.['yandex-cache'];
+            if (!yandexCacheProvider || typeof yandexCacheProvider.getCoinData !== 'function') {
+                return new Map();
+            }
+
+            try {
+                // @skill-anchor id:sk-224210 #for-cloud-registry-intersection
+                // Modal reference checkboxes must stay on the cron-backed cloud cache only.
+                const cloudCoins = await yandexCacheProvider.getCoinData(ids);
+                const byId = new Map();
+                (Array.isArray(cloudCoins) ? cloudCoins : []).forEach(coin => {
+                    const coinId = this.normalizeCoinId(coin?.id);
+                    if (!coinId) return;
+                    byId.set(coinId, coin);
+                });
+                return byId;
+            } catch (error) {
+                console.warn('coin-set-load-modal-body: failed to load cloud-backed reference coins', error);
+                return new Map();
+            }
+        },
+
+        /**
+         * Load reference sets shown in modal.
+         * Stablecoins/Wrapped/LST use registry ids filtered by actual presence in cloud market-cache.
+         */
+        async loadAutoSets() {
+            const stableRegistry = window.coinsConfig && typeof window.coinsConfig.getStablecoins === 'function'
+                ? window.coinsConfig.getStablecoins()
+                : [];
+            const wrappedRegistryIds = window.coinsConfig && typeof window.coinsConfig.getWrappedCoins === 'function'
+                ? window.coinsConfig.getWrappedCoins()
+                : [];
+            const lstRegistryIds = window.coinsConfig && typeof window.coinsConfig.getLstCoins === 'function'
+                ? window.coinsConfig.getLstCoins()
+                : [];
+
+            const stableRegistryById = new Map(
+                stableRegistry
+                    .map(item => [this.normalizeCoinId(item?.id), item])
+                    .filter(([id]) => Boolean(id))
+            );
+            const wrappedRegistryIdSet = new Set(
+                wrappedRegistryIds
+                    .map(id => this.normalizeCoinId(id))
+                    .filter(Boolean)
+            );
+            const lstRegistryIdSet = new Set(
+                lstRegistryIds
+                    .map(id => this.normalizeCoinId(id))
+                    .filter(Boolean)
+            );
+
+            let stableCoins = [];
+            let wrappedCoins = [];
+            let lstCoins = [];
+
+            if (stableRegistryById.size > 0 || wrappedRegistryIdSet.size > 0 || lstRegistryIdSet.size > 0) {
+                const cloudReferenceCoinMap = await this.loadCloudReferenceCoinMap([
+                    ...stableRegistryById.keys(),
+                    ...wrappedRegistryIdSet,
+                    ...lstRegistryIdSet
+                ]);
+
+                stableCoins = Array.from(stableRegistryById.keys())
+                    .map(id => this.buildCloudReferenceCoin(
+                        cloudReferenceCoinMap.get(id),
+                        stableRegistryById.get(id) || {}
+                    ))
+                    .filter(Boolean);
+
+                wrappedCoins = Array.from(wrappedRegistryIdSet)
+                    .map(id => this.buildCloudReferenceCoin(cloudReferenceCoinMap.get(id)))
+                    .filter(Boolean);
+
+                lstCoins = Array.from(lstRegistryIdSet)
+                    .map(id => this.buildCloudReferenceCoin(cloudReferenceCoinMap.get(id)))
+                    .filter(Boolean);
+            }
 
             this.autoSets = [
                 {
                     id: 'auto-stablecoins',
                     name: 'Стейблкоины',
-                    description: 'Автоматический сбор стейблкоинов из loadedных монет',
-                    // icon: 'account_balance',
-                    coins: autoSetsData.stablecoins,
-                    coin_ids: autoSetsData.stablecoins.map(c => c.id)
+                    description: 'CDN-реестр `coins.json`, отфильтрованный по фактическому наличию в cloud market-cache',
+                    coins: stableCoins,
+                    coin_ids: stableCoins.map(c => c.id),
+                    source: 'cloud-cache-registry-intersection'
                 },
                 {
                     id: 'auto-wrapped',
                     name: 'Обертки (Wrapped)',
-                    description: 'Автоматический сбор wrapped-токенов из loadedных монет',
-                    // icon: 'repeat',
-                    coins: autoSetsData.wrapped,
-                    coin_ids: autoSetsData.wrapped.map(c => c.id)
+                    description: 'CDN-реестр `coins.json`, отфильтрованный по фактическому наличию в cloud market-cache',
+                    coins: wrappedCoins,
+                    coin_ids: wrappedCoins.map(c => c.id),
+                    source: 'cloud-cache-registry-intersection'
                 },
                 {
                     id: 'auto-lst',
                     name: 'LST (Liquid Staking)',
-                    description: 'Автоматический сбор LST-токенов из loadedных монет',
-                    // icon: 'local_fire_department',
-                    coins: autoSetsData.lst,
-                    coin_ids: autoSetsData.lst.map(c => c.id)
+                    description: 'CDN-реестр `coins.json`, отфильтрованный по фактическому наличию в cloud market-cache',
+                    coins: lstCoins,
+                    coin_ids: lstCoins.map(c => c.id),
+                    source: 'cloud-cache-registry-intersection'
                 }
             ];
 
-            console.log(`coin-set-load-modal-body: loaded ${this.autoSets.length} auto-sets`);
+            console.log(
+                `coin-set-load-modal-body: loaded reference sets `
+                + `(stable in cloud: ${stableCoins.length}, wrapped in cloud: ${wrappedCoins.length}, lst in cloud: ${lstCoins.length})`
+            );
         },
 
         /**

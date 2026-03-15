@@ -43,6 +43,7 @@
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data && isStableMetadataShape(cached.data) && cached.expiresAt && cached.expiresAt > Date.now()) {
                 applyMetadata(cached.data);
+                emitMetadataUpdated(cached.data, 'cache');
                 console.log('coinsMetadataLoader: metadata loaded from cache');
                 return cached.data;
             }
@@ -74,6 +75,7 @@
             await window.cacheManager.set(CONFIG.cacheKey, payload, { useVersioning: true, ttl });
 
             applyMetadata(data);
+            emitMetadataUpdated(data, 'network');
             console.log('coinsMetadataLoader: metadata loaded from network');
 
             return data;
@@ -84,6 +86,7 @@
             const cached = await window.cacheManager.get(CONFIG.cacheKey, { useVersioning: true });
             if (cached && cached.data && isStableMetadataShape(cached.data)) {
                 applyMetadata(cached.data);
+                emitMetadataUpdated(cached.data, 'stale-cache');
                 console.warn('coinsMetadataLoader: using stale cached metadata');
                 return cached.data;
             }
@@ -117,6 +120,23 @@
         if (data.lst) {
             window.coinsConfig.setLstCoins(data.lst);
         }
+    }
+
+    function emitMetadataUpdated(data, source) {
+        if (!window.eventBus || typeof window.eventBus.emit !== 'function') return;
+
+        const stable = data?.stable;
+        const stableCount = isStableMetadataShape(data)
+            ? STABLE_SECTIONS.reduce((sum, section) => sum + countGroupEntries(stable[section]), 0)
+            : 0;
+
+        window.eventBus.emit('coins-metadata-updated', {
+            source,
+            stableCount,
+            wrappedCount: Array.isArray(data?.wrapped) ? data.wrapped.length : 0,
+            lstCount: Array.isArray(data?.lst) ? data.lst.length : 0,
+            updatedAt: Date.now()
+        });
     }
 
     /**
@@ -164,6 +184,14 @@
 
     function isGroupMap(value) {
         return typeof value === 'object' && value !== null && !Array.isArray(value);
+    }
+
+    function countGroupEntries(groups) {
+        if (!isGroupMap(groups)) return 0;
+
+        return Object.values(groups).reduce((sum, ids) => {
+            return sum + (Array.isArray(ids) ? ids.length : 0);
+        }, 0);
     }
 
     window.coinsMetadataLoader = {

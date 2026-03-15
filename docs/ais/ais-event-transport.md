@@ -44,6 +44,8 @@ related_ais:
 | Событие | Источник | Потребители | Данные |
 |---------|----------|-------------|--------|
 | `auth-state-changed` | authState | favorites-manager, coin-set-save-modal-body, coin-set-load-modal-body | `{ isAuthenticated, user, timestamp }` |
+| `coins-metadata-updated` | `#JS-882U8X4J (coins-metadata-loader.js)` | app-ui-root, `#JS-W23K9iSC (coin-set-load-modal-body.js)` | `{ source, stableCount, wrappedCount, lstCount, updatedAt }` |
+| `auto-coin-sets-updated` | `#JS-xc26vutn (auto-coin-sets.js)` | modal badges for local auto-sets only (outside `#JS-W23K9iSC`) | `{ reason, counts, updatedAt, ...payload }` |
 | `cache-reset` | storage-reset-modal-body | app-ui-root | `void` |
 | `coins-added-from-search` | app-ui-root (search) | app-ui-root (table) | `string[]` (coin IDs) |
 | `draft-set-updated` | draft-coin-set | app-ui-root | draft set data |

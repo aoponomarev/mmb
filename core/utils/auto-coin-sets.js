@@ -22,7 +22,7 @@
 (function() {
     'use strict';
 
-    // Keys for storing auto-sets in localStorage
+    // Keys stay stable so the modal and background classifiers see the same persisted auto-sets.
     const AUTO_SET_KEYS = {
         stablecoins: 'auto-set-stablecoins',
         wrapped: 'auto-set-wrapped',
@@ -37,7 +37,7 @@
     function getAutoSet(type) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
+            console.warn(`auto-coin-sets: unknown auto-set type "${type}"`);
             return [];
         }
 
@@ -45,7 +45,7 @@
             const data = localStorage.getItem(key);
             return data ? JSON.parse(data) : [];
         } catch (error) {
-            console.error(`auto-coin-sets: read error автонабора "${type}":`, error);
+            console.error(`auto-coin-sets: auto-set read failed for "${type}":`, error);
             return [];
         }
     }
@@ -58,28 +58,27 @@
     function addToAutoSet(type, newCoins) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
-            return;
+            console.warn(`auto-coin-sets: unknown auto-set type "${type}"`);
+            return 0;
         }
 
         if (!Array.isArray(newCoins) || newCoins.length === 0) {
-            return;
+            return 0;
         }
 
         try {
             const existing = getAutoSet(type);
             const existingIds = new Set(existing.map(c => c.id));
 
-            // Filter only new coins
+            // Auto-sets remain append-only so repeated classifications never duplicate rows.
             const uniqueNewCoins = newCoins.filter(coin => {
                 return coin && coin.id && !existingIds.has(coin.id);
             });
 
             if (uniqueNewCoins.length === 0) {
-                return; // No new coins to add
+                return 0;
             }
 
-            // Keep only required fields
             const coinsToAdd = uniqueNewCoins.map(coin => ({
                 id: coin.id,
                 symbol: coin.symbol || '',
@@ -89,9 +88,11 @@
             const updated = [...existing, ...coinsToAdd];
             localStorage.setItem(key, JSON.stringify(updated));
 
-            console.log(`auto-coin-sets: добавлено ${coinsToAdd.length} монет в "${type}"`);
+            console.log(`auto-coin-sets: added ${coinsToAdd.length} coins to "${type}"`);
+            return coinsToAdd.length;
         } catch (error) {
-            console.error(`auto-coin-sets: ошибка добавления в автонабор "${type}":`, error);
+            console.error(`auto-coin-sets: auto-set write failed for "${type}":`, error);
+            return 0;
         }
     }
 
@@ -105,7 +106,7 @@
         }
 
         if (!window.coinsConfig) {
-            console.warn('auto-coin-sets: coinsConfig not loaded, классификация невозможна');
+            console.warn('auto-coin-sets: coinsConfig not loaded, classification skipped');
             return;
         }
 
@@ -113,52 +114,49 @@
         const wrapped = [];
         const lst = [];
 
-        // Get lists for membership check
+        // Wrapped/LST exact lists take priority over heuristic type guesses.
         const wrappedIds = new Set(window.coinsConfig.getWrappedCoins());
         const lstIds = new Set(window.coinsConfig.getLstCoins());
 
-        // Classify each coin
         coins.forEach(coin => {
             if (!coin || !coin.id) return;
 
             const coinId = String(coin.id).toLowerCase();
 
-            // 1. Stablecoins
             if (window.coinsConfig.isStablecoinId(coin.id)) {
                 stablecoins.push(coin);
-                return; // Stablecoin cannot be both wrapped and lst
+                return;
             }
 
-            // 2. Wrapped or LST
             if (window.coinsConfig.isWrappedOrLst(coin.id, coin.symbol, coin.name)) {
-                // Determine exact type from coins.json lists
                 if (wrappedIds.has(coinId)) {
                     wrapped.push(coin);
                 } else if (lstIds.has(coinId)) {
                     lst.push(coin);
                 } else {
-                    // Matched by heuristic (e.g. symbol starts with 'w')
-                    // Conservatively assign to wrapped
+                    // Heuristic matches are biased to wrapped so unknown LSTs never masquerade as stablecoins.
                     wrapped.push(coin);
                 }
             }
         });
 
-        // Update auto-sets
-        if (stablecoins.length > 0) {
-            addToAutoSet('stablecoins', stablecoins);
-        }
-        if (wrapped.length > 0) {
-            addToAutoSet('wrapped', wrapped);
-        }
-        if (lst.length > 0) {
-            addToAutoSet('lst', lst);
-        }
+        const addedStablecoins = stablecoins.length > 0 ? addToAutoSet('stablecoins', stablecoins) : 0;
+        const addedWrapped = wrapped.length > 0 ? addToAutoSet('wrapped', wrapped) : 0;
+        const addedLst = lst.length > 0 ? addToAutoSet('lst', lst) : 0;
 
-        // Log classification results
         const total = stablecoins.length + wrapped.length + lst.length;
         if (total > 0) {
-            console.log(`auto-coin-sets: классифицировано ${total} монет (стейблы: ${stablecoins.length}, wrapped: ${wrapped.length}, LST: ${lst.length})`);
+            console.log(`auto-coin-sets: classified ${total} coins (stable: ${stablecoins.length}, wrapped: ${wrapped.length}, lst: ${lst.length})`);
+        }
+
+        if (addedStablecoins + addedWrapped + addedLst > 0) {
+            emitAutoSetsUpdated('classify', {
+                added: {
+                    stablecoins: addedStablecoins,
+                    wrapped: addedWrapped,
+                    lst: addedLst
+                }
+            });
         }
     }
 
@@ -182,15 +180,16 @@
     function clearAutoSet(type) {
         const key = AUTO_SET_KEYS[type];
         if (!key) {
-            console.warn(`auto-coin-sets: unknown type автонабора "${type}"`);
+            console.warn(`auto-coin-sets: unknown auto-set type "${type}"`);
             return;
         }
 
         try {
             localStorage.removeItem(key);
-            console.log(`auto-coin-sets: автонабор "${type}" очищен`);
+            emitAutoSetsUpdated('clear', { type });
+            console.log(`auto-coin-sets: cleared "${type}"`);
         } catch (error) {
-            console.error(`auto-coin-sets: ошибка очистки автонабора "${type}":`, error);
+            console.error(`auto-coin-sets: auto-set clear failed for "${type}":`, error);
         }
     }
 
@@ -201,6 +200,21 @@
      */
     function getAutoSetCount(type) {
         return getAutoSet(type).length;
+    }
+
+    function emitAutoSetsUpdated(reason, payload = {}) {
+        if (!window.eventBus || typeof window.eventBus.emit !== 'function') return;
+
+        window.eventBus.emit('auto-coin-sets-updated', {
+            reason,
+            ...payload,
+            counts: {
+                stablecoins: getAutoSetCount('stablecoins'),
+                wrapped: getAutoSetCount('wrapped'),
+                lst: getAutoSetCount('lst')
+            },
+            updatedAt: Date.now()
+        });
     }
 
     // Export to global scope

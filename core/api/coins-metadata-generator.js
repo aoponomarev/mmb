@@ -1,11 +1,11 @@
 /**
  * #JS-mi2ffpht
- * @description Auto-generate and upload coins.json to GitHub: collect stablecoins from market-cache, detect Wrapped/LST, build JSON, upload via API (app_github_token).
+ * @description Auto-generate and upload coins.json to GitHub: collect stablecoins from market-cache, preserve curated wrapped/lst, upload via API (app_github_token).
  * @skill id:sk-bb7c8e
  * @skill-anchor id:sk-bb7c8e #for-layer-separation
  * @skill-anchor id:sk-224210 #for-data-provider-interface
  *
- * HOW: 1) dataProviderManager.getTopCoins (cap+vol) 2) stablecoinFilter.extractFromCoins 3) detect Wrapped/LST (heuristics) 4) upload to GitHub.
+ * HOW: 1) dataProviderManager.getTopCoins (cap+vol) 2) stablecoinFilter.extractFromCoins 3) preserve curated wrapped/lst from existing metadata 4) upload to GitHub.
  */
 
 (function() {
@@ -53,31 +53,21 @@
 
             const existingMetadata = await loadCurrentMetadata(token);
 
-            // Wrapped and LST still use heuristics because the source payload does not carry first-class flags for these types.
-            console.log('📡 Поиск Wrapped и LST монет...');
-            const wrappedIds = [];
-            const lstIds = [];
-
-            topCoins.forEach(coin => {
-                const id = coin.id.toLowerCase();
-                const name = (coin.name || '').toLowerCase();
-                const symbol = (coin.symbol || '').toLowerCase();
-
-                if (stableList.some(s => s.id === id)) return;
-
-                if (id.includes('wrapped-') || name.includes('wrapped ') || (symbol.startsWith('w') && symbol.length > 2 && id !== 'waves')) {
-                    wrappedIds.push(id);
-                } else if (id.includes('staked-') || name.includes('staked ') || name.includes('liquid staking') || id.endsWith('-steth')) {
-                    lstIds.push(id);
-                }
-            });
+            // @causality #for-curated-wrapped-lst-preservation
+            // Wrapped and LST: preserve curated registry (SSOT). No heuristics — manual curation only.
+            const wrappedIds = existingMetadata?.wrapped && Array.isArray(existingMetadata.wrapped)
+                ? [...existingMetadata.wrapped].map(id => String(id).toLowerCase()).sort()
+                : [];
+            const lstIds = existingMetadata?.lst && Array.isArray(existingMetadata.lst)
+                ? [...existingMetadata.lst].map(id => String(id).toLowerCase()).sort()
+                : [];
 
             const stable = buildStableMetadata(stableList, existingMetadata?.stable);
 
             const result = {
                 stable,
-                wrapped: Array.from(new Set(wrappedIds)).sort(),
-                lst: Array.from(new Set(lstIds)).sort(),
+                wrapped: wrappedIds,
+                lst: lstIds,
                 updatedAt: Date.now()
             };
 
@@ -89,7 +79,7 @@
                 ...Object.entries(stable.fiat).map(([k, v]) => `fiat.${k}:${v.length}`),
                 ...Object.entries(stable.commodity).map(([k, v]) => `commodity.${k}:${v.length}`)
             ].join(', ');
-            console.log(`✅ Сформировано: ${totalStable} стейблов (${pegSummary}), ${result.wrapped.length} оберток, ${result.lst.length} LST`);
+            console.log(`✅ Сформировано: ${totalStable} стейблов (${pegSummary}), ${result.wrapped.length} wrapped (curated), ${result.lst.length} LST (curated)`);
 
             await uploadToGithub(result, token);
 

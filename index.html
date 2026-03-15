@@ -628,6 +628,7 @@
                                 </td>
                                 <td>
                                     <coin-block
+                                        :key="`${coin.id}-${coinsMetadataRevision}`"
                                         :coin-id="coin.id"
                                         :symbol="coin.symbol"
                                         :name="coin.name"

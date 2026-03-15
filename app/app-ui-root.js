@@ -304,6 +304,7 @@
                     coins: [],
                     coinsLoading: false,
                     coinsError: null,
+                    coinsMetadataRevision: 0,
                     headerActionHover: null, // Hover state for header action buttons (load/save, refresh, favorites)
                     coinsCacheCheckTimer: null, // Timer for top-coins cache expiry check
                     selectedCoinIds: [], // Selected coins (stub)
@@ -3287,22 +3288,48 @@
 
                 async loadCoinsMetadataOnDemand(forceRefresh = false) {
                     if (!window.coinsMetadataLoader || typeof window.coinsMetadataLoader.load !== 'function') {
-                        return;
+                        return null;
                     }
 
                     try {
-                        await window.coinsMetadataLoader.load({ forceRefresh, ttl: 24 * 60 * 60 * 1000 });
+                        return await window.coinsMetadataLoader.load({ forceRefresh, ttl: 24 * 60 * 60 * 1000 });
                     } catch (error) {
                         console.warn('app-ui-root: on-demand coins metadata load failed', error);
+                        return null;
                     }
                 },
 
-                coinMatchesReferenceSet(coin, refs) {
-                    if (!coin || !(refs instanceof Set)) return false;
+                getVisibleCoinType(coin) {
+                    if (!coin || !window.coinsConfig || typeof window.coinsConfig.getCoinType !== 'function') {
+                        return null;
+                    }
 
-                    const coinId = String(coin.id || '').toLowerCase();
-                    const symbol = String(coin.symbol || '').toLowerCase();
-                    return refs.has(coinId) || refs.has(symbol);
+                    return window.coinsConfig.getCoinType(coin.id, coin.symbol, coin.name);
+                },
+
+                getVisibleStablecoinPegLabel(coin) {
+                    if (this.getVisibleCoinType(coin) !== 'stable') {
+                        return null;
+                    }
+
+                    if (!window.coinsConfig || typeof window.coinsConfig.getStablecoinPegLabel !== 'function') {
+                        return 'USD';
+                    }
+
+                    return String(window.coinsConfig.getStablecoinPegLabel(coin.id, coin.symbol) || 'USD').toUpperCase();
+                },
+
+                handleCoinsMetadataUpdated(eventData = {}) {
+                    this.coinsMetadataRevision += 1;
+
+                    // Reclassify current table coins so auto-sets catch up when metadata finishes after the table render.
+                    if (window.autoCoinSets && typeof window.autoCoinSets.classifyAndUpdateAutoSets === 'function' && Array.isArray(this.coins) && this.coins.length > 0) {
+                        window.autoCoinSets.classifyAndUpdateAutoSets(this.coins);
+                    }
+
+                    if (eventData?.source) {
+                        console.log(`app-ui-root: coins metadata revision updated from ${eventData.source}`);
+                    }
                 },
 
                 /**
@@ -3314,12 +3341,8 @@
 
                     await this.loadCoinsMetadataOnDemand(false);
 
-                    const set = window.coinsConfig && typeof window.coinsConfig.getUsdStablecoinSymbolsSet === 'function'
-                        ? window.coinsConfig.getUsdStablecoinSymbolsSet()
-                        : new Set();
-
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => this.coinMatchesReferenceSet(coin, set))
+                        .filter(coin => this.getVisibleStablecoinPegLabel(coin) === 'USD')
                         .map(coin => coin.id);
                     this.saveTableSettings();
 
@@ -3342,12 +3365,11 @@
 
                     await this.loadCoinsMetadataOnDemand(false);
 
-                    const set = window.coinsConfig && typeof window.coinsConfig.getNonUsdStablecoinSymbolsSet === 'function'
-                        ? window.coinsConfig.getNonUsdStablecoinSymbolsSet()
-                        : new Set();
-
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => this.coinMatchesReferenceSet(coin, set))
+                        .filter(coin => {
+                            const pegLabel = this.getVisibleStablecoinPegLabel(coin);
+                            return pegLabel && pegLabel !== 'USD';
+                        })
                         .map(coin => coin.id);
                     this.saveTableSettings();
 
@@ -3368,14 +3390,10 @@
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
 
-                    await this.loadCoinsMetadataOnDemand(true);
-
-                    const wrappedIds = window.coinsConfig && typeof window.coinsConfig.getWrappedCoins === 'function'
-                        ? new Set(window.coinsConfig.getWrappedCoins())
-                        : new Set();
+                    await this.loadCoinsMetadataOnDemand(false);
 
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => wrappedIds.has(String(coin.id || '').toLowerCase()))
+                        .filter(coin => this.getVisibleCoinType(coin) === 'wrapped')
                         .map(coin => coin.id);
 
                     this.saveTableSettings();
@@ -3397,14 +3415,10 @@
                     const visibleCoins = this.sortedCoins;
                     if (!visibleCoins) return;
 
-                    await this.loadCoinsMetadataOnDemand(true);
-
-                    const lstIds = window.coinsConfig && typeof window.coinsConfig.getLstCoins === 'function'
-                        ? new Set(window.coinsConfig.getLstCoins())
-                        : new Set();
+                    await this.loadCoinsMetadataOnDemand(false);
 
                     this.selectedCoinIds = visibleCoins
-                        .filter(coin => lstIds.has(String(coin.id || '').toLowerCase()))
+                        .filter(coin => this.getVisibleCoinType(coin) === 'lst')
                         .map(coin => coin.id);
 
                     this.saveTableSettings();
@@ -4940,8 +4954,9 @@
                             coinSet.coin_ids.forEach(id => allCoinIds.add(id));
                             setNames.push(coinSet.name);
 
-                            // If set contains full coin data (e.g. default set)
-                            if (coinSet.coins && Array.isArray(coinSet.coins)) {
+                            // Registry-backed reference sets carry only lightweight id/symbol/name stubs.
+                            // Use them for counts/UI, but fetch full market objects by coin_ids before rendering.
+                            if (coinSet.hasPartialCoinData !== true && coinSet.coins && Array.isArray(coinSet.coins)) {
                                 coinSet.coins.forEach(coin => {
                                     allCoinsData.set(coin.id, coin);
                                 });
@@ -5405,8 +5420,6 @@
                         await window.cacheManager.delete('top-coins-by-market-cap-meta');
                         await window.cacheManager.delete('top-coins-by-volume');
                         await window.cacheManager.delete('top-coins-by-volume-meta');
-                        await window.cacheManager.delete('coins-metadata');
-
                         console.log('app-ui-root: кэш coins очищен, загружаем новые данные...');
 
                         // 2. Load fresh coin data
@@ -5420,14 +5433,26 @@
                         await window.cacheManager.set('top-coins-by-volume-meta', { timestamp: Date.now() });
                         console.log(`✅ Топ-250 по объему обновлены (${coinsVolume.length} coins)`);
 
-                        // 3. Extract stablecoins from market-cache (cap|vol 250)
-                        if (window.stablecoinFilter && typeof window.stablecoinFilter.extractFromCoins === 'function' && window.coinsConfig) {
+                        // Refresh the published registry first so curated metadata stays authoritative.
+                        const metadata = await this.loadCoinsMetadataOnDemand(true);
+
+                        // Heuristic fallback is used only when the curated registry is unavailable.
+                        if (!metadata && window.stablecoinFilter && typeof window.stablecoinFilter.extractFromCoins === 'function' && window.coinsConfig) {
                             const byId = new Map(coinsMarketCap.map(c => [c.id, c]));
                             coinsVolume.forEach(c => { if (!byId.has(c.id)) byId.set(c.id, c); });
                             const unique = Array.from(byId.values());
                             const stables = window.stablecoinFilter.extractFromCoins(unique);
                             window.coinsConfig.setStablecoins(stables);
-                            console.log(`✅ Список стейблкоинов обновлен (${stables.length} из market-cache)`);
+                            if (window.eventBus && typeof window.eventBus.emit === 'function') {
+                                window.eventBus.emit('coins-metadata-updated', {
+                                    source: 'market-cache-fallback',
+                                    stableCount: stables.length,
+                                    wrappedCount: window.coinsConfig.getWrappedCoins().length,
+                                    lstCount: window.coinsConfig.getLstCoins().length,
+                                    updatedAt: Date.now()
+                                });
+                            }
+                            console.log(`✅ Stablecoin fallback rebuilt from market-cache (${stables.length})`);
                         }
 
                         // 4. Remove market metrics cache (VIX, FGI, Dom, OI, FR, LSR)
@@ -5873,6 +5898,9 @@
                     window.eventBus.on('portfolios-imported', () => {
                         this.loadScopedPortfolios('current');
                     });
+                    this._coinsMetadataUpdatedSubId = window.eventBus.on('coins-metadata-updated', (eventData) => {
+                        this.handleCoinsMetadataUpdated(eventData);
+                    });
                 }
 
                 // Load timezone and translation language from cache at init
@@ -5915,9 +5943,8 @@
                         try {
                             await window.tooltipsConfig.init(savedLanguage);
 
-                            // Load coin metadata (stablecoins, wrapped, LST)
+                            // Start registry hydration in background so initial render is not blocked by CDN latency.
                             if (window.coinsMetadataLoader && typeof window.coinsMetadataLoader.load === 'function') {
-                                // Do not wait for full load to avoid blocking UI, but start
                                 window.coinsMetadataLoader.load().catch(err => {
                                     console.warn('app-ui-root: ошибка loading метаdata coins при старте', err);
                                 });
@@ -6126,6 +6153,9 @@
                 }
                 if (window.eventBus && this._uiShowModalSubId) {
                     window.eventBus.off('ui:show-modal', this._uiShowModalSubId);
+                }
+                if (window.eventBus && this._coinsMetadataUpdatedSubId) {
+                    window.eventBus.off('coins-metadata-updated', this._coinsMetadataUpdatedSubId);
                 }
             },
         });

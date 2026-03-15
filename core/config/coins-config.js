@@ -175,33 +175,14 @@
     }
 
     /**
-     * Check if coin is wrapped (Wrapped) or LST
+     * Check if coin is wrapped or LST (registry-only, no heuristics)
+     * @causality #for-curated-wrapped-lst-preservation
      * @param {string} id - Coin ID
-     * @param {string} symbol - Coin symbol (optional)
-     * @param {string} name - Coin name (optional)
      * @returns {boolean}
      */
-    function isWrappedOrLst(id, symbol = '', name = '') {
+    function isWrappedOrLst(id) {
         const lowerId = String(id || '').toLowerCase();
-        const lowerSymbol = String(symbol || '').toLowerCase();
-        const lowerName = String(name || '').toLowerCase();
-
-        // 1. Check pre-built lists first (high priority)
-        if (wrappedCoins.includes(lowerId) || lstCoins.includes(lowerId)) {
-            return true;
-        }
-
-        // 2. Heuristic search for "wrap" substring
-        if (lowerId.includes('wrapped') || lowerName.includes('wrapped')) {
-            return true;
-        }
-
-        // Check symbol
-        if (lowerSymbol.startsWith('w') && lowerSymbol.length > 1) {
-            return true;
-        }
-
-        return false;
+        return wrappedCoins.includes(lowerId) || lstCoins.includes(lowerId);
     }
 
     /**
@@ -225,11 +206,6 @@
 
         if (lstCoins.includes(lowerId)) {
             return 'lst';
-        }
-
-        // If not in lists but looks like wrapped/LST — treat as wrapped
-        if (isWrappedOrLst(lowerId, symbol, name)) {
-            return 'wrapped';
         }
 
         return null;
